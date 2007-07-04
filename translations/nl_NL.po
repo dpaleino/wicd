@@ -1,0 +1,186 @@
+# Dutch translations for PACKAGE package.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Adam Blackburn <compwiz18@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-04-18 20:40+0900\n"
+"PO-Revision-Date: 2007-04-19 07:57+0900\n"
+"Last-Translator: Ravan <ravanhagen@gmail.com>\n"
+"Language-Team: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+msgid "Connect"
+msgstr "Verbinden"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Netmask"
+msgstr "Netmasker"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "Use Static IPs"
+msgstr "Gebruik Statisch IP"
+
+msgid "Use Static DNS"
+msgstr "Gebruik Statische DNS"
+
+msgid "Use Encryption"
+msgstr "Gebruik Encryptie"
+
+msgid "Advanced Settings"
+msgstr "Geavanceerde Instellingen"
+
+msgid "Wired Network"
+msgstr "Locaal Netwerk"
+
+msgid "Automatically connect to this network"
+msgstr "Automatisch verbinden met dit netwerk"
+
+msgid "Secured"
+msgstr "Beveiligd"
+
+msgid "Unsecured"
+msgstr "Onbeveiligd"
+
+msgid "Channel"
+msgstr "Kanaal"
+
+msgid "Preferences"
+msgstr "Voorkeuren"
+
+msgid "WPA Supplicant Driver"
+msgstr "WPA Supplicant Stuurprogramma"
+
+msgid "Wireless Interface"
+msgstr "Draadloze Aansluiting"
+
+msgid "Wired Interface"
+msgstr "Draad Aansluiting"
+
+msgid "Hidden Network"
+msgstr "Verborgen Netwerk"
+
+msgid "Hidden Network ESSID"
+msgstr "Verborgen Netwerk ESSID"
+
+msgid "Connected to $A at $B% (IP: $C)"
+msgstr "Verbonden met $A op $B% (IP: $C)"
+
+msgid "Connected to wired network (IP: $A)"
+msgstr "Verbonden met LAN (IP: $A)"
+
+msgid "Not connected"
+msgstr "Niet verbonden"
+
+msgid "No wireless networks found."
+msgstr "Geen draadloze netwerken gevonden."
+
+msgid "Key"
+msgstr "Sleutel"
+
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+msgid "Password"
+msgstr "Wachtwoord"
+
+msgid "Anonymous Identity"
+msgstr "Anonieme Identiteit"
+
+msgid "Identity"
+msgstr "Identiteit"
+
+msgid "Authentication"
+msgstr "Verificatie"
+
+msgid "Path to PAC File"
+msgstr "Pad naar PAC bestand"
+
+msgid "Choose from the networks below:"
+msgstr "Kies uit de volgende netwerken:"
+
+msgid "Connecting..."
+msgstr "Verbinden..."
+
+msgid "0"
+msgstr "0"
+
+msgid "1"
+msgstr "1"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "5"
+msgstr "5"
+
+msgid "6"
+msgstr "6"
+
+msgid "7"
+msgstr "7"
+
+msgid "8"
+msgstr "8"
+
+msgid "9"
+msgstr "9"
+
+msgid "Putting interface down..."
+msgstr "Aansluiting verbreken..."
+
+msgid "Resetting IP address..."
+msgstr "Herstellen IP adress..."
+
+msgid "Putting interface up..."
+msgstr "Aansluiting verbinden..."
+
+msgid "Removing old connection..."
+msgstr "Verwijderen oude verbinding..."
+
+msgid "Generating PSK..."
+msgstr "Genereren PSK..."
+
+msgid "Generating WPA configuration file..."
+msgstr "Genereren WPA configuratiebestand..."
+
+msgid "Flushing the routing table..."
+msgstr "Opschonen routing tabellen..."
+
+msgid "Configuring wireless interface..."
+msgstr "Configureren draadloze aansluiting..."
+
+msgid "Setting broadcast address..."
+msgstr "Instellen broadcast adres..."
+
+msgid "Setting static DNS servers..."
+msgstr "Instellen statische DNS server..."
+
+msgid "Setting static IP addresses..."
+msgstr "Instellen statisch IP adress..."
+
+msgid "Obtaining IP address..."
+msgstr "Verkrijgen IP adres..."
+
+msgid "Done connecting..."
+msgstr "Aansluiten gereed..."
+
+msgid "To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add."
+msgstr "Om met een bedraad netwerk te verbinding moet een netwerkprofiel worden aangemaakt. Type hiervoor een naam om het netwerk te beschrijven en klik Toevoegen."

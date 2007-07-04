@@ -1,0 +1,18 @@
+name = EAP-FAST
+author = Adam Blackburn
+version = 2
+require username *Username password *Password pac_file *Path_To_PAC_File
+-----
+network={
+	ssid="$_ESSID"
+	scan_ssid=$_SCAN
+	proto=RSN WPA
+	pairwise=CCMP TKIP
+	group=CCMP TKIP
+	key-mgmt=WPA-EAP
+	eap=FAST
+	identity=$_USERNAME
+	password=$_PASSWORD
+	phase1="fast_provisioning=1"
+	pac-file="$_PAC_FILE"
+}

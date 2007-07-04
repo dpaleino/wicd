@@ -1,0 +1,13 @@
+name = LEAP with WEP
+author = Adam Blackburn
+version = 1
+require username *Username password *Password
+-----
+network={
+	ssid="$_ESSID"
+	scan_ssid=$_SCAN
+	eap=LEAP
+	key-mgmt=IEEE8021X
+	identity="$_USERNAME"
+	password="$_PASSWORD"
+}

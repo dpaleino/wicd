@@ -1,0 +1,186 @@
+# Northern Sami translations for PACKAGE package.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Adam Blackburn <compwiz18@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-04-13 20:40+0900\n"
+"PO-Revision-Date: 2007-04-14 07:57+0900\n"
+"Last-Translator: Adam Blackburn <compwiz18@gmail.com>\n"
+"Language-Team: Northern Sami\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+msgid "Connect"
+msgstr "Anslut"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Netmask"
+msgstr "Subnät"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "Use Static IPs"
+msgstr "Använd Fast IP"
+
+msgid "Use Static DNS"
+msgstr "Använd Statisk DNS"
+
+msgid "Use Encryption"
+msgstr "Använd Kryptering"
+
+msgid "Advanced Settings"
+msgstr "Avancerade Inställningar"
+
+msgid "Wired Network"
+msgstr "Lokalt Nätverk"
+
+msgid "Automatically connect to this network"
+msgstr "Anslut automatiskt till detta nätverk "
+
+msgid "Secured"
+msgstr "Krypterat"
+
+msgid "Unsecured"
+msgstr "Okrypterat"
+
+msgid "Channel"
+msgstr "Kanal"
+
+msgid "Preferences"
+msgstr "Egenskaper"
+
+msgid "WPA Supplicant Driver"
+msgstr "WPA Supplicant Drivrutin"
+
+msgid "Wireless Interface"
+msgstr "Trådlöst Nätverk"
+
+msgid "Wired Interface"
+msgstr "Ethernet"
+
+msgid "Hidden Network"
+msgstr "Dold Nätverk"
+
+msgid "Hidden Network ESSID"
+msgstr "Dold Nätverks ESSID"
+
+msgid "Connected to $A at $B% (IP: $C)"
+msgstr "Anslut till $A Signal $B% (IP: $C)"
+
+msgid "Connected to wired network (IP: $A)"
+msgstr "Anslut till lokalt nätverk(IP: $A)"
+
+msgid "Not connected"
+msgstr "Ej ansluten"
+
+msgid "No wireless networks found."
+msgstr "Inga trådlösa nätverk funna."
+
+msgid "Key"
+msgstr "Nyckel"
+
+msgid "Username"
+msgstr "Användar namn"
+
+msgid "Password"
+msgstr "Lösenord"
+
+msgid "Anonymous Identity"
+msgstr "Anonym Identitet"
+
+msgid "Identity"
+msgstr "Identitet"
+
+msgid "Authentication"
+msgstr "Verifiering"
+
+msgid "Path to PAC File"
+msgstr "Sökväg till PAC fil"
+
+msgid "Choose from the networks below:"
+msgstr "Välj från nätverken nedan:"
+
+msgid "Connecting..."
+msgstr "Ansluter..."
+
+msgid "0"
+msgstr "0"
+
+msgid "1"
+msgstr "1"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "5"
+msgstr "5"
+
+msgid "6"
+msgstr "6"
+
+msgid "7"
+msgstr "7"
+
+msgid "8"
+msgstr "8"
+
+msgid "9"
+msgstr "9"
+
+msgid "Putting interface down..."
+msgstr "Kopplar ner ansluting..."
+
+msgid "Resetting IP address..."
+msgstr "Återställer IP adress..."
+
+msgid "Putting interface up..."
+msgstr "Kopplar upp anslutning..."
+
+msgid "Removing old connection..."
+msgstr "Tar bort gamla anslutningen..."
+
+msgid "Generating PSK..."
+msgstr "Genererar PSK..."
+
+msgid "Generating WPA configuration file..."
+msgstr "Genererar WPA Konfigurations fil..."
+
+msgid "Flushing the routing table..."
+msgstr "Tömmer routing tabellen..."
+
+msgid "Configuring wireless interface..."
+msgstr "Konfigurerar trådlös anslutning..."
+
+msgid "Setting broadcast address..."
+msgstr "Sätter broadcast adress..."
+
+msgid "Setting static DNS servers..."
+msgstr "Sätter statisk DNS server..."
+
+msgid "Setting static IP addresses..."
+msgstr "Sätter statisk IP adress..."
+
+msgid "Obtaining IP address..."
+msgstr "Väntar på IP adress..."
+
+msgid "Done connecting..."
+msgstr "Ansluting klar..."
+
+msgid "To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add."
+msgstr "För att ansluta till ett lokalt nätverk, måste du skapa en profile. För att skapa en profile, ange ett namn / beskrivning för detta nätverk, sedan tryck på lägg till."

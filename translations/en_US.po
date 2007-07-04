@@ -1,0 +1,252 @@
+# English translations for PACKAGE package.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# root <compwiz18@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-04-13 20:40+0900\n"
+"PO-Revision-Date: 2007-04-13 20:41+0900\n"
+"Last-Translator: Adam Blackburn <compwiz18@gmail.com>\n"
+"Language-Team: English <en@translate.freefriends.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ASCII\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: gui.py:36
+msgid "Connect"
+msgstr "Connect"
+
+#: gui.py:37
+msgid "IP"
+msgstr "IP"
+
+#: gui.py:38
+msgid "Netmask"
+msgstr "Netmask"
+
+#: gui.py:39
+msgid "Gateway"
+msgstr "Gateway"
+
+#: gui.py:40
+msgid "DNS"
+msgstr "DNS"
+
+#: gui.py:41
+msgid "Use Static IPs"
+msgstr "Use Static IPs"
+
+#: gui.py:42
+msgid "Use Static DNS"
+msgstr "Use Static DNS"
+
+#: gui.py:43
+msgid "Use Encryption"
+msgstr "Use Encryption"
+
+#: gui.py:44
+msgid "Advanced Settings"
+msgstr "Advanced Settings"
+
+#: gui.py:45
+msgid "Wired Network"
+msgstr "Wired Network"
+
+#: gui.py:46
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add"
+msgstr ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add"
+
+#: gui.py:47
+msgid "Automatically connect to this network"
+msgstr "Automatically connect to this network"
+
+#: gui.py:48
+msgid "Secured"
+msgstr "Secured"
+
+#: gui.py:49
+msgid "Unsecured"
+msgstr "Unsecured"
+
+#: gui.py:50
+msgid "Channel"
+msgstr "Channel"
+
+#: gui.py:51
+msgid "Preferences"
+msgstr "Preferences"
+
+#: gui.py:52
+msgid "WPA Supplicant Driver"
+msgstr "WPA Supplicant Driver"
+
+#: gui.py:53
+msgid "Wireless Interface"
+msgstr "Wireless Interface"
+
+#: gui.py:54
+msgid "Wired Interface"
+msgstr "Wired Interface"
+
+#: gui.py:55
+msgid "Hidden Network"
+msgstr "Hidden Network"
+
+#: gui.py:56
+msgid "Hidden Network ESSID"
+msgstr "Hidden Network ESSID"
+
+#: gui.py:57
+msgid "Connected to $A at $B% (IP: $C)"
+msgstr "Connected to $A at $B% (IP: $C)"
+
+#: gui.py:58
+msgid "Connected to wired network (IP: $A)"
+msgstr "Connected to wired network (IP: $A)"
+
+#: gui.py:59
+msgid "Not connected"
+msgstr "Not connected"
+
+#: gui.py:60
+msgid "No wireless networks found."
+msgstr "No wireless networks found."
+
+#: gui.py:61
+msgid "Key"
+msgstr "Key"
+
+#: gui.py:62
+msgid "Username"
+msgstr "Username"
+
+#: gui.py:63
+msgid "Password"
+msgstr "Password"
+
+#: gui.py:64
+msgid "Anonymous Identity"
+msgstr "Anonymous Identity"
+
+#: gui.py:65
+msgid "Identity"
+msgstr "Identity"
+
+#: gui.py:66
+msgid "Authentication"
+msgstr "Authentication"
+
+#: gui.py:67
+msgid "Path to PAC File"
+msgstr "Path to PAC File"
+
+#: gui.py:68
+msgid "Choose from the networks below:"
+msgstr "Choose from the networks below:"
+
+#: gui.py:69
+msgid "Connecting..."
+msgstr "Connecting..."
+
+#: gui.py:71
+msgid "0"
+msgstr "0"
+
+#: gui.py:72
+msgid "1"
+msgstr "1"
+
+#: gui.py:73
+msgid "2"
+msgstr "2"
+
+#: gui.py:74
+msgid "3"
+msgstr "3"
+
+#: gui.py:75
+msgid "4"
+msgstr "4"
+
+#: gui.py:76
+msgid "5"
+msgstr "5"
+
+#: gui.py:77
+msgid "6"
+msgstr "6"
+
+#: gui.py:78
+msgid "7"
+msgstr "7"
+
+#: gui.py:79
+msgid "8"
+msgstr "8"
+
+#: gui.py:80
+msgid "9"
+msgstr "9"
+
+#: gui.py:82
+msgid "Putting interface down..."
+msgstr "Putting interface down..."
+
+#: gui.py:83
+msgid "Resetting IP address..."
+msgstr "Resetting IP address..."
+
+#: gui.py:84
+msgid "Putting interface up..."
+msgstr "Putting interface up..."
+
+#: gui.py:85
+msgid "Removing old connection..."
+msgstr "Removing old connection..."
+
+#: gui.py:86
+msgid "Generating PSK..."
+msgstr "Generating PSK..."
+
+#: gui.py:87
+msgid "Generating WPA configuration file..."
+msgstr "Generating WPA configuration file..."
+
+#: gui.py:88
+msgid "Flushing the routing table..."
+msgstr "Flushing the routing table..."
+
+#: gui.py:89
+msgid "Configuring wireless interface..."
+msgstr "Configuring wireless interface..."
+
+#: gui.py:90
+msgid "Setting broadcast address..."
+msgstr "Setting broadcast address..."
+
+#: gui.py:91
+msgid "Setting static DNS servers..."
+msgstr "Setting static DNS servers..."
+
+#: gui.py:92
+msgid "Setting static IP addresses..."
+msgstr "Setting static IP addresses..."
+
+#: gui.py:93
+msgid "Obtaining IP address..."
+msgstr "Obtaining IP address..."
+
+#: gui.py:95
+msgid "Done connecting..."
+msgstr "Done connecting..."
+
+msgid "To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add."
+msgstr "To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add."

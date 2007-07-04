@@ -1,0 +1,14 @@
+name = PEAP with GTC
+author = Adam Blackburn
+version = 2
+require identity *Identity password *Password
+-----
+network={
+	ssid="$_ESSID"
+	proto=RSN
+	key_mgmt=WPA-EAP
+	pairwise=CCMP
+	eap=PEAP
+	identity="$_IDENTITY"
+	password="$_PASSWORD"
+}

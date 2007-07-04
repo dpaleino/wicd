@@ -1,0 +1,14 @@
+name = WPA 1/2
+author = Adam Blackburn
+version = 1
+require key *Key
+-----
+network={
+       ssid="$_ESSID"
+       scan_ssid=$_SCAN
+       proto=WPA RSN
+       key_mgmt=WPA-PSK
+       pairwise=CCMP TKIP
+       group=CCMP TKIP
+       psk=$_PSK
+}

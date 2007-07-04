@@ -1,0 +1,191 @@
+# Italian translations for PACKAGE package.
+# Copyright (C) 2007 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Adam Blackburn <compwiz18@gmail.com>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-04-13 20:40+0900\n"
+"PO-Revision-Date: 2007-04-26 20:59+0900\n"
+"Last-Translator: Adam Blackburn <compwiz18@gmail.com>\n"
+"Language-Team: Italian <tp@lists.linux.it>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+msgid "English"
+msgstr "Italiano"
+
+msgid "Connect"
+msgstr "Connetti"
+
+msgid "IP"
+msgstr "IP"
+
+msgid "Netmask"
+msgstr "Netmask"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "DNS"
+msgstr "DNS"
+
+msgid "Use Static IPs"
+msgstr "Usa IP statici"
+
+msgid "Use Static DNS"
+msgstr "Usa DNS statici"
+
+msgid "Use Encryption"
+msgstr "Usa cifratura"
+
+msgid "Advanced Settings"
+msgstr "Opzioni Avanzate"
+
+msgid "Wired Network"
+msgstr "Rete cablata"
+
+msgid "Automatically connect to this network"
+msgstr "Connetti automaticamente a questa rete"
+
+msgid "Secured"
+msgstr "Sicura"
+
+msgid "Unsecured"
+msgstr "Insicura"
+
+msgid "Channel"
+msgstr "Canale"
+
+msgid "Preferences"
+msgstr "Opzioni"
+
+msgid "WPA Supplicant Driver"
+msgstr "Driver WPA Supplicant"
+
+msgid "Wireless Interface"
+msgstr "Interfaccia Wireless"
+
+msgid "Wired Interface"
+msgstr "Interfaccia Cablata"
+
+msgid "Hidden Network"
+msgstr "Rete Nascosta"
+
+msgid "Hidden Network ESSID"
+msgstr "ESSID Rete Nascosta"
+
+msgid "Connected to $A at $B% (IP: $C)"
+msgstr "Connesso a $A a $B% (IP: $C)"
+
+msgid "Connected to wired network (IP: $A)"
+msgstr "Connesso a rete cablata"
+
+msgid "Not connected"
+msgstr "Non connesso"
+
+msgid "No wireless networks found."
+msgstr "Nessuna rete wireless trovata"
+
+msgid "Key"
+msgstr "Chiave"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Anonymous Identity"
+msgstr "Identità Anonima"
+
+msgid "Identity"
+msgstr "Identità"
+
+msgid "Authentication"
+msgstr "Autenticazione"
+
+msgid "Path to PAC File"
+msgstr "Indirizzo del file PAC"
+
+msgid "Choose from the networks below:"
+msgstr "Scegliere dalle seguenti reti:"
+
+msgid "Connecting..."
+msgstr "Connessione in corso..."
+
+msgid "0"
+msgstr "0"
+
+msgid "1"
+msgstr "1"
+
+msgid "2"
+msgstr "2"
+
+msgid "3"
+msgstr "3"
+
+msgid "4"
+msgstr "4"
+
+msgid "5"
+msgstr "5"
+
+msgid "6"
+msgstr "6"
+
+msgid "7"
+msgstr "7"
+
+msgid "8"
+msgstr "8"
+
+msgid "9"
+msgstr "9"
+
+msgid "Putting interface down..."
+msgstr "Disabilitazione interfaccia in corso..."
+
+msgid "Resetting IP address..."
+msgstr "Reimpostazione indirizzo IP in corso..."
+
+msgid "Putting interface up..."
+msgstr "Abilitazione interfaccia in corso..."
+
+msgid "Removing old connection..."
+msgstr "Eliminazione vecchia connessione in corso..."
+
+msgid "Generating PSK..."
+msgstr "Creazione PSK in corso..."
+
+msgid "Generating WPA configuration file..."
+msgstr "Creazione file di configurazione WPA in corso..."
+
+msgid "Flushing the routing table..."
+msgstr "Pulizia tabelle di routing in corso..."
+
+msgid "Configuring wireless interface..."
+msgstr "Configurazione interfaccia wireless in corso..."
+
+msgid "Setting broadcast address..."
+msgstr "Impostazione indirizzo di broadcast in corso..."
+
+msgid "Setting static DNS servers..."
+msgstr "Impostazione server DNS statici in corso..."
+
+msgid "Setting static IP addresses..."
+msgstr "Impostazione indirizzi IP statici in corso..."
+
+msgid "Obtaining IP address..."
+msgstr "Attesa indirizzo IP..."
+
+msgid "Done connecting..."
+msgstr "Connessione completata..."
+
+msgid "To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add."
+msgstr "Per connettersi ad una rete cablata è necessario creare un profilo di rete. Per creare un profilo di rete, inserire un nome descrittivo della rete e premere aggiungi"
+

@@ -380,7 +380,7 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def CheckIfWirelessConnecting(self):
-		'''reutrns True if wireless interface is connecting, otherwise False'''
+		'''returns True if wireless interface is connecting, otherwise False'''
 		if not self.wifi.ConnectingThread == None:
 			#if ConnectingThread exists, then check for it's
 			#status, if it doesn't, we aren't connecting
@@ -426,9 +426,9 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def GetWiredIP(self):
-		'''returns the wired interface's ip address'''
+		'''returns the wired interface\'s ip address'''
 		ip = self.wired.GetIP()
-		print 'returing wired ip',ip
+		print 'returning wired ip',ip
 		return ip
 
 	@dbus.service.method('org.wicd.daemon.wired')
@@ -447,7 +447,7 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckWiredConnectingMessage(self):
-		'''returns the wired interface's status message'''
+		'''returns the wired interface\'s status message'''
 		if not self.wired.ConnectingThread == None:
 			status = self.wired.ConnectingThread.GetStatus()
 			print 'wired connect status',status
@@ -493,7 +493,7 @@ class ConnectionWizard(dbus.service.Object):
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckPluggedIn(self):
 		if not self.wired.wired_interface == None:
-			return self.__printReturn('returing plugged in',self.wired.CheckPluggedIn())
+			return self.__printReturn('returning plugged in',self.wired.CheckPluggedIn())
 		else:
 			return self.__printReturn("returning plugged in",None)
 

@@ -24,7 +24,7 @@ def Run(cmd,include_std_error=False):
 
 def PromptToStartDaemon():
 	gksudo_args = ['gksudo', '--message', 'Wicd needs to access your computer\'s network cards.','--','./daemon.py']
-	os.spawnvpe(os.P_WAIT, 'gksudo', gksudo_args, os.environ)
+	os.spawnvpe(os.P_NOWAIT, 'gksudo', gksudo_args, os.environ)
 
 def RunRegex(regex,string):
 	m = regex.search( string )

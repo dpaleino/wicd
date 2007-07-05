@@ -122,6 +122,9 @@ language['select_a_network'] = _('Choose from the networks below:')
 language['connecting'] = _('Connecting...')
 language['wired_always_on'] = _('Always show wired interface')
 language['auto_reconnect'] = _('Automatically reconnect on connection loss')
+language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
+language['essid'] = _('ESSID')
+language['use_wep_encryption'] = _('Use Encryption (WEP only)')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -146,9 +149,6 @@ language['setting_broadcast_address'] = _('Setting broadcast address...')
 language['setting_static_dns'] = _('Setting static DNS servers...')
 language['setting_static_ip'] = _('Setting static IP addresses...')
 language['running_dhcp'] = _('Obtaining IP address...')
-language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
-language['essid'] = _('ESSID')
-
 
 language['done'] = _('Done connecting...')
 
@@ -706,7 +706,7 @@ class appGui:
 		dialog = gtk.Dialog(title=language['create_adhoc_network'], flags = gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,1,gtk.STOCK_CANCEL,2))
 		dialog.set_has_separator(False)
 		dialog.set_size_request(400,-1)
-		self.useEncryptionCheckbox = gtk.CheckButton(language['use_encryption'])
+		self.useEncryptionCheckbox = gtk.CheckButton(language['use_wep_encryption'])
 		self.useEncryptionCheckbox.set_active(False)
 		self.useEncryptionCheckbox.show()
 		ipEntry = LabelEntry(language['ip'] + ':')

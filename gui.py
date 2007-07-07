@@ -719,6 +719,7 @@ class appGui:
 		self.useEncryptionCheckbox.connect("toggled",self.toggleEncryptionCheck)	
 		channelEntry.entry.set_text('3')
 		essidEntry.entry.set_text('My_Adhoc_Network')
+		ipEntry.entry.set_text('169.254.12.10') #Just a random IP
 
 		vboxA = gtk.VBox(False,0)
 		vboxA.pack_start(self.useEncryptionCheckbox,fill=False,expand=False)
@@ -874,11 +875,13 @@ class appGui:
 						strength = str(strength)
 						ip = str(wireless_ip)
 						self.statusID=self.status_bar.push(1,language['connected_to_wireless'].replace('$A',network).replace('$B',strength).replace('$C',wireless_ip))
+						config.EnableLogging() #reenable logging
 						return True
 			wired_ip = wired.GetWiredIP()
 			if wired_ip:
 				if wired.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
 					self.statusID = self.status_bar.push(1,language['connected_to_wired'].replace('$A',wired_ip))
+				config.EnableLogging() #reenable logging
 				return True
 			self.statusID = self.status_bar.push(1,language['not_connected'])
 		config.EnableLogging() #reenable logging

@@ -22,6 +22,14 @@ def Run(cmd,include_std_error=False):
 		input,out_err = os.popen4( cmd, 'r')
 		return out_err.read()
 
+def IsValidIP(ip):
+	if ip != None: #make sure there is an IP
+		if ip.count('.') == 3: #make sure the IP can be parsed (or at least it has the proper dots)
+			ipNumbers = ip.split('.') #split it up
+			if not '' in ipNumbers: #make sure the IP isn't something like 127..0.1
+				return ipNumbers
+	return False
+
 def PromptToStartDaemon():
 	gksudo_args = ['gksudo', '--message', 'Wicd needs to access your computer\'s network cards.','--','./daemon.py']
 	os.spawnvpe(os.P_NOWAIT, 'gksudo', gksudo_args, os.environ)

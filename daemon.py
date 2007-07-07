@@ -242,9 +242,9 @@ class ConnectionWizard(dbus.service.Object):
 	#end function GetNumberOfNetworks
 
 	@dbus.service.method('org.wicd.daemon.wireless')
-	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused):
+	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
 		print 'attempting to create ad-hoc network...'
-		self.wifi.CreateAdHocNetwork(essid,channel,ip,enctype,key,encused)
+		self.wifi.CreateAdHocNetwork(essid,channel,ip,enctype,key,encused,ics)
 	#end function CreateAdHocNetwork
 
 	@dbus.service.method('org.wicd.daemon.wireless')
@@ -258,7 +258,7 @@ class ConnectionWizard(dbus.service.Object):
 		print 'setting automatically reconnect when connection drops'
 		config = ConfigParser.ConfigParser()
 		config.read(self.app_conf)
-		config.set("Settings","auto_reconnect",value)
+		config.set("Settings","auto_reconnect",int(value))
 		config.write(open(self.app_conf,"w"))
 		self.auto_reconnect = value
 	#end function SetAutoReconnect
@@ -481,7 +481,7 @@ class ConnectionWizard(dbus.service.Object):
 		print 'setting always show wired interface'
 		config = ConfigParser.ConfigParser()
 		config.read(self.app_conf)
-		config.set("Settings","always_show_wired_interface",value)
+		config.set("Settings","always_show_wired_interface",int(value))
 		config.write(open(self.app_conf,"w"))
 		self.always_show_wired_interface = value
 

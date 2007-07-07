@@ -379,7 +379,7 @@ class Wireless:
 		ip_pattern	= re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
 		return misc.RunRegex(ip_pattern,output)
 
-	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused):
+	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
 		misc.Run("killall dhclient dhclient3 wpa_supplicant") #remove wpa_supplicant, as it can cause the connection to revert to
 		#previous networks...
 		misc.Run('ifconfig ' + self.wireless_interface + ' down')
@@ -389,8 +389,33 @@ class Wireless:
 		#Right now it just assumes you're using WEP
 		if encused == True:
 			misc.Run('iwconfig ' + self.wireless_interface + ' key ' + key)
+
 		misc.Run('ifconfig ' + self.wireless_interface + ' up')
 		misc.Run('ifconfig ' + self.wireless_interface + ' inet ' + ip)
+
+		#also just assume that the netmask is 255.255.255.0, it simplifies ICS
+		misc.Run('ifconfig ' + self.wireless_interface + ' netmask 255.255.255.0')
+
+		ip_parts = misc.IsValidIP(ip)
+
+		if ics and ip_parts:
+			#set up internet connection sharing here
+			#flush the forward tables
+			misc.Run('iptables -F FORWARD')
+			misc.Run('iptables -N fw-interfaces')
+			misc.Run('iptables -N fw-open')
+			misc.Run('iptables -F fw-interfaces')
+			misc.Run('iptables -F fw-open')
+			misc.Run('iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu')
+			misc.Run('iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT')
+			misc.Run('iptables -A FORWARD -j fw-interfaces ')
+			misc.Run('iptables -A FORWARD -j fw-open ')
+			misc.Run('iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable')
+			misc.Run('iptables -P FORWARD DROP')
+			misc.Run('iptables -A fw-interfaces -i ' + self.wireless_interface + ' -j ACCEPT')
+			basic_ip = '.'.join(ip_parts[0:3]) + '.0' #not sure that basic_ip is a good name
+			misc.Run('iptables -t nat -A POSTROUTING -s ' + basic_ip + '/255.255.255.0 -o ' + self.wired_interface + ' -j MASQUERADE')
+			misc.Run('echo 1 > /proc/sys/net/ipv4/ip_forward') #enable routing
 	#end function CreateAdHocNetwork
 
 	def DetectWirelessInterface(self):
@@ -546,3 +571,4 @@ class Wired:
 			self.lock.release()
 			self.IsConnecting = False
 		#end function run
+

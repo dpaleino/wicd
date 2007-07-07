@@ -125,6 +125,7 @@ language['auto_reconnect'] = _('Automatically reconnect on connection loss')
 language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
 language['essid'] = _('ESSID')
 language['use_wep_encryption'] = _('Use Encryption (WEP only)')
+language['use_ics'] = _('Activate Internet Connection Sharing')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -376,16 +377,13 @@ class NetworkEntry(gtk.Expander):
 		ipAddress = self.txtIP.get_text() #for easy typing :)
 		netmask = self.txtNetmask
 		gateway = self.txtGateway
-		
-		if ipAddress != None: #make sure the is an IP in the box
-			if ipAddress.count('.') == 3: #make sure the IP can be parsed
-				ipNumbers = ipAddress.split('.') #split it up
-				if not '' in ipNumbers: #make sure the IP isn't something like 127..0.1
-					if stringToNone(gateway.get_text()) == None: #make sure the gateway box is blank
-						#fill it in with a .1 at the end
-						gateway.set_text('.'.join(ipNumbers[0:3]) + '.1') 
+		ip_parts = misc.IsValidIP(ipAddress)
+		if ip_parts:
+			if stringToNone(gateway.get_text()) == None: #make sure the gateway box is blank
+				#fill it in with a .1 at the end
+				gateway.set_text('.'.join(ip_parts[0:3]) + '.1') 
 
-					if stringToNone(netmask.get_text()) == None: #make sure the netmask is blank
+			if stringToNone(netmask.get_text()) == None: #make sure the netmask is blank
 						netmask.set_text('255.255.255.0') #fill in the most common one
 
 
@@ -701,6 +699,7 @@ class appGui:
 		gobject.timeout_add(100,self.pulse_progress_bar)
 
 	def create_adhoc_network(self,widget=None):
+		'''shows a dialog that creates a new adhoc network'''
 		#create a new adhoc network here.
 		print 'create adhoc network'
 		dialog = gtk.Dialog(title=language['create_adhoc_network'], flags = gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,1,gtk.STOCK_CANCEL,2))
@@ -708,13 +707,14 @@ class appGui:
 		dialog.set_size_request(400,-1)
 		self.useEncryptionCheckbox = gtk.CheckButton(language['use_wep_encryption'])
 		self.useEncryptionCheckbox.set_active(False)
-		self.useEncryptionCheckbox.show()
 		ipEntry = LabelEntry(language['ip'] + ':')
 		essidEntry = LabelEntry(language['essid'] + ':')
 		channelEntry = LabelEntry(language['channel'] + ':')
 		self.keyEntry = LabelEntry(language['key'] + ':')
+		self.keyEntry.set_auto_hidden(True)
 		self.keyEntry.set_sensitive(False)
-		self.keyEntry.entry.set_visibility(False)
+		
+		useICSCheckbox = gtk.CheckButton(language['use_ics'])
 
 		self.useEncryptionCheckbox.connect("toggled",self.toggleEncryptionCheck)	
 		channelEntry.entry.set_text('3')
@@ -727,11 +727,14 @@ class appGui:
 		dialog.vbox.pack_start(essidEntry)
 		dialog.vbox.pack_start(ipEntry)
 		dialog.vbox.pack_start(channelEntry)
+		dialog.vbox.pack_start(useICSCheckbox)
 		dialog.vbox.pack_start(vboxA)
 		dialog.vbox.set_spacing(5)
+		dialog.show_all()
+		useICSCheckbox.hide() #this isn't quite ready yet
 		response = dialog.run()
 		if response == 1:
-			wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),channelEntry.entry.get_text(),ipEntry.entry.get_text(),"WEP",self.keyEntry.entry.get_text(),self.useEncryptionCheckbox.get_active())
+			wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),channelEntry.entry.get_text(),ipEntry.entry.get_text(),"WEP",self.keyEntry.entry.get_text(),self.useEncryptionCheckbox.get_active(),False) #useICSCheckbox.get_active())
 		dialog.destroy()
 
 	def toggleEncryptionCheck(self,widget=None):

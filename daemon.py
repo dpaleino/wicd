@@ -152,6 +152,7 @@ class ConnectionWizard(dbus.service.Object):
 		version = '1.3.0'
 		print 'returned version number',version
 		return version
+	#end function Hello
 
 	@dbus.service.method('org.wicd.daemon')
 	def SetWiredInterface(self,interface):
@@ -163,6 +164,7 @@ class ConnectionWizard(dbus.service.Object):
 		config.read(self.app_conf)
 		config.set("Settings","wired_interface",interface)
 		config.write(open(self.app_conf,"w"))
+	#end function SetWiredInterface
 
 	@dbus.service.method('org.wicd.daemon')
 	def SetWirelessInterface(self,interface):
@@ -175,6 +177,7 @@ class ConnectionWizard(dbus.service.Object):
 		config.set("Settings","wireless_interface",interface)
 		configfile = open(self.app_conf,"w")
 		config.write(configfile)
+	#end function SetWirelessInterface
 
 	@dbus.service.method('org.wicd.daemon')
 	def SetWPADriver(self,driver):
@@ -186,24 +189,28 @@ class ConnectionWizard(dbus.service.Object):
 		config.set("Settings","wpa_driver",driver)
 		configfile = open(self.app_conf,"w")
 		config.write(configfile)
+	#end function SetWPADriver
 
 	@dbus.service.method('org.wicd.daemon')
 	def GetWPADriver(self):
 		'''returns the wpa driver the daemon is using'''
 		print 'returned wpa driver'
 		return str(self.wifi.wpa_driver)
+	#end function GetWPADriver
 
 	@dbus.service.method('org.wicd.daemon')
 	def GetWiredInterface(self):
 		'''returns the wired interface'''
 		print 'returning wired interface'
 		return str(self.wired.wired_interface)
+	#end function GetWiredInterface
 
 	@dbus.service.method('org.wicd.daemon')
 	def GetWirelessInterface(self):
 		'''returns the wireless interface the daemon is using'''
 		print 'returning wireless interface to client'
 		return str(self.wifi.wireless_interface)
+	#end function GetWirelessInterface
 
 	########## WIRELESS FUNCTIONS
 	#################################
@@ -430,10 +437,11 @@ class ConnectionWizard(dbus.service.Object):
 		ip = self.wired.GetIP()
 		print 'returning wired ip',ip
 		return ip
+	#end function GetWiredIP
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckIfWiredConnecting(self):
-		'''reutrns True if wired interface is connecting, otherwise False'''
+		'''returns True if wired interface is connecting, otherwise False'''
 		if not self.wired.ConnectingThread == None:
 			#if ConnectingThread exists, then check for it's
 			#status, if it doesn't exist, we aren't connecting
@@ -443,8 +451,8 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			print 'wired connecting',False
 			return False
-
-
+	#end function CheckIfWiredConnecting
+	
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckWiredConnectingMessage(self):
 		'''returns the wired interface\'s status message'''
@@ -455,6 +463,7 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			print 'wired connect status',False
 			return False
+	#end function CheckWiredConnectingMessage
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def SetWiredProperty(self,property,value):
@@ -465,6 +474,7 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			print 'WiredNetwork does not exist'
 			return False
+	#end function SetWiredProperty
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def GetWiredProperty(self,property):
@@ -475,6 +485,7 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			print 'WiredNetwork does not exist'
 			return False
+	#end function GetWiredProperty
 	
 	@dbus.service.method('org.wicd.daemon.wired')
 	def SetAlwaysShowWiredInterface(self,value):
@@ -484,11 +495,13 @@ class ConnectionWizard(dbus.service.Object):
 		config.set("Settings","always_show_wired_interface",int(value))
 		config.write(open(self.app_conf,"w"))
 		self.always_show_wired_interface = value
+	#end function SetAlwaysShowWiredInterface
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def GetAlwaysShowWiredInterface(self):
 		do = bool(int(self.always_show_wired_interface))
 		return self.__printReturn('returning always show wired interface',do)
+	#end function GetAlwaysShowWiredInterface
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckPluggedIn(self):
@@ -496,6 +509,7 @@ class ConnectionWizard(dbus.service.Object):
 			return self.__printReturn('returning plugged in',self.wired.CheckPluggedIn())
 		else:
 			return self.__printReturn("returning plugged in",None)
+	#end function CheckPluggedIn
 
 	@dbus.service.method('org.wicd.daemon.wired')
 	def ConnectWired(self):
@@ -521,7 +535,7 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def CreateWiredNetworkProfile(self,profilename):
-		#should include: profilename,ip,netmask,gateway,dns1,dns2
+		#should include: profilename,ip,netmask,gateway,dns1,dns2,dns3
 		print "creating profile for " + str(profilename)
 		config = ConfigParser.ConfigParser()
 		config.read(self.wired_conf)
@@ -537,6 +551,7 @@ class ConnectionWizard(dbus.service.Object):
 		config.set(profilename,"dns3",None)
 		config.write( open(self.wired_conf,"w"))
 		return True
+	#end function CreateWiredNetworkProfile
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def DeleteWiredNetworkProfile(self,profilename):
@@ -549,6 +564,7 @@ class ConnectionWizard(dbus.service.Object):
 			return "500: Profile does not exist"
 		config.write( open(self.wired_conf,"w"))
 		return "100: Profile Deleted"
+	#end function DeleteWiredNetworkProfile
 		
 	@dbus.service.method('org.wicd.daemon.config')
 	def SaveWiredNetworkProfile(self,profilename):
@@ -563,6 +579,7 @@ class ConnectionWizard(dbus.service.Object):
 			config.set(profilename,x,self.WiredNetwork[x])
 		config.write( open(self.wired_conf,"w"))
 		return "100: Profile Written"
+	#end function SaveWiredNetworkProfile
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def ReadWiredNetworkProfile(self,profilename):
@@ -577,6 +594,7 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			self.WiredNetwork = None
 			return "500: Profile Not Found"
+	#end function ReadWiredNetworkProfile
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def GetWiredProfileList(self):
@@ -587,6 +605,7 @@ class ConnectionWizard(dbus.service.Object):
 			return config.sections()
 		else:
 			return None
+	#end function GetWiredProfileList
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def SaveWirelessNetworkProfile(self,id):
@@ -602,6 +621,7 @@ class ConnectionWizard(dbus.service.Object):
 			config.set(self.LastScan[id]["bssid"],x,self.LastScan[id][x])
 		config.write( open(self.wireless_conf,"w"))
 		print "100: Profile Written"
+	#end function SaveWirelessNetworkProfile
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def SaveWirelessNetworkProperty(self,id,option):
@@ -611,6 +631,7 @@ class ConnectionWizard(dbus.service.Object):
 		if config.has_section(self.LastScan[id]["bssid"]):
 			config.set(self.LastScan[id]["bssid"],option,str(self.LastScan[id][option]))
 		config.write(open(self.wireless_conf,"w"))
+	#end function SaveWirelessNetworkProperty
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def ReadWirelessNetworkProfile(self,id):
@@ -631,9 +652,7 @@ class ConnectionWizard(dbus.service.Object):
 		else:
 			self.LastScan[id]["has_profile"] = False
 			return "500: Profile Not Found"
-
-	
-
+	#end function ReadWirelessNetworkProfile
 
 	#############################################
 	########## INTERNAL FUNCTIONS ###############
@@ -648,6 +667,7 @@ class ConnectionWizard(dbus.service.Object):
 	def __printReturn(self,text,value):
 		print text,value
 		return value
+	#end function __printReturn
 
 	def ReadConfig(self):
 		if os.path.isfile( self.app_conf ):

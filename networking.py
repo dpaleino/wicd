@@ -380,7 +380,7 @@ class Wireless:
 		return misc.RunRegex(ip_pattern,output)
 	#end function GetIP
 
-	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused):
+	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
 		misc.Run("killall dhclient dhclient3 wpa_supplicant") #remove wpa_supplicant, as it can cause the connection to revert to
 		#previous networks...
 		misc.Run('ifconfig ' + self.wireless_interface + ' down')
@@ -541,13 +541,15 @@ class Wired:
 				self.lock.acquire()
 				self.ConnectingMessage = 'setting_static_dns'
 				self.lock.release()
-				print "setting the first and second dns servers...", network["dns2"], network["dns2"]
+				print "setting the first dns server...", network["dns1"]
 				resolv = open("/etc/resolv.conf","w")
 				misc.WriteLine(resolv,"nameserver " + network["dns1"])
-				misc.WriteLine(resolv,"nameserver " + network["dns2"])
+				if not network.get("dns2") == None:
+					print "setting the second dns server...", network["dns2"]
+					misc.WriteLine(resolv,"nameserver " + network["dns2"])
 				if not network.get("dns3") == None:
 					print "setting the third dns server..."
-					misc.WriteLine(resolv,"nameserver " + network["dns3"])
+					misc.WriteLine(resolv,"nameserver " + network["dns3"]))
 
 			if not network.get("ip") == None:
 				self.lock.acquire()

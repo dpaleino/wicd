@@ -234,7 +234,7 @@ class Wireless:
 			self.lock.acquire()
 			self.ConnectingMessage = 'interface_down'
 			self.lock.release()
-			#misc.Run("ifconfig " + self.wireless_interface + " down")
+			misc.Run("ifconfig " + self.wireless_interface + " down")
 
 			#set a false ip so that when we set the real one, the correct
 			#routing entry is created
@@ -314,19 +314,19 @@ class Wireless:
 				misc.Run("ifconfig " + self.wireless_interface + " broadcast " + network["broadcast"])
 
 
-			if not network.get('dns1') == None:
+			if not network.get("dns1") == None:
 				self.lock.acquire()
-
 				self.ConnectingMessage = 'setting_static_dns'
 				self.lock.release()
-				# dns1)
-				print "setting the first and second dns servers..."
+				print "setting the first dns server...", network["dns1"]
 				resolv = open("/etc/resolv.conf","w")
 				misc.WriteLine(resolv,"nameserver " + network["dns1"])
-				misc.WriteLine(resolv,"nameserver " + network["dns2"])
-				if not network["dns3"] == None:
+				if not network.get("dns2") == None:
+					print "setting the second dns server...", network["dns2"]
+					misc.WriteLine(resolv,"nameserver " + network["dns2"])
+				if not network.get("dns3") == None:
 					print "setting the third dns server..."
-					misc.WriteLine(resolv,"nameserver " + network["dns3"])
+					misc.WriteLine(resolv,"nameserver " + network["dns3"]))
 
 			if not network.get('ip') == None:
 				self.lock.acquire()
@@ -366,7 +366,7 @@ class Wireless:
 		output = misc.Run("iwconfig " + self.wireless_interface)
 		strength_pattern	= re.compile('.*Quality:?=? ?(\d+)',re.DOTALL | re.I | re.M  | re.S)
 		return misc.RunRegex(strength_pattern,output)
-	#end function GetSignalStrength#end function GetSignalStrength
+	#end function GetSignalStrength
 
 	def GetCurrentNetwork(self):
 		output = misc.Run("iwconfig " + self.wireless_interface)
@@ -378,8 +378,9 @@ class Wireless:
 		output = misc.Run("ifconfig " + self.wireless_interface)
 		ip_pattern	= re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
 		return misc.RunRegex(ip_pattern,output)
+	#end function GetIP
 
-	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
+	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused):
 		misc.Run("killall dhclient dhclient3 wpa_supplicant") #remove wpa_supplicant, as it can cause the connection to revert to
 		#previous networks...
 		misc.Run('ifconfig ' + self.wireless_interface + ' down')

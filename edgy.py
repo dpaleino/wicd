@@ -139,7 +139,7 @@ def set_signal_image():
 			print wireless.AutoConnect(True)
 		  else:
 		     print "networkID returned -1, waiting..." #This is usually only caused by hibernation
-		     time.sleep(10)
+		     time.sleep(5)
          config.EnableLogging()
          return True
 

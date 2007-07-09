@@ -138,8 +138,8 @@ def set_signal_image():
 		        print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
 			print wireless.AutoConnect(True)
 		  else:
-		     print "networkID returned -1, waiting..." #This is usually only caused by hibernation
-		     time.sleep(5)
+		     print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
+         	     print wireless.AutoConnect(True)
          config.EnableLogging()
          return True
 

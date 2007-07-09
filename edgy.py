@@ -127,7 +127,8 @@ def set_signal_image():
 	       #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
 	       #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
 	       #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
-	       #connect to any network set to autoconnect.
+	       #connect to any network set to autoconnect.  It will continuously rescan until a network is found or the user manually reconnects
+	       #This behavior could prove to be annoying, so we'll keep it in the experimental build for now
 	       if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
 		  curNetID = wireless.GetCurrentNetworkID()
 		  if curNetID > -1:
@@ -138,7 +139,7 @@ def set_signal_image():
 		        print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
 			print wireless.AutoConnect(True)
 		  else:
-		     print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
+		     print "Scanning for an autoconnect network..."
          	     print wireless.AutoConnect(True)
          config.EnableLogging()
          return True

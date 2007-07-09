@@ -144,7 +144,6 @@ def set_signal_image():
          config.EnableLogging()
          return True
 
-
 class TrackerStatusIcon(gtk.StatusIcon):
 	def __init__(self):
 		gtk.StatusIcon.__init__(self)

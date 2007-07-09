@@ -26,6 +26,8 @@ class Wireless:
 	wired_interface = None
 	wpa_driver = None
 	ConnectingThread = None
+	before_script = None
+	after_script = None
 
 	#Create a function to scan for wireless networks
 	def Scan(self,essid=None):
@@ -189,7 +191,7 @@ class Wireless:
 
 	def Connect(self,network):
 		#call the thread, so we don't hang up the entire works
-		self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.wpa_driver)
+		self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.wpa_driver,self.before_script,self.after_script)
 		self.ConnectingThread.start()
 		return True
 
@@ -199,13 +201,15 @@ class Wireless:
 		ShouldDie = False
 		lock = thread.allocate_lock()
 
-		def __init__(self,network,wireless,wired,wpa_driver):
+		def __init__(self,network,wireless,wired,wpa_driver,before_script,after_script):
 			threading.Thread.__init__(self)
 			self.network = network
 			self.wireless_interface = wireless
 			self.wired_interface = wired
 			self.wpa_driver = wpa_driver
 			self.IsConnecting = False
+			self.before_script = before_script
+			self.after_script = after_script
 			self.lock.acquire()
 			self.ConnectingMessage = 'interface_down'
 			self.lock.release()
@@ -228,7 +232,15 @@ class Wireless:
 
 			self.IsConnecting = True
 			network = self.network
-			
+			self.lock.acquire()
+			self.ConnectingMessage = 'executing_before_script'
+			self.lock.release()
+
+			before_script = self.before_script
+			print 'before script is ', before_script
+			if before_script != '' and before_script != None:
+				print 'Executing pre-connection script'
+				misc.Run(before_script)
 			#put it down
 			print "interface down..."
 			self.lock.acquire()
@@ -357,8 +369,10 @@ class Wireless:
 			print "done"
 			self.IsConnecting = False
 
-
-
+			after_script = self.after_script
+			if after_script != '' and after_script != None:
+				print 'executing post connection script'
+				misc.Run(after_script)
 		#end function Connect
 	#end class Connect
 
@@ -436,6 +450,8 @@ class Wired:
 	wireless_interface = None
 	wired_interface = None
 	ConnectingThread = None
+	before_script = None
+	after_script = None
 
 	def GetIP(self):
 		output = misc.Run("ifconfig " + self.wired_interface)
@@ -456,7 +472,7 @@ class Wired:
 
 	def Connect(self,network):
 		#call the thread, so we don't hang up the entire works
-		self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface)
+		self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.before_script,self.after_script)
 		self.ConnectingThread.start()
 		return True
 	#end function Connect
@@ -467,12 +483,14 @@ class Wired:
 		ConnectingMessage = None
 		ShouldDie = False
 
-		def __init__(self,network,wireless,wired):
+		def __init__(self,network,wireless,wired,before_script,after_script):
 			threading.Thread.__init__(self)
 			self.network = network
 			self.wireless_interface = wireless
 			self.wired_interface = wired
 			self.IsConnecting = False
+			self.before_script = before_script
+			self.after_script = after_script
 			self.lock.acquire()
 			self.ConnectingMessage = 'interface_down'
 			self.lock.release()
@@ -490,6 +508,12 @@ class Wired:
 			#we don't touch the wifi interface
 			#but we do remove all wifi entries from the
 			#routing table
+
+			before_script = self.before_script
+			print 'before script is ', before_script
+			if before_script != '' and before_script != None:
+				print 'Executing pre-connection script'
+				misc.Run(before_script)
 
 			self.IsConnecting = True
 			network = self.network 
@@ -549,7 +573,7 @@ class Wired:
 					misc.WriteLine(resolv,"nameserver " + network["dns2"])
 				if not network.get("dns3") == None:
 					print "setting the third dns server..."
-					misc.WriteLine(resolv,"nameserver " + network["dns3"]))
+					misc.WriteLine(resolv,"nameserver " + network["dns3"])
 
 			if not network.get("ip") == None:
 				self.lock.acquire()
@@ -573,5 +597,10 @@ class Wired:
 			self.ConnectingMessage = 'done'
 			self.lock.release()
 			self.IsConnecting = False
+
+			after_script = self.after_script
+			if after_script != '' and after_script != None:
+				print 'executing post connection script'
+				misc.Run(after_script)
 		#end function run
 

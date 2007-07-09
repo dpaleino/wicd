@@ -13,7 +13,6 @@ except:
 	print 'Missing GTK and gtk.glade.  Aborting.'
 	sys.exit(1)
 
-
 import time, os, misc, gettext, locale, gobject, dbus, dbus.service
 
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
@@ -125,7 +124,11 @@ language['auto_reconnect'] = _('Automatically reconnect on connection loss')
 language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
 language['essid'] = _('ESSID')
 language['use_wep_encryption'] = _('Use Encryption (WEP only)')
+language['before_script'] = _('Run script before connect')
+language['after_script'] = _('Run script after connect')
+language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
+language['default_wired'] = _('Use as default profile (overwrites any previous default)')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -348,11 +351,17 @@ class NetworkEntry(gtk.Expander):
 		self.txtDNS1 = LabelEntry(language['dns'] + language['1'])
 		self.txtDNS2 = LabelEntry(language['dns'] + language['2'])
 		self.txtDNS3 = LabelEntry(language['dns'] + language['3'])
+		self.txtBeforeScript = LabelEntry(language['before_script'])
+		self.txtAfterScript = LabelEntry(language['after_script'])
+		self.txtBeforeScript.label.set_size_request(200,-1)
+		self.txtAfterScript.label.set_size_request(200,-1)
 		self.checkboxStaticIP = gtk.CheckButton(language['use_static_ip'])
 		self.checkboxStaticDNS = gtk.CheckButton(language['use_static_dns'])
 		self.expanderAdvanced = gtk.Expander(language['advanced_settings'])
+		self.expanderScripts = gtk.Expander(language['script_settings'])
 		self.vboxTop = gtk.VBox(False,0)
 		self.vboxAdvanced = gtk.VBox(False,0)
+		self.vboxScripts = gtk.VBox(False,0)
 		self.vboxAdvanced.pack_start(self.checkboxStaticIP,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtIP,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtNetmask,fill=False,expand=False)
@@ -361,8 +370,12 @@ class NetworkEntry(gtk.Expander):
 		self.vboxAdvanced.pack_start(self.txtDNS1,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtDNS2,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtDNS3,fill=False,expand=False)
+		self.vboxScripts.pack_start(self.txtBeforeScript,fill=False,expand=False)
+		self.vboxScripts.pack_start(self.txtAfterScript,fill=False,expand=False)
+		self.vboxTop.pack_end(self.expanderScripts,fill=False,expand=False)
 		self.vboxTop.pack_end(self.expanderAdvanced,fill=False,expand=False)
 		self.expanderAdvanced.add(self.vboxAdvanced)
+		self.expanderScripts.add(self.vboxScripts)
 		#connect the events to the actions
 		self.checkboxStaticIP.connect("toggled",self.toggleIPCheckbox)
 		self.checkboxStaticDNS.connect("toggled",self.toggleDNSCheckbox)
@@ -444,26 +457,41 @@ class WiredNetworkEntry(NetworkEntry):
 		self.set_label(language['wired_network'])
 		self.resetStaticCheckboxes()
 		self.comboProfileNames = gtk.combo_box_entry_new_text()
+
 		profileList = config.GetWiredProfileList()
 		if profileList: #make sure there is something in it...
 			for x in config.GetWiredProfileList(): #add all the names to the combobox
 				self.comboProfileNames.append_text(x)
 		hboxTemp = gtk.HBox(False,0)
+		hboxDef = gtk.HBox(False,0)
+		buttonOK = gtk.Button(stock=gtk.STOCK_ADD)
+		self.buttonDelete = gtk.Button(stock=gtk.STOCK_DELETE)
 		self.profileHelp = gtk.Label(language['wired_network_instructions'])
+		self.checkboxDefaultProfile = gtk.CheckButton(language['default_wired'])
+
 		self.profileHelp.set_width_chars(5) #the default is a tad too long
 		self.profileHelp.set_padding(10,10)
 		self.profileHelp.set_justify(gtk.JUSTIFY_LEFT)
 		self.profileHelp.set_line_wrap(True)
+
 		self.vboxTop.pack_start(self.profileHelp,fill=False,expand=False)
 		hboxTemp.pack_start(self.comboProfileNames,fill=True,expand=True)
-		buttonOK = gtk.Button(stock=gtk.STOCK_ADD)
-		self.buttonDelete = gtk.Button(stock=gtk.STOCK_DELETE)
 		hboxTemp.pack_start(buttonOK,fill=False,expand=False)
 		hboxTemp.pack_start(self.buttonDelete,fill=False,expand=False)
+		hboxDef.pack_start(self.checkboxDefaultProfile,fill=False,expand=False)
+
 		buttonOK.connect("clicked",self.addProfile) #hook up our buttons
 		self.buttonDelete.connect("clicked",self.removeProfile)
 		self.comboProfileNames.connect("changed",self.changeProfile)
 		self.vboxTop.pack_start(hboxTemp)
+		self.vboxTop.pack_start(hboxDef)
+
+		if stringToBoolean(wired.GetWiredProperty("default")) == True:
+		    self.checkboxDefaultProfile.set_active(True)
+		else:
+		    self.checkboxDefaultProfile.set_active(False)
+		self.checkboxDefaultProfile.connect("toggled",self.toggleDefaultProfile)
+
 		self.show_all()
 		self.profileHelp.hide()
 		if profileList != None:
@@ -475,12 +503,14 @@ class WiredNetworkEntry(NetworkEntry):
 			if not wired.GetAlwaysShowWiredInterface():
 				self.set_expanded(True)
 			self.profileHelp.show()
+
 	def checkEnable(self):
 		profileList = config.GetWiredProfileList()
 		if profileList == None:
 			self.buttonDelete.set_sensitive(False)
 			self.higherLevel.connectButton.set_sensitive(False)
 			self.vboxAdvanced.set_sensitive(False)
+
 	def addProfile(self,widget):
 		print "adding profile"
 		profileName = self.comboProfileNames.get_active_text()
@@ -511,6 +541,13 @@ class WiredNetworkEntry(NetworkEntry):
 			self.higherLevel.connectButton.set_sensitive(False)
 		else:
 			self.profileHelp.hide()
+	
+	def toggleDefaultProfile(self,widget):
+		if self.checkboxDefaultProfile.get_active() == True:
+			print 'unsetting previous default profile...'
+			config.UnsetWiredDefault() # Makes sure there is only one default profile at a time
+		wired.SetWiredProperty("default",self.checkboxDefaultProfile.get_active())
+		config.SaveWiredNetworkProfile(self.comboProfileNames.get_active_text())
 
 	def changeProfile(self,widget):
 		if self.comboProfileNames.get_active() > -1: #this way the name doesn't change
@@ -527,6 +564,11 @@ class WiredNetworkEntry(NetworkEntry):
 			self.txtDNS1.set_text(noneToBlankString(wired.GetWiredProperty("dns1")))
 			self.txtDNS2.set_text(noneToBlankString(wired.GetWiredProperty("dns2")))
 			self.txtDNS3.set_text(noneToBlankString(wired.GetWiredProperty("dns3")))
+			
+			self.txtBeforeScript.set_text(noneToBlankString(wired.GetWiredProperty("beforescript")))
+			self.txtAfterScript.set_text(noneToBlankString(wired.GetWiredProperty("afterscript")))
+	
+			self.checkboxDefaultProfile.set_active(stringToBoolean(wired.GetWiredProperty("default")))
 
 			self.resetStaticCheckboxes()
 class WirelessNetworkEntry(NetworkEntry):
@@ -574,6 +616,9 @@ class WirelessNetworkEntry(NetworkEntry):
 		self.txtDNS1.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns1")))
 		self.txtDNS2.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns2")))
 		self.txtDNS3.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns3")))
+
+		self.txtBeforeScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"beforescript")))
+		self.txtAfterScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"afterscript")))
 
 		self.resetStaticCheckboxes()
 		encryptionTypes = misc.LoadEncryptionMethods()
@@ -965,6 +1010,15 @@ class appGui:
 				print "no encryption specified..."
 				wireless.SetWirelessProperty(networkid,"enctype",noneToString(None))
 
+			# Script info
+			before_script = networkentry.expander.txtBeforeScript.get_text()
+			after_script = networkentry.expander.txtAfterScript.get_text()
+			wireless.SetWirelessProperty(networkid,"beforescript",noneToString(before_script))
+			wireless.SetWirelessProperty(networkid,"afterscript",noneToString(after_script))
+			wireless.SetBeforeScript(before_script)
+			wireless.SetAfterScript(after_script)
+
+			# if it exists.  maybe kept as a value in the network entry?  Not sure...
 			print "connecting to wireless network..."
 			config.SaveWirelessNetworkProfile(networkid)
 			wireless.ConnectWireless(networkid)
@@ -988,7 +1042,15 @@ class appGui:
 				wired.SetWiredProperty("dns1",'')
 				wired.SetWiredProperty("dns2",'')
 				wired.SetWiredProperty("dns3",'')
-			
+
+			#Script Info
+			before_script = networkentry.expander.txtBeforeScript.get_text()
+			after_script = networkentry.expander.txtAfterScript.get_text()
+			wired.SetWiredProperty("beforescript",noneToString(before_script))
+			wired.SetWiredProperty("afterscript",noneToString(after_script))
+			wired.SetBeforeScript(before_script)
+			wired.SetAfterScript(after_script)
+		
 			config.SaveWiredNetworkProfile(networkentry.expander.comboProfileNames.get_active_text())
 			wired.ConnectWired()
 

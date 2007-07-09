@@ -140,7 +140,7 @@ def set_signal_image():
 			print wireless.AutoConnect(True)
 		  else:
 		     print "Scanning for an autoconnect network..."
-         	     print wireless.AutoConnect(True)
+		     print wireless.AutoConnect(True)
          config.EnableLogging()
          return True
 

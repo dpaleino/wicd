@@ -338,7 +338,7 @@ class Wireless:
 					misc.WriteLine(resolv,"nameserver " + network["dns2"])
 				if not network.get("dns3") == None:
 					print "setting the third dns server..."
-					misc.WriteLine(resolv,"nameserver " + network["dns3"]))
+					misc.WriteLine(resolv,"nameserver " + network["dns3"])
 
 			if not network.get('ip') == None:
 				self.lock.acquire()

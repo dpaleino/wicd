@@ -241,6 +241,7 @@ class Wireless:
 			if before_script != '' and before_script != None:
 				print 'Executing pre-connection script'
 				misc.Run(before_script)
+
 			#put it down
 			print "interface down..."
 			self.lock.acquire()

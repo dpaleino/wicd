@@ -241,14 +241,14 @@ class ConnectionWizard(dbus.service.Object):
 	#end function DisconnectWireless
 
 	@dbus.service.method('org.wicd.daemon.wireless')
-	def SetBeforeScript(self,script):
+	def SetWirelessBeforeScript(self,script):
 		self.wifi.before_script = script
-	#end function SetBeforeScript
+	#end function SetWirelessBeforeScript
 
 	@dbus.service.method('org.wicd.daemon.wireless')
-	def SetAfterScript(self,script):
+	def SetWirelessAfterScript(self,script):
 		self.wifi.after_script = script
-	#end function SetAfterScript
+	#end function SetWirelessAfterScript
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def GetNumberOfNetworks(self):
@@ -487,16 +487,16 @@ class ConnectionWizard(dbus.service.Object):
 	#end function CheckIfWiredConnecting
 
 	@dbus.service.method('org.wicd.daemon.wired')
-	def SetBeforeScript(self,script):
+	def SetWiredBeforeScript(self,script):
 		'''sets pre-connection script to run for a wired connection'''
 		self.wired.before_script = script
-	#end function SetBeforeScript
+	#end function SetWiredBeforeScript
 
 	@dbus.service.method('org.wicd.daemon.wired')
-	def SetAfterScript(self,script):
+	def SetWiredAfterScript(self,script):
 		'''sets post-connection script to run for a wired connection'''
 		self.wired.after_script = script
-	#end function SetAfterScript
+	#end function SetWiredAfterScript
 	
 	@dbus.service.method('org.wicd.daemon.wired')
 	def CheckWiredConnectingMessage(self):

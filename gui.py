@@ -1015,8 +1015,8 @@ class appGui:
 			after_script = networkentry.expander.txtAfterScript.get_text()
 			wireless.SetWirelessProperty(networkid,"beforescript",noneToString(before_script))
 			wireless.SetWirelessProperty(networkid,"afterscript",noneToString(after_script))
-			wireless.SetBeforeScript(before_script)
-			wireless.SetAfterScript(after_script)
+			wireless.SetWirelessBeforeScript(before_script)
+			wireless.SetWirelessAfterScript(after_script)
 
 			# if it exists.  maybe kept as a value in the network entry?  Not sure...
 			print "connecting to wireless network..."
@@ -1048,8 +1048,8 @@ class appGui:
 			after_script = networkentry.expander.txtAfterScript.get_text()
 			wired.SetWiredProperty("beforescript",noneToString(before_script))
 			wired.SetWiredProperty("afterscript",noneToString(after_script))
-			wired.SetBeforeScript(before_script)
-			wired.SetAfterScript(after_script)
+			wired.SetWiredBeforeScript(before_script)
+			wired.SetWiredAfterScript(after_script)
 		
 			config.SaveWiredNetworkProfile(networkentry.expander.comboProfileNames.get_active_text())
 			wired.ConnectWired()

@@ -327,13 +327,19 @@ class ConnectionWizard(dbus.service.Object):
 						return
 			print "unable to find a network to autoconnect to, checking for a wired connection"
 			if self.CheckPluggedIn() == True:
-				if self.CheckIfWiredConnecting() == False: # Keeps us from going into an infinite connecting loop
-				    defaultNetwork = self.GetDefaultWiredNetwork()
-				    if defaultNetwork != None:
-					self.ReadWiredNetworkProfile(defaultNetwork)	
-				        self.ConnectWired()
-				    else:
-				        print "couldn't find a default wired connection, couldn't autoconnect"
+			    defaultNetwork = self.GetDefaultWiredNetwork()
+			    if defaultNetwork != None:
+				self.ReadWiredNetworkProfile(defaultNetwork)	
+			        self.ConnectWired()
+				time.sleep(1)
+				print "Attempting to autoconnect with wired interface..."
+				while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
+					#I didn't include a self.GetWired/WirelessIP call and it seems
+					#to work for me...could it cause problems? - Dan
+					time.sleep(1)
+				print "...done autoconnecting."
+			    else:
+			        print "couldn't find a default wired connection, couldn't autoconnect"
 			else:
 				print "no wired connection present, couldn't autoconnect."
 		else:

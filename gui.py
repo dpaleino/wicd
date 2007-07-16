@@ -129,7 +129,11 @@ language['after_script'] = _('Run script after connect')
 language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
+<<<<<<< .mine
+language['use_debug_mode'] = _('Enable debug mode')
+=======
 language['use_global_dns'] = _('Use global DNS servers')
+>>>>>>> .r63
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -145,6 +149,7 @@ language['9'] = _('9')
 language['interface_down'] = _('Putting interface down...')
 language['resetting_ip_address'] = _('Resetting IP address...')
 language['interface_up'] = _('Putting interface up...')
+language['setting_encryption_info'] = _('Setting encryption info')
 language['removing_old_connection'] = _('Removing old connection...')
 language['generating_psk'] = _('Generating PSK...')
 language['generating_wpa_config'] = _('Generating WPA configuration file...')
@@ -838,10 +843,12 @@ class appGui:
 		wiredcheckbox.set_active(wired.GetAlwaysShowWiredInterface())
 		reconnectcheckbox = gtk.CheckButton(language['auto_reconnect'])
 		reconnectcheckbox.set_active(wireless.GetAutoReconnect())
+		debugmodecheckbox = gtk.CheckButton(language['use_debug_mode'])
+		debugmodecheckbox.set_active(daemon.GetDebugMode())
 		wpadriverlabel = SmallLabel(language['wpa_supplicant_driver'] + ':')
 		wpadrivercombo = gtk.combo_box_new_text()
 		wpadrivercombo.set_size_request(50,-1)
-		wpadrivers = [ "hostap","hermes","madwifi","atmel","wext","ndiswrapper","broadcom","ipw" ]
+		wpadrivers = [ "hostap","hermes","madwifi","atmel","wext","ndiswrapper","broadcom","ipw","ralink legacy" ]
 		i = 0
 		found = False
 		for x in wpadrivers:
@@ -892,6 +899,7 @@ class appGui:
 
 		dialog.vbox.pack_start(wiredcheckbox)
 		dialog.vbox.pack_start(reconnectcheckbox)
+		dialog.vbox.pack_start(debugmodecheckbox)
 		dialog.vbox.set_spacing(5)
 		dialog.show_all()
 		response = dialog.run()
@@ -904,8 +912,7 @@ class appGui:
 			daemon.SetWPADriver(wpadrivers[wpadrivercombo.get_active()])
 			wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
 			wireless.SetAutoReconnect(reconnectcheckbox.get_active())
-			print wiredcheckbox.get_active()
-			print reconnectcheckbox.get_active()
+			daemon.SetDebugMode(debugmodecheckbox.get_active())
 			dialog.destroy()
 		else:
 			dialog.destroy()
@@ -944,9 +951,10 @@ class appGui:
 	def update_statusbar(self):
 		#should update the status bar
 		#every couple hundred milliseconds
-		config.DisableLogging() #stop log file spam
+		if not daemon.GetDebugMode():
+			config.DisableLogging() #stop log file spam
 		wireless_ip = wireless.GetWirelessIP() #do this so that it doesn't lock up.  don't know how or why this works
-					 #but it does so we leave it alone :)
+					#but it does so we leave it alone :)
 		wiredConnecting = wired.CheckIfWiredConnecting() 
 		wirelessConnecting = wireless.CheckIfWirelessConnecting() 
 		if wirelessConnecting == True or wiredConnecting == True:
@@ -974,16 +982,19 @@ class appGui:
 						strength = str(strength)
 						ip = str(wireless_ip)
 						self.statusID=self.status_bar.push(1,language['connected_to_wireless'].replace('$A',network).replace('$B',strength).replace('$C',wireless_ip))
-						config.EnableLogging() #reenable logging
+						if not daemon.GetDebugMode():
+							config.EnableLogging()
 						return True
 			wired_ip = wired.GetWiredIP()
 			if wired_ip:
 				if wired.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
 					self.statusID = self.status_bar.push(1,language['connected_to_wired'].replace('$A',wired_ip))
-				config.EnableLogging() #reenable logging
+				if not daemon.GetDebugMode():
+					config.EnableLogging()
 				return True
 			self.statusID = self.status_bar.push(1,language['not_connected'])
-		config.EnableLogging() #reenable logging
+		if not daemon.GetDebugMode():
+			config.EnableLogging()
 		return True
 
 	def refresh_networks(self,widget=None,fresh=True,hidden=None):

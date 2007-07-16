@@ -31,7 +31,6 @@ class Wireless:
 
 	#Create a function to scan for wireless networks
 	def Scan(self,essid=None):
-
 		#we ask for an essid, because then we can see hidden networks
 
 		#####
@@ -116,30 +115,51 @@ class Wireless:
 				CurrentNetwork["bssid"] = misc.RunRegex(ap_mac_pattern,cell)
 				print "	##### " + CurrentNetwork["bssid"]
 				CurrentNetwork["mode"] = misc.RunRegex(mode_pattern,cell)
-
+				
 				#since encryption needs a True or False
 				#we have to do a simple if then to set it
 				if misc.RunRegex(wep_pattern,cell) == "on":
-					CurrentNetwork["encryption"] = True
-					#set this, because if it is something else this will be overwritten
-					CurrentNetwork["encryption_method"] = "WEP"
+					if self.wpa_driver != 'ralink legacy': 
+						CurrentNetwork["encryption"] = True
+						#set this, because if it is something else this will be overwritten
+						CurrentNetwork["encryption_method"] = "WEP"
 
-					if misc.RunRegex(wpa1_pattern,cell) == "WPA Version 1":
-						CurrentNetwork["encryption_method"] = "WPA"
+						if misc.RunRegex(wpa1_pattern,cell) == "WPA Version 1":
+							CurrentNetwork["encryption_method"] = "WPA"
 
-					if misc.RunRegex(wpa2_pattern,cell) == "WPA2":
-						CurrentNetwork["encryption_method"] = "WPA2"
+						if misc.RunRegex(wpa2_pattern,cell) == "WPA2":
+							CurrentNetwork["encryption_method"] = "WPA2"
+
+					else: #support for ralink legacy drivers, may not work w/ hidden networks
+						iwpriv = misc.Run("iwpriv " + self.wireless_interface + " get_site_survey")
+						lines = iwpriv.splitlines()
+						lines = lines[2:]
+						for x in lines:
+							info = x.split()
+							if len(info) < 5 or info == None or info == '':
+								break;
+							if info[2] == CurrentNetwork["essid"]:
+								if info[5] == 'WEP' or info[5] == 'OPEN': # Needs to be tested
+									CurrentNetwork["encryption_method"] = 'WEP'
+								elif info[5] == 'WPA-PSK':
+									CurrentNetwork["encrytion_method"] = 'WPA'
+								elif info[5] == 'WPA2-PSK':
+									CurrentNetwork["encryption_method"] = 'WPA2'
+								else:
+									print 'Unknown AuthMode, can\'t assign encryption_method!!'
+									CurrentNetwork["encryption_method"] = 'Unknown'
+								CurrentNetwork["quality"] = info[1][1:] #set link strength here
 				else:
 					CurrentNetwork["encryption"] = False
 				#end If
 
-				#since stength needs a -1 if the quality isn't found
-				#we need a simple if then to set it
-				if misc.RunRegex(strength_pattern,cell):
-					CurrentNetwork["quality"] = misc.RunRegex(strength_pattern,cell)
-				else:
-					CurrentNetwork["quality"] = -1
-				#end If
+				if self.wpa_driver != 'ralink legacy':
+					#since stength needs a -1 if the quality isn't found
+					#we need a simple if then to set it
+					if misc.RunRegex(strength_pattern,cell):
+						CurrentNetwork["quality"] = misc.RunRegex(strength_pattern,cell)
+					else:
+						CurrentNetwork["quality"] = -1
 
 				#add this network to the list of networks
 				aps[ i ] = CurrentNetwork
@@ -210,6 +230,7 @@ class Wireless:
 			self.IsConnecting = False
 			self.before_script = before_script
 			self.after_script = after_script
+
 			self.lock.acquire()
 			self.ConnectingMessage = 'interface_down'
 			self.lock.release()
@@ -259,14 +280,6 @@ class Wireless:
 			misc.Run("ifconfig " + self.wired_interface + " 0.0.0.0")
 			misc.Run("ifconfig " + self.wireless_interface + " 0.0.0.0")
 
-			#bring it up
-			print "interface up..."
-			self.lock.acquire()
-			self.ConnectingMessage = 'interface_up'
-			self.lock.release()
-
-			print misc.Run("ifconfig " + self.wireless_interface + " up")
-
 			print "killing wpa_supplicant, dhclient, dhclient3"
 			self.lock.acquire()
 			self.ConnectingMessage = 'removing_old_connection'
@@ -275,29 +288,28 @@ class Wireless:
 			misc.Run("killall dhclient dhclient3 wpa_supplicant")
 
 			#check to see if we need to generate a PSK
+			if self.wpa_driver != "ralink legacy": # Enhanced Ralink legacy drivers are handled later
+				if not network.get('key')== None:
+					self.lock.acquire()
+					self.ConnectingMessage = 'generating_psk'
+					self.lock.release()
 
-			if not network.get('key')== None:
-				self.lock.acquire()
-				self.ConnectingMessage = 'generating_psk'
-				self.lock.release()
+					print "generating psk..."
+					key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',re.DOTALL | re.I | re.M  | re.S)
+					network["psk"] = misc.RunRegex(key_pattern,misc.Run('wpa_passphrase "' + network["essid"] + '" "' + network["key"] + '"'))
+				#generate the wpa_supplicant file...
+				if not network.get('enctype') == None:
+					self.lock.acquire()
+					self.ConnectingMessage = 'generating_wpa_config'
+					self.lock.release()
 
-				print "generating psk..."
-				key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',re.DOTALL | re.I | re.M  | re.S)
-				network["psk"] = misc.RunRegex(key_pattern,misc.Run('wpa_passphrase "' + network["essid"] + '" "' + network["key"] + '"'))
-			#generate the wpa_supplicant file...
-			if not network.get('enctype') == None:
-				self.lock.acquire()
-				self.ConnectingMessage = 'generating_wpa_config'
-				self.lock.release()
-
-				print "generating wpa_supplicant configuration file..."
-				misc.ParseEncryption(network)
-				print "wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver
-				misc.Run("wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver)
+					print "generating wpa_supplicant configuration file..."
+					misc.ParseEncryption(network)
+					print "wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver
+					misc.Run("wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver)
 
 			print "flushing the routing table..."
 			self.lock.acquire()
-
 			self.ConnectingMessage = 'flushing_routing_table'
 			self.lock.release()
 
@@ -306,9 +318,16 @@ class Wireless:
 
 			print "configuring the wireless interface..."
 			self.lock.acquire()
-
 			self.ConnectingMessage = 'configuring_interface'
 			self.lock.release()
+
+			#bring it up
+			print "interface up..."
+			self.lock.acquire()
+			self.ConnectingMessage = 'interface_up'
+			self.lock.release()
+
+			print misc.Run("ifconfig " + self.wireless_interface + " up")
 
 			if network["mode"].lower() == "master":
 				misc.Run("iwconfig " + self.wireless_interface + " mode managed")
@@ -317,9 +336,46 @@ class Wireless:
 
 			misc.Run("iwconfig " + self.wireless_interface + " essid \"" + network["essid"] + "\" channel " + str(network["channel"])) + " ap " + network["bssid"]
 
+			if self.wpa_driver == "ralink legacy": #Adds support for ralink cards that can't use wpasupplicant
+				if network.get('key') != None:
+					self.lock.acquire()
+					self.ConnectingMessage = 'setting_encryption_info'
+					self.lock.release()
+
+					print 'setting up ralink encryption'
+					iwpriv = misc.Run("iwpriv " + self.wireless_interface + " get_site_survey")
+					lines = iwpriv.splitlines()
+					lines = lines[2:]
+					for x in lines:
+						info = x.split()
+						if len(info) < 5 or info == None or info == '': #probably overkill, but the last 2 won't get run anyways
+							break;
+						if info[2] == network.get("essid"):
+							if info[5] == 'WEP' or info[5] == 'OPEN': # Needs to be tested
+								print 'setting up WEP'
+								misc.Run("iwconfig " + self.wireless_interface + " key " + network.get('key'))
+							elif info[5] == 'WPA-PSK':
+								print 'setting up WPA-PSK'
+								misc.Run("iwpriv " + self.wireless_interface + " set NetworkType=" + info[6])
+								misc.Run("iwpriv " + self.wireless_interface + " set AuthMode=WPAPSK")
+								misc.Run("iwpriv " + self.wireless_interface + " set EncrypType=" + info[4])
+								misc.Run("iwpriv " + self.wireless_interface + " set SSID=" + info[2])
+								misc.Run("iwpriv " + self.wireless_interface + " set WPAPSK=" + network.get('key'))
+								misc.Run("iwpriv " + self.wireless_interface + " set SSID=" + info[2])
+							elif info[5] == 'WPA2-PSK':
+								print 'setting up WPA2-PSK'
+								misc.Run("iwpriv " + self.wireless_interface + " set NetworkType=" + info[6])
+								misc.Run("iwpriv " + self.wireless_interface + " set AuthMode=WPA2PSK")
+								misc.Run("iwpriv " + self.wireless_interface + " set EncrypType=" + info[4])
+								misc.Run("iwpriv " + self.wireless_interface + " set SSID=" + info[2])
+								misc.Run("iwpriv " + self.wireless_interface + " set WPAPSK=" + network.get('key'))
+								misc.Run("iwpriv " + self.wireless_interface + " set SSID=" + info[2])
+							else:
+								print 'Unknown AuthMode, can\'t complete connection process!!!'
+			print "done setting encryption info"
+
 			if not network.get('broadcast') == None:
 				self.lock.acquire()
-
 				self.ConnectingMessage = 'setting_broadcast_address'
 				self.lock.release()
 
@@ -327,6 +383,22 @@ class Wireless:
 				misc.Run("ifconfig " + self.wireless_interface + " broadcast " + network["broadcast"])
 
 
+<<<<<<< .mine
+			if not network.get("dns1") == None:
+				self.lock.acquire()
+				self.ConnectingMessage = 'setting_static_dns'
+				self.lock.release()
+
+				print "setting the first dns server...", network["dns1"]
+				resolv = open("/etc/resolv.conf","w")
+				misc.WriteLine(resolv,"nameserver " + network["dns1"])
+				if not network.get("dns2") == None:
+					print "setting the second dns server...", network["dns2"]
+					misc.WriteLine(resolv,"nameserver " + network["dns2"])
+				if not network.get("dns3") == None:
+					print "setting the third dns server..."
+					misc.WriteLine(resolv,"nameserver " + network["dns3"])
+=======
 			if network.get('static_dns') == True and network.get('global_dns') == False:
 				if not network.get("dns1") == None:
 					self.lock.acquire()
@@ -355,10 +427,10 @@ class Wireless:
 					if not self.global_dns_3 == None:
 						print "setting the third dns server..."
 						misc.WriteLine(resolv,"nameserver " + self.global_dns_3)
+>>>>>>> .r63
 
 			if not network.get('ip') == None:
 				self.lock.acquire()
-
 				self.ConnectingMessage = 'setting_static_ip'
 				self.lock.release()
 
@@ -370,7 +442,6 @@ class Wireless:
 			else:
 				#run dhcp...
 				self.lock.acquire()
-
 				self.ConnectingMessage = 'running_dhcp'
 				self.lock.release()
 
@@ -619,4 +690,3 @@ class Wired:
 				print 'executing post connection script'
 				misc.Run(after_script)
 		#end function run
-

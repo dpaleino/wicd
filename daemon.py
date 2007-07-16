@@ -252,6 +252,23 @@ class ConnectionWizard(dbus.service.Object):
 		return str(self.wifi.wireless_interface)
 	#end function GetWirelessInterface
 
+<<<<<<< .mine
+	@dbus.service.method('org.wicd.daemon')
+	def SetDebugMode(self,debug):
+		'''sets if debugging mode is on or off'''
+		config = ConfigParser.ConfigParser()
+		config.read(self.app_conf)
+		config.set("Settings","debug_mode",debug)
+		configfile = open(self.app_conf,"w")
+		config.write(configfile)
+		self.debug_mode = debug
+
+	@dbus.service.method('org.wicd.daemon')
+	def GetDebugMode(self):
+		'''returns whether debugging is enabled'''
+		return bool(int(self.debug_mode))
+
+=======
 	@dbus.service.method('org.wicd.daemon')
 	def GetGlobalDNSAddresses(self):
 		'''returns the global dns addresses'''
@@ -259,6 +276,7 @@ class ConnectionWizard(dbus.service.Object):
 		return (self.dns1,self.dns2,self.dns3)
 	#end function GetWirelessInterface
 	
+>>>>>>> .r63
 	########## WIRELESS FUNCTIONS
 	#################################
 
@@ -284,6 +302,7 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def DisconnectWireless(self):
+		'''disconnects all wireless networks'''
 		self.SetForcedDisconnect(True)
 		self.wifi.Disconnect()
 	#end function DisconnectWireless
@@ -307,28 +326,21 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
+		'''creates an ad-hoc network using user inputted settings'''
 		print 'attempting to create ad-hoc network...'
 		self.wifi.CreateAdHocNetwork(essid,channel,ip,enctype,key,encused,ics)
 	#end function CreateAdHocNetwork
 
 	@dbus.service.method('org.wicd.daemon.wireless')
-	def GetHideDupeAPs(self):
-		return self.hide_dupe_aps
-	#end function GetHideDupeAPs
-
-	@dbus.service.method('org.wicd.daemon.wireless')
-	def SetHideDupeAPs(self,value):
-		self.hide_dupe_aps = value
-	#end function SetHideDupeAPs
-
-	@dbus.service.method('org.wicd.daemon.wireless')
 	def GetAutoReconnect(self):
+		'''returns if wicd should automatically try to reconnect is connection is lost'''
 		do = bool(int(self.auto_reconnect))
 		return self.__printReturn('returning automatically reconnect when connection drops',do)
 	#end function GetAutoReconnect	
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def SetAutoReconnect(self,value):
+		'''sets if wicd should try to reconnect with connection drops'''
 		print 'setting automatically reconnect when connection drops'
 		config = ConfigParser.ConfigParser()
 		config.read(self.app_conf)
@@ -339,7 +351,21 @@ class ConnectionWizard(dbus.service.Object):
 
 	@dbus.service.method('org.wicd.daemon.wireless')
 	def AutoConnect(self,fresh):
-		'''autoconnects to a wireless network'''
+		'''first tries to autoconnect to a wireled network, if that fails it tries a wireless connection'''
+		if fresh and self.CheckPluggedIn() == True:
+			defaultNetwork = self.GetDefaultWiredNetwork()
+			if defaultNetwork != None:
+				self.ReadWiredNetworkProfile(defaultNetwork)	
+				self.ConnectWired()
+			time.sleep(1)
+			print "Attempting to autoconnect with wired interface..."
+			while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
+				time.sleep(1)
+			print "...done autoconnecting."
+		    else:
+		        print "couldn't find a default wired connection, wired autoconnect failed"
+		else:
+			print "no wired connection present, wired autoconnect failed"
 		print 'attempting to autoconnect to wireless network'
 		if fresh:
 			self.Scan()
@@ -350,7 +376,7 @@ class ConnectionWizard(dbus.service.Object):
 					if bool(self.LastScan[x].get('automatic')):
 						print 'automatically connecting to...',str(self.LastScan[x]["essid"])
 						self.ConnectWireless(x)
-						time.sleep(1)
+						time.sleep(3)
 						while self.CheckIfWirelessConnecting():
 							print "autoconnecting... hold"
 							#not sure why I need to get IPs, but
@@ -370,26 +396,10 @@ class ConnectionWizard(dbus.service.Object):
 							# think? -- adam
 							###
 							#self.GetWiredIP()
-							time.sleep(1)
+							time.sleep(2)
 						print "autoconnecting... done"
 						return
-			print "unable to find a network to autoconnect to, checking for a wired connection"
-			if self.CheckPluggedIn() == True:
-			    defaultNetwork = self.GetDefaultWiredNetwork()
-			    if defaultNetwork != None:
-				self.ReadWiredNetworkProfile(defaultNetwork)	
-			        self.ConnectWired()
-				time.sleep(1)
-				print "Attempting to autoconnect with wired interface..."
-				while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
-					#I didn't include a self.GetWired/WirelessIP call and it seems
-					#to work for me...could it cause problems? - Dan
-					time.sleep(1)
-				print "...done autoconnecting."
-			    else:
-			        print "couldn't find a default wired connection, couldn't autoconnect"
-			else:
-				print "no wired connection present, couldn't autoconnect."
+			print "unable to autoconnect, you'll have to manually connect"
 		else:
 			print 'autoconnect failed because wireless interface == None'
 	#end function AutoConnect
@@ -624,7 +634,7 @@ class ConnectionWizard(dbus.service.Object):
 	@dbus.service.method('org.wicd.daemon.config')
 	def DisableLogging(self):
 		global logging_enabled
-		logging_enabled = False 
+		logging_enabled = False
 
 	@dbus.service.method('org.wicd.daemon.config')
 	def EnableLogging(self):
@@ -843,10 +853,18 @@ class ConnectionWizard(dbus.service.Object):
 				else:
 					config.set("Settings","auto_reconnect","False")
 					self.auto_reconnect = False
+<<<<<<< .mine
+				if config.has_option("Settings","debug_mode"):
+					self.debug_mode = config.get("Settings","debug_mode")
+				else:
+					self.debug_mode = False
+					config.set("Settings","debug_mode","False")
+=======
 				if config.has_option('Settings','dns1') and config.has_option('Settings','dns2') and config.has_option('Settings','dns3'):
 					self.SetGlobalDNS(config.get('Settings','dns1'),config.get('Settings','dns2'),config.get('Settings','dns3'))
 				else:
 					self.SetGlobalDNS("None","None","None")
+>>>>>>> .r63
 			else:
 				print "configuration file exists, no settings found, adding defaults..."
 				configfile = open(self.app_conf,"w")
@@ -856,6 +874,15 @@ class ConnectionWizard(dbus.service.Object):
 				config.set("Settings","wpa_driver","wext")
 				config.set("Settings","always_show_wired_interface","False")
 				config.set("Settings","auto_reconnect","False")
+<<<<<<< .mine
+				config.set("Settings","debug_mode","False")
+				self.SetWirelessInterface("wlan0")
+				self.SetWiredInterface("eth0")
+				self.SetWPADriver("wext")
+				self.SetAlwaysShowWiredInterface(False)
+				self.SetAutoReconnect(True)
+				self.SetDebugMode(False)
+=======
 				config.set("Settings","use_global_dns","False")
 				config.set("Settings","dns1","None")
 				config.set("Settings","dns2","None")
@@ -864,6 +891,7 @@ class ConnectionWizard(dbus.service.Object):
 				self.SetWirelessInterface(config.get("Settings","wireless_interface"))
 				self.SetWiredInterface(config.get("Settings","wired_interface"))
 				self.SetWPADriver(config.get("Settings","wpa_driver"))
+>>>>>>> .r63
 				config.write(configfile)
 
 		else:
@@ -876,9 +904,13 @@ class ConnectionWizard(dbus.service.Object):
 			config.set("Settings","wired_interface","eth0")
 			config.set("Settings","always_show_wired_interface","False")
 			config.set("Settings","auto_reconnect","False")
+<<<<<<< .mine
+			config.set("Settings","debug_mode","False")
+=======
 			config.set("Settings","dns1","None")
 			config.set("Settings","dns2","None")
 			config.set("Settings","dns3","None")
+>>>>>>> .r63
 			iface = self.DetectWirelessInterface()
 			if iface:
 				config.set("Settings","wireless_interface",iface)
@@ -892,7 +924,11 @@ class ConnectionWizard(dbus.service.Object):
 			self.SetWPADriver(config.get("Settings","wpa_driver"))
 			self.SetAlwaysShowWiredInterface(False)
 			self.SetAutoReconnect(True)
+<<<<<<< .mine
+			self.SetDebugMode(False)
+=======
  			self.SetGlobalDNS(None,None,None)
+>>>>>>> .r63
 		#end If
 
 		if os.path.isfile( self.wireless_conf ):
@@ -933,12 +969,13 @@ class ConnectionWizard(dbus.service.Object):
 
 ## fork from the parent terminal
 
-if not True: #for easy disabling
+if True: #for easy disabling
 	try:
 		pid = os.fork()
 		if pid > 0:
 			# exit first parent
 			sys.exit(0)
+
 	except OSError, e:
 		print >>sys.stderr, "fork #1 failed: %d (%s)" % (e.errno, e.strerror)
 		sys.exit(1)
@@ -960,8 +997,8 @@ if not True: #for easy disabling
 #kill output
 #POI:500 stdout redirection
 output = FlushWriter()
-#sys.stdout = output #open("data/wicd.log","w")
-#sys.stderr = output
+sys.stdout = output #open("data/wicd.log","w")
+sys.stderr = output
 
 print "---------------------------"
 print "wicd initalizing..."

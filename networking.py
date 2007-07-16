@@ -327,19 +327,34 @@ class Wireless:
 				misc.Run("ifconfig " + self.wireless_interface + " broadcast " + network["broadcast"])
 
 
-			if not network.get("dns1") == None:
-				self.lock.acquire()
-				self.ConnectingMessage = 'setting_static_dns'
-				self.lock.release()
-				print "setting the first dns server...", network["dns1"]
-				resolv = open("/etc/resolv.conf","w")
-				misc.WriteLine(resolv,"nameserver " + network["dns1"])
-				if not network.get("dns2") == None:
-					print "setting the second dns server...", network["dns2"]
-					misc.WriteLine(resolv,"nameserver " + network["dns2"])
-				if not network.get("dns3") == None:
-					print "setting the third dns server..."
-					misc.WriteLine(resolv,"nameserver " + network["dns3"])
+			if network.get('static_dns') == True and network.get('global_dns') == False:
+				if not network.get("dns1") == None:
+					self.lock.acquire()
+					self.ConnectingMessage = 'setting_static_dns'
+					self.lock.release()
+					print "setting the first dns server...", network["dns1"]
+					resolv = open("/etc/resolv.conf","w")
+					misc.WriteLine(resolv,"nameserver " + network["dns1"])
+					if not network.get("dns2") == None:
+						print "setting the second dns server...", network["dns2"]
+						misc.WriteLine(resolv,"nameserver " + network["dns2"])
+					if not network.get("dns3") == None:
+						print "setting the third dns server..."
+						misc.WriteLine(resolv,"nameserver " + network["dns3"])
+			else:
+				if not self.global_dns_1 == None:
+					self.lock.acquire()
+					self.ConnectingMessage = 'setting_static_dns'
+					self.lock.release()
+					print "setting the first dns server...", self.global_dns_1
+					resolv = open("/etc/resolv.conf","w")
+					misc.WriteLine(resolv,"nameserver " + self.global_dns_1)
+					if not self.global_dns_2 == None:
+						print "setting the second dns server...", self.global_dns_2 
+						misc.WriteLine(resolv,"nameserver " + self.global_dns_2)
+					if not self.global_dns_3 == None:
+						print "setting the third dns server..."
+						misc.WriteLine(resolv,"nameserver " + self.global_dns_3)
 
 			if not network.get('ip') == None:
 				self.lock.acquire()

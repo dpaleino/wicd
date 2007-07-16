@@ -177,7 +177,7 @@ class ConnectionWizard(dbus.service.Object):
 		configfile = open(self.app_conf,"w")
 		config.write(configfile)
 	#end function SetWirelessInterface
-
+	
 	@dbus.service.method('org.wicd.daemon')
 	def SetWPADriver(self,driver):
 		'''sets the wpa driver the wpa_supplicant will use'''
@@ -189,6 +189,47 @@ class ConnectionWizard(dbus.service.Object):
 		configfile = open(self.app_conf,"w")
 		config.write(configfile)
 	#end function SetWPADriver
+
+	@dbus.service.method('org.wicd.daemon')
+	def SetUseGlobalDNS(self,use):
+		config = ConfigParser.ConfigParser()
+		config.read(self.app_conf)
+		config.set("Settings","use_global_dns",str(use))
+		self.use_global_dns = use
+		self.wifi.use_global_dns = use
+		self.wired.use_global_dns = use
+		configfile = open(self.app_conf,"w")
+		config.write(configfile)
+
+	@dbus.service.method('org.wicd.daemon')
+	def SetGlobalDNS(self,dns1=None,dns2=None,dns3=None):
+		'''sets the global dns addresses'''
+		print "setting global dns"
+		config = ConfigParser.ConfigParser()
+		config.read(self.app_conf)
+		if dns1:
+			config.set("Settings","global_dns_1",misc.noneToString(dns1))
+			self.dns1 = dns1
+			self.wifi.global_dns_1 = dns1
+			self.wired.global_dns_1 = dns1
+		if dns2:
+			config.set("Settings","global_dns_2",misc.noneToString(dns2))
+			self.dns2 = dns2
+			self.wifi.global_dns_2 = dns2
+			self.wired.global_dns_2 = dns2
+		if dns3:
+			config.set("Settings","global_dns_3",misc.noneToString(dns3))
+			self.dns3 = dns3
+			self.wifi.global_dns_3 = dns3
+			self.wired.global_dns_3 = dns3
+		configfile = open(self.app_conf,"w")
+		config.write(configfile)
+	#end function SetWirelessInterface
+
+
+	@dbus.service.method('org.wicd.daemon')
+	def GetUseGlobalDNS(self):
+		return bool(self.use_global_dns)
 
 	@dbus.service.method('org.wicd.daemon')
 	def GetWPADriver(self):
@@ -211,6 +252,13 @@ class ConnectionWizard(dbus.service.Object):
 		return str(self.wifi.wireless_interface)
 	#end function GetWirelessInterface
 
+	@dbus.service.method('org.wicd.daemon')
+	def GetGlobalDNSAddresses(self):
+		'''returns the global dns addresses'''
+		print 'returning global dns addresses to client'
+		return (self.dns1,self.dns2,self.dns3)
+	#end function GetWirelessInterface
+	
 	########## WIRELESS FUNCTIONS
 	#################################
 
@@ -700,8 +748,7 @@ class ConnectionWizard(dbus.service.Object):
 		#out which network is which. it will not be read
 		for x in self.LastScan[id]:
 			config.set(self.LastScan[id]["bssid"],x,self.LastScan[id][x])
-		config.write( open(self.wireless_conf,"w"))
-		print "100: Profile Written"
+		config.write(open(self.wireless_conf,"w"))
 	#end function SaveWirelessNetworkProfile
 
 	@dbus.service.method('org.wicd.daemon.config')
@@ -755,6 +802,7 @@ class ConnectionWizard(dbus.service.Object):
 	#############################################
 
 	def __printReturn(self,text,value):
+		'''prints the specified text followed by the specified value, then returns value'''
 		print text,value
 		return value
 	#end function __printReturn
@@ -778,11 +826,27 @@ class ConnectionWizard(dbus.service.Object):
 				else:
 					config.set("Settings","always_show_wired_interface","False")
 					self.always_show_wired_interface = False
+				if config.has_option("Settings","use_global_dns"):
+					self.SetUseGlobalDNS(config.get("Settings","use_global_dns"))
+					dns1, dns2, dns3 = ('None','None','None') #so we can access them later
+					if config.has_option("Settings","global_dns_1"):
+							dns1 = config.get('Settings','global_dns_1')
+					if config.has_option("Settings","global_dns_2"):
+							dns2 = config.get('Settings','global_dns_2')
+					if config.has_option("Settings","global_dns_3"):
+							dns3 = config.get('Settings','global_dns_3')
+					self.SetGlobalDNS(dns1,dns2,dns3)
+				else:
+					self.SetUseGlobalDNS(False)
 				if config.has_option("Settings","auto_reconnect"):
 					self.auto_reconnect = config.get("Settings","auto_reconnect")
 				else:
 					config.set("Settings","auto_reconnect","False")
 					self.auto_reconnect = False
+				if config.has_option('Settings','dns1') and config.has_option('Settings','dns2') and config.has_option('Settings','dns3'):
+					self.SetGlobalDNS(config.get('Settings','dns1'),config.get('Settings','dns2'),config.get('Settings','dns3'))
+				else:
+					self.SetGlobalDNS("None","None","None")
 			else:
 				print "configuration file exists, no settings found, adding defaults..."
 				configfile = open(self.app_conf,"w")
@@ -792,6 +856,11 @@ class ConnectionWizard(dbus.service.Object):
 				config.set("Settings","wpa_driver","wext")
 				config.set("Settings","always_show_wired_interface","False")
 				config.set("Settings","auto_reconnect","False")
+				config.set("Settings","use_global_dns","False")
+				config.set("Settings","dns1","None")
+				config.set("Settings","dns2","None")
+				config.set("Settings","dns3","None")
+				self.SetGlobalDNS(config.get('Settings','dns1'),config.get('Settings','dns2'),config.get('Settings','dns3'))
 				self.SetWirelessInterface(config.get("Settings","wireless_interface"))
 				self.SetWiredInterface(config.get("Settings","wired_interface"))
 				self.SetWPADriver(config.get("Settings","wpa_driver"))
@@ -807,11 +876,14 @@ class ConnectionWizard(dbus.service.Object):
 			config.set("Settings","wired_interface","eth0")
 			config.set("Settings","always_show_wired_interface","False")
 			config.set("Settings","auto_reconnect","False")
+			config.set("Settings","dns1","None")
+			config.set("Settings","dns2","None")
+			config.set("Settings","dns3","None")
 			iface = self.DetectWirelessInterface()
 			if iface:
 				config.set("Settings","wireless_interface",iface)
 			else:
-				print "couldn't detect a wireless interface..."
+				print "couldn't detect a wireless interface, using wlan0..."
 				config.set("Settings","wireless_interface","wlan0")
 			config.set("Settings","wpa_driver","wext")
 			config.write(open(self.app_conf,"w"))
@@ -820,6 +892,7 @@ class ConnectionWizard(dbus.service.Object):
 			self.SetWPADriver(config.get("Settings","wpa_driver"))
 			self.SetAlwaysShowWiredInterface(False)
 			self.SetAutoReconnect(True)
+ 			self.SetGlobalDNS(None,None,None)
 		#end If
 
 		if os.path.isfile( self.wireless_conf ):

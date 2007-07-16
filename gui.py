@@ -129,6 +129,7 @@ language['after_script'] = _('Run script after connect')
 language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
+language['use_global_dns'] = _('Use global DNS servers')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -153,7 +154,6 @@ language['setting_broadcast_address'] = _('Setting broadcast address...')
 language['setting_static_dns'] = _('Setting static DNS servers...')
 language['setting_static_ip'] = _('Setting static IP addresses...')
 language['running_dhcp'] = _('Obtaining IP address...')
-
 language['done'] = _('Done connecting...')
 
 ########################################
@@ -221,6 +221,7 @@ class LabelEntry(gtk.HBox):
 		#when the box looses focus, hide them
 		if self.auto_hide_text and widget:
 			self.entry.set_visibility(False)
+
 class GreyLabel(gtk.Label):
 	def __init__(self):
 		gtk.Label.__init__(self)
@@ -233,7 +234,7 @@ class GreyLabel(gtk.Label):
 ########################################
 
 def noneToString(text):
-	'''used for putting text in a text box if the value to put in is 'None' the box will be blank'''
+	'''used for putting text in a text box - if the value to put in is 'None' the box will be blank'''
 	if text == None or text == "None" or text == "":
 		return "None" 
 	else:
@@ -260,6 +261,11 @@ def stringToBoolean(text):
 	if text == "False":
 		return False
 	return text
+
+def checkboxTextboxToggle(checkbox,textboxes):
+	#really bad practice, but checkbox == self
+	for textbox in textboxes:
+			textbox.set_sensitive(checkbox.get_active())
 
 ########################################
 ##### NETWORK LIST CLASSES
@@ -348,25 +354,33 @@ class NetworkEntry(gtk.Expander):
 		self.txtIP.entry.connect('focus-out-event',self.setDefaults)
 		self.txtNetmask = LabelEntry(language['netmask'])
 		self.txtGateway = LabelEntry(language['gateway'])
-		self.txtDNS1 = LabelEntry(language['dns'] + language['1'])
-		self.txtDNS2 = LabelEntry(language['dns'] + language['2'])
-		self.txtDNS3 = LabelEntry(language['dns'] + language['3'])
+		self.txtDNS1 = LabelEntry(language['dns'] + ' ' + language['1'])
+		self.txtDNS2 = LabelEntry(language['dns'] + ' ' + language['2'])
+		self.txtDNS3 = LabelEntry(language['dns'] + ' ' + language['3'])
+		#dns_addresses = daemon.GetGlobalDNSAddresses()
+		#self.txtDNS1.set_text(dns_addresses[0])
+		#self.txtDNS2.set_text(dns_addresses[1])
+		#self.txtDNS3.set_text(dns_addresses[2])
 		self.txtBeforeScript = LabelEntry(language['before_script'])
 		self.txtAfterScript = LabelEntry(language['after_script'])
 		self.txtBeforeScript.label.set_size_request(200,-1)
 		self.txtAfterScript.label.set_size_request(200,-1)
 		self.checkboxStaticIP = gtk.CheckButton(language['use_static_ip'])
 		self.checkboxStaticDNS = gtk.CheckButton(language['use_static_dns'])
+		self.checkboxGlobalDNS = gtk.CheckButton(language['use_global_dns'])
 		self.expanderAdvanced = gtk.Expander(language['advanced_settings'])
 		self.expanderScripts = gtk.Expander(language['script_settings'])
 		self.vboxTop = gtk.VBox(False,0)
 		self.vboxAdvanced = gtk.VBox(False,0)
 		self.vboxScripts = gtk.VBox(False,0)
+		self.hboxDNS = gtk.HBox(False,0)
+		self.hboxDNS.pack_start(self.checkboxStaticDNS)
+		self.hboxDNS.pack_start(self.checkboxGlobalDNS)
 		self.vboxAdvanced.pack_start(self.checkboxStaticIP,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtIP,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtNetmask,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtGateway,fill=False,expand=False)
-		self.vboxAdvanced.pack_start(self.checkboxStaticDNS,fill=False,expand=False)
+		self.vboxAdvanced.pack_start(self.hboxDNS,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtDNS1,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtDNS2,fill=False,expand=False)
 		self.vboxAdvanced.pack_start(self.txtDNS3,fill=False,expand=False)
@@ -379,6 +393,7 @@ class NetworkEntry(gtk.Expander):
 		#connect the events to the actions
 		self.checkboxStaticIP.connect("toggled",self.toggleIPCheckbox)
 		self.checkboxStaticDNS.connect("toggled",self.toggleDNSCheckbox)
+		self.checkboxGlobalDNS.connect("toggled",self.toggleGlobalDNSCheckbox)
 		self.add(self.vboxTop)
 		#start with all disabled, then they will be enabled later
 		self.checkboxStaticIP.set_active(False)
@@ -447,9 +462,21 @@ class NetworkEntry(gtk.Expander):
 			self.checkboxStaticDNS.set_active(self.checkboxStaticIP.get_active())
 			self.checkboxStaticDNS.set_sensitive(False)
 			
-		self.txtDNS1.set_sensitive(self.checkboxStaticDNS.get_active())
-		self.txtDNS2.set_sensitive(self.checkboxStaticDNS.get_active())
-		self.txtDNS3.set_sensitive(self.checkboxStaticDNS.get_active())
+		self.checkboxGlobalDNS.set_sensitive(self.checkboxStaticDNS.get_active())
+		if self.checkboxStaticDNS.get_active():
+			self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active()) #if global dns is on, use local dns
+			self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
+			self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
+		else:
+			self.txtDNS1.set_sensitive(False)
+			self.txtDNS2.set_sensitive(False)
+			self.txtDNS3.set_sensitive(False)
+	
+	def toggleGlobalDNSCheckbox(self,widget=None):
+		self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
+		self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
+		self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
+
 class WiredNetworkEntry(NetworkEntry):
 	#creates the wired network expander
 	def __init__(self):
@@ -571,6 +598,7 @@ class WiredNetworkEntry(NetworkEntry):
 			self.checkboxDefaultProfile.set_active(stringToBoolean(wired.GetWiredProperty("default")))
 
 			self.resetStaticCheckboxes()
+
 class WirelessNetworkEntry(NetworkEntry):
 	#this class is respsponsible for creating the expander
 	#in each wirelessnetwork entry
@@ -613,9 +641,14 @@ class WirelessNetworkEntry(NetworkEntry):
 		self.txtNetmask.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"netmask")))
 		self.txtGateway.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"gateway")))
 
-		self.txtDNS1.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns1")))
-		self.txtDNS2.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns2")))
-		self.txtDNS3.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns3")))
+		if wireless.GetWirelessProperty(networkID,"dns1") != None:
+			self.txtDNS1.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns1")))
+
+		if wireless.GetWirelessProperty(networkID,'dns2') != None:
+			self.txtDNS2.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns2")))
+
+		if wireless.GetWirelessProperty(networkID,'dns3') != None:
+			self.txtDNS3.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns3")))
 
 		self.txtBeforeScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"beforescript")))
 		self.txtAfterScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"afterscript")))
@@ -777,7 +810,6 @@ class appGui:
 		dialog.vbox.pack_start(vboxA)
 		dialog.vbox.set_spacing(5)
 		dialog.show_all()
-		useICSCheckbox.hide() #this isn't quite ready yet
 		response = dialog.run()
 		if response == 1:
 			wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),channelEntry.entry.get_text(),ipEntry.entry.get_text(),"WEP",self.keyEntry.entry.get_text(),self.useEncryptionCheckbox.get_active(),False) #useICSCheckbox.get_active())
@@ -835,15 +867,37 @@ class appGui:
 		entryWirelessInterface.entry.set_text(daemon.GetWirelessInterface())
 		entryWiredInterface.entry.set_text(daemon.GetWiredInterface())
 
+		useGlobalDNSCheckbox = gtk.CheckButton(language['use_global_dns'])
+		dns1Entry = LabelEntry(language['dns'] + ' ' + language['1'])
+		dns2Entry = LabelEntry(language['dns'] + ' ' + language['2'])
+		dns3Entry = LabelEntry(language['dns'] + ' ' + language['3'])
+		
+		useGlobalDNSCheckbox.connect("toggled",checkboxTextboxToggle,(dns1Entry, dns2Entry, dns3Entry))
+
+		dns_addresses = daemon.GetGlobalDNSAddresses()
+
+		useGlobalDNSCheckbox.set_active(daemon.GetUseGlobalDNS())
+		dns1Entry.set_text(dns_addresses[0])
+		dns2Entry.set_text(dns_addresses[1])
+		dns3Entry.set_text(dns_addresses[2])
+
 		dialog.vbox.pack_start(wpabox)
 		dialog.vbox.pack_start(entryWirelessInterface)
 		dialog.vbox.pack_start(entryWiredInterface)
+
+		dialog.vbox.pack_start(useGlobalDNSCheckbox)
+		dialog.vbox.pack_start(dns1Entry)
+		dialog.vbox.pack_start(dns2Entry)
+		dialog.vbox.pack_start(dns3Entry)
+
 		dialog.vbox.pack_start(wiredcheckbox)
 		dialog.vbox.pack_start(reconnectcheckbox)
 		dialog.vbox.set_spacing(5)
 		dialog.show_all()
 		response = dialog.run()
 		if response == 1:
+			daemon.SetUseGlobalDNS(useGlobalDNSCheckbox.get_active())
+			daemon.SetGlobalDNS(dns1Entry.get_text(),dns2Entry.get_text(),dns3Entry.get_text())
 			daemon.SetWirelessInterface(entryWirelessInterface.entry.get_text())
 			daemon.SetWiredInterface(entryWiredInterface.entry.get_text())
 			print "setting: " + wpadrivers[wpadrivercombo.get_active()]
@@ -988,17 +1042,18 @@ class appGui:
 				wireless.SetWirelessProperty(networkid,"netmask",'')
 				wireless.SetWirelessProperty(networkid,"gateway",'')
 
-			if networkentry.expander.checkboxStaticDNS.get_active() == True:
-				wireless.SetWirelessProperty(networkid,"dns1",noneToString(networkentry.expander.txtDNS1.get_text()))
-				wireless.SetWirelessProperty(networkid,"dns2",noneToString(networkentry.expander.txtDNS2.get_text()))
-				wireless.SetWirelessProperty(networkid,"dns3",noneToString(networkentry.expander.txtDNS3.get_text()))
+			if networkentry.expander.checkboxStaticDNS.get_active() == True and networkentry.expander.checkboxGlobalDNS.get_active() == False:
+				wireless.SetWirelessProperty(networkid,'global_dns',False)
+				wireless.SetWirelessProperty(networkid,'static_dns',True)
+				wireless.SetWirelessProperty(networkid,'dns1',noneToString(networkentry.expander.txtDNS1.get_text()))
+				wireless.SetWirelessProperty(networkid,'dns2',noneToString(networkentry.expander.txtDNS2.get_text()))
+				wireless.SetWirelessProperty(networkid,'dns3',noneToString(networkentry.expander.txtDNS3.get_text()))
+			elif networkentry.expander.checkboxStaticDNS.get_active() == True and networkentry.expander.checkboxGlobalDNS.get_active() == True:
+				wireless.SetWirelessProperty(networkid,'static_dns',True)
+				wireless.SetWirelessProperty(networkid,'global_dns',True)
 			else:
-				#blank the values
-				wireless.SetWirelessProperty(networkid,"dns1",'')
-				wireless.SetWirelessProperty(networkid,"dns2",'')
-				wireless.SetWirelessProperty(networkid,"dns3",'')
+				wireless.SetWirelessProperty(networkid,'static_dns',False) #disable static dns
 
-			
 			if networkentry.expander.checkboxEncryption.get_active() == True:
 				print "setting encryption info..."
 				encryptionInfo = networkentry.expander.encryptionInfo

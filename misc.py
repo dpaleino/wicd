@@ -130,3 +130,10 @@ def LoadEncryptionMethods():
 					encryptionTypes[typeID][2][index] = {}
 					encryptionTypes[typeID][2][index][1] = current
 		return encryptionTypes
+
+def noneToString(text):
+	'''used for putting text in a text box if the value to put in is 'None' the box will be blank'''
+	if text == None or text == "None" or text == "":
+		return "None" 
+	else:
+		return str(text)

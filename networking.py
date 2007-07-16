@@ -383,7 +383,6 @@ class Wireless:
 				misc.Run("ifconfig " + self.wireless_interface + " broadcast " + network["broadcast"])
 
 
-<<<<<<< .mine
 			if not network.get("dns1") == None:
 				self.lock.acquire()
 				self.ConnectingMessage = 'setting_static_dns'
@@ -398,7 +397,6 @@ class Wireless:
 				if not network.get("dns3") == None:
 					print "setting the third dns server..."
 					misc.WriteLine(resolv,"nameserver " + network["dns3"])
-=======
 			if network.get('static_dns') == True and network.get('global_dns') == False:
 				if not network.get("dns1") == None:
 					self.lock.acquire()
@@ -427,7 +425,6 @@ class Wireless:
 					if not self.global_dns_3 == None:
 						print "setting the third dns server..."
 						misc.WriteLine(resolv,"nameserver " + self.global_dns_3)
->>>>>>> .r63
 
 			if not network.get('ip') == None:
 				self.lock.acquire()

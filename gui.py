@@ -129,11 +129,8 @@ language['after_script'] = _('Run script after connect')
 language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
-<<<<<<< .mine
 language['use_debug_mode'] = _('Enable debug mode')
-=======
 language['use_global_dns'] = _('Use global DNS servers')
->>>>>>> .r63
 
 language['0'] = _('0')
 language['1'] = _('1')

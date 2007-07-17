@@ -5,30 +5,30 @@
 ## but that is not the preferred method
 import os,sys
 if __name__ == '__main__':
-	os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
 import gtk
 import egg.trayicon
 import gobject, dbus, dbus.service
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
-	import dbus.glib
+    import dbus.glib
 #############
 #declare the connections to our daemon.
 #without them nothing useful will happen
 #the daemon should be running as root
 bus = dbus.SystemBus()
 try:
-	print 'attempting to connect daemon...'
-	proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-	print 'success'
+    print 'attempting to connect daemon...'
+    proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+    print 'success'
 except:
-	print 'daemon not running, running gksudo ./daemon.py...'
-	import misc,time
-	misc.PromptToStartDaemon()
-	time.sleep(1)
-	try:
-		proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-	except:
-		print 'daemon still not running, aborting.'
+    print 'daemon not running, running gksudo ./daemon.py...'
+    import misc,time
+    misc.PromptToStartDaemon()
+    time.sleep(1)
+    try:
+        proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+    except:
+        print 'daemon still not running, aborting.'
 #daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')

@@ -4,7 +4,7 @@ import gobject
 import dbus
 import dbus.service
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
-	import dbus.glib
+    import dbus.glib
 
 #############
 #declare our connections to our daemon.
@@ -21,4 +21,4 @@ wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
 
 print daemon.Hello()
 if wireless.CheckIfWirelessConnecting() == False and wired.CheckIfWiredConnecting() == False:
-	print wireless.AutoConnect(True)
+    print wireless.AutoConnect(True)

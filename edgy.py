@@ -122,20 +122,22 @@ def set_signal_image():
                     tr.set_from_file("images/bad-signal" + lock + ".png")
                 elif signal == 0:
                     tr.set_from_file("images/no-signal.png")
-                    #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
-                    #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
-                    #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
-                    #connect to any network set to autoconnect.  It will continuously rescan until a network is found or the user manually reconnects
-                    #This behavior could prove to be annoying, so we'll keep it in the experimental build for now
-                    if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
-                        curNetID = wireless.GetCurrentNetworkID()
-                        if curNetID > -1: #value of -1 is typically caused by hibernation and breaks the tray if passed to daemon
-                            wireless.ConnectWireless(wireless.GetCurrentNetworkID())
+               #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
+               #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
+               #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
+               #connect to any network set to autoconnect.
+                if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
+                    curNetID = wireless.GetCurrentNetworkID()
+                    if curNetID > -1:
+                        wireless.ConnectWireless(wireless.GetCurrentNetworkID())
+                        print 'Trying to autoreconnect'
+                        while wireless.CheckIfWirelessConnecting() == True:
+                            time.sleep(1)
                         if wireless.GetCurrentSignalStrength() != 0:
                             print "Successfully autoreconnected."
                         else:
                             print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
-                            print wireless.AutoConnect(True)
+                            print wireless.AutoConnect(True)   
                      
                 elif wireless_ip == None:
                     tr.set_from_file("images/no-signal.png")

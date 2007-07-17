@@ -87,61 +87,64 @@ def set_signal_image():
         config.DisableLogging()
     
     wired_ip = wired.GetWiredIP()
-    if wired.CheckPluggedIn() == True and wired_ip:
+    if wired.CheckPluggedIn() == True and wired_ip != None:
         if stillWired == False: # Only set image/tooltip if it hasn't been set already
             tr.set_from_file("images/wired.png")
             tr.set_tooltip(language['connected_to_wired'].replace('$A',wired_ip))
             stillWired = True
             lock = ''
+    else:
+        if stillWired == True:
+            tr.set_from_file("images/no-signal.png")
+            tr.set_tooltip(language['not_connected'])
+        stillWired = False
+        wireless_ip = wireless.GetWirelessIP()
+        #If ip returns as None, we are probably returning from hibernation and need to force signal to 0 to avoid crashing
+        if wireless_ip != None:
+            signal = int(wireless.GetCurrentSignalStrength())
         else:
-            stillWired = False
-            wireless_ip = wireless.GetWirelessIP()
-            #If ip returns as None, we are probably returning from hibernation and need to force signal to 0 to avoid crashing
-            if wireless_ip != None:
-                signal = int(wireless.GetCurrentSignalStrength())
-            else:
-                signal = 0
-                   
-            #only update if the signal strength has changed because doing I/O calls is expensive,
-            #and the icon flickers
-            if (signal != LastStrength or network != wireless.GetCurrentNetwork()) and wireless_ip != None:
-                LastStrength = signal
-                lock = '' #set the string to '' so that when it is put in "high-signal" + lock + ".png", there will be nothing
-                curNetID = wireless.GetCurrentNetworkID() #the network ID needs to be checked because a negative value here will break the tray
-                if signal > 0 and curNetID > -1 and wireless.GetWirelessProperty(curNetID,"encryption"):
-                    lock = '-lock' #set the string to '-lock' so that it will display the lock picture
-                network = str(wireless.GetCurrentNetwork())               
-                tr.set_tooltip(language['connected_to_wireless'].replace('$A',network).replace('$B',str(signal)).replace('$C',str(wireless_ip)))
-                if signal > 75:
-                    tr.set_from_file("images/high-signal" + lock + ".png")
-                elif signal > 50:
-                    tr.set_from_file("images/good-signal" + lock + ".png")
-                elif signal > 25:
-                    tr.set_from_file("images/low-signal" + lock + ".png")
-                elif signal > 0:
-                    tr.set_from_file("images/bad-signal" + lock + ".png")
-                elif signal == 0:
-                    tr.set_from_file("images/no-signal.png")
-               #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
-               #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
-               #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
-               #connect to any network set to autoconnect.
-                if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
-                    curNetID = wireless.GetCurrentNetworkID()
-                    if curNetID > -1:
-                        wireless.ConnectWireless(wireless.GetCurrentNetworkID())
-                        print 'Trying to autoreconnect'
-                        while wireless.CheckIfWirelessConnecting() == True:
-                            time.sleep(1)
-                        if wireless.GetCurrentSignalStrength() != 0:
-                            print "Successfully autoreconnected."
-                        else:
-                            print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
-                            print wireless.AutoConnect(True)   
-                     
-                elif wireless_ip == None:
-                    tr.set_from_file("images/no-signal.png")
-                    tr.set_tooltip(language['not_connected'])
+            signal = 0
+                
+        #only update if the signal strength has changed because doing I/O calls is expensive,
+        #and the icon flickers
+        if (signal != LastStrength or network != wireless.GetCurrentNetwork()) and wireless_ip != None:
+            LastStrength = signal
+            lock = '' #set the string to '' so that when it is put in "high-signal" + lock + ".png", there will be nothing
+            curNetID = wireless.GetCurrentNetworkID() #the network ID needs to be checked because a negative value here will break the tray
+            if signal > 0 and curNetID > -1 and wireless.GetWirelessProperty(curNetID,"encryption"):
+                lock = '-lock' #set the string to '-lock' so that it will display the lock picture
+            network = str(wireless.GetCurrentNetwork())               
+            tr.set_tooltip(language['connected_to_wireless'].replace('$A',network).replace('$B',str(signal)).replace('$C',str(wireless_ip)))
+            if signal > 75:
+                tr.set_from_file("images/high-signal" + lock + ".png")
+            elif signal > 50:
+                tr.set_from_file("images/good-signal" + lock + ".png")
+            elif signal > 25:
+                tr.set_from_file("images/low-signal" + lock + ".png")
+            elif signal > 0:
+                tr.set_from_file("images/bad-signal" + lock + ".png")
+            elif signal == 0:
+                tr.set_from_file("images/no-signal.png")
+            #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
+            #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
+            #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
+            #connect to any network set to autoconnect.
+            if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
+                curNetID = wireless.GetCurrentNetworkID()
+                if curNetID > -1:
+                    wireless.ConnectWireless(wireless.GetCurrentNetworkID())
+                    print 'Trying to autoreconnect'
+                    while wireless.CheckIfWirelessConnecting() == True:
+                        time.sleep(1)
+                    if wireless.GetCurrentSignalStrength() != 0:
+                        print "Successfully autoreconnected."
+                    else:
+                        print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
+                        print wireless.AutoConnect(True)   
+                    
+            elif wireless_ip == None:
+                tr.set_from_file("images/no-signal.png")
+                tr.set_tooltip(language['not_connected'])
 
     if not daemon.GetDebugMode():
         config.EnableLogging()

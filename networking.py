@@ -39,15 +39,15 @@ class Wireless:
 
         #init the regex patterns that will be used to search the output of iwlist scan for info
         #these are well tested, should work on most cards
-        essid_pattern       = re.compile('.*ESSID:"(.*?)"\n',re.DOTALL | re.I | re.M  | re.S)
-        ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
-        channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
+        essid_pattern        = re.compile('.*ESSID:"(.*?)"\n',re.DOTALL | re.I | re.M  | re.S)
+        ap_mac_pattern        = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
+        channel_pattern        = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
         strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
         mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 
-        wep_pattern     = re.compile('.*Encryption key:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
+        wep_pattern        = re.compile('.*Encryption key:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
         wpa1_pattern        = re.compile('(WPA Version 1)',re.DOTALL | re.I | re.M  | re.S)
-        wpa2_pattern        = re.compile('(WPA2)',re.DOTALL | re.I | re.M  | re.S)
+        wpa2_pattern         = re.compile('(WPA2)',re.DOTALL | re.I | re.M  | re.S)
 
         #####
         ## PREPARE THE INTERFACE
@@ -139,7 +139,8 @@ class Wireless:
                             if len(info) < 5 or info == None or info == '':
                                 break;
                             if info[2] == CurrentNetwork["essid"]:
-                                if info[5] == 'WEP' or info[5] == 'OPEN': # Needs to be tested
+                                CurrentNetwork["encryption"] = True
+                                if info[5] == 'WEP' or ((info[5] == 'OPEN' or info[5] == 'SHARED') and info[4] == 'WEP'): # Needs to be tested
                                     CurrentNetwork["encryption_method"] = 'WEP'
                                 elif info[5] == 'WPA-PSK':
                                     CurrentNetwork["encrytion_method"] = 'WPA'
@@ -148,7 +149,7 @@ class Wireless:
                                 else:
                                     print 'Unknown AuthMode, can\'t assign encryption_method!!'
                                     CurrentNetwork["encryption_method"] = 'Unknown'
-                                CurrentNetwork["quality"] = info[1][1:] #set link strength here
+                                CurrentNetwork["quality"] = info[1][1:] #set signal strength here (not link quality! dBm vs %)
                 else:
                     CurrentNetwork["encryption"] = False
                 #end If
@@ -355,9 +356,17 @@ class Wireless:
                         if len(info) < 5 or info == None or info == '': #probably overkill, but the last 2 won't get run anyways
                             break;
                         if info[2] == network.get("essid"):
-                            if info[5] == 'WEP' or info[5] == 'OPEN': # Needs to be tested
+                            if info[5] == 'WEP' or (info[5] == 'OPEN' and info[4] == 'WEP'): # Needs to be tested
                                 print 'setting up WEP'
                                 misc.Run("iwconfig " + self.wireless_interface + " key " + network.get('key'))
+                            elif info[5] == 'SHARED' and info[4] == 'WEP':
+                                print 'setting up WEP'
+                                misc.Run("iwpriv " + self.wireless_interface + " set NetworkType=" + info[6])
+                                misc.Run("iwpriv " + self.wireless_interface + " set AuthMode=SHARED")
+                                misc.Run("iwpriv " + self.wireless_interface + " set EncrypType=" + info[4])
+                                misc.Run("iwpriv " + self.wireless_interface + " set Key1=" + network.get('key'))
+                                misc.Run("iwpriv " + self.wireless_interface + " set DefaultKeyID=1")
+                                misc.Run("iwpriv " + self.wireless_interface + " set SSID=" + info[2])                                
                             elif info[5] == 'WPA-PSK':
                                 print 'setting up WPA-PSK'
                                 misc.Run("iwpriv " + self.wireless_interface + " set NetworkType=" + info[6])
@@ -385,6 +394,21 @@ class Wireless:
 
                 print "setting the broadcast address..." + network["broadcast"]
                 misc.Run("ifconfig " + self.wireless_interface + " broadcast " + network["broadcast"])
+
+            if not network.get("dns1") == None:
+                self.lock.acquire()
+                self.ConnectingMessage = 'setting_static_dns'
+                self.lock.release()
+
+                print "setting the first dns server...", network["dns1"]
+                resolv = open("/etc/resolv.conf","w")
+                misc.WriteLine(resolv,"nameserver " + network["dns1"])
+                if not network.get("dns2") == None:
+                    print "setting the second dns server...", network["dns2"]
+                    misc.WriteLine(resolv,"nameserver " + network["dns2"])
+                if not network.get("dns3") == None:
+                    print "setting the third dns server..."
+                    misc.WriteLine(resolv,"nameserver " + network["dns3"])
 
             if not network.get('ip') == None:
                 self.lock.acquire()

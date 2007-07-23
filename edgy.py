@@ -77,14 +77,23 @@ def open_wicd_gui():
     if ret == 0:
        lastWinId = os.spawnlpe(os.P_NOWAIT, './gui.py', os.environ)
 
+def wired_profile_chooser():
+    print 'profile chooser is running'
+    os.spawnlpe(os.P_WAIT, './gui.py', os.environ)
+    
 def set_signal_image():
     global LastStrength
     global stillWired #keeps us from resetting the wired info over and over
     global network #declared as global so it gets initialized before initial use
 
-    # Disable logging if debugging isn't on to prevent log spam
+    #Disable logging if debugging isn't on to prevent log spam
     if not daemon.GetDebugMode():
         config.DisableLogging()
+    
+    #Check to see we wired profile autoconnect chooser needs to be displayed
+    if daemon.GetNeedWiredProfileChooser() == True:
+        wired_profile_chooser()
+        daemon.SetNeedWiredProfileChooser(False)
     
     wired_ip = wired.GetWiredIP()
     if wired.CheckPluggedIn() == True and wired_ip != None:
@@ -94,7 +103,7 @@ def set_signal_image():
             stillWired = True
             lock = ''
     else:
-        if stillWired == True:
+        if stillWired == True: #this only occurs when we were previously using wired but it became unplugged
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
         stillWired = False
@@ -107,7 +116,7 @@ def set_signal_image():
                 
         #only update if the signal strength has changed because doing I/O calls is expensive,
         #and the icon flickers
-        if (signal != LastStrength or network != wireless.GetCurrentNetwork()) and wireless_ip != None:
+        if (signal != LastStrength or network != wireless.GetCurrentNetwork() or signal == 0) and wireless_ip != None:
             LastStrength = signal
             lock = '' #set the string to '' so that when it is put in "high-signal" + lock + ".png", there will be nothing
             curNetID = wireless.GetCurrentNetworkID() #the network ID needs to be checked because a negative value here will break the tray
@@ -125,32 +134,38 @@ def set_signal_image():
                 tr.set_from_file("images/bad-signal" + lock + ".png")
             elif signal == 0:
                 tr.set_from_file("images/no-signal.png")
-            #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
-            #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
-            #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
-            #connect to any network set to autoconnect.
-            if wireless.GetAutoReconnect() == True and wireless.CheckIfWirelessConnecting() == False and wireless.GetForcedDisconnect() == False:
-                curNetID = wireless.GetCurrentNetworkID()
-                if curNetID > -1:
-                    wireless.ConnectWireless(wireless.GetCurrentNetworkID())
-                    print 'Trying to autoreconnect'
-                    while wireless.CheckIfWirelessConnecting() == True:
-                        time.sleep(1)
-                    if wireless.GetCurrentSignalStrength() != 0:
-                        print "Successfully autoreconnected."
-                    else:
-                        print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
-                        print wireless.AutoConnect(True)   
+                auto_reconnect()
                     
-            elif wireless_ip == None:
-                tr.set_from_file("images/no-signal.png")
-                tr.set_tooltip(language['not_connected'])
+        elif wireless_ip == None and wired_ip == None:
+            tr.set_from_file("images/no-signal.png")
+            tr.set_tooltip(language['not_connected'])
+            auto_reconnect()
 
     if not daemon.GetDebugMode():
         config.EnableLogging()
 
     return True
 
+def auto_reconnect():
+    #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
+    #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
+    #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
+    #connect to a wired network or any wireless network set to autoconnect.
+    if wireless.GetAutoReconnect() == True and daemon.CheckIfConnecting() == False and wireless.GetForcedDisconnect() == False:
+        curNetID = wireless.GetCurrentNetworkID()
+        print 'Trying to autoreconnect to last used network'                    
+        if curNetID > -1:
+            wireless.ConnectWireless(curNetID)
+            while wireless.CheckIfWirelessConnecting() == True:
+                time.sleep(1)
+            if wireless.GetCurrentSignalStrength() != 0:
+                print "Successfully autoreconnected."
+            else:
+                print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
+                daemon.AutoConnect(True)
+        else:   
+            daemon.AutoConnect(True)
+            
 class TrackerStatusIcon(gtk.StatusIcon):
     def __init__(self):
         gtk.StatusIcon.__init__(self)
@@ -184,6 +199,8 @@ class TrackerStatusIcon(gtk.StatusIcon):
         self.set_visible(True)
         self.connect('activate', self.on_activate)
         self.connect('popup-menu', self.on_popup_menu)
+        
+        wireless.SetForcedDisconnect(False)
 
     def on_activate(self, data):
         open_wicd_gui()

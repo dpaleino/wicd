@@ -13,7 +13,7 @@ except:
     print 'Missing GTK and gtk.glade.  Aborting.'
     sys.exit(1)
 
-import time, os, misc, gettext, locale, gobject, dbus, dbus.service
+import time, os, misc, gettext, locale, gobject, dbus, dbus.service,pango
 
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
@@ -131,6 +131,11 @@ language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
 language['use_debug_mode'] = _('Enable debug mode')
 language['use_global_dns'] = _('Use global DNS servers')
+language['use_default_profile'] = _('Use default profile on wired auto-connect')
+language['show_wired_list'] = _('Prompt for profile on wired auto-connect')
+language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
+language['wired_network_found'] = _('Wired connection detected')
+language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -418,7 +423,6 @@ class NetworkEntry(gtk.Expander):
             if stringToNone(netmask.get_text()) == None: #make sure the netmask is blank
                         netmask.set_text('255.255.255.0') #fill in the most common one
 
-
     def resetStaticCheckboxes(self):
         #enable the right stuff
         if not stringToNone(self.txtIP.get_text()) == None:
@@ -491,14 +495,15 @@ class WiredNetworkEntry(NetworkEntry):
         self.set_label(language['wired_network'])
         self.resetStaticCheckboxes()
         self.comboProfileNames = gtk.combo_box_entry_new_text()
+        self.isFullGUI = True
 
-        profileList = config.GetWiredProfileList()
-        if profileList: #make sure there is something in it...
+        self.profileList = config.GetWiredProfileList()
+        if self.profileList: #make sure there is something in it...
             for x in config.GetWiredProfileList(): #add all the names to the combobox
                 self.comboProfileNames.append_text(x)
-        hboxTemp = gtk.HBox(False,0)
+        self.hboxTemp = gtk.HBox(False,0)
         hboxDef = gtk.HBox(False,0)
-        buttonOK = gtk.Button(stock=gtk.STOCK_ADD)
+        self.buttonAdd = gtk.Button(stock=gtk.STOCK_ADD)
         self.buttonDelete = gtk.Button(stock=gtk.STOCK_DELETE)
         self.profileHelp = gtk.Label(language['wired_network_instructions'])
         self.checkboxDefaultProfile = gtk.CheckButton(language['default_wired'])
@@ -509,15 +514,15 @@ class WiredNetworkEntry(NetworkEntry):
         self.profileHelp.set_line_wrap(True)
 
         self.vboxTop.pack_start(self.profileHelp,fill=False,expand=False)
-        hboxTemp.pack_start(self.comboProfileNames,fill=True,expand=True)
-        hboxTemp.pack_start(buttonOK,fill=False,expand=False)
-        hboxTemp.pack_start(self.buttonDelete,fill=False,expand=False)
+        self.hboxTemp.pack_start(self.comboProfileNames,fill=True,expand=True)
+        self.hboxTemp.pack_start(self.buttonAdd,fill=False,expand=False)
+        self.hboxTemp.pack_start(self.buttonDelete,fill=False,expand=False)
         hboxDef.pack_start(self.checkboxDefaultProfile,fill=False,expand=False)
 
-        buttonOK.connect("clicked",self.addProfile) #hook up our buttons
+        self.buttonAdd.connect("clicked",self.addProfile) #hook up our buttons
         self.buttonDelete.connect("clicked",self.removeProfile)
         self.comboProfileNames.connect("changed",self.changeProfile)
-        self.vboxTop.pack_start(hboxTemp)
+        self.vboxTop.pack_start(self.hboxTemp)
         self.vboxTop.pack_start(hboxDef)
 
         if stringToBoolean(wired.GetWiredProperty("default")) == True:
@@ -528,7 +533,7 @@ class WiredNetworkEntry(NetworkEntry):
 
         self.show_all()
         self.profileHelp.hide()
-        if profileList != None:
+        if self.profileList != None:
             self.comboProfileNames.set_active(0)
             print "wired profiles found"
             self.set_expanded(False)
@@ -557,9 +562,10 @@ class WiredNetworkEntry(NetworkEntry):
             config.CreateWiredNetworkProfile(profileName)
             self.comboProfileNames.prepend_text(profileName)
             self.comboProfileNames.set_active(0)
-            self.buttonDelete.set_sensitive(True)
-            self.vboxAdvanced.set_sensitive(True)
-            self.higherLevel.connectButton.set_sensitive(True)
+            if self.isFullGUI == True:
+                self.buttonDelete.set_sensitive(True)
+                self.vboxAdvanced.set_sensitive(True)
+                self.higherLevel.connectButton.set_sensitive(True)
 
     def removeProfile(self,widget):
         print "removing profile"
@@ -570,9 +576,10 @@ class WiredNetworkEntry(NetworkEntry):
             self.profileHelp.show()
             entry = self.comboProfileNames.child
             entry.set_text("")
-            self.buttonDelete.set_sensitive(False)
-            self.vboxAdvanced.set_sensitive(False)
-            self.higherLevel.connectButton.set_sensitive(False)
+            if self.isFullGUI == True:
+                self.buttonDelete.set_sensitive(False)
+                self.vboxAdvanced.set_sensitive(False)
+                self.higherLevel.connectButton.set_sensitive(False)
         else:
             self.profileHelp.hide()
     
@@ -585,7 +592,9 @@ class WiredNetworkEntry(NetworkEntry):
 
     def changeProfile(self,widget):
         if self.comboProfileNames.get_active() > -1: #this way the name doesn't change
-            #                    #everytime someone types something in
+            #                     #everytime someone types something in
+            if self.isFullGUI == False:
+                return
             print "changing profile..."
             profileName = self.comboProfileNames.get_active_text()
             print profileName
@@ -761,30 +770,80 @@ class appGui:
 
     def __init__(self):
         print "starting..."
-        gladefile = "data/wicd.glade"
-        self.windowname = "gtkbench"
-        self.wTree = gtk.glade.XML(gladefile)
+        #two possibilities here, one is that the normal GUI should be opened, the other is that wired auto-connect
+        #is set to prompt the user to select a profile.  It's kind of hacked together, but it'll do.
+        if  daemon.GetNeedWiredProfileChooser() == True:
+            #profile chooser init block
+            #import and init WiredNetworkEntry to steal some of the functions and widgets it uses
+            wiredNetEntry = WiredNetworkEntry()
+            wiredNetEntry.__init__()
+            
+            dialog = gtk.Dialog(title=language['wired_network_found'], flags = gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CONNECT,1,gtk.STOCK_CANCEL,2))
+            dialog.set_has_separator(False)
+            dialog.set_size_request(400,150)
+            instructLabel = gtk.Label(language['choose_wired_profile'] + ':\n')
+            stoppopcheckbox = gtk.CheckButton(language['stop_showing_chooser'])
 
-        dic = { "refresh_clicked" : self.refresh_networks, "quit_clicked" : self.exit, 'disconnect_clicked' : self.disconnect_wireless, "main_exit" : self.exit, "cancel_clicked" : self.cancel_connect, "connect_clicked" : self.connect_hidden, "preferences_clicked" : self.settings_dialog, "about_clicked" : self.about_dialog, 'create_adhoc_network_button_button' : self.create_adhoc_network}
-        self.wTree.signal_autoconnect(dic)
+            wiredNetEntry.isFullGUI = False         
+            instructLabel.set_alignment(0,0)
+            stoppopcheckbox.set_active(False)
+            
+            #remove widgets that were added to the normal WiredNetworkEntry so that they can be added to the pop-up wizard
+            wiredNetEntry.vboxTop.remove(wiredNetEntry.hboxTemp)
+            wiredNetEntry.vboxTop.remove(wiredNetEntry.profileHelp)
+            
+            dialog.vbox.pack_start(instructLabel,fill=False,expand=False)
+            dialog.vbox.pack_start(wiredNetEntry.profileHelp,fill=False,expand=False)
+            dialog.vbox.pack_start(wiredNetEntry.hboxTemp,fill=False,expand=False)
+            dialog.vbox.pack_start(stoppopcheckbox,fill=False,expand=False)
+            dialog.show_all()
+            
+            wiredNetEntry.profileHelp.hide()
+            if wiredNetEntry.profileList != None:
+                wiredNetEntry.comboProfileNames.set_active(0)
+                print "wired profiles found"
+            else:
+                print "no wired profiles found"
+                wiredNetEntry.profileHelp.show()
+                
+            response = dialog.run()
+            if response == 1:
+                print 'reading profile ', wiredNetEntry.comboProfileNames.get_active_text()
+                config.ReadWiredNetworkProfile(wiredNetEntry.comboProfileNames.get_active_text())
+                wired.ConnectWired()
+                dialog.destroy()
+                sys.exit(0)
+            else:
+                if stoppopcheckbox.get_active() == True:
+                    wired.use_default_profile = 1 #so that the pop-up doesn't keep appearing if you cancel it
+                dialog.destroy()
+                sys.exit(0)
+        else:
+            #normal init block
+            gladefile = "data/wicd.glade"
+            self.windowname = "gtkbench"
+            self.wTree = gtk.glade.XML(gladefile)
 
-        #set some strings in the GUI - they may be translated
+            dic = { "refresh_clicked" : self.refresh_networks, "quit_clicked" : self.exit, 'disconnect_clicked' : self.disconnect_wireless, "main_exit" : self.exit, "cancel_clicked" : self.cancel_connect, "connect_clicked" : self.connect_hidden, "preferences_clicked" : self.settings_dialog, "about_clicked" : self.about_dialog, 'create_adhoc_network_button_button' : self.create_adhoc_network}
+            self.wTree.signal_autoconnect(dic)
 
-        self.wTree.get_widget("label_instructions").set_label(language['select_a_network'])
-        #I don't know how to translate a menu entry
-        #more specifically, I don't know how to set a menu entry's text
-        #self.wTree.get_widget("connect_button").modify_text(language['hidden_network'])
-        self.wTree.get_widget("progressbar").set_text(language['connecting'])
+            #set some strings in the GUI - they may be translated
 
-        self.network_list = self.wTree.get_widget("network_list_vbox")
-        self.status_area = self.wTree.get_widget("connecting_hbox")
-        self.status_bar = self.wTree.get_widget("statusbar")
-        self.refresh_networks(fresh=False)
+            self.wTree.get_widget("label_instructions").set_label(language['select_a_network'])
+            #I don't know how to translate a menu entry
+            #more specifically, I don't know how to set a menu entry's text
+            #self.wTree.get_widget("connect_button").modify_text(language['hidden_network'])
+            self.wTree.get_widget("progressbar").set_text(language['connecting'])
 
-        self.statusID = None
+            self.network_list = self.wTree.get_widget("network_list_vbox")
+            self.status_area = self.wTree.get_widget("connecting_hbox")
+            self.status_bar = self.wTree.get_widget("statusbar")
+            self.refresh_networks(fresh=False)
 
-        gobject.timeout_add(300,self.update_statusbar)
-        gobject.timeout_add(100,self.pulse_progress_bar)
+            self.statusID = None
+
+            gobject.timeout_add(300,self.update_statusbar)
+            gobject.timeout_add(100,self.pulse_progress_bar)
 
     def create_adhoc_network(self,widget=None):
         '''shows a dialog that creates a new adhoc network'''
@@ -829,7 +888,7 @@ class appGui:
         self.keyEntry.set_sensitive(self.useEncryptionCheckbox.get_active())
 
     def disconnect_wireless(self,widget=None):
-        wireless.DisconnectWireless()       
+        wireless.DisconnectWireless()
 
     def about_dialog(self,widget,event=None):
         dialog = gtk.AboutDialog()
@@ -843,14 +902,18 @@ class appGui:
     def settings_dialog(self,widget,event=None):
         dialog = gtk.Dialog(title=language['preferences'], flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,1,gtk.STOCK_CANCEL,2))
         dialog.set_has_separator(False)
-        dialog.set_size_request(375,-1)
+        dialog.set_size_request(465,-1)
         wiredcheckbox = gtk.CheckButton(language['wired_always_on'])
         wiredcheckbox.set_active(wired.GetAlwaysShowWiredInterface())
         reconnectcheckbox = gtk.CheckButton(language['auto_reconnect'])
         reconnectcheckbox.set_active(wireless.GetAutoReconnect())
         debugmodecheckbox = gtk.CheckButton(language['use_debug_mode'])
         debugmodecheckbox.set_active(daemon.GetDebugMode())
+        sepline = gtk.HSeparator()
+        usedefaultradiobutton = gtk.RadioButton(None,language['use_default_profile'],False)
+        showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,language['show_wired_list'],False)
         wpadriverlabel = SmallLabel(language['wpa_supplicant_driver'] + ':')
+        wpadriverlabel.set_size_request(75,-1)
         wpadrivercombo = gtk.combo_box_new_text()
         wpadrivercombo.set_size_request(50,-1)
         wpadrivers = [ "hostap","hermes","madwifi","atmel","wext","ndiswrapper","broadcom","ipw","ralink legacy" ]
@@ -875,6 +938,9 @@ class appGui:
 
         entryWirelessInterface = LabelEntry(language['wireless_interface'] + ':')
         entryWiredInterface = LabelEntry(language['wired_interface'] + ':')
+        entryWirelessInterface.label.set_size_request(260,-1)        
+        entryWiredInterface.label.set_size_request(260,-1)
+        entryWiredAutoMethod = gtk.Label('Wired Autoconnection options:')
 
         entryWirelessInterface.entry.set_text(daemon.GetWirelessInterface())
         entryWiredInterface.entry.set_text(daemon.GetWiredInterface())
@@ -893,6 +959,13 @@ class appGui:
         dns2Entry.set_text(noneToBlankString(dns_addresses[1]))
         dns3Entry.set_text(noneToBlankString(dns_addresses[2]))
 
+        entryWiredAutoMethod.set_alignment(0,0)
+        sepline.set_size_request(2,8)
+        atrlist = pango.AttrList()
+        atrlist.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE,0,28))
+        atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD,0,50))
+        entryWiredAutoMethod.set_attributes(atrlist)
+
         dialog.vbox.pack_start(wpabox)
         dialog.vbox.pack_start(entryWirelessInterface)
         dialog.vbox.pack_start(entryWiredInterface)
@@ -905,8 +978,13 @@ class appGui:
         dialog.vbox.pack_start(wiredcheckbox)
         dialog.vbox.pack_start(reconnectcheckbox)
         dialog.vbox.pack_start(debugmodecheckbox)
+        dialog.vbox.pack_start(sepline)
+        dialog.vbox.pack_start(entryWiredAutoMethod)
+        dialog.vbox.pack_start(usedefaultradiobutton)
+        dialog.vbox.pack_start(showlistradiobutton)
         dialog.vbox.set_spacing(5)
         dialog.show_all()
+
         response = dialog.run()
         if response == 1:
             daemon.SetUseGlobalDNS(useGlobalDNSCheckbox.get_active())
@@ -918,6 +996,7 @@ class appGui:
             wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
             wireless.SetAutoReconnect(reconnectcheckbox.get_active())
             daemon.SetDebugMode(debugmodecheckbox.get_active())
+            wired.SetWiredAutoConnectMethod(usedefaultradiobutton.get_active())
             dialog.destroy()
         else:
             dialog.destroy()
@@ -977,7 +1056,7 @@ class appGui:
             if self.statusID:
                 self.status_bar.remove(1,self.statusID)
             #use the chain approach to save calls to external programs
-            #external programs are quite CPU intensive  
+            #external programs are quite CPU intensive
             if wireless_ip:
                 network = wireless.GetCurrentNetwork()
                 if network:
@@ -1084,10 +1163,8 @@ class appGui:
             # Script info
             before_script = networkentry.expander.txtBeforeScript.get_text()
             after_script = networkentry.expander.txtAfterScript.get_text()
-            wireless.SetWirelessProperty(networkid,"beforescript",noneToString(before_script))
-            wireless.SetWirelessProperty(networkid,"afterscript",noneToString(after_script))
-            wireless.SetWirelessBeforeScript(before_script)
-            wireless.SetWirelessAfterScript(after_script)
+            wireless.SetWirelessBeforeScript(networkid,before_script)
+            wireless.SetWirelessAfterScript(networkid,after_script)
 
             # if it exists.  maybe kept as a value in the network entry?  Not sure...
             print "connecting to wireless network..."
@@ -1117,8 +1194,6 @@ class appGui:
             #Script Info
             before_script = networkentry.expander.txtBeforeScript.get_text()
             after_script = networkentry.expander.txtAfterScript.get_text()
-            wired.SetWiredProperty("beforescript",noneToString(before_script))
-            wired.SetWiredProperty("afterscript",noneToString(after_script))
             wired.SetWiredBeforeScript(before_script)
             wired.SetWiredAfterScript(after_script)
         

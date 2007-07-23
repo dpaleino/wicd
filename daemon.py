@@ -111,6 +111,7 @@ class ConnectionWizard(dbus.service.Object):
         self.wifi = networking.Wireless()
         self.wired = networking.Wired()
         self.forced_disconnect = False
+        self.need_profile_chooser = False
 
         #load the config file - it should have most of the stuff we need to run...
         self.ReadConfig()
@@ -119,7 +120,7 @@ class ConnectionWizard(dbus.service.Object):
 
         #this will speed up the scanning process - if a client doesn't need a fresh scan, just
         #feed them the old one.  a fresh scan can be done by calling FreshScan(self,interface)
-        self.LastScan = None
+        self.LastScan = ''
 
         #make a variable that will hold the wired network profile
         self.WiredNetwork = {}
@@ -184,7 +185,7 @@ class ConnectionWizard(dbus.service.Object):
         configfile = open(self.app_conf,"w")
         config.write(configfile)
     #end function SetWirelessInterface
-    
+
     @dbus.service.method('org.wicd.daemon')
     def SetWPADriver(self,driver):
         '''sets the wpa driver the wpa_supplicant will use'''
@@ -269,12 +270,73 @@ class ConnectionWizard(dbus.service.Object):
         configfile = open(self.app_conf,"w")
         config.write(configfile)
         self.debug_mode = debug
+    #end function SetDebugMode
 
     @dbus.service.method('org.wicd.daemon')
     def GetDebugMode(self):
         '''returns whether debugging is enabled'''
         return bool(int(self.debug_mode))
+    #end function GetDebugMode
 
+    @dbus.service.method('org.wicd.daemon')
+    def AutoConnect(self,fresh):
+        '''first tries to autoconnect to a wired network, if that fails it tries a wireless connection'''
+        if self.CheckPluggedIn() == True:
+            if self.GetWiredAutoConnectMethod() == False:
+                self.SetNeedWiredProfileChooser(True)
+                print 'alerting tray to display wired autoconnect wizard'
+            else:
+                defaultNetwork = self.GetDefaultWiredNetwork()
+                if defaultNetwork != None:
+                    self.ReadWiredNetworkProfile(defaultNetwork)    
+                    self.ConnectWired()
+                    time.sleep(1)
+                    print "Attempting to autoconnect with wired interface..."
+                    while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
+                        time.sleep(1)
+                    print "...done autoconnecting."
+                else:
+                    print "couldn't find a default wired connection, wired autoconnect failed"
+        else:
+            print "no wired connection present, wired autoconnect failed"
+            print 'attempting to autoconnect to wireless network'
+            if fresh:
+                self.Scan()
+            if self.GetWirelessInterface() != None:
+                for x in self.LastScan:
+                    if bool(self.LastScan[x]["has_profile"]):
+                        print str(self.LastScan[x]["essid"]) + ' has profile'
+                        if bool(self.LastScan[x].get('automatic')):
+                            print 'automatically connecting to...',str(self.LastScan[x]["essid"])
+                            self.ConnectWireless(x)
+                            time.sleep(3)
+                            while self.CheckIfWirelessConnecting():
+                                print "autoconnecting... hold"
+                                #not sure why I need to get IPs, but
+                                #it solves the autoconnect problem
+                                #i think it has something to do with
+                                #making IO calls while threads are working...?
+                                #if anyone knows why...email me at compwiz18@gmail.com
+                                #only some people need these statements for autoconnect
+                                #to function properly
+                                self.GetWirelessIP()
+                                ###
+                                # removed line below for 1.3.0 - if there is trouble with
+                                # connecting at boot,
+                                # add back to file -- adam
+                                ###
+                                # as far as I can tell, it seems fine - what does everyone else
+                                # think? -- adam
+                                ###
+                                #self.GetWiredIP()
+                                time.sleep(2)
+                            print "autoconnecting... done"
+                            return
+                print "unable to autoconnect, you'll have to manually connect"
+            else:
+                print 'autoconnect failed because wireless interface == None'
+    #end function AutoConnect
+    
     @dbus.service.method('org.wicd.daemon')
     def GetGlobalDNSAddresses(self):
         '''returns the global dns addresses'''
@@ -282,6 +344,25 @@ class ConnectionWizard(dbus.service.Object):
         return (self.dns1,self.dns2,self.dns3)
     #end function GetWirelessInterface
     
+    @dbus.service.method('org.wicd.daemon')
+    def CheckIfConnecting(self):
+        '''returns if a network connection is being made'''
+        if self.CheckIfWiredConnecting() == False and self.CheckIfWirelessConnecting() == False:
+            return False
+        else:
+            return True
+    #end function CheckIfConnecting
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetNeedWiredProfileChooser(self,val):
+        self.need_profile_chooser = val
+    #end function SetNeedWiredProfileChooser
+    
+    @dbus.service.method('org.wicd.daemon')
+    def GetNeedWiredProfileChooser(self):
+        return self.need_profile_chooser
+    #end function GetNeedWiredProfileChooser
+
     ########## WIRELESS FUNCTIONS
     #################################
 
@@ -313,12 +394,18 @@ class ConnectionWizard(dbus.service.Object):
     #end function DisconnectWireless
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessBeforeScript(self,script):
+    def SetWirelessBeforeScript(self,networkid,script):
+        if script == '':
+            script = None
+        self.SetWirelessProperty(networkid,"beforescript",script)
         self.wifi.before_script = script
     #end function SetWirelessBeforeScript
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessAfterScript(self,script):
+    def SetWirelessAfterScript(self,networkid,script):
+        if script == '':
+            script = None
+        self.SetWirelessProperty(networkid,"afterscript",script)
         self.wifi.after_script = script
     #end function SetWirelessAfterScript
 
@@ -341,7 +428,7 @@ class ConnectionWizard(dbus.service.Object):
         '''returns if wicd should automatically try to reconnect is connection is lost'''
         do = bool(int(self.auto_reconnect))
         return self.__printReturn('returning automatically reconnect when connection drops',do)
-    #end function GetAutoReconnect  
+    #end function GetAutoReconnect
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetAutoReconnect(self,value):
@@ -353,61 +440,6 @@ class ConnectionWizard(dbus.service.Object):
         config.write(open(self.app_conf,"w"))
         self.auto_reconnect = value
     #end function SetAutoReconnect
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def AutoConnect(self,fresh):
-        '''first tries to autoconnect to a wireled network, if that fails it tries a wireless connection'''
-        if fresh and self.CheckPluggedIn() == True:
-            defaultNetwork = self.GetDefaultWiredNetwork()
-            if defaultNetwork != None:
-                self.ReadWiredNetworkProfile(defaultNetwork)    
-                self.ConnectWired()
-                time.sleep(1)
-                print "Attempting to autoconnect with wired interface..."
-                while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
-                    time.sleep(1)
-                print "...done autoconnecting."
-            else:
-                print "couldn't find a default wired connection, wired autoconnect failed"
-        else:
-            print "no wired connection present, wired autoconnect failed"
-        print 'attempting to autoconnect to wireless network'
-        if fresh:
-            self.Scan()
-        if self.GetWirelessInterface() != None:
-            for x in self.LastScan:
-                if bool(self.LastScan[x]["has_profile"]):
-                    print str(self.LastScan[x]["essid"]) + ' has profile'
-                    if bool(self.LastScan[x].get('automatic')):
-                        print 'automatically connecting to...',str(self.LastScan[x]["essid"])
-                        self.ConnectWireless(x)
-                        time.sleep(3)
-                        while self.CheckIfWirelessConnecting():
-                            print "autoconnecting... hold"
-                            #not sure why I need to get IPs, but
-                            #it solves the autoconnect problem
-                            #i think it has something to do with
-                            #making IO calls while threads are working...?
-                            #if anyone knows why...email me at compwiz18@gmail.com
-                            #only some people need these statements for autoconnect
-                            #to function properly
-                            self.GetWirelessIP()
-                            ###
-                            # removed line below for 1.3.0 - if there is trouble with
-                            # connecting at boot,
-                            # add back to file -- adam
-                            ###
-                            # as far as I can tell, it seems fine - what does everyone else
-                            # think? -- adam
-                            ###
-                            #self.GetWiredIP()
-                            time.sleep(2)
-                        print "autoconnecting... done"
-                        return
-            print "unable to autoconnect, you'll have to manually connect"
-        else:
-            print 'autoconnect failed because wireless interface == None'
-    #end function AutoConnect
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetWirelessProperty(self,networkid,property):
@@ -558,14 +590,35 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredBeforeScript(self,script):
         '''sets pre-connection script to run for a wired connection'''
+        if script == '':
+            script = None
+        self.SetWiredProperty("beforescript",script)
         self.wired.before_script = script
     #end function SetWiredBeforeScript
 
     @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredAfterScript(self,script):
         '''sets post-connection script to run for a wired connection'''
+        if script == '':
+            script = None
+        self.SetWiredProperty("afterscript",script)
         self.wired.after_script = script
     #end function SetWiredAfterScript
+    
+    @dbus.service.method('org.wicd.daemon.wired')
+    def SetWiredAutoConnectMethod(self,method):
+        '''sets which method the user wants to autoconnect to wired networks'''
+        print 'method = ',method
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        config.set("Settings","use_default_profile",int(method))
+        config.write(open(self.app_conf,"w"))
+        self.use_default_profile = method
+        
+    def GetWiredAutoConnectMethod(self):
+        '''returns the wired autoconnect method'''
+        return bool(int(self.use_default_profile))
+    #end function GetWiredAutoConnectMethod
     
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
@@ -856,13 +909,18 @@ class ConnectionWizard(dbus.service.Object):
                 if config.has_option("Settings","auto_reconnect"):
                     self.auto_reconnect = config.get("Settings","auto_reconnect")
                 else:
-                    config.set("Settings","auto_reconnect","False")
+                    config.set("Settings","auto_reconnect","0")
                     self.auto_reconnect = False
                 if config.has_option("Settings","debug_mode"):
                     self.debug_mode = config.get("Settings","debug_mode")
                 else:
-                    self.debug_mode = False
-                    config.set("Settings","debug_mode","False")
+                    self.debug_mode = 0
+                    config.set("Settings","debug_mode","0")
+                if config.has_option("Settings","use_default_profile"):
+                    self.SetWiredAutoConnectMethod(config.get("Settings","use_default_profile"))
+                else:
+                    config.set("Settings","use_default_profile","1")
+                    self.SetWiredAutoConnectMethod(config.get("Settings","use_default_profile"))
             else:
                 print "configuration file exists, no settings found, adding defaults..."
                 configfile = open(self.app_conf,"w")
@@ -870,20 +928,22 @@ class ConnectionWizard(dbus.service.Object):
                 config.set("Settings","wireless_interface","wlan0")
                 config.set("Settings","wired_interface","eth0")
                 config.set("Settings","wpa_driver","wext")
-                config.set("Settings","always_show_wired_interface","False")
-                config.set("Settings","auto_reconnect","False")
-                config.set("Settings","debug_mode","False")
+                config.set("Settings","always_show_wired_interface","0")
+                config.set("Settings","auto_reconnect","0")
+                config.set("Settings","debug_mode","0")
+                config.set("Settings","use_default_profile","1")
                 config.set("Settings","use_global_dns","False")
                 config.set("Settings","dns1","None")
                 config.set("Settings","dns2","None")
                 config.set("Settings","dns3","None")
                 self.SetGlobalDNS(config.get('Settings','dns1'),config.get('Settings','dns2'),config.get('Settings','dns3'))
-                self.SetWirelessInterface(config.get("Settings","wireless_interface"))
-                self.SetWiredInterface(config.get("Settings","wired_interface"))
-                self.SetWPADriver(config.get("Settings","wpa_driver"))
-                self.SetAlwaysShowWiredInterface(False)
-                self.SetAutoReconnect(True)
-                self.SetDebugMode(False)
+                self.SetWirelessInterface("wlan0")
+                self.SetWiredInterface("eth0")
+                self.SetWPADriver("wext")
+                self.SetAlwaysShowWiredInterface(0)
+                self.SetAutoReconnect(1)
+                self.SetDebugMode(0)
+                self.SetWiredAutoConnectMethod(1)
                 config.write(configfile)
 
         else:
@@ -894,9 +954,10 @@ class ConnectionWizard(dbus.service.Object):
             config.add_section("Settings")
             config.set("Settings","wireless_interface","wlan0")
             config.set("Settings","wired_interface","eth0")
-            config.set("Settings","always_show_wired_interface","False")
-            config.set("Settings","auto_reconnect","False")
-            config.set("Settings","debug_mode","False")
+            config.set("Settings","always_show_wired_interface","0")
+            config.set("Settings","auto_reconnect","0")
+            config.set("Settings","debug_mode","0")
+            config.set("Settings","use_default_profile","1")
             config.set("Settings","dns1","None")
             config.set("Settings","dns2","None")
             config.set("Settings","dns3","None")
@@ -911,9 +972,11 @@ class ConnectionWizard(dbus.service.Object):
             self.SetWirelessInterface(config.get("Settings","wireless_interface"))
             self.SetWiredInterface(config.get("Settings","wired_interface"))
             self.SetWPADriver(config.get("Settings","wpa_driver"))
-            self.SetAlwaysShowWiredInterface(False)
-            self.SetAutoReconnect(True)
-            self.SetDebugMode(False)
+            self.SetAlwaysShowWiredInterface(0)
+            self.SetAutoReconnect(1)
+            self.SetHideDupeAPs(0)
+            self.SetDebugMode(0)
+            self.SetWiredAutoConnectMethod(1)
             self.SetGlobalDNS(None,None,None)
         #end If
 

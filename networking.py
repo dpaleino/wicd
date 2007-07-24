@@ -143,7 +143,7 @@ class Wireless:
                                 if info[5] == 'WEP' or ((info[5] == 'OPEN' or info[5] == 'SHARED') and info[4] == 'WEP'): # Needs to be tested
                                     CurrentNetwork["encryption_method"] = 'WEP'
                                 elif info[5] == 'WPA-PSK':
-                                    CurrentNetwork["encrytion_method"] = 'WPA'
+                                    CurrentNetwork["encryption_method"] = 'WPA'
                                 elif info[5] == 'WPA2-PSK':
                                     CurrentNetwork["encryption_method"] = 'WPA2'
                                 else:

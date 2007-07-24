@@ -200,9 +200,12 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon')
     def SetUseGlobalDNS(self,use):
+        print 'setting use global dns to',use
+        use = bool(use)
+        print 'setting use global dns to boolean',use
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","use_global_dns",str(use))
+        config.set("Settings","use_global_dns",int(use))
         self.use_global_dns = use
         self.wifi.use_global_dns = use
         self.wired.use_global_dns = use
@@ -215,21 +218,18 @@ class ConnectionWizard(dbus.service.Object):
         print "setting global dns"
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        if dns1:
-            config.set("Settings","global_dns_1",misc.noneToString(dns1))
-            self.dns1 = dns1
-            self.wifi.global_dns_1 = dns1
-            self.wired.global_dns_1 = dns1
-        if dns2:
-            config.set("Settings","global_dns_2",misc.noneToString(dns2))
-            self.dns2 = dns2
-            self.wifi.global_dns_2 = dns2
-            self.wired.global_dns_2 = dns2
-        if dns3:
-            config.set("Settings","global_dns_3",misc.noneToString(dns3))
-            self.dns3 = dns3
-            self.wifi.global_dns_3 = dns3
-            self.wired.global_dns_3 = dns3
+        config.set("Settings","global_dns_1",misc.noneToString(dns1))
+        self.dns1 = dns1
+        self.wifi.global_dns_1 = dns1
+        self.wired.global_dns_1 = dns1
+        config.set("Settings","global_dns_2",misc.noneToString(dns2))
+        self.dns2 = dns2
+        self.wifi.global_dns_2 = dns2
+        self.wired.global_dns_2 = dns2
+        config.set("Settings","global_dns_3",misc.noneToString(dns3))
+        self.dns3 = dns3
+        self.wifi.global_dns_3 = dns3
+        self.wired.global_dns_3 = dns3
         print 'global dns servers are',dns1,dns2,dns3
         configfile = open(self.app_conf,"w")
         config.write(configfile)
@@ -281,8 +281,10 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def AutoConnect(self,fresh):
         '''first tries to autoconnect to a wired network, if that fails it tries a wireless connection'''
+        if fresh:
+            self.Scan()
         if self.CheckPluggedIn() == True:
-            if self.GetWiredAutoConnectMethod() == False:
+            if self.GetWiredAutoConnectMethod() == 2:
                 self.SetNeedWiredProfileChooser(True)
                 print 'alerting tray to display wired autoconnect wizard'
             else:
@@ -300,8 +302,6 @@ class ConnectionWizard(dbus.service.Object):
         else:
             print "no wired connection present, wired autoconnect failed"
             print 'attempting to autoconnect to wireless network'
-            if fresh:
-                self.Scan()
             if self.GetWirelessInterface() != None:
                 for x in self.LastScan:
                     if bool(self.LastScan[x]["has_profile"]):
@@ -608,16 +608,19 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredAutoConnectMethod(self,method):
         '''sets which method the user wants to autoconnect to wired networks'''
-        print 'method = ',method
+        # 1 = default profile
+        # 2 = show list
+        print 'wired autoconnection method is',method
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","use_default_profile",int(method))
+        config.set("Settings","wired_connect_mode",int(method))
         config.write(open(self.app_conf,"w"))
-        self.use_default_profile = method
+        self.wired_connect_mode = method
         
+    @dbus.service.method('org.wicd.daemon.wired')
     def GetWiredAutoConnectMethod(self):
         '''returns the wired autoconnect method'''
-        return bool(int(self.use_default_profile))
+        return int(self.wired_connect_mode)
     #end function GetWiredAutoConnectMethod
     
     @dbus.service.method('org.wicd.daemon.wired')
@@ -895,7 +898,8 @@ class ConnectionWizard(dbus.service.Object):
                     config.set("Settings","always_show_wired_interface","False")
                     self.always_show_wired_interface = False
                 if config.has_option("Settings","use_global_dns"):
-                    self.SetUseGlobalDNS(config.get("Settings","use_global_dns"))
+                    print config.get("Settings","use_global_dns")
+                    self.SetUseGlobalDNS(int(config.get("Settings","use_global_dns")))
                     dns1, dns2, dns3 = ('None','None','None') #so we can access them later
                     if config.has_option("Settings","global_dns_1"):
                             dns1 = config.get('Settings','global_dns_1')
@@ -906,6 +910,7 @@ class ConnectionWizard(dbus.service.Object):
                     self.SetGlobalDNS(dns1,dns2,dns3)
                 else:
                     self.SetUseGlobalDNS(False)
+                    self.SetGlobalDNS(False,False,False)
                 if config.has_option("Settings","auto_reconnect"):
                     self.auto_reconnect = config.get("Settings","auto_reconnect")
                 else:
@@ -916,11 +921,11 @@ class ConnectionWizard(dbus.service.Object):
                 else:
                     self.debug_mode = 0
                     config.set("Settings","debug_mode","0")
-                if config.has_option("Settings","use_default_profile"):
-                    self.SetWiredAutoConnectMethod(config.get("Settings","use_default_profile"))
+                if config.has_option("Settings","wired_connect_mode"):
+                    self.SetWiredAutoConnectMethod(config.get("Settings","wired_connect_mode"))
                 else:
-                    config.set("Settings","use_default_profile","1")
-                    self.SetWiredAutoConnectMethod(config.get("Settings","use_default_profile"))
+                    config.set("Settings","wired_connect_mode","1")
+                    self.SetWiredAutoConnectMethod(config.get("Settings","wired_connect_mode"))
             else:
                 print "configuration file exists, no settings found, adding defaults..."
                 configfile = open(self.app_conf,"w")
@@ -931,11 +936,12 @@ class ConnectionWizard(dbus.service.Object):
                 config.set("Settings","always_show_wired_interface","0")
                 config.set("Settings","auto_reconnect","0")
                 config.set("Settings","debug_mode","0")
-                config.set("Settings","use_default_profile","1")
+                config.set("Settings","wired_connect_mode","1")
                 config.set("Settings","use_global_dns","False")
                 config.set("Settings","dns1","None")
                 config.set("Settings","dns2","None")
                 config.set("Settings","dns3","None")
+                self.SetUseGlobalDNS(False)
                 self.SetGlobalDNS(config.get('Settings','dns1'),config.get('Settings','dns2'),config.get('Settings','dns3'))
                 self.SetWirelessInterface("wlan0")
                 self.SetWiredInterface("eth0")
@@ -957,7 +963,7 @@ class ConnectionWizard(dbus.service.Object):
             config.set("Settings","always_show_wired_interface","0")
             config.set("Settings","auto_reconnect","0")
             config.set("Settings","debug_mode","0")
-            config.set("Settings","use_default_profile","1")
+            config.set("Settings","wired_connect_mode","1")
             config.set("Settings","dns1","None")
             config.set("Settings","dns2","None")
             config.set("Settings","dns3","None")
@@ -977,6 +983,7 @@ class ConnectionWizard(dbus.service.Object):
             self.SetHideDupeAPs(0)
             self.SetDebugMode(0)
             self.SetWiredAutoConnectMethod(1)
+            self.SetUseGlobalDNS(False)
             self.SetGlobalDNS(None,None,None)
         #end If
 
@@ -1019,7 +1026,7 @@ class ConnectionWizard(dbus.service.Object):
 ## fork from the parent terminal
 ## borrowed from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
 
-if True: #for easy disabling
+if not True: #for easy disabling
     try:
         pid = os.fork()
         if pid > 0:
@@ -1047,8 +1054,8 @@ if True: #for easy disabling
 #kill output
 #POI:500 stdout redirection
 output = FlushWriter()
-sys.stdout = output #open("data/wicd.log","w")
-sys.stderr = output
+#sys.stdout = output #open("data/wicd.log","w")
+#sys.stderr = output
 
 print "---------------------------"
 print "wicd initalizing..."

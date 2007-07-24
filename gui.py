@@ -131,8 +131,8 @@ language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
 language['use_debug_mode'] = _('Enable debug mode')
 language['use_global_dns'] = _('Use global DNS servers')
-language['use_default_profile'] = _('Use default profile on wired auto-connect')
-language['show_wired_list'] = _('Prompt for profile on wired auto-connect')
+language['use_default_profile'] = _('Use default profile on wired autoconnect')
+language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
 language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
 language['wired_network_found'] = _('Wired connection detected')
 language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
@@ -912,6 +912,12 @@ class appGui:
         sepline = gtk.HSeparator()
         usedefaultradiobutton = gtk.RadioButton(None,language['use_default_profile'],False)
         showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,language['show_wired_list'],False)
+        if wired.GetWiredAutoConnectMethod() == 1:
+            usedefaultradiobutton.set_active(True)
+            print 'use default profile'
+        elif wired.GetWiredAutoConnectMethod() == 2:
+            print 'show list'
+            showlistradiobutton.set_active(True)
         wpadriverlabel = SmallLabel(language['wpa_supplicant_driver'] + ':')
         wpadriverlabel.set_size_request(75,-1)
         wpadrivercombo = gtk.combo_box_new_text()
@@ -940,7 +946,7 @@ class appGui:
         entryWiredInterface = LabelEntry(language['wired_interface'] + ':')
         entryWirelessInterface.label.set_size_request(260,-1)        
         entryWiredInterface.label.set_size_request(260,-1)
-        entryWiredAutoMethod = gtk.Label('Wired Autoconnection options:')
+        entryWiredAutoMethod = gtk.Label('Wired Autoconnect Setting:')
 
         entryWirelessInterface.entry.set_text(daemon.GetWirelessInterface())
         entryWiredInterface.entry.set_text(daemon.GetWiredInterface())
@@ -958,11 +964,14 @@ class appGui:
         dns1Entry.set_text(noneToBlankString(dns_addresses[0]))
         dns2Entry.set_text(noneToBlankString(dns_addresses[1]))
         dns3Entry.set_text(noneToBlankString(dns_addresses[2]))
+        if not daemon.GetUseGlobalDNS():
+            dns1Entry.set_sensitive(False)
+            dns2Entry.set_sensitive(False)
+            dns3Entry.set_sensitive(False)
 
         entryWiredAutoMethod.set_alignment(0,0)
         sepline.set_size_request(2,8)
         atrlist = pango.AttrList()
-        atrlist.insert(pango.AttrUnderline(pango.UNDERLINE_SINGLE,0,28))
         atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD,0,50))
         entryWiredAutoMethod.set_attributes(atrlist)
 
@@ -996,7 +1005,8 @@ class appGui:
             wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
             wireless.SetAutoReconnect(reconnectcheckbox.get_active())
             daemon.SetDebugMode(debugmodecheckbox.get_active())
-            wired.SetWiredAutoConnectMethod(usedefaultradiobutton.get_active())
+            wired.SetWiredAutoConnectMethod(int(showlistradiobutton.get_active())+1) #if option is default profile, showlist will be 0, so 0 + 1 = 1
+                                                                            #if option is showlist, showlist will be 1, so 1+1 = 2 :)
             dialog.destroy()
         else:
             dialog.destroy()

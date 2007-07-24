@@ -1026,7 +1026,7 @@ class ConnectionWizard(dbus.service.Object):
 ## fork from the parent terminal
 ## borrowed from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
 
-if not True: #for easy disabling
+if True: #for easy disabling
     try:
         pid = os.fork()
         if pid > 0:
@@ -1054,8 +1054,8 @@ if not True: #for easy disabling
 #kill output
 #POI:500 stdout redirection
 output = FlushWriter()
-#sys.stdout = output #open("data/wicd.log","w")
-#sys.stderr = output
+sys.stdout = output #open("data/wicd.log","w")
+sys.stderr = output
 
 print "---------------------------"
 print "wicd initalizing..."

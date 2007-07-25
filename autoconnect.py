@@ -14,11 +14,11 @@ bus = dbus.SystemBus()
 proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
 ##we don't need some of these, so I just comment them out
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
-wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
+#wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
+#wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
 #config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 #############
 
 print daemon.Hello()
-if wireless.CheckIfWirelessConnecting() == False and wired.CheckIfWiredConnecting() == False:
-    print wireless.AutoConnect(True)
+if daemon.CheckIfConnecting() == False:
+    print daemon.AutoConnect(True)

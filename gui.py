@@ -330,14 +330,24 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
     
     def setSignalStrength(self,strength):
         strength = int(strength)
-        if strength > 75:
-            self.image.set_from_file("images/signal-100.png")
-        elif strength > 50:
-            self.image.set_from_file("images/signal-75.png")
-        elif strength > 25:
-            self.image.set_from_file("images/signal-50.png")
+        if daemon.GetWPADriver() == 'ralink legacy':
+            if strength <= 60:
+                self.image.set_from_file("images/signal-100.png")
+            elif strength <= 70:
+                self.image.set_from_file("images/signal-75.png")
+            elif strength <= 80:
+                self.image.set_from_file("images/signal-50.png")
+            else:
+                self.image.set_from_file("images/signal-25.png")
         else:
-            self.image.set_from_file("images/signal-25.png")
+            if strength > 75:
+                self.image.set_from_file("images/signal-100.png")
+            elif strength > 50:
+                self.image.set_from_file("images/signal-75.png")
+            elif strength > 25:
+                self.image.set_from_file("images/signal-50.png")
+            else:
+                self.image.set_from_file("images/signal-25.png")
         self.expander.setSignalStrength(strength)
         
     def setMACAddress(self,address):
@@ -744,7 +754,13 @@ class WirelessNetworkEntry(NetworkEntry):
         self.vboxEncryptionInformation.show_all()
 
     def setSignalStrength(self,strength):
-        self.lblStrength.set_label(str(strength) + "%")
+        if daemon.GetWPADriver() == 'ralink legacy':
+            ending = "dBm"
+            start = "-"
+        else:
+            ending = "%"
+            start = ""
+        self.lblStrength.set_label(start + str(strength) + ending)
         
     def setMACAddress(self,address):
         self.lblMAC.set_label(str(address))

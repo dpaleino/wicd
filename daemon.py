@@ -737,10 +737,11 @@ class ConnectionWizard(dbus.service.Object):
         print "profileList = ",profileList
         for profile in profileList:
             print "profile = ", profile
-            if config.get(profile,"default") == "True":
-                print "removing existing default"
-                config.set(profile,"default", False)
-                self.SaveWiredNetworkProfile(profile)
+            if config.has_option(profile,"default"):
+                if config.get(profile,"default") == "True":
+                    print "removing existing default"
+                    config.set(profile,"default", False)
+                    self.SaveWiredNetworkProfile(profile)
     #end function UnsetWiredDefault
 
     @dbus.service.method('org.wicd.daemon.config')
@@ -749,8 +750,9 @@ class ConnectionWizard(dbus.service.Object):
         config.read(self.wired_conf)
         profileList = config.sections()
         for profile in profileList:
-            if config.get(profile,"default") == "True":
-                return profile
+            if config.has_option(profile,"default"):
+                if config.get(profile,"default") == "True":
+                    return profile
         return None
 
     @dbus.service.method('org.wicd.daemon.config')

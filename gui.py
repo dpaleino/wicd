@@ -223,6 +223,10 @@ class LabelEntry(gtk.HBox):
         #when the box has focus, show the characters
         if self.auto_hide_text and widget:
             self.entry.set_visibility(True)
+            
+    def set_sensitive(self,value):
+        self.entry.set_sensitive(value)
+        self.label.set_sensitive(value)
 
     def hide_characters(self,widget=None,event=None):
         #when the box looses focus, hide them
@@ -470,6 +474,7 @@ class NetworkEntry(gtk.Expander):
             self.checkboxStaticDNS.set_sensitive(False)
         else:
             self.checkboxStaticDNS.set_sensitive(True)
+            self.checkboxStaticDNS.set_active(False)
 
         self.txtIP.set_sensitive(self.checkboxStaticIP.get_active())
         self.txtNetmask.set_sensitive(self.checkboxStaticIP.get_active())
@@ -484,19 +489,20 @@ class NetworkEntry(gtk.Expander):
             
         self.checkboxGlobalDNS.set_sensitive(self.checkboxStaticDNS.get_active())
         if self.checkboxStaticDNS.get_active() == True:
-            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active()) #if global dns is on, use local dns
+            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active()) #if global dns is on, don't use local dns
             self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
             self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
         else:
             self.txtDNS1.set_sensitive(False)
             self.txtDNS2.set_sensitive(False)
             self.txtDNS3.set_sensitive(False)
+            self.checkboxGlobalDNS.set_active(False)
 
     def toggleGlobalDNSCheckbox(self,widget=None):
-        self.checkboxStaticDNS.set_active(True)
-        self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
-        self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
-        self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
+        if daemon.GetUseGlobalDNS() and self.checkboxStaticDNS.get_active():
+            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
+            self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
+            self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
 
 class WiredNetworkEntry(NetworkEntry):
     #creates the wired network expander
@@ -544,7 +550,14 @@ class WiredNetworkEntry(NetworkEntry):
         self.show_all()
         self.profileHelp.hide()
         if self.profileList != None:
-            self.comboProfileNames.set_active(0)
+            prof = config.GetDefaultWiredNetwork()
+            if prof != None: #make sure the default profile gets displayed
+                i=0
+                while self.comboProfileNames.get_active_text() != prof:
+                    self.comboProfileNames.set_active(i)
+                    i+= 1
+            else:
+               self.comboProfileNames.set_active(0)
             print "wired profiles found"
             self.set_expanded(False)
         else:

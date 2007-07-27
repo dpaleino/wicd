@@ -156,7 +156,7 @@ class ConnectionWizard(dbus.service.Object):
         #micro is for everything else.
         #and micro may be anything >= 0
         #this number is effective starting wicd v1.2.0
-        version = '1.3.2'
+        version = '1.3.3'
         print 'returned version number',version
         return version
     #end function Hello

@@ -6,7 +6,7 @@
 import os,sys
 if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
-import gtk,locale,gettext
+import gtk,locale,gettext,signal
 import egg.trayicon
 import gobject, dbus, dbus.service
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):

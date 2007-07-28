@@ -275,7 +275,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def GetDebugMode(self):
         '''returns whether debugging is enabled'''
-        return bool(int(self.debug_mode))
+        return self.debug_mode
     #end function GetDebugMode
 
     @dbus.service.method('org.wicd.daemon')

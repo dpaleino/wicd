@@ -62,7 +62,8 @@ def set_signal_image():
     global stillWired #keeps us from resetting the wired info over and over
     global network #declared as global so it is initialized once before it gets used in the if statement below
     
-    config.DisableLogging()
+    if not daemon.GetDebugMode():
+        config.DisableLogging()
     
     #Check to see we wired profile autoconnect chooser needs to be displayed
     if daemon.GetNeedWiredProfileChooser() == True:

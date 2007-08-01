@@ -90,11 +90,12 @@ def set_signal_image():
     if not daemon.GetDebugMode():
         config.DisableLogging()
     
-    #Check to see we wired profile autoconnect chooser needs to be displayed
+    #Check if wired profile chooser should be launched
     if daemon.GetNeedWiredProfileChooser() == True:
         wired_profile_chooser()
         daemon.SetNeedWiredProfileChooser(False)
     
+    #Check for active wired connection
     wired_ip = wired.GetWiredIP()
     if wired.CheckPluggedIn() == True and wired_ip != None:
         if stillWired == False: # Only set image/tooltip if it hasn't been set already
@@ -102,11 +103,13 @@ def set_signal_image():
             tr.set_tooltip(language['connected_to_wired'].replace('$A',wired_ip))
             stillWired = True
             lock = ''
+    #Check if using wireless/not-connected
     else:
         if stillWired == True: #this only occurs when we were previously using wired but it became unplugged
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
         stillWired = False
+        
         wireless_ip = wireless.GetWirelessIP()
         #If ip returns as None, we are probably returning from hibernation and need to force signal to 0 to avoid crashing
         if wireless_ip != None:
@@ -119,7 +122,7 @@ def set_signal_image():
         if (signal != LastStrength or network != wireless.GetCurrentNetwork() or signal == 0) and wireless_ip != None:
             LastStrength = signal
             lock = '' #set the string to '' so that when it is put in "high-signal" + lock + ".png", there will be nothing
-            curNetID = wireless.GetCurrentNetworkID() #the network ID needs to be checked because a negative value here will break the tray
+            curNetID = wireless.GetCurrentNetworkID() #this needs to be checked because a negative value will break the tray
             if signal > 0 and curNetID > -1 and wireless.GetWirelessProperty(curNetID,"encryption"):
                 lock = '-lock' #set the string to '-lock' so that it will display the lock picture
             network = str(wireless.GetCurrentNetwork())               
@@ -199,6 +202,8 @@ class TrackerStatusIcon(gtk.StatusIcon):
         self.set_visible(True)
         self.connect('activate', self.on_activate)
         self.connect('popup-menu', self.on_popup_menu)
+        self.set_from_file("images/no-signal.png")
+        self.set_tooltip("Initializing wicd...")
         
         wireless.SetForcedDisconnect(False)
 
@@ -217,7 +222,7 @@ class TrackerStatusIcon(gtk.StatusIcon):
     def on_about(self, data):
         dialog = gtk.AboutDialog()
         dialog.set_name('wicd tray icon')
-        dialog.set_version('0.2')
+        dialog.set_version('0.2') #Might be time to move the version number up?
         dialog.set_comments('an icon that shows your network connectivity')
         dialog.set_website('http://wicd.sourceforge.net')
         dialog.run()
@@ -231,7 +236,6 @@ class TrackerStatusIcon(gtk.StatusIcon):
 LastStrength = -2
 stillWired = False
 network = ''
-tr=None
 
 tr=TrackerStatusIcon()
 gobject.timeout_add(3000,set_signal_image)

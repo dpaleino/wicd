@@ -64,12 +64,12 @@ def set_signal_image():
     
     if not daemon.GetDebugMode():
         config.DisableLogging()
-    
-    #Check to see we wired profile autoconnect chooser needs to be displayed
+
+    #Check if wired profile chooser should be launched        
     if daemon.GetNeedWiredProfileChooser() == True:
         wired_profile_chooser()
         daemon.SetNeedWiredProfileChooser(False)
-        
+       
     #Are we using a wired connection?        
     wired_ip = wired.GetWiredIP()
     if wired.CheckPluggedIn() == True and wired_ip:
@@ -78,11 +78,13 @@ def set_signal_image():
           tooltip.set_tip(eb,language['connected_to_wired'].replace('$A',wired_ip))
           stillWired = True
           lock = ''
+    #Check for wireless or no connection
     else:
         if stillWired == True: #wire must have gotten unplugged
             pic.set_from_file("images/no-signal.png")
-            tooltip.set_tip(eb,"Wicd - No Connection") 
+            tooltip.set_tip(eb,language['not_connected']) 
         stillWired = False
+        
         wireless_ip = wireless.GetWirelessIP()
         #If ip returns as None, we are probably returning from hibernation and need to force signal to 0 to avoid crashing
         if wireless_ip != None:
@@ -202,7 +204,7 @@ manager.insert_action_group(ag, 0)
 manager.add_ui_from_string(menu)
 menu = manager.get_widget('/Menubar/Menu/About').props.parent
 
-gobject.timeout_add(2000,set_signal_image)
+gobject.timeout_add(3000,set_signal_image)
 tooltip.set_tip(eb, "Wicd Systray")
 pic.set_from_file("images/no-signal.png")
 

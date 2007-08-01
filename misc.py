@@ -31,8 +31,8 @@ def IsValidIP(ip):
     return False
 
 def PromptToStartDaemon():
-    gksudo_args = ['gksudo', '--message', 'Wicd needs to access your computer\'s network cards.','--','./daemon.py']
-    os.spawnvpe(os.P_NOWAIT, 'gksudo', gksudo_args, os.environ)
+	#script execution doesn't work correctly if daemon gets autostarted, so just prompt user to start manually
+    print 'You need to start the daemon before using the gui or tray.  Use the command \'sudo /etc/init.d/wicd start\'.'
 
 def RunRegex(regex,string):
     m = regex.search( string )

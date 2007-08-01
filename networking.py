@@ -44,6 +44,7 @@ class Wireless:
         channel_pattern        = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
         strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
         mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
+        freq_pattern        = re.compile('.*Frequency:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 
         wep_pattern        = re.compile('.*Encryption key:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
         wpa1_pattern        = re.compile('(WPA Version 1)',re.DOTALL | re.I | re.M  | re.S)
@@ -112,6 +113,31 @@ class Wireless:
                     CurrentNetwork["hidden"] = False
 
                 CurrentNetwork["channel"] = misc.RunRegex(channel_pattern,cell)
+                if CurrentNetwork["channel"] == None: #some cards don't show the channel number
+                    freq = misc.RunRegex(freq_pattern,cell)
+                    if freq == '2.412 GHz':
+                        CurrentNetwork["channel"] = 1
+                    elif freq == '2.417 GHz':
+                        CurrentNetwork["channel"] = 2
+                    elif freq == '2.422 GHz':
+                        CurrentNetwork["channel"] = 3
+                    elif freq == '2.427 GHz':
+                        CurrentNetwork["channel"] = 4
+                    elif freq == '2.432 GHz':
+                        CurrentNetwork["channel"] = 5
+                    elif freq == '2.437 GHz':
+                        CurrentNetwork["channel"] = 6
+                    elif freq == '2.442 GHz':
+                        CurrentNetwork["channel"] = 7
+                    elif freq == '2.447 GHz':
+                        CurrentNetwork["channel"] = 8
+                    elif freq == '2.452 GHz':
+                        CurrentNetwork["channel"] = 9
+                    elif freq == '2.457 GHz':
+                        CurrentNetwork["channel"] = 10
+                    elif freq == '2.462 GHz':
+                        CurrentNetwork["channel"] = 11
+
                 CurrentNetwork["bssid"] = misc.RunRegex(ap_mac_pattern,cell)
                 print " ##### " + CurrentNetwork["bssid"]
                 CurrentNetwork["mode"] = misc.RunRegex(mode_pattern,cell)
@@ -149,6 +175,7 @@ class Wireless:
                                 else:
                                     print 'Unknown AuthMode, can\'t assign encryption_method!!'
                                     CurrentNetwork["encryption_method"] = 'Unknown'
+                                    
                                 CurrentNetwork["quality"] = info[1][1:] #set signal strength here (not link quality! dBm vs %)
                 else:
                     CurrentNetwork["encryption"] = False
@@ -258,15 +285,10 @@ class Wireless:
 
             self.IsConnecting = True
             network = self.network
-            self.lock.acquire()
-            self.ConnectingMessage = 'executing_before_script'
-            self.lock.release()
 
-            before_script = self.before_script
-            print 'before script is ', before_script
-            if before_script != '' and before_script != None:
+            if self.before_script != '' and self.before_script != None:
                 print 'Executing pre-connection script'
-                misc.Run(before_script)
+                print misc.Run('./run-script.py ' + self.before_script)
 
             #put it down
             print "interface down..."
@@ -339,7 +361,7 @@ class Wireless:
             else:
                 misc.Run("iwconfig " + self.wireless_interface + " mode " + network["mode"])
 
-            misc.Run("iwconfig " + self.wireless_interface + " essid \"" + network["essid"] + "\" channel " + str(network["channel"])) + " ap " + network["bssid"]
+            misc.Run("iwconfig " + self.wireless_interface + " essid \"" + network["essid"] + "\" channel " + str(network["channel"]) + " ap " + network["bssid"])
 
             if self.wpa_driver == "ralink legacy": #Adds support for ralink cards that can't use wpasupplicant
                 if network.get('key') != None:
@@ -474,10 +496,9 @@ class Wireless:
             print "done"
             self.IsConnecting = False
 
-            after_script = self.after_script
-            if after_script != '' and after_script != None:
+            if self.after_script != '' and self.after_script != None:
                 print 'executing post connection script'
-                misc.Run(after_script)
+                print misc.Run('./run-script.py ' + self.after_script)
         #end function Connect
     #end class Connect
 
@@ -613,15 +634,12 @@ class Wired:
             #we don't touch the wifi interface
             #but we do remove all wifi entries from the
             #routing table
-
-            before_script = self.before_script
-            print 'before script is ', before_script
-            if before_script != '' and before_script != None:
-                print 'Executing pre-connection script'
-                misc.Run(before_script)
-
             self.IsConnecting = True
-            network = self.network 
+            network = self.network
+            
+            if self.before_script != '' and self.before_script != None:
+                print 'executing pre-connection script'
+                misc.Run('./run-script.py ' + self.before_script)
 
             #put it down
             self.lock.acquire()
@@ -703,8 +721,7 @@ class Wired:
             self.lock.release()
             self.IsConnecting = False
 
-            after_script = self.after_script
-            if after_script != '' and after_script != None:
+            if self.after_script != '' and self.after_script != None:
                 print 'executing post connection script'
-                misc.Run(after_script)
+                misc.Run('./run-script.py ' + self.after_script)
         #end function run

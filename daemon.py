@@ -294,7 +294,7 @@ class ConnectionWizard(dbus.service.Object):
                     self.ConnectWired()
                     time.sleep(1)
                     print "Attempting to autoconnect with wired interface..."
-                    while self.CheckIfWiredConnecting(): # Keeps us from going into an infinite connecting loop
+                    while self.CheckIfWiredConnecting(): #Leaving this for wired since you're probably not going to have DHCP problems
                         time.sleep(1)
                     print "...done autoconnecting."
                 else:
@@ -307,11 +307,14 @@ class ConnectionWizard(dbus.service.Object):
                     if bool(self.LastScan[x]["has_profile"]):
                         print str(self.LastScan[x]["essid"]) + ' has profile'
                         if bool(self.LastScan[x].get('automatic')):
-                            print 'automatically connecting to...',str(self.LastScan[x]["essid"])
+                            print 'trying to automatically connect to...',str(self.LastScan[x]["essid"])
                             self.ConnectWireless(x)
-                            time.sleep(3)
-                            while self.CheckIfWirelessConnecting():
-                                print "autoconnecting... hold"
+                            time.sleep(5)
+                            return
+                            #Changed this because the while loop would cause dbus errors if
+                            #there was trouble connecting or connecting took a long time
+                            #print "autoconnecting... hold"
+                            #while self.CheckIfWirelessConnecting():
                                 #not sure why I need to get IPs, but
                                 #it solves the autoconnect problem
                                 #i think it has something to do with
@@ -319,7 +322,7 @@ class ConnectionWizard(dbus.service.Object):
                                 #if anyone knows why...email me at compwiz18@gmail.com
                                 #only some people need these statements for autoconnect
                                 #to function properly
-                                self.GetWirelessIP()
+                                #self.GetWirelessIP()
                                 ###
                                 # removed line below for 1.3.0 - if there is trouble with
                                 # connecting at boot,
@@ -329,9 +332,14 @@ class ConnectionWizard(dbus.service.Object):
                                 # think? -- adam
                                 ###
                                 #self.GetWiredIP()
-                                time.sleep(2)
-                            print "autoconnecting... done"
-                            return
+                                #time.sleep(3)
+                            #if self.GetWirelessIP() != None:
+                            #    print "autoconnecting... done"
+                            #    return
+                            #else:
+                            #    print 'autoconnect was taking too long, aborted.'
+                            #    self.SetForcedDisconnect(True)
+                            #    return
                 print "unable to autoconnect, you'll have to manually connect"
             else:
                 print 'autoconnect failed because wireless interface == None'
@@ -898,7 +906,7 @@ class ConnectionWizard(dbus.service.Object):
                     self.always_show_wired_interface = config.get("Settings","always_show_wired_interface")
                 else:
                     config.set("Settings","always_show_wired_interface","False")
-                    self.always_show_wired_interface = False
+                    self.always_show_wired_interface = 0
                 if config.has_option("Settings","use_global_dns"):
                     print config.get("Settings","use_global_dns")
                     self.SetUseGlobalDNS(int(config.get("Settings","use_global_dns")))

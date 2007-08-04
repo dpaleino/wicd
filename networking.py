@@ -43,10 +43,12 @@ class Wireless:
         ap_mac_pattern        = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
         channel_pattern        = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
         strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
+        altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
         mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
         freq_pattern        = re.compile('.*Frequency:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 
         wep_pattern        = re.compile('.*Encryption key:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
+        altwpa_pattern      = re.compile('(wpa_ie)',re.DOTALL | re.I | re.M | re.S)
         wpa1_pattern        = re.compile('(WPA Version 1)',re.DOTALL | re.I | re.M  | re.S)
         wpa2_pattern         = re.compile('(WPA2)',re.DOTALL | re.I | re.M  | re.S)
 
@@ -137,6 +139,14 @@ class Wireless:
                         CurrentNetwork["channel"] = 10
                     elif freq == '2.462 GHz':
                         CurrentNetwork["channel"] = 11
+                    elif freq == '2.467 GHz':
+                        CurrentNetwork["channel"] = 12
+                    elif freq == '2.472 GHz':
+                        CurrentNetwork["channel"] = 13                        
+                    elif freq == '2.484 GHz':
+                        CurrentNetwork["channel"] = 14
+                    else:
+                        print 'Couldn\'t determine channel number for current network'
 
                 CurrentNetwork["bssid"] = misc.RunRegex(ap_mac_pattern,cell)
                 print " ##### " + CurrentNetwork["bssid"]
@@ -151,6 +161,9 @@ class Wireless:
                         CurrentNetwork["encryption_method"] = "WEP"
 
                         if misc.RunRegex(wpa1_pattern,cell) == "WPA Version 1":
+                            CurrentNetwork["encryption_method"] = "WPA"
+                        
+                        if misc.RunRegex(altwpa_pattern,cell) == "wpa_ie":
                             CurrentNetwork["encryption_method"] = "WPA"
 
                         if misc.RunRegex(wpa2_pattern,cell) == "WPA2":
@@ -186,6 +199,8 @@ class Wireless:
                     #we need a simple if then to set it
                     if misc.RunRegex(strength_pattern,cell):
                         CurrentNetwork["quality"] = misc.RunRegex(strength_pattern,cell)
+                    elif misc.RunRegex(altstrength_pattern,cell):
+                        CurrentNetwork["quality"] = misc.RunRegex(altstrength_pattern,cell)
                     else:
                         CurrentNetwork["quality"] = -1
 

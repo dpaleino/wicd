@@ -28,6 +28,8 @@ class Wireless:
     ConnectingThread = None
     before_script = None
     after_script = None
+    disconnect_script = None
+    
 
     #Create a function to scan for wireless networks
     def Scan(self,essid=None):
@@ -169,13 +171,13 @@ class Wireless:
                         if misc.RunRegex(wpa2_pattern,cell) == "WPA2":
                             CurrentNetwork["encryption_method"] = "WPA2"
 
-                    else: #support for ralink legacy drivers, may not work w/ hidden networks
+                    else: #support for ralink legacy drivers (maybe only serialmonkey enhanced), may not work w/ hidden networks
                         iwpriv = misc.Run("iwpriv " + self.wireless_interface + " get_site_survey")
                         lines = iwpriv.splitlines()
                         lines = lines[2:]
-                        for x in lines:
+                        for x in lines: #iterate through all networks found
                             info = x.split()
-                            if len(info) < 5 or info == None or info == '':
+                            if len(info) < 5 or info == None or info == '': #make sure we read in a valid entry
                                 break;
                             if info[2] == CurrentNetwork["essid"]:
                                 CurrentNetwork["encryption"] = True
@@ -195,11 +197,11 @@ class Wireless:
                 #end If
 
                 if self.wpa_driver != 'ralink legacy':
-                    #since stength needs a -1 if the quality isn't found
+                    #since strength needs a -1 if the quality isn't found
                     #we need a simple if then to set it
                     if misc.RunRegex(strength_pattern,cell):
                         CurrentNetwork["quality"] = misc.RunRegex(strength_pattern,cell)
-                    elif misc.RunRegex(altstrength_pattern,cell):
+                    elif misc.RunRegex(altstrength_pattern,cell): #alternate way of labeling link quality used by some drivers
                         CurrentNetwork["quality"] = misc.RunRegex(altstrength_pattern,cell)
                     else:
                         CurrentNetwork["quality"] = -1
@@ -254,7 +256,7 @@ class Wireless:
 
     def Connect(self,network):
         #call the thread, so we don't hang up the entire works
-        self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.wpa_driver,self.before_script,self.after_script,self.global_dns_1,self.global_dns_2,self.global_dns_3)
+        self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.wpa_driver,self.before_script,self.after_script,self.disconnect_script,self.global_dns_1,self.global_dns_2,self.global_dns_3)
         self.ConnectingThread.start()
         return True
 
@@ -264,7 +266,7 @@ class Wireless:
         ShouldDie = False
         lock = thread.allocate_lock()
 
-        def __init__(self,network,wireless,wired,wpa_driver,before_script,after_script,gdns1,gdns2,gdns3):
+        def __init__(self,network,wireless,wired,wpa_driver,before_script,after_script,disconnect_script,gdns1,gdns2,gdns3):
             threading.Thread.__init__(self)
             self.network = network
             self.wireless_interface = wireless
@@ -273,6 +275,7 @@ class Wireless:
             self.IsConnecting = False
             self.before_script = before_script
             self.after_script = after_script
+            self.disconnect_script = disconnect_script
         
             self.global_dns_1 = gdns1
             self.global_dns_2 = gdns2
@@ -301,6 +304,7 @@ class Wireless:
             self.IsConnecting = True
             network = self.network
 
+            #execute pre-connection script if necessary
             if self.before_script != '' and self.before_script != None:
                 print 'Executing pre-connection script'
                 print misc.Run('./run-script.py ' + self.before_script)
@@ -511,6 +515,7 @@ class Wireless:
             print "done"
             self.IsConnecting = False
 
+            #execute post-connection script if necessary
             if self.after_script != '' and self.after_script != None:
                 print 'executing post connection script'
                 print misc.Run('./run-script.py ' + self.after_script)
@@ -520,7 +525,11 @@ class Wireless:
     def GetSignalStrength(self):
         output = misc.Run("iwconfig " + self.wireless_interface)
         strength_pattern    = re.compile('.*Quality:?=? ?(\d+)',re.DOTALL | re.I | re.M  | re.S)
-        return misc.RunRegex(strength_pattern,output)
+        altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
+        strength = misc.RunRegex(strength_pattern,output)
+        if strength == None:
+            strength = misc.RunRegex(altstrength_pattern,output)
+        return strength
     #end function GetSignalStrength
 
     def GetCurrentNetwork(self):
@@ -578,8 +587,9 @@ class Wireless:
         return misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',re.DOTALL | re.I | re.M  | re.S),misc.Run("iwconfig"))
 
     def Disconnect(self):
-        misc.Run('ifconfig ' + self.wired_interface + ' 0.0.0.0')
-        misc.Run('ifconfig ' + self.wired_interface + ' down')
+        if self.disconnect_script != None:
+            print 'running wireless network disconnect script'
+            misc.Run(self.disconnect_script)
         misc.Run('ifconfig ' + self.wireless_interface + ' 0.0.0.0')
         misc.Run('ifconfig ' + self.wireless_interface + ' down')
 
@@ -593,6 +603,7 @@ class Wired:
     ConnectingThread = None
     before_script = None
     after_script = None
+    disconnect_script = None
 
     def GetIP(self):
         output = misc.Run("ifconfig " + self.wired_interface)
@@ -613,7 +624,7 @@ class Wired:
 
     def Connect(self,network):
         #call the thread, so we don't hang up the entire works
-        self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.before_script,self.after_script)
+        self.ConnectingThread = self.ConnectThread(network,self.wireless_interface,self.wired_interface,self.before_script,self.after_script,self.disconnect_script)
         self.ConnectingThread.start()
         return True
     #end function Connect
@@ -624,7 +635,7 @@ class Wired:
         ConnectingMessage = None
         ShouldDie = False
 
-        def __init__(self,network,wireless,wired,before_script,after_script):
+        def __init__(self,network,wireless,wired,before_script,after_script,disconnect_script):
             threading.Thread.__init__(self)
             self.network = network
             self.wireless_interface = wireless
@@ -632,6 +643,7 @@ class Wired:
             self.IsConnecting = False
             self.before_script = before_script
             self.after_script = after_script
+            self.disconnect_script = disconnect_script
             self.lock.acquire()
             self.ConnectingMessage = 'interface_down'
             self.lock.release()
@@ -740,3 +752,11 @@ class Wired:
                 print 'executing post connection script'
                 misc.Run('./run-script.py ' + self.after_script)
         #end function run
+
+    def Disconnect(self):
+        print 'wired disconnect running'
+        if self.disconnect_script != None:
+            print 'running wired network disconnect script'
+            misc.Run(self.disconnect_script)
+        misc.Run('ifconfig ' + self.wired_interface + ' 0.0.0.0')
+        misc.Run('ifconfig ' + self.wired_interface + ' down')

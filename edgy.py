@@ -32,7 +32,7 @@ try:
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     print 'success'
 except:
-    print 'daemon not running, running gksudo ./daemon.py...'
+    print 'daemon not running...'
     import misc
     misc.PromptToStartDaemon()
     time.sleep(5)
@@ -154,16 +154,15 @@ def auto_reconnect():
     #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
     #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
     #connect to a wired network or any wireless network set to autoconnect.
+    global triedReconnect
     if wireless.GetAutoReconnect() == True and daemon.CheckIfConnecting() == False and wireless.GetForcedDisconnect() == False:
         curNetID = wireless.GetCurrentNetworkID()
         print 'Trying to autoreconnect to last used network'                    
-        if curNetID > -1:
-            wireless.ConnectWireless(curNetID)
-            while wireless.CheckIfWirelessConnecting() == True:
-                time.sleep(1)
-            if wireless.GetCurrentSignalStrength() != 0:
-                print "Successfully autoreconnected."
-            else:
+        if curNetID > -1: #needs to be a valid network to try to connect to
+            if triedReconnect == False:
+                wireless.ConnectWireless(curNetID)
+                triedReconnect = True
+            elif triedReconnect == True and wireless.CheckIfWirelessConnecting() == False:
                 print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
                 daemon.AutoConnect(True)
         else:   
@@ -236,6 +235,7 @@ class TrackerStatusIcon(gtk.StatusIcon):
 LastStrength = -2
 stillWired = False
 network = ''
+triedReconnect = False
 
 tr=TrackerStatusIcon()
 gobject.timeout_add(3000,set_signal_image)

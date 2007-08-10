@@ -21,7 +21,7 @@ try:
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     print 'success'
 except:
-    print 'daemon not running, running gksudo ./daemon.py...'
+    print 'daemon not running...'
     import misc,time
     misc.PromptToStartDaemon()
     time.sleep(1)

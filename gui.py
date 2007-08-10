@@ -126,6 +126,7 @@ language['essid'] = _('ESSID')
 language['use_wep_encryption'] = _('Use Encryption (WEP only)')
 language['before_script'] = _('Run script before connect')
 language['after_script'] = _('Run script after connect')
+language['disconnect_script'] = _('Run disconnect script')
 language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
@@ -237,7 +238,7 @@ class GreyLabel(gtk.Label):
     def __init__(self):
         gtk.Label.__init__(self)
     def set_label(self,text):
-        self.set_markup("<span color=\"grey\"><i>" + text + "</i></span>")
+        self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
         self.set_alignment(0,0)
 
 ########################################
@@ -384,8 +385,10 @@ class NetworkEntry(gtk.Expander):
         #self.txtDNS3.set_text(dns_addresses[2])
         self.txtBeforeScript = LabelEntry(language['before_script'])
         self.txtAfterScript = LabelEntry(language['after_script'])
+        self.txtDisconnectScript = LabelEntry(language['disconnect_script'])
         self.txtBeforeScript.label.set_size_request(200,-1)
         self.txtAfterScript.label.set_size_request(200,-1)
+        self.txtDisconnectScript.label.set_size_request(200,-1)
         self.checkboxStaticIP = gtk.CheckButton(language['use_static_ip'])
         self.checkboxStaticDNS = gtk.CheckButton(language['use_static_dns'])
         self.checkboxGlobalDNS = gtk.CheckButton(language['use_global_dns'])
@@ -407,6 +410,7 @@ class NetworkEntry(gtk.Expander):
         self.vboxAdvanced.pack_start(self.txtDNS3,fill=False,expand=False)
         self.vboxScripts.pack_start(self.txtBeforeScript,fill=False,expand=False)
         self.vboxScripts.pack_start(self.txtAfterScript,fill=False,expand=False)
+        self.vboxScripts.pack_start(self.txtDisconnectScript,fill=False,expand=False)
         self.vboxTop.pack_end(self.expanderScripts,fill=False,expand=False)
         self.vboxTop.pack_end(self.expanderAdvanced,fill=False,expand=False)
         self.expanderAdvanced.add(self.vboxAdvanced)
@@ -633,6 +637,7 @@ class WiredNetworkEntry(NetworkEntry):
             
             self.txtBeforeScript.set_text(noneToBlankString(wired.GetWiredProperty("beforescript")))
             self.txtAfterScript.set_text(noneToBlankString(wired.GetWiredProperty("afterscript")))
+            self.txtDisconnectScript.set_text(noneToBlankString(wired.GetWiredProperty("disconnectscript")))
     
             self.checkboxDefaultProfile.set_active(stringToBoolean(wired.GetWiredProperty("default")))
 
@@ -694,6 +699,7 @@ class WirelessNetworkEntry(NetworkEntry):
 
         self.txtBeforeScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"beforescript")))
         self.txtAfterScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"afterscript")))
+        self.txtDisconnectScript.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"disconnectscript")))
 
         self.resetStaticCheckboxes()
         encryptionTypes = misc.LoadEncryptionMethods()
@@ -782,10 +788,10 @@ class WirelessNetworkEntry(NetworkEntry):
         if on and type:
             self.lblEncryption.set_label(language['secured'] + " " + str(type))
             self.set_use_markup(True)
-            self.set_label(self.essid + ' <span color="grey">' + str(type) + '</span>')
+            self.set_label(self.essid + ' <span color="#666666">' + str(type) + '</span>')
         if on and not type:
             self.lblEncryption.set_label(language['secured'])
-            self.set_label(self.essid + ' <span color="grey">Secured</span>')
+            self.set_label(self.essid + ' <span color="#666666">Secured</span>')
         if not on:
             self.lblEncryption.set_label(language['unsecured'])
 
@@ -1202,8 +1208,10 @@ class appGui:
             # Script info
             before_script = networkentry.expander.txtBeforeScript.get_text()
             after_script = networkentry.expander.txtAfterScript.get_text()
+            disconnect_script = networkentry.expander.txtDisconnectScript.get_text()
             wireless.SetWirelessBeforeScript(networkid,before_script)
             wireless.SetWirelessAfterScript(networkid,after_script)
+            wireless.SetWirelessDisconnectScript(networkid,disconnect_script)
 
             # if it exists.  maybe kept as a value in the network entry?  Not sure...
             print "connecting to wireless network..."
@@ -1233,8 +1241,10 @@ class appGui:
             #Script Info
             before_script = networkentry.expander.txtBeforeScript.get_text()
             after_script = networkentry.expander.txtAfterScript.get_text()
+            disconnect_script = networkentry.expander.txtDisconnectScript.get_text()
             wired.SetWiredBeforeScript(before_script)
             wired.SetWiredAfterScript(after_script)
+            wired.SetWiredDisconnectScript(disconnect_script)
         
             config.SaveWiredNetworkProfile(networkentry.expander.comboProfileNames.get_active_text())
             wired.ConnectWired()

@@ -1,59 +1,55 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.5
+""" wicd - wireless connection daemon implementation.
 
-############
-## USES 4 SPACES FOR INDENT
-## NO TABS
-############
+This module implements the wicd daemon that provides network
+connection management, for both wireless and wired networks. The daemon
+must be run as root to control the networks, however the user interface
+components should be run as a normal user.
 
-#change to the directory that the file lives in
+class LogWriter() -- Class to redirect stdout and stderr to a log file.  
+class ConnectionWizard() -- DBUS interface to manage the network.
+def usage() -- Print usage information.
+def daemonize() -- Daemonize the current process with a double fork.
+def main() -- The wicd daemon main loop.
+
+"""
+
+#
+#   Copyright (C) 2007 Adam Blackburn
+#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007 Byron Hillis
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License Version 2 as
+#   published by the Free Software Foundation.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import os
 import sys
-import wpath
-if __name__ == '__main__':
-    wpath.chdir(__file__)
-#import the dbus stuff
+import time
+import getopt
+import ConfigParser
+# DBUS
 import gobject
 import dbus
 import dbus.service
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
-#import the networking library
+# wicd specific libraries
+import wpath
 import networking
-#import random other libraries
-import ConfigParser, time
-#import the random functions library
 import misc
 
-###############################
-#                       GENERAL NOTES
-#
-#       wicd Daemon
-#       Version 1.0.0
-#       Suppliments wicd
-#       Written December/January 2006
-#
-#       Uses libraries also written by me
-#       for this program
-#       called networking.py and misc.py
-#       Will not function without them.
-#
-#                           CODE NOTES
-#
-#       If a function has the "pass" statement in it
-#       this is usually because it is not complete.
-#
-#       Runs on behalf of the wicd GUI
-#       to perform actions that require root.
-#       The GUI should be running as the current user
-#
-#       This is released under the
-#          GNU General Public License
-#
-#       The terms can be found at
-#            http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-#       Copyright (C) 2007 Adam Blackburn
-###############################
+if __name__ == '__main__':
+    wpath.chdir(__file__)
 
 logging_enabled = True
 
@@ -121,7 +117,8 @@ class ConnectionWizard(dbus.service.Object):
     ########## VARIABLES AND STUFF
     #################################
 
-    def __init__(self, bus_name, object_path='/org/wicd/daemon'):
+    def __init__(self, bus_name, object_path='/org/wicd/daemon',
+            auto_connect=True):
         dbus.service.Object.__init__(self, bus_name, object_path)
 
         #set variables needed to run - these probably won't be changed too often
@@ -147,20 +144,11 @@ class ConnectionWizard(dbus.service.Object):
         self.WiredNetwork = {}
 
         #scan since we just got started
-
-        DoAutoConnect = True
-
-        if len(sys.argv) > 1:
-            if sys.argv[1] == "--do-not-scan":
-                print "--do-not-scan detected, not autoconnecting..."
-                DoAutoConnect = False
-
-        if DoAutoConnect:
+        if auto_connect:
             print "autoconnecting...",str(self.GetWirelessInterface()[5:])
             print self.AutoConnect(True)
-
-        #log file!  all std:out is redirected to this log file, so we'll flush it from time to time
-        #see POI:500 for details (use the search feature to search for POI:500 in this file)
+        else:
+            print "--no-scan detected, not autoconnecting..."
 
     ########## DAEMON FUNCTIONS
     #################################
@@ -1084,49 +1072,111 @@ class ConnectionWizard(dbus.service.Object):
         print "using wireless interface...",self.GetWirelessInterface()[5:]
     #end function ReadConfig
 
-## fork from the parent terminal
-## borrowed from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
 
-if True: #for easy disabling
+
+def usage():
+    print """
+wicd 1.0
+wireless (and wired) connection daemon.
+
+Arguments:
+\t-s\t--no-scan\tDon't auto-scan/auto-connect.
+\t-f\t--no-daemon\tDon't daemonize (run in foreground).
+\t-e\t--no-stderr\tDon't redirect stderr.
+\t-o\t--no-stdout\tDon't redirect stdout.
+\t-h\t--help\t\tPrint this help.
+"""
+
+
+def daemonize():
+    """ Disconnect from the controlling terminal.
+
+    Fork twice, once to disconnect ourselves from the parent terminal and a
+    second time to prevent any files we open from becoming our controlling
+    terminal.
+
+    For more info see http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
+
+    """
+    # Fork the first time to disconnect from the parent terminal and
+    # exit the parent process.
     try:
         pid = os.fork()
         if pid > 0:
-            # exit first parent
             sys.exit(0)
-
     except OSError, e:
-        print >>sys.stderr, "fork #1 failed: %d (%s)" % (e.errno, e.strerror)
+        print >> sys.stderr, "Fork #1 failed: %d (%s)" % (e.errno, e.strerror)
         sys.exit(1)
 
-    # decouple from parent environment
+    # Decouple from parent environment to stop us from being a zombie.
     os.setsid()
     os.umask(0)
 
-    # do second fork
+    # Fork the second time to prevent us from opening a file that will
+    # become our controlling terminal.
     try:
         pid = os.fork()
         if pid > 0:
             print "wicd daemon: pid " + str(pid)
             sys.exit(0)
     except OSError, e:
-        print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
+        print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
         sys.exit(1)
 
-#kill output
-#POI:500 stdout redirection
-output = LogWriter()
-sys.stdout = output 
-sys.stderr = output
 
-print "---------------------------"
-print "wicd initalizing..."
-print "---------------------------"
+def main(argv):
+    """ The main daemon program. 
 
-#open our dbus session
-session_bus = dbus.SystemBus()
-bus_name = dbus.service.BusName('org.wicd.daemon', bus=session_bus)
-object = ConnectionWizard(bus_name)
+    Keyword arguments:
+    argv -- The arguments passed to the script.
+    
+    """
 
-#enter the main loop
-mainloop = gobject.MainLoop()
-mainloop.run()
+    do_daemonize = True
+    redirect_stderr = True
+    redirect_stdout = True
+    auto_scan = True
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'feos', 
+                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan'])
+    except getopt.GetoptError:
+        # Print help information and exit
+        usage()
+        sys.exit(2)
+
+    for o, a in opts:
+        if o in ('-h', '--help'):
+            usage()
+            sys.exit()
+        if o in ('-e', '--no-stderr'):
+            redirect_stderr = False
+        if o in ('-o', '--no-stdout'):
+            redirect_stdout = False
+        if o in ('-f', '--no-daemon'):
+            do_daemonize = False
+        if o in ('-s', '--no-scan'):
+            auto_scan = False
+
+    if do_daemonize: daemonize()
+
+    if redirect_stderr or redirect_stdout: output = LogWriter()
+    if redirect_stdout: sys.stdout = output 
+    if redirect_stderr: sys.stderr = output
+
+    print '---------------------------'
+    print 'wicd initializing...'
+    print '---------------------------'
+
+    # Open the DBUS session
+    session_bus = dbus.SystemBus()
+    bus_name = dbus.service.BusName('org.wicd.daemon', bus=session_bus)
+    object = ConnectionWizard(bus_name, auto_connect=auto_scan)
+
+    # Enter the main loop
+    mainloop = gobject.MainLoop()
+    mainloop.run()
+
+
+if __name__ == '__main__':
+    main(sys.argv)

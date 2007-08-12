@@ -1,4 +1,4 @@
-"""Path configuration and functions for the wicd daemon and gui clients.
+""" Path configuration and functions for the wicd daemon and gui clients.
 
 chdir() -- Change directory to the location of the current file.
 

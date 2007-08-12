@@ -3,9 +3,11 @@
 ## USE TRAY.PY INSTEAD
 ## nothing bad will happen if you do
 ## but that is not the preferred method
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 import gtk,locale,gettext,signal
 import egg.trayicon
 import gobject, dbus, dbus.service

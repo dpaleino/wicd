@@ -1,7 +1,9 @@
 #!/usr/bin/python
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 import gtk
 if gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10:
     import edgy

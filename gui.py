@@ -1,7 +1,9 @@
 #!/usr/bin/python
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 try:
     import pygtk
     pygtk.require("2.0")
@@ -337,22 +339,22 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         strength = int(strength)
         if daemon.GetWPADriver() == 'ralink legacy':
             if strength <= 60:
-                self.image.set_from_file("images/signal-100.png")
+                self.image.set_from_file(wpath.images + 'signal-100.png')
             elif strength <= 70:
-                self.image.set_from_file("images/signal-75.png")
+                self.image.set_from_file(wpath.images + 'signal-75.png')
             elif strength <= 80:
-                self.image.set_from_file("images/signal-50.png")
+                self.image.set_from_file(wpath.images + 'signal-50.png')
             else:
-                self.image.set_from_file("images/signal-25.png")
+                self.image.set_from_file(wpath.images + 'signal-25.png')
         else:
             if strength > 75:
-                self.image.set_from_file("images/signal-100.png")
+                self.image.set_from_file(wpath.images + 'signal-100.png')
             elif strength > 50:
-                self.image.set_from_file("images/signal-75.png")
+                self.image.set_from_file(wpath.images + 'signal-75.png')
             elif strength > 25:
-                self.image.set_from_file("images/signal-50.png")
+                self.image.set_from_file(wpath.images + 'signal-50.png')
             else:
-                self.image.set_from_file("images/signal-25.png")
+                self.image.set_from_file(wpath.images + 'signal-25.png')
         self.expander.setSignalStrength(strength)
         
     def setMACAddress(self,address):

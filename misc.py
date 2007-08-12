@@ -10,9 +10,11 @@
 #        Copyright (C) 2007 Adam Blackburn
 #
 
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 import re
 def Run(cmd,include_std_error=False):
     if not include_std_error:
@@ -91,9 +93,9 @@ def ParseEncryption(network):
         y+=1
     #write the data to the files
     #then chmod them so they can't be read by evil little munchkins
-    fileness = open("encryption/configurations/" + network["bssid"].replace(":","").lower(),"w")
-    os.chmod("encryption/configurations/" + network["bssid"].replace(":","").lower(),0600)
-    os.chown("encryption/configurations/" + network["bssid"].replace(":","").lower(), 0, 0)
+    fileness = open(wpath.networks + network["bssid"].replace(":","").lower(),"w")
+    os.chmod(wpath.networks + network["bssid"].replace(":","").lower(),0600)
+    os.chown(wpath.networks + network["bssid"].replace(":","").lower(), 0, 0)
     #we could do this above, but we'd like to permod (permission mod) them before we write, so that it can't be read
     fileness.write(z)
     fileness.close()

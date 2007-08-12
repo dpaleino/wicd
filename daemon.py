@@ -6,9 +6,11 @@
 ############
 
 #change to the directory that the file lives in
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 #import the dbus stuff
 import gobject
 import dbus
@@ -58,7 +60,7 @@ logging_enabled = True
 class FlushWriter:
     def __init__(self):
         print os.getcwd()
-        self.file = open('data/wicd.log','w')
+        self.file = open(wpath.log + 'wicd.log','w')
         self.file.write(self.__getPrettyTime() + ' :: ')
 
     def write(self,data):
@@ -104,9 +106,9 @@ class ConnectionWizard(dbus.service.Object):
         dbus.service.Object.__init__(self, bus_name, object_path)
 
         #set variables needed to run - these probably won't be changed too often
-        self.app_conf = "data/manager-settings.conf"
-        self.wireless_conf = "data/wireless-settings.conf"
-        self.wired_conf = "data/wired-settings.conf"
+        self.app_conf = wpath.etc + 'manager-settings.conf'
+        self.wireless_conf = wpath.etc + 'wireless-settings.conf'
+        self.wired_conf = wpath.etc + 'wired-settings.conf'
         self.hidden_essid = None
         self.wifi = networking.Wireless()
         self.wired = networking.Wired()

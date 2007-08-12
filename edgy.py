@@ -14,9 +14,11 @@
 ##this will only work in Edgy and above because of gtk requirements
 ##to run the tray icon
 ########
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 import gtk, gobject, dbus, dbus.service, os, sys, locale, gettext, signal, time
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib

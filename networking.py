@@ -6,9 +6,11 @@
 ## MUST BE IMPORTED VIA import networking
 ## TO ANOTHER PROJECT IF YOU WISH TO USE IT
 
-import os,sys
+import os
+import sys
+import wpath
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(os.path.normpath(os.path.join(os.getcwd(),sys.argv[0]))))
+    wpath.chdir(__file__)
 
 #import the library of random functions that we need here
 #this is also written by me, for this purpose
@@ -351,8 +353,8 @@ class Wireless:
 
                     print "generating wpa_supplicant configuration file..."
                     misc.ParseEncryption(network)
-                    print "wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver
-                    misc.Run("wpa_supplicant -B -i " + self.wireless_interface + " -c \"encryption/configurations/" + network["bssid"].replace(":","").lower() + "\" -D " + self.wpa_driver)
+                    print 'wpa_supplicant -B -i ' + self.wireless_interface + ' -c "' + wpath.networks + network["bssid"].replace(":","").lower() + '" -D ' + self.wpa_driver
+                    misc.Run('wpa_supplicant -B -i ' + self.wireless_interface + ' -c "' + wpath.networks + network["bssid"].replace(":","").lower() + '" -D ' + self.wpa_driver)
 
             print "flushing the routing table..."
             self.lock.acquire()

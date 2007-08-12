@@ -57,45 +57,64 @@ import misc
 
 logging_enabled = True
 
-class FlushWriter:
+class LogWriter:
+    """ A class to provide timestamped logging. """
     def __init__(self):
-        print os.getcwd()
-        self.file = open(wpath.log + 'wicd.log','w')
-        self.file.write(self.__getPrettyTime() + ' :: ')
+        self.file = open(wpath.log + 'wicd.log','a')
+        self.eol = True
 
-    def write(self,data):
-        '''prepends a timestamp, writes the data, and then flushes the buffer'''
+
+    def __del__(self):
+        self.file.close()
+
+
+    def write(self, data):
+        """ Writes the data to the log with a timestamp.
+
+        This function handles writing of data to a log file. In order to
+        handle output redirection, we need to be careful with how we
+        handle the addition of timestamps. In any set of data that is
+        written, we replace the newlines with a timestamp + new line,
+        except for newlines that are the final character in data.
+
+        When a newline is the last character in data, we set a flag to
+        indicate that the next write should have a timestamp prepended
+        as well, which ensures that the timestamps match the time at
+        which the data is written, rather than the previous write.
+
+        Keyword arguments:
+        data -- The string to write to the log.
+
+        """
         global logging_enabled
-
+        if len(data) <= 0: return
         if logging_enabled:
+            if self.eol:
+                self.file.write(self.get_time() + ' :: ')
+                self.eol = False
 
-            #it appears that only one character at a time is written, but I don't trust it
-            #so if it isn't always one letter, make it so
-            #this code should never run
-            if len(data) > 1:
-                for letter in data:
-                    self.write(letter)
-                return
+            if data[-1] == '\n':
+                self.eol = True
+                data = data[:-1]
 
-            if data == '\n':
-                self.file.write('\n' + self.__getPrettyTime() + ' :: ')
-            else:
-                self.file.write(str(data))
-
+            self.file.write(
+                    data.replace('\n', '\n' + self.get_time() + ' :: '))
+            if self.eol: self.file.write('\n')
             self.file.flush()
 
-    def __getPrettyTime(self):
-        '''generate a string with the time, and space numbers with 0s'''
-        x = time.localtime()
-        #year/month/day hours:minutes:seconds
-        pretty_time = str(x[0]).rjust(4,'0') + '/' + str(x[1]).rjust(2,'0') + '/'+str(x[2]).rjust(2,'0') + ' '+str(x[3]).rjust(2,'0') + ':' + str(x[4]).rjust(2,'0') + ':' + str(x[5]).rjust(2,'0')
-        #probably don't need to pad the year, but it makes it consistent
-        return pretty_time
 
-    
-    def flush(self):
-        '''flushes the buffer'''
-        self.file.flush()
+    def get_time(self):
+        """ Return a string with the current time nicely formatted.
+
+        The format of the returned string is yyyy/mm/dd HH:MM:SS
+
+        """
+        x = time.localtime()
+        return ''.join([
+            str(x[0]).rjust(4,'0'), '/', str(x[1]).rjust(2,'0'), '/',
+            str(x[2]).rjust(2,'0'), ' ', str(x[3]).rjust(2,'0'), ':',
+            str(x[4]).rjust(2,'0'), ':', str(x[5]).rjust(2,'0')])
+
 
 class ConnectionWizard(dbus.service.Object):
 
@@ -1095,8 +1114,8 @@ if True: #for easy disabling
 
 #kill output
 #POI:500 stdout redirection
-output = FlushWriter()
-sys.stdout = output #open("data/wicd.log","w")
+output = LogWriter()
+sys.stdout = output 
 sys.stderr = output
 
 print "---------------------------"

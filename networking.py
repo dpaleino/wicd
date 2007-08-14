@@ -405,7 +405,7 @@ class Wireless:
                     misc.ParseEncryption(network)
                     wpa_string = ("wpa_supplicant -B -i " +
                                   self.wireless_interface +
-                                  " -c " + wpath.networks + "\"" +
+                                  " -c " + "\"" + wpath.networks +
                                   network["bssid"].replace(":","").lower() +
                                   "\" -D " + self.wpa_driver)
                     print wpa_string

@@ -1075,7 +1075,7 @@ class ConnectionWizard(dbus.service.Object):
 
 def usage():
     print """
-wicd 1.0
+wicd 1.33
 wireless (and wired) connection daemon.
 
 Arguments:

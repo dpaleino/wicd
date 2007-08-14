@@ -1029,7 +1029,6 @@ class ConnectionWizard(dbus.service.Object):
             self.SetWPADriver(config.get("Settings","wpa_driver"))
             self.SetAlwaysShowWiredInterface(0)
             self.SetAutoReconnect(1)
-            self.SetHideDupeAPs(0)
             self.SetDebugMode(0)
             self.SetWiredAutoConnectMethod(1)
             self.SetUseGlobalDNS(False)

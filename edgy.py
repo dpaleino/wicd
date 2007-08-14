@@ -24,10 +24,10 @@ if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
 
 #############
-#declare the connections to our daemon.
-#without them nothing useful will happen
-#the daemon should be running as root
-#some connections aren't used so they are commented
+# Declare the connections to our daemon.
+# Without them nothing useful will happen.
+# The daemon should be running as root.
+# Some connections aren't used so they are commented.
 bus = dbus.SystemBus()
 try:
     print 'attempting to connect daemon...'
@@ -37,12 +37,8 @@ except:
     print 'daemon not running...'
     import misc
     misc.PromptToStartDaemon()
-    time.sleep(5)
-    try:
-        proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    except:
-        print 'daemon still not running, aborting.'
-daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon') # Had to uncomment it
+    sys.exit(0)
+daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
 config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
@@ -82,66 +78,82 @@ def open_wicd_gui():
 def wired_profile_chooser():
     print 'profile chooser is running'
     os.spawnlpe(os.P_WAIT, './gui.py', os.environ)
-    
+
 def set_signal_image():
     global LastStrength
-    global stillWired #keeps us from resetting the wired info over and over
-    global network #declared as global so it gets initialized before initial use
+    global stillWired  # Keeps us from resetting the wired info over and over
+    global network  # Declared as global so it gets initialized before first use
 
-    #Disable logging if debugging isn't on to prevent log spam
+    # Disable logging if debugging isn't on to prevent log spam
     if not daemon.GetDebugMode():
         config.DisableLogging()
-    
-    #Check if wired profile chooser should be launched
+
+    # Check if wired profile chooser should be launched
     if daemon.GetNeedWiredProfileChooser() == True:
         wired_profile_chooser()
         daemon.SetNeedWiredProfileChooser(False)
-    
-    #Check for active wired connection
+
+    # Check for active wired connection
     wired_ip = wired.GetWiredIP()
     if wired.CheckPluggedIn() == True and wired_ip != None:
-        if stillWired == False: # Only set image/tooltip if it hasn't been set already
+        # Only set image/tooltip if it hasn't been set already
+        if stillWired == False:
             tr.set_from_file("images/wired.png")
-            tr.set_tooltip(language['connected_to_wired'].replace('$A',wired_ip))
+            tr.set_tooltip(language['connected_to_wired'].replace('$A',
+                                                                  wired_ip))
             stillWired = True
             lock = ''
-    #Check if using wireless/not-connected
     else:
-        if stillWired == True: #this only occurs when we were previously using wired but it became unplugged
+        # Check to see if we were using a wired connection that has now become
+        # unplugged or disabled.
+        if stillWired == True:
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
         stillWired = False
-        
+
         wireless_ip = wireless.GetWirelessIP()
-        #If ip returns as None, we are probably returning from hibernation and need to force signal to 0 to avoid crashing
+        # If ip returns as None, we are probably returning from hibernation
+        # and need to force signal to 0 to avoid crashing.
         if wireless_ip != None:
-            signal = int(wireless.GetCurrentSignalStrength())
+            wireless_signal = int(wireless.GetCurrentSignalStrength())
         else:
-            signal = 0
-                
-        #only update if the signal strength has changed because doing I/O calls is expensive,
-        #and the icon flickers
-        if (signal != LastStrength or network != wireless.GetCurrentNetwork() or signal == 0) and wireless_ip != None:
-            LastStrength = signal
-            lock = '' #set the string to '' so that when it is put in "high-signal" + lock + ".png", there will be nothing
-            curNetID = wireless.GetCurrentNetworkID() #this needs to be checked because a negative value will break the tray
-            if signal > 0 and curNetID > -1 and wireless.GetWirelessProperty(curNetID,"encryption"):
-                lock = '-lock' #set the string to '-lock' so that it will display the lock picture
-            network = str(wireless.GetCurrentNetwork())               
-            tr.set_tooltip(language['connected_to_wireless'].replace('$A',network).replace('$B',str(signal)).replace('$C',str(wireless_ip)))
-            if signal > 75:
+            wireless_signal = 0
+
+        # Only update if the signal strength has changed because doing I/O
+        # calls is expensive, and the icon flickers
+        if (wireless_signal != LastStrength or
+            network != wireless.GetCurrentNetwork() or wireless_signal == 0) \
+            and wireless_ip != None:
+            LastStrength = wireless_signal
+            # Set the string to '' so that when it is put in "high-signal" +
+            # lock + ".png", there will be nothing
+            lock = ''
+            # curNetID needs to be checked because a negative value
+            # will break the tray when passed to GetWirelessProperty.
+            curNetID = wireless.GetCurrentNetworkID()
+            if wireless_signal > 0 and curNetID > -1 and \
+               wireless.GetWirelessProperty(curNetID,"encryption"):
+                # Set the string to '-lock' so that it will display the
+                # lock picture
+                lock = '-lock'
+            network = str(wireless.GetCurrentNetwork())
+            tr.set_tooltip(language['connected_to_wireless'].replace
+                           ('$A',network).replace
+                           ('$B',str(wireless_signal)).replace
+                           ('$C',str(wireless_ip)))
+            if wireless_signal > 75:
                 tr.set_from_file("images/high-signal" + lock + ".png")
-            elif signal > 50:
+            elif wireless_signal > 50:
                 tr.set_from_file("images/good-signal" + lock + ".png")
-            elif signal > 25:
+            elif wireless_signal > 25:
                 tr.set_from_file("images/low-signal" + lock + ".png")
-            elif signal > 0:
+            elif wireless_signal > 0:
                 tr.set_from_file("images/bad-signal" + lock + ".png")
-            elif signal == 0:
+            elif wireless_signal == 0:
                 tr.set_from_file("images/no-signal.png")
                 auto_reconnect()
-                    
-        elif wireless_ip == None and wired_ip == None:
+
+        elif wireless_ip is None and wired_ip is None:
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
             auto_reconnect()
@@ -152,24 +164,31 @@ def set_signal_image():
     return True
 
 def auto_reconnect():
-    #Auto-reconnect code - not sure how well this works.  I know that without the ForcedDisconnect check it reconnects you when
-    #a disconnect is forced.  People who have disconnection problems need to test it to determine if it actually works.
-    #First it will attempt to reconnect to the last known wireless network, and if that fails it should run a scan and try to
-    #connect to a wired network or any wireless network set to autoconnect.
+    # Auto-reconnect code - not sure how well this works.  I know that
+    # without the ForcedDisconnect check it reconnects you when a
+    # disconnect is forced.  People who have disconnection problems need
+    # to test it to determine if it actually works.
+    #
+    # First it will attempt to reconnect to the last known wireless network
+    # and if that fails it should run a scan and try to connect to a wired
+    # network or any wireless network set to autoconnect.
     global triedReconnect
-    if wireless.GetAutoReconnect() == True and daemon.CheckIfConnecting() == False and wireless.GetForcedDisconnect() == False:
+
+    if wireless.GetAutoReconnect() == True and \
+       daemon.CheckIfConnecting() == False:
         curNetID = wireless.GetCurrentNetworkID()
-        print 'Trying to autoreconnect to last used network'                    
-        if curNetID > -1: #needs to be a valid network to try to connect to
+        if curNetID > -1:  # Needs to be a valid network to try to connect to
             if triedReconnect == False:
+                print 'Trying to autoreconnect to last used network'
                 wireless.ConnectWireless(curNetID)
                 triedReconnect = True
-            elif triedReconnect == True and wireless.CheckIfWirelessConnecting() == False:
-                print "Couldn't reconnect to last used network, scanning for an autoconnect network..."
+            elif wireless.CheckIfWirelessConnecting() == False:
+                print "Couldn't reconnect to last used network,\
+                       scanning for an autoconnect network..."
                 daemon.AutoConnect(True)
-        else:   
+        else:
             daemon.AutoConnect(True)
-            
+
 class TrackerStatusIcon(gtk.StatusIcon):
     def __init__(self):
         gtk.StatusIcon.__init__(self)
@@ -187,10 +206,12 @@ class TrackerStatusIcon(gtk.StatusIcon):
         '''
         actions = [
                 ('Menu',  None, 'Menu'),
-                ('Connect', gtk.STOCK_CONNECT, '_Connect...', None, 'Connect to network', self.on_preferences),
-                ('About', gtk.STOCK_ABOUT, '_About...', None, 'About wicd-tray-icon', self.on_about),
-                ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon', self.on_quit),
-            
+                ('Connect', gtk.STOCK_CONNECT, '_Connect...', None,
+                 'Connect to network', self.on_preferences),
+                ('About', gtk.STOCK_ABOUT, '_About...', None,
+                 'About wicd-tray-icon', self.on_about),
+                ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
+                 self.on_quit),
                 ]
         ag = gtk.ActionGroup('Actions')
         ag.add_actions(actions)
@@ -205,7 +226,7 @@ class TrackerStatusIcon(gtk.StatusIcon):
         self.connect('popup-menu', self.on_popup_menu)
         self.set_from_file("images/no-signal.png")
         self.set_tooltip("Initializing wicd...")
-        
+
         wireless.SetForcedDisconnect(False)
 
     def on_activate(self, data):
@@ -223,7 +244,7 @@ class TrackerStatusIcon(gtk.StatusIcon):
     def on_about(self, data):
         dialog = gtk.AboutDialog()
         dialog.set_name('wicd tray icon')
-        dialog.set_version('0.2') #Might be time to move the version number up?
+        dialog.set_version('0.2')  # Might be time to move the version number up?
         dialog.set_comments('an icon that shows your network connectivity')
         dialog.set_website('http://wicd.sourceforge.net')
         dialog.run()

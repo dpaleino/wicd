@@ -10,4 +10,7 @@ command = ''
 for stuff in sys.argv[1:]:
     command = command + ' ' + stuff
 print 'command = ',command
-print misc.Run(command)
+pid = os.fork()
+print 'hey'
+if not pid:
+    misc.Run(command)

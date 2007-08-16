@@ -75,18 +75,18 @@ class ConnectThread(threading.Thread):
 
     Useless on it's own, this class provides the generic functions
     necessary for connecting using a separate thread. """
-    
+
     is_connecting = None
     connecting_thread = None
     should_die = False
     lock = thread.allocate_lock()
 
 
-    def __init__(self, network, wireless, wired, 
+    def __init__(self, network, wireless, wired,
                 before_script, after_script, disconnect_script, gdns1,
                 gdns2, gdns3):
-        """ Initialise the required object variables and the thread. 
-        
+        """ Initialise the required object variables and the thread.
+
         Keyword arguments:
         network -- the network to connect to
         wireless -- name of the wireless interface
@@ -107,7 +107,7 @@ class ConnectThread(threading.Thread):
         self.before_script = before_script
         self.after_script = after_script
         self.disconnect_script = disconnect_script
-    
+
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
         self.global_dns_3 = gdns3
@@ -116,8 +116,8 @@ class ConnectThread(threading.Thread):
 
 
     def SetStatus(self, status):
-        """ Set the threads current status message in a thread-safe way.  
-        
+        """ Set the threads current status message in a thread-safe way.
+
         Keyword arguments:
         status -- the current connection status
 
@@ -128,8 +128,8 @@ class ConnectThread(threading.Thread):
 
 
     def GetStatus(self):
-        """ Get the threads current status message in a thread-safe way.  
-       
+        """ Get the threads current status message in a thread-safe way.
+
         Returns:
         The current connection status.
 
@@ -275,7 +275,7 @@ class Wireless(Controller):
             misc.Run('iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable')
             misc.Run('iptables -P FORWARD DROP')
             misc.Run('iptables -A fw-interfaces -i ' + self.wireless_interface + ' -j ACCEPT')
-            net_ip = '.'.join(ip_parts[0:3]) + '.0' 
+            net_ip = '.'.join(ip_parts[0:3]) + '.0'
             misc.Run('iptables -t nat -A POSTROUTING -s ' + net_ip + '/255.255.255.0 -o ' + self.wired_interface + ' -j MASQUERADE')
             misc.Run('echo 1 > /proc/sys/net/ipv4/ip_forward') # Enable routing
 
@@ -285,9 +285,9 @@ class Wireless(Controller):
 
         Returns:
         The first available wireless interface.
-        
+
         """
-        return wnettools.GetWirelessInterfaces()
+        wnettools.GetWirelessInterfaces()
 
 
     def Disconnect(self):
@@ -295,7 +295,7 @@ class Wireless(Controller):
         wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
         if self.disconnect_script != None:
             print 'Running wireless network disconnect script'
-            misc.Run(self.disconnect_script)
+            misc.ExecuteScript(self.disconnect_script)
 
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
@@ -328,7 +328,7 @@ class WirelessConnectThread(ConnectThread):
         gdns3 -- global DNS server 3
 
         """
-        ConnectThread.__init__(self, network, wireless, wired, 
+        ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
             gdns2, gdns3)
         self.wpa_driver = wpa_driver
@@ -356,7 +356,7 @@ class WirelessConnectThread(ConnectThread):
         # Execute pre-connection script if necessary
         if self.before_script != '' and self.before_script != None:
             print 'Executing pre-connection script'
-            print misc.Run('run-script.py ' + self.before_script)
+            print misc.ExecuteScript(self.before_script)
 
         # Put it down
         print 'Interface down'
@@ -408,7 +408,7 @@ class WirelessConnectThread(ConnectThread):
                 self.network['channel'], self.network['bssid'])
 
         # Authenticate after association for Ralink legacy cards.
-        if self.wpa_driver == 'ralink legacy': 
+        if self.wpa_driver == 'ralink legacy':
             if self.network.get('key') != None:
                 wiface.Authenticate(self.network)
 
@@ -437,7 +437,7 @@ class WirelessConnectThread(ConnectThread):
             self.SetStatus('setting_static_dns')
             if self.network.get('use_global_dns'):
                 wnettools.SetDNS(misc.Noneify(self.global_dns_1),
-                    misc.Noneify(self.global_dns_2), 
+                    misc.Noneify(self.global_dns_2),
                     misc.Noneify(self.global_dns_3))
             else:
                 wnettools.SetDNS(self.network.get('dns1'),
@@ -445,8 +445,8 @@ class WirelessConnectThread(ConnectThread):
 
         #execute post-connection script if necessary
         if misc.Noneify(self.after_script):
-            print 'executing post connection script'
-            print misc.Run('./run-script.py ' + self.after_script)
+            print 'Executing post-connection script'
+            misc.ExecuteScript(self.after_script)
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
@@ -479,7 +479,7 @@ class Wired(Controller):
         Keyword arguments:
         network -- network to connect to
 
-        """ 
+        """
         self.connecting_thread = WiredConnectThread(network,
             self.wireless_interface, self.wired_interface,
             self.before_script, self.after_script,
@@ -521,7 +521,7 @@ class WiredConnectThread(ConnectThread):
     """
 
 
-    def __init__(self, network, wireless, wired, 
+    def __init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
             gdns2, gdns3):
         """ Initialise the thread with network information.
@@ -538,7 +538,7 @@ class WiredConnectThread(ConnectThread):
         gdns3 -- global DNS server 3
 
         """
-        ConnectThread.__init__(self, network, wireless, wired, 
+        ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
             gdns2, gdns3)
 
@@ -563,8 +563,8 @@ class WiredConnectThread(ConnectThread):
 
         # Execute pre-connection script if necessary
         if self.before_script != '' and self.before_script != None:
-            print 'Executing pre-connection script'
-            print misc.Run('run-script.py ' + self.before_script)
+            print 'executing pre-connectiong script'
+            misc.ExecuteScript(self.before_script)
 
         # Put it down
         print 'Interface down'
@@ -617,7 +617,7 @@ class WiredConnectThread(ConnectThread):
             self.SetStatus('setting_static_dns')
             if self.network.get('use_global_dns'):
                 wnettools.SetDNS(misc.Noneify(self.global_dns_1),
-                    misc.Noneify(self.global_dns_2), 
+                    misc.Noneify(self.global_dns_2),
                     misc.Noneify(self.global_dns_3))
             else:
                 wnettools.SetDNS(self.network.get('dns1'),
@@ -626,7 +626,7 @@ class WiredConnectThread(ConnectThread):
         #execute post-connection script if necessary
         if misc.Noneify(self.after_script):
             print 'executing post connection script'
-            print misc.Run('./run-script.py ' + self.after_script)
+            misc.ExecuteScript(self.after_script)
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'

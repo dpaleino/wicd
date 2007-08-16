@@ -37,7 +37,7 @@ def PromptToStartDaemon():
     print 'You need to start the daemon before using the gui or tray.  Use the command \'sudo /etc/init.d/wicd start\'.'
 
 def RunRegex(regex,string):
-    m = regex.search( string )
+    m = regex.search(string)
     if m:
         return m.groups()[0]
     else:
@@ -45,6 +45,19 @@ def RunRegex(regex,string):
 
 def WriteLine(file,text):
     file.write(text + "\n")
+
+def ExecuteScript(script):
+    pid = os.fork()
+    if not pid:
+        os.setsid()
+        os.umask(0)
+        pid = os.fork()
+        if not pid:
+            print Run('./run-script.py ' + script)
+            os._exit(0)
+        os._exit(0)
+    os.wait()
+
 
 def ReadFile(filename):
     if not os.path.exists(filename):
@@ -136,6 +149,6 @@ def LoadEncryptionMethods():
 def noneToString(text):
     '''used for putting text in a text box if the value to put in is 'None' the box will be blank'''
     if text == None or text == "None" or text == "":
-        return "None" 
+        return "None"
     else:
         return str(text)

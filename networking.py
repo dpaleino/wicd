@@ -40,13 +40,10 @@ class WiredConnectThread() -- Connection thread for wired
 # and helped keep this project moving
 #
 
-import os
-import sys
 import re
 import sys
 import threading
 import thread
-import operator
 import misc
 import wnettools
 import wpath
@@ -64,6 +61,12 @@ class Controller(object):
     before_script = None
     after_script = None
     disconnect_script = None
+
+    def __init__(self):
+        """ Initialise the class. """
+        self.global_dns_1 = None
+        self.global_dns_2 = None
+        self.global_dns_3 = None
 
 
 
@@ -141,7 +144,12 @@ class ConnectThread(threading.Thread):
 class Wireless(Controller):
     """ A wrapper for common wireless interface functions. """
 
-    wpa_driver = None
+    def __init__(self):
+        """ Initialise the class. """
+        Controller.__init__(self)
+        self.wpa_driver = None
+
+
 
     def Scan(self,essid=None):
         """ Scan for available wireless networks.
@@ -243,7 +251,7 @@ class Wireless(Controller):
         wiface.SetChannel(channel)
         wiface.SetEssid(essid)
         #Right now it just assumes you're using WEP
-        if enc_used == True:
+        if enc_used:
             wiface.SetKey(key)
 
         wiface.Up()
@@ -449,6 +457,11 @@ class WirelessConnectThread(ConnectThread):
 class Wired(Controller):
     """ A wrapper for common wired interface functions. """
 
+    def __init__(self):
+        """ Initialise the class. """
+        Controller.__init__(self)
+        self.wpa_driver = None
+
     def CheckPluggedIn(self):
         """ Check whether the wired connection is plugged in.
 
@@ -527,7 +540,7 @@ class WiredConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, wired, 
             before_script, after_script, disconnect_script, gdns1,
-            gdns3, gdns3)
+            gdns2, gdns3)
 
 
     def run(self):

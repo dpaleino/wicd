@@ -232,7 +232,7 @@ class WirelessInterface(Interface):
         essid -- essid to set the interface to
         
         """
-        cmd = 'iwconfig ' + self.wireless_interface + ' essid "' + essid + '"'
+        cmd = 'iwconfig ' + self.iface + ' essid "' + essid + '"'
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -354,7 +354,7 @@ class WirelessInterface(Interface):
             # Support for ralink legacy drivers (maybe only serialmonkey enhanced), 
             # may not work w/ hidden networks
             else: 
-                iwpriv = misc.Run('iwpriv ' + self.wireless_interface + ' get_site_survey')
+                iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
                 lines = iwpriv.splitlines()
                 lines = lines[2:]
                 for x in lines: # Iterate through all networks found
@@ -403,7 +403,7 @@ class WirelessInterface(Interface):
             mode = 'managed'
         cmd = 'iwconfig ' + self.iface + ' mode ' + mode
         if self.verbose: print cmd
-        results = misc.Run(cmd)
+        misc.Run(cmd)
 
 
     def SetChannel(self, channel):
@@ -415,7 +415,7 @@ class WirelessInterface(Interface):
         """
         cmd = 'iwconfig ' + self.iface + ' channel ' + str(channel)
         if self.verbose: print cmd
-        results = misc.Run(cmd)
+        misc.Run(cmd)
 
 
     def SetKey(self, key):
@@ -427,7 +427,7 @@ class WirelessInterface(Interface):
         """
         cmd = 'iwconfig ' + self.iface + ' key ' + key
         if self.verbose: print cmd
-        results = misc.Run(cmd)
+        misc.Run(cmd)
 
 
     def Associate(self, essid, channel=None, bssid=None):
@@ -445,7 +445,7 @@ class WirelessInterface(Interface):
         if bssid:
             cmd += ' ap ' + bssid
         if self.verbose: print cmd
-        results = misc.Run(cmd)
+        misc.Run(cmd)
 
 
     def Authenticate(self, network):
@@ -457,7 +457,7 @@ class WirelessInterface(Interface):
         """
         misc.ParseEncryption(network)
         if self.wpa_driver == 'ralink legacy': 
-            _AuthenticateRalinkLegacy(network)
+            self._AuthenticateRalinkLegacy(network)
         else:
             cmd = ('wpa_supplicant -B -i ' + self.iface + ' -c "' 
                     + wpath.networks + network['bssid'].replace(':','').lower() 

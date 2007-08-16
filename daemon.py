@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.5
+#!/usr/bin/env python
 """ wicd - wireless connection daemon implementation.
 
 This module implements the wicd daemon that provides network
@@ -312,7 +312,7 @@ class ConnectionWizard(dbus.service.Object):
             print "no wired connection present, wired autoconnect failed"
             print 'attempting to autoconnect to wireless network'
             if self.GetWirelessInterface() != None:
-                for x in self.LastScan:
+                for x, network in enumerate(self.LastScan):
                     if bool(self.LastScan[x]["has_profile"]):
                         print str(self.LastScan[x]["essid"]) + ' has profile'
                         if bool(self.LastScan[x].get('automatic')):
@@ -397,8 +397,7 @@ class ConnectionWizard(dbus.service.Object):
         self.LastScan = scan
         print 'scanning done'
         print 'found',str(len(scan)),'networks:',
-        for i in scan:
-            print i,
+        for i, network in enumerate(scan):
             self.ReadWirelessNetworkProfile(i)
         print
     #end function FreshScan
@@ -549,10 +548,10 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def CheckIfWirelessConnecting(self):
         '''returns True if wireless interface is connecting, otherwise False'''
-        if not self.wifi.ConnectingThread == None:
-            #if ConnectingThread exists, then check for it's
+        if not self.wifi.connecting_thread == None:
+            #if connecting_thread exists, then check for it's
             #status, if it doesn't, we aren't connecting
-            status =  self.wifi.ConnectingThread.IsConnecting
+            status =  self.wifi.connecting_thread.is_connecting
             print 'wireless connecting',status
             return status
         else:
@@ -571,8 +570,8 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def CheckWirelessConnectingMessage(self):
         '''returns the wireless interface's status message'''
-        if not self.wifi.ConnectingThread == None:
-            stat = self.wifi.ConnectingThread.GetStatus()
+        if not self.wifi.connecting_thread == None:
+            stat = self.wifi.connecting_thread.GetStatus()
             print 'wireless connect status',stat
             return stat
         else:
@@ -584,8 +583,8 @@ class ConnectionWizard(dbus.service.Object):
     def CancelConnect(self):
         '''cancels the wireless connection attempt'''
         print 'canceling connection attempt'
-        if not self.wifi.ConnectingThread == None:
-            self.wifi.ConnectingThread.ShouldDie = True
+        if not self.wifi.connecting_thread == None:
+            self.wifi.connecting_thread.ShouldDie = True
         misc.Run("killall dhclient dhclient3 wpa_supplicant")
     #end function CancelConnect
 
@@ -603,10 +602,10 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckIfWiredConnecting(self):
         '''returns True if wired interface is connecting, otherwise False'''
-        if not self.wired.ConnectingThread == None:
-            #if ConnectingThread exists, then check for it's
+        if not self.wired.connecting_thread == None:
+            #if connecting_thread exists, then check for it's
             #status, if it doesn't exist, we aren't connecting
-            status = self.wired.ConnectingThread.IsConnecting
+            status = self.wired.connecting_thread.is_connecting
             print 'wired connecting',status
             return status
         else:
@@ -662,8 +661,8 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
         '''returns the wired interface\'s status message'''
-        if not self.wired.ConnectingThread == None:
-            status = self.wired.ConnectingThread.GetStatus()
+        if not self.wired.connecting_thread == None:
+            status = self.wired.connecting_thread.GetStatus()
             print 'wired connect status',status
             return status
         else:

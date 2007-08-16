@@ -1232,10 +1232,12 @@ class appGui:
                 wired.SetWiredProperty("gateway",'')
 
             if networkentry.expander.checkboxStaticDNS.get_active() == True:
+                wireless.SetWirelessProperty(networkid,'use_static_dns',True)
                 wired.SetWiredProperty("dns1",noneToString(networkentry.expander.txtDNS1.get_text()))
                 wired.SetWiredProperty("dns2",noneToString(networkentry.expander.txtDNS2.get_text()))
                 wired.SetWiredProperty("dns3",noneToString(networkentry.expander.txtDNS3.get_text()))
             else:
+                wireless.SetWirelessProperty(networkid,'use_static_dns',False)
                 wired.SetWiredProperty("dns1",'')
                 wired.SetWiredProperty("dns2",'')
                 wired.SetWiredProperty("dns3",'')

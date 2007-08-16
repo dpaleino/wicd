@@ -358,7 +358,7 @@ class ConnectionWizard(dbus.service.Object):
     def GetGlobalDNSAddresses(self):
         '''returns the global dns addresses'''
         print 'returning global dns addresses to client'
-        return (self.dns1,self.dns2,self.dns3)
+        return (misc.noneToString(self.dns1),misc.noneToString(self.dns2),misc.noneToString(self.dns3))
     #end function GetWirelessInterface
     
     @dbus.service.method('org.wicd.daemon')

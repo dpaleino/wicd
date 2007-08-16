@@ -287,7 +287,7 @@ class Wireless(Controller):
         The first available wireless interface.
         
         """
-        wnettools.GetWirelessInterfaces()
+        return wnettools.GetWirelessInterfaces()
 
 
     def Disconnect(self):

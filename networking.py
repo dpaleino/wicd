@@ -151,7 +151,7 @@ class Wireless(Controller):
 
 
 
-    def Scan(self,essid=None):
+    def Scan(self, essid=None):
         """ Scan for available wireless networks.
 
         Keyword arguments:
@@ -203,7 +203,8 @@ class Wireless(Controller):
         The current signal strength.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         return wiface.GetSignalStrength()
 
 
@@ -214,7 +215,8 @@ class Wireless(Controller):
         The name of the currently connected network.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         return wiface.GetCurrentNetwork()
 
 
@@ -225,7 +227,8 @@ class Wireless(Controller):
         The IP address of the interface in dotted notation.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         return wiface.GetIP()
 
 
@@ -243,7 +246,8 @@ class Wireless(Controller):
         ics -- enable internet connection sharing
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         wiface.StopDHCP()
         wiface.StopWPA()
         wiface.Down()
@@ -287,12 +291,13 @@ class Wireless(Controller):
         The first available wireless interface.
 
         """
-        wnettools.GetWirelessInterfaces()
+        return wnettools.GetWirelessInterfaces()
 
 
     def Disconnect(self):
         """ Disconnect from the network. """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         if self.disconnect_script != None:
             print 'Running wireless network disconnect script'
             misc.ExecuteScript(self.disconnect_script)
@@ -348,7 +353,8 @@ class WirelessConnectThread(ConnectThread):
         5. Get/set IP address and DNS servers.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.wpa_driver)
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
         liface = wnettools.WiredInterface(self.wired_interface)
 
         self.is_connecting = True
@@ -375,15 +381,18 @@ class WirelessConnectThread(ConnectThread):
         wiface.StopWPA()
         liface.StopDHCP()
 
-        # Check to see if we need to generate a PSK
-        if self.wpa_driver != 'ralink legacy': # Enhanced Ralink legacy drivers are handled later
+        # Check to see if we need to generate a PSK (only for non-ralink
+        # cards).
+        if self.wpa_driver != 'ralink legacy':
             if not self.network.get('key') == None:
                 self.SetStatus('generating_psk')
 
                 print 'Generating psk...'
-                key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*', re.DOTALL | re.I | re.M  | re.S)
+                key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
+                                         re.DOTALL | re.I | re.M  | re.S)
                 self.network['psk'] = misc.RunRegex(key_pattern,
-                        misc.Run('wpa_passphrase "' + self.network['essid'] + '" "' + self.network['key'] + '"'))
+                        misc.Run('wpa_passphrase "' + self.network['essid'] +
+                                 '" "' + self.network['key'] + '"'))
             # Generate the wpa_supplicant file...
             if not self.network.get('enctype') == None:
                 self.SetStatus('generating_wpa_config')

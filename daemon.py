@@ -511,7 +511,7 @@ class ConnectionWizard(dbus.service.Object):
     def GetCurrentNetworkID(self):
         '''returns the id of the current network, or -1 if network is not found'''
         currentESSID = self.GetCurrentNetwork()
-        for x in self.LastScan:
+        for x in xrange(0,len(self.LastScan)):
             if self.LastScan[x]['essid'] == currentESSID:
                 print 'current network found, id is ',x
                 return x

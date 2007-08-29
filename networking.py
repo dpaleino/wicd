@@ -248,18 +248,24 @@ class Wireless(Controller):
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                              self.wpa_driver)
+        print 'Creating ad-hoc network'
+        print 'Killing dhclient and wpa_supplicant'
         wiface.StopDHCP()
         wiface.StopWPA()
+        print 'Putting wireless interface down'
         wiface.Down()
+        print 'Setting mode, channel, and essid'
         wiface.SetMode('ad-hoc')
         wiface.SetChannel(channel)
         wiface.SetEssid(essid)
         #Right now it just assumes you're using WEP
         if enc_used:
+            print 'Setting encryption key'
             wiface.SetKey(key)
-
+        print 'Putting interface up'
         wiface.Up()
         # Just assume that the netmask is 255.255.255.0, it simplifies ICS
+        print 'Setting IP address'
         wiface.SetAddress(ip, '255.255.255.0')
 
         ip_parts = misc.IsValidIP(ip)

@@ -108,7 +108,7 @@ language['wireless_interface'] = _('Wireless Interface')
 language['wired_interface'] = _('Wired Interface')
 language['hidden_network'] = _('Hidden Network')
 language['hidden_network_essid'] = _('Hidden Network ESSID')
-language['connected_to_wireless'] = _('Connected to $A at $B% (IP: $C)')
+language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
 language['no_wireless_networks_found'] = _('No wireless networks found.')
@@ -139,6 +139,7 @@ language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
 language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
 language['wired_network_found'] = _('Wired connection detected')
 language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
+language['display_type_dialog'] = _('Use dBm to measure signal strength')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -327,26 +328,38 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         self.image.set_size_request(60,-1)
         self.image.set_from_icon_name("network-wired",6) 
         self.pack_start(self.image,fill=False,expand=False)
-        self.setSignalStrength(wireless.GetWirelessProperty(networkID,'quality'))
+        self.setSignalStrength(wireless.GetWirelessProperty(networkID,'quality'),
+                               wireless.GetWirelessProperty(networkID,'strength'))
         self.setMACAddress(wireless.GetWirelessProperty(networkID,'bssid'))
         self.setMode(wireless.GetWirelessProperty(networkID,'mode'))
         self.setChannel(wireless.GetWirelessProperty(networkID,'channel'))
-        self.setEncryption(wireless.GetWirelessProperty(networkID,'encryption'),wireless.GetWirelessProperty(networkID,'encryption_method'))
+        self.setEncryption(wireless.GetWirelessProperty(networkID,'encryption'),
+                           wireless.GetWirelessProperty(networkID,'encryption_method'))
         #show everything
         self.show_all()
     
-    def setSignalStrength(self,strength):
+    def setSignalStrength(self,strength, dbm_strength):
         strength = int(strength)
-        if daemon.GetWPADriver() == 'ralink legacy':
-            if strength <= 60:
+        if dbm_strength is not None:
+            dbm_strength = int(dbm_strength)
+        else:
+            dbm_strength = -1
+        display_type = daemon.GetSignalDisplayType()
+        if daemon.GetWPADriver() == 'ralink legacy' or display_type == 1:
+            # Use the -xx dBm signal strength to display a signal icon
+            # I'm not sure how accurately the dBm strength is being
+            # "converted" to strength bars, so suggestions from people
+            # for a better way would be welcome.
+            if dbm_strength >= -60:
                 self.image.set_from_file(wpath.images + 'signal-100.png')
-            elif strength <= 70:
+            elif dbm_strength >= -70:
                 self.image.set_from_file(wpath.images + 'signal-75.png')
-            elif strength <= 80:
+            elif dbm_strength >= -80:
                 self.image.set_from_file(wpath.images + 'signal-50.png')
             else:
                 self.image.set_from_file(wpath.images + 'signal-25.png')
         else:
+            # Uses normal link quality, should be fine in most cases
             if strength > 75:
                 self.image.set_from_file(wpath.images + 'signal-100.png')
             elif strength > 50:
@@ -355,7 +368,7 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
                 self.image.set_from_file(wpath.images + 'signal-50.png')
             else:
                 self.image.set_from_file(wpath.images + 'signal-25.png')
-        self.expander.setSignalStrength(strength)
+        self.expander.setSignalStrength(strength, dbm_strength)
         
     def setMACAddress(self,address):
         self.expander.setMACAddress(address)
@@ -774,8 +787,9 @@ class WirelessNetworkEntry(NetworkEntry):
             box.entry.set_text(noneToBlankString(wireless.GetWirelessProperty(self.networkID,methods[ID][2][x][1])))
         self.vboxEncryptionInformation.show_all()
 
-    def setSignalStrength(self,strength):
-        if daemon.GetWPADriver() == 'ralink legacy':
+    def setSignalStrength(self,strength, dbm_strength):
+        display_type = daemon.GetSignalDisplayType()
+        if daemon.GetWPADriver() == 'ralink legacy' or display_type == 1:
             ending = "dBm"
             start = "-"
         else:
@@ -806,16 +820,22 @@ class WirelessNetworkEntry(NetworkEntry):
 class appGui:
 
     def __init__(self):
-        print "starting..."
-        #two possibilities here, one is that the normal GUI should be opened, the other is that wired auto-connect
-        #is set to prompt the user to select a profile.  It's kind of hacked together, but it'll do.
+        print "starting gui.py..."
+        # Two possibilities here, one is that the normal GUI should be opened,
+        # the other is that wired auto-connect is set to prompt the user to
+        # select a profile.  It's kind of hacked together, but it'll do.
         if  daemon.GetNeedWiredProfileChooser() == True:
-            #profile chooser init block
-            #import and init WiredNetworkEntry to steal some of the functions and widgets it uses
+            daemon.SetNeedWiredProfileChooser(False)
+            # Profile chooser init block.
+            # Import and init WiredNetworkEntry to steal some of the
+            # functions and widgets it uses.
             wiredNetEntry = WiredNetworkEntry()
             wiredNetEntry.__init__()
             
-            dialog = gtk.Dialog(title=language['wired_network_found'], flags = gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CONNECT,1,gtk.STOCK_CANCEL,2))
+            dialog = gtk.Dialog(title = language['wired_network_found'],
+                                flags = gtk.DIALOG_MODAL,
+                                buttons = (gtk.STOCK_CONNECT, 1,
+                                           gtk.STOCK_CANCEL, 2))
             dialog.set_has_separator(False)
             dialog.set_size_request(400,150)
             instructLabel = gtk.Label(language['choose_wired_profile'] + ':\n')
@@ -825,7 +845,9 @@ class appGui:
             instructLabel.set_alignment(0,0)
             stoppopcheckbox.set_active(False)
             
-            #remove widgets that were added to the normal WiredNetworkEntry so that they can be added to the pop-up wizard
+            # Remove widgets that were added to the normal
+            # WiredNetworkEntry so that they can be added to
+            # the pop-up wizard.
             wiredNetEntry.vboxTop.remove(wiredNetEntry.hboxTemp)
             wiredNetEntry.vboxTop.remove(wiredNetEntry.profileHelp)
             
@@ -852,7 +874,8 @@ class appGui:
                 sys.exit(0)
             else:
                 if stoppopcheckbox.get_active() == True:
-                    wired.use_default_profile = 1 #so that the pop-up doesn't keep appearing if you cancel it
+                    # Stops the pop-up from reappearing if cancelled
+                    wired.use_default_profile = 1
                 dialog.destroy()
                 sys.exit(0)
         else:
@@ -869,7 +892,7 @@ class appGui:
             self.wTree.get_widget("label_instructions").set_label(language['select_a_network'])
             #I don't know how to translate a menu entry
             #more specifically, I don't know how to set a menu entry's text
-            #self.wTree.get_widget("connect_button").modify_text(language['hidden_network'])
+            #self.wTree.get_widget("connect_button").modify_text(language['_network'])
             self.wTree.get_widget("progressbar").set_text(language['connecting'])
 
             self.network_list = self.wTree.get_widget("network_list_vbox")
@@ -918,7 +941,12 @@ class appGui:
         dialog.show_all()
         response = dialog.run()
         if response == 1:
-            wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),channelEntry.entry.get_text(),ipEntry.entry.get_text(),"WEP",self.keyEntry.entry.get_text(),self.useEncryptionCheckbox.get_active(),False) #useICSCheckbox.get_active())
+            wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),
+                                        channelEntry.entry.get_text(),
+                                        ipEntry.entry.get_text(), "WEP",
+                                        self.keyEntry.entry.get_text(),
+                                        self.useEncryptionCheckbox.get_active(),
+                                        False) #useICSCheckbox.get_active())
         dialog.destroy()
 
     def toggleEncryptionCheck(self,widget=None):
@@ -946,6 +974,8 @@ class appGui:
         reconnectcheckbox.set_active(wireless.GetAutoReconnect())
         debugmodecheckbox = gtk.CheckButton(language['use_debug_mode'])
         debugmodecheckbox.set_active(daemon.GetDebugMode())
+        displaytypecheckbox = gtk.CheckButton(language['display_type_dialog'])
+        displaytypecheckbox.set_active(daemon.GetSignalDisplayType())
         sepline = gtk.HSeparator()
         usedefaultradiobutton = gtk.RadioButton(None,language['use_default_profile'],False)
         showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,language['show_wired_list'],False)
@@ -1024,6 +1054,7 @@ class appGui:
         dialog.vbox.pack_start(wiredcheckbox)
         dialog.vbox.pack_start(reconnectcheckbox)
         dialog.vbox.pack_start(debugmodecheckbox)
+        dialog.vbox.pack_start(displaytypecheckbox)
         dialog.vbox.pack_start(sepline)
         dialog.vbox.pack_start(entryWiredAutoMethod)
         dialog.vbox.pack_start(usedefaultradiobutton)
@@ -1042,6 +1073,7 @@ class appGui:
             wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
             wireless.SetAutoReconnect(reconnectcheckbox.get_active())
             daemon.SetDebugMode(debugmodecheckbox.get_active())
+            daemon.SetSignalDisplayType(displaytypecheckbox.get_active())
             wired.SetWiredAutoConnectMethod(int(showlistradiobutton.get_active())+1) #if option is default profile, showlist will be 0, so 0 + 1 = 1
                                                                             #if option is showlist, showlist will be 1, so 1+1 = 2 :)
             dialog.destroy()
@@ -1049,7 +1081,7 @@ class appGui:
             dialog.destroy()
 
     def connect_hidden(self,widget):
-        #should display a dialog asking
+        # Should display a dialog asking
         #for the ssid of a hidden network
         #and displaying connect/cancel buttons
         dialog = gtk.Dialog(title=language['hidden_network'], flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CONNECT,1,gtk.STOCK_CANCEL,2))
@@ -1073,7 +1105,8 @@ class appGui:
         cancelButton = self.wTree.get_widget("cancel_button")
         cancelButton.set_sensitive(False)
         wireless.CancelConnect()
-        wireless.SetForcedDisconnect(True) #Prevents automatic reconnecting if that option is enabled
+        # Prevents automatic reconnecting if that option is enabled
+        wireless.SetForcedDisconnect(True)
 
     def pulse_progress_bar(self):
         self.wTree.get_widget("progressbar").pulse()
@@ -1112,7 +1145,9 @@ class appGui:
                         network = str(network)
                         strength = str(strength)
                         ip = str(wireless_ip)
-                        self.statusID=self.status_bar.push(1,language['connected_to_wireless'].replace('$A',network).replace('$B',strength).replace('$C',wireless_ip))
+                        self.statusID=self.status_bar.push(1, language['connected_to_wireless'].replace
+                                                          ('$A',network).replace('$B',daemon.FormatSignalForPrinting(strength)).replace
+                                                          ('$C',wireless_ip))
                         if not daemon.GetDebugMode():
                             config.EnableLogging()
                         return True
@@ -1137,7 +1172,7 @@ class appGui:
             z.destroy()
 
         if wired.CheckPluggedIn() or wired.GetAlwaysShowWiredInterface():
-            printLine = True #so that a horizontal line is printed if there are wireless networks
+            printLine = True  # So that a horizontal line is printed if there are wireless networks
             wiredNetwork = PrettyWiredNetworkEntry()
             self.network_list.pack_start(wiredNetwork,fill=False,expand=False)
             wiredNetwork.connectButton.connect("button-press-event",self.connect,"wired",0,wiredNetwork)
@@ -1254,6 +1289,9 @@ class appGui:
             wired.ConnectWired()
 
     def exit(self,widget,event=None):
+        # Call close_gui so the daemon can send a signal to alert
+        # the tray that the gui has closed (prevents zombies)
+        daemon.close_gui()
         sys.exit(0)
 
 #start the app

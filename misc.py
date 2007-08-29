@@ -1,4 +1,5 @@
-#misc functions for wicd
+''' Misc - miscellaneous functions for wicd '''
+
 #pretty much useless to anyone else...
 #but if it is useful, feel free to use under the terms of the GPL
 #
@@ -11,12 +12,11 @@
 #
 
 import os
-import sys
 import wpath
 if __name__ == '__main__':
     wpath.chdir(__file__)
-import re
 def Run(cmd,include_std_error=False):
+    ''' Run a command '''
     if not include_std_error:
         f = os.popen( cmd , "r")
         return f.read()
@@ -25,28 +25,41 @@ def Run(cmd,include_std_error=False):
         return out_err.read()
 
 def IsValidIP(ip):
-    if ip != None: #make sure there is an IP
-        if ip.count('.') == 3: #make sure the IP can be parsed (or at least it has the proper dots)
-            ipNumbers = ip.split('.') #split it up
-            if not '' in ipNumbers: #make sure the IP isn't something like 127..0.1
+    ''' Make sure an entered IP is valid '''
+    if ip != None: # Make sure there is an IP
+        if ip.count('.') == 3: # Make sure there are 3 periods
+            ipNumbers = ip.split('.') # Split it up
+            if not '' in ipNumbers: # Make sure the ip was split into 3 groups
                 return ipNumbers
     return False
 
 def PromptToStartDaemon():
-	#script execution doesn't work correctly if daemon gets autostarted, so just prompt user to start manually
-    print 'You need to start the daemon before using the gui or tray.  Use the command \'sudo /etc/init.d/wicd start\'.'
+    ''' Prompt the user to start the daemon '''
+    # script execution doesn't work correctly if daemon gets autostarted,
+    # so just prompt user to start manually
+    print 'You need to start the daemon before using the gui or tray.  Use \
+           the command \'sudo /etc/init.d/wicd start\'.'
 
 def RunRegex(regex,string):
+    ''' runs a regex search on a string '''
     m = regex.search(string)
     if m:
         return m.groups()[0]
     else:
         return None
 
-def WriteLine(file,text):
-    file.write(text + "\n")
+def WriteLine(my_file, text):
+    ''' write a line to a file '''
+    my_file.write(text + "\n")
 
 def ExecuteScript(script):
+    ''' Execute a command
+
+    Executes a given command by forking a new process and
+    calling run-script.py
+
+    '''
+
     pid = os.fork()
     if not pid:
         os.setsid()
@@ -60,14 +73,16 @@ def ExecuteScript(script):
 
 
 def ReadFile(filename):
+    ''' read in a file and return it's contents as a string '''
     if not os.path.exists(filename):
         return None
-    file = open(filename,'r')
-    data = file.read().strip()
-    file.close()
+    my_file = open(filename,'r')
+    data = my_file.read().strip()
+    my_file.close()
     return str(data)
 
 def Noneify(variable):
+    ''' convert string types to either None or booleans'''
     #set string Nones to real Nones
     if variable == "None" or variable == "":
         return None
@@ -85,45 +100,62 @@ def Noneify(variable):
     return variable
 
 def ParseEncryption(network):
+    ''' Parse through an encryption template file
+
+    Parses an encryption template, reading in a network's info
+    and creating a config file for it
+
+    '''
     #list = open("encryption/templates/active","r")
     #types = list.readlines()
     #for i in types:
     enctemplate = open("encryption/templates/" + network["enctype"])
     template = enctemplate.readlines()
-    #set these to nothing so that we can hold them outside the loop
+    # Set these to nothing so that we can hold them outside the loop
     z = "ap_scan=1\n"
     y = 0
-    #loop through the lines in the template, selecting ones to use
+    # Loop through the lines in the template, selecting ones to use
     for x in template:
         x = x.strip("\n")
         if y>4:
             #blah blah replace stuff
             x = x.replace("$_SCAN","0")
             for t in network:
-                if Noneify(network[t]) != None: #don't bother if z's value is None cause it will cause errors
+                # Don't bother if z's value is None cause it will cause errors
+                if Noneify(network[t]) != None:
                     x = x.replace("$_" + str(t).upper(),str(network[t]))
             z = z + "\n" + x
         y+=1
-    #write the data to the files
+    # Write the data to the files
     #then chmod them so they can't be read by evil little munchkins
-    fileness = open(wpath.networks + network["bssid"].replace(":","").lower(),"w")
+    fileness = open(wpath.networks + network["bssid"].replace(":", "").lower(),
+                    "w")
     os.chmod(wpath.networks + network["bssid"].replace(":","").lower(),0600)
     os.chown(wpath.networks + network["bssid"].replace(":","").lower(), 0, 0)
-    #we could do this above, but we'd like to permod (permission mod) them before we write, so that it can't be read
+    # We could do this above, but we'd like to permod (permission mod)
+    # them before we write, so that it can't be read.
     fileness.write(z)
     fileness.close()
 
 def LoadEncryptionMethods():
+    ''' Load encryption methods from configuration files
+
+    Loads all the encryption methods from the template files
+    in /encryption/templates into a data structure.  To be
+    loaded, the template must be listed in the "active" file.
+
+    '''
         encryptionTypes = {}
         types = open("encryption/templates/active","r")
         enctypes = types.readlines()
         for x in enctypes:
-            #skip some lines, we don't care who the author is/was, etc
-            #we don't care about version either
+        # Skip some lines, we don't care who the author is/was, etc
+        # we don't care about version either.
             x = x.strip("\n")
             current = open("encryption/templates/" + x,"r")
             line = current.readlines()
-            typeID = len(encryptionTypes) #this is so we know where in the array to add data
+        # Get the length so we know where in the array to add data
+        typeID = len(encryptionTypes)
             encryptionTypes[typeID] = {}
             encryptionTypes[typeID][0] = line[0][7:].strip("\n")
             encryptionTypes[typeID][1] = x
@@ -133,21 +165,26 @@ def LoadEncryptionMethods():
             requiredFields = requiredFields.split(" ")
             index = -1
             for current in requiredFields:
-                #the pretty names will start with an * so we can
+            # The pretty names will start with an * so we can
                 #seperate them with that
                 if current[0] == "*":
-                    #make underscores spaces
+                # Make underscores spaces
                     #and remove the *
-                    encryptionTypes[typeID][2][index][0] = current.replace("_"," ").lstrip("*")
+                encryptionTypes[typeID][2][index][0] = current.replace("_",
+                                                       " ").lstrip("*")
                 else:
-                    #add to the list of things that are required
+                # Add to the list of things that are required
                     index = len(encryptionTypes[typeID][2])
                     encryptionTypes[typeID][2][index] = {}
                     encryptionTypes[typeID][2][index][1] = current
         return encryptionTypes
 
 def noneToString(text):
-    '''used for putting text in a text box if the value to put in is 'None' the box will be blank'''
+    ''' Convert None, "None", or "" to string type "None"
+
+    used for putting text in a text box if the value to put in is 'None' the box will be blank
+
+    '''
     if text == None or text == "None" or text == "":
         return "None"
     else:

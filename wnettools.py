@@ -34,13 +34,17 @@ import misc
 import re
 import wpath
 
-# Compile the regex patterns that will be used to search the output of iwlist scan for info
-# these are well tested, should work on most cards
+# Compile the regex patterns that will be used to search the output of iwlist
+# scan for info these are well tested, should work on most cards
 essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.DOTALL | re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
+# These next two look a lot a like, altstrength is for Signal level = xx/100,
+# which is just an alternate way of displaying link quality,signaldbm is
+# for displaying actualy signal strength (-xx dBm).
 strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
+signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)',re.DOTALL | re.I | re.M | re.S)
 mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 freq_pattern        = re.compile('.*Frequency:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 ip_pattern          = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
@@ -375,19 +379,27 @@ class WirelessInterface(Interface):
                             print 'Unknown AuthMode, can\'t assign encryption_method!!'
                             ap['encryption_method'] = 'Unknown'
                         
-                        # Set signal strength here (in dBm, not %)
-                        ap['quality'] = info[1][1:] 
+                        # Set signal strength here (in dBm, not %),
+                        # ralink drivers don't return link quality
+                        ap['strength'] = info[1]
         else:
             ap['encryption'] = False
 
-        if self.wpa_driver != 'ralink legacy':
+        # Link Quality
             # Set strength to -1 if the quality is not found
             if misc.RunRegex(strength_pattern,cell):
-                ap['quality'] = misc.RunRegex(strength_pattern,cell)
+            ap['quality'] = misc.RunRegex(strength_pattern,cell)
             elif misc.RunRegex(altstrength_pattern,cell): 
-                ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
+            ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
             else:
-                ap['quality'] = -1
+            ap['quality'] = -1
+
+        # Signal Strength (only used if user doesn't want link
+        # quality displayed or it isn't found)
+        if misc.RunRegex(signaldbm_pattern, cell):
+            ap['strength'] = misc.RunRegex(signaldbm_pattern, cell)
+        else:
+            ap['strength'] = -1
         
         return ap
 

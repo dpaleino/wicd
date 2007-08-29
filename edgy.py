@@ -1,3 +1,11 @@
+''' edgy - implements a tray icon
+
+Creates and updates the tray icon on systems with pygtk above a certain version
+Also calls the wired profile chooser when needed and attempts to auto
+reconnect when needed
+
+'''
+
 ########
 ## DO NOT RUN THIS FILE DIRECTLY
 ## USE TRAY.PY INSTEAD
@@ -19,7 +27,13 @@ import sys
 import wpath
 if __name__ == '__main__':
     wpath.chdir(__file__)
-import gtk, gobject, dbus, dbus.service, os, sys, locale, gettext, signal, time
+import gtk
+import gobject
+import dbus
+import dbus.service
+import locale
+import gettext
+import signal
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
 
@@ -53,94 +67,109 @@ osLanguage = os.environ.get('LANGUAGE', None)
 if (osLanguage):
     langs += osLanguage.split(":")
 langs += ["en_US"]
-lang = gettext.translation('wicd', local_path, languages=langs, fallback = True)
+lang = gettext.translation('wicd', local_path, languages=langs,
+                           fallback = True)
 _ = lang.gettext
 language = {}
-language['connected_to_wireless'] = _('Connected to $A at $B% (IP: $C)')
+language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
 
-tr=None
-tooltip = gtk.Tooltips()
-pic=None
-lastWinId = 0
+class TrayIconInfo():
+    ''' class for updating the tray icon status '''
+    def __init__(self):
+        ''' initialize variables needed for the icon status methods '''
+        self.last_strength = -2
+        self.still_wired = False
+        self.network = ''
+        self.tried_reconnect = False
+        self.last_win_id = 0
 
-def open_wicd_gui():
-    global lastWinId
-    ret = 0
-    if lastWinId != 0:
-       os.kill(lastWinId,signal.SIGQUIT)
-       ret = os.waitpid(lastWinId,0)[1]
-       lastWinId = 0
-    if ret == 0:
-       lastWinId = os.spawnlpe(os.P_NOWAIT, './gui.py', os.environ)
-
-def wired_profile_chooser():
-    print 'profile chooser is running'
+    def wired_profile_chooser(self):
+        ''' Launched the wired profile chooser '''
+        print 'profile chooser is be launched...'
+        daemon.SetNeedWiredProfileChooser(True)
     os.spawnlpe(os.P_WAIT, './gui.py', os.environ)
 
-def set_signal_image():
-    global LastStrength
-    global stillWired  # Keeps us from resetting the wired info over and over
-    global network  # Declared as global so it gets initialized before first use
+    def check_for_wired_connection(self, wired_ip):
+        ''' Checks for an active wired connection
+
+        Checks for and updates the tray icon for an active wired connection
+
+        '''
+        # Only set image/tooltip if it hasn't been set already
+        if self.still_wired == False:
+            tr.set_from_file("images/wired.png")
+            tr.set_tooltip(language['connected_to_wired'].replace('$A',
+                                                                  wired_ip))
+            self.still_wired = True
+
+    def check_for_wireless_connection(self, wireless_ip):
+        ''' Checks for an active wireless connection
+
+        Checks for and updates the tray icon for an active wireless connection
+
+        '''
+        wireless_signal = int(wireless.GetCurrentSignalStrength())
+
+        # Only update if the signal strength has changed because doing I/O
+        # calls is expensive, and the icon flickers
+        if (wireless_signal != self.last_strength or
+            self.network != wireless.GetCurrentNetwork() or
+            wireless_signal == 0):
+            self.last_strength = wireless_signal
+            # Set the string to '' so that when it is put in "high-signal" +
+            # lock + ".png", there will be nothing
+            lock = ''
+
+            # cur_net_id needs to be checked because a negative value
+            # will break the tray when passed to GetWirelessProperty.
+            cur_net_id = wireless.GetCurrentNetworkID()
+
+            if cur_net_id > -1 and \
+               wireless.GetWirelessProperty(cur_net_id, "encryption"):
+                # Set the string to '-lock' so that it will display the
+                # lock picture
+                lock = '-lock'
+            # Update the tooltip and icon picture
+            self.network = str(wireless.GetCurrentNetwork())
+            tr.set_tooltip(language['connected_to_wireless'].replace
+                           ('$A', self.network).replace
+                           ('$B', daemon.FormatSignalForPrinting
+                                            (str(wireless_signal))).replace
+                           ('$C', str(wireless_ip)))
+            self.set_signal_image(wireless_signal, lock)
+
+    def update_tray_icon(self):
+        ''' updates tray icon and checks if wired profile chooser should run '''
 
     # Disable logging if debugging isn't on to prevent log spam
     if not daemon.GetDebugMode():
         config.DisableLogging()
 
-    # Check if wired profile chooser should be launched
-    if daemon.GetNeedWiredProfileChooser() == True:
-        wired_profile_chooser()
-        daemon.SetNeedWiredProfileChooser(False)
-
-    # Check for active wired connection
+        # First check for an active wired network, then for an
+        # active wireless network.  If neither is found, change
+        # icon to reflect that and run auto_reconnect()
     wired_ip = wired.GetWiredIP()
-    if wired.CheckPluggedIn() == True and wired_ip != None:
-        # Only set image/tooltip if it hasn't been set already
-        if stillWired == False:
-            tr.set_from_file("images/wired.png")
-            tr.set_tooltip(language['connected_to_wired'].replace('$A',
-                                                                  wired_ip))
-            stillWired = True
-            lock = ''
+        if wired_ip is not None and wired.CheckPluggedIn():
+            self.check_for_wired_connection(wired_ip)
     else:
-        # Check to see if we were using a wired connection that has now become
-        # unplugged or disabled.
-        if stillWired == True:
+            self.still_wired = False  # We're not wired any more
+            wireless_ip = wireless.GetWirelessIP()
+            if wireless_ip is not None:
+                self.check_for_wireless_connection(wireless_ip)
+            else:
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
-        stillWired = False
+                self.auto_reconnect()
 
-        wireless_ip = wireless.GetWirelessIP()
-        # If ip returns as None, we are probably returning from hibernation
-        # and need to force signal to 0 to avoid crashing.
-        if wireless_ip != None:
-            wireless_signal = int(wireless.GetCurrentSignalStrength())
-        else:
-            wireless_signal = 0
+        if not daemon.GetDebugMode():
+            config.EnableLogging()
 
-        # Only update if the signal strength has changed because doing I/O
-        # calls is expensive, and the icon flickers
-        if (wireless_signal != LastStrength or
-            network != wireless.GetCurrentNetwork() or wireless_signal == 0) \
-            and wireless_ip != None:
-            LastStrength = wireless_signal
-            # Set the string to '' so that when it is put in "high-signal" +
-            # lock + ".png", there will be nothing
-            lock = ''
-            # curNetID needs to be checked because a negative value
-            # will break the tray when passed to GetWirelessProperty.
-            curNetID = wireless.GetCurrentNetworkID()
-            if wireless_signal > 0 and curNetID > -1 and \
-               wireless.GetWirelessProperty(curNetID,"encryption"):
-                # Set the string to '-lock' so that it will display the
-                # lock picture
-                lock = '-lock'
-            network = str(wireless.GetCurrentNetwork())
-            tr.set_tooltip(language['connected_to_wireless'].replace
-                           ('$A',network).replace
-                           ('$B',str(wireless_signal)).replace
-                           ('$C',str(wireless_ip)))
+        return True
+
+    def set_signal_image(self, wireless_signal, lock):
+        ''' Sets the tray icon picture for an active wireless connection '''
             if wireless_signal > 75:
                 tr.set_from_file("images/high-signal" + lock + ".png")
             elif wireless_signal > 50:
@@ -151,37 +180,30 @@ def set_signal_image():
                 tr.set_from_file("images/bad-signal" + lock + ".png")
             elif wireless_signal == 0:
                 tr.set_from_file("images/no-signal.png")
-                auto_reconnect()
+            # If we have no signal, we should try to reconnect.
+            self.auto_reconnect()
 
-        elif wireless_ip is None and wired_ip is None:
-            tr.set_from_file("images/no-signal.png")
-            tr.set_tooltip(language['not_connected'])
-            auto_reconnect()
+    def auto_reconnect(self):
+        ''' Automatically reconnects to a network if needed
 
-    if not daemon.GetDebugMode():
-        config.EnableLogging()
+        If automatic reconnection is turned on, this method will
+        attempt to first reconnect to the last used wireless network, and
+        should that fail will simply run AutoConnect()
 
-    return True
-
-def auto_reconnect():
+        '''
     # Auto-reconnect code - not sure how well this works.  I know that
     # without the ForcedDisconnect check it reconnects you when a
     # disconnect is forced.  People who have disconnection problems need
     # to test it to determine if it actually works.
-    #
-    # First it will attempt to reconnect to the last known wireless network
-    # and if that fails it should run a scan and try to connect to a wired
-    # network or any wireless network set to autoconnect.
-    global triedReconnect
-
     if wireless.GetAutoReconnect() == True and \
-       daemon.CheckIfConnecting() == False:
-        curNetID = wireless.GetCurrentNetworkID()
-        if curNetID > -1:  # Needs to be a valid network to try to connect to
-            if triedReconnect == False:
+           daemon.CheckIfConnecting() == False and \
+           wireless.GetForcedDisconnect() == False:
+            cur_net_id = wireless.GetCurrentNetworkID()
+            if cur_net_id > -1:  # Needs to be a valid network
+                if self.tried_reconnect == False:
                 print 'Trying to autoreconnect to last used network'
-                wireless.ConnectWireless(curNetID)
-                triedReconnect = True
+                    wireless.ConnectWireless(cur_net_id)
+                    self.tried_reconnect = True
             elif wireless.CheckIfWirelessConnecting() == False:
                 print "Couldn't reconnect to last used network,\
                        scanning for an autoconnect network..."
@@ -190,6 +212,7 @@ def auto_reconnect():
             daemon.AutoConnect(True)
 
 class TrackerStatusIcon(gtk.StatusIcon):
+    ''' Class for creating the wicd tray icon '''
     def __init__(self):
         gtk.StatusIcon.__init__(self)
         menu = '''
@@ -213,10 +236,10 @@ class TrackerStatusIcon(gtk.StatusIcon):
                 ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
                  self.on_quit),
                 ]
-        ag = gtk.ActionGroup('Actions')
-        ag.add_actions(actions)
+        actg = gtk.ActionGroup('Actions')
+        actg.add_actions(actions)
         self.manager = gtk.UIManager()
-        self.manager.insert_action_group(ag, 0)
+        self.manager.insert_action_group(actg, 0)
         self.manager.add_ui_from_string(menu)
         self.menu = self.manager.get_widget('/Menubar/Menu/About').props.parent
         self.current_icon_path = ''
@@ -226,40 +249,60 @@ class TrackerStatusIcon(gtk.StatusIcon):
         self.connect('popup-menu', self.on_popup_menu)
         self.set_from_file("images/no-signal.png")
         self.set_tooltip("Initializing wicd...")
-
+        self.last_win_id = 0
         wireless.SetForcedDisconnect(False)
 
-    def on_activate(self, data):
-        open_wicd_gui()
+    def on_activate(self, data=None):
+        ''' Opens the wicd GUI '''
+        self.toggle_wicd_gui()
 
-    def on_quit(self,widget):
+    def on_quit(self, widget=None):
+        ''' Closes the tray icon '''
         sys.exit()
 
     def on_popup_menu(self, status, button, time):
+        ''' Opens the right click menu for the tray icon '''
         self.menu.popup(None, None, None, button, time)
 
-    def on_preferences(self, data):
-        open_wicd_gui()
+    def on_preferences(self, data=None):
+        ''' Opens the wicd GUI '''
+        self.toggle_wicd_gui()
 
-    def on_about(self, data):
+    def on_about(self, data = None):
+        ''' Opens the About Dialog '''
         dialog = gtk.AboutDialog()
         dialog.set_name('wicd tray icon')
-        dialog.set_version('0.2')  # Might be time to move the version number up?
+        dialog.set_version('0.2')
         dialog.set_comments('an icon that shows your network connectivity')
         dialog.set_website('http://wicd.sourceforge.net')
         dialog.run()
         dialog.destroy()
 
-    def set_from_file(self,path):
+    def set_from_file(self, path = None):
+        ''' Sets a new tray icon picture '''
         if path != self.current_icon_path:
             self.current_icon_path = path
         gtk.StatusIcon.set_from_file(self,path)
 
-LastStrength = -2
-stillWired = False
-network = ''
-triedReconnect = False
+    def toggle_wicd_gui(self):
+        ''' Toggles the wicd GUI '''
+        ret = 0
+        if self.last_win_id != 0:
+            os.kill(self.last_win_id, signal.SIGQUIT)
+            ret = os.waitpid(self.last_win_id, 0)[1]
+            self.last_win_id = 0
+        if ret == 0:
+            self.last_win_id = os.spawnlpe(os.P_NOWAIT, './gui.py', os.environ)
+
 
 tr=TrackerStatusIcon()
-gobject.timeout_add(3000,set_signal_image)
-gtk.main()
+icon_info = TrayIconInfo()
+
+# Signal receivers for launching the wired profile chooser, and
+# for cleaning up child gui.py processes when they're closed.
+bus.add_signal_receiver(icon_info.wired_profile_chooser, 'LaunchChooser',
+                            'org.wicd.daemon')
+bus.add_signal_receiver(tr.toggle_wicd_gui, 'CloseGui', 'org.wicd.daemon')
+
+gobject.timeout_add(3000, icon_info.update_tray_icon)
+gobject.MainLoop().run()

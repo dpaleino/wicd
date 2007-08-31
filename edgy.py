@@ -158,7 +158,7 @@ class TrayIconInfo():
             wireless_ip = wireless.GetWirelessIP()
             if wireless_ip is not None:
                 self.check_for_wireless_connection(wireless_ip)
-            else:
+            else:  # No connection at all
             tr.set_from_file("images/no-signal.png")
             tr.set_tooltip(language['not_connected'])
                 self.auto_reconnect()
@@ -191,16 +191,12 @@ class TrayIconInfo():
         should that fail will simply run AutoConnect()
 
         '''
-    # Auto-reconnect code - not sure how well this works.  I know that
-    # without the ForcedDisconnect check it reconnects you when a
-    # disconnect is forced.  People who have disconnection problems need
-    # to test it to determine if it actually works.
-    if wireless.GetAutoReconnect() == True and \
-           daemon.CheckIfConnecting() == False and \
-           wireless.GetForcedDisconnect() == False:
+        if wireless.GetAutoReconnect() and \
+           not daemon.CheckIfConnecting() and \
+           not wireless.GetForcedDisconnect():
             cur_net_id = wireless.GetCurrentNetworkID()
             if cur_net_id > -1:  # Needs to be a valid network
-                if self.tried_reconnect == False:
+                if not self.tried_reconnect:
                 print 'Trying to autoreconnect to last used network'
                     wireless.ConnectWireless(cur_net_id)
                     self.tried_reconnect = True
@@ -284,14 +280,23 @@ class TrackerStatusIcon(gtk.StatusIcon):
             self.current_icon_path = path
         gtk.StatusIcon.set_from_file(self,path)
 
-    def toggle_wicd_gui(self):
-        ''' Toggles the wicd GUI '''
+    def toggle_wicd_gui(self, killed = False):
+        ''' Toggles the wicd GUI
+
+        either opens or closes the gui, depending on
+        the situation.
+        killed is passed as True if the gui was manually
+        closed and a signal was sent from the daemon,
+        and is false otherwise.
+        
+        '''
         ret = 0
         if self.last_win_id != 0:
+            # There may be a gui window already open, so try to kill it
             os.kill(self.last_win_id, signal.SIGQUIT)
             ret = os.waitpid(self.last_win_id, 0)[1]
             self.last_win_id = 0
-        if ret == 0:
+        if ret == 0 and not killed:
             self.last_win_id = os.spawnlpe(os.P_NOWAIT, './gui.py', os.environ)
 
 

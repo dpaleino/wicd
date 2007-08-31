@@ -421,7 +421,7 @@ class ConnectionWizard(dbus.service.Object):
         print 'calling wired profile chooser'
 
     @dbus.service.signal(dbus_interface='org.wicd.daemon',signature='')
-    def CloseGui(self):
+    def CloseGui(self, killed):
         ''' Sends a dbus signal announcing the GUI is closing '''
         print 'sending close signal'
     @dbus.service.method('org.wicd.daemon')
@@ -433,7 +433,7 @@ class ConnectionWizard(dbus.service.Object):
         service.method and service.signal
 
         '''
-        self.CloseGui()
+        self.CloseGui(True)
 
     ########## WIRELESS FUNCTIONS
     #################################
@@ -1194,7 +1194,6 @@ class ConnectionWizard(dbus.service.Object):
         print "autodetected wireless interface...",self.DetectWirelessInterface()
         print "using wireless interface...",self.GetWirelessInterface()[5:]
     #end function ReadConfig
-
 
 
 def usage():

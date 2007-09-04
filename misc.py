@@ -138,13 +138,13 @@ def ParseEncryption(network):
     fileness.close()
 
 def LoadEncryptionMethods():
-    ''' Load encryption methods from configuration files
+        ''' Load encryption methods from configuration files
 
-    Loads all the encryption methods from the template files
-    in /encryption/templates into a data structure.  To be
-    loaded, the template must be listed in the "active" file.
+        Loads all the encryption methods from the template files
+        in /encryption/templates into a data structure.  To be
+        loaded, the template must be listed in the "active" file.
 
-    '''
+        '''
         encryptionTypes = {}
         types = open("encryption/templates/active","r")
         enctypes = types.readlines()
@@ -156,27 +156,27 @@ def LoadEncryptionMethods():
             line = current.readlines()
         # Get the length so we know where in the array to add data
         typeID = len(encryptionTypes)
-            encryptionTypes[typeID] = {}
-            encryptionTypes[typeID][0] = line[0][7:].strip("\n")
-            encryptionTypes[typeID][1] = x
-            encryptionTypes[typeID][2] = {}
-            requiredFields = line[3][8:]
-            requiredFields = requiredFields.strip("\n")
-            requiredFields = requiredFields.split(" ")
-            index = -1
-            for current in requiredFields:
-            # The pretty names will start with an * so we can
-                #seperate them with that
-                if current[0] == "*":
+        encryptionTypes[typeID] = {}
+        encryptionTypes[typeID][0] = line[0][7:].strip("\n")
+        encryptionTypes[typeID][1] = x
+        encryptionTypes[typeID][2] = {}
+        requiredFields = line[3][8:]
+        requiredFields = requiredFields.strip("\n")
+        requiredFields = requiredFields.split(" ")
+        index = -1
+        for current in requiredFields:
+        # The pretty names will start with an * so we can
+            #seperate them with that
+            if current[0] == "*":
                 # Make underscores spaces
-                    #and remove the *
+                #and remove the *
                 encryptionTypes[typeID][2][index][0] = current.replace("_",
-                                                       " ").lstrip("*")
-                else:
-                # Add to the list of things that are required
-                    index = len(encryptionTypes[typeID][2])
-                    encryptionTypes[typeID][2][index] = {}
-                    encryptionTypes[typeID][2][index][1] = current
+                                                   " ").lstrip("*")
+            else:
+            # Add to the list of things that are required
+                index = len(encryptionTypes[typeID][2])
+                encryptionTypes[typeID][2][index] = {}
+                encryptionTypes[typeID][2][index][1] = current
         return encryptionTypes
 
 def noneToString(text):

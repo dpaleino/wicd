@@ -455,8 +455,8 @@ class ConnectionWizard(dbus.service.Object):
         for i, network in enumerate(scan):
             self.ReadWirelessNetworkProfile(i)
         print
-	
-	# This is unfinished so not on dbus yet
+    
+    # This is unfinished so not on dbus yet
     def AutoConnectScan(self):
         ''' Scan for networks and for known hidden networks
 
@@ -1110,7 +1110,7 @@ class ConnectionWizard(dbus.service.Object):
                 if iface:
                     self.SetWirelessInterface(iface)
                 else:
-                self.SetWirelessInterface("wlan0")
+                    self.SetWirelessInterface("wlan0")
                 self.SetWiredInterface("eth0")
                 self.SetWPADriver("wext")
                 self.SetAlwaysShowWiredInterface(0)

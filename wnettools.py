@@ -388,11 +388,11 @@ class WirelessInterface(Interface):
         # Link Quality
             # Set strength to -1 if the quality is not found
             if misc.RunRegex(strength_pattern,cell):
-            ap['quality'] = misc.RunRegex(strength_pattern,cell)
+                ap['quality'] = misc.RunRegex(strength_pattern,cell)
             elif misc.RunRegex(altstrength_pattern,cell): 
-            ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
+                ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
             else:
-            ap['quality'] = -1
+                ap['quality'] = -1
 
         # Signal Strength (only used if user doesn't want link
         # quality displayed or it isn't found)

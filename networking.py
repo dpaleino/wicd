@@ -175,8 +175,9 @@ class Wireless(Controller):
             wiface.SetEssid(essid)
 
         aps = wiface.GetNetworks()
-        aps.sort(key=lambda x: x['quality'])
-        aps.reverse()
+        print aps
+        aps.sort(key=lambda x: x['strength'])
+        #aps.reverse()
         return aps
 
 

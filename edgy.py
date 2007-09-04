@@ -19,7 +19,8 @@ reconnect when needed
 ##thanks to Arne Brix for programming most of this
 ##released under the GNU Public License
 ##see http://www.gnu.org/copyleft/gpl.html for details
-##this will only work in Edgy and above because of gtk requirements
+##this will only work if the GTK version is above 2.10.0
+##as it is in Ubuntu Edgy
 ##to run the tray icon
 ########
 import os
@@ -143,24 +144,24 @@ class TrayIconInfo():
     def update_tray_icon(self):
         ''' updates tray icon and checks if wired profile chooser should run '''
 
-    # Disable logging if debugging isn't on to prevent log spam
-    if not daemon.GetDebugMode():
-        config.DisableLogging()
+        # Disable logging if debugging isn't on to prevent log spam
+        if not daemon.GetDebugMode():
+            config.DisableLogging()
 
-        # First check for an active wired network, then for an
-        # active wireless network.  If neither is found, change
-        # icon to reflect that and run auto_reconnect()
-    wired_ip = wired.GetWiredIP()
+            # First check for an active wired network, then for an
+            # active wireless network.  If neither is found, change
+            # icon to reflect that and run auto_reconnect()
+        wired_ip = wired.GetWiredIP()
         if wired_ip is not None and wired.CheckPluggedIn():
             self.check_for_wired_connection(wired_ip)
-    else:
+        else:
             self.still_wired = False  # We're not wired any more
             wireless_ip = wireless.GetWirelessIP()
             if wireless_ip is not None:
                 self.check_for_wireless_connection(wireless_ip)
             else:  # No connection at all
-            tr.set_from_file("images/no-signal.png")
-            tr.set_tooltip(language['not_connected'])
+                tr.set_from_file("images/no-signal.png")
+                tr.set_tooltip(language['not_connected'])
                 self.auto_reconnect()
 
         if not daemon.GetDebugMode():
@@ -170,18 +171,18 @@ class TrayIconInfo():
 
     def set_signal_image(self, wireless_signal, lock):
         ''' Sets the tray icon picture for an active wireless connection '''
-            if wireless_signal > 75:
-                tr.set_from_file("images/high-signal" + lock + ".png")
-            elif wireless_signal > 50:
-                tr.set_from_file("images/good-signal" + lock + ".png")
-            elif wireless_signal > 25:
-                tr.set_from_file("images/low-signal" + lock + ".png")
-            elif wireless_signal > 0:
-                tr.set_from_file("images/bad-signal" + lock + ".png")
-            elif wireless_signal == 0:
-                tr.set_from_file("images/no-signal.png")
-            # If we have no signal, we should try to reconnect.
-            self.auto_reconnect()
+        if wireless_signal > 75:
+            tr.set_from_file("images/high-signal" + lock + ".png")
+        elif wireless_signal > 50:
+            tr.set_from_file("images/good-signal" + lock + ".png")
+        elif wireless_signal > 25:
+            tr.set_from_file("images/low-signal" + lock + ".png")
+        elif wireless_signal > 0:
+            tr.set_from_file("images/bad-signal" + lock + ".png")
+        elif wireless_signal == 0:
+            tr.set_from_file("images/no-signal.png")
+        # If we have no signal, we should try to reconnect.
+        self.auto_reconnect()
 
     def auto_reconnect(self):
         ''' Automatically reconnects to a network if needed
@@ -197,7 +198,7 @@ class TrayIconInfo():
             cur_net_id = wireless.GetCurrentNetworkID()
             if cur_net_id > -1:  # Needs to be a valid network
                 if not self.tried_reconnect:
-                print 'Trying to autoreconnect to last used network'
+                    print 'Trying to autoreconnect to last used network'
                     wireless.ConnectWireless(cur_net_id)
                     self.tried_reconnect = True
             elif wireless.CheckIfWirelessConnecting() == False:

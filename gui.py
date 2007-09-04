@@ -339,7 +339,10 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         self.show_all()
     
     def setSignalStrength(self,strength, dbm_strength):
-        strength = int(strength)
+        if strength is not None:
+            strength = int(strength)
+        else:
+            dbm_strength = -1
         if dbm_strength is not None:
             dbm_strength = int(dbm_strength)
         else:

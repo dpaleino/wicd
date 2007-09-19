@@ -39,10 +39,10 @@ import wpath
 essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.DOTALL | re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
-# These next two look a lot a like, altstrength is for Signal level = xx/100,
-# which is just an alternate way of displaying link quality,signaldbm is
-# for displaying actualy signal strength (-xx dBm).
 strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
+# These next two look a lot a like, altstrength is for Signal level = xx/100,
+# which is just an alternate way of displaying link quality, signaldbm is
+# for displaying actualy signal strength (-xx dBm).
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
 signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)',re.DOTALL | re.I | re.M | re.S)
 mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
@@ -64,7 +64,7 @@ def SetDNS(dns1=None, dns2=None, dns3=None):
     dns1 -- IP address of DNS server 1
     dns2 -- IP address of DNS server 1
     dns3 -- IP address of DNS server 1
-    
+
     """
     dns_ips = [dns1, dns2, dns3]
 
@@ -84,7 +84,7 @@ def GetWirelessInterfaces():
 
     """
     return misc.RunRegex(
-        re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)', re.DOTALL | re.I | re.M  | re.S), 
+        re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)', re.DOTALL | re.I | re.M  | re.S),
         misc.Run('iwconfig'))
 
 
@@ -93,7 +93,7 @@ class Interface(object):
     def __init__(self, iface, verbose=True):
         """ Initialise the object.
 
-        Keyword arguments: 
+        Keyword arguments:
         iface -- the name of the interface
         verbose -- whether to print every command run
 
@@ -160,7 +160,7 @@ class Interface(object):
         cmd = 'ip route flush dev ' + self.iface
         if self.verbose: print cmd
         misc.Run(cmd)
-        
+
 
     def SetDefaultRoute(self, gw):
         """ Add a default route with the specified gateway.
@@ -175,7 +175,7 @@ class Interface(object):
 
 
     def GetIP(self):
-        """ Get the IP address of the interface. 
+        """ Get the IP address of the interface.
 
         Returns:
         The IP address of the interface in dotted quad form.
@@ -230,11 +230,11 @@ class WirelessInterface(Interface):
 
 
     def SetEssid(self, essid):
-        """ Set the essid of the wireless interface. 
-        
+        """ Set the essid of the wireless interface.
+
         Keyword arguments:
         essid -- essid to set the interface to
-        
+
         """
         cmd = 'iwconfig ' + self.iface + ' essid "' + essid + '"'
         if self.verbose: print cmd
@@ -246,14 +246,14 @@ class WirelessInterface(Interface):
         cmd = 'killall wpa_supplicant'
         if self.verbose: print cmd
         misc.Run(cmd)
-        
+
 
     def GetNetworks(self):
-        """ Get a list of available wireless networks. 
-        
+        """ Get a list of available wireless networks.
+
         Returns:
         A list containing available wireless networks.
-        
+
         """
         cmd = 'iwlist ' + self.iface + ' scan'
         if self.verbose: print cmd
@@ -262,6 +262,13 @@ class WirelessInterface(Interface):
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time
         networks = results.split( '   Cell ' )
+        
+        # Get available network info from iwpriv get_site_survey
+        # if we're using a ralink card (needed to get encryption info)
+        if self.wpa_driver == 'ralink legacy':
+            ralink_info = self._GetRalinkScanInfo()
+        else:
+            ralink_info = None
 
         # An array for the access points
         access_points = []
@@ -269,7 +276,7 @@ class WirelessInterface(Interface):
             # Only use sections where there is an ESSID.
             if cell.count('ESSID:') > 0:
                 # Add this network to the list of networks
-                access_points.append(self._ParseAccessPoint(cell))
+                access_points.append(self._ParseAccessPoint(cell, ralink_info))
 
         return access_points
 
@@ -301,18 +308,33 @@ class WirelessInterface(Interface):
         elif freq == '2.467 GHz': return 12
         elif freq == '2.472 GHz': return 13
         elif freq == '2.484 GHz': return 14
-        else: 
+        else:
             print 'Couldn\'t determine channel number for current network - ' + freq
             return None
 
+    def _GetRalinkInfo(self):
+        """ Get a network info list used for ralink drivers
+        
+        Calls iwpriv <wireless interface> get_site_survey, which
+        on some ralink cards will return encryption and signal
+        strength info for wireless networks in the area.
+        
+        """
+        iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
+        lines = iwpriv.splitlines()
+        lines = lines[2:]
+        return lines
 
-    def _ParseAccessPoint(self, cell):
+    def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.
 
         Keyword arguments:
         cell -- string containing the cell information
+        ralink_info -- string contating network information needed
+                       for ralink cards.
 
         Returns:
+    
         A dictionary containing the cell networks properties.
 
         """
@@ -321,6 +343,7 @@ class WirelessInterface(Interface):
         # ESSID - Switch '<hidden>' to 'Hidden' to remove
         # brackets that can mix up formatting.
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
+        ap['essid'] = ap['essid'].encode('utf-8')
         if ap['essid'] == '<hidden>':
             ap['essid'] = 'Hidden'
             ap['hidden'] = True
@@ -330,7 +353,7 @@ class WirelessInterface(Interface):
         # Channel - For cards that don't have a channel number,
         # convert the frequency.
         ap['channel'] = misc.RunRegex(channel_pattern, cell)
-        if ap['channel'] == None: 
+        if ap['channel'] == None:
             freq = misc.RunRegex(freq_pattern, cell)
             ap['channel'] = self._FreqToChannel(freq)
 
@@ -339,68 +362,82 @@ class WirelessInterface(Interface):
 
         # Mode
         ap['mode'] = misc.RunRegex(mode_pattern, cell)
-        
-        # Encryption - Default to WEP
-        if misc.RunRegex(wep_pattern, cell) == 'on':
-            if self.wpa_driver != 'ralink legacy': 
-                ap['encryption'] = True
-                ap['encryption_method'] = 'WEP'
 
-                if misc.RunRegex(wpa1_pattern,cell) == 'WPA Version 1':
-                    ap['encryption_method'] = 'WPA'
-                
-                if misc.RunRegex(altwpa_pattern,cell) == 'wpa_ie':
-                    ap['encryption_method'] = 'WPA'
+        # Break off here if we're using a ralink card
+        if self.wpa_driver == 'ralink legacy':
+            ap = self._ParseRalinkAccessPoint(ap, ralink_info, cell)
+        elif misc.RunRegex(wep_pattern, cell) == 'on':
+            # Encryption - Default to WEP
+            ap['encryption'] = True
+            ap['encryption_method'] = 'WEP'
 
-                if misc.RunRegex(wpa2_pattern,cell) == 'WPA2':
-                    ap['encryption_method'] = 'WPA2'
+            if misc.RunRegex(wpa1_pattern,cell) == 'WPA Version 1':
+                ap['encryption_method'] = 'WPA'
 
-            # Support for ralink legacy drivers (maybe only serialmonkey enhanced), 
-            # may not work w/ hidden networks
-            else: 
-                iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
-                lines = iwpriv.splitlines()
-                lines = lines[2:]
-                for x in lines: # Iterate through all networks found
-                    info = x.split()
-                    if len(info) < 5 or info == None or info == '': # Make sure we read in a valid entry
-                        break;
-                    if info[2] == ap['essid']:
-                        ap['encryption'] = True
-                        if info[5] == 'WEP' or (
-                                (info[5] == 'OPEN' or info[5] == 'SHARED') and
-                            info[4] == 'WEP'): 
-                            ap['encryption_method'] = 'WEP'
-                        elif info[5] == 'WPA-PSK':
-                            ap['encryption_method'] = 'WPA'
-                        elif info[5] == 'WPA2-PSK':
-                            ap['encryption_method'] = 'WPA2'
-                        else:
-                            print 'Unknown AuthMode, can\'t assign encryption_method!!'
-                            ap['encryption_method'] = 'Unknown'
-                        
-                        # Set signal strength here (in dBm, not %),
-                        # ralink drivers don't return link quality
-                        ap['strength'] = info[1]
+            if misc.RunRegex(altwpa_pattern,cell) == 'wpa_ie':
+                ap['encryption_method'] = 'WPA'
+
+            if misc.RunRegex(wpa2_pattern,cell) == 'WPA2':
+                ap['encryption_method'] = 'WPA2'
         else:
             ap['encryption'] = False
 
         # Link Quality
-            # Set strength to -1 if the quality is not found
-            if misc.RunRegex(strength_pattern,cell):
-                ap['quality'] = misc.RunRegex(strength_pattern,cell)
-            elif misc.RunRegex(altstrength_pattern,cell): 
-                ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
-            else:
-                ap['quality'] = -1
+        # Set strength to -1 if the quality is not found
+        if misc.RunRegex(strength_pattern,cell):
+            ap['quality'] = misc.RunRegex(strength_pattern,cell)
+        elif misc.RunRegex(altstrength_pattern,cell):
+            ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
+        else:
+            ap['quality'] = -1
 
         # Signal Strength (only used if user doesn't want link
         # quality displayed or it isn't found)
         if misc.RunRegex(signaldbm_pattern, cell):
             ap['strength'] = misc.RunRegex(signaldbm_pattern, cell)
-        else:
+        elif self.wpa_driver != 'ralink legacy':  # This is already set for ralink
             ap['strength'] = -1
+
+        return ap
+    
+    def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
+        """ Parse encryption and signal strength info for ralink cards
         
+        Keyword arguments:
+        ap -- array containing info about the current access point
+        ralink_info -- string containing available network info
+        cell -- string containing cell information
+        
+        Returns:
+        Updated array containing info about the current access point
+        
+        """
+        lines = ralink_info
+        for x in lines: # Iterate through all networks found
+            info = x.split()
+            # Make sure we read in a valid entry
+            if len(info) < 5 or info == None or info == '':
+                break
+            if info[2] == ap['essid']:
+                if misc.RunRegex(wep_pattern, cell) == 'on':
+                    ap['encryption'] = True
+                    if info[5] == 'WEP' or (
+                            (info[5] == 'OPEN' or info[5] == 'SHARED') and
+                        info[4] == 'WEP'):
+                        ap['encryption_method'] = 'WEP'
+                    elif info[5] == 'WPA-PSK':
+                        ap['encryption_method'] = 'WPA'
+                    elif info[5] == 'WPA2-PSK':
+                        ap['encryption_method'] = 'WPA2'
+                    else:
+                        print 'Unknown AuthMode, can\'t assign encryption_method!!'
+                        ap['encryption_method'] = 'Unknown'
+                else:
+                    ap['encryption'] = False
+
+                # Set signal strength here (in dBm, not %),
+                # ralink drivers don't return link quality
+                ap['strength'] = info[1]
         return ap
 
 
@@ -434,7 +471,7 @@ class WirelessInterface(Interface):
         """ Set the encryption key of the wireless interface.
 
         Keyword arguments:
-        key -- encryption key to set 
+        key -- encryption key to set
 
         """
         cmd = 'iwconfig ' + self.iface + ' key ' + key
@@ -468,11 +505,11 @@ class WirelessInterface(Interface):
 
         """
         misc.ParseEncryption(network)
-        if self.wpa_driver == 'ralink legacy': 
+        if self.wpa_driver == 'ralink legacy':
             self._AuthenticateRalinkLegacy(network)
         else:
-            cmd = ('wpa_supplicant -B -i ' + self.iface + ' -c "' 
-                    + wpath.networks + network['bssid'].replace(':','').lower() 
+            cmd = ('wpa_supplicant -B -i ' + self.iface + ' -c "'
+                    + wpath.networks + network['bssid'].replace(':','').lower()
                     + '" -D ' + self.wpa_driver)
             if self.verbose: print cmd
             misc.Run(cmd)

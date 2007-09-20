@@ -75,6 +75,7 @@ language = {}
 language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
+language['connecting'] = _('Connecting...')
 
 class TrayIconInfo():
     ''' class for updating the tray icon status '''
@@ -111,7 +112,10 @@ class TrayIconInfo():
         Checks for and updates the tray icon for an active wireless connection
 
         '''
+        if daemon.GetSignalDisplayType() == 0:
         wireless_signal = int(wireless.GetCurrentSignalStrength())
+        else:
+            wireless_signal = int(wireless.GetCurrentDBMStrength())
 
         # Only update if the signal strength has changed because doing I/O
         # calls is expensive, and the icon flickers
@@ -136,8 +140,7 @@ class TrayIconInfo():
             self.network = str(wireless.GetCurrentNetwork())
             tr.set_tooltip(language['connected_to_wireless'].replace
                            ('$A', self.network).replace
-                           ('$B', daemon.FormatSignalForPrinting
-                                            (str(wireless_signal))).replace
+                           ('$B', daemon.FormatSignalForPrinting(str(wireless_signal))).replace
                            ('$C', str(wireless_ip)))
             self.set_signal_image(wireless_signal, lock)
 
@@ -161,6 +164,9 @@ class TrayIconInfo():
                 self.check_for_wireless_connection(wireless_ip)
             else:  # No connection at all
                 tr.set_from_file("images/no-signal.png")
+                if daemon.CheckIfConnecting():
+                    tr.set_tooltip(language['connecting'])
+                else:
                 tr.set_tooltip(language['not_connected'])
                 self.auto_reconnect()
 
@@ -171,6 +177,7 @@ class TrayIconInfo():
 
     def set_signal_image(self, wireless_signal, lock):
         ''' Sets the tray icon picture for an active wireless connection '''
+        if daemon.GetSignalDisplayType() == 0:
         if wireless_signal > 75:
             tr.set_from_file("images/high-signal" + lock + ".png")
         elif wireless_signal > 50:
@@ -183,6 +190,15 @@ class TrayIconInfo():
             tr.set_from_file("images/no-signal.png")
         # If we have no signal, we should try to reconnect.
         self.auto_reconnect()
+        else:
+            if wireless_signal >= -60:
+                tr.set_from_file(wpath.images + "high-signal" + lock + ".png")
+            elif wireless_signal >= -70:
+                tr.set_from_file(wpath.images + "good-signal" + lock + ".png")
+            elif wireless_signal >= -80:
+                tr.set_from_file(wpath.images + "low-signal" + lock + ".png")
+            else:
+                tr.set_from_file(wpath.images + "bad-signal" + lock + ".png")
 
     def auto_reconnect(self):
         ''' Automatically reconnects to a network if needed

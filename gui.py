@@ -131,6 +131,7 @@ language['after_script'] = _('Run script after connect')
 language['disconnect_script'] = _('Run disconnect script')
 language['script_settings'] = _('Scripts')
 language['use_ics'] = _('Activate Internet Connection Sharing')
+language['madwifi_for_adhoc'] = _('Check if using madwifi/atheros drivers')
 language['default_wired'] = _('Use as default profile (overwrites any previous default)')
 language['use_debug_mode'] = _('Enable debug mode')
 language['use_global_dns'] = _('Use global DNS servers')
@@ -224,7 +225,7 @@ class LabelEntry(gtk.HBox):
         self.auto_hide_text = value
 
     def show_characters(self,widget=None,event=None):
-        #when the box has focus, show the characters
+        # When the box has focus, show the characters
         if self.auto_hide_text and widget:
             self.entry.set_visibility(True)
             
@@ -342,7 +343,7 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         if strength is not None:
             strength = int(strength)
         else:
-            dbm_strength = -1
+            strength = -1
         if dbm_strength is not None:
             dbm_strength = int(dbm_strength)
         else:
@@ -794,11 +795,11 @@ class WirelessNetworkEntry(NetworkEntry):
         display_type = daemon.GetSignalDisplayType()
         if daemon.GetWPADriver() == 'ralink legacy' or display_type == 1:
             ending = "dBm"
-            start = "-"
+            disp_strength = str(dbm_strength)
         else:
             ending = "%"
-            start = ""
-        self.lblStrength.set_label(start + str(strength) + ending)
+            disp_strength = str(strength)
+        self.lblStrength.set_label(disp_strength + ending)
         
     def setMACAddress(self,address):
         self.lblMAC.set_label(str(address))
@@ -810,7 +811,8 @@ class WirelessNetworkEntry(NetworkEntry):
             self.set_label(self.essid + ' <span color="#666666">' + str(type) + '</span>')
         if on and not type:
             self.lblEncryption.set_label(language['secured'])
-            self.set_label(self.essid + ' <span color="#666666">Secured</span>')
+            self.set_use_markup(True)
+            self.set_label(self.essid + ' <span color="#666666">' + 'Secured' + '</span>')
         if not on:
             self.lblEncryption.set_label(language['unsecured'])
 
@@ -912,7 +914,9 @@ class appGui:
         '''shows a dialog that creates a new adhoc network'''
         #create a new adhoc network here.
         print 'create adhoc network'
-        dialog = gtk.Dialog(title=language['create_adhoc_network'], flags = gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,1,gtk.STOCK_CANCEL,2))
+        dialog = gtk.Dialog(title = language['create_adhoc_network'],
+                            flags = gtk.DIALOG_MODAL,
+                            buttons=(gtk.STOCK_OK, 1, gtk.STOCK_CANCEL, 2))
         dialog.set_has_separator(False)
         dialog.set_size_request(400,-1)
         self.useEncryptionCheckbox = gtk.CheckButton(language['use_wep_encryption'])
@@ -1144,19 +1148,24 @@ class appGui:
                 network = wireless.GetCurrentNetwork()
                 if network:
                     strength = wireless.GetCurrentSignalStrength()
-                    if strength != None: #do this because if strength is 0, if strength: doesn't work
+                    dbm_strength = wireless.GetCurrentDBMStrength()
+                    if strength is not None and dbm_strength is not None:
                         network = str(network)
+                        if daemon.GetSignalDisplayType() == 0:
                         strength = str(strength)
+                        else:
+                            strength = str(dbm_strength)
                         ip = str(wireless_ip)
                         self.statusID=self.status_bar.push(1, language['connected_to_wireless'].replace
-                                                          ('$A',network).replace('$B',daemon.FormatSignalForPrinting(strength)).replace
+                                                          ('$A',network).replace
+                                                          ('$B',daemon.FormatSignalForPrinting(strength)).replace
                                                           ('$C',wireless_ip))
                         if not daemon.GetDebugMode():
                             config.EnableLogging()
                         return True
             wired_ip = wired.GetWiredIP()
             if wired_ip:
-                if wired.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
+                if wired.CheckPluggedIn():
                     self.statusID = self.status_bar.push(1,language['connected_to_wired'].replace('$A',wired_ip))
                 if not daemon.GetDebugMode():
                     config.EnableLogging()

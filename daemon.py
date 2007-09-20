@@ -314,10 +314,10 @@ class ConnectionWizard(dbus.service.Object):
     def FormatSignalForPrinting(self, signal):
         ''' Returns the suffix to display after the signal strength number '''
         if self.GetSignalDisplayType() == 1:
-            return ("-" + signal + " dBm")
+            return (signal + " dBm")
         else:
             return (signal + "%")
-    # End function GetSignalSuffix
+    # End function FormatSignalForPrinting
 
 
     @dbus.service.method('org.wicd.daemon')
@@ -586,6 +586,13 @@ class ConnectionWizard(dbus.service.Object):
         print 'returning current signal strength',strength
         return strength
     #end function GetCurrentSignalStrength
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetCurrentDBMStrength(self):
+        ''' returns the current dbm signal strength '''
+
+        dbm_strength = int(self.wifi.GetDBMStrength())
+        return dbm_strength
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetCurrentNetwork(self):

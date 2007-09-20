@@ -208,6 +208,17 @@ class Wireless(Controller):
                                              self.wpa_driver)
         return wiface.GetSignalStrength()
 
+    def GetDBMStrength(self):
+        """ Get the dBm signal strength of the current network.
+
+        Returns:
+        The current dBm signal strength.
+
+        """
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                          self.wpa_driver)
+        return wiface.GetDBMStrength()
+
 
     def GetCurrentNetwork(self):
         """ Get current network name.

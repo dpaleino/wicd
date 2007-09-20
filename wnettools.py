@@ -526,9 +526,7 @@ class WirelessInterface(Interface):
 
         """
         if network.get('key') != None:
-            iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
-            lines = iwpriv.splitlines()
-            lines = lines[2:]
+            lines = self._GetRalinkInfo()
             for x in lines:
                 info = x.split()
                 if len(info) < 5:
@@ -589,6 +587,18 @@ class WirelessInterface(Interface):
 
         return strength
 
+    def GetDBMStrength(self):
+        """ Get the dBm signal strength of the current network.
+
+        Returns:
+        The dBm signal strength.
+
+        """
+        cmd = 'iwconfig ' + self.iface
+        if self.verbose: print cmd
+        output = misc.Run(cmd)
+        dbm_strength = misc.RunRegex(signaldbm_pattern,output)
+        return dbm_strength
 
     def GetCurrentNetwork(self):
         """ Get the essid of the current network.

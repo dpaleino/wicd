@@ -330,6 +330,19 @@ class ConnectionWizard(dbus.service.Object):
             if self.GetWiredAutoConnectMethod() == 2:
                 #self.SetNeedWiredProfileChooser(True)
                 self.LaunchChooser()
+            elif self.GetWiredAutoConnectMethod() == 3:
+                lastUsedNetwork = self.GetLastUsedWiredNetwork()
+                if lastUsedNetwork != None:
+                    self.ReadWiredNetworkProfile(lastUsedNetwork)
+                    self.wired.profilename = lastUsedNetwork
+                    self.ConnectWired()
+                    time.sleep(1)
+                    print "Attempting to autoconnect with last used wired interface..."
+                    while self.CheckIfWiredConnecting(): #Leaving this for wired since you're probably not going to have DHCP problems
+                        time.sleep(1)
+                    print "...done autoconnecting with last used wired connection."
+                else:
+                    print "there is no last used wired connection, wired autoconnect failed"
             else:
                 defaultNetwork = self.GetDefaultWiredNetwork()
                 if defaultNetwork != None:
@@ -740,6 +753,7 @@ class ConnectionWizard(dbus.service.Object):
         '''sets which method the user wants to autoconnect to wired networks'''
         # 1 = default profile
         # 2 = show list
+        # 3 = last used profile
         print 'wired autoconnection method is',method
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
@@ -863,6 +877,22 @@ class ConnectionWizard(dbus.service.Object):
     #end function CreateWiredNetworkProfile
 
     @dbus.service.method('org.wicd.daemon.config')
+    def UnsetWiredLastUsed(self):
+        '''Unsets the last used option in the current default wired profile'''
+        config = ConfigParser.ConfigParser()
+        config.read(self.wired_conf)
+        profileList = config.sections()
+        print "profileList = ",profileList
+        for profile in profileList:
+            print "profile = ", profile
+            if config.has_option(profile,"lastused"):
+                if config.get(profile,"lastused") == "True":
+                    print "removing existing lastused"
+                    config.set(profile,"lastused", False)
+                    self.SaveWiredNetworkProfile(profile)
+    #end function UnsetWiredLastUsed
+
+    @dbus.service.method('org.wicd.daemon.config')
     def UnsetWiredDefault(self):
         '''Unsets the default option in the current default wired profile'''
         config = ConfigParser.ConfigParser()
@@ -877,6 +907,8 @@ class ConnectionWizard(dbus.service.Object):
                     config.set(profile,"default", False)
                     self.SaveWiredNetworkProfile(profile)
     #end function UnsetWiredDefault
+    
+    
 
     @dbus.service.method('org.wicd.daemon.config')
     def GetDefaultWiredNetwork(self):
@@ -887,6 +919,17 @@ class ConnectionWizard(dbus.service.Object):
         for profile in profileList:
             if config.has_option(profile,"default"):
                 if config.get(profile,"default") == "True":
+                    return profile
+        return None
+
+    @dbus.service.method('org.wicd.daemon.config')
+    def GetLastUsedWiredNetwork(self):
+        config = ConfigParser.ConfigParser()
+        config.read(self.wired_conf)
+        profileList = config.sections()
+        for profile in profileList:
+            if config.has_option(profile,"lastused"):
+                if config.get(profile,"lastused") == "True":
                     return profile
         return None
 

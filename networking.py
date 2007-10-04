@@ -469,6 +469,12 @@ class WirelessConnectThread(ConnectThread):
             else:
                 wnettools.SetDNS(self.network.get('dns1'),
                     self.network.get('dns2'), self.network.get('dns3'))
+                    
+        #save as last used profile
+        print 'Saving last used profile'
+        config.UnsetLastUsedDefault() # Makes sure there is only one last used profile at a time
+        self.network.SetWiredProperty("lastused",True)
+        config.SaveWiredNetworkProfile(self.profilename)
 
         #execute post-connection script if necessary
         if misc.Noneify(self.after_script):

@@ -137,6 +137,7 @@ language['use_debug_mode'] = _('Enable debug mode')
 language['use_global_dns'] = _('Use global DNS servers')
 language['use_default_profile'] = _('Use default profile on wired autoconnect')
 language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
+language['use_last_used_profile'] =_ ('Use last used profile on wired autoconnect')
 language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
 language['wired_network_found'] = _('Wired connection detected')
 language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
@@ -986,12 +987,16 @@ class appGui:
         sepline = gtk.HSeparator()
         usedefaultradiobutton = gtk.RadioButton(None,language['use_default_profile'],False)
         showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,language['show_wired_list'],False)
+        lastusedradiobutton = gtk.RadioButton(usedefaultradiobutton,language['use_last_used_profile'],False)
         if wired.GetWiredAutoConnectMethod() == 1:
             usedefaultradiobutton.set_active(True)
             print 'use default profile'
         elif wired.GetWiredAutoConnectMethod() == 2:
             print 'show list'
             showlistradiobutton.set_active(True)
+        elif wired.GetWiredAutoConnectMethod() == 3:
+            print 'use last used profile'
+            lastusedradiobutton.set_active(True)    
         wpadriverlabel = SmallLabel(language['wpa_supplicant_driver'] + ':')
         wpadriverlabel.set_size_request(75,-1)
         wpadrivercombo = gtk.combo_box_new_text()
@@ -1066,6 +1071,7 @@ class appGui:
         dialog.vbox.pack_start(entryWiredAutoMethod)
         dialog.vbox.pack_start(usedefaultradiobutton)
         dialog.vbox.pack_start(showlistradiobutton)
+        dialog.vbox.pack_start(lastusedradiobutton)
         dialog.vbox.set_spacing(5)
         dialog.show_all()
 
@@ -1079,10 +1085,17 @@ class appGui:
             daemon.SetWPADriver(wpadrivers[wpadrivercombo.get_active()])
             wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
             wireless.SetAutoReconnect(reconnectcheckbox.get_active())
+            
             daemon.SetDebugMode(debugmodecheckbox.get_active())
             daemon.SetSignalDisplayType(displaytypecheckbox.get_active())
-            wired.SetWiredAutoConnectMethod(int(showlistradiobutton.get_active())+1) #if option is default profile, showlist will be 0, so 0 + 1 = 1
-                                                                            #if option is showlist, showlist will be 1, so 1+1 = 2 :)
+           
+            if showlistradiobutton.get_active():
+                wired.SetWiredAutoConnectMethod(2)
+            elif lastusedradiobutton.get_active():
+                wired.SetWiredAutoConnectMethod(3)
+            else:
+                wired.SetWiredAutoConnectMethod(1)
+
             dialog.destroy()
         else:
             dialog.destroy()

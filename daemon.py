@@ -275,7 +275,7 @@ class ConnectionWizard(dbus.service.Object):
         '''sets if debugging mode is on or off'''
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","debug_mode",debug)
+        config.set("Settings","debug_mode",int(debug))
         configfile = open(self.app_conf,"w")
         config.write(configfile)
         self.debug_mode = debug
@@ -304,7 +304,7 @@ class ConnectionWizard(dbus.service.Object):
         ''' Sets the signal display type and writes it the wicd config file '''
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","signal_display_type",value)
+        config.set("Settings","signal_display_type",int(value))
         configfile = open(self.app_conf,"w")
         config.write(configfile)
         self.signal_display_type = value

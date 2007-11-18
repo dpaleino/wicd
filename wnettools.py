@@ -260,9 +260,9 @@ class WirelessInterface(Interface):
         results = misc.Run(cmd)
 
         # Split the networks apart, using Cell as our split point
-        # this way we can look at only one network at a time
+        # this way we can look at only one network at a time.
         networks = results.split( '   Cell ' )
-        
+
         # Get available network info from iwpriv get_site_survey
         # if we're using a ralink card (needed to get encryption info)
         if self.wpa_driver == 'ralink legacy':
@@ -294,7 +294,7 @@ class WirelessInterface(Interface):
         The channel number, or None if not found.
 
         """
-        if freq == '2.412 GHz': return 1
+        if freq == '2.412 GHz':   return 1
         elif freq == '2.417 GHz': return 2
         elif freq == '2.422 GHz': return 3
         elif freq == '2.427 GHz': return 4
@@ -314,11 +314,11 @@ class WirelessInterface(Interface):
 
     def _GetRalinkInfo(self):
         """ Get a network info list used for ralink drivers
-        
+
         Calls iwpriv <wireless interface> get_site_survey, which
         on some ralink cards will return encryption and signal
         strength info for wireless networks in the area.
-        
+
         """
         iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
         lines = iwpriv.splitlines()
@@ -334,7 +334,7 @@ class WirelessInterface(Interface):
                        for ralink cards.
 
         Returns:
-    
+
         A dictionary containing the cell networks properties.
 
         """
@@ -399,21 +399,21 @@ class WirelessInterface(Interface):
             ap['strength'] = -1
 
         return ap
-    
+
     def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
         """ Parse encryption and signal strength info for ralink cards
-        
+
         Keyword arguments:
         ap -- array containing info about the current access point
         ralink_info -- string containing available network info
         cell -- string containing cell information
-        
+
         Returns:
         Updated array containing info about the current access point
-        
+
         """
         lines = ralink_info
-        for x in lines: # Iterate through all networks found
+        for x in lines:  # Iterate through all networks found
             info = x.split()
             # Make sure we read in a valid entry
             if len(info) < 5 or info == None or info == '':
@@ -532,7 +532,7 @@ class WirelessInterface(Interface):
                 if len(info) < 5:
                     break
                 if info[2] == network.get('essid'):
-                    if info[5] == 'WEP' or (info[5] == 'OPEN' and info[4] == 'WEP'): # Needs to be tested
+                    if info[5] == 'WEP' or (info[5] == 'OPEN' and info[4] == 'WEP'):
                         print 'Setting up WEP'
                         cmd = 'iwconfig ' + self.iface + ' key ' + network.get('key')
                         if self.verbose: print cmd
@@ -610,5 +610,7 @@ class WirelessInterface(Interface):
         cmd = 'iwconfig ' + self.iface
         if self.verbose: print cmd
         output = misc.Run(cmd)
-        return misc.RunRegex(re.compile('.*ESSID:"(.*?)"',re.DOTALL | re.I | re.M  | re.S), output)
-
+        network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',re.DOTALL | re.I | re.M  | re.S), output)
+        if network is not None:
+            network = network.encode('utf-8')
+        return network

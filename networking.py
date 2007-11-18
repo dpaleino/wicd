@@ -47,6 +47,7 @@ import thread
 import misc
 import wnettools
 import wpath
+import os
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -80,7 +81,6 @@ class ConnectThread(threading.Thread):
     connecting_thread = None
     should_die = False
     lock = thread.allocate_lock()
-
 
     def __init__(self, network, wireless, wired,
                 before_script, after_script, disconnect_script, gdns1,
@@ -290,7 +290,8 @@ class Wireless(Controller):
             misc.Run('iptables -N fw-open')
             misc.Run('iptables -F fw-interfaces')
             misc.Run('iptables -F fw-open')
-            misc.Run('iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu')
+            misc.Run('iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -j TCPMSS \
+                     --clamp-mss-to-pmtu')
             misc.Run('iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT')
             misc.Run('iptables -A FORWARD -j fw-interfaces ')
             misc.Run('iptables -A FORWARD -j fw-open ')
@@ -298,7 +299,9 @@ class Wireless(Controller):
             misc.Run('iptables -P FORWARD DROP')
             misc.Run('iptables -A fw-interfaces -i ' + self.wireless_interface + ' -j ACCEPT')
             net_ip = '.'.join(ip_parts[0:3]) + '.0'
-            misc.Run('iptables -t nat -A POSTROUTING -s ' + net_ip + '/255.255.255.0 -o ' + self.wired_interface + ' -j MASQUERADE')
+            misc.Run('iptables -t nat -A POSTROUTING -s ' + net_ip + \
+                     '/255.255.255.0 -o ' + self.wired_interface + \
+                     ' -j MASQUERADE')
             misc.Run('echo 1 > /proc/sys/net/ipv4/ip_forward') # Enable routing
 
 
@@ -322,8 +325,6 @@ class Wireless(Controller):
 
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
-
-
 
 class WirelessConnectThread(ConnectThread):
     """ A thread class to perform the connection to a wireless network.
@@ -459,8 +460,7 @@ class WirelessConnectThread(ConnectThread):
                 wiface.StartDHCP()
 
         if ((self.network.get('dns1') or self.network.get('dns2') or
-            self.network.get('dns3')) and
-            self.network.get('use_static_dns')):
+            self.network.get('dns3')) and self.network.get('use_static_dns')):
             self.SetStatus('setting_static_dns')
             if self.network.get('use_global_dns'):
                 wnettools.SetDNS(misc.Noneify(self.global_dns_1),
@@ -469,11 +469,11 @@ class WirelessConnectThread(ConnectThread):
             else:
                 wnettools.SetDNS(self.network.get('dns1'),
                     self.network.get('dns2'), self.network.get('dns3'))
-                    
-        #save as last used profile
+
+        # Save as last used profile
         print 'Saving last used profile'
         config.UnsetLastUsedDefault() # Makes sure there is only one last used profile at a time
-        self.network.SetWiredProperty("lastused",True)
+        self.network.SetWiredProperty("lastused", True)
         config.SaveWiredNetworkProfile(self.profilename)
 
         #execute post-connection script if necessary
@@ -596,7 +596,7 @@ class WiredConnectThread(ConnectThread):
 
         # Execute pre-connection script if necessary
         if self.before_script != '' and self.before_script != None:
-            print 'executing pre-connectiong script'
+            print 'executing pre-connection script'
             misc.ExecuteScript(self.before_script)
 
         # Put it down
@@ -645,8 +645,7 @@ class WiredConnectThread(ConnectThread):
                 liface.StartDHCP()
 
         if ((self.network.get('dns1') or self.network.get('dns2') or
-            self.network.get('dns3')) and
-            self.network.get('use_static_dns')):
+            self.network.get('dns3')) and self.network.get('use_static_dns')):
             self.SetStatus('setting_static_dns')
             if self.network.get('use_global_dns'):
                 wnettools.SetDNS(misc.Noneify(self.global_dns_1),

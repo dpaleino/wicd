@@ -562,15 +562,16 @@ class ConnectionWizard(dbus.service.Object):
             strength = int(self.wifi.GetSignalStrength())
         except:
             strength = 0
-        print 'returning current signal strength',strength
         return strength
     #end function GetCurrentSignalStrength
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetCurrentDBMStrength(self):
         ''' returns the current dbm signal strength '''
-
+        try:
         dbm_strength = int(self.wifi.GetDBMStrength())
+        except:
+            dbm_strength = 0
         return dbm_strength
 
     @dbus.service.method('org.wicd.daemon.wireless')

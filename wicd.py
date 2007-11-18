@@ -222,6 +222,7 @@ class TrayIcon():
                     self.tr.set_from_file("images/no-signal.png")
                     if daemon.CheckIfConnecting():
                         self.tr.set_tooltip(language['connecting'])
+                        self.tr.set_from_file(wpath.images + "no-signal.png")
                     else:
                         self.tr.set_tooltip(language['not_connected'])
                         daemon.SetCurrentInterface('')
@@ -360,7 +361,7 @@ class TrayIcon():
             ''' Toggles the wicd GUI '''
             if self.gui_win == None:
                 self.gui_win = gui.appGui()
-            elif self.gui_win.is_active == False:
+            elif self.gui_win.is_visible == False:
                 self.gui_win.show_win()
             else:
                 self.gui_win.exit()
@@ -474,8 +475,8 @@ def main(argv):
             use_tray = False
     
     # Redirect stderr and stdout for logging purposes
-    sys.stderr = log
-    sys.stdout = log
+    #sys.stderr = log
+    #sys.stdout = log
     
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)

@@ -42,7 +42,7 @@ channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M 
 strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
 # These next two look a lot a like, altstrength is for Signal level = xx/100,
 # which is just an alternate way of displaying link quality, signaldbm is
-# for displaying actualy signal strength (-xx dBm).
+# for displaying actual signal strength (-xx dBm).
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
 signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)',re.DOTALL | re.I | re.M | re.S)
 mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)

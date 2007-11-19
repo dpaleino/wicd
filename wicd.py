@@ -100,7 +100,7 @@ language['connecting'] = _('Connecting...')
 class TrayIcon():
     def __init__(self, use_tray):
         if USE_EGG:
-            self.tr = self.DapperIconGUI(use_tray)
+            self.tr = self.DapperTrayIconGUI(use_tray)
         else:
             self.tr = self.EdgyTrayIconGUI(use_tray)
         self.icon_info = self.TrayConnectionInfo(self.tr)
@@ -371,7 +371,7 @@ class TrayIcon():
     class DapperTrayIconGUI(TrayIconGUI):
         def __init__(self, use_tray=True):
             ''' initializes the tray icon '''
-            TrayIcon.TrayIconGUI.__init__()
+            TrayIcon.TrayIconGUI.__init__(self)
             self.use_tray = use_tray
             if not use_tray: 
                 self.toggle_wicd_gui()
@@ -384,9 +384,9 @@ class TrayIcon():
             self.tooltip.set_tip(self.eb, "Initializing wicd...")
             self.pic.set_from_file("images/no-signal.png")
 
-            self.eb.connect('button_press_event', tray_display.tray_clicked)
-            self.eb.add(pic)
-            self.tray.add(eb)
+            self.eb.connect('button_press_event', self.tray_clicked)
+            self.eb.add(self.pic)
+            self.tray.add(self.eb)
             self.tray.show_all()
 
         def tray_clicked(self, widget, event):
@@ -396,12 +396,12 @@ class TrayIcon():
             if event.button == 3:
                 self.menu.popup(None, None, None, event.button, event.time)
         
-        def set_from_file(str):
+        def set_from_file(self, str):
             ''' Calls set_from_file on the gtk.Image for the tray icon '''
             if not self.use_tray: return
             self.pic.set_from_file(str)
         
-        def set_tooltip(str):
+        def set_tooltip(self, str):
             '''
                 Sets the tooltip for the gtk.ToolTips associated with this
                 tray icon.

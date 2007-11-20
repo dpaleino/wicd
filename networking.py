@@ -150,7 +150,6 @@ class Wireless(Controller):
         self.wpa_driver = None
 
 
-
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
 
@@ -207,6 +206,7 @@ class Wireless(Controller):
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                              self.wpa_driver)
         return wiface.GetSignalStrength()
+
 
     def GetDBMStrength(self):
         """ Get the dBm signal strength of the current network.
@@ -476,7 +476,7 @@ class WirelessConnectThread(ConnectThread):
         self.network.SetWiredProperty("lastused", True)
         config.SaveWiredNetworkProfile(self.profilename)
 
-        #execute post-connection script if necessary
+        # Execute post-connection script if necessary
         if misc.Noneify(self.after_script):
             print 'Executing post-connection script'
             misc.ExecuteScript(self.after_script)
@@ -655,7 +655,7 @@ class WiredConnectThread(ConnectThread):
                 wnettools.SetDNS(self.network.get('dns1'),
                     self.network.get('dns2'), self.network.get('dns3'))
 
-        #execute post-connection script if necessary
+        # Execute post-connection script if necessary
         if misc.Noneify(self.after_script):
             print 'executing post connection script'
             misc.ExecuteScript(self.after_script)

@@ -1,4 +1,22 @@
 #!/usr/bin/python
+
+#
+#   Copyright (C) 2007 Adam Blackburn
+#   Copyright (C) 2007 Dan O'Reilly
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License Version 2 as
+#   published by the Free Software Foundation.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 import os
 import sys
 import wpath
@@ -99,7 +117,11 @@ language['use_static_dns'] = _('Use Static DNS')
 language['use_encryption'] = _('Use Encryption')
 language['advanced_settings'] = _('Advanced Settings')
 language['wired_network'] = _('Wired Network')
-language['wired_network_instructions'] = _('To connect to a wired network, you must create a network profile.  To create a network profile, type a name that describes this network, and press Add.')
+language['wired_network_instructions'] = _('To connect to a wired network, you \
+                                            must create a network profile.  To \
+                                            create a network profile, type a \
+                                            name that describes this network, \
+                                            and press Add.')
 language['automatic_connect'] = _('Automatically connect to this network')
 language['secured'] = _('Secured')
 language['unsecured'] = _('Unsecured')
@@ -445,8 +467,6 @@ class NetworkEntry(gtk.Expander):
         #start with all disabled, then they will be enabled later
         self.checkboxStaticIP.set_active(False)
         self.checkboxStaticDNS.set_active(False)
-        print 'using global dns:',daemon.GetUseGlobalDNS()
-        #self.checkboxGlobalDNS.set_active(bool(int(daemon.GetUseGlobalDNS())))
 
     def setDefaults(self,widget=None,event=None):
         #after the user types in the IP address,
@@ -469,19 +489,15 @@ class NetworkEntry(gtk.Expander):
             self.checkboxStaticIP.set_active(True)
             self.checkboxStaticDNS.set_active(True)
             self.checkboxStaticDNS.set_sensitive(False)
-            print 'enabling ip'
         else:
             self.checkboxStaticIP.set_active(False)
             self.checkboxStaticDNS.set_active(False)
             self.checkboxStaticDNS.set_sensitive(True)
-            print 'disabling ip'
 
         if not stringToNone(self.txtDNS1.get_text()) == None:
             self.checkboxStaticDNS.set_active(True)
-            print 'enabling dns'
         else:
             self.checkboxStaticDNS.set_active(False)
-            print 'disabling dns'
 
         #blankify stuff!
         #this will properly disable
@@ -507,15 +523,15 @@ class NetworkEntry(gtk.Expander):
         self.txtGateway.set_sensitive(self.checkboxStaticIP.get_active())
 
     def toggleDNSCheckbox(self,widget=None):
-        print 'dns checkbox toggled',self.checkboxStaticDNS.get_active()
-        #should disable the static DNS boxes
+        # Should disable the static DNS boxes
         if self.checkboxStaticIP.get_active() == True:
             self.checkboxStaticDNS.set_active(self.checkboxStaticIP.get_active())
             self.checkboxStaticDNS.set_sensitive(False)
 
         self.checkboxGlobalDNS.set_sensitive(self.checkboxStaticDNS.get_active())
         if self.checkboxStaticDNS.get_active() == True:
-            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active()) #if global dns is on, don't use local dns
+            # If global dns is on, don't use local dns
+            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
             self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
             self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
         else:
@@ -640,8 +656,8 @@ class WiredNetworkEntry(NetworkEntry):
         config.SaveWiredNetworkProfile(self.comboProfileNames.get_active_text())
 
     def changeProfile(self,widget):
-        if self.comboProfileNames.get_active() > -1: #this way the name doesn't change
-            #                     #everytime someone types something in
+        # Make sure the name doesn't change everytime someone types something
+        if self.comboProfileNames.get_active() > -1:
             if self.isFullGUI == False:
                 return
             print "changing profile..."
@@ -675,7 +691,6 @@ class WirelessNetworkEntry(NetworkEntry):
         print "ESSID : " + wireless.GetWirelessProperty(networkID,"essid")
         self.set_label(wireless.GetWirelessProperty(networkID,"essid"))
         self.essid = wireless.GetWirelessProperty(networkID,"essid")
-        print "making a new network entry..."
 
         #make the vbox to hold the encryption stuff
         self.vboxEncryptionInformation = gtk.VBox(False,0)
@@ -689,8 +704,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.lblMode = GreyLabel()
         self.hboxStatus = gtk.HBox(False,5)
         self.checkboxAutoConnect = gtk.CheckButton(language['automatic_connect'])
-        self.checkboxAutoConnect.connect("toggled",self.updateAutoConnect) #so that the autoconnect box is
-                                           #toggled
+        self.checkboxAutoConnect.connect("toggled",self.updateAutoConnect)
 
         self.hboxStatus.pack_start(self.lblStrength,fill=False,expand=True)
         self.hboxStatus.pack_start(self.lblEncryption,fill=False,expand=True)
@@ -759,7 +773,8 @@ class WirelessNetworkEntry(NetworkEntry):
         self.show_all()
 
     def updateAutoConnect(self,widget):
-        wireless.SetWirelessProperty(self.networkID,"automatic",self.checkboxAutoConnect.get_active())
+        wireless.SetWirelessProperty(self.networkID,"automatic",
+                                     self.checkboxAutoConnect.get_active())
         config.SaveWirelessNetworkProperty(self.networkID,"automatic")
 
     def toggleEncryption(self,widget=None):
@@ -778,7 +793,6 @@ class WirelessNetworkEntry(NetworkEntry):
             self.comboEncryption.set_active(0)
             ID == 0
         for x in methods[ID][2]:
-            print x
             box = None
             if language.has_key(methods[ID][2][x][0]):
                 box = LabelEntry(language[methods[ID][2][x][0].lower().replace(' ','_')])
@@ -1143,8 +1157,6 @@ class appGui:
     def update_statusbar(self):
         #should update the status bar
         #every couple hundred milliseconds
-        if not daemon.GetDebugMode():
-            config.DisableLogging() #stop log file spam
         wireless_ip = wireless.GetWirelessIP() #do this so that it doesn't lock up.  don't know how or why this works
                     #but it does so we leave it alone :)
         wiredConnecting = wired.CheckIfWiredConnecting()
@@ -1181,19 +1193,13 @@ class appGui:
                                                           ('$A',network).replace
                                                           ('$B',daemon.FormatSignalForPrinting(strength)).replace
                                                           ('$C',wireless_ip))
-                        if not daemon.GetDebugMode():
-                            config.EnableLogging()
                         return True
             wired_ip = wired.GetWiredIP()
             if wired_ip:
                 if wired.CheckPluggedIn():
                     self.statusID = self.status_bar.push(1,language['connected_to_wired'].replace('$A',wired_ip))
-                if not daemon.GetDebugMode():
-                    config.EnableLogging()
                 return True
             self.statusID = self.status_bar.push(1,language['not_connected'])
-        if not daemon.GetDebugMode():
-            config.EnableLogging()
         return True
 
     def refresh_networks(self,widget=None,fresh=True,hidden=None):
@@ -1215,12 +1221,12 @@ class appGui:
             wireless.SetHiddenNetworkESSID(noneToString(hidden))
             wireless.Scan()
 
-        print wireless.GetNumberOfNetworks()
+        num_networks = wireless.GetNumberOfNetworks()
 
         instructLabel = self.wTree.get_widget("label_instructions")
-        if wireless.GetNumberOfNetworks() > 0:
+        if num_networks > 0:
             instructLabel.show()
-            for x in range(0,wireless.GetNumberOfNetworks()):
+            for x in range(0,num_networks):
                 if printLine:
                     sep = gtk.HSeparator()
                     self.network_list.pack_start(sep,padding=10,expand=False,fill=False)

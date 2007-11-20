@@ -55,7 +55,7 @@ def RunRegex(regex, string):
         return None
     
 def log(text):
-    log = self.LogWriter()
+    log = LogWriter()
     log.write(text + "\n")
 
 def WriteLine(my_file, text):
@@ -215,6 +215,19 @@ def get_gettext():
     _ = lang.gettext
     return _
 
+
+def to_unicode(x):
+    try: # This may never fail, but let's be safe
+        default_encoding = locale.getpreferredencoding()
+    except:
+        default_encoding = None
+    if default_encoding:
+        return x.decode(default_encoding).encode('utf-8')
+    else:
+        return x.decode('utf-8').encode('utf-8')
+
+
+
 class LogWriter():
     """ A class to provide timestamped logging. """
     def __init__(self):
@@ -260,7 +273,7 @@ class LogWriter():
             self.file.write(
                     data.replace('\n', '\n' + self.get_time() + ' :: '))
             if self.eol: self.file.write('\n')
-            self.file.flush()
+            self.file.close()
 
 
     def get_time(self):

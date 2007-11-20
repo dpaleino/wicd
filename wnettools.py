@@ -90,7 +90,7 @@ def GetWirelessInterfaces():
 
 class Interface(object):
     """ Control a network interface. """
-    def __init__(self, iface, verbose=True):
+    def __init__(self, iface, verbose=False):
         """ Initialise the object.
 
         Keyword arguments:
@@ -182,7 +182,7 @@ class Interface(object):
 
         """
         cmd = 'ifconfig ' + self.iface
-        if self.verbose: print cmd
+        #if self.verbose: print cmd
         output = misc.Run(cmd)
         return misc.RunRegex(ip_pattern,output)
 
@@ -190,7 +190,7 @@ class Interface(object):
 
 class WiredInterface(Interface):
     """ Control a wired network interface. """
-    def __init__(self, iface, verbose=True):
+    def __init__(self, iface, verbose=False):
         """ Initialise the wired network interface class.
 
         Keyword arguments:
@@ -217,7 +217,7 @@ class WiredInterface(Interface):
 
 class WirelessInterface(Interface):
     """ Control a wireless network interface. """
-    def __init__(self, iface, verbose=True, wpa_driver='wext'):
+    def __init__(self, iface, verbose=False, wpa_driver='wext'):
         """ Initialise the wireless network interface class.
 
         Keyword arguments:
@@ -276,7 +276,9 @@ class WirelessInterface(Interface):
             # Only use sections where there is an ESSID.
             if cell.count('ESSID:') > 0:
                 # Add this network to the list of networks
-                access_points.append(self._ParseAccessPoint(cell, ralink_info))
+                entry = self._ParseAccessPoint(cell, ralink_info)
+                if entry is not None:
+                    access_points.append(entry)
 
         return access_points
 
@@ -325,6 +327,7 @@ class WirelessInterface(Interface):
         lines = lines[2:]
         return lines
 
+
     def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.
 
@@ -339,11 +342,14 @@ class WirelessInterface(Interface):
 
         """
         ap = {}
-
         # ESSID - Switch '<hidden>' to 'Hidden' to remove
         # brackets that can mix up formatting.
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
-        ap['essid'] = ap['essid'].encode('utf-8')
+        try:
+            ap['essid'] = misc.to_unicode(ap['essid'])
+        except UnicodeDecodeError, UnicodeEncodeError:
+            print 'Unicode problem with current network essid, ignoring!!'
+            return None
         if ap['essid'] == '<hidden>':
             ap['essid'] = 'Hidden'
             ap['hidden'] = True
@@ -399,6 +405,7 @@ class WirelessInterface(Interface):
             ap['strength'] = -1
 
         return ap
+
 
     def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
         """ Parse encryption and signal strength info for ralink cards
@@ -579,13 +586,14 @@ class WirelessInterface(Interface):
 
         """
         cmd = 'iwconfig ' + self.iface
-        if self.verbose: print cmd
+        # if self.verbose: print cmd
         output = misc.Run(cmd)
         strength = misc.RunRegex(strength_pattern,output)
         if strength == None:
             strength = misc.RunRegex(altstrength_pattern,output)
 
         return strength
+
 
     def GetDBMStrength(self):
         """ Get the dBm signal strength of the current network.
@@ -599,6 +607,7 @@ class WirelessInterface(Interface):
         output = misc.Run(cmd)
         dbm_strength = misc.RunRegex(signaldbm_pattern,output)
         return dbm_strength
+
 
     def GetCurrentNetwork(self):
         """ Get the essid of the current network.

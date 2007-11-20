@@ -105,6 +105,7 @@ class TrayIcon():
             self.tr = self.EdgyTrayIconGUI(use_tray)
         self.icon_info = self.TrayConnectionInfo(self.tr)
         
+
     class TrayConnectionInfo():
         ''' class for updating the tray icon status '''
         def __init__(self, tr):
@@ -140,11 +141,13 @@ class TrayIcon():
                 return True
             return False
 
+
         def check_for_wireless_connection(self, wireless_ip):
             ''' Checks for an active wireless connection
 
-            Checks for and updates the tray icon for an active wireless connection
-            Returns True if wireless connection is active, False otherwise.
+            Checks for and updates the tray icon for an active
+            wireless connection.  Returns True if wireless connection 
+            is active, and False otherwise.
 
             '''
             if wireless.GetWirelessIP() is None:
@@ -153,16 +156,17 @@ class TrayIcon():
             # Reset this, just in case
             self.tried_reconnect = False
             
-            # Try getting signal strength, default to 0 if something goes wrong.
+            # Try getting signal strength, and default to 0 
+            # if something goes wrong.
             try:
                 if daemon.GetSignalDisplayType() == 0:
-                    wireless_signal = int(wireless.GetCurrentSignalStrength())
+                    wifi_signal = int(wireless.GetCurrentSignalStrength())
                 else:
-                    wireless_signal = int(wireless.GetCurrentDBMStrength())
+                    wifi_signal = int(wireless.GetCurrentDBMStrength())
             except:
-                wireless_signal = 0
+                wifi_signal = 0
 
-            if wireless_signal == 0:
+            if wifi_signal == 0:
                 # If we have no signal, increment connection loss counter.
                 # If we haven't gotten any signal 4 runs in a row (12 seconds),
                 # try to reconnect.
@@ -175,11 +179,11 @@ class TrayIcon():
 
             # Only update if the signal strength has changed because doing I/O
             # calls is expensive, and the icon flickers
-            if (wireless_signal != self.last_strength or
+            if (wifi_signal != self.last_strength or
                 self.network != wireless.GetCurrentNetwork()):
-                self.last_strength = wireless_signal
-                # Set the string to '' so that when it is put in "high-signal" +
-                # lock + ".png", there will be nothing
+                self.last_strength = wifi_signal
+                # Set the string to '' so that when it is put in
+                # "high-signal" + lock + ".png", there will be nothing
                 lock = ''
 
                 # cur_net_id needs to be checked because a negative value
@@ -194,20 +198,17 @@ class TrayIcon():
                 # Update the tooltip and icon picture
                 self.network = str(wireless.GetCurrentNetwork())
                 daemon.SetCurrentInterface(daemon.GetWirelessInterface())
-                str_signal = daemon.FormatSignalForPrinting(str(wireless_signal))
+                str_signal = daemon.FormatSignalForPrinting(str(wifi_signal))
                 self.tr.set_tooltip(language['connected_to_wireless']
                                     .replace('$A', self.network)
                                     .replace('$B', str_signal)
                                     .replace('$C', str(wireless_ip)))
-                self.set_signal_image(wireless_signal, lock)
+                self.set_signal_image(wifi_signal, lock)
             return True
+
 
         def update_tray_icon(self):
             ''' Updates the tray icon and current connection status '''
-
-            # Disable logging if debugging isn't on to prevent log spam
-            if not daemon.GetDebugMode():
-                config.DisableLogging()
 
             # First check for an active wired network, then for an
             # active wireless network.  If neither is found, change
@@ -216,8 +217,8 @@ class TrayIcon():
             wired_found = self.check_for_wired_connection(wired_ip)
             if not wired_found:
                 self.still_wired = False  # We're not wired any more
-                wireless_ip = wireless.GetWirelessIP()
-                wireless_found = self.check_for_wireless_connection(wireless_ip)
+                wifi_ip = wireless.GetWirelessIP()
+                wireless_found = self.check_for_wireless_connection(wifi_ip)
                 if not wireless_found:  # No connection at all
                     self.tr.set_from_file("images/no-signal.png")
                     if daemon.CheckIfConnecting():
@@ -233,38 +234,42 @@ class TrayIcon():
 
             return True
 
+
         def set_signal_image(self, wireless_signal, lock):
-            ''' Sets the tray icon picture for an active wireless connection '''
+            ''' Sets the tray icon image for an active wireless connection '''
             if wireless_signal == 0:
                 # We handle a signal of 0 the same regardless of dBm or %
                 # signal strength.  Set the image based on connection loss
                 # counter, and then return so the counter isn't reset.
                 if self.connection_lost_counter < 4:
-                    self.tr.set_from_file(wpath.images + "bad-signal" + lock + ".png")
+                    img_file = (wpath.images + "bad-signal" + lock + ".png")
                 else:
-                    self.tr.set_from_file(wpath.images + "no-signal.png")
+                    img_file = (wpath.images + "no-signal.png")
+                self.tr.set_from_file(img_file)
                 return
             elif daemon.GetSignalDisplayType() == 0:
                 if wireless_signal > 75:
-                    self.tr.set_from_file(wpath.images + "high-signal" + lock + ".png")
+                    img_file = (wpath.images + "high-signal" + lock + ".png")
                 elif wireless_signal > 50:
-                    self.tr.set_from_file(wpath.images + "good-signal" + lock + ".png")
+                    img_file = (wpath.images + "good-signal" + lock + ".png")
                 elif wireless_signal > 25:
-                    self.tr.set_from_file(wpath.images + "low-signal" + lock + ".png")
+                    img_file = (wpath.images + "low-signal" + lock + ".png")
                 elif wireless_signal > 0:
-                    self.tr.set_from_file(wpath.images + "bad-signal" + lock + ".png")
+                    img_file = (wpath.images + "bad-signal" + lock + ".png")
             else:
                 if wireless_signal >= -60:
-                    self.tr.set_from_file(wpath.images + "high-signal" + lock + ".png")
+                    img_file = (wpath.images + "high-signal" + lock + ".png")
                 elif wireless_signal >= -70:
-                    self.tr.set_from_file(wpath.images + "good-signal" + lock + ".png")
+                    img_file = (wpath.images + "good-signal" + lock + ".png")
                 elif wireless_signal >= -80:
-                    self.tr.set_from_file(wpath.images + "low-signal" + lock + ".png")
+                    img_file = (wpath.images + "low-signal" + lock + ".png")
                 else:
-                    self.tr.set_from_file(wpath.images + "bad-signal" + lock + ".png")
+                    img_file = (wpath.images + "bad-signal" + lock + ".png")
             # Since we have a signal, we should reset 
             # the connection loss counter.
+            self.tr.set_from_file(img_file)
             self.connection_lost_counter = 0
+
 
         def auto_reconnect(self):
             ''' Automatically reconnects to a network if needed
@@ -274,7 +279,8 @@ class TrayIcon():
             should that fail will simply run AutoConnect()
 
             '''
-            if wireless.GetAutoReconnect() and not daemon.CheckIfConnecting() and \
+            if wireless.GetAutoReconnect() and \
+               not daemon.CheckIfConnecting() and \
                not wireless.GetForcedDisconnect():
                 print 'Starting automatic reconnect process'
                 # First try connecting through ethernet
@@ -287,7 +293,8 @@ class TrayIcon():
                 cur_net_id = wireless.GetCurrentNetworkID()
                 if cur_net_id > -1:  # Needs to be a valid network
                     if not self.tried_reconnect:
-                        print 'Trying to reconnect to last used wireless network'
+                        print 'Trying to reconnect to last used wireless \
+                               network'
                         wireless.ConnectWireless(cur_net_id)
                         self.tried_reconnect = True
                     elif wireless.CheckIfWirelessConnecting() == False:
@@ -296,7 +303,8 @@ class TrayIcon():
                         daemon.AutoConnect(True)
                 else:
                     daemon.AutoConnect(True)
-                    
+            
+        
     class TrayIconGUI():
         def __init__(self):
             menu = '''
@@ -328,17 +336,21 @@ class TrayIcon():
             self.menu = self.manager.get_widget('/Menubar/Menu/About').props.parent
             self.gui_win = None
             
+
         def on_activate(self, data=None):
             ''' Opens the wicd GUI '''
             self.toggle_wicd_gui()
+
 
         def on_quit(self, widget=None):
             ''' Closes the tray icon '''
             sys.exit(0)
 
+
         def on_preferences(self, data=None):
             ''' Opens the wicd GUI '''
             self.toggle_wicd_gui()
+
 
         def on_about(self, data = None):
             ''' Opens the About Dialog '''
@@ -350,12 +362,14 @@ class TrayIcon():
             dialog.run()
             dialog.destroy()
 
+
         def set_from_file(self, path = None):
             ''' Sets a new tray icon picture '''
             if not self.use_tray: return
             if path != self.current_icon_path:
                 self.current_icon_path = path
                 gtk.StatusIcon.set_from_file(self, path)
+
 
         def toggle_wicd_gui(self):
             ''' Toggles the wicd GUI '''
@@ -389,18 +403,21 @@ class TrayIcon():
             self.tray.add(self.eb)
             self.tray.show_all()
 
+
         def tray_clicked(self, widget, event):
             ''' Handles tray mouse click events '''
             if event.button == 1:
                 self.open_wicd_gui()
             if event.button == 3:
                 self.menu.popup(None, None, None, event.button, event.time)
-        
+ 
+       
         def set_from_file(self, str):
             ''' Calls set_from_file on the gtk.Image for the tray icon '''
             if not self.use_tray: return
             self.pic.set_from_file(str)
-        
+  
+      
         def set_tooltip(self, str):
             '''
                 Sets the tooltip for the gtk.ToolTips associated with this
@@ -408,6 +425,7 @@ class TrayIcon():
             '''
             if not self.use_tray: return
             self.tooltip.set_tip(self.eb, str)
+
 
     class EdgyTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
         ''' Class for creating the wicd tray icon '''
@@ -428,9 +446,11 @@ class TrayIcon():
             self.set_from_file("images/no-signal.png")
             self.set_tooltip("Initializing wicd...")
 
+
         def on_popup_menu(self, status, button, time):
             ''' Opens the right click menu for the tray icon '''
             self.menu.popup(None, None, None, button, time)
+
 
         def set_from_file(self, path = None):
             ''' Sets a new tray icon picture '''
@@ -450,6 +470,7 @@ Arguments:
 \t-h\t--help\t\tPrint this help.
 """
 
+
 def main(argv):
     """ The main frontend program.
 
@@ -460,8 +481,7 @@ def main(argv):
     use_tray = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'nh',
-                ['help', 'no-tray'])
+        opts, args = getopt.getopt(sys.argv[1:], 'nh', ['help', 'no-tray'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -475,8 +495,8 @@ def main(argv):
             use_tray = False
     
     # Redirect stderr and stdout for logging purposes
-    #sys.stderr = log
-    #sys.stdout = log
+    sys.stderr = log
+    sys.stdout = log
     
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)
@@ -497,6 +517,7 @@ def main(argv):
     # Enter the main loop
     mainloop = gobject.MainLoop()
     mainloop.run()
+
 
 if __name__ == '__main__':
     main(sys.argv)

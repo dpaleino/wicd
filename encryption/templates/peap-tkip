@@ -1,0 +1,19 @@
+name = PEAP with TKIP
+author = Fralaltro
+version = 1
+require identity *Identity password *Password ca_cert *Path_to_CA_Cert
+-----
+network={
+        ssid="$_ESSID"
+        scan_ssid=$_SCAN
+        proto=WPA
+        key_mgmt=WPA-EAP
+        pairwise=TKIP
+        group=TKIP
+        eap=PEAP
+        identity="$_IDENTITY"
+        password="$_PASSWORD"
+        ca_cert="$_CA_CERT"
+        phase1="peaplabel=0"
+        phase2="auth=MSCHAPV2"
+}

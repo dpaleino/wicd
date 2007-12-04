@@ -495,8 +495,8 @@ def main(argv):
             use_tray = False
     
     # Redirect stderr and stdout for logging purposes
-    sys.stderr = log
-    sys.stdout = log
+    #sys.stderr = log
+    #sys.stdout = log
     
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)

@@ -627,7 +627,7 @@ class ConnectionWizard(dbus.service.Object):
             # status, if it doesn't, we aren't connecting.
             status =  self.wifi.connecting_thread.is_connecting
             if self.debug_mode == 1:
-            print 'wireless connecting',status
+                print 'wireless connecting',status
             return status
         else:
             print 'wireless connecting',False

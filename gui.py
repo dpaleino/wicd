@@ -43,7 +43,7 @@ if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
 #in any class
 bus = dbus.SystemBus()
 try:
-    print 'attempting to connect daemon...'
+    print 'Attempting to connect daemon to gui...'
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     print 'success'
 except:

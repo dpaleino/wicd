@@ -333,7 +333,7 @@ class ConnectionWizard(dbus.service.Object):
         if fresh:
             self.Scan()
             #self.AutoConnectScan()  # Also scans for hidden networks
-        if self.CheckPluggedIn() == True:
+        if self.CheckPluggedIn() == True and self.:
             if self.GetWiredAutoConnectMethod() == 2:
                 self.LaunchChooser()
             else:
@@ -385,7 +385,7 @@ class ConnectionWizard(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon')    
     def SetCurrentInterface(self, iface):
-        self.current_interface = iface
+        self.current_interface = str(iface)
 
     @dbus.service.method('org.wicd.daemon')
     def SetNeedWiredProfileChooser(self,val):
@@ -394,14 +394,14 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon')
     def GetNeedWiredProfileChooser(self):
-        return self.need_profile_chooser
+        return bool(self.need_profile_chooser)
     #end function GetNeedWiredProfileChooser
 
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
         print 'calling wired profile chooser'
         daemon.SetNeedWiredProfileChooser(True)
-
+        
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def StatusChanged(self):
         """ Called when the current connection status has changed """

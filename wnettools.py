@@ -39,7 +39,7 @@ import wpath
 essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.DOTALL | re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
-strength_pattern    = re.compile('.*Quality:?=? ?(\d\d*)',re.DOTALL | re.I | re.M  | re.S)
+strength_pattern	= re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',re.DOTALL | re.I | re.M  | re.S)
 # These next two look a lot a like, altstrength is for Signal level = xx/100,
 # which is just an alternate way of displaying link quality, signaldbm is
 # for displaying actual signal strength (-xx dBm).
@@ -261,6 +261,8 @@ class WirelessInterface(Interface):
 
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time.
+        # the spaces around '   Cell ' are to minimize the chance that someone
+        # has an essid named Cell...
         networks = results.split( '   Cell ' )
 
         # Get available network info from iwpriv get_site_survey
@@ -390,8 +392,15 @@ class WirelessInterface(Interface):
 
         # Link Quality
         # Set strength to -1 if the quality is not found
-        if misc.RunRegex(strength_pattern,cell):
-            ap['quality'] = misc.RunRegex(strength_pattern,cell)
+        
+        # more of the patch from
+        # https://bugs.launchpad.net/wicd/+bug/175104
+		if (strength_pattern.match(cell)):
+			[(strength, max_strength)] = strength_pattern.findall(cell)
+			if max_strength:
+				CurrentNetwork["quality"] = 100 * int(strength) // int(max_strength)
+			else:
+				CurrentNetwork["quality"] = int(strength)
         elif misc.RunRegex(altstrength_pattern,cell):
             ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
         else:
@@ -588,10 +597,19 @@ class WirelessInterface(Interface):
         cmd = 'iwconfig ' + self.iface
         # if self.verbose: print cmd
         output = misc.Run(cmd)
-        strength = misc.RunRegex(strength_pattern,output)
+        # implemented the patch provided in
+        # https://bugs.launchpad.net/wicd/+bug/175104
+        # it was for the stable version, so I've improvised here
+        # should work though
+
+        #strength = misc.RunRegex(strength_pattern,output)
+
+ 		[(strength, max_strength)] = strength_pattern.findall(output)
+ 		if max_strength and strength:
+ 			return 100 * int(strength) // int(max_strength)
+ 			
         if strength == None:
             strength = misc.RunRegex(altstrength_pattern,output)
-
         return strength
 
 

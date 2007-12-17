@@ -333,7 +333,7 @@ class ConnectionWizard(dbus.service.Object):
         if fresh:
             self.Scan()
             #self.AutoConnectScan()  # Also scans for hidden networks
-        if self.CheckPluggedIn() == True and self.:
+        if self.CheckPluggedIn() == True:
             if self.GetWiredAutoConnectMethod() == 2:
                 self.LaunchChooser()
             else:

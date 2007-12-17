@@ -639,5 +639,5 @@ class WirelessInterface(Interface):
         output = misc.Run(cmd)
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',re.DOTALL | re.I | re.M  | re.S), output)
         if network is not None:
-            network = network.encode('utf-8')
+            network = misc.to_unicode(network)
         return network

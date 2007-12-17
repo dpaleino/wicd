@@ -896,9 +896,7 @@ class appGui:
         self.windowname = "gtkbench"
         self.wTree = gtk.glade.XML(gladefile)
 
-        dic = { # "on_vpn_connection" : self.on_vpn_connection, 
-                # I don't see a function that matches this...
-                "refresh_clicked" : self.refresh_networks, 
+        dic = { "refresh_clicked" : self.refresh_networks, 
                 "quit_clicked" : self.exit, 
                 "disconnect_clicked" : self.disconnect_wireless,
                 "main_exit" : self.exit, 
@@ -935,6 +933,7 @@ class appGui:
         self.is_visible = True
         
         self.window.connect('delete_event', self.exit)
+
         size = config.ReadWindowSize()
         width = size[0]
         height = size[1]

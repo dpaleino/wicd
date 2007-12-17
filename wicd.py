@@ -100,7 +100,6 @@ language['connecting'] = _('Connecting...')
 
 class TrayIcon():
     def __init__(self, use_tray):
-        print 'Use tray:',use_tray
         if USE_EGG:
             self.tr = self.DapperTrayIconGUI(use_tray)
         else:
@@ -118,6 +117,7 @@ class TrayIcon():
             self.tried_reconnect = False
             self.connection_lost_counter = 0
             self.tr = tr
+            self.update_tray_icon()
 
         def wired_profile_chooser(self):
             """Launch the wired profile chooser."""
@@ -397,6 +397,5 @@ def main(argv):
     mainloop.run()
 
 
-print 'Here.'
 if __name__ == '__main__':
     main(sys.argv)

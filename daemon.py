@@ -1136,8 +1136,7 @@ class ConnectionWizard(dbus.service.Object):
                     self.SetUseGlobalDNS(False)
                     self.SetGlobalDNS(False, False, False)
                 if config.has_option("Settings", "auto_reconnect"):
-                    self.auto_reconnect = config.get("Settings",
-                                                     "auto_reconnect")
+                    self.auto_reconnect = config.get("Settings", "auto_reconnect")
                 else:
                     config.set("Settings", "auto_reconnect", "0")
                     self.auto_reconnect = False

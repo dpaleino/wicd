@@ -398,9 +398,9 @@ class WirelessInterface(Interface):
         if (strength_pattern.match(cell)):
             [(strength, max_strength)] = strength_pattern.findall(cell)
             if max_strength:
-                CurrentNetwork["quality"] = 100 * int(strength) // int(max_strength)
+                ap["quality"] = 100 * int(strength) // int(max_strength)
             else:
-                CurrentNetwork["quality"] = int(strength)
+                ap["quality"] = int(strength)
         elif misc.RunRegex(altstrength_pattern,cell):
             ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
         else:
@@ -604,8 +604,8 @@ class WirelessInterface(Interface):
 
         #strength = misc.RunRegex(strength_pattern,output)
 
-         [(strength, max_strength)] = strength_pattern.findall(output)
-         if max_strength and strength:
+        [(strength, max_strength)] = strength_pattern.findall(output)
+        if max_strength and strength:
             return 100 * int(strength) / int(max_strength)
              
         if strength == None:

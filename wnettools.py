@@ -39,7 +39,7 @@ import wpath
 essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.DOTALL | re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
-strength_pattern	= re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',re.DOTALL | re.I | re.M  | re.S)
+strength_pattern    = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',re.DOTALL | re.I | re.M  | re.S)
 # These next two look a lot a like, altstrength is for Signal level = xx/100,
 # which is just an alternate way of displaying link quality, signaldbm is
 # for displaying actual signal strength (-xx dBm).
@@ -395,12 +395,12 @@ class WirelessInterface(Interface):
         
         # more of the patch from
         # https://bugs.launchpad.net/wicd/+bug/175104
-		if (strength_pattern.match(cell)):
-			[(strength, max_strength)] = strength_pattern.findall(cell)
-			if max_strength:
-				CurrentNetwork["quality"] = 100 * int(strength) // int(max_strength)
-			else:
-				CurrentNetwork["quality"] = int(strength)
+        if (strength_pattern.match(cell)):
+            [(strength, max_strength)] = strength_pattern.findall(cell)
+            if max_strength:
+                CurrentNetwork["quality"] = 100 * int(strength) // int(max_strength)
+            else:
+                CurrentNetwork["quality"] = int(strength)
         elif misc.RunRegex(altstrength_pattern,cell):
             ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
         else:
@@ -604,10 +604,10 @@ class WirelessInterface(Interface):
 
         #strength = misc.RunRegex(strength_pattern,output)
 
- 		[(strength, max_strength)] = strength_pattern.findall(output)
- 		if max_strength and strength:
- 			return 100 * int(strength) // int(max_strength)
- 			
+         [(strength, max_strength)] = strength_pattern.findall(output)
+         if max_strength and strength:
+            return 100 * int(strength) / int(max_strength)
+             
         if strength == None:
             strength = misc.RunRegex(altstrength_pattern,output)
         return strength
@@ -621,7 +621,7 @@ class WirelessInterface(Interface):
 
         """
         cmd = 'iwconfig ' + self.iface
-        if self.verbose: print cmd
+        # if self.verbose: print cmd
         output = misc.Run(cmd)
         dbm_strength = misc.RunRegex(signaldbm_pattern,output)
         return dbm_strength
@@ -635,7 +635,7 @@ class WirelessInterface(Interface):
 
         """
         cmd = 'iwconfig ' + self.iface
-        if self.verbose: print cmd
+        # if self.verbose: print cmd
         output = misc.Run(cmd)
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',re.DOTALL | re.I | re.M  | re.S), output)
         if network is not None:

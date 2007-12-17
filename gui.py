@@ -928,6 +928,11 @@ class appGui:
         self.is_visible = True
         
         self.window.connect('delete_event', self.exit)
+        size = config.ReadWindowSize()
+        width = size[0]
+        height = size[1]
+        if width > -1 and height > -1:
+            self.window.resize(int(width), int(height))
 
         gobject.timeout_add(600, self.update_statusbar)
         gobject.timeout_add(100, self.pulse_progress_bar)
@@ -1330,6 +1335,8 @@ class appGui:
     def exit(self, widget=None, event=None):
         self.window.hide()
         self.is_visible = False
+        [width, height] = self.window.get_size()
+        config.WriteWindowSize(width, height)
         while gtk.events_pending():
             gtk.main_iteration()
         return True

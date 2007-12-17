@@ -1045,6 +1045,40 @@ class ConnectionWizard(dbus.service.Object):
             return "500: Profile Not Found"
     #end function ReadWirelessNetworkProfile
 
+    @dbus.service.method('org.wicd.daemon.config')
+    def WriteWindowSize(self, width, height):
+        """Write the desired default window size"""
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        if config.has_section("Settings"):
+            config.set("Settings", "window_width", width)
+            config.set("Settings", "window_height", height)
+            config.write(open(self.app_conf, "w"))
+            
+    @dbus.service.method('org.wicd.daemon.config')
+    def ReadWindowSize(self):
+        """Returns a list containing the desired default window size
+        
+        Attempts to read the default size from the config file,
+        and if that fails, returns a default of 605 x 400.
+        
+        """
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        if config.has_section("Settings"):
+            if config.has_option("Settings", "window_width"):
+                width = config.get("Settings", "window_width")
+            else:
+                width = 605
+            if config.has_option("Settings", "window_height"):
+                height = config.get("Settings", "window_height")
+            else:
+                height = 400
+        size = []
+        size.append(int(width))
+        size.append(int(height))
+        return size
+
     #############################################
     ########## INTERNAL FUNCTIONS ###############
     #############################################

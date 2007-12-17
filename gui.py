@@ -103,7 +103,7 @@ _ = lang.gettext
 #but it works and makes it easy for me :)
 ##########
 # translations are done at
-# http://wicd.sourceforge.net/wiki/doku.php?id=translations
+# http://wicd.net/translator
 # please translate if you can!
 ##########
 language = {}
@@ -896,7 +896,8 @@ class appGui:
         self.windowname = "gtkbench"
         self.wTree = gtk.glade.XML(gladefile)
 
-        dic = { "on_vpn_connection" : self.on_vpn_connection, 
+        dic = { # "on_vpn_connection" : self.on_vpn_connection, 
+                # I don't see a function that matches this...
                 "refresh_clicked" : self.refresh_networks, 
                 "quit_clicked" : self.exit, 
                 "disconnect_clicked" : self.disconnect_wireless,
@@ -914,13 +915,19 @@ class appGui:
         # I don't know how to translate a menu entry.
         # More specifically, I don't know how to set a menu entry's text
         # self.wTree.get_widget("connect_button").modify_text(language['_network'])
-        self.wTree.get_widget("progressbar").set_text(language['connecting'])
+
+        probar = self.wTree.get_widget("progressbar")
+        probar.set_text(language['connecting'])
+        # self.entry.set_visibility(False)
+        # probar.set_visiblity(False)
         self.window = self.wTree.get_widget("window1")
 
         self.network_list = self.wTree.get_widget("network_list_vbox")
         self.status_area = self.wTree.get_widget("connecting_hbox")
         self.status_bar = self.wTree.get_widget("statusbar")
         self.refresh_networks(fresh=False)
+
+        self.status_area.hide_all()
 
         self.statusID = None
         
@@ -1343,4 +1350,11 @@ class appGui:
     
     def show_win(self):
         self.window.show_all()
+        # hide the status bar, as it might be confusing if it
+        # pops up randomly :)
+        self.status_area.hide_all()
         self.is_visible = True
+
+if __name__ == '__main__':
+    app = appGui()
+    gtk.main()

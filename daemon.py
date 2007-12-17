@@ -528,12 +528,13 @@ class ConnectionWizard(dbus.service.Object):
     def GetWirelessProperty(self,networkid,property):
         ''' Retrieves wireless property from the network specified '''
         value = self.LastScan[networkid].get(property)
-        if self.debug_mode == 1:
-        print 'returned wireless network',networkid,'property',property,'of value',value
         try:
             value = value.encode('utf-8')
         except:
             pass
+        if self.debug_mode == 1:
+            #return type instead of value for security
+            print 'returned wireless network',networkid,'property',property,'of type',type(value)
         return value
     #end function GetWirelessProperty
 
@@ -583,7 +584,7 @@ class ConnectionWizard(dbus.service.Object):
     def GetCurrentDBMStrength(self):
         ''' Returns the current dbm signal strength '''
         try:
-        dbm_strength = int(self.wifi.GetDBMStrength())
+            dbm_strength = int(self.wifi.GetDBMStrength())
         except:
             dbm_strength = 0
         return dbm_strength
@@ -659,7 +660,7 @@ class ConnectionWizard(dbus.service.Object):
         ''' Returns the IP that the wireless interface has '''
         ip = self.wifi.GetIP()
         if self.debug_mode == 1:
-        print 'returning wireless ip',ip
+            print 'returning wireless ip',ip
         return ip
     #end function GetWirelessIP
 
@@ -690,7 +691,7 @@ class ConnectionWizard(dbus.service.Object):
         '''returns the wired interface\'s ip address'''
         ip = self.wired.GetIP()
         if self.debug_mode == 1:
-        print 'returning wired ip',ip
+            print 'returning wired ip',ip
         return ip
     #end function GetWiredIP
 
@@ -702,11 +703,11 @@ class ConnectionWizard(dbus.service.Object):
             #status, if it doesn't exist, we aren't connecting
             status = self.wired.connecting_thread.is_connecting
             if self.debug_mode == 1:
-            print 'wired connecting',status
+                print 'wired connecting',status
             return status
         else:
             if self.debug_mode == 1:
-            print 'wired connecting',False
+                print 'wired connecting',False
             return False
     #end function CheckIfWiredConnecting
 
@@ -771,7 +772,7 @@ class ConnectionWizard(dbus.service.Object):
         if self.WiredNetwork:
             self.WiredNetwork[property] = misc.Noneify(value)
             if self.debug_mode == 1:
-            print 'set',property,'to',misc.Noneify(value)
+                print 'set',property,'to',misc.Noneify(value)
             return True
         else:
             print 'WiredNetwork does not exist'
@@ -783,7 +784,7 @@ class ConnectionWizard(dbus.service.Object):
         if self.WiredNetwork:
             value = self.WiredNetwork.get(property)
             if self.debug_mode == 1:
-            print 'returned',property,'with value of',value,'to client...'
+                print 'returned',property,'with value of',value,'to client...'
             return value
         else:
             print 'WiredNetwork does not exist'

@@ -139,7 +139,7 @@
             <property name="border_width">4</property>
             <child>
               <widget class="GtkProgressBar" id="progressbar">
-                <property name="visible">True</property>
+                <property name="visible">False</property>
                 <property name="tooltip" translatable="yes">Connecting...</property>
                 <property name="activity_mode">True</property>
                 <property name="text" translatable="yes">Connecting...</property>

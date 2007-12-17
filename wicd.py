@@ -100,6 +100,7 @@ language['connecting'] = _('Connecting...')
 
 class TrayIcon():
     def __init__(self, use_tray):
+        print 'Use tray:',use_tray
         if USE_EGG:
             self.tr = self.DapperTrayIconGUI(use_tray)
         else:
@@ -146,6 +147,7 @@ class TrayIcon():
             # Check for a wireless connection
             elif cur_iface == wifi_iface:
                 cur_net_id = wireless.GetCurrentNetworkID()
+                lock = ''
                 if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                     lock = "-lock"
                 strength = wireless.GetPrintableSignalStrength()
@@ -353,6 +355,7 @@ def main(argv):
     argv -- The arguments passed to the script.
 
     """
+    print 'Loading...'
     use_tray = True
 
     try:
@@ -373,6 +376,8 @@ def main(argv):
     #sys.stderr = log
     #sys.stdout = log
     
+    print 'Done initalizing, starting...'
+
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)
     
@@ -392,5 +397,6 @@ def main(argv):
     mainloop.run()
 
 
+print 'Here.'
 if __name__ == '__main__':
     main(sys.argv)

@@ -679,7 +679,7 @@ class ConnectionWizard(dbus.service.Object):
         ''' Cancels the wireless connection attempt '''
         print 'canceling connection attempt'
         if not self.wifi.connecting_thread == None:
-            self.wifi.connecting_thread.ShouldDie = True
+            self.wifi.connecting_thread.should_die = True
         misc.Run("killall dhclient dhclient3 wpa_supplicant")
     #end function CancelConnect
 

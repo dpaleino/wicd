@@ -191,6 +191,7 @@ language['setting_broadcast_address'] = _('Setting broadcast address...')
 language['setting_static_dns'] = _('Setting static DNS servers...')
 language['setting_static_ip'] = _('Setting static IP addresses...')
 language['running_dhcp'] = _('Obtaining IP address...')
+language['aborted'] = _('Connection cancelled')
 language['done'] = _('Done connecting...')
 
 ########################################
@@ -1168,6 +1169,8 @@ class appGui:
     def update_statusbar(self):
         #should update the status bar
         #every couple hundred milliseconds
+        if self.is_visible == False:
+            return True
         wireless_ip = wireless.GetWirelessIP() #do this so that it doesn't lock up.  don't know how or why this works
                     #but it does so we leave it alone :)
         wiredConnecting = wired.CheckIfWiredConnecting()

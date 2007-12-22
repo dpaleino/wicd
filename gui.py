@@ -318,10 +318,10 @@ class PrettyNetworkEntry(gtk.HBox):
     '''adds an image and a connect button to a NetworkEntry'''
     def __init__(self,expander):
         gtk.HBox.__init__(self)
-        #add the stuff to the hbox (self)
+        # Add the stuff to the hbox (self)
         self.expander = expander
         self.expander.show()
-        self.expander.higherLevel = self #do this so that the expander can access the stuff inside me
+        self.expander.higherLevel = self  # Do this so that the expander can access the stuff inside me
         self.tempVBox = gtk.VBox(False,1)
         self.tempVBox.show()
         self.connectButton = LinkButton()
@@ -362,7 +362,7 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         self.setChannel(wireless.GetWirelessProperty(networkID,'channel'))
         self.setEncryption(wireless.GetWirelessProperty(networkID,'encryption'),
                            wireless.GetWirelessProperty(networkID,'encryption_method'))
-        #show everything
+        # Show everything
         self.show_all()
 
     def setSignalStrength(self,strength, dbm_strength):
@@ -460,7 +460,7 @@ class NetworkEntry(gtk.Expander):
         self.vboxTop.pack_end(self.expanderAdvanced,fill=False,expand=False)
         self.expanderAdvanced.add(self.vboxAdvanced)
         self.expanderScripts.add(self.vboxScripts)
-        #connect the events to the actions
+        # Connect the events to the actions
         self.checkboxStaticIP.connect("toggled",self.toggleIPCheckbox)
         self.checkboxStaticDNS.connect("toggled",self.toggleDNSCheckbox)
         self.checkboxGlobalDNS.connect("toggled",self.toggleGlobalDNSCheckbox)
@@ -481,8 +481,8 @@ class NetworkEntry(gtk.Expander):
                 #fill it in with a .1 at the end
                 gateway.set_text('.'.join(ip_parts[0:3]) + '.1')
 
-            if stringToNone(netmask.get_text()) == None: #make sure the netmask is blank
-                        netmask.set_text('255.255.255.0') #fill in the most common one
+            if stringToNone(netmask.get_text()) == None: # Make sure the netmask is blank
+                        netmask.set_text('255.255.255.0') # Fill in the most common one
 
     def resetStaticCheckboxes(self):
         #enable the right stuff
@@ -885,12 +885,13 @@ class WiredProfileChooser:
             print 'reading profile ', wiredNetEntry.comboProfileNames.get_active_text()
             config.ReadWiredNetworkProfile(wiredNetEntry.comboProfileNames.get_active_text())
             wired.ConnectWired()
-            dialog.destroy()
         else:
             if stoppopcheckbox.get_active() == True:
                 # Stops the pop-up from reappearing if cancelled
                 wired.use_default_profile = 1
-            dialog.destroy()
+        dialog.destroy()
+
+
 class appGui:
     def __init__(self):
         gladefile = "data/wicd.glade"
@@ -1181,9 +1182,11 @@ class appGui:
             if self.statusID:
                 self.status_bar.remove(1,self.statusID)
             if wirelessConnecting:
-                self.statusID = self.status_bar.push(1,language[str(wireless.CheckWirelessConnectingMessage())])
+                self.statusID = self.status_bar.push(1,wireless.GetCurrentNetwork() + ': ' +
+                                                       language[str(wireless.CheckWirelessConnectingMessage())])
             if wiredConnecting:
-                self.statusID = self.status_bar.push(1,language[str(wired.CheckWiredConnectingMessage())])
+                self.statusID = self.status_bar.push(1,language['wired_network'] + ': ' + 
+                                                       language[str(wired.CheckWiredConnectingMessage())])
         else:
             self.network_list.set_sensitive(True)
             self.status_area.hide_all()

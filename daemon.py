@@ -434,7 +434,6 @@ class ConnectionWizard(dbus.service.Object):
         Scans for wireless networks and also for hidden networks defined in
         wireless-settings.conf
 
-
         '''
         hidden_network_list = self.GetHiddenNetworkList()
         master_scan = self.Scan()
@@ -1471,6 +1470,8 @@ class ConnectionStatus():
             if not wireless_found:  # No connection at all
                 if not conn.CheckIfConnecting():
                     self.auto_reconnect()
+                else:
+                    self.status_changed = True
         # Send a D-Bus signal announcing status has changed if necessary.
         if self.status_changed:
             conn.StatusChanged()
@@ -1489,8 +1490,7 @@ class ConnectionStatus():
         conn.SetCurrentInterface('')
         self.status_changed = True
         
-        if conn.GetAutoReconnect() and \
-           not conn.CheckIfConnecting() and \
+        if conn.GetAutoReconnect() and not conn.CheckIfConnecting() and \
            not conn.GetForcedDisconnect():
             print 'Starting automatic reconnect process'
             # First try connecting through ethernet

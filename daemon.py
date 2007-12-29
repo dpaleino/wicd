@@ -468,30 +468,6 @@ class ConnectionWizard(dbus.service.Object):
     #end function DisconnectWireless
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessBeforeScript(self,networkid,script):
-        if script == '':
-            script = None
-        self.SetWirelessProperty(networkid,"beforescript",script)
-        self.wifi.before_script = script
-    #end function SetWirelessBeforeScript
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessDisconnectScript(self,networkid,script):
-        if script == '':
-            script = None
-        self.SetWirelessProperty(networkid,"disconnectscript",script)
-        self.wifi.disconnect_script = script
-    #end function SetWirelessDisconnectScript
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessAfterScript(self,networkid,script):
-        if script == '':
-            script = None
-        self.SetWirelessProperty(networkid,"afterscript",script)
-        self.wifi.after_script = script
-    #end function SetWirelessAfterScript
-
-    @dbus.service.method('org.wicd.daemon.wireless')
     def GetNumberOfNetworks(self):
         '''returns number of networks'''
         print 'returned number of networks...',len(self.LastScan)
@@ -528,7 +504,7 @@ class ConnectionWizard(dbus.service.Object):
         ''' Retrieves wireless property from the network specified '''
         value = self.LastScan[networkid].get(property)
         try:
-            value = value.encode('utf-8')
+            value = misc.to_unicode(value)
         except:
             pass
         if self.debug_mode == 1:
@@ -542,6 +518,10 @@ class ConnectionWizard(dbus.service.Object):
         ''' Sets property to value in network specified '''
         #simple - set the value of the item in our current data
         #to the value the client asked for
+        if (property.strip()).endswith("script"):
+                print "Setting script properties through the daemon \
+                      is not permitted."
+                return False
         print 'setting wireless network',networkid,'property',property,'to value',value
         self.LastScan[networkid][property] = misc.Noneify(value)
     #end function SetProperty
@@ -711,33 +691,6 @@ class ConnectionWizard(dbus.service.Object):
     #end function CheckIfWiredConnecting
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredBeforeScript(self,script):
-        '''sets pre-connection script to run for a wired connection'''
-        if script == '':
-            script = None
-        self.SetWiredProperty("beforescript",script)
-        self.wired.before_script = script
-    #end function SetWiredBeforeScript
-
-    @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredDisconnectScript(self,script):
-        '''sets script to run on connection disconnect'''
-        if script == '':
-            script = None
-        self.SetWiredProperty("disconnectscript",script)
-        self.wired.disconnect_script = script
-    #end function SetWirelessDisconnectScript
-
-    @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredAfterScript(self,script):
-        '''sets post-connection script to run for a wired connection'''
-        if script == '':
-            script = None
-        self.SetWiredProperty("afterscript",script)
-        self.wired.after_script = script
-    #end function SetWiredAfterScript
-
-    @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredAutoConnectMethod(self,method):
         '''sets which method the user wants to autoconnect to wired networks'''
         # 1 = default profile
@@ -769,6 +722,10 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredProperty(self,property,value):
         if self.WiredNetwork:
+            if (property.strip()).endswith("script"):
+                print "Setting script properties through the daemon \
+                      is not permitted."
+                return False
             self.WiredNetwork[property] = misc.Noneify(value)
             if self.debug_mode == 1:
                 print 'set',property,'to',misc.Noneify(value)
@@ -938,7 +895,7 @@ class ConnectionWizard(dbus.service.Object):
     def SaveWiredNetworkProfile(self,profilename):
         ''' Writes a wired network profile to disk '''
         #should include: profilename,ip,netmask,gateway,dns1,dns2
-        profilename = profilename.encode('utf-8')
+        profilename = misc.to_unicode(profilename)
         print "setting profile for " + str(profilename)
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
@@ -955,7 +912,7 @@ class ConnectionWizard(dbus.service.Object):
     def ReadWiredNetworkProfile(self,profilename):
         ''' Reads a wired network profile in as the currently active profile '''
         profile = {}
-        profilename = profilename.encode('utf-8')
+        profilename = misc.to_unicode(profilename)
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
         if config.has_section(profilename) == True:
@@ -999,6 +956,9 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.config')
     def SaveWirelessNetworkProperty(self,id,option):
         ''' Writes a particular wireless property to disk '''
+        if (option.strip()).endswith("script"):
+            print 'you cannot save script information to disk through the daemon.'
+            return
         print "setting network option " + str(option) + " to " + str(self.LastScan[id][option])
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
@@ -1015,27 +975,13 @@ class ConnectionWizard(dbus.service.Object):
         print self.LastScan[id]["bssid"]
         if config.has_section(self.LastScan[id]["bssid"]):
             self.LastScan[id]["has_profile"] = True
-            if config.has_option(self.LastScan[id]["bssid"], "beforescript"):
-                self.LastScan[id]["beforescript"] = misc.Noneify(config.get(self.LastScan[id]["bssid"], "beforescript"))
-            else:
-                self.LastScan[id]["beforescript"] = None
-            if config.has_option(self.LastScan[id]["bssid"], "afterscript"):
-                self.LastScan[id]["afterscript"] = misc.Noneify(config.get(self.LastScan[id]["bssid"],
-                                                                           "afterscript"))
-            else:
-                self.LastScan[id]["afterscript"] = None
-            if config.has_option(self.LastScan[id]["bssid"], "disconnectscript"):
-                self.LastScan[id]["disconnectscript"] = misc.Noneify(config.get(self.LastScan[id]["bssid"],
-                                                                                "disconnectscript"))
-            else:
-                self.LastScan[id]["disconnectscript"] = None
 
-            #read the essid because we be needing to name those hidden
-            #wireless networks now - but only read it if it is hidden
+            # Read the essid because we be needing to name those hidden
+            # wireless networks now - but only read it if it is hidden.
             if self.LastScan[id]["hidden"] == True:
                 self.LastScan[id]["essid"] = misc.Noneify(config.get(self.LastScan[id]["bssid"], "essid"))
             for x in config.options(self.LastScan[id]["bssid"]):
-                if self.LastScan[id].has_key(x) == False:
+                if self.LastScan[id].has_key(x) == False or x.endswith("script"):
                     self.LastScan[id][x] = misc.Noneify(config.get(self.LastScan[id]["bssid"], x))
             return "100: Loaded Profile"
         else:
@@ -1266,112 +1212,6 @@ class ConnectionWizard(dbus.service.Object):
     #end function ReadConfig
 
 
-def usage():
-    print """
-wicd 1.33
-wireless (and wired) connection daemon.
-
-Arguments:
-\t-s\t--no-scan\tDon't auto-scan/auto-connect.
-\t-f\t--no-daemon\tDon't daemonize (run in foreground).
-\t-e\t--no-stderr\tDon't redirect stderr.
-\t-o\t--no-stdout\tDon't redirect stdout.
-\t-h\t--help\t\tPrint this help.
-"""
-
-
-def daemonize():
-    """ Disconnect from the controlling terminal.
-
-    Fork twice, once to disconnect ourselves from the parent terminal and a
-    second time to prevent any files we open from becoming our controlling
-    terminal.
-
-    For more info see http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
-
-    """
-    # Fork the first time to disconnect from the parent terminal and
-    # exit the parent process.
-    try:
-        pid = os.fork()
-        if pid > 0:
-            sys.exit(0)
-    except OSError, e:
-        print >> sys.stderr, "Fork #1 failed: %d (%s)" % (e.errno, e.strerror)
-        sys.exit(1)
-
-    # Decouple from parent environment to stop us from being a zombie.
-    os.setsid()
-    os.umask(0)
-
-    # Fork the second time to prevent us from opening a file that will
-    # become our controlling terminal.
-    try:
-        pid = os.fork()
-        if pid > 0:
-            print "wicd daemon: pid " + str(pid)
-            sys.exit(0)
-    except OSError, e:
-        print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
-        sys.exit(1)
-
-
-def main(argv):
-    """ The main daemon program.
-
-    Keyword arguments:
-    argv -- The arguments passed to the script.
-
-    """
-
-    do_daemonize = True
-    redirect_stderr = True
-    redirect_stdout = True
-    auto_scan = True
-
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], 'feos',
-                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan'])
-    except getopt.GetoptError:
-        # Print help information and exit
-        usage()
-        sys.exit(2)
-
-    for o, a in opts:
-        if o in ('-h', '--help'):
-            usage()
-            sys.exit()
-        if o in ('-e', '--no-stderr'):
-            redirect_stderr = False
-        if o in ('-o', '--no-stdout'):
-            redirect_stdout = False
-        if o in ('-f', '--no-daemon'):
-            do_daemonize = False
-        if o in ('-s', '--no-scan'):
-            auto_scan = False
-
-    if do_daemonize: daemonize()
-
-    if redirect_stderr or redirect_stdout: output = LogWriter()
-    if redirect_stdout: sys.stdout = output
-    if redirect_stderr: sys.stderr = output
-
-    print '---------------------------'
-    print 'wicd initializing...'
-    print '---------------------------'
-
-    # Open the DBUS session
-    session_bus = dbus.SystemBus()
-    bus_name = dbus.service.BusName('org.wicd.daemon', bus=session_bus)
-    object = ConnectionWizard(bus_name, auto_connect=auto_scan)
-    connection_status = ConnectionStatus(object)
-    
-    gobject.timeout_add(3000, connection_status.update_connection_status)
-
-    # Enter the main loop
-    mainloop = gobject.MainLoop()
-    mainloop.run()
-
 class ConnectionStatus():
     def __init__(self, connection):
         """Initialize variables needed for the connection status methods."""
@@ -1513,7 +1353,113 @@ class ConnectionStatus():
                     conn.AutoConnect(True)
             else:
                 conn.AutoConnect(True)
+                
 
+def usage():
+    print """
+wicd 1.33
+wireless (and wired) connection daemon.
+
+Arguments:
+\t-s\t--no-scan\tDon't auto-scan/auto-connect.
+\t-f\t--no-daemon\tDon't daemonize (run in foreground).
+\t-e\t--no-stderr\tDon't redirect stderr.
+\t-o\t--no-stdout\tDon't redirect stdout.
+\t-h\t--help\t\tPrint this help.
+"""
+
+
+def daemonize():
+    """ Disconnect from the controlling terminal.
+
+    Fork twice, once to disconnect ourselves from the parent terminal and a
+    second time to prevent any files we open from becoming our controlling
+    terminal.
+
+    For more info see http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
+
+    """
+    # Fork the first time to disconnect from the parent terminal and
+    # exit the parent process.
+    try:
+        pid = os.fork()
+        if pid > 0:
+            sys.exit(0)
+    except OSError, e:
+        print >> sys.stderr, "Fork #1 failed: %d (%s)" % (e.errno, e.strerror)
+        sys.exit(1)
+
+    # Decouple from parent environment to stop us from being a zombie.
+    os.setsid()
+    os.umask(0)
+
+    # Fork the second time to prevent us from opening a file that will
+    # become our controlling terminal.
+    try:
+        pid = os.fork()
+        if pid > 0:
+            print "wicd daemon: pid " + str(pid)
+            sys.exit(0)
+    except OSError, e:
+        print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
+        sys.exit(1)
+
+
+def main(argv):
+    """ The main daemon program.
+
+    Keyword arguments:
+    argv -- The arguments passed to the script.
+
+    """
+
+    do_daemonize = True
+    redirect_stderr = True
+    redirect_stdout = True
+    auto_scan = True
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'feos',
+                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan'])
+    except getopt.GetoptError:
+        # Print help information and exit
+        usage()
+        sys.exit(2)
+
+    for o, a in opts:
+        if o in ('-h', '--help'):
+            usage()
+            sys.exit()
+        if o in ('-e', '--no-stderr'):
+            redirect_stderr = False
+        if o in ('-o', '--no-stdout'):
+            redirect_stdout = False
+        if o in ('-f', '--no-daemon'):
+            do_daemonize = False
+        if o in ('-s', '--no-scan'):
+            auto_scan = False
+
+    if do_daemonize: daemonize()
+
+    if redirect_stderr or redirect_stdout: output = LogWriter()
+    if redirect_stdout: sys.stdout = output
+    if redirect_stderr: sys.stderr = output
+
+    print '---------------------------'
+    print 'wicd initializing...'
+    print '---------------------------'
+
+    # Open the DBUS session
+    session_bus = dbus.SystemBus()
+    bus_name = dbus.service.BusName('org.wicd.daemon', bus=session_bus)
+    object = ConnectionWizard(bus_name, auto_connect=auto_scan)
+    connection_status = ConnectionStatus(object)
+    
+    gobject.timeout_add(3000, connection_status.update_connection_status)
+
+    # Enter the main loop
+    mainloop = gobject.MainLoop()
+    mainloop.run()
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -36,23 +36,23 @@ import wpath
 
 # Compile the regex patterns that will be used to search the output of iwlist
 # scan for info these are well tested, should work on most cards
-essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.DOTALL | re.I | re.M  | re.S)
-ap_mac_pattern      = re.compile('.*Address: (.*?)\n',re.DOTALL | re.I | re.M  | re.S)
-channel_pattern     = re.compile('.*Channel:? ?(\d\d?)',re.DOTALL | re.I | re.M  | re.S)
-strength_pattern    = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',re.DOTALL | re.I | re.M  | re.S)
+essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.I | re.M  | re.S)
+ap_mac_pattern      = re.compile('.*Address: (.*?)\n', re.I | re.M  | re.S)
+channel_pattern     = re.compile('.*Channel:? ?(\d\d?)', re.I | re.M  | re.S)
+strength_pattern    = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', re.I | re.M  | re.S)
 # These next two look a lot a like, altstrength is for Signal level = xx/100,
 # which is just an alternate way of displaying link quality, signaldbm is
 # for displaying actual signal strength (-xx dBm).
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',re.DOTALL | re.I | re.M | re.S)
-signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)',re.DOTALL | re.I | re.M | re.S)
-mode_pattern        = re.compile('.*Mode:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
-freq_pattern        = re.compile('.*Frequency:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', re.I | re.M | re.S)
+signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)', re.I | re.M | re.S)
+mode_pattern        = re.compile('.*Mode:(.*?)\n', re.I | re.M  | re.S)
+freq_pattern        = re.compile('.*Frequency:(.*?)\n', re.I | re.M  | re.S)
 ip_pattern          = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
 
-wep_pattern         = re.compile('.*Encryption key:(.*?)\n',re.DOTALL | re.I | re.M  | re.S)
-altwpa_pattern      = re.compile('(wpa_ie)',re.DOTALL | re.I | re.M | re.S)
-wpa1_pattern        = re.compile('(WPA Version 1)',re.DOTALL | re.I | re.M  | re.S)
-wpa2_pattern        = re.compile('(WPA2)',re.DOTALL | re.I | re.M  | re.S)
+wep_pattern         = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
+altwpa_pattern      = re.compile('(wpa_ie)', re.I | re.M | re.S)
+wpa1_pattern        = re.compile('(WPA Version 1)', re.I | re.M  | re.S)
+wpa2_pattern        = re.compile('(WPA2)', re.I | re.M  | re.S)
 
 
 def SetDNS(dns1=None, dns2=None, dns3=None):
@@ -261,7 +261,7 @@ class WirelessInterface(Interface):
 
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time.
-        # the spaces around '   Cell ' are to minimize the chance that someone
+        # The spaces around '   Cell ' are to minimize the chance that someone
         # has an essid named Cell...
         networks = results.split( '   Cell ' )
 

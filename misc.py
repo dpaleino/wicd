@@ -217,6 +217,7 @@ def get_gettext():
 
 
 def to_unicode(x):
+    """ Attempts to convert a string to unicode """
     try: # This may never fail, but let's be safe
         default_encoding = locale.getpreferredencoding()
     except:

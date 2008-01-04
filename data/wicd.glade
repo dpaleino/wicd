@@ -7,7 +7,7 @@
     <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Wicd Manager</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ALWAYS</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="icon">wicd.png</property>
     <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="destroy" handler="main_exit"/>

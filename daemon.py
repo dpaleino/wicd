@@ -1212,9 +1212,10 @@ class ConnectionWizard(dbus.service.Object):
             #don't do anything since it is there
             pass
         else:
-            print "wired confguration file not found, creating..."
-            #we don't need to put anything in it, so just make it
+            print "wired configuration file not found, creating..."
+            # Create the file and a default profile
             open( self.wired_conf, "w" ).close()
+            self.CreateWiredNetworkProfile("wired-default")
         #end If
 
         #hide the files, so the keys aren't exposed

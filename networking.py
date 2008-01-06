@@ -48,6 +48,7 @@ import misc
 import wnettools
 import wpath
 import os
+import time
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -104,6 +105,8 @@ class ConnectThread(threading.Thread):
         self.wireless_interface = wireless
         self.wired_interface = wired
         self.is_connecting = False
+        self.is_aborted = False
+        self.abort_msg = None
         self.before_script = before_script
         self.after_script = after_script
         self.disconnect_script = disconnect_script
@@ -123,8 +126,10 @@ class ConnectThread(threading.Thread):
 
         """
         self.lock.acquire()
-        self.connecting_message = status
-        self.lock.release()
+        try:
+            self.connecting_message = status
+        finally:
+            self.lock.release()
 
 
     def GetStatus(self):
@@ -135,8 +140,10 @@ class ConnectThread(threading.Thread):
 
         """
         self.lock.acquire()
-        message = self.connecting_message
-        self.lock.release()
+        try:
+            message = self.connecting_message
+        finally:
+            self.lock.release()
         return message
 
     def connect_aborted(self, reason):
@@ -147,9 +154,10 @@ class ConnectThread(threading.Thread):
         
         """
         self.SetStatus(reason)
+        self.is_aborted = True
+        self.abort_msg = reason
         self.is_connecting = False
         print 'exiting connection thread'
-
 
 
 class Wireless(Controller):
@@ -394,7 +402,7 @@ class WirelessConnectThread(ConnectThread):
             return
 
         # Execute pre-connection script if necessary
-        if self.before_script != '' and self.before_script != None:
+        if self.before_script != '' and self.before_script is not None:
             print 'Executing pre-connection script'
             misc.ExecuteScript(self.before_script)
         
@@ -427,7 +435,7 @@ class WirelessConnectThread(ConnectThread):
         # Check to see if we need to generate a PSK (only for non-ralink
         # cards).
         if self.wpa_driver != 'ralink legacy':
-            if not self.network.get('key') == None:
+            if not self.network.get('key') is None:
                 self.SetStatus('generating_psk')
 
                 print 'Generating psk...'
@@ -437,10 +445,11 @@ class WirelessConnectThread(ConnectThread):
                         misc.Run('wpa_passphrase "' + self.network['essid'] +
                                  '" "' + self.network['key'] + '"'))
             # Generate the wpa_supplicant file...
-            if not self.network.get('enctype') == None:
+            if self.network.get('enctype') is not None:
                 self.SetStatus('generating_wpa_config')
                 print 'Attempting to authenticate...'
                 wiface.Authenticate(self.network)
+                auth_time = time.time()
 
         if self.should_die:
             wiface.Up()
@@ -464,16 +473,30 @@ class WirelessConnectThread(ConnectThread):
             self.connect_aborted('aborted')
             return
 
+        if self.network.get('enctype') is not None:
+            # Allow some time for wpa_supplicant to associate.
+            # Hopefully 3 sec is enough.  If it proves to be inconsistent,
+            # we might have to try to monitor wpa_supplicant more closely,
+            # so we can tell exactly when it fails/succeeds.
+            elapsed = time.time() - auth_time
+            if elapsed < 3 and elapsed >= 0:
+                time.sleep(3 - elapsed)
+
+            # Make sure wpa_supplicant was able to associate.
+            if not wiface.ValidateAuthentication():
+                self.connect_aborted('bad_pass')
+                return
+
         wiface.SetMode(self.network['mode'])
-        wiface.Associate(self.network['essid'],
-                self.network['channel'], self.network['bssid'])
+        wiface.Associate(self.network['essid'], self.network['channel'],
+                         self.network['bssid'])
 
         # Authenticate after association for Ralink legacy cards.
         if self.wpa_driver == 'ralink legacy':
-            if self.network.get('key') != None:
+            if self.network.get('key') is not None:
                 wiface.Authenticate(self.network)
 
-        if not self.network.get('broadcast') == None:
+        if self.network.get('broadcast') is not None:
             self.SetStatus('setting_broadcast_address')
 
             print 'Setting the broadcast address...' + self.network['broadcast']
@@ -483,18 +506,20 @@ class WirelessConnectThread(ConnectThread):
             self.connect_aborted('aborted')
             return
 
-        if not self.network.get('ip') == None:
+        if self.network.get('ip') is not None:
             self.SetStatus('setting_static_ip')
             print 'Setting static IP : ' + self.network['ip']
             wiface.SetAddress(self.network['ip'], self.network['netmask'])
             print 'Setting default gateway : ' + self.network['gateway']
             wiface.SetDefaultRoute(self.network['gateway'])
         else:
-            # Run dhcp...
+            # Run DHCP...
             self.SetStatus('running_dhcp')
             print "Running DHCP"
-            if not self.should_die:
-                wiface.StartDHCP()
+            dhcp_status = wiface.StartDHCP()
+            if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
+                self.connect_aborted(dhcp_status)
+                return
 
         if ((self.network.get('dns1') or self.network.get('dns2') or
             self.network.get('dns3')) and self.network.get('use_static_dns')):
@@ -697,8 +722,10 @@ class WiredConnectThread(ConnectThread):
             # Run dhcp...
             self.SetStatus('running_dhcp')
             print "Running DHCP"
-            if not self.should_die:
-                liface.StartDHCP()
+            dhcp_status = liface.StartDHCP()
+            if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
+                self.connect_aborted(dhcp_status)
+                return
 
         if ((self.network.get('dns1') or self.network.get('dns2') or
             self.network.get('dns3')) and self.network.get('use_static_dns')):

@@ -3,6 +3,7 @@ author = Fralaltro
 version = 1
 require identity *Identity password *Password ca_cert *Path_to_CA_Cert
 -----
+ctrl_interface=/var/run/wpa_supplicant
 network={
         ssid="$_ESSID"
         scan_ssid=$_SCAN

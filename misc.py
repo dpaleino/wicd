@@ -1,14 +1,20 @@
 ''' Misc - miscellaneous functions for wicd '''
 
-# Pretty much useless to anyone else...
-# But if it is useful, feel free to use under the terms of the GPL
-#
-#        This is released under the
-#                    GNU General Public License
-#        The terms can be found at
-#            http://www.gnu.org/copyleft/gpl.html
 #
 #        Copyright (C) 2007 Adam Blackburn
+#   Copyright (C) 2007 Dan O'Reilly
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License Version 2 as
+#   published by the Free Software Foundation.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 import os
@@ -17,18 +23,42 @@ import locale
 import gettext
 import time
 import sys
+from subprocess import *
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
-def Run(cmd, include_std_error = False):
-    ''' Run a command '''
-    if not include_std_error:
-        f = os.popen( cmd , "r")
-        return f.read()
+def Run(cmd, include_stderr=False, return_pipe=False):
+    ''' Run a command 
+
+    Runs the given command, returning either the output
+    of the program, or a pipe to read output from.
+
+    keyword arguments --
+    cmd - The command to execute
+    include_std_err - Boolean specifying if stderr should
+                      be included in the pipe to the cmd.
+    return_pipe - Boolean specifying if a pipe to the
+                  command should be returned.  If it is
+                  false, all that will be returned is
+                  one output string from the command.
+
+    '''
+    
+    cmd = to_unicode(str(cmd))
+    if include_stderr:
+        err = STDOUT
+        fds = True
     else:
-        input, out_err = os.popen4( cmd, 'r')
-        return out_err.read()
+        err = None
+        fds = False
+
+    f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds)
+    
+        if return_pipe:
+            return f.stdout
+        else:
+        return f.communicate()[0]
 
 def IsValidIP(ip):
     ''' Make sure an entered IP is valid '''
@@ -41,10 +71,11 @@ def IsValidIP(ip):
 
 def PromptToStartDaemon():
     ''' Prompt the user to start the daemon '''
-    # script execution doesn't work correctly if daemon gets autostarted,
-    # so just prompt user to start manually
-    print 'You need to start the daemon before using the gui or tray.  Use \
-           the command \'sudo /etc/init.d/wicd start\'.'
+    daemonloc = wpath.bin + 'launchdaemon.sh'
+    gksudo_args = ['gksudo', '--message', 
+                   'Wicd needs to access your computer\'s network cards.',
+                   '--', daemonloc]
+    os.spawnvpe(os.P_WAIT, 'gksudo', gksudo_args, os.environ)
 
 def RunRegex(regex, string):
     ''' runs a regex search on a string '''
@@ -63,24 +94,8 @@ def WriteLine(my_file, text):
     my_file.write(text + "\n")
 
 def ExecuteScript(script):
-    ''' Execute a command
-
-    Executes a given command by forking a new process and
-    calling run-script.py
-
-    '''
-
-    pid = os.fork()
-    if not pid:
-        os.setsid()
-        os.umask(0)
-        pid = os.fork()
-        if not pid:
-            print Run('./run-script.py ' + script)
-            os._exit(0)
-        os._exit(0)
-    os.wait()
-
+    ''' Execute a command '''
+    os.system(script + ' &')
 
 def ReadFile(filename):
     ''' read in a file and return it's contents as a string '''
@@ -227,6 +242,13 @@ def to_unicode(x):
     else:
         return x.decode('utf-8').encode('utf-8')
 
+def error(parent, message): 
+    """ Shows an error dialog """
+    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
+        gtk.BUTTONS_OK)
+    dialog.set_markup(message)
+    dialog.run()
+    dialog.destroy()
 
 
 class LogWriter():

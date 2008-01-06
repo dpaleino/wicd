@@ -143,6 +143,7 @@ class ConnectionWizard(dbus.service.Object):
         self.need_profile_chooser = False
         self.current_interface = None
         self.vpn_session =  None
+        self.user_init_connect = False
 
         # Load the config file
         self.ReadConfig()
@@ -177,7 +178,7 @@ class ConnectionWizard(dbus.service.Object):
         #micro is for everything else.
         #and micro may be anything >= 0
         #this number is effective starting wicd v1.2.0
-        version = '1.4.0'
+        version = '1.4.2'
         print 'returned version number',version
         return version
 
@@ -296,6 +297,13 @@ class ConnectionWizard(dbus.service.Object):
     #end function GetDebugMode
 
     @dbus.service.method('org.wicd.daemon')
+    def Disconnect(self):
+        '''disconnects all networks'''
+        self.SetForcedDisconnect(True)
+        self.wifi.Disconnect()
+        self.wired.Disconnect()
+
+    @dbus.service.method('org.wicd.daemon')
     def GetSignalDisplayType(self):
         ''' Returns the signal display type
 
@@ -381,16 +389,35 @@ class ConnectionWizard(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon')
     def GetCurrentInterface(self):
+        """ Returns the active interface """
         return self.current_interface
     
     @dbus.service.method('org.wicd.daemon')    
     def SetCurrentInterface(self, iface):
+        """ Sets the current active interface """
         self.current_interface = str(iface)
 
     @dbus.service.method('org.wicd.daemon')
     def SetNeedWiredProfileChooser(self,val):
+        """ Sets the need_wired_profile_chooser variable.
+        
+        If set to true, that alerts the wicd frontend to display the chooser,
+        if false the frontend will do nothing.  This function is only needed
+        when the frontend starts up, to determine if the chooser was requested
+        before the frontend was launched.
+        
+        """
         self.need_profile_chooser = val
     #end function SetNeedWiredProfileChooser
+
+    @dbus.service.method('org.wicd.daemon')
+    def SetUserInitConnect(self, val):
+        """ Specifies if the last connection attempt was user/cpu initiated """
+        self.user_init_connect = val
+    
+    @dbus.service.method('org.wicd.daemon')
+    def GetUserInitConnect(self):
+        return self.user_init_connect
 
     @dbus.service.method('org.wicd.daemon')
     def GetNeedWiredProfileChooser(self):
@@ -459,13 +486,6 @@ class ConnectionWizard(dbus.service.Object):
                         break
                 self.LastScan = master_scan
 
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def DisconnectWireless(self):
-        '''disconnects all wireless networks'''
-        self.SetForcedDisconnect(True)
-        self.wifi.Disconnect()
-        self.wired.Disconnect()
-    #end function DisconnectWireless
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetNumberOfNetworks(self):
@@ -587,12 +607,13 @@ class ConnectionWizard(dbus.service.Object):
     #end function GetCurrentNetwork
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def ConnectWireless(self,id):
+    def ConnectWireless(self,id, user_init=False):
         '''connects the the wireless network specified by id'''
         # Will returned instantly, that way we don't hold up dbus.
         # CheckIfWirelessConnecting can be used to test if the connection
         # is done.
         self.SetForcedDisconnect(False)
+        self.SetUserInitConnect(user_init)
         self.wifi.before_script = self.GetWirelessProperty(id,'beforescript')
         self.wifi.after_script = self.GetWirelessProperty(id,'afterscript')
         self.wifi.disconnect_script = self.GetWirelessProperty(id,'disconnectscript')
@@ -772,8 +793,9 @@ class ConnectionWizard(dbus.service.Object):
     #end function CheckPluggedIn
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def ConnectWired(self):
+    def ConnectWired(self, user_init=False):
         '''connects to a wired network'''
+        self.SetUserInitConnect(user_init)
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")

@@ -3,6 +3,7 @@ author = Adam Blackburn
 version = 1
 require key *Key
 -----
+ctrl_interface=/var/run/wpa_supplicant
 network={
        ssid="$_ESSID"
        scan_ssid=$_SCAN

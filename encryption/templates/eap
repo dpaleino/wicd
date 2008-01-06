@@ -3,6 +3,7 @@ author = Adam Blackburn
 version = 2
 require username *Username password *Password pac_file *Path_To_PAC_File
 -----
+ctrl_interface=/var/run/wpa_supplicant
 network={
 	ssid="$_ESSID"
 	scan_ssid=$_SCAN

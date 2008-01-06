@@ -42,6 +42,7 @@ import gobject
 import dbus
 import dbus.service
 import getopt
+import time
 
 # Import egg.trayicon if we're using an older gtk version
 if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
@@ -80,8 +81,15 @@ try:
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     print 'Success.'
 except Exception:
-    print 'Daemon not running...'
+    print 'Can\'t connect to the daemon, trying to start it automatically...'
     misc.PromptToStartDaemon()
+    time.sleep(1)
+    try:
+        print 'Attempting to connect tray to daemon...'
+        proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+        print 'Success.'
+    except:
+        print 'Failed to start daemon.  Aborting.'
     sys.exit(1)
 
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
@@ -108,12 +116,12 @@ class TrayIcon():
             self.tr = self.EggTrayIconGUI(use_tray)
         else:
             self.tr = self.StatusTrayIconGUI(use_tray)
-        self.icon_info = self.TrayConnectionInfo(self.tr)
+        self.icon_info = self.TrayConnectionInfo(self.tr, use_tray)
         
 
     class TrayConnectionInfo():
         """Class for updating the tray icon status"""
-        def __init__(self, tr):
+        def __init__(self, tr, use_tray=True):
             """Initialize variables needed for the icon status methods."""
             self.last_strength = -2
             self.still_wired = False
@@ -121,6 +129,7 @@ class TrayIcon():
             self.tried_reconnect = False
             self.connection_lost_counter = 0
             self.tr = tr
+            self.use_tray = use_tray
             self.update_tray_icon()
 
         def wired_profile_chooser(self):
@@ -130,6 +139,7 @@ class TrayIcon():
 
         def update_tray_icon(self):
             """Updates the tray icon and current connection status"""
+            if self.use_tray == False: return False
 
             # If we're currently connecting, we can shortcut all other checks
             if daemon.CheckIfConnecting():
@@ -205,7 +215,9 @@ class TrayIcon():
     class TrayIconGUI():
         """Base Tray Icon class
         
-        Implements methods and variables used by both egg/StatusIcon tray icons.
+        Implements methods and variables used by both egg/StatusIcon
+        tray icons.
+
         """
         def __init__(self, use_tray):
             menu = """
@@ -396,20 +408,18 @@ def main(argv):
         if opt in ('-h', '--help'):
             usage()
             sys.exit()
-        if opt in ('-n', '--no-tray'):
+        elif opt in ('-n', '--no-tray'):
             use_tray = False
     
     # Redirect stderr and stdout for logging purposes
     #sys.stderr = log
     #sys.stdout = log
     
-    print 'Done initalizing, starting...'
-
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)
     
     # Check to see if wired profile chooser was called before icon
-    # was launched (typically happens on startup or daemon restart)
+    # was launched (typically happens on startup or daemon restart).
     if daemon.GetNeedWiredProfileChooser():
         daemon.SetNeedWiredProfileChooser(False)
         tray_icon.icon_info.wired_profile_chooser()
@@ -419,6 +429,7 @@ def main(argv):
     
     bus.add_signal_receiver(tray_icon.icon_info.update_tray_icon,
                             'StatusChanged', 'org.wicd.daemon')                            
+    print 'Done.'
     
     mainloop = gobject.MainLoop()
     mainloop.run()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Configure the scripts for a particular network
+""" Configure the scripts for a particular network
 
 Script for configuring the scripts for a network passed in as a
 command line argument.  This needs to run a separate process because
@@ -25,6 +25,7 @@ run as the current user.
 #   You should have received a copy of the GNU General Public License
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+
 import os
 import sys
 import gtk

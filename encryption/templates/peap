@@ -3,6 +3,7 @@ author = Adam Blackburn
 version = 2
 require identity *Identity password *Password
 -----
+ctrl_interface=/var/run/wpa_supplicant
 network={
 	ssid="$_ESSID"
 	proto=RSN

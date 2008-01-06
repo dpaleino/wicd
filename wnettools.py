@@ -33,6 +33,7 @@ class WirelessInterface() -- Control a wireless network interface.
 import misc
 import re
 import wpath
+import time
 
 # Compile the regex patterns that will be used to search the output of iwlist
 # scan for info these are well tested, should work on most cards
@@ -53,6 +54,11 @@ wep_pattern         = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S
 altwpa_pattern      = re.compile('(wpa_ie)', re.I | re.M | re.S)
 wpa1_pattern        = re.compile('(WPA Version 1)', re.I | re.M  | re.S)
 wpa2_pattern        = re.compile('(WPA2)', re.I | re.M  | re.S)
+
+# Patterns for wpa_cli output
+auth_pattern       = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
+
+RALINK_DRIVER = 'ralink legacy'
 
 
 def SetDNS(dns1=None, dns2=None, dns3=None):
@@ -140,12 +146,53 @@ class Interface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    def _parse_dhclient(self, pipe):
+        """ Parse the output of dhclient
+        
+        Parses the output of dhclient and returns the status of
+        the connection attempt.
+        
+        """
+        dhclient_complete = False
+        dhclient_success = False
+        dh_no_offers = False
+        
+        while not dhclient_complete:
+            line = pipe.readline()
+            if line == '':  # Empty string means dhclient is done.
+                dhclient_complete = True
+            else:
+                print line.strip('\n')
+            if line.startswith('bound'):
+                dhclient_success = True
+                dhclient_complete = True
+            if line.startswith('No DHCPOFFERS'):
+                # We don't break in this case because dhclient will
+                # try to use an old lease if possible, so we may
+                # still make a successful connection.
+                dh_no_offers = True
+                
+        if dhclient_success:
+            print 'DHCP connection successful'
+            return 'success'
+        if dh_no_offers:
+            print 'DHCP connection failed: No DHCP offers recieved'
+            return 'no_dhcp_offers'
+        else:
+            print 'DHCP connection failed: Reason unknown'
+            return 'dhcp_failed'
+
 
     def StartDHCP(self):
         """ Start the DHCP client to obtain an IP address. """
+        # TODO: Not all distros use dhclient to get an IP.  We should
+        # add a way to determine what method is used (or let the user tell
+        # us), and run the cmd based on that.
         cmd = 'dhclient ' + self.iface
         if self.verbose: print cmd
-        misc.Run(cmd)
+        pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
+        
+        return self._parse_dhclient(pipe)
 
 
     def StopDHCP(self):
@@ -202,17 +249,32 @@ class WiredInterface(Interface):
 
 
     def GetPluggedIn(self):
-        """ Get the current physical connection state. """
-        mii_tool_data = misc.Run( 'mii-tool ' + self.iface,True)
-        if not misc.RunRegex(re.compile('(Invalid argument)',re.DOTALL | re.I | re.M | re.S),mii_tool_data) == None:
+        """ Get the current physical connection state.
+        
+        The method will first attempt to use ethtool do determine
+        physical connection state.  Should ethtool fail to run properly,
+        mii-tool will be used instead.
+        
+        """
+        link_tool = 'ethtool'
+        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+        if misc.RunRegex(re.compile('(Operation not supported)|\
+                                    (ethtool: command not found)', re.I),
+                                    tool_data) is not None:
+            print "ethtool check failed, falling back to mii-tool"
+            link_tool = 'mii-tool'
+    
+        if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M | re.S), 
+                                    tool_data) is not None:
             print 'wired interface appears down, putting up for mii-tool check'
-            misc.Run( 'ifconfig ' + self.iface + ' up' )
-        mii_tool_data = misc.Run( 'mii-tool ' + self.iface)
-        if not misc.RunRegex(re.compile('(link ok)',re.DOTALL | re.I | re.M  | re.S),mii_tool_data) == None:
+            self.Up()
+
+        tool_data = misc.Run(link_tool + ' ' + self.iface)
+        if misc.RunRegex(re.compile('(Link detected: yes)|(link ok)',
+                                    re.I | re.M  | re.S), tool_data) is not None:
             return True
         else:
             return False
-
 
 
 class WirelessInterface(Interface):
@@ -267,7 +329,7 @@ class WirelessInterface(Interface):
 
         # Get available network info from iwpriv get_site_survey
         # if we're using a ralink card (needed to get encryption info)
-        if self.wpa_driver == 'ralink legacy':
+        if self.wpa_driver == RALINK_DRIVER:
             ralink_info = self._GetRalinkScanInfo()
         else:
             ralink_info = None
@@ -372,7 +434,7 @@ class WirelessInterface(Interface):
         ap['mode'] = misc.RunRegex(mode_pattern, cell)
 
         # Break off here if we're using a ralink card
-        if self.wpa_driver == 'ralink legacy':
+        if self.wpa_driver == RALINK_DRIVER:
             ap = self._ParseRalinkAccessPoint(ap, ralink_info, cell)
         elif misc.RunRegex(wep_pattern, cell) == 'on':
             # Encryption - Default to WEP
@@ -410,7 +472,7 @@ class WirelessInterface(Interface):
         # quality displayed or it isn't found)
         if misc.RunRegex(signaldbm_pattern, cell):
             ap['strength'] = misc.RunRegex(signaldbm_pattern, cell)
-        elif self.wpa_driver != 'ralink legacy':  # This is already set for ralink
+        elif self.wpa_driver != RALINK_DRIVER:  # This is already set for ralink
             ap['strength'] = -1
 
         return ap
@@ -521,7 +583,7 @@ class WirelessInterface(Interface):
 
         """
         misc.ParseEncryption(network)
-        if self.wpa_driver == 'ralink legacy':
+        if self.wpa_driver == RALINK_DRIVER:
             self._AuthenticateRalinkLegacy(network)
         else:
             cmd = ('wpa_supplicant -B -i ' + self.iface + ' -c "'
@@ -530,6 +592,52 @@ class WirelessInterface(Interface):
             if self.verbose: print cmd
             misc.Run(cmd)
 
+    def ValidateAuthentication(self):
+        """ Validate WPA authentication.
+
+            Validate that the wpa_supplicant authentication
+            process was successful.
+
+            NOTE: It's possible this could return False,
+            even though in actuality wpa_supplicant just isn't
+            finished yet.
+
+        """
+        # Right now there's no way to do this for these drivers
+        if self.wpa_driver == RALINK_DRIVER:
+            return True
+        
+        cmd = 'wpa_cli -i ' + self.iface + ' status'
+        if self.verbose: print cmd
+        output = misc.Run(cmd)
+        result = misc.RunRegex(auth_pattern, output)
+        if result == "COMPLETED":
+            return True
+        elif result =="DISCONNECTED":
+            # Force a rescan to get wpa_supplicant moving again.
+            self._ForceSupplicantScan()
+            return self.ValidateAuthentication()
+        else:
+            print 'wpa_supplicant authentication may have failed.'
+            return False
+        pass
+
+    def _ForceSupplicantScan(self):
+        """ Force wpa_supplicant to rescan available networks.
+    
+        This function forces wpa_supplicant to rescan, then sleeps
+        to allow the scan to finish and reassociation to take place.
+        This works around authentication validation failing for
+        wpa_supplicant sometimes becaues it remains in a DISCONNECTED
+        state for quite a while, before a rescan takes places, all before
+        even attempting to authenticate.
+        
+        """
+        print 'wpa_supplicant rescan forced...'
+        cmd = 'wpa_cli -i' + self.iface + ' scan'
+        misc.Run(cmd)
+        time.sleep(5)
+        print 'Trying to validate authentication again'
 
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.

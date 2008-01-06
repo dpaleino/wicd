@@ -21,6 +21,8 @@ import os
 import sys
 import wpath
 import signal
+import time
+
 if __name__ == '__main__':
     wpath.chdir(__file__)
 try:
@@ -39,21 +41,24 @@ import time, os, misc, gettext, locale, gobject, dbus, dbus.service,pango
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
 
-#declare the connections to the daemon, so that they may be accessed
-#in any class
+# Declare the connections to the daemon, so that they may be accessed
+# in any class.
 bus = dbus.SystemBus()
 try:
-    print 'Attempting to connect daemon to gui...'
+    print 'Attempting to connect daemon to GUI...'
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    print 'success'
+    print 'Success'
 except:
-    print 'daemon not running, running gksudo ./daemon.py...'
+    print 'Daemon not running, trying to start it automatically.'
     misc.PromptToStartDaemon()
     time.sleep(1)
     try:
         proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+        print 'Daemon started succesfully'
     except:
-        print 'daemon still not running, aborting.'
+        print 'Daemon still not running, aborting.'
+        sys.exit(1)
+
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
@@ -65,19 +70,19 @@ config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 #http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
 #which is also under GPLv2
 
-#Get the local directory since we are not installing anything
+# Get the local directory since we are not installing anything.
 local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + '/translations'
-# Init the list of languages to support
+# Init the list of languages to support.
 langs = list()
-#Check the default locale
+# Check the default locale.
 lc, encoding = locale.getdefaultlocale()
 if (lc):
-    #If we have a default, it's the first in the list
+    # If we have a default, it's the first in the list.
     langs = [lc]
 # Now lets get all of the supported languages on the system
 osLanguage = os.environ.get('LANGUAGE', None)
 if (osLanguage):
-    #langage comes back something like en_CA:en_US:en_GB:en
+    # Language comes back something like en_CA:en_US:en_GB:en
     #on linuxy systems, on Win32 it's nothing, so we need to
     #split it up into a list
     langs += osLanguage.split(":")
@@ -97,10 +102,10 @@ lang = gettext.translation('wicd', local_path, languages=langs, fallback = True)
 #map _() to self.lang.gettext() which will translate them.
 _ = lang.gettext
 
-#keep all the language strings in a dictionary
-#by the english words
-#I'm not sure this is the best way to do it
-#but it works and makes it easy for me :)
+# Keep all the language strings in a dictionary
+# by the english words.
+# I'm not sure this is the best way to do it
+# but it works and makes it easy for me :)
 ##########
 # translations are done at
 # http://wicd.net/translator
@@ -190,7 +195,11 @@ language['setting_broadcast_address'] = _('Setting broadcast address...')
 language['setting_static_dns'] = _('Setting static DNS servers...')
 language['setting_static_ip'] = _('Setting static IP addresses...')
 language['running_dhcp'] = _('Obtaining IP address...')
+language['no_dhcp_offers'] = _('Connection Failed: No DHCP offers received.  \
+                                Couldn\'t get an IP Address.')
+language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
 language['aborted'] = _('Connection cancelled')
+language['bad_pass'] = _('Connection Failed: Bad password')
 language['done'] = _('Done connecting...')
 
 ########################################
@@ -210,7 +219,7 @@ class LinkButton(gtk.EventBox):
         self.show_all()
 
     def __setHandCursor(self,widget):
-        #we need this to set the cursor to a hand for the link labels
+        # We need this to set the cursor to a hand for the link labels.
         #I'm not entirely sure what it does :P
         hand = gtk.gdk.Cursor(gtk.gdk.HAND1)
         widget.window.set_cursor(hand)
@@ -239,7 +248,7 @@ class LabelEntry(gtk.HBox):
         self.show()
 
     def set_text(self,text):
-        #for compatibility...
+        # For compatibility...
         self.entry.set_text(text)
 
     def get_text(self):
@@ -259,7 +268,7 @@ class LabelEntry(gtk.HBox):
         self.label.set_sensitive(value)
 
     def hide_characters(self,widget=None,event=None):
-        #when the box looses focus, hide them
+        # When the box looses focus, hide them
         if self.auto_hide_text and widget:
             self.entry.set_visibility(False)
 
@@ -282,7 +291,7 @@ def noneToString(text):
         return str(text)
 
 def noneToBlankString(text):
-    '''if text is None, 'None', or '' then return '', otherwise return str(text)'''
+    '''If text is None, 'None', or '' then return '', otherwise return str(text)'''
     if text == None or text == "None" or text == "":
         return ""
     else:
@@ -296,7 +305,7 @@ def stringToNone(text):
         return str(text)
 
 def stringToBoolean(text):
-    '''turns a "True" to True or a "False" to False otherwise returns the text'''
+    '''Turns a "True" to True or a "False" to False otherwise returns the text'''
     if text == "True":
         return True
     if text == "False":
@@ -304,7 +313,7 @@ def stringToBoolean(text):
     return text
 
 def checkboxTextboxToggle(checkbox,textboxes):
-    #really bad practice, but checkbox == self
+    # Really bad practice, but checkbox == self
     for textbox in textboxes:
             textbox.set_sensitive(checkbox.get_active())
 
@@ -314,7 +323,7 @@ def checkboxTextboxToggle(checkbox,textboxes):
 
 
 class PrettyNetworkEntry(gtk.HBox):
-    '''adds an image and a connect button to a NetworkEntry'''
+    '''Adds an image and a connect button to a NetworkEntry'''
     def __init__(self,expander):
         gtk.HBox.__init__(self)
         # Add the stuff to the hbox (self)
@@ -333,10 +342,9 @@ class PrettyNetworkEntry(gtk.HBox):
 class PrettyWiredNetworkEntry(PrettyNetworkEntry):
     def __init__(self):
         PrettyNetworkEntry.__init__(self,WiredNetworkEntry())
-        #center the picture and pad it a bit
+        # Center the picture and pad it a bit
         self.image = gtk.Image()
         self.image.set_alignment(.5,0)
-
         self.image.set_size_request(60,-1)
         self.image.set_from_icon_name("network-wired",6)
         self.image.show()
@@ -381,23 +389,24 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
             # "converted" to strength bars, so suggestions from people
             # for a better way would be welcome.
             if dbm_strength >= -60:
-                self.image.set_from_file(wpath.images + 'signal-100.png')
+                signal_img = 'signal-100.png'
             elif dbm_strength >= -70:
-                self.image.set_from_file(wpath.images + 'signal-75.png')
+                signal_img = 'signal-75.png'
             elif dbm_strength >= -80:
-                self.image.set_from_file(wpath.images + 'signal-50.png')
+                signal_img = 'signal-50.png'
             else:
-                self.image.set_from_file(wpath.images + 'signal-25.png')
+                signal_img = 'signal-25.png'
         else:
             # Uses normal link quality, should be fine in most cases
             if strength > 75:
-                self.image.set_from_file(wpath.images + 'signal-100.png')
+                signal_img = 'signal-100.png'
             elif strength > 50:
-                self.image.set_from_file(wpath.images + 'signal-75.png')
+                signal_img = 'signal-75.png'
             elif strength > 25:
-                self.image.set_from_file(wpath.images + 'signal-50.png')
+                signal_img = 'signal-50.png'
             else:
-                self.image.set_from_file(wpath.images + 'signal-25.png')
+                signal_img = 'signal-25.png'
+        self.image.set_from_file(wpath.images + signal_img)
         self.expander.setSignalStrength(strength, dbm_strength)
 
     def setMACAddress(self,address):
@@ -412,10 +421,11 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
     def setMode(self,mode):
         self.expander.setMode(mode)
 
+
 class NetworkEntry(gtk.Expander):
-    '''the basis for the entries in the network list'''
+    '''The basis for the entries in the network list'''
     def __init__(self):
-        #make stuff exist, this is pretty long and boring
+        # Make stuff exist, this is pretty long and boring.
         gtk.Expander.__init__(self)
         self.txtIP = LabelEntry(language['ip'])
         self.txtIP.entry.connect('focus-out-event',self.setDefaults)
@@ -449,27 +459,27 @@ class NetworkEntry(gtk.Expander):
         self.checkboxStaticDNS.connect("toggled",self.toggleDNSCheckbox)
         self.checkboxGlobalDNS.connect("toggled",self.toggleGlobalDNSCheckbox)
         self.add(self.vboxTop)
-        #start with all disabled, then they will be enabled later
+        # Start with all disabled, then they will be enabled later.
         self.checkboxStaticIP.set_active(False)
         self.checkboxStaticDNS.set_active(False)
 
     def setDefaults(self,widget=None,event=None):
-        #after the user types in the IP address,
-        #help them out a little
-        ipAddress = self.txtIP.get_text() #for easy typing :)
+        # After the user types in the IP address,
+        # help them out a little.
+        ipAddress = self.txtIP.get_text()  # For easy typing :)
         netmask = self.txtNetmask
         gateway = self.txtGateway
         ip_parts = misc.IsValidIP(ipAddress)
         if ip_parts:
-            if stringToNone(gateway.get_text()) == None: #make sure the gateway box is blank
-                #fill it in with a .1 at the end
+            if stringToNone(gateway.get_text()) == None:  # Make sure the gateway box is blank
+                # Fill it in with a .1 at the end
                 gateway.set_text('.'.join(ip_parts[0:3]) + '.1')
 
             if stringToNone(netmask.get_text()) == None: # Make sure the netmask is blank
                         netmask.set_text('255.255.255.0') # Fill in the most common one
 
     def resetStaticCheckboxes(self):
-        #enable the right stuff
+        # Enable the right stuff
         if not stringToNone(self.txtIP.get_text()) == None:
             self.checkboxStaticIP.set_active(True)
             self.checkboxStaticDNS.set_active(True)
@@ -492,10 +502,9 @@ class NetworkEntry(gtk.Expander):
         self.toggleGlobalDNSCheckbox()
 
     def toggleIPCheckbox(self,widget=None):
-        #should disable the static IP text boxes
-        #and also enable the DNS checkbox when
-        #disabled and disable when enabled
-
+        # Should disable the static IP text boxes,
+        # and also enable the DNS checkbox when
+        # disabled and disable when enabled.
         if self.checkboxStaticIP.get_active():
             self.checkboxStaticDNS.set_active(True)
             self.checkboxStaticDNS.set_sensitive(False)
@@ -532,7 +541,7 @@ class NetworkEntry(gtk.Expander):
             self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
 
 class WiredNetworkEntry(NetworkEntry):
-    #creates the wired network expander
+    # Creates the wired network expander.
     def __init__(self):
         NetworkEntry.__init__(self)
         self.set_label(language['wired_network'])
@@ -541,8 +550,8 @@ class WiredNetworkEntry(NetworkEntry):
         self.isFullGUI = True
 
         self.profileList = config.GetWiredProfileList()
-        if self.profileList: #make sure there is something in it...
-            for x in config.GetWiredProfileList(): #add all the names to the combobox
+        if self.profileList:  # Make sure there is something in it...
+            for x in config.GetWiredProfileList():  # Add all the names to the combobox
                 self.comboProfileNames.append_text(x)
         self.hboxTemp = gtk.HBox(False,0)
         hboxDef = gtk.HBox(False,0)
@@ -668,19 +677,19 @@ class WiredNetworkEntry(NetworkEntry):
             self.resetStaticCheckboxes()
 
 class WirelessNetworkEntry(NetworkEntry):
-    #this class is respsponsible for creating the expander
-    #in each wirelessnetwork entry
+    # This class is respsponsible for creating the expander
+    # in each wirelessnetwork entry.
     def __init__(self,networkID):
         self.networkID = networkID
-        #create the data labels
+        # Create the data labels
         NetworkEntry.__init__(self)
         print "ESSID : " + wireless.GetWirelessProperty(networkID,"essid")
         self.set_label(wireless.GetWirelessProperty(networkID,"essid"))
         self.essid = wireless.GetWirelessProperty(networkID,"essid")
 
-        #make the vbox to hold the encryption stuff
+        # Make the vbox to hold the encryption stuff.
         self.vboxEncryptionInformation = gtk.VBox(False,0)
-        #make the combo box
+        # Make the combo box.
         self.comboEncryption = gtk.combo_box_new_text()
         self.checkboxEncryption = gtk.CheckButton(language['use_encryption'])
         self.lblStrength = GreyLabel()
@@ -888,7 +897,7 @@ class appGui:
 
         dic = { "refresh_clicked" : self.refresh_networks, 
                 "quit_clicked" : self.exit, 
-                "disconnect_clicked" : self.disconnect_wireless,
+                "disconnect_clicked" : self.disconnect,
                 "main_exit" : self.exit, 
                 "cancel_clicked" : self.cancel_connect,
                 "connect_clicked" : self.connect_hidden,
@@ -981,8 +990,8 @@ class appGui:
     def toggleEncryptionCheck(self,widget=None):
         self.keyEntry.set_sensitive(self.useEncryptionCheckbox.get_active())
 
-    def disconnect_wireless(self,widget=None):
-        wireless.DisconnectWireless()
+    def disconnect(self,widget=None):
+        daemon.Disconnect()
 
     def about_dialog(self,widget,event=None):
         dialog = gtk.AboutDialog()
@@ -1289,7 +1298,7 @@ class appGui:
             # if it exists.  maybe kept as a value in the network entry?  Not sure...
             print "connecting to wireless network..."
             config.SaveWirelessNetworkProfile(networkid)
-            wireless.ConnectWireless(networkid)
+            wireless.ConnectWireless(networkid, True)
 
         if type == "wired":
             print "wired"
@@ -1314,7 +1323,7 @@ class appGui:
                 wired.SetWiredProperty("dns3",'')
 
             config.SaveWiredNetworkProfile(networkentry.expander.comboProfileNames.get_active_text())
-            wired.ConnectWired()
+            wired.ConnectWired(True)
 
     def exit(self, widget=None, event=None):
         self.window.hide()
@@ -1327,9 +1336,6 @@ class appGui:
     
     def show_win(self):
         self.window.show()
-        # hide the status bar, as it might be confusing if it
-        # pops up randomly :)
-        self.status_area.hide_all()
         self.is_visible = True
 
 if __name__ == '__main__':

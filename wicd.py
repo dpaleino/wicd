@@ -103,7 +103,7 @@ language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
 language['connecting'] = _('Connecting')
-language['wired'] = _('wired network')
+language['wired'] = _('Wired Network')
 
 class TrayIcon():
     """Base Tray Icon class
@@ -146,7 +146,7 @@ class TrayIcon():
                 if wireless.CheckIfWirelessConnecting():
                     cur_network = wireless.GetCurrentNetwork()
                 else:
-                    cur_network = language['wired_network']
+                    cur_network = language['wired']
                 self.tr.set_tooltip(language['connecting'] + " to " + 
                                     cur_network + "...")
                 self.tr.set_from_file(wpath.images + "no-signal.png")

@@ -41,10 +41,10 @@ import misc
 _ = misc.get_gettext()
 
 language = {}
-language['configure_scripts'] = "Configure Scripts"
-language['before_script'] = "Pre-connection Script"
-language['after_script'] = "Post-connection Script"
-language['disconnect_script'] = "Disconnection Script"
+language['configure_scripts'] = _("Configure Scripts")
+language['before_script'] = _("Pre-connection Script")
+language['after_script'] = _("Post-connection Script")
+language['disconnect_script'] = _("Disconnection Script")
 
 bus = dbus.SystemBus()
 
@@ -103,24 +103,28 @@ def get_script_info(network, network_type):
 def write_scripts(network, network_type, script_info):
     """Writes script info to disk and loads it into the daemon"""
     con = ConfigParser.ConfigParser()
+    print "writing scripts, type",network_type
     if network_type == "wired":
         con.read(wired_conf)
         if con.has_section(network):
-            con.set(network, "beforescript", script_info["pre_entry"])
-            con.set(network, "afterscript", script_info["post_entry"])
-            con.set(network, "disconnectscript", script_info["disconnect_entry"])
-            con.write(open(wired_conf, "w"))
-            config.ReadWiredNetworkProfile(network)
+            con.add_section(network)
+        con.set(network, "beforescript", script_info["pre_entry"])
+        con.set(network, "afterscript", script_info["post_entry"])
+        con.set(network, "disconnectscript", script_info["disconnect_entry"])
+        con.write(open(wired_conf, "w"))
+        config.ReadWiredNetworkProfile(network)
+        config.SaveWiredNetworkProfile(network)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
         if con.has_section(bssid):
-            con.set(bssid, "beforescript", script_info["pre_entry"])
-            con.set(bssid, "afterscript", script_info["post_entry"])
-            con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
-            con.write(open(wireless_conf, "w"))
-            config.ReadWirelessNetworkProfile(int(network))
-            config.SaveWirelessNetworkProfile(int(network))
+            con.add_section(bssid)
+        con.set(bssid, "beforescript", script_info["pre_entry"])
+        con.set(bssid, "afterscript", script_info["post_entry"])
+        con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
+        con.write(open(wireless_conf, "w"))
+        config.ReadWirelessNetworkProfile(int(network))
+        config.SaveWirelessNetworkProfile(int(network))
 
 def main (argv):
     """Runs the script configuration dialog."""
@@ -145,9 +149,9 @@ def main (argv):
     post_entry = wTree.get_widget("post_entry")
     disconnect_entry = wTree.get_widget("disconnect_entry")
     
-    pre_entry.set_text(none_to_blank(script_info["pre_entry"]))
-    post_entry.set_text(none_to_blank(script_info["post_entry"]))
-    disconnect_entry.set_text(none_to_blank(script_info["disconnect_entry"]))
+    pre_entry.set_text(none_to_blank(script_info.get("pre_entry")))
+    post_entry.set_text(none_to_blank(script_info.get("post_entry")))
+    disconnect_entry.set_text(none_to_blank(script_info.get("disconnect_entry")))
     
     dialog.show_all()
     

@@ -1380,7 +1380,7 @@ class ConnectionStatus():
 
 def usage():
     print """
-wicd 1.33
+wicd 1.5.0
 wireless (and wired) connection daemon.
 
 Arguments:

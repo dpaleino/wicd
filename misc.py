@@ -55,9 +55,9 @@ def Run(cmd, include_stderr=False, return_pipe=False):
 
     f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds)
     
-        if return_pipe:
-            return f.stdout
-        else:
+    if return_pipe:
+        return f.stdout
+    else:
         return f.communicate()[0]
 
 def IsValidIP(ip):
@@ -143,7 +143,7 @@ def ParseEncryption(network):
     for x in template:
         x = x.strip("\n")
         if y > 4:
-            # blah blah replace stuff
+            # replace values
             x = x.replace("$_SCAN","0")
             for t in network:
                 # Don't bother if z's value is None cause it will cause errors
@@ -152,15 +152,15 @@ def ParseEncryption(network):
             z = z + "\n" + x
         y += 1
     # Write the data to the files
-    # then chmod them so they can't be read by evil little munchkins
-    fileness = open(wpath.networks + network["bssid"].replace(":", "").lower(),
+    # then chmod them so they can't be read by normal users
+    file = open(wpath.networks + network["bssid"].replace(":", "").lower(),
                     "w")
     os.chmod(wpath.networks + network["bssid"].replace(":", "").lower(), 0600)
     os.chown(wpath.networks + network["bssid"].replace(":", "").lower(), 0, 0)
-    # We could do this above, but we'd like to permod (permission mod)
+    # We could do this above, but we'd like to read protect
     # them before we write, so that it can't be read.
-    fileness.write(z)
-    fileness.close()
+    file.write(z)
+    file.close()
 
 def LoadEncryptionMethods():
     ''' Load encryption methods from configuration files

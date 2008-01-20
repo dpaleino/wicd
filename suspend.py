@@ -17,15 +17,14 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
 import dbus
-import time
+import dbus.service
 
 bus = dbus.SystemBus()
 proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 
-print daemon.Hello()
-time.sleep(3)
-daemon.SetSuspend(False)
-if daemon.CheckIfConnecting() == False:
-    print daemon.AutoConnect(True)
+if __name__ == '__main__':
+    daemon.SetSuspend(True)
+

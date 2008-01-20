@@ -106,6 +106,14 @@ def ReadFile(filename):
     my_file.close()
     return str(data)
 
+def to_bool(var):
+    """ Convert a string to type bool, but make "False"/"0" become False. """
+    if var == "False" or var == "0":
+        var = False
+    else:
+        var = bool(var)
+    return var
+
 def Noneify(variable):
     ''' convert string types to either None or booleans'''
     #set string Nones to real Nones
@@ -237,10 +245,12 @@ def to_unicode(x):
         default_encoding = locale.getpreferredencoding()
     except:
         default_encoding = None
+
     if default_encoding:
-        return x.decode(default_encoding).encode('utf-8')
-    else:
-        return x.decode('utf-8').encode('utf-8')
+        ret = x.decode(default_encoding, 'replace').encode('utf-8')
+    else:  # Just guess UTF-8
+        ret = x.decode('utf-8', 'replace').encode('utf-8')
+    return ret
 
 def error(parent, message): 
     """ Shows an error dialog """

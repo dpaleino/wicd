@@ -81,6 +81,21 @@ def SetDNS(dns1=None, dns2=None, dns3=None):
             resolv.write('nameserver ' + dns + '\n')
     resolv.close()
 
+def GetDefaultGateway():
+    """Attempts to determine the default gateway by parsing route -n"""
+    route_info = misc.Run("route -n")
+    lines = route_info.split('\n')
+    for line in lines:
+        words = line.split()
+        print words
+        if words[0] == '0.0.0.0':
+            gateway = words[1]
+            break
+        
+    if not gateway:
+        print 'couldn\'t retrieve default gateway from route -n'
+        gateway = None
+    return gateway
 
 def GetWirelessInterfaces():
     """ Get available wireless interfaces.
@@ -89,10 +104,9 @@ def GetWirelessInterfaces():
     The first interface available.
 
     """
-    return misc.RunRegex(
-        re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)', re.DOTALL | re.I | re.M  | re.S),
-        misc.Run('iwconfig'))
-
+    output = misc.Run('iwconfig')
+    return misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',
+                         re.I | re.M  | re.S), output)
 
 class Interface(object):
     """ Control a network interface. """
@@ -110,8 +124,8 @@ class Interface(object):
     def Check(self):
         """ Check that all required tools are available."""
         # TODO: Implement this function.
+        # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
         pass
-
 
     def Up(self):
         """ Bring the network interface up. """
@@ -119,13 +133,11 @@ class Interface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
 
-
     def Down(self):
         """ Take down the network interface. """
         cmd = 'ifconfig ' + self.iface + ' down'
         if self.verbose: print cmd
         misc.Run(cmd)
-
 
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
         """ Set the IP addresses of an interface.
@@ -182,7 +194,6 @@ class Interface(object):
             print 'DHCP connection failed: Reason unknown'
             return 'dhcp_failed'
 
-
     def StartDHCP(self):
         """ Start the DHCP client to obtain an IP address. """
         # TODO: Not all distros use dhclient to get an IP.  We should
@@ -194,20 +205,17 @@ class Interface(object):
         
         return self._parse_dhclient(pipe)
 
-
     def StopDHCP(self):
         """ Stop the DHCP client. """
         cmd = 'killall dhclient dhclient3'
         if self.verbose: print cmd
         misc.Run(cmd)
 
-
     def FlushRoutes(self):
         """ Flush all network routes. """
         cmd = 'ip route flush dev ' + self.iface
         if self.verbose: print cmd
         misc.Run(cmd)
-
 
     def SetDefaultRoute(self, gw):
         """ Add a default route with the specified gateway.
@@ -219,7 +227,6 @@ class Interface(object):
         cmd = 'route add default gw ' + gw
         if self.verbose: print cmd
         misc.Run(cmd)
-
 
     def GetIP(self):
         """ Get the IP address of the interface.
@@ -234,7 +241,6 @@ class Interface(object):
         return misc.RunRegex(ip_pattern,output)
 
 
-
 class WiredInterface(Interface):
     """ Control a wired network interface. """
     def __init__(self, iface, verbose=False):
@@ -246,7 +252,6 @@ class WiredInterface(Interface):
 
         """
         Interface.__init__(self, iface, verbose)
-
 
     def GetPluggedIn(self):
         """ Get the current physical connection state.
@@ -290,7 +295,6 @@ class WirelessInterface(Interface):
         Interface.__init__(self, iface, verbose)
         self.wpa_driver = wpa_driver
 
-
     def SetEssid(self, essid):
         """ Set the essid of the wireless interface.
 
@@ -302,13 +306,27 @@ class WirelessInterface(Interface):
         if self.verbose: print cmd
         misc.Run(cmd)
 
-
     def StopWPA(self):
         """ Stop wireless encryption. """
         cmd = 'killall wpa_supplicant'
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    def GetKillSwitchStatus(self):
+        """ Determines if the wireless killswitch is enabled. """
+        output = misc.Run("iwconfig " + self.iface)
+
+        killswitch_pattern = re.compile('.*radio off', re.I | re.M | re.S)
+        if killswitch_pattern.search(output):
+            radiostatus = True
+        else:
+            radiostatus = False
+
+        return radiostatus
+    
+    def GetIwconfig(self):
+        """ Returns the output of iwconfig for this interface. """
+        return misc.Run("iwconfig " + self.iface)
 
     def GetNetworks(self):
         """ Get a list of available wireless networks.
@@ -345,7 +363,6 @@ class WirelessInterface(Interface):
                     access_points.append(entry)
 
         return access_points
-
 
     def _FreqToChannel(self, freq):
         """ Translate the specified frequency to a channel.
@@ -390,7 +407,6 @@ class WirelessInterface(Interface):
         lines = iwpriv.splitlines()
         lines = lines[2:]
         return lines
-
 
     def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.
@@ -477,7 +493,6 @@ class WirelessInterface(Interface):
 
         return ap
 
-
     def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
         """ Parse encryption and signal strength info for ralink cards
 
@@ -518,7 +533,6 @@ class WirelessInterface(Interface):
                 ap['strength'] = info[1]
         return ap
 
-
     def SetMode(self, mode):
         """ Set the mode of the wireless interface.
 
@@ -532,7 +546,6 @@ class WirelessInterface(Interface):
         if self.verbose: print cmd
         misc.Run(cmd)
 
-
     def SetChannel(self, channel):
         """ Set the channel of the wireless interface.
 
@@ -544,7 +557,6 @@ class WirelessInterface(Interface):
         if self.verbose: print cmd
         misc.Run(cmd)
 
-
     def SetKey(self, key):
         """ Set the encryption key of the wireless interface.
 
@@ -555,7 +567,6 @@ class WirelessInterface(Interface):
         cmd = 'iwconfig ' + self.iface + ' key ' + key
         if self.verbose: print cmd
         misc.Run(cmd)
-
 
     def Associate(self, essid, channel=None, bssid=None):
         """ Associate with the specified wireless network.
@@ -573,7 +584,6 @@ class WirelessInterface(Interface):
             cmd += ' ap ' + bssid
         if self.verbose: print cmd
         misc.Run(cmd)
-
 
     def Authenticate(self, network):
         """ Authenticate with the specified wireless network.
@@ -627,10 +637,10 @@ class WirelessInterface(Interface):
     
         This function forces wpa_supplicant to rescan, then sleeps
         to allow the scan to finish and reassociation to take place.
-        This works around authentication validation failing for
-        wpa_supplicant sometimes becaues it remains in a DISCONNECTED
-        state for quite a while, before a rescan takes places, all before
-        even attempting to authenticate.
+        This works around authentication validation sometimes failing for
+        wpa_supplicant because it remains in a DISCONNECTED state for 
+        quite a while, after which a rescan is required, and then
+        attempting to authenticate.
         
         """
         print 'wpa_supplicant rescan forced...'
@@ -695,16 +705,19 @@ class WirelessInterface(Interface):
                             misc.Run(cmd)
 
 
-    def GetSignalStrength(self):
+    def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
         Returns:
         The signal strength.
 
         """
+        if not iwconfig:
         cmd = 'iwconfig ' + self.iface
         # if self.verbose: print cmd
         output = misc.Run(cmd)
+        else:
+            output = iwconfig
         # implemented the patch provided in
         # https://bugs.launchpad.net/wicd/+bug/175104
         # it was for the stable version, so I've improvised here
@@ -721,31 +734,38 @@ class WirelessInterface(Interface):
         return strength
 
 
-    def GetDBMStrength(self):
+    def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
 
         Returns:
         The dBm signal strength.
 
         """
+        if iwconfig:
         cmd = 'iwconfig ' + self.iface
         # if self.verbose: print cmd
         output = misc.Run(cmd)
+        else:
+            output = iwconfig
         dbm_strength = misc.RunRegex(signaldbm_pattern,output)
         return dbm_strength
 
 
-    def GetCurrentNetwork(self):
+    def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
 
         Returns:
         The current network essid.
 
         """
+        if not iwconfig:
         cmd = 'iwconfig ' + self.iface
         # if self.verbose: print cmd
         output = misc.Run(cmd)
-        network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',re.DOTALL | re.I | re.M  | re.S), output)
+        else:
+            output = iwconfig
+        network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',
+                                           re.I | re.M  | re.S), output)
         if network is not None:
             network = misc.to_unicode(network)
         return network

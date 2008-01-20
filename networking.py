@@ -63,13 +63,13 @@ class Controller(object):
     before_script = None
     after_script = None
     disconnect_script = None
+    driver = None
 
     def __init__(self):
         """ Initialise the class. """
         self.global_dns_1 = None
         self.global_dns_2 = None
         self.global_dns_3 = None
-
 
 
 class ConnectThread(threading.Thread):
@@ -83,9 +83,8 @@ class ConnectThread(threading.Thread):
     should_die = False
     lock = thread.allocate_lock()
 
-    def __init__(self, network, wireless, wired,
-                before_script, after_script, disconnect_script, gdns1,
-                gdns2, gdns3):
+    def __init__(self, network, wireless, wired, before_script, after_script, 
+                 disconnect_script, gdns1, gdns2, gdns3, debug):
         """ Initialise the required object variables and the thread.
 
         Keyword arguments:
@@ -115,6 +114,8 @@ class ConnectThread(threading.Thread):
         self.global_dns_2 = gdns2
         self.global_dns_3 = gdns3
 
+        self.debug = debug
+        
         self.SetStatus('interface_down')
 
 
@@ -168,7 +169,6 @@ class Wireless(Controller):
         Controller.__init__(self)
         self.wpa_driver = None
 
-
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
 
@@ -195,9 +195,7 @@ class Wireless(Controller):
         aps = wiface.GetNetworks()
         print aps
         aps.sort(key=lambda x: x['strength'])
-        #aps.reverse()
         return aps
-
 
     def Connect(self, network):
         """ Spawn a connection thread to connect to the network.
@@ -214,8 +212,7 @@ class Wireless(Controller):
         self.connecting_thread.start()
         return True
 
-
-    def GetSignalStrength(self):
+    def GetSignalStrength(self, iwconfig=None):
         """ Get signal strength of the current network.
 
         Returns:
@@ -224,10 +221,9 @@ class Wireless(Controller):
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                              self.wpa_driver)
-        return wiface.GetSignalStrength()
+        return wiface.GetSignalStrength(iwconfig)
 
-
-    def GetDBMStrength(self):
+    def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
 
         Returns:
@@ -236,10 +232,9 @@ class Wireless(Controller):
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                           self.wpa_driver)
-        return wiface.GetDBMStrength()
+        return wiface.GetDBMStrength(iwconfig)
 
-
-    def GetCurrentNetwork(self):
+    def GetCurrentNetwork(self, iwconfig=None):
         """ Get current network name.
 
         Returns:
@@ -248,8 +243,7 @@ class Wireless(Controller):
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                              self.wpa_driver)
-        return wiface.GetCurrentNetwork()
-
+        return wiface.GetCurrentNetwork(iwconfig)
 
     def GetIP(self):
         """ Get the IP of the interface.
@@ -262,6 +256,11 @@ class Wireless(Controller):
                                              self.wpa_driver)
         return wiface.GetIP()
 
+    def GetIwconfig(self):
+        """ Get the out of iwconfig. """
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
+        return wiface.GetIwconfig()
 
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key,
             enc_used, ics):
@@ -323,7 +322,6 @@ class Wireless(Controller):
                      ' -j MASQUERADE')
             misc.Run('echo 1 > /proc/sys/net/ipv4/ip_forward') # Enable routing
 
-
     def DetectWirelessInterface(self):
         """ Detect available wireless interfaces.
 
@@ -333,6 +331,10 @@ class Wireless(Controller):
         """
         return wnettools.GetWirelessInterfaces()
 
+    def GetKillSwitchStatus(self):
+        wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                             self.wpa_driver)
+        return wiface.GetKillSwitchStatus()
 
     def Disconnect(self):
         """ Disconnect from the network. """
@@ -355,7 +357,7 @@ class WirelessConnectThread(ConnectThread):
 
     def __init__(self, network, wireless, wired, wpa_driver,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3):
+            gdns2, gdns3, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -373,7 +375,7 @@ class WirelessConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3)
+            gdns2, gdns3, debug)
         self.wpa_driver = wpa_driver
 
 
@@ -440,7 +442,7 @@ class WirelessConnectThread(ConnectThread):
 
                 print 'Generating psk...'
                 key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
-                                         re.DOTALL | re.I | re.M  | re.S)
+                                         re.I | re.M  | re.S)
                 self.network['psk'] = misc.RunRegex(key_pattern,
                         misc.Run('wpa_passphrase "' + self.network['essid'] +
                                  '" "' + self.network['key'] + '"'))
@@ -473,23 +475,26 @@ class WirelessConnectThread(ConnectThread):
             self.connect_aborted('aborted')
             return
 
+        wiface.SetMode(self.network['mode'])
+        wiface.Associate(self.network['essid'], self.network['channel'],
+                         self.network['bssid'])
+
         if self.network.get('enctype') is not None:
             # Allow some time for wpa_supplicant to associate.
             # Hopefully 3 sec is enough.  If it proves to be inconsistent,
             # we might have to try to monitor wpa_supplicant more closely,
             # so we can tell exactly when it fails/succeeds.
+            self.SetStatus('validating_authentication')
             elapsed = time.time() - auth_time
             if elapsed < 3 and elapsed >= 0:
+                if self.debug:
+                    print 'sleeping for ' + str(3 - elapsed)
                 time.sleep(3 - elapsed)
 
             # Make sure wpa_supplicant was able to associate.
             if not wiface.ValidateAuthentication():
                 self.connect_aborted('bad_pass')
                 return
-
-        wiface.SetMode(self.network['mode'])
-        wiface.Associate(self.network['essid'], self.network['channel'],
-                         self.network['bssid'])
 
         # Authenticate after association for Ralink legacy cards.
         if self.wpa_driver == 'ralink legacy':
@@ -506,7 +511,7 @@ class WirelessConnectThread(ConnectThread):
             self.connect_aborted('aborted')
             return
 
-        if self.network.get('ip') is not None:
+        if self.network.get('ip'):
             self.SetStatus('setting_static_ip')
             print 'Setting static IP : ' + self.network['ip']
             wiface.SetAddress(self.network['ip'], self.network['netmask'])
@@ -565,7 +570,6 @@ class Wired(Controller):
         liface = wnettools.WiredInterface(self.wired_interface)
         return liface.GetPluggedIn()
 
-
     def Connect(self, network):
         """ Spawn a connection thread to connect to the network.
 
@@ -581,7 +585,6 @@ class Wired(Controller):
         self.connecting_thread.start()
         return True
 
-
     def GetIP(self):
         """ Get the IP of the interface.
 
@@ -592,17 +595,15 @@ class Wired(Controller):
         liface = wnettools.WiredInterface(self.wired_interface)
         return liface.GetIP()
 
-
     def Disconnect(self):
         """ Disconnect from the network. """
-        liface = wnettools.WirelessInterface(self.wired_interface)
+        liface = wnettools.WiredInterface(self.wired_interface)
         if self.disconnect_script != None:
             print 'Running wired disconnect script'
             misc.Run(self.disconnect_script)
 
         liface.SetAddress('0.0.0.0')
         liface.Down()
-
 
 
 class WiredConnectThread(ConnectThread):
@@ -612,11 +613,9 @@ class WiredConnectThread(ConnectThread):
     to the specified network.
 
     """
-
-
     def __init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3):
+            gdns2, gdns3, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -633,8 +632,7 @@ class WiredConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3)
-
+            gdns2, gdns3, debug)
 
     def run(self):
         """ The main function of the connection thread.

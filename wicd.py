@@ -102,6 +102,7 @@ language = {}
 language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
+language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
 language['connecting'] = _('Connecting')
 language['wired'] = _('Wired Network')
 
@@ -141,10 +142,11 @@ class TrayIcon():
             """Updates the tray icon and current connection status"""
             if self.use_tray == False: return False
 
+            iwconfig = wireless.GetIwconfig()
             # If we're currently connecting, we can shortcut all other checks
             if daemon.CheckIfConnecting():
                 if wireless.CheckIfWirelessConnecting():
-                    cur_network = wireless.GetCurrentNetwork()
+                    cur_network = wireless.GetCurrentNetwork(iwconfig)
                 else:
                     cur_network = language['wired']
                 self.tr.set_tooltip(language['connecting'] + " to " + 
@@ -166,12 +168,12 @@ class TrayIcon():
             
             # Check for a wireless connection
             elif cur_iface == wifi_iface:
-                cur_net_id = wireless.GetCurrentNetworkID()
+                cur_net_id = wireless.GetCurrentNetworkID(iwconfig)
                 lock = ''
                 if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                     lock = "-lock"
-                strength = wireless.GetPrintableSignalStrength()
-                self.network = str(wireless.GetCurrentNetwork())
+                strength = wireless.GetPrintableSignalStrength(iwconfig)
+                self.network = str(wireless.GetCurrentNetwork(iwconfig))
                 sig_string = daemon.FormatSignalForPrinting(str(strength))
                 wireless_ip = wireless.GetWirelessIP()
                 self.tr.set_tooltip(language['connected_to_wireless']
@@ -183,7 +185,12 @@ class TrayIcon():
             # If we made it here, we don't have a connection
             else:
                 self.tr.set_from_file(wpath.images + "no-signal.png")
-                self.tr.set_tooltip(language['not_connected'])
+                if wireless.GetKillSwitchEnabled():
+                    status = (language['not_connected'] + " (" + 
+                             language['killswitch_enabled'] + ")")
+                else:
+                    status = language['not_connected']
+                self.tr.set_tooltip(status)
 
             return True
 
@@ -384,7 +391,7 @@ wireless (and wired) connection daemon front-end.
 
 Arguments:
 \t-n\t--no-tray\tRun wicd without the tray icon.
-\t-h\t--help\t\tPrint this help.
+\t-h\t--help\t\tPrint this help information.
 """
 
 def main(argv):
@@ -410,10 +417,6 @@ def main(argv):
             sys.exit()
         elif opt in ('-n', '--no-tray'):
             use_tray = False
-    
-    # Redirect stderr and stdout for logging purposes
-    #sys.stderr = log
-    #sys.stdout = log
     
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)

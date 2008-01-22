@@ -135,8 +135,8 @@ class TrayIcon():
 
         def wired_profile_chooser(self):
             """Launch the wired profile chooser."""
-            daemon.SetNeedWiredProfileChooser(False)
             gui.WiredProfileChooser()
+            daemon.SetNeedWiredProfileChooser(False)
 
         def update_tray_icon(self):
             """Updates the tray icon and current connection status"""
@@ -364,7 +364,7 @@ class TrayIcon():
             gtk.StatusIcon.__init__(self)
 
             self.current_icon_path = ''
-            wireless.SetForcedDisconnect(False)
+            daemon.SetForcedDisconnect(False)
             self.set_visible(True)
             self.connect('activate', self.on_activate)
             self.connect('popup-menu', self.on_popup_menu)

@@ -349,10 +349,11 @@ class ConnectionWizard(dbus.service.Object):
         if fresh:
             self.Scan()
             #self.AutoConnectScan()  # Also scans for hidden networks
-        if self.CheckPluggedIn() == True:
-            if self.GetWiredAutoConnectMethod() == 2:
+        if self.CheckPluggedIn():
+            if self.GetWiredAutoConnectMethod() == 2 and \
+               not self.GetNeedWiredProfileChooser():
                 self.LaunchChooser()
-            else:
+            elif not self.GetWiredAutoConnectMethod != 2:
                 defaultNetwork = self.GetDefaultWiredNetwork()
                 if defaultNetwork != None:
                     self.ReadWiredNetworkProfile(defaultNetwork)
@@ -385,7 +386,7 @@ class ConnectionWizard(dbus.service.Object):
         return self.__printReturn('returning automatically reconnect when connection drops',do)
     #end function GetAutoReconnect
 
-    @dbus.service.method('org.wicd.daemon.wireless')
+    @dbus.service.method('org.wicd.daemon')
     def SetAutoReconnect(self, value):
         '''sets if wicd should try to reconnect with connection drops'''
         print 'setting automatically reconnect when connection drops'
@@ -415,6 +416,16 @@ class ConnectionWizard(dbus.service.Object):
     #end function CheckIfConnecting
     
     @dbus.service.method('org.wicd.daemon')
+    def CancelConnect(self):
+        ''' Cancels the wireless connection attempt '''
+        print 'canceling connection attempt'
+        if self.wifi.connecting_thread:
+            self.wifi.connecting_thread.should_die = True
+        if self.wired.connecting_thread:
+            self.wired.connecting_thread.should_die = True
+        misc.Run("killall dhclient dhclient3 wpa_supplicant")
+    
+    @dbus.service.method('org.wicd.daemon')
     def GetCurrentInterface(self):
         """ Returns the active interface """
         return self.current_interface
@@ -437,6 +448,24 @@ class ConnectionWizard(dbus.service.Object):
         self.need_profile_chooser = misc.to_bool(val)
     #end function SetNeedWiredProfileChooser
 
+    @dbus.service.method('org.wicd.daemon')
+    def GetForcedDisconnect(self):
+        ''' Returns whether connection was dropped by user, or for some other reason '''
+        return bool(self.forced_disconnect)
+    #end function GetForcedDisconnect
+
+    @dbus.service.method('org.wicd.daemon')
+    def SetForcedDisconnect(self,value):
+        '''
+        
+        Set to True when a user manually disconnects or cancels a connection.
+        It gets set to False as soon as the connection process is manually
+        started.
+        
+        '''
+        self.forced_disconnect = bool(value)
+    #end function SetForcedDisconnect
+    
     @dbus.service.method('org.wicd.daemon')
     def GetGUIOpen(self):
         """Returns the value of gui_open
@@ -466,7 +495,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
         print 'calling wired profile chooser'
-        daemon.SetNeedWiredProfileChooser(True)
+        self.SetNeedWiredProfileChooser(True)
         
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def StatusChanged(self):
@@ -653,24 +682,6 @@ class ConnectionWizard(dbus.service.Object):
     #end function Connect
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetForcedDisconnect(self):
-        ''' Returns whether wireless was dropped by user, or for some other reason '''
-        return bool(self.forced_disconnect)
-    #end function GetForcedDisconnect
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def SetForcedDisconnect(self,value):
-        '''
-        
-        Set to True when a user manually disconnects or cancels a connection.
-        It gets set to False as soon as the connection process is manually
-        started.
-        
-        '''
-        self.forced_disconnect = bool(value)
-    #end function SetForcedDisconnect
-
-    @dbus.service.method('org.wicd.daemon.wireless')
     def CheckIfWirelessConnecting(self):
         ''' Returns True if wireless interface is connecting, otherwise False'''
         if not self.wifi.connecting_thread == None:
@@ -704,15 +715,6 @@ class ConnectionWizard(dbus.service.Object):
         else:
             return False
     #end function CheckWirelessConnectingMessage
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def CancelConnect(self):
-        ''' Cancels the wireless connection attempt '''
-        print 'canceling connection attempt'
-        if not self.wifi.connecting_thread == None:
-            self.wifi.connecting_thread.should_die = True
-        misc.Run("killall dhclient dhclient3 wpa_supplicant")
-    #end function CancelConnect
 
     ########## WIRED FUNCTIONS
     #################################
@@ -817,7 +819,7 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckPluggedIn(self):
-        if not self.wired.wired_interface == None and self.wired.wired_interface != "None":
+        if self.wired.wired_interface and self.wired.wired_interface != "None":
             return self.__printReturn('returning plugged in',self.wired.CheckPluggedIn())
         else:
             return self.__printReturn("returning plugged in",None)

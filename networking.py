@@ -346,6 +346,7 @@ class Wireless(Controller):
 
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
+        wiface.Up()
 
 class WirelessConnectThread(ConnectThread):
     """ A thread class to perform the connection to a wireless network.
@@ -604,6 +605,7 @@ class Wired(Controller):
 
         liface.SetAddress('0.0.0.0')
         liface.Down()
+        liface.Up()
 
 
 class WiredConnectThread(ConnectThread):

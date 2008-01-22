@@ -595,7 +595,7 @@ class WiredNetworkEntry(NetworkEntry):
         if self.profileList:  # Make sure there is something in it...
             for x in config.GetWiredProfileList():  # Add all the names to the combobox
                 self.comboProfileNames.append_text(x)
-        hboxTemp = gtk.HBox(False,0)
+        self.hboxTemp = gtk.HBox(False,0)
         hboxDef = gtk.HBox(False,0)
         buttonAdd = gtk.Button(stock=gtk.STOCK_ADD)
         buttonDelete = gtk.Button(stock=gtk.STOCK_DELETE)
@@ -606,9 +606,9 @@ class WiredNetworkEntry(NetworkEntry):
         self.profileHelp.set_line_wrap(True)
 
         self.vboxTop.pack_start(self.profileHelp,fill=True,expand=True)
-        hboxTemp.pack_start(self.comboProfileNames, fill=True, expand=True)
-        hboxTemp.pack_start(buttonAdd, fill=False, expand=False)
-        hboxTemp.pack_start(buttonDelete, fill=False, expand=False)
+        self.hboxTemp.pack_start(self.comboProfileNames, fill=True, expand=True)
+        self.hboxTemp.pack_start(buttonAdd, fill=False, expand=False)
+        self.hboxTemp.pack_start(buttonDelete, fill=False, expand=False)
         hboxDef.pack_start(self.checkboxDefaultProfile,fill=False,expand=False)
 
         buttonAdd.connect("clicked", self.addProfile)
@@ -616,7 +616,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.comboProfileNames.connect("changed",self.changeProfile)
         self.scriptButton.connect("button-press-event", self.editScripts)
         self.vboxTop.pack_start(hboxDef)
-        self.vboxTop.pack_start(hboxTemp)
+        self.vboxTop.pack_start(self.hboxTemp)
 
         if stringToBoolean(wired.GetWiredProperty("default")):
             self.checkboxDefaultProfile.set_active(True)
@@ -844,7 +844,8 @@ class WirelessNetworkEntry(NetworkEntry):
             #data
             self.encryptionInfo[methods[ID][2][x][1]] = box.entry
 
-            box.entry.set_text(noneToBlankString(wireless.GetWirelessProperty(self.networkID,methods[ID][2][x][1])))
+            box.entry.set_text(noneToBlankString(
+                wireless.GetWirelessProperty(self.networkID,methods[ID][2][x][1])))
         self.vboxEncryptionInformation.show_all()
 
     def setSignalStrength(self,strength, dbm_strength):
@@ -879,7 +880,7 @@ class WiredProfileChooser:
         # Import and init WiredNetworkEntry to steal some of the
         # functions and widgets it uses.
         wiredNetEntry = WiredNetworkEntry()
-        wiredNetEntry.__init__()
+        #wiredNetEntry.__init__()
 
         dialog = gtk.Dialog(title = language['wired_network_found'],
                             flags = gtk.DIALOG_MODAL,
@@ -921,8 +922,7 @@ class WiredProfileChooser:
             wired.ConnectWired()
         else:
             if stoppopcheckbox.get_active() == True:
-                # Stops the pop-up from reappearing if cancelled
-                wired.use_default_profile = 1
+                daemon.SetForcedDisconnect(True)
         dialog.destroy()
 
 
@@ -1191,9 +1191,9 @@ class appGui:
         #is one in progress
         cancelButton = self.wTree.get_widget("cancel_button")
         cancelButton.set_sensitive(False)
-        wireless.CancelConnect()
+        daemon.CancelConnect()
         # Prevents automatic reconnecting if that option is enabled
-        wireless.SetForcedDisconnect(True)
+        daemon.SetForcedDisconnect(True)
 
     def pulse_progress_bar(self):
         try:

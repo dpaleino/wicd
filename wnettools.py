@@ -262,6 +262,10 @@ class WiredInterface(Interface):
         
         """
         link_tool = 'ethtool'
+        if not self.IsUp():
+            print 'Wired Interface is down, putting it up'
+            self.Up()
+            time.sleep(6)
         tool_data = misc.Run(link_tool + ' ' + self.iface, True)
         if misc.RunRegex(re.compile('(Operation not supported)|\
                                     (ethtool: command not found)', re.I),
@@ -269,16 +273,25 @@ class WiredInterface(Interface):
             print "ethtool check failed, falling back to mii-tool"
             link_tool = 'mii-tool'
     
-        if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M | re.S), 
-                                    tool_data) is not None:
-            print 'wired interface appears down, putting up for mii-tool check'
-            self.Up()
-
-        tool_data = misc.Run(link_tool + ' ' + self.iface)
+        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
         if misc.RunRegex(re.compile('(Link detected: yes)|(link ok)',
                                     re.I | re.M  | re.S), tool_data) is not None:
             return True
         else:
+            return False
+    
+    def IsUp(self):
+        """ Determines if the interface is up. """
+        cmd = "ifconfig " + self.iface
+        output = misc.Run(cmd)
+        lines = output.split('\n')
+        if len(lines) < 5:
+            return False
+        
+        for line in lines[1:4]:
+            if line.strip().startswith('UP'):
+                return True
+            
             return False
 
 

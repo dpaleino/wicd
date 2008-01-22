@@ -379,6 +379,10 @@ class PrettyWirelessNetworkEntry(PrettyNetworkEntry):
         self.setChannel(wireless.GetWirelessProperty(networkID,'channel'))
         self.setEncryption(wireless.GetWirelessProperty(networkID,'encryption'),
                            wireless.GetWirelessProperty(networkID,'encryption_method'))
+        self.expander.set_use_markup(True)
+        self.expander.set_label(self.expander.essid + "   " + 
+                                self.expander.lblEncryption.get_label() + "   "
+                                + self.expander.lblStrength.get_label())
         # Show everything
         self.show_all()
 
@@ -811,7 +815,7 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def changeEncryptionMethod(self,widget=None):
         for z in self.vboxEncryptionInformation:
-            z.destroy() #remove stuff in there already
+            z.destroy()  # Remove stuff in there already
         ID = self.comboEncryption.get_active()
         methods = misc.LoadEncryptionMethods()
         self.encryptionInfo = {}
@@ -851,12 +855,8 @@ class WirelessNetworkEntry(NetworkEntry):
     def setEncryption(self,on,type):
         if on and type:
             self.lblEncryption.set_label(str(type))
-            self.set_use_markup(True)
-            self.set_label(self.essid + ' <span color="#666666">' + str(type) + '</span>')
         if on and not type:
             self.lblEncryption.set_label(language['secured'])
-            self.set_use_markup(True)
-            self.set_label(self.essid + ' <span color="#666666">' + language['secured'] + '</span>')
         if not on:
             self.lblEncryption.set_label(language['unsecured'])
 
@@ -1341,6 +1341,9 @@ class appGui:
             else:
                 wireless.SetWirelessProperty(networkid, 'use_static_dns', False) 
                 wireless.SetWirelessProperty(networkid, 'use_global_dns', False)
+                wireless.SetWirelessProperty(networkid, 'dns1', '')
+                wireless.SetWirelessProperty(networkid, 'dns2', '')
+                wireless.SetWirelessProperty(networkid, 'dns3', '')
 
             if entry.checkboxEncryption.get_active():
                 print "setting encryption info..."

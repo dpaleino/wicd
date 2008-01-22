@@ -335,16 +335,16 @@ class PrettyNetworkEntry(gtk.HBox):
         self.tempVBox = gtk.VBox(False,1)
         self.tempVBox.show()
         self.connectButton = gtk.Button(stock=gtk.STOCK_CONNECT)
-        self.connect_hbox = gtk.HBox(False, 2)
-        self.connect_hbox.pack_start(self.connectButton, False, False)
-        self.connect_hbox.pack_start(self.expander.scriptButton, False, False)
-        self.connect_hbox.pack_start(self.expander.advancedButton, False, False)
-        self.connect_hbox.show()
+        connect_hbox = gtk.HBox(False, 2)
+        connect_hbox.pack_start(self.connectButton, False, False)
+        #connect_hbox.pack_start(self.expander.scriptButton, False, False)
+        #connect_hbox.pack_start(self.expander.advancedButton, False, False)
+        connect_hbox.show()
         self.tempVBox.pack_start(self.expander,fill=False,expand=False)
-        self.tempVBox.pack_start(self.connect_hbox, fill=False, expand=False)
+        self.tempVBox.pack_start(connect_hbox, fill=False, expand=False)
         self.pack_end(self.tempVBox)
-        self.expander.scriptButton.show()
-        self.expander.advancedButton.show()
+        #self.expander.scriptButton.show()
+        #self.expander.advancedButton.show()
 
 
 class PrettyWiredNetworkEntry(PrettyNetworkEntry):
@@ -488,6 +488,13 @@ class NetworkEntry(gtk.Expander):
         self.vboxAdvanced.pack_start(self.txtDNS1,fill=False,expand=False)
         self.vboxAdvanced.pack_start(self.txtDNS2,fill=False,expand=False)
         self.vboxAdvanced.pack_start(self.txtDNS3,fill=False,expand=False)
+
+        settings_hbox = gtk.HBox(False, 3)
+        settings_hbox.set_border_width(5)
+        settings_hbox.pack_start(self.scriptButton, fill=False, expand=False)
+        settings_hbox.pack_start(self.advancedButton, fill=False, expand=False)
+
+        self.vboxTop.pack_end(settings_hbox, fill=False, expand=False)
 
         # Connect the events to the actions
         self.checkboxStaticIP.connect("toggled",self.toggleIPCheckbox)
@@ -768,7 +775,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.checkboxEncryption.set_active(False)
         self.comboEncryption.set_sensitive(False)
 
-        if stringToBoolean(wireless.GetWirelessProperty(networkID,"automatic")) == True:
+        if stringToBoolean(wireless.GetWirelessProperty(networkID,"automatic")):
             self.checkboxAutoConnect.set_active(True)
         else:
             self.checkboxAutoConnect.set_active(False)
@@ -805,7 +812,8 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def updateAutoConnect(self,widget):
         wireless.SetWirelessProperty(self.networkID,"automatic",
-                                     self.checkboxAutoConnect.get_active())
+                                     noneToString(self.checkboxAutoConnect.get_active()))
+        
         config.SaveWirelessNetworkProperty(self.networkID,"automatic")
 
     def toggleEncryption(self,widget=None):

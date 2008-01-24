@@ -23,7 +23,6 @@ import locale
 import gettext
 import time
 import sys
-import re
 from subprocess import *
 
 if __name__ == '__main__':
@@ -261,18 +260,12 @@ def error(parent, message):
     dialog.run()
     dialog.destroy()
 
-def shell_escape(data):
-    escape_re = re.compile('(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF])')
-    print 'data is',data
-    return escape_re.sub("\\\\", data)
-
 class LogWriter():
     """ A class to provide timestamped logging. """
     def __init__(self):
         self.file = open(wpath.log + 'wicd.log','a')
         self.eol = True
         self.logging_enabled = True
-
 
     def __del__(self):
         self.file.close()

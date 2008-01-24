@@ -446,7 +446,8 @@ class WirelessConnectThread(ConnectThread):
                                          re.I | re.M  | re.S)
                 self.network['psk'] = misc.RunRegex(key_pattern,
                         misc.Run('wpa_passphrase "' + self.network['essid'] +
-                                 '" "' + self.network['key'] + '"'))
+                                 '" "' + misc.shell_escape(self.network['key'])
+                                 + '"'))
             # Generate the wpa_supplicant file...
             if self.network.get('enctype') is not None:
                 self.SetStatus('generating_wpa_config')

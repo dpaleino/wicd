@@ -23,6 +23,7 @@ import locale
 import gettext
 import time
 import sys
+import re
 from subprocess import *
 
 if __name__ == '__main__':
@@ -260,6 +261,10 @@ def error(parent, message):
     dialog.run()
     dialog.destroy()
 
+def shell_escape(data):
+    escape_re = re.compile('(?=[^a-zA-Z0-9_.\/\-\x7F-\xFF])')
+    print 'data is',data
+    return escape_re.sub("\\\\", data)
 
 class LogWriter():
     """ A class to provide timestamped logging. """
@@ -307,7 +312,6 @@ class LogWriter():
                     data.replace('\n', '\n' + self.get_time() + ' :: '))
             if self.eol: self.file.write('\n')
             self.file.close()
-
 
     def get_time(self):
         """ Return a string with the current time nicely formatted.

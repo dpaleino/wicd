@@ -41,13 +41,11 @@ class WiredConnectThread() -- Connection thread for wired
 #
 
 import re
-import sys
 import threading
 import thread
 import misc
 import wnettools
 import wpath
-import os
 import time
 
 if __name__ == '__main__':
@@ -114,6 +112,7 @@ class ConnectThread(threading.Thread):
         self.global_dns_2 = gdns2
         self.global_dns_3 = gdns3
 
+        self.connecting_message = None
         self.debug = debug
         
         self.SetStatus('interface_down')

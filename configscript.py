@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Configure the scripts for a particular network
+""" Configure the scripts for a particular network.
 
 Script for configuring the scripts for a network passed in as a
 command line argument.  This needs to run a separate process because
@@ -26,13 +26,11 @@ run as the current user.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os
 import sys
 import gtk
 import ConfigParser
 import dbus
 import dbus.service
-import pygtk
 import gtk.glade
 
 import wpath
@@ -67,21 +65,26 @@ wired_conf = wpath.etc + 'wired-settings.conf'
 
 
 def none_to_blank(text):
-    """if text is None, 'None', or '' then return '', otherwise return str(text)"""
+    """ Converts special string cases to a blank string.
+    
+    If text is None, 'None', or '' then this method will
+    return '', otherwise it will just return str(text).
+    
+    """
     if text == None or text == "None" or text == "":
         return ""
     else:
         return str(text)
 
 def blank_to_none(text):
-    """Convert an empty or null string to 'None'"""
+    """ Convert an empty or null string to 'None'. """
     if text == "" or text == None:
         return "None"
     else:
         return str(text)
 
 def get_script_info(network, network_type):
-    """Reads script info from disk and load it into the configuration dialog"""
+    """ Read script info from disk and load it into the configuration dialog """
     info = {}
     con = ConfigParser.ConfigParser()
     if network_type == "wired":
@@ -101,7 +104,7 @@ def get_script_info(network, network_type):
     return info
 
 def write_scripts(network, network_type, script_info):
-    """Writes script info to disk and loads it into the daemon"""
+    """ Writes script info to disk and loads it into the daemon. """
     con = ConfigParser.ConfigParser()
     print "writing scripts, type",network_type
     if network_type == "wired":
@@ -110,7 +113,8 @@ def write_scripts(network, network_type, script_info):
             con.add_section(network)
         con.set(network, "beforescript", script_info["pre_entry"])
         con.set(network, "afterscript", script_info["post_entry"])
-        con.set(network, "disconnectscript", script_info["disconnect_entry"])
+            con.set(network, "disconnectscript",
+                    script_info["disconnect_entry"])
         con.write(open(wired_conf, "w"))
         config.ReadWiredNetworkProfile(network)
         config.SaveWiredNetworkProfile(network)

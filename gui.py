@@ -19,9 +19,17 @@
 
 import os
 import sys
-import wpath
 import signal
 import time
+import gettext
+import locale
+import gobject
+import dbus
+import dbus.service
+import pango
+
+import misc
+import wpath
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -35,8 +43,6 @@ try:
 except:
     print 'Missing GTK and gtk.glade.  Aborting.'
     sys.exit(1)
-
-import time, os, misc, gettext, locale, gobject, dbus, dbus.service,pango
 
 if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
     import dbus.glib
@@ -65,42 +71,7 @@ wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
 vpn_session = dbus.Interface(proxy_obj, 'org.wicd.daemon.vpn')
 config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 
-#Translation stuff
-#borrowed from an excellent post on how to do this on
-#http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
-#which is also under GPLv2
-
-# Get the local directory since we are not installing anything.
-local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + '/translations'
-# Init the list of languages to support.
-langs = list()
-# Check the default locale.
-lc, encoding = locale.getdefaultlocale()
-if (lc):
-    # If we have a default, it's the first in the list.
-    langs = [lc]
-# Now lets get all of the supported languages on the system
-osLanguage = os.environ.get('LANGUAGE', None)
-if (osLanguage):
-    # Language comes back something like en_CA:en_US:en_GB:en
-    #on linuxy systems, on Win32 it's nothing, so we need to
-    #split it up into a list
-    langs += osLanguage.split(":")
-
-#Now add on to the back of the list the translations that we
-#know that we have, our defaults
-langs += ["en_US"] # I add english because a lot of people can read it
-#Now langs is a list of all of the languages that we are going
-#to try to use.  First we check the default, then what the system
-#told us, and finally the 'known' list
-
-gettext.bindtextdomain('wicd', local_path)
-gettext.textdomain('wicd')
-# Get the language to use
-lang = gettext.translation('wicd', local_path, languages=langs, fallback = True)
-
-#map _() to self.lang.gettext() which will translate them.
-_ = lang.gettext
+_ = misc.get_gettext()
 
 # Keep all the language strings in a dictionary
 # by the english words.
@@ -171,6 +142,7 @@ language['wired_network_found'] = _('Wired connection detected')
 language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
 language['display_type_dialog'] = _('Use dBm to measure signal strength')
 language['scripts'] = _('Scripts')
+language['invalid_address'] = _('Invalid address in $A entry.')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -691,9 +663,10 @@ class WiredNetworkEntry(NetworkEntry):
             self.profileHelp.hide()
 
     def toggleDefaultProfile(self,widget):
-        if self.checkboxDefaultProfile.get_active() == True:
+        if self.checkboxDefaultProfile.get_active():
             print 'unsetting previous default profile...'
-            config.UnsetWiredDefault() # Makes sure there is only one default profile at a time
+            # Make sure there is only one default profile at a time
+            config.UnsetWiredDefault()
         wired.SetWiredProperty("default",self.checkboxDefaultProfile.get_active())
         config.SaveWiredNetworkProfile(self.comboProfileNames.get_active_text())
 
@@ -707,17 +680,20 @@ class WiredNetworkEntry(NetworkEntry):
             print profileName
             config.ReadWiredNetworkProfile(profileName)
 
-            self.txtIP.set_text(noneToBlankString(wired.GetWiredProperty("ip")))
-            self.txtNetmask.set_text(noneToBlankString(wired.GetWiredProperty("netmask")))
-            self.txtGateway.set_text(noneToBlankString(wired.GetWiredProperty("gateway")))
+            self.txtIP.set_text(self.format_entry("ip"))
+            self.txtNetmask.set_text(self.format_entry("netmask"))
+            self.txtGateway.set_text(self.format_entry("gateway"))
 
-            self.txtDNS1.set_text(noneToBlankString(wired.GetWiredProperty("dns1")))
-            self.txtDNS2.set_text(noneToBlankString(wired.GetWiredProperty("dns2")))
-            self.txtDNS3.set_text(noneToBlankString(wired.GetWiredProperty("dns3")))
+            self.txtDNS1.set_text(self.format_entry("dns1"))
+            self.txtDNS2.set_text(self.format_entry("dns2"))
+            self.txtDNS3.set_text(self.format_entry("dns3"))
 
-            self.checkboxDefaultProfile.set_active(stringToBoolean(wired.GetWiredProperty("default")))
-
+            is_default = wired.GetWiredProperty("default")
+            self.checkboxDefaultProfile.set_active(stringToBoolean(is_default))
             self.resetStaticCheckboxes()
+
+    def format_entry(self, label):
+        return noneToBlankString(wired.GetWiredProperty(label))
 
 class WirelessNetworkEntry(NetworkEntry):
     # This class is respsponsible for creating the expander
@@ -750,26 +726,28 @@ class WirelessNetworkEntry(NetworkEntry):
         self.hboxStatus.pack_start(self.lblMode,fill=False,expand=True)
         self.hboxStatus.pack_start(self.lblChannel,fill=False,expand=True)
 
-        self.vboxTop.pack_start(self.checkboxAutoConnect,fill=False,expand=False)
+        self.vboxTop.pack_start(self.checkboxAutoConnect, fill=False, 
+                                expand=False)
         self.vboxTop.pack_start(self.hboxStatus,fill=True,expand=True)
 
-        self.vboxAdvanced.pack_start(self.checkboxEncryption,fill=False,expand=False)
+        self.vboxAdvanced.pack_start(self.checkboxEncryption, fill=False,
+                                     expand=False)
 
-        self.txtIP.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"ip")))
-        self.txtNetmask.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"netmask")))
-        self.txtGateway.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"gateway")))
+        self.txtIP.set_text(self.format_entry(networkID,"ip"))
+        self.txtNetmask.set_text(self.format_entry(networkID,"netmask"))
+        self.txtGateway.set_text(self.format_entry(networkID,"gateway"))
 
         if wireless.GetWirelessProperty(networkID,'use_global_dns'):
             self.checkboxGlobalDNS.set_active(True)
 
         if wireless.GetWirelessProperty(networkID,"dns1") != None:
-            self.txtDNS1.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns1")))
+            self.txtDNS1.set_text(self.format_entry(networkID,"dns1"))
 
         if wireless.GetWirelessProperty(networkID,'dns2') != None:
-            self.txtDNS2.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns2")))
+            self.txtDNS2.set_text(self.format_entry(networkID,"dns2"))
 
         if wireless.GetWirelessProperty(networkID,'dns3') != None:
-            self.txtDNS3.set_text(noneToBlankString(wireless.GetWirelessProperty(networkID,"dns3")))
+            self.txtDNS3.set_text(self.format_entry(networkID,"dns3"))
 
         self.resetStaticCheckboxes()
         encryptionTypes = misc.LoadEncryptionMethods()
@@ -777,7 +755,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.checkboxEncryption.set_active(False)
         self.comboEncryption.set_sensitive(False)
 
-        if stringToBoolean(wireless.GetWirelessProperty(networkID,"automatic")):
+        if stringToBoolean(self.format_entry(networkID, "automatic")):
             self.checkboxAutoConnect.set_active(True)
         else:
             self.checkboxAutoConnect.set_active(False)
@@ -788,7 +766,8 @@ class WirelessNetworkEntry(NetworkEntry):
         activeID = -1 #set the menu to this item when we are done
         for x in encryptionTypes:
             self.comboEncryption.append_text(encryptionTypes[x][0])
-            if encryptionTypes[x][1] == wireless.GetWirelessProperty(networkID,"enctype"):
+            if encryptionTypes[x][1] == wireless.GetWirelessProperty(networkID,
+                                                                     "enctype"):
                 activeID = x
 
         self.comboEncryption.set_active(activeID)
@@ -807,12 +786,15 @@ class WirelessNetworkEntry(NetworkEntry):
         self.comboEncryption.connect("changed",self.changeEncryptionMethod)
         self.show_all()
 
+    def format_entry(self, networkid, label):
+        return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
+
     def editScripts(self, widget=None, event=None):
         result = os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "./configscript.py",
                    str(self.networkID), "wireless", os.environ)
         print result
 
-    def updateAutoConnect(self,widget):
+    def updateAutoConnect(self, widget=None):
         wireless.SetWirelessProperty(self.networkID,"automatic",
                                      noneToString(self.checkboxAutoConnect.get_active()))
         
@@ -878,7 +860,9 @@ class WirelessNetworkEntry(NetworkEntry):
         self.lblMode.set_label(str(mode))
 
 class WiredProfileChooser:
+    """ Class for displaying the wired profile chooser. """
     def __init__(self):
+        """ Initializes and runs the wired profile chooser. """
         # Import and init WiredNetworkEntry to steal some of the
         # functions and widgets it uses.
         wiredNetEntry = WiredNetworkEntry()
@@ -904,14 +888,17 @@ class WiredProfileChooser:
         wiredNetEntry.vboxTop.remove(wiredNetEntry.profileHelp)
 
         dialog.vbox.pack_start(instructLabel,fill=False,expand=False)
-        dialog.vbox.pack_start(wiredNetEntry.profileHelp,fill=False,expand=False)
-        dialog.vbox.pack_start(wiredNetEntry.hboxTemp,fill=False,expand=False)
+        dialog.vbox.pack_start(wiredNetEntry.profileHelp, fill=False,
+                               expand=False)
+        dialog.vbox.pack_start(wiredNetEntry.hboxTemp, fill=False,
+                               expand=False)
         dialog.vbox.pack_start(stoppopcheckbox,fill=False,expand=False)
         dialog.show_all()
 
+        wired_profiles = wiredNetEntry.comboProfileNames
         wiredNetEntry.profileHelp.hide()
         if wiredNetEntry.profileList != None:
-            wiredNetEntry.comboProfileNames.set_active(0)
+            wired_profiles.set_active(0)
             print "wired profiles found"
         else:
             print "no wired profiles found"
@@ -919,17 +906,19 @@ class WiredProfileChooser:
 
         response = dialog.run()
         if response == 1:
-            print 'reading profile ', wiredNetEntry.comboProfileNames.get_active_text()
-            config.ReadWiredNetworkProfile(wiredNetEntry.comboProfileNames.get_active_text())
+            print 'reading profile ', wired_profiles.get_active_text()
+            config.ReadWiredNetworkProfile(wired_profiles.get_active_text())
             wired.ConnectWired()
         else:
-            if stoppopcheckbox.get_active() == True:
+            if stoppopcheckbox.get_active():
                 daemon.SetForcedDisconnect(True)
         dialog.destroy()
 
 
 class appGui:
+    """ The main wicd GUI class. """
     def __init__(self):
+        """ Initializes everything needed for the GUI. """
         gladefile = "data/wicd.glade"
         self.windowname = "gtkbench"
         self.wTree = gtk.glade.XML(gladefile)
@@ -946,11 +935,8 @@ class appGui:
         self.wTree.signal_autoconnect(dic)
 
         # Set some strings in the GUI - they may be translated
-
-        self.wTree.get_widget("label_instructions").set_label(language['select_a_network'])
-        # I don't know how to translate a menu entry.
-        # More specifically, I don't know how to set a menu entry's text
-        # self.wTree.get_widget("connect_button").modify_text(language['_network'])
+        label_instruct = self.wTree.get_widget("label_instructions")
+        label_instruct.set_label(language['select_a_network'])
 
         probar = self.wTree.get_widget("progressbar")
         probar.set_text(language['connecting'])
@@ -982,7 +968,7 @@ class appGui:
         gobject.timeout_add(100, self.pulse_progress_bar)
 
     def create_adhoc_network(self,widget=None):
-        '''shows a dialog that creates a new adhoc network'''
+        """ Shows a dialog that creates a new adhoc network. """
         print "Starting the Ad-Hoc Network Creation Process..."
         dialog = gtk.Dialog(title = language['create_adhoc_network'],
                             flags = gtk.DIALOG_MODAL,
@@ -1027,12 +1013,15 @@ class appGui:
         dialog.destroy()
         
     def toggleEncryptionCheck(self,widget=None):
+        """ Toggles the encryption key entry box for the ad-hoc dialog. """
         self.keyEntry.set_sensitive(self.useEncryptionCheckbox.get_active())
 
     def disconnect(self,widget=None):
+        """ Disconnects from any active network. """
         daemon.Disconnect()
 
     def about_dialog(self,widget,event=None):
+        """ Displays an about dialog. """
         dialog = gtk.AboutDialog()
         dialog.set_name("Wicd")
         dialog.set_version(daemon.Hello())
@@ -1042,7 +1031,9 @@ class appGui:
         dialog.destroy()
 
     def settings_dialog(self,widget,event=None):
-        dialog = gtk.Dialog(title=language['preferences'], flags=gtk.DIALOG_MODAL,
+        """ Displays a general settings dialog. """
+        dialog = gtk.Dialog(title=language['preferences'],
+                            flags=gtk.DIALOG_MODAL,
                             buttons=(gtk.STOCK_OK,1,gtk.STOCK_CANCEL,2))
         dialog.set_has_separator(False)
         dialog.set_size_request(465,-1)
@@ -1055,9 +1046,15 @@ class appGui:
         displaytypecheckbox = gtk.CheckButton(language['display_type_dialog'])
         displaytypecheckbox.set_active(daemon.GetSignalDisplayType())
         sepline = gtk.HSeparator()
-        usedefaultradiobutton = gtk.RadioButton(None,language['use_default_profile'],False)
-        showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,language['show_wired_list'],False)
-        lastusedradiobutton = gtk.RadioButton(usedefaultradiobutton,language['use_last_used_profile'],False)
+        usedefaultradiobutton = gtk.RadioButton(None, 
+                                                language['use_default_profile'],
+                                                False)
+        showlistradiobutton = gtk.RadioButton(usedefaultradiobutton,
+                                              language['show_wired_list'],
+                                              False)
+        lastusedradiobutton = gtk.RadioButton(usedefaultradiobutton,
+                                              language['use_last_used_profile'],
+                                              False)
         if wired.GetWiredAutoConnectMethod() == 1:
             usedefaultradiobutton.set_active(True)
             print 'use default profile'
@@ -1105,7 +1102,8 @@ class appGui:
         dns2Entry = LabelEntry(language['dns'] + ' ' + language['2'])
         dns3Entry = LabelEntry(language['dns'] + ' ' + language['3'])
 
-        useGlobalDNSCheckbox.connect("toggled",checkboxTextboxToggle,(dns1Entry, dns2Entry, dns3Entry))
+        useGlobalDNSCheckbox.connect("toggled", checkboxTextboxToggle,
+                                     (dns1Entry, dns2Entry, dns3Entry))
 
         dns_addresses = daemon.GetGlobalDNSAddresses()
 
@@ -1169,6 +1167,7 @@ class appGui:
             dialog.destroy()
 
     def connect_hidden(self,widget):
+        """ Prompts the user for a hidden network, then scans for it. """
         # Should display a dialog asking
         # for the ssid of a hidden network
         # and displaying connect/cancel buttons
@@ -1189,6 +1188,7 @@ class appGui:
             dialog.destroy()
 
     def cancel_connect(self,widget):
+        """ Alerts the daemon to cancel the connection process. """
         #should cancel a connection if there
         #is one in progress
         cancelButton = self.wTree.get_widget("cancel_button")
@@ -1198,6 +1198,7 @@ class appGui:
         daemon.SetForcedDisconnect(True)
 
     def pulse_progress_bar(self):
+        """ Pulses the progress bar while connecting to a network. """
         try:
             self.wTree.get_widget("progressbar").pulse()
         except:
@@ -1205,24 +1206,25 @@ class appGui:
         return True
 
     def update_statusbar(self):
-        #should update the status bar
-        #every couple hundred milliseconds
+        """ Updates the status bar. """
+        # Update the status bar every couple hundred milliseconds.
         if self.is_visible == False:
             return True
         iwconfig = wireless.GetIwconfig()
         wireless_ip = wireless.GetWirelessIP()
         wiredConnecting = wired.CheckIfWiredConnecting()
         wirelessConnecting = wireless.CheckIfWirelessConnecting()
+
         if wirelessConnecting or wiredConnecting:
             self.network_list.set_sensitive(False)
             self.status_area.show_all()
             if self.statusID:
                 self.status_bar.remove(1,self.statusID)
             if wirelessConnecting:
-                self.statusID = self.status_bar.push(1,wireless.GetCurrentNetwork(iwconfig) + ': ' +
+                self.set_status(wireless.GetCurrentNetwork(iwconfig) + ': ' +
                                                        language[str(wireless.CheckWirelessConnectingMessage())])
             if wiredConnecting:
-                self.statusID = self.status_bar.push(1,language['wired_network'] + ': ' + 
+                self.set_status(language['wired_network'] + ': ' + 
                                                        language[str(wired.CheckWiredConnectingMessage())])
         else:
             self.network_list.set_sensitive(True)
@@ -1243,7 +1245,7 @@ class appGui:
                         else:
                             strength = str(dbm_strength)
                         ip = str(wireless_ip)
-                        self.statusID=self.status_bar.push(1, language['connected_to_wireless'].replace
+                        self.set_status(language['connected_to_wireless'].replace
                                                           ('$A',network).replace
                                                           ('$B',daemon.FormatSignalForPrinting(strength)).replace
                                                           ('$C',wireless_ip))
@@ -1251,13 +1253,26 @@ class appGui:
             wired_ip = wired.GetWiredIP()
             if wired_ip:
                 if wired.CheckPluggedIn():
-                    self.statusID = self.status_bar.push(1, language['connected_to_wired'].
-                                                            replace('$A', wired_ip))
+                    self.set_status(language['connected_to_wired'].replace('$A',
+                                                                      wired_ip))
                 return True
-            self.statusID = self.status_bar.push(1,language['not_connected'])
+            self.set_status(language['not_connected'])
         return True
 
+    def set_status(self, msg):
+        """ Sets the status bar message for the GUI. """
+        self.statusID = self.status_bar.push(1, msg)
+
     def refresh_networks(self,widget=None,fresh=True,hidden=None):
+        """ Refreshes the network list.
+        
+        If fresh=True, scans for wireless networks and displays the results.
+        If a ethernet connection is available, or the user has chosen to,
+        displays a Wired Network entry as well.
+        If hidden isn't None, will scan for networks after running
+        iwconfig <wireless interface> essid <hidden>.
+        
+        """
         print "refreshing..."
 
         printLine = False  # We don't print a separator by default.
@@ -1267,14 +1282,13 @@ class appGui:
 
         if wired.CheckPluggedIn() or wired.GetAlwaysShowWiredInterface():
             printLine = True  # In this case we print a separator.
-            wiredNetwork = PrettyWiredNetworkEntry()
-            self.network_list.pack_start(wiredNetwork,fill=False,expand=False)
-            wiredNetwork.connectButton.connect("button-press-event", 
-                                               self.connect, "wired", 0, 
-                                               wiredNetwork)
-            wiredNetwork.expander.advancedButton.connect("button-press-event",
-                                                         self.editAdvanced,
-                                                         "wired", 0, wiredNetwork)
+            wirednet = PrettyWiredNetworkEntry()
+            self.network_list.pack_start(wirednet, fill=False, expand=False)
+            wirednet.connectButton.connect("button-press-event", self.connect,
+                                           "wired", 0, wirednet)
+            wirednet.expander.advancedButton.connect("button-press-event",
+                                                     self.edit_advanced,
+                                                     "wired", 0, wirednet)
         # Scan
         if fresh:
             # Even if it is None, it can still be passed.
@@ -1294,17 +1308,15 @@ class appGui:
                     sep.show()
                 else:
                     printLine = True
-                tempNetwork = PrettyWirelessNetworkEntry(x)
-                tempNetwork.show_all()
-                self.network_list.pack_start(tempNetwork, expand=False,
-                                             fill=False)
-                tempNetwork.connectButton.connect("button-press-event",
+                tempnet = PrettyWirelessNetworkEntry(x)
+                tempnet.show_all()
+                self.network_list.pack_start(tempnet, expand=False, fill=False)
+                tempnet.connectButton.connect("button-press-event",
                                                   self.connect, "wireless", x,
-                                                  tempNetwork)
-                tempNetwork.expander.advancedButton.connect("button-press-event",
-                                                            self.editAdvanced,
-                                                            "wireless", x, 
-                                                            tempNetwork)
+                                               tempnet)
+                tempnet.expander.advancedButton.connect("button-press-event",
+                                                        self.edit_advanced,
+                                                        "wireless", x, tempnet)
         else:
             instructLabel.hide()
             if wireless.GetKillSwitchEnabled():
@@ -1315,6 +1327,7 @@ class appGui:
             label.show()
 
     def save_settings(self, type, networkid, networkentry):
+        """ Verifies and saves the settings for the network entry. """
         entry = networkentry.expander
         entlist = []
         
@@ -1333,8 +1346,8 @@ class appGui:
                     
         for lblent in entlist:
             if not misc.IsValidIP(lblent.get_text()):
-                misc.error(self.window, "Invalid address in " +
-                           lblent.label.get_label() + " entry.")
+                misc.error(self.window, language['invalid_address'].
+                           replace('$A', lblent.label.get_label()))
                 return False
 
         # Now save the settings.
@@ -1381,7 +1394,8 @@ class appGui:
                 encryptionInfo = entry.encryptionInfo
                 encrypt_methods = misc.LoadEncryptionMethods()
                 wireless.SetWirelessProperty(networkid, "enctype",
-                                             encrypt_methods[entry.comboEncryption.get_active()][1])
+                                             encrypt_methods[entry.comboEncryption.
+                                                             get_active()][1])
                 for x in encryptionInfo:
                     wireless.SetWirelessProperty(networkid,x,
                                                  noneToString(encryptionInfo[x].get_text()))
@@ -1421,7 +1435,15 @@ class appGui:
             config.SaveWiredNetworkProfile(entry.comboProfileNames.get_active_text())
         return True
 
-    def editAdvanced(self, widget, event, type, networkid, networkentry):
+    def edit_advanced(self, widget, event, ttype, networkid, networkentry):
+        """ Display the advanced settings dialog.
+        
+        Displays the advanced settings dialog and saves any changes made.
+        If errors occur in the settings, an error message will be displayed
+        and the user won't be able to save the changes until the errors
+        are fixed.
+        
+        """
         dialog = gtk.Dialog(title=language['advanced_settings'],
                             flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,
                                                           gtk.RESPONSE_ACCEPT,
@@ -1430,12 +1452,18 @@ class appGui:
         dialog.vbox.pack_start(networkentry.expander.vboxAdvanced)
         dialog.show_all()
         while True:
-            if self.run_advanced(dialog, networkid, networkentry):
+            if self.run_settings_dialog(dialog, networkid, networkentry):
                 break
         dialog.vbox.remove(networkentry.expander.vboxAdvanced)
         dialog.destroy()
         
-    def run_advanced(self, dialog, networkid, networkentry):
+    def run_settings_dialog(self, dialog, networkid, networkentry):
+        """ Runs the settings dialog.
+        
+        Runs the settings dialog and returns True if settings are saved
+        successfully, and false otherwise.
+        
+        """
         result = dialog.run()
         if result == gtk.RESPONSE_ACCEPT:
             if self.save_settings(type, networkid, networkentry):

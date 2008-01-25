@@ -228,6 +228,10 @@ def noneToString(text):
         return str(text)
     
 def get_gettext():
+    """ Set up gettext for translations. """
+    # Translation stuff
+    # borrowed from an excellent post on how to do this on
+    # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
     local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + '/translations'
     langs = []
     lc, encoding = locale.getdefaultlocale()

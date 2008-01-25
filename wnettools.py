@@ -361,7 +361,7 @@ class WirelessInterface(Interface):
         # Get available network info from iwpriv get_site_survey
         # if we're using a ralink card (needed to get encryption info)
         if self.wpa_driver == RALINK_DRIVER:
-            ralink_info = self._GetRalinkScanInfo()
+            ralink_info = self._GetRalinkInfo()
         else:
             ralink_info = None
 

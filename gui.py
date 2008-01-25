@@ -519,6 +519,8 @@ class NetworkEntry(gtk.Expander):
 
             if stringToNone(netmask.get_text()) == None: # Make sure the netmask is blank
                         netmask.set_text('255.255.255.0') # Fill in the most common one
+        elif ipAddress != "":
+            misc.error(None, "Invalid IP Address Entered.")
 
     def resetStaticCheckboxes(self):
         # Enable the right stuff
@@ -1314,7 +1316,28 @@ class appGui:
 
     def save_settings(self, type, networkid, networkentry):
         entry = networkentry.expander
+        entlist = []
+        
+        # First make sure all the Addresses entered are valid.
+        if entry.checkboxStaticIP.get_active():
+            for ent in [entry.txtIP, entry.txtNetmask, entry.txtGateway]:
+                entlist.append(ent)
+                
+        if entry.checkboxStaticDNS.get_active() and \
+           not entry.checkboxGlobalDNS.get_active():
+            entlist.append(entry.txtDNS1)
+            # Only append addition dns entries if they're entered.
+            for ent in [entry.txtDNS2, entry.txtDNS3]:
+                if ent.get_text() != "":
+                    entlist.append(ent)
+                    
+        for lblent in entlist:
+            if not misc.IsValidIP(lblent.get_text()):
+                misc.error(self.window, "Invalid address in " +
+                           lblent.label.get_label() + " entry.")
+                return False
 
+        # Now save the settings.
         if type == "wireless":
             wireless.SetWirelessProperty(networkid, "automatic",
                                          noneToString(entry.checkboxAutoConnect.get_active()))
@@ -1381,7 +1404,7 @@ class appGui:
             if entry.checkboxStaticDNS.get_active() and \
                not entry.checkboxGlobalDNS.get_active():
                 wireless.SetWiredProperty('use_static_dns', True)
-                wireless.SetWiredProperty('use_global_dns', True)
+                wireless.SetWiredProperty('use_global_dns', False)
                 wired.SetWiredProperty("dns1", noneToString(entry.txtDNS1.get_text()))
                 wired.SetWiredProperty("dns2", noneToString(entry.txtDNS2.get_text()))
                 wired.SetWiredProperty("dns3", noneToString(entry.txtDNS3.get_text()))
@@ -1396,6 +1419,7 @@ class appGui:
                 wired.SetWiredProperty("dns3",'')
 
             config.SaveWiredNetworkProfile(entry.comboProfileNames.get_active_text())
+        return True
 
     def editAdvanced(self, widget, event, type, networkid, networkentry):
         dialog = gtk.Dialog(title=language['advanced_settings'],
@@ -1405,17 +1429,28 @@ class appGui:
                                                           gtk.RESPONSE_REJECT))
         dialog.vbox.pack_start(networkentry.expander.vboxAdvanced)
         dialog.show_all()
-        result = dialog.run()
-        if result == gtk.RESPONSE_ACCEPT:
-            self.save_settings(type, networkid, networkentry)
+        while True:
+            if self.run_advanced(dialog, networkid, networkentry):
+                break
         dialog.vbox.remove(networkentry.expander.vboxAdvanced)
         dialog.destroy()
+        
+    def run_advanced(self, dialog, networkid, networkentry):
+        result = dialog.run()
+        if result == gtk.RESPONSE_ACCEPT:
+            if self.save_settings(type, networkid, networkentry):
+                return True
+            else:
+                return False
+        return True
             
     def connect(self, widget, event, type, networkid, networkentry):
         cancelButton = self.wTree.get_widget("cancel_button")
         cancelButton.set_sensitive(True)
         
-        self.save_settings(type, networkid, networkentry)
+        if not self.save_settings(type, networkid, networkentry):
+            return False
+        
         if type == "wireless":
             wireless.ConnectWireless(networkid)
         elif type == "wired":

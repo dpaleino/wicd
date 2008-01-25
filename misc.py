@@ -1,4 +1,4 @@
-''' Misc - miscellaneous functions for wicd '''
+""" Misc - miscellaneous functions for wicd """
 
 #
 #        Copyright (C) 2007 Adam Blackburn
@@ -23,13 +23,14 @@ import locale
 import gettext
 import time
 import sys
+import gtk
 from subprocess import *
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
 def Run(cmd, include_stderr=False, return_pipe=False):
-    ''' Run a command 
+    """ Run a command.
 
     Runs the given command, returning either the output
     of the program, or a pipe to read output from.
@@ -43,7 +44,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
                   false, all that will be returned is
                   one output string from the command.
 
-    '''
+    """
     
     cmd = to_unicode(str(cmd))
     if include_stderr:
@@ -61,16 +62,18 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         return f.communicate()[0]
 
 def IsValidIP(ip):
-    ''' Make sure an entered IP is valid '''
-    if ip != None: # Make sure there is an IP
-        if ip.count('.') == 3: # Make sure there are 3 periods
-            ipNumbers = ip.split('.') # Split it up
-            if not '' in ipNumbers: # Make sure the ip was split into 3 groups
+    """ Make sure an entered IP is valid """
+    if ip != None:
+        if ip.count('.') == 3:
+            ipNumbers = ip.split('.')
+            for number in ipNumbers:
+                if not number.isdigit() or int(number) > 255:
+                    return False
                 return ipNumbers
     return False
 
 def PromptToStartDaemon():
-    ''' Prompt the user to start the daemon '''
+    """ Prompt the user to start the daemon """
     daemonloc = wpath.bin + 'launchdaemon.sh'
     gksudo_args = ['gksudo', '--message', 
                    'Wicd needs to access your computer\'s network cards.',
@@ -78,7 +81,7 @@ def PromptToStartDaemon():
     os.spawnvpe(os.P_WAIT, 'gksudo', gksudo_args, os.environ)
 
 def RunRegex(regex, string):
-    ''' runs a regex search on a string '''
+    """ runs a regex search on a string """
     m = regex.search(string)
     if m:
         return m.groups()[0]
@@ -90,15 +93,15 @@ def log(text):
     log.write(text + "\n")
 
 def WriteLine(my_file, text):
-    ''' write a line to a file '''
+    """ write a line to a file """
     my_file.write(text + "\n")
 
 def ExecuteScript(script):
-    ''' Execute a command '''
+    """ Execute a command """
     os.system(script + ' &')
 
 def ReadFile(filename):
-    ''' read in a file and return it's contents as a string '''
+    """ read in a file and return it's contents as a string """
     if not os.path.exists(filename):
         return None
     my_file = open(filename,'r')
@@ -115,7 +118,7 @@ def to_bool(var):
     return var
 
 def Noneify(variable):
-    ''' convert string types to either None or booleans'''
+    """ Convert string types to either None or booleans"""
     #set string Nones to real Nones
     if variable == "None" or variable == "":
         return None
@@ -133,12 +136,12 @@ def Noneify(variable):
     return variable
 
 def ParseEncryption(network):
-    ''' Parse through an encryption template file
+    """ Parse through an encryption template file
 
     Parses an encryption template, reading in a network's info
     and creating a config file for it
 
-    '''
+    """
     #list = open("encryption/templates/active","r")
     #types = list.readlines()
     #for i in types:
@@ -171,13 +174,13 @@ def ParseEncryption(network):
     file.close()
 
 def LoadEncryptionMethods():
-    ''' Load encryption methods from configuration files
+    """ Load encryption methods from configuration files
 
     Loads all the encryption methods from the template files
     in /encryption/templates into a data structure.  To be
     loaded, the template must be listed in the "active" file.
 
-    '''
+    """
     encryptionTypes = {}
     types = open("encryption/templates/active","r")
     enctypes = types.readlines()
@@ -213,11 +216,12 @@ def LoadEncryptionMethods():
     return encryptionTypes
 
 def noneToString(text):
-    ''' Convert None, "None", or "" to string type "None"
+    """ Convert None, "None", or "" to string type "None"
 
-    used for putting text in a text box if the value to put in is 'None' the box will be blank
+    Used for putting text in a text box.  If the value to put in is 'None',
+    the box will be blank.
 
-    '''
+    """
     if text == None or text == "None" or text == "":
         return "None"
     else:

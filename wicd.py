@@ -44,6 +44,11 @@ import dbus.service
 import getopt
 import time
 
+# Wicd specific imports
+import wpath
+import misc
+import gui
+
 # Import egg.trayicon if we're using an older gtk version
 if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
     import egg.trayicon
@@ -53,11 +58,6 @@ else:
     
 if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib
-
-# Wicd specific imports
-import wpath
-import misc
-import gui
 
 if sys.platform == 'linux2':
     # Set process name.  Only works on Linux >= 2.1.57.

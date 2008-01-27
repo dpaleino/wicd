@@ -272,8 +272,8 @@ class WiredInterface(Interface):
                                     tool_data) is not None:
             print "ethtool check failed, falling back to mii-tool"
             link_tool = 'mii-tool'
-    
-        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+            tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+
         if misc.RunRegex(re.compile('(Link detected: yes|link ok)',
                                     re.I | re.M  | re.S), tool_data) is not None:
             return True

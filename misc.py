@@ -1,7 +1,7 @@
 """ Misc - miscellaneous functions for wicd """
 
 #
-#        Copyright (C) 2007 Adam Blackburn
+#   Copyright (C) 2007 Adam Blackburn
 #   Copyright (C) 2007 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -28,6 +28,11 @@ from subprocess import *
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
+    
+NOT_CONNECTED = 0
+CONNECTING = 1
+WIRELESS = 2
+WIRED = 3
 
 def Run(cmd, include_stderr=False, return_pipe=False):
     """ Run a command.
@@ -45,7 +50,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
                   one output string from the command.
 
     """
-    
+
     cmd = to_unicode(str(cmd))
     if include_stderr:
         err = STDOUT
@@ -69,7 +74,7 @@ def IsValidIP(ip):
             for number in ipNumbers:
                 if not number.isdigit() or int(number) > 255:
                     return False
-                return ipNumbers
+            return ipNumbers
     return False
 
 def PromptToStartDaemon():
@@ -232,7 +237,8 @@ def get_gettext():
     # Translation stuff
     # borrowed from an excellent post on how to do this on
     # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
-    local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + '/translations'
+    local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + \
+                 '/translations'
     langs = []
     lc, encoding = locale.getdefaultlocale()
     if (lc):
@@ -242,7 +248,7 @@ def get_gettext():
         langs += osLanguage.split(":")
     langs += ["en_US"]
     lang = gettext.translation('wicd', local_path, languages=langs,
-                               fallback = True)
+                               fallback=True)
     _ = lang.gettext
     return _
 
@@ -252,6 +258,7 @@ def to_unicode(x):
     try: # This may never fail, but let's be safe
         default_encoding = locale.getpreferredencoding()
     except:
+        print 'Could not get default encoding'
         default_encoding = None
 
     if default_encoding:
@@ -313,7 +320,7 @@ class LogWriter():
                     data.replace('\n', '\n' + self.get_time() + ' :: '))
             if self.eol: self.file.write('\n')
             self.file.close()
-
+            
     def get_time(self):
         """ Return a string with the current time nicely formatted.
 

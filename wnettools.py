@@ -48,7 +48,7 @@ altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', re.I | re.M | re
 signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)', re.I | re.M | re.S)
 mode_pattern        = re.compile('.*Mode:(.*?)\n', re.I | re.M  | re.S)
 freq_pattern        = re.compile('.*Frequency:(.*?)\n', re.I | re.M  | re.S)
-ip_pattern          = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
+ip_pattern          = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
 
 wep_pattern         = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
 altwpa_pattern      = re.compile('(wpa_ie)', re.I | re.M | re.S)
@@ -238,7 +238,7 @@ class Interface(object):
         cmd = 'ifconfig ' + self.iface
         #if self.verbose: print cmd
         output = misc.Run(cmd)
-        return misc.RunRegex(ip_pattern,output)
+        return misc.RunRegex(ip_pattern, output)
 
 
 class WiredInterface(Interface):
@@ -292,8 +292,8 @@ class WiredInterface(Interface):
             if line.strip().startswith('UP'):
                 return True
             
-            return False
-
+        return False
+        
 
 class WirelessInterface(Interface):
     """ Control a wireless network interface. """
@@ -440,7 +440,7 @@ class WirelessInterface(Interface):
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
         try:
             ap['essid'] = misc.to_unicode(ap['essid'])
-        except UnicodeDecodeError, UnicodeEncodeError:
+        except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
         if ap['essid'] == '<hidden>':
@@ -470,20 +470,20 @@ class WirelessInterface(Interface):
             ap['encryption'] = True
             ap['encryption_method'] = 'WEP'
 
-            if misc.RunRegex(wpa1_pattern,cell) == 'WPA Version 1':
+            if misc.RunRegex(wpa1_pattern, cell) == 'WPA Version 1':
                 ap['encryption_method'] = 'WPA'
 
-            if misc.RunRegex(altwpa_pattern,cell) == 'wpa_ie':
+            if misc.RunRegex(altwpa_pattern, cell) == 'wpa_ie':
                 ap['encryption_method'] = 'WPA'
 
-            if misc.RunRegex(wpa2_pattern,cell) == 'WPA2':
+            if misc.RunRegex(wpa2_pattern, cell) == 'WPA2':
                 ap['encryption_method'] = 'WPA2'
         else:
             ap['encryption'] = False
 
         # Link Quality
         # Set strength to -1 if the quality is not found
-        
+
         # more of the patch from
         # https://bugs.launchpad.net/wicd/+bug/175104
         if (strength_pattern.match(cell)):
@@ -493,7 +493,7 @@ class WirelessInterface(Interface):
             else:
                 ap["quality"] = int(strength)
         elif misc.RunRegex(altstrength_pattern,cell):
-            ap['quality'] = misc.RunRegex(altstrength_pattern,cell)
+            ap['quality'] = misc.RunRegex(altstrength_pattern, cell)
         else:
             ap['quality'] = -1
 
@@ -636,7 +636,7 @@ class WirelessInterface(Interface):
         result = misc.RunRegex(auth_pattern, output)
         if result == "COMPLETED":
             return True
-        elif result =="DISCONNECTED":
+        elif result == "DISCONNECTED":
             # Force a rescan to get wpa_supplicant moving again.
             self._ForceSupplicantScan()
             return self.ValidateAuthentication()
@@ -726,9 +726,9 @@ class WirelessInterface(Interface):
 
         """
         if not iwconfig:
-        cmd = 'iwconfig ' + self.iface
-        # if self.verbose: print cmd
-        output = misc.Run(cmd)
+            cmd = 'iwconfig ' + self.iface
+            # if self.verbose: print cmd
+            output = misc.Run(cmd)
         else:
             output = iwconfig
         # implemented the patch provided in
@@ -741,9 +741,9 @@ class WirelessInterface(Interface):
         [(strength, max_strength)] = strength_pattern.findall(output)
         if max_strength and strength:
             return 100 * int(strength) / int(max_strength)
-             
+        
         if strength == None:
-            strength = misc.RunRegex(altstrength_pattern,output)
+            strength = misc.RunRegex(altstrength_pattern, output)
         return strength
 
 
@@ -755,12 +755,12 @@ class WirelessInterface(Interface):
 
         """
         if iwconfig:
-        cmd = 'iwconfig ' + self.iface
-        # if self.verbose: print cmd
-        output = misc.Run(cmd)
+            cmd = 'iwconfig ' + self.iface
+            # if self.verbose: print cmd
+            output = misc.Run(cmd)
         else:
             output = iwconfig
-        dbm_strength = misc.RunRegex(signaldbm_pattern,output)
+        dbm_strength = misc.RunRegex(signaldbm_pattern, output)
         return dbm_strength
 
 
@@ -772,9 +772,9 @@ class WirelessInterface(Interface):
 
         """
         if not iwconfig:
-        cmd = 'iwconfig ' + self.iface
-        # if self.verbose: print cmd
-        output = misc.Run(cmd)
+            cmd = 'iwconfig ' + self.iface
+            # if self.verbose: print cmd
+            output = misc.Run(cmd)
         else:
             output = iwconfig
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',

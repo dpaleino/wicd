@@ -42,7 +42,7 @@ import ConfigParser
 import gobject
 import dbus
 import dbus.service
-if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
+if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib
 # wicd specific libraries
 import wpath
@@ -67,7 +67,7 @@ logging_enabled = True
 class LogWriter:
     """ A class to provide timestamped logging. """
     def __init__(self):
-        self.file = open(wpath.log + 'wicd.log','a')
+        self.file = open(wpath.log + 'wicd.log', 'a')
         self.eol = True
 
 
@@ -118,9 +118,9 @@ class LogWriter:
         """
         x = time.localtime()
         return ''.join([
-            str(x[0]).rjust(4,'0'), '/', str(x[1]).rjust(2,'0'), '/',
-            str(x[2]).rjust(2,'0'), ' ', str(x[3]).rjust(2,'0'), ':',
-            str(x[4]).rjust(2,'0'), ':', str(x[5]).rjust(2,'0')])
+            str(x[0]).rjust(4, '0'), '/', str(x[1]).rjust(2, '0'), '/',
+            str(x[2]).rjust(2, '0'), ' ', str(x[3]).rjust(2, '0'), ':',
+            str(x[4]).rjust(2, '0'), ':', str(x[5]).rjust(2, '0')])
 
 
 class ConnectionWizard(dbus.service.Object):
@@ -144,6 +144,8 @@ class ConnectionWizard(dbus.service.Object):
         self.vpn_session =  None
         self.gui_open = False
         self.suspended = False
+        self.connection_state = 0
+        self.connection_info = [""]
 
         # Load the config file
         self.ReadConfig()
@@ -158,7 +160,7 @@ class ConnectionWizard(dbus.service.Object):
 
         # Scan since we just got started
         if auto_connect:
-            print "autoconnecting...",str(self.GetWirelessInterface()[5:])
+            print "autoconnecting...", str(self.GetWirelessInterface()[5:])
             self.AutoConnect(True)
         else:
             print "--no-scan detected, not autoconnecting..."
@@ -179,79 +181,79 @@ class ConnectionWizard(dbus.service.Object):
         #and micro may be anything >= 0
         #this number is effective starting wicd v1.2.0
         version = '1.5.0'
-        print 'returned version number',version
+        print 'returned version number', version
         return version
 
     @dbus.service.method('org.wicd.daemon')
-    def SetWiredInterface(self,interface):
+    def SetWiredInterface(self, interface):
         ''' Sets the wired interface for the daemon to use '''
-        print "setting wired interface" , str(interface)
+        print "setting wired interface", str(interface)
         self.wired.wired_interface = interface
         self.wifi.wired_interface = interface
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","wired_interface",interface)
-        config.write(open(self.app_conf,"w"))
+        config.set("Settings","wired_interface", interface)
+        config.write(open(self.app_conf, "w"))
 
     @dbus.service.method('org.wicd.daemon')
-    def SetWirelessInterface(self,interface):
+    def SetWirelessInterface(self, interface):
         ''' Sets the wireless interface the daemon will use '''
         print "setting wireless interface" , str(interface)
         self.wifi.wireless_interface = interface
         self.wired.wireless_interface = interface
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","wireless_interface",interface)
-        configfile = open(self.app_conf,"w")
+        config.set("Settings","wireless_interface", interface)
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
 
     @dbus.service.method('org.wicd.daemon')
-    def SetWPADriver(self,driver):
+    def SetWPADriver(self, driver):
         ''' Sets the wpa driver the wpa_supplicant will use '''
-        print "setting wpa driver" , str(driver)
+        print "setting wpa driver", str(driver)
         self.wifi.wpa_driver = driver
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
         config.set("Settings","wpa_driver",driver)
-        configfile = open(self.app_conf,"w")
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
     #end function SetWPADriver
 
     @dbus.service.method('org.wicd.daemon')
-    def SetUseGlobalDNS(self,use):
+    def SetUseGlobalDNS(self, use):
         ''' Sets a boolean which determines if global DNS is enabled '''
-        print 'setting use global dns to',use
+        print 'setting use global dns to', use
         use = misc.to_bool(use)
-        print 'setting use global dns to boolean',use
+        print 'setting use global dns to boolean', use
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","use_global_dns", use)
+        config.set("Settings", "use_global_dns", use)
         self.use_global_dns = use
         self.wifi.use_global_dns = use
         self.wired.use_global_dns = use
-        configfile = open(self.app_conf,"w")
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
 
     @dbus.service.method('org.wicd.daemon')
-    def SetGlobalDNS(self,dns1=None,dns2=None,dns3=None):
+    def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None):
         ''' Sets the global dns addresses '''
         print "setting global dns"
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","global_dns_1",misc.noneToString(dns1))
+        config.set("Settings", "global_dns_1", misc.noneToString(dns1))
         self.dns1 = dns1
         self.wifi.global_dns_1 = dns1
         self.wired.global_dns_1 = dns1
-        config.set("Settings","global_dns_2",misc.noneToString(dns2))
+        config.set("Settings", "global_dns_2", misc.noneToString(dns2))
         self.dns2 = dns2
         self.wifi.global_dns_2 = dns2
         self.wired.global_dns_2 = dns2
-        config.set("Settings","global_dns_3",misc.noneToString(dns3))
+        config.set("Settings", "global_dns_3", misc.noneToString(dns3))
         self.dns3 = dns3
         self.wifi.global_dns_3 = dns3
         self.wired.global_dns_3 = dns3
-        print 'global dns servers are',dns1,dns2,dns3
-        configfile = open(self.app_conf,"w")
+        print 'global dns servers are', dns1, dns2, dns3
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
     #end function SetWirelessInterface
 
@@ -284,8 +286,8 @@ class ConnectionWizard(dbus.service.Object):
         ''' Sets if debugging mode is on or off '''
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","debug_mode",debug)
-        configfile = open(self.app_conf,"w")
+        config.set("Settings", "debug_mode", debug)
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
         self.debug_mode = misc.to_bool(debug)
     #end function SetDebugMode
@@ -320,8 +322,8 @@ class ConnectionWizard(dbus.service.Object):
         ''' Sets the signal display type and writes it the wicd config file '''
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","signal_display_type",value)
-        configfile = open(self.app_conf,"w")
+        config.set("Settings", "signal_display_type", value)
+        configfile = open(self.app_conf, "w")
         config.write(configfile)
         self.signal_display_type = int(value)
     # end function SetSignalDisplayType
@@ -334,14 +336,17 @@ class ConnectionWizard(dbus.service.Object):
         else:
             return (signal + "%")
     # End function FormatSignalForPrinting
-
-    @dbus.service. method('org.wicd.daemon')
+    
+    @dbus.service.method('org.wicd.daemon')
     def SetSuspend(self, val):
         """ Toggles whether or not monitoring connection status is suspended """
         self.suspended = val
+        if self.suspended:
+            self.Disconnect()
+
 
     @dbus.service. method('org.wicd.daemon')
-    def AutoConnect(self,fresh):
+    def AutoConnect(self, fresh):
         ''' Attempts to autoconnect to a wired or wireless network.
         
         Autoconnect will first try to connect to a wired network, if that 
@@ -353,7 +358,7 @@ class ConnectionWizard(dbus.service.Object):
             if self.GetWiredAutoConnectMethod() == 2 and \
                not self.GetNeedWiredProfileChooser():
                 self.LaunchChooser()
-            elif not self.GetWiredAutoConnectMethod != 2:
+            elif self.GetWiredAutoConnectMethod != 2:
                 defaultNetwork = self.GetDefaultWiredNetwork()
                 if defaultNetwork != None:
                     self.ReadWiredNetworkProfile(defaultNetwork)
@@ -370,7 +375,7 @@ class ConnectionWizard(dbus.service.Object):
                     if bool(self.LastScan[x]["has_profile"]):
                         print self.LastScan[x]["essid"] + ' has profile'
                         if bool(self.LastScan[x].get('automatic')):
-                            print 'trying to automatically connect to...',self.LastScan[x]["essid"]
+                            print 'trying to automatically connect to...', self.LastScan[x]["essid"]
                             self.ConnectWireless(x)
                             time.sleep(1)
                             return
@@ -383,7 +388,8 @@ class ConnectionWizard(dbus.service.Object):
     def GetAutoReconnect(self):
         '''returns if wicd should automatically try to reconnect is connection is lost'''
         do = bool(self.auto_reconnect)
-        return self.__printReturn('returning automatically reconnect when connection drops',do)
+        return self.__printReturn('returning automatically reconnect when\
+                                   connection drops', do)
     #end function GetAutoReconnect
 
     @dbus.service.method('org.wicd.daemon')
@@ -392,8 +398,8 @@ class ConnectionWizard(dbus.service.Object):
         print 'setting automatically reconnect when connection drops'
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","auto_reconnect",misc.to_bool(value))
-        config.write(open(self.app_conf,"w"))
+        config.set("Settings", "auto_reconnect", misc.to_bool(value))
+        config.write(open(self.app_conf, "w"))
         self.auto_reconnect = misc.to_bool(value)
     #end function SetAutoReconnect
 
@@ -436,7 +442,7 @@ class ConnectionWizard(dbus.service.Object):
         self.current_interface = str(iface)
 
     @dbus.service.method('org.wicd.daemon')
-    def SetNeedWiredProfileChooser(self,val):
+    def SetNeedWiredProfileChooser(self, val):
         """ Sets the need_wired_profile_chooser variable.
         
         If set to True, that alerts the wicd frontend to display the chooser,
@@ -455,7 +461,7 @@ class ConnectionWizard(dbus.service.Object):
     #end function GetForcedDisconnect
 
     @dbus.service.method('org.wicd.daemon')
-    def SetForcedDisconnect(self,value):
+    def SetForcedDisconnect(self, value):
         '''
         
         Set to True when a user manually disconnects or cancels a connection.
@@ -486,27 +492,68 @@ class ConnectionWizard(dbus.service.Object):
     def SetGUIOpen(self, val):
         """ Sets the value of gui_open. """
         self.gui_open = bool(val)
+        
+    @dbus.service.method('org.wicd.daemon')
+    def SetConnectionStatus(self, state, info):
+        """ Sets the connection status.
+        
+        Keyword arguments:
+        state - An int representing the state of the connection as defined
+        in misc.py.
+        
+        info - a list of strings containing data about the connection state.  
+        The contents of this list are dependent on the connection state.
+        
+        state - info contents:
+        NOT_CONNECTED - info[0] = ""
+        CONNECTING - info[0] = "wired" or "wireless"
+                     info[1] = None for wired, essid for wireless
+        WIRED - info[0] = IP Adresss
+        WIRELESS - info[0] = IP Address
+                   info[1] = essid
+                   info[2] = signal strength
+                   info[3] = internal networkid
+                
+        
+        """
+        self.connection_state = state
+        self.connection_info = info
+    
+    @dbus.service.method('org.wicd.daemon', out_signature='(uas)')
+    def GetConnectionStatus(self):
+        return [self.connection_state, self.connection_info]
 
     @dbus.service.method('org.wicd.daemon')
     def GetNeedWiredProfileChooser(self):
+        """ Returns need_profile_chooser
+        
+        Returns a boolean specifying if the wired profile chooser needs to
+        be launched.
+        
+        """
         return bool(self.need_profile_chooser)
     #end function GetNeedWiredProfileChooser
 
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
+        """ Emits the wired profile chooser dbus signal. """
         print 'calling wired profile chooser'
         self.SetNeedWiredProfileChooser(True)
         
-    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
-    def StatusChanged(self):
-        """ Called when the current connection status has changed """
+    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='uav')
+    def StatusChanged(self, state, info):
+        """ Emits a "status changed" dbus signal.
+        
+        This D-Bus signal is emitted when the connection status changes.
+        
+        """
         pass
 
     ########## WIRELESS FUNCTIONS
     #################################
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetHiddenNetworkESSID(self,essid):
+    def SetHiddenNetworkESSID(self, essid):
         '''sets the ESSID of a hidden network for use with ConnectionWizard.Scan'''
         print 'setting hidden essid: ' + str(essid)
         self.hidden_essid = str(misc.Noneify(essid))
@@ -518,42 +565,10 @@ class ConnectionWizard(dbus.service.Object):
         scan = self.wifi.Scan(str(self.hidden_essid))
         self.LastScan = scan
         print 'scanning done'
-        print 'found',str(len(scan)),'networks:',
+        print 'found', str(len(scan)), 'networks:',
         for i, network in enumerate(scan):
             self.ReadWirelessNetworkProfile(i)
 
-    # This is unfinished so not on dbus yet
-    def AutoConnectScan(self):
-        ''' Scan for networks and for known hidden networks
-
-        Scans for wireless networks and also for hidden networks defined in
-        wireless-settings.conf
-
-        '''
-        hidden_network_list = self.GetHiddenNetworkList()
-        master_scan = self.Scan()
-
-        if hidden_network_list is None:
-            return
-        else:
-            # If we find hidden networks, run a scan for each one found,
-            # parsing out the hidden network info if it's in the scan
-            # results, and appending it to a master scan list
-            for hidden_network in hidden_network_list:
-                print 'Scanning for hidden network:', hidden_network
-                self.SetHiddenESSID(hidden_network['essid'])
-                temp_scan = self.Scan()
-                for i, network in enumerate(temp_scan):
-                    print 'Searching scan results for ' + hidden_network['essid']
-                    #  Make sure both the essid and bssid match
-                    if temp_scan[i]['essid'] == hidden_network['essid'] and \
-                       temp_scan[i]['bssid'] == hidden_network['bssid']:
-                        print 'Hidden network found, adding to master list'
-                        master_scan[len(master_scan)] = temp_scan[i]
-                        # Break once the network is found
-                        break
-                self.LastScan = master_scan
-    
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetIwconfig(self):
         """ Calls and returns the output of iwconfig"""
@@ -562,15 +577,17 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetNumberOfNetworks(self):
         '''returns number of networks'''
-        print 'returned number of networks...',len(self.LastScan)
+        print 'returned number of networks...', len(self.LastScan)
         return len(self.LastScan)
     #end function GetNumberOfNetworks
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def CreateAdHocNetwork(self,essid,channel,ip,enctype,key,encused,ics):
-        '''creates an ad-hoc network using user inputted settings'''
+    def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
+                           ics):
+        ''' creates an ad-hoc network using user inputted settings '''
         print 'attempting to create ad-hoc network...'
-        self.wifi.CreateAdHocNetwork(essid,channel,ip,enctype,key,encused,ics)
+        self.wifi.CreateAdHocNetwork(essid, channel, ip, enctype, key, encused,
+                                     ics)
     #end function CreateAdHocNetwork
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -580,7 +597,7 @@ class ConnectionWizard(dbus.service.Object):
         return status
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetWirelessProperty(self,networkid,property):
+    def GetWirelessProperty(self, networkid, property):
         ''' Retrieves wireless property from the network specified '''
         value = self.LastScan[networkid].get(property)
         try:
@@ -589,21 +606,22 @@ class ConnectionWizard(dbus.service.Object):
             pass
         #if self.debug_mode == 1:
             #return type instead of value for security
-            #print ('returned wireless network',networkid,'property',
-            #      property,'of type',type(value))
+            #print ('returned wireless network', networkid, 'property',
+            #      property, 'of type', type(value))
         return value
     #end function GetWirelessProperty
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessProperty(self,networkid,property,value):
+    def SetWirelessProperty(self, networkid, property, value):
         ''' Sets property to value in network specified '''
         #simple - set the value of the item in our current data
         #to the value the client asked for
         if (property.strip()).endswith("script"):
-                print "Setting script properties through the daemon \
-                      is not permitted."
-                return False
-        print 'setting wireless network',networkid,'property',property,'to value',value
+            print "Setting script properties through the daemon is not \
+                   permitted."
+            return False
+        print 'setting wireless network', networkid, 'property', property,
+        'to value', value
         self.LastScan[networkid][property] = misc.Noneify(value)
     #end function SetProperty
 
@@ -611,7 +629,7 @@ class ConnectionWizard(dbus.service.Object):
     def DetectWirelessInterface(self):
         ''' Returns an automatically detected wireless interface '''
         iface = self.wifi.DetectWirelessInterface()
-        print 'automatically detected wireless interface',iface
+        print 'automatically detected wireless interface', iface
         return str(iface)
     #end function DetectWirelessInterface
 
@@ -628,7 +646,7 @@ class ConnectionWizard(dbus.service.Object):
         if self.GetSignalDisplayType() == 0:
             return self.GetCurrentSignalStrength(iwconfig)
         else:
-            return GetCurrentDBMStrength(iwconfig)
+            return self.GetCurrentDBMStrength(iwconfig)
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetCurrentSignalStrength(self, iwconfig=None):
@@ -660,7 +678,7 @@ class ConnectionWizard(dbus.service.Object):
     def GetCurrentNetworkID(self, iwconfig=None):
         '''returns the id of the current network, or -1 if network is not found'''
         currentESSID = self.GetCurrentNetwork(iwconfig)
-        for x in xrange(0,len(self.LastScan)):
+        for x in xrange(0, len(self.LastScan)):
             if self.LastScan[x]['essid'] == currentESSID:
                 return x
         print 'returning -1, current network not found'
@@ -674,10 +692,11 @@ class ConnectionWizard(dbus.service.Object):
         # CheckIfWirelessConnecting can be used to test if the connection
         # is done.
         self.SetForcedDisconnect(False)
-        self.wifi.before_script = self.GetWirelessProperty(id,'beforescript')
-        self.wifi.after_script = self.GetWirelessProperty(id,'afterscript')
-        self.wifi.disconnect_script = self.GetWirelessProperty(id,'disconnectscript')
-        print 'connecting to wireless network',self.LastScan[id]['essid']
+        self.wifi.before_script = self.GetWirelessProperty(id, 'beforescript')
+        self.wifi.after_script = self.GetWirelessProperty(id, 'afterscript')
+        self.wifi.disconnect_script = self.GetWirelessProperty(id,
+                                                               'disconnectscript')
+        print 'connecting to wireless network', self.LastScan[id]['essid']
         return self.wifi.Connect(self.LastScan[id])
     #end function Connect
 
@@ -689,11 +708,11 @@ class ConnectionWizard(dbus.service.Object):
             # status, if it doesn't, we aren't connecting.
             status =  self.wifi.connecting_thread.is_connecting
             if self.debug_mode == 1:
-                print 'wireless connecting',status
+                print 'wireless connecting', status
             return status
         else:
             if self.debug_mode == 1:
-                print 'wireless connecting',False
+                print 'wireless connecting', False
             return False
     #end function CheckIfWirelessConnecting
 
@@ -702,7 +721,7 @@ class ConnectionWizard(dbus.service.Object):
         ''' Returns the IP that the wireless interface has '''
         ip = self.wifi.GetIP()
         if self.debug_mode == 1:
-            print 'returning wireless ip',ip
+            print 'returning wireless ip', ip
         return ip
     #end function GetWirelessIP
 
@@ -724,7 +743,7 @@ class ConnectionWizard(dbus.service.Object):
         '''returns the wired interface\'s ip address'''
         ip = self.wired.GetIP()
         if self.debug_mode == 1:
-            print 'returning wired ip',ip
+            print 'returning wired ip', ip
         return ip
     #end function GetWiredIP
 
@@ -736,25 +755,25 @@ class ConnectionWizard(dbus.service.Object):
             #status, if it doesn't exist, we aren't connecting
             status = self.wired.connecting_thread.is_connecting
             if self.debug_mode == 1:
-                print 'wired connecting',status
+                print 'wired connecting', status
             return status
         else:
             if self.debug_mode == 1:
-                print 'wired connecting',False
+                print 'wired connecting', False
             return False
     #end function CheckIfWiredConnecting
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredAutoConnectMethod(self,method):
+    def SetWiredAutoConnectMethod(self, method):
         '''sets which method the user wants to autoconnect to wired networks'''
         # 1 = default profile
         # 2 = show list
         # 3 = last used profile
-        print 'wired autoconnection method is',method
+        print 'wired autoconnection method is', method
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","wired_connect_mode",int(method))
-        config.write(open(self.app_conf,"w"))
+        config.set("Settings","wired_connect_mode", int(method))
+        config.write(open(self.app_conf, "w"))
         self.wired_connect_mode = int(method)
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -774,7 +793,7 @@ class ConnectionWizard(dbus.service.Object):
     #end function CheckWiredConnectingMessage
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredProperty(self,property,value):
+    def SetWiredProperty(self, property, value):
         if self.WiredNetwork:
             if (property.strip()).endswith("script"):
                 print "Setting script properties through the daemon \
@@ -782,7 +801,7 @@ class ConnectionWizard(dbus.service.Object):
                 return False
             self.WiredNetwork[property] = misc.Noneify(value)
             if self.debug_mode == 1:
-                print 'set',property,'to',misc.Noneify(value)
+                print 'set', property, 'to', misc.Noneify(value)
             return True
         else:
             print 'WiredNetwork does not exist'
@@ -790,11 +809,12 @@ class ConnectionWizard(dbus.service.Object):
     #end function SetWiredProperty
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def GetWiredProperty(self,property):
+    def GetWiredProperty(self, property):
+        """ Returns the requested wired property. """
         if self.WiredNetwork:
             value = self.WiredNetwork.get(property)
             if self.debug_mode == 1:
-                print 'returned',property,'with value of',value,'to client...'
+                print 'returned', property, 'with value of', value, 'to client'
             return value
         else:
             print 'WiredNetwork does not exist'
@@ -802,27 +822,29 @@ class ConnectionWizard(dbus.service.Object):
     #end function GetWiredProperty
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def SetAlwaysShowWiredInterface(self,value):
+    def SetAlwaysShowWiredInterface(self, value):
         print 'Setting always show wired interface'
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
-        config.set("Settings","always_show_wired_interface",misc.to_bool(value))
-        config.write(open(self.app_conf,"w"))
+        config.set("Settings", "always_show_wired_interface", 
+                   misc.to_bool(value))
+        config.write(open(self.app_conf, "w"))
         self.always_show_wired_interface = misc.to_bool(value)
     #end function SetAlwaysShowWiredInterface
 
     @dbus.service.method('org.wicd.daemon.wired')
     def GetAlwaysShowWiredInterface(self):
         do = bool(self.always_show_wired_interface)
-        return self.__printReturn('returning always show wired interface',do)
+        return self.__printReturn('returning always show wired interface', do)
     #end function GetAlwaysShowWiredInterface
 
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckPluggedIn(self):
         if self.wired.wired_interface and self.wired.wired_interface != "None":
-            return self.__printReturn('returning plugged in',self.wired.CheckPluggedIn())
+            return self.__printReturn('returning plugged in',
+                                      self.wired.CheckPluggedIn())
         else:
-            return self.__printReturn("returning plugged in",None)
+            return self.__printReturn("returning plugged in", None)
     #end function CheckPluggedIn
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -850,9 +872,9 @@ class ConnectionWizard(dbus.service.Object):
     #################################
 
     @dbus.service.method('org.wicd.daemon.config')
-    def CreateWiredNetworkProfile(self,profilename):
+    def CreateWiredNetworkProfile(self, profilename):
         ''' Creates a wired network profile '''
-        #should include: profilename,ip,netmask,gateway,dns1,dns2,dns3
+        #should include: profilename, ip, netmask, gateway, dns1, dns2, dns3
         profilename = profilename.encode('utf-8')
         print "creating profile for " + profilename
         config = ConfigParser.ConfigParser()
@@ -860,18 +882,18 @@ class ConnectionWizard(dbus.service.Object):
         if config.has_section(profilename):
             return False
         config.add_section(profilename)
-        config.set(profilename,"ip",None)
-        config.set(profilename,"broadcast",None)
-        config.set(profilename,"netmask",None)
-        config.set(profilename,"gateway",None)
-        config.set(profilename,"dns1",None)
-        config.set(profilename,"dns2",None)
-        config.set(profilename,"dns3",None)
-        config.set(profilename,"beforescript",None)
-        config.set(profilename,"afterscript",None)
-        config.set(profilename,"disconnectscript",None)
-        config.set(profilename,"default",False)
-        config.write( open(self.wired_conf,"w"))
+        config.set(profilename, "ip", None)
+        config.set(profilename, "broadcast", None)
+        config.set(profilename, "netmask", None)
+        config.set(profilename, "gateway", None)
+        config.set(profilename, "dns1", None)
+        config.set(profilename, "dns2", None)
+        config.set(profilename, "dns3", None)
+        config.set(profilename, "beforescript", None)
+        config.set(profilename, "afterscript", None)
+        config.set(profilename, "disconnectscript", None)
+        config.set(profilename, "default", False)
+        config.write(open(self.wired_conf, "w"))
         return True
     #end function CreateWiredNetworkProfile
 
@@ -881,13 +903,13 @@ class ConnectionWizard(dbus.service.Object):
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
         profileList = config.sections()
-        print "profileList = ",profileList
+        print "profileList = ", profileList
         for profile in profileList:
             print "profile = ", profile
             if config.has_option(profile,"lastused"):
-                if config.get(profile,"lastused") == "True":
+                if config.get(profile, "lastused") == "True":
                     print "removing existing lastused"
-                    config.set(profile,"lastused", False)
+                    config.set(profile, "lastused", False)
                     self.SaveWiredNetworkProfile(profile)
     #end function UnsetWiredLastUsed
 
@@ -897,13 +919,13 @@ class ConnectionWizard(dbus.service.Object):
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
         profileList = config.sections()
-        print "profileList = ",profileList
+        print "profileList = ", profileList
         for profile in profileList:
             print "profile = ", profile
-            if config.has_option(profile,"default"):
-                if config.get(profile,"default") == "True":
+            if config.has_option(profile, "default"):
+                if config.get(profile, "default") == "True":
                     print "removing existing default"
-                    config.set(profile,"default", False)
+                    config.set(profile, "default", False)
                     self.SaveWiredNetworkProfile(profile)
     #end function UnsetWiredDefault
 
@@ -914,8 +936,8 @@ class ConnectionWizard(dbus.service.Object):
         config.read(self.wired_conf)
         profileList = config.sections()
         for profile in profileList:
-            if config.has_option(profile,"default"):
-                if config.get(profile,"default") == "True":
+            if config.has_option(profile, "default"):
+                if config.get(profile, "default") == "True":
                     return profile
         return None
 
@@ -931,7 +953,7 @@ class ConnectionWizard(dbus.service.Object):
         return None
 
     @dbus.service.method('org.wicd.daemon.config')
-    def DeleteWiredNetworkProfile(self,profilename):
+    def DeleteWiredNetworkProfile(self, profilename):
         ''' Deletes a wired network profile '''
         profilename = profilename.encode('utf-8')
         print "deleting profile for " + str(profilename)
@@ -941,12 +963,12 @@ class ConnectionWizard(dbus.service.Object):
             config.remove_section(profilename)
         else:
             return "500: Profile does not exist"
-        config.write( open(self.wired_conf,"w"))
+        config.write(open(self.wired_conf, "w"))
         return "100: Profile Deleted"
     #end function DeleteWiredNetworkProfile
 
     @dbus.service.method('org.wicd.daemon.config')
-    def SaveWiredNetworkProfile(self,profilename):
+    def SaveWiredNetworkProfile(self, profilename):
         ''' Writes a wired network profile to disk '''
         #should include: profilename,ip,netmask,gateway,dns1,dns2
         profilename = misc.to_unicode(profilename)
@@ -957,13 +979,13 @@ class ConnectionWizard(dbus.service.Object):
             config.remove_section(profilename)
         config.add_section(profilename)
         for x in self.WiredNetwork:
-            config.set(profilename,x,self.WiredNetwork[x])
-        config.write( open(self.wired_conf,"w"))
+            config.set(profilename, x, self.WiredNetwork[x])
+        config.write(open(self.wired_conf, "w"))
         return "100: Profile Written"
     #end function SaveWiredNetworkProfile
 
     @dbus.service.method('org.wicd.daemon.config')
-    def ReadWiredNetworkProfile(self,profilename):
+    def ReadWiredNetworkProfile(self, profilename):
         ''' Reads a wired network profile in as the currently active profile '''
         profile = {}
         profilename = misc.to_unicode(profilename)
@@ -971,7 +993,7 @@ class ConnectionWizard(dbus.service.Object):
         config.read(self.wired_conf)
         if config.has_section(profilename) == True:
             for x in config.options(profilename):
-                profile[x] = misc.Noneify(config.get(profilename,x))
+                profile[x] = misc.Noneify(config.get(profilename, x))
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))
             profile['use_static_dns'] = bool(profile.get('use_static_dns'))
             self.WiredNetwork = profile
@@ -994,7 +1016,7 @@ class ConnectionWizard(dbus.service.Object):
     #end function GetWiredProfileList
 
     @dbus.service.method('org.wicd.daemon.config')
-    def SaveWirelessNetworkProfile(self,id):
+    def SaveWirelessNetworkProfile(self, id):
         ''' Writes a wireless profile to disk '''
         print "setting network profile"
         config = ConfigParser.ConfigParser()
@@ -1006,11 +1028,11 @@ class ConnectionWizard(dbus.service.Object):
         #out which network is which. it will not be read
         for x in self.LastScan[id]:
             config.set(self.LastScan[id]["bssid"], x, self.LastScan[id][x])
-        config.write(open(self.wireless_conf,"w"))
+        config.write(open(self.wireless_conf, "w"))
     #end function SaveWirelessNetworkProfile
 
     @dbus.service.method('org.wicd.daemon.config')
-    def SaveWirelessNetworkProperty(self,id,option):
+    def SaveWirelessNetworkProperty(self, id, option):
         ''' Writes a particular wireless property to disk '''
         if (option.strip()).endswith("script"):
             print 'you cannot save script information to disk through the daemon.'
@@ -1019,12 +1041,13 @@ class ConnectionWizard(dbus.service.Object):
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
         if config.has_section(self.LastScan[id]["bssid"]):
-            config.set(self.LastScan[id]["bssid"],option,str(self.LastScan[id][option]))
-        config.write(open(self.wireless_conf,"w"))
+            config.set(self.LastScan[id]["bssid"], option,
+                       str(self.LastScan[id][option]))
+        config.write(open(self.wireless_conf, "w"))
     #end function SaveWirelessNetworkProperty
 
     @dbus.service.method('org.wicd.daemon.config')
-    def ReadWirelessNetworkProfile(self,id):
+    def ReadWirelessNetworkProfile(self, id):
         ''' Reads in wireless profile as the active network '''
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
@@ -1094,10 +1117,10 @@ class ConnectionWizard(dbus.service.Object):
     # then be SURE YOU CHANGE IT                #
     #############################################
 
-    def __printReturn(self,text,value):
+    def __printReturn(self, text, value):
         '''prints the specified text and value, then returns the value'''
         if self.debug_mode == 1:
-            print text,value
+            print text, value
         return value
     #end function __printReturn
 
@@ -1122,7 +1145,7 @@ class ConnectionWizard(dbus.service.Object):
         return ret
 
     def ReadConfig(self):
-        if os.path.isfile( self.app_conf ):
+        if os.path.isfile(self.app_conf):
             iface = self.DetectWirelessInterface()
             if not iface:
                 iface = "wlan0"
@@ -1143,7 +1166,8 @@ class ConnectionWizard(dbus.service.Object):
             dns1 = self.get_option("Settings", "global_dns_1", default='None')
             dns2 = self.get_option("Settings", "global_dns_2", default='None')
             dns3 = self.get_option("Settings", "global_dns_3", default='None')
-                    self.SetGlobalDNS(dns1,dns2,dns3)
+            self.SetGlobalDNS(dns1, dns2, dns3)
+            
             self.SetAutoReconnect(self.get_option("Settings", "auto_reconnect",
                                                   default=False))
             self.SetDebugMode(self.get_option("Settings", "debug_mode",
@@ -1174,7 +1198,7 @@ class ConnectionWizard(dbus.service.Object):
             config.set("Settings", "dns3", "None")
             iface = self.DetectWirelessInterface()
             if iface is not None:
-                config.set("Settings","wireless_interface", iface)
+                config.set("Settings", "wireless_interface", iface)
             else:
                 print "couldn't detect a wireless interface, using wlan0..."
                 config.set("Settings", "wireless_interface", "wlan0")
@@ -1194,23 +1218,23 @@ class ConnectionWizard(dbus.service.Object):
             self.SetUseGlobalDNS(False)
             self.SetGlobalDNS(None, None, None)
 
-        if os.path.isfile( self.wireless_conf ):
+        if os.path.isfile(self.wireless_conf):
             print "wireless configuration file found..."
             # Don't do anything since it is there
             pass
         else:
             # We don't need to put anything in it, so just make it
             print "wireless configuration file not found, creating..."
-            open( self.wireless_conf, "w" ).close()
+            open(self.wireless_conf, "w").close()
 
-        if os.path.isfile( self.wired_conf ):
+        if os.path.isfile(self.wired_conf):
             print "wired configuration file found..."
             # Don't do anything since it is there
             pass
         else:
             print "wired configuration file not found, creating a default..."
             # Create the file and a default profile
-            open( self.wired_conf, "w" ).close()
+            open(self.wired_conf, "w").close()
             self.CreateWiredNetworkProfile("wired-default")
 
         # Hide the files, so the keys aren't exposed.
@@ -1225,14 +1249,14 @@ class ConnectionWizard(dbus.service.Object):
         os.chown(self.wireless_conf, 0, 0)
         os.chown(self.wired_conf, 0, 0)
 
-        print "autodetected wireless interface...",self.DetectWirelessInterface()
-        print "using wireless interface...",self.GetWirelessInterface()[5:]
+        print "autodetected wireless interface...", self.DetectWirelessInterface()
+        print "using wireless interface...", self.GetWirelessInterface()[5:]
 
 
 class ConnectionStatus():
     """ Class for monitoring the computer's connection status. """
     def __init__(self, connection):
-        """Initialize variables needed for the connection status methods."""
+        """ Initialize variables needed for the connection status methods. """
         self.last_strength = -2
         self.still_wired = False
         self.network = ''
@@ -1240,6 +1264,7 @@ class ConnectionStatus():
         self.connection_lost_counter = 0
         self.conn = connection
         self.status_changed = False
+        self.state = 0
 
     def check_for_wired_connection(self, wired_ip):
         """ Checks for an active wired connection.
@@ -1255,6 +1280,7 @@ class ConnectionStatus():
                 conn.SetCurrentInterface(conn.GetWiredInterface())
                 self.still_wired = True
                 self.status_changed = True
+            self.state = misc.WIRED
             return True
         # Wired connection isn't active
         self.still_wired = False
@@ -1269,7 +1295,7 @@ class ConnectionStatus():
 
         """
         conn = self.conn
-        
+
         # Make sure we have an IP before we do anything else.
         if wireless_ip is None:
             return False
@@ -1305,8 +1331,9 @@ class ConnectionStatus():
             self.network != conn.GetCurrentNetwork(self.iwconfig)):
             self.last_strength = wifi_signal
             self.status_changed = True
-            conn.SetCurrentInterface(conn.GetWirelessInterface())
-
+            conn.SetCurrentInterface(conn.GetWirelessInterface())    
+        self.state = misc.WIRELESS
+            
         return True
 
     def update_connection_status(self):
@@ -1323,6 +1350,7 @@ class ConnectionStatus():
             print "Suspended."
             return True
 
+        # Determine what our current state is.
         self.iwconfig = conn.GetIwconfig()
         wired_ip = conn.GetWiredIP()
         wired_found = self.check_for_wired_connection(wired_ip)
@@ -1332,13 +1360,34 @@ class ConnectionStatus():
             wireless_found = self.check_for_wireless_connection(wifi_ip)
             if not wireless_found:  # No connection at all
                 if not conn.CheckIfConnecting():
+                    self.state = misc.NOT_CONNECTED
                     self.auto_reconnect()
                 else:
+                    self.state = misc.CONNECTING
                     self.status_changed = True
+        
+        # Set our connection state/info.
+        if self.state == misc.NOT_CONNECTED:
+            info = [""]
+        elif self.state == misc.CONNECTING:
+            if conn.CheckIfWiredConnecting():
+                info = ["wired"]
+            else:
+                info = ["wireless", conn.GetCurrentNetwork(self.iwconfig)]
+        elif self.state == misc.WIRELESS:
+            info = [wifi_ip, conn.GetCurrentNetwork(self.iwconfig),
+                    str(conn.GetPrintableSignalStrength(self.iwconfig)),
+                    str(conn.GetCurrentNetworkID(self.iwconfig))]
+        elif self.state == misc.WIRED:
+            info = [wired_ip]
+        else:
+            print 'ERROR: Invalid state!'
+            return True
+        conn.SetConnectionStatus(self.state, info)
 
         # Send a D-Bus signal announcing status has changed if necessary.
         if self.status_changed:
-            conn.StatusChanged()
+            conn.StatusChanged(self.state, info)
             self.status_changed = False
         return True
 

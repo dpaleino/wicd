@@ -90,7 +90,7 @@ except Exception:
         print 'Success.'
     except:
         print 'Failed to start daemon.  Aborting.'
-    sys.exit(1)
+        sys.exit(1)
 
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
@@ -138,52 +138,46 @@ class TrayIcon():
             gui.WiredProfileChooser()
             daemon.SetNeedWiredProfileChooser(False)
 
-        def update_tray_icon(self):
+        def update_tray_icon(self, state=None, info=None):
             """Updates the tray icon and current connection status"""
             if self.use_tray == False: return False
 
-            iwconfig = wireless.GetIwconfig()
-            # If we're currently connecting, we can shortcut all other checks
-            if daemon.CheckIfConnecting():
-                if wireless.CheckIfWirelessConnecting():
-                    cur_network = wireless.GetCurrentNetwork(iwconfig)
-                else:
-                    cur_network = language['wired']
-                self.tr.set_tooltip(language['connecting'] + " to " + 
-                                    cur_network + "...")
-                self.tr.set_from_file(wpath.images + "no-signal.png")
-                return True
+            if not state or not info:
+                [state, info] = daemon.GetConnectionStatus()
             
-            cur_iface = daemon.GetCurrentInterface()
-            wifi_iface = daemon.GetWirelessInterface()
-            wire_iface = daemon.GetWiredInterface()
-            
-            # Check for a wired connection
-            if cur_iface == wire_iface:
-                wired_ip = wired.GetWiredIP()
+            if state == misc.WIRED:
+                wired_ip = info[0]
                 self.tr.set_from_file(wpath.images + "wired.png")
-                self.tr.set_tooltip(language['connected_to_wired'].
-                                                              replace('$A',
-                                                                          wired_ip))
-            
-            # Check for a wireless connection
-            elif cur_iface == wifi_iface:
-                cur_net_id = wireless.GetCurrentNetworkID(iwconfig)
+                self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
+                                                                     wired_ip))
+
+            elif state == misc.WIRELESS:
                 lock = ''
+                wireless_ip = info[0]
+                self.network = info[1]
+                strength = info[2]
+                cur_net_id = int(info[3])
+                sig_string = daemon.FormatSignalForPrinting(str(strength))
+                
                 if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                     lock = "-lock"
-                strength = wireless.GetPrintableSignalStrength(iwconfig)
-                self.network = str(wireless.GetCurrentNetwork(iwconfig))
-                sig_string = daemon.FormatSignalForPrinting(str(strength))
-                wireless_ip = wireless.GetWirelessIP()
+                    
                 self.tr.set_tooltip(language['connected_to_wireless']
                                     .replace('$A', self.network)
                                     .replace('$B', sig_string)
                                     .replace('$C', str(wireless_ip)))
                 self.set_signal_image(strength, lock)
-            
-            # If we made it here, we don't have a connection
-            else:
+                
+            elif state == misc.CONNECTING:
+                if info[0] == 'wired' and len(info) == 1:
+                    cur_network = language['wired']
+                else:
+                    cur_network = info[1]
+                self.tr.set_tooltip(language['connecting'] + " to " + 
+                                    cur_network + "...")
+                self.tr.set_from_file(wpath.images + "no-signal.png")
+                
+            elif state == misc.NOT_CONNECTED:
                 self.tr.set_from_file(wpath.images + "no-signal.png")
                 if wireless.GetKillSwitchEnabled():
                     status = (language['not_connected'] + " (" + 
@@ -191,6 +185,9 @@ class TrayIcon():
                 else:
                     status = language['not_connected']
                 self.tr.set_tooltip(status)
+            else:
+                print 'Invalid state returned!!!'
+                return False
 
             return True
 
@@ -217,8 +214,8 @@ class TrayIcon():
 
             img_file = (wpath.images + signal_img + lock + ".png")
             self.tr.set_from_file(img_file)
-            
-        
+
+
     class TrayIconGUI():
         """Base Tray Icon class
         
@@ -254,11 +251,11 @@ class TrayIcon():
             self.manager.insert_action_group(actg, 0)
             self.manager.add_ui_from_string(menu)
             self.menu = (self.manager.get_widget('/Menubar/Menu/About').
-                                                                   props.parent)
+                                                                  props.parent)
             self.gui_win = None
             self.current_icon_path = None
             self.use_tray = use_tray
-            
+
         def on_activate(self, data=None):
             """Opens the wicd GUI"""
             self.toggle_wicd_gui()
@@ -280,13 +277,6 @@ class TrayIcon():
             dialog.set_website('http://wicd.sourceforge.net')
             dialog.run()
             dialog.destroy()
-
-        def set_from_file(self, path = None):
-            """Sets a new tray icon picture"""
-            if not self.use_tray: return
-            if path != self.current_icon_path:
-                self.current_icon_path = path
-                gtk.StatusIcon.set_from_file(self, path)
 
         def toggle_wicd_gui(self):
             """Toggles the wicd GUI"""
@@ -331,12 +321,12 @@ class TrayIcon():
                 self.toggle_wicd_gui()
             if event.button == 3:
                 self.menu.popup(None, None, None, event.button, event.time)
-    
-        def set_from_file(self, val):
+
+        def set_from_file(self, val=None):
             """Calls set_from_file on the gtk.Image for the tray icon"""
             if not self.use_tray: return
             self.pic.set_from_file(val)
-  
+
         def set_tooltip(self, val):
             """
             
@@ -371,9 +361,9 @@ class TrayIcon():
             self.set_from_file(wpath.images + "no-signal.png")
             self.set_tooltip("Initializing wicd...")
 
-        def on_popup_menu(self, status, button, time):
+        def on_popup_menu(self, status, button, timestamp):
             """Opens the right click menu for the tray icon"""
-            self.menu.popup(None, None, None, button, time)
+            self.menu.popup(None, None, None, button, timestamp)
 
         def set_from_file(self, path = None):
             """Sets a new tray icon picture"""
@@ -417,21 +407,21 @@ def main(argv):
             sys.exit()
         elif opt in ('-n', '--no-tray'):
             use_tray = False
-    
+
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)
-    
+
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).
     if daemon.GetNeedWiredProfileChooser():
         daemon.SetNeedWiredProfileChooser(False)
         tray_icon.icon_info.wired_profile_chooser()
-        
+
     bus.add_signal_receiver(tray_icon.icon_info.wired_profile_chooser,
                             'LaunchChooser', 'org.wicd.daemon')
-    
+
     bus.add_signal_receiver(tray_icon.icon_info.update_tray_icon,
-                            'StatusChanged', 'org.wicd.daemon')                            
+                            'StatusChanged', 'org.wicd.daemon')
     print 'Done.'
     
     mainloop = gobject.MainLoop()

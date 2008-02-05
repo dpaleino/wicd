@@ -554,13 +554,18 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetHiddenNetworkESSID(self, essid):
-        '''sets the ESSID of a hidden network for use with ConnectionWizard.Scan'''
+        ''' Sets the ESSID of a hidden network for use with Scan(). '''
         print 'setting hidden essid: ' + str(essid)
         self.hidden_essid = str(misc.Noneify(essid))
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def Scan(self):
-        '''scans for wireless networks, optionally using a (hidden) essid set with SetHiddenNetworkESSID'''
+        ''' Scan for wireless networks.
+        
+        Scans for wireless networks,optionally using a (hidden) essid
+        set with SetHiddenNetworkESSID.
+        
+        '''
         print 'scanning start'
         scan = self.wifi.Scan(str(self.hidden_essid))
         self.LastScan = scan

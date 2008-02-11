@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """ Network interface control tools for wicd.
 
 This module implements functions to control and obtain information from

@@ -107,7 +107,7 @@ language['connecting'] = _('Connecting')
 language['wired'] = _('Wired Network')
 
 class TrayIcon():
-    """Base Tray Icon class
+    """ Base Tray Icon class.
     
     Base Class for implementing a tray icon to display network status.
     
@@ -121,9 +121,9 @@ class TrayIcon():
         
 
     class TrayConnectionInfo():
-        """Class for updating the tray icon status"""
+        """ Class for updating the tray icon status. """
         def __init__(self, tr, use_tray=True):
-            """Initialize variables needed for the icon status methods."""
+            """ Initialize variables needed for the icon status methods. """
             self.last_strength = -2
             self.still_wired = False
             self.network = ''
@@ -139,7 +139,7 @@ class TrayIcon():
             daemon.SetNeedWiredProfileChooser(False)
 
         def update_tray_icon(self, state=None, info=None):
-            """Updates the tray icon and current connection status"""
+            """ Updates the tray icon and current connection status. """
             if self.use_tray == False: return False
 
             if not state or not info:
@@ -192,7 +192,7 @@ class TrayIcon():
             return True
 
         def set_signal_image(self, wireless_signal, lock):
-            """Sets the tray icon image for an active wireless connection"""
+            """ Sets the tray icon image for an active wireless connection. """
             if daemon.GetSignalDisplayType() == 0:
                 if wireless_signal > 75:
                     signal_img = "high-signal"
@@ -217,7 +217,7 @@ class TrayIcon():
 
 
     class TrayIconGUI():
-        """Base Tray Icon class
+        """ Base Tray Icon class.
         
         Implements methods and variables used by both egg/StatusIcon
         tray icons.
@@ -257,19 +257,19 @@ class TrayIcon():
             self.use_tray = use_tray
 
         def on_activate(self, data=None):
-            """Opens the wicd GUI"""
+            """ Opens the wicd GUI. """
             self.toggle_wicd_gui()
 
         def on_quit(self, widget=None):
-            """Closes the tray icon"""
+            """ Closes the tray icon. """
             sys.exit(0)
 
         def on_preferences(self, data=None):
-            """Opens the wicd GUI """
+            """ Opens the wicd GUI. """
             self.toggle_wicd_gui()
 
         def on_about(self, data = None):
-            """Opens the About Dialog"""
+            """ Opens the About Dialog. """
             dialog = gtk.AboutDialog()
             dialog.set_name('wicd tray icon')
             dialog.set_version('1.0')
@@ -279,7 +279,7 @@ class TrayIcon():
             dialog.destroy()
 
         def toggle_wicd_gui(self):
-            """Toggles the wicd GUI"""
+            """ Toggles the wicd GUI. """
             if self.gui_win == None:
                 self.gui_win = gui.appGui()
             elif self.gui_win.is_visible == False:
@@ -290,7 +290,7 @@ class TrayIcon():
         
 
     class EggTrayIconGUI(TrayIconGUI):
-        """Tray Icon for gtk < 2.10
+        """ Tray Icon for gtk < 2.10.
         
         Uses the deprecated egg.trayicon module to implement the tray icon.
         
@@ -316,19 +316,19 @@ class TrayIcon():
             self.tray.show_all()
 
         def tray_clicked(self, widget, event):
-            """Handles tray mouse click events"""
+            """ Handles tray mouse click events. """
             if event.button == 1:
                 self.toggle_wicd_gui()
             if event.button == 3:
                 self.menu.popup(None, None, None, event.button, event.time)
 
         def set_from_file(self, val=None):
-            """Calls set_from_file on the gtk.Image for the tray icon"""
+            """ Calls set_from_file on the gtk.Image for the tray icon. """
             if not self.use_tray: return
             self.pic.set_from_file(val)
 
         def set_tooltip(self, val):
-            """
+            """ Set the tooltip for this tray icon.
             
             Sets the tooltip for the gtk.ToolTips associated with this
             tray icon.
@@ -339,7 +339,7 @@ class TrayIcon():
 
 
     class StatusTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
-        """Class for creating the wicd tray icon on gtk > 2.10
+        """ Class for creating the wicd tray icon on gtk > 2.10.
         
         Uses gtk.StatusIcon to implement a tray icon.
         
@@ -362,11 +362,11 @@ class TrayIcon():
             self.set_tooltip("Initializing wicd...")
 
         def on_popup_menu(self, status, button, timestamp):
-            """Opens the right click menu for the tray icon"""
+            """ Opens the right click menu for the tray icon. """
             self.menu.popup(None, None, None, button, timestamp)
 
         def set_from_file(self, path = None):
-            """Sets a new tray icon picture"""
+            """ Sets a new tray icon picture. """
             if not self.use_tray: return
             if path != self.current_icon_path:
                 self.current_icon_path = path
@@ -374,7 +374,7 @@ class TrayIcon():
 
 
 def usage():
-    """Print usage information."""
+    """ Print usage information. """
     print """
 wicd 1.40
 wireless (and wired) connection daemon front-end.

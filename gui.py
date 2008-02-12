@@ -147,6 +147,8 @@ language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporaril
 language['display_type_dialog'] = _('Use dBm to measure signal strength')
 language['scripts'] = _('Scripts')
 language['invalid_address'] = _('Invalid address in $A entry.')
+language['encrypt_info_missing'] = _('Required encryption information is missing.')
+language['enable_encryption'] = _('This network requires encryption to be enabled.')
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -1372,10 +1374,21 @@ class appGui:
 
         # Now save the settings.
         if nettype == "wireless":
-            self.save_wireless_settings(networkid, entry)
+            if not self.save_wireless_settings(networkid, entry):
+                return False
+            
+            # Copy settings if they're set to be used globally.
+            if entry.checkGlobalSettings.get_active():
+                all_ids = config.FindMatchingEssids(
+                    wireless.GetWirelessProperty(networkid, "essid"))
+                for network in all_ids:
+                    config.CopySettingsToProfile(
+                        wireless.GetWirelessProperty(networkid, "bssid"),
+                        network)
 
         elif nettype == "wired":
-            self.save_wired_settings(entry)
+            if not self.save_wired_settings(entry):
+                return False
             
         return True
     
@@ -1407,12 +1420,36 @@ class appGui:
             wired.SetWiredProperty("dns2", '')
             wired.SetWiredProperty("dns3", '')
         config.SaveWiredNetworkProfile(entry.comboProfileNames.get_active_text())
+        return True
             
     def save_wireless_settings(self, networkid, entry):
         """ Save wireless network settings. """
+        # Check encryption info
+        if entry.checkboxEncryption.get_active():
+            print "setting encryption info..."
+            encryptionInfo = entry.encryptionInfo
+            encrypt_methods = misc.LoadEncryptionMethods()
+            wireless.SetWirelessProperty(networkid, "enctype",
+                                         encrypt_methods[entry.comboEncryption.
+                                                         get_active()][1])
+            for x in encryptionInfo:
+                if encryptionInfo[x].get_text() == "":
+                    misc.error(self.window, language['encrypt_info_missing'])
+                    return False
+                wireless.SetWirelessProperty(networkid, x,
+                                             noneToString(encryptionInfo[x].get_text()))
+        elif not entry.checkboxEncryption.get_active() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            misc.error(self.window, language['enable_encryption'])
+            return False
+        else:
+            print 'encryption is', wireless.GetWirelessProperty(networkid, "encryption")
+            print "no encryption specified..."
+            wireless.SetWirelessProperty(networkid, "enctype", "None")
+            
         wireless.SetWirelessProperty(networkid, "automatic",
                                      noneToString(entry.checkboxAutoConnect.get_active()))
-     
+        # Save IP info
         if entry.checkboxStaticIP.get_active():
             wireless.SetWirelessProperty(networkid, "ip",
                                       noneToString(entry.txtIP.get_text()))
@@ -1425,7 +1462,8 @@ class appGui:
             wireless.SetWirelessProperty(networkid, "ip", '')
             wireless.SetWirelessProperty(networkid, "netmask", '')
             wireless.SetWirelessProperty(networkid, "gateway", '')
-   
+        
+        # Save DNS info
         if entry.checkboxStaticDNS.get_active() and \
            not entry.checkboxGlobalDNS.get_active():
             wireless.SetWirelessProperty(networkid, 'use_static_dns', True)
@@ -1446,22 +1484,9 @@ class appGui:
             wireless.SetWirelessProperty(networkid, 'dns1', '')
             wireless.SetWirelessProperty(networkid, 'dns2', '')
             wireless.SetWirelessProperty(networkid, 'dns3', '')
-   
-        if entry.checkboxEncryption.get_active():
-            print "setting encryption info..."
-            encryptionInfo = entry.encryptionInfo
-            encrypt_methods = misc.LoadEncryptionMethods()
-            wireless.SetWirelessProperty(networkid, "enctype",
-                                         encrypt_methods[entry.comboEncryption.
-                                                         get_active()][1])
-            for x in encryptionInfo:
-                wireless.SetWirelessProperty(networkid, x,
-                                             noneToString(encryptionInfo[x].get_text()))
-        else:
-            print "no encryption specified..."
-            wireless.SetWirelessProperty(networkid, "enctype", "None")
             
         config.SaveWirelessNetworkProfile(networkid)
+        return True
 
     def edit_advanced(self, widget, event, ttype, networkid, networkentry):
         """ Display the advanced settings dialog.

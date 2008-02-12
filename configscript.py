@@ -106,11 +106,10 @@ def get_script_info(network, network_type):
 def write_scripts(network, network_type, script_info):
     """ Writes script info to disk and loads it into the daemon. """
     con = ConfigParser.ConfigParser()
-    print "writing scripts, type", network_type
+    print "Writing scripts, type", network_type
     if network_type == "wired":
         con.read(wired_conf)
         if con.has_section(network):
-            con.add_section(network)
             con.set(network, "beforescript", script_info["pre_entry"])
             con.set(network, "afterscript", script_info["post_entry"])
             con.set(network, "disconnectscript",
@@ -122,7 +121,6 @@ def write_scripts(network, network_type, script_info):
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
         if con.has_section(bssid):
-            con.add_section(bssid)
             con.set(bssid, "beforescript", script_info["pre_entry"])
             con.set(bssid, "afterscript", script_info["post_entry"])
             con.set(bssid, "disconnectscript", script_info["disconnect_entry"])

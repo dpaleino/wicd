@@ -60,6 +60,7 @@ wpa2_pattern        = re.compile('(WPA2)', re.I | re.M  | re.S)
 auth_pattern       = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
 
 RALINK_DRIVER = 'ralink legacy'
+DHCP_CLIENT = None
 
 
 def SetDNS(dns1=None, dns2=None, dns3=None):
@@ -121,6 +122,20 @@ class Interface(object):
         """
         self.iface = iface
         self.verbose = verbose
+
+    def CheckDHCP(self):
+        """ Check that all required tools are available. """
+        # TODO: Implement this function.
+        # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
+        dhcpclients = ["dhclient", "dhcpcd", "pump -i"]
+        for client in dhcpclients:
+            if misc.Run("which " + client.split()[0]):
+                DHCP_CLIENT = client
+                break
+    
+        if not DHCP_CLIENT:
+            print "WARNING: NO DHCP CLIENT DETECTED!"
+        self.DHCP_CLIENT = DHCP_CLIENT
 
     def Check(self):
         """ Check that all required tools are available."""
@@ -194,21 +209,67 @@ class Interface(object):
         else:
             print 'DHCP connection failed: Reason unknown'
             return 'dhcp_failed'
+        
+    def _parse_pump(self, pipe):
+        """ Determines if obtaining an IP using pump succeeded. """
+        pump_complete = False
+        pump_succeded = True
+        
+        while not pump_complete:
+            line = pipe.readline()
+            if line == '':
+                pump_complete = True
+            elif line.strip().lower().startswith('Operation failed.'):
+                pump_succeded = False
+                pump_complete = True
+            print line
+            
+        if pump_succeded:
+            print "DHCP connection successful"
+            return "success"
+        else:
+            print "DHCP connection failed: Reason unknown"
+            return 'dhcp_failed'
 
+    def _parse_dhcpcd(self, pipe):
+        dhcpcd_complete = False
+        dhcpcd_success = True
+        
+        while not dhcpcd_complete:
+            line = pipe.readline()
+            if line.startswith("Error"):
+                dhcpcd_success = False
+                dhcpcd_complete = True
+            elif line == '':
+                dhcpcd_complete = True
+            print line
+            
+        if dhcpcd_success:
+            print "DHCP connection successful"
+            return "success"
+        else:
+            print "DHCP connection failed"
+            return "dhcp_failed"
+            
     def StartDHCP(self):
         """ Start the DHCP client to obtain an IP address. """
-        # TODO: Not all distros use dhclient to get an IP.  We should
-        # add a way to determine what method is used (or let the user tell
-        # us), and run the cmd based on that.
-        cmd = 'dhclient ' + self.iface
+        self.CheckDHCP()
+        DHCP_CLIENT = self.DHCP_CLIENT
+        
+        cmd = DHCP_CLIENT + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
         
-        return self._parse_dhclient(pipe)
+        if DHCP_CLIENT == "dhclient":
+            return self._parse_dhclient(pipe)
+        elif DHCP_CLIENT == "pump -i":
+            return self._parse_pump(pipe)
+        elif DHCP_CLIENT == "dhcpcd":
+            return self._parse_dhcpcd(pipe)
 
     def StopDHCP(self):
         """ Stop the DHCP client. """
-        cmd = 'killall dhclient dhclient3'
+        cmd = 'killall dhclient dhclient3 pump dhcpcd-bin'
         if self.verbose: print cmd
         misc.Run(cmd)
 

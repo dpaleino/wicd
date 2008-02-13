@@ -1361,7 +1361,7 @@ class appGui:
         if entry.checkboxStaticDNS.get_active() and \
            not entry.checkboxGlobalDNS.get_active():
             entlist.append(entry.txtDNS1)
-            # Only append addition dns entries if they're entered.
+            # Only append additional dns entries if they're entered.
             for ent in [entry.txtDNS2, entry.txtDNS3]:
                 if ent.get_text() != "":
                     entlist.append(ent)

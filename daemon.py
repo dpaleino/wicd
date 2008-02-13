@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """ wicd - wireless connection daemon implementation.
 
 This module implements the wicd daemon that provides network
@@ -463,7 +464,6 @@ class ConnectionWizard(dbus.service.Object):
         
         """
         self.forced_disconnect = bool(value)
-    #end function SetForcedDisconnect
     
     @dbus.service.method('org.wicd.daemon')
     def GetGUIOpen(self):
@@ -830,6 +830,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def ConnectWired(self):
         """connects to a wired network. """
+        self.SetForcedDisconnect(False)
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")

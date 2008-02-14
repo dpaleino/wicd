@@ -497,7 +497,7 @@ class NetworkEntry(gtk.Expander):
                 gateway.set_text('.'.join(ip_parts[0:3]) + '.1')
 
             if stringToNone(netmask.get_text()) == None:  # Make sure the netmask is blank
-                        netmask.set_text('255.255.255.0')  # Fill in the most common one
+                netmask.set_text('255.255.255.0')  # Fill in the most common one
         elif ipAddress != "":
             misc.error(None, "Invalid IP Address Entered.")
 
@@ -517,9 +517,7 @@ class NetworkEntry(gtk.Expander):
         else:
             self.checkboxStaticDNS.set_active(False)
 
-        #blankify stuff!
-        #this will properly disable
-        #unused boxes
+        # This will properly disable unused boxes.
         self.toggleIPCheckbox()
         self.toggleDNSCheckbox()
         self.toggleGlobalDNSCheckbox()
@@ -959,7 +957,7 @@ class appGui:
         self.status_area.hide_all()
 
         self.statusID = None
-        self.first_dialog_load = False
+        self.first_dialog_load = True
         self.vpn_connection_pipe = None
         self.is_visible = True
         
@@ -1077,10 +1075,10 @@ class appGui:
         self.set_label("pref_driver_label", language['wpa_supplicant_driver'] +
                        ':')
         # Hack to get the combo box we need, which you can't do with glade.
-        if not self.first_dialog_load:
-            self.first_dialog_load = True
+        wpadrivercombo = gtk.combo_box_new_text()
+        if self.first_dialog_load:
+            self.first_dialog_load = False
             wpa_hbox = self.wTree.get_widget("hbox_wpa")
-            wpadrivercombo = gtk.combo_box_new_text()
             wpa_hbox.pack_end(wpadrivercombo)
             
         wpadrivers = ["hostap", "hermes", "madwifi", "atmel", "wext",

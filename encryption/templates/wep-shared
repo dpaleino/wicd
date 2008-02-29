@@ -1,5 +1,5 @@
-name = WEP
-author = Adam Blackburn
+name = WEP Shared/Restricted
+author = Dan O'Reilly
 version = 1
 require key *Key
 -----
@@ -8,6 +8,7 @@ network={
        ssid="$_ESSID"
        scan_ssid=$_SCAN
        key_mgmt=NONE
+       auth_alg=SHARED
        wep_key0=$_KEY
        wep_tx_keyidx=0
        priority=5

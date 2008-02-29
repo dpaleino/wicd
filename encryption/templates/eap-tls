@@ -1,0 +1,18 @@
+name = EAP-TLS
+author = Dan O'Reilly
+version = 1
+require identity *Identity ca_cert *Path_to_CA_Cert client_cert *Path_to_Client_Cert private_key *Private_Key private_key_passwd *Private_Key_Password
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+   ssid=$_ESSID
+   key_mgmt=WPA-EAP
+   pairwise=TKIP
+   group=TKIP
+   eap=TLS
+   identity=$_IDENTITY
+   ca_cert=$_CA_CERT
+   client_cert=$_CLIENT_CERT
+   private_key=$_PRIVATE_KEY
+   private_key_passwd=$_PRIVATE_KEY_PASSWD
+}

@@ -1,0 +1,14 @@
+name = WEP (Hex)
+author = Adam Blackburn
+version = 1
+require key *Key
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+       ssid="$_ESSID"
+       scan_ssid=$_SCAN
+       key_mgmt=NONE
+       wep_key0=$_KEY
+       wep_tx_keyidx=0
+       priority=5
+}

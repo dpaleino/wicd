@@ -45,6 +45,7 @@ import dbus
 import dbus.service
 if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib
+
 # wicd specific libraries
 import wpath
 import networking
@@ -176,7 +177,7 @@ class ConnectionWizard(dbus.service.Object):
         This number is major-minor-micro. Major is only incremented if minor
         reaches > 9. Minor is incremented if changes that break core stucture
         are implemented. Micro is for everything else, and micro may be
-        anything >= 0. This number is effective starting wicd v1.2.0
+        anything >= 0. This number is effective starting wicd v1.2.0.
         
         """
         version = '1.5.0'

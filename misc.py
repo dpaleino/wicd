@@ -167,8 +167,9 @@ def ParseEncryption(network):
                     x = x.replace("$_" + str(t).upper(), str(network[t]))
             z = z + "\n" + x
         y += 1
-    # Write the data to the files
-    # then chmod them so they can't be read by normal users
+
+    # Write the data to the files then chmod them so they can't be read 
+    # by normal users.
     file = open(wpath.networks + network["bssid"].replace(":", "").lower(),
                     "w")
     os.chmod(wpath.networks + network["bssid"].replace(":", "").lower(), 0600)
@@ -207,14 +208,14 @@ def LoadEncryptionMethods():
         index = -1
         for current in requiredFields:
             # The pretty names will start with an * so we can
-            # seperate them with that
+            # separate them with that.
             if current[0] == "*":
                 # Make underscores spaces
                 # and remove the *
                 encryptionTypes[typeID][2][index][0] = current.replace("_",
                                                        " ").lstrip("*")
             else:
-                # Add to the list of things that are required
+                # Add to the list of things that are required.
                 index = len(encryptionTypes[typeID][2])
                 encryptionTypes[typeID][2][index] = {}
                 encryptionTypes[typeID][2][index][1] = current
@@ -252,7 +253,6 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-
 def to_unicode(x):
     """ Attempts to convert a string to unicode """
     try: # This may never fail, but let's be safe
@@ -270,12 +270,13 @@ def to_unicode(x):
 def error(parent, message): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
-        gtk.BUTTONS_OK)
+                               gtk.BUTTONS_OK)
     dialog.set_markup(message)
     dialog.run()
     dialog.destroy()
 
-class LogWriter():
+
+class LogWriter:
     """ A class to provide timestamped logging. """
     def __init__(self):
         self.file = open(wpath.log + 'wicd.log','a')

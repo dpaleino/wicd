@@ -376,7 +376,7 @@ class TrayIcon():
 def usage():
     """ Print usage information. """
     print """
-wicd 1.40
+wicd 1.50
 wireless (and wired) connection daemon front-end.
 
 Arguments:

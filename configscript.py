@@ -82,6 +82,12 @@ def blank_to_none(text):
         return "None"
     else:
         return str(text)
+    
+def get_val(con, network, val, default="None"):
+    if not con.has_option(network, val):
+        con.set(network, val, default)
+    return con.get(network, val)
+        
 
 def get_script_info(network, network_type):
     """ Read script info from disk and load it into the configuration dialog """
@@ -90,17 +96,16 @@ def get_script_info(network, network_type):
     if network_type == "wired":
         con.read(wired_conf)
         if con.has_section(network):
-            info["pre_entry"] = con.get(network, "beforescript")
-            info["post_entry"] = con.get(network, "afterscript")
-            info["disconnect_entry"] = con.get(network, "disconnectscript")
+            info["pre_entry"] = get_val(con, network, "beforescript")
+            info["post_entry"] = get_val(con, network, "afterscript")
+            info["disconnect_entry"] = get_val(con, network, "disconnectscript")
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
         if con.has_section(bssid):
-            info["pre_entry"] = con.get(bssid, "beforescript")
-            info["post_entry"] = con.get(bssid, "afterscript")
-            info["disconnect_entry"] = con.get(bssid, "disconnectscript")
-    
+            info["pre_entry"] = get_val(con, bssid, "beforescript")
+            info["post_entry"] = get_val(con, bssid, "afterscript")
+            info["disconnect_entry"] = get_val(con, bssid, "disconnectscript")
     return info
 
 def write_scripts(network, network_type, script_info):

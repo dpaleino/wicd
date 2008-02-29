@@ -36,9 +36,9 @@ class WiredConnectThread() -- Connection thread for wired
 #
 
 #
-# Much thanks to wieman01 for help and support with various types of encyption
+# Much thanks to wieman01 for help and support with various types of encyption.
 # Also thanks to foxy123, yopnono, and the many others who reported bugs helped
-# and helped keep this project moving
+# and helped keep this project moving.
 #
 
 import re
@@ -63,12 +63,33 @@ class Controller(object):
     after_script = None
     disconnect_script = None
     driver = None
+    wiface = None
+    liface = None
 
     def __init__(self):
         """ Initialise the class. """
         self.global_dns_1 = None
         self.global_dns_2 = None
         self.global_dns_3 = None
+        
+    def SetWiface(self, iface):
+        self.wiface.SetInterface(iface)
+    
+    def SetLiface(self, iface):
+        self.liface.SetInterface(iface)
+        
+    def __setattr__(self, attr, value):
+        if attr == 'wireless_interface':
+            object.__setattr__(self, attr, value)
+            if self.wiface:
+                self.SetWiface(value)
+            print 'hmm', self.wireless_interface
+        elif attr == 'wired_interface':
+            object.__setattr__(self, attr, value)
+            if self.liface:
+                self.SetLiface(value)
+        else:
+            object.__setattr__(self, attr, value)
 
 
 class ConnectThread(threading.Thread):
@@ -168,6 +189,21 @@ class Wireless(Controller):
         """ Initialise the class. """
         Controller.__init__(self)
         self.wpa_driver = None
+        self.wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                                  self.wpa_driver)
+    
+    def __setattr__(self, attr, value):
+        if attr == 'wpa_driver':
+            self.__dict__[attr] = value
+            if self.wiface:
+                self.SetWPADriver(value)
+        else:
+            object.__setattr__(self, attr, value)
+                
+    def LoadInterfaces(self):
+        """ Load the wnettools controls for the wired/wireless interfaces. """
+        self.wiface = wnettools.WirelessInterface(self.wireless_interface,
+                                                  self.wpa_driver)
 
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
@@ -179,8 +215,7 @@ class Wireless(Controller):
         A list of available networks sorted by strength.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                self.wpa_driver)
+        wiface = self.wiface
 
         # Prepare the interface for scanning
         wiface.Up()
@@ -193,7 +228,7 @@ class Wireless(Controller):
             wiface.SetEssid(essid)
 
         aps = wiface.GetNetworks()
-        print aps
+        #print aps
         aps.sort(key=lambda x: x['strength'])
         return aps
 
@@ -219,9 +254,7 @@ class Wireless(Controller):
         The current signal strength.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        return wiface.GetSignalStrength(iwconfig)
+        return self.wiface.GetSignalStrength(iwconfig)
 
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
@@ -230,9 +263,7 @@ class Wireless(Controller):
         The current dBm signal strength.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                          self.wpa_driver)
-        return wiface.GetDBMStrength(iwconfig)
+        return self.wiface.GetDBMStrength(iwconfig)
 
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get current network name.
@@ -241,9 +272,7 @@ class Wireless(Controller):
         The name of the currently connected network.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        return wiface.GetCurrentNetwork(iwconfig)
+        return self.wiface.GetCurrentNetwork(iwconfig)
 
     def GetIP(self):
         """ Get the IP of the interface.
@@ -252,15 +281,11 @@ class Wireless(Controller):
         The IP address of the interface in dotted notation.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        return wiface.GetIP()
+        return self.wiface.GetIP()
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        return wiface.GetIwconfig()
+        return self.wiface.GetIwconfig()
 
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key,
             enc_used, ics):
@@ -276,8 +301,7 @@ class Wireless(Controller):
         ics -- enable internet connection sharing
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
+        wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Killing dhclient and wpa_supplicant'
         wiface.StopDHCP()
@@ -288,7 +312,7 @@ class Wireless(Controller):
         wiface.SetMode('ad-hoc')
         wiface.SetChannel(channel)
         wiface.SetEssid(essid)
-        #Right now it just assumes you're using WEP
+        # Right now it just assumes you're using WEP
         if enc_used:
             print 'Setting encryption key'
             wiface.SetKey(key)
@@ -332,14 +356,11 @@ class Wireless(Controller):
         return wnettools.GetWirelessInterfaces()
 
     def GetKillSwitchStatus(self):
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        return wiface.GetKillSwitchStatus()
+        return self.wiface.GetKillSwitchStatus()
 
     def Disconnect(self):
         """ Disconnect from the network. """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
+        wiface = self.wiface
         if self.disconnect_script != None:
             print 'Running wireless network disconnect script'
             misc.ExecuteScript(self.disconnect_script)
@@ -347,6 +368,16 @@ class Wireless(Controller):
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
         wiface.Up()
+    
+    def SetDriver(self):
+        self.driver = self.GetDriverName()
+    
+    def GetDriverName(self):
+        """ Gets the driver associated with the wireless interface. """
+        return self.wiface.GetDriverName()
+    
+    def SetWPADriver(self, driver):
+        self.wiface.SetWpaDriver(driver)
 
 class WirelessConnectThread(ConnectThread):
     """ A thread class to perform the connection to a wireless network.
@@ -425,10 +456,9 @@ class WirelessConnectThread(ConnectThread):
         wiface.SetAddress('0.0.0.0')
         liface.SetAddress('0.0.0.0')
 
-        print 'Stopping wpa_supplicant, dhclient, dhclient3'
-        wiface.StopDHCP()
+        print 'Stopping wpa_supplicant, and any running dhcp clients'
         wiface.StopWPA()
-        liface.StopDHCP()
+        wnettools.StopDHCP()
 
         if self.should_die:
             wiface.Up()
@@ -561,6 +591,14 @@ class Wired(Controller):
         """ Initialise the class. """
         Controller.__init__(self)
         self.wpa_driver = None
+        self.liface = wnettools.WiredInterface(self.wired_interface)
+        
+    def __setattr__(self, attr, val):
+        object.__setattr__(self, attr, val)
+        
+    def LoadInterfaces(self):
+        """ Load the wnettools controls for the wired/wireless interfaces. """
+        self.liface = wnettools.WiredInterface(self.wired_interface)
 
     def CheckPluggedIn(self):
         """ Check whether the wired connection is plugged in.
@@ -569,8 +607,7 @@ class Wired(Controller):
         The status of the physical connection link.
 
         """
-        liface = wnettools.WiredInterface(self.wired_interface)
-        return liface.GetPluggedIn()
+        return self.liface.GetPluggedIn()
 
     def Connect(self, network):
         """ Spawn a connection thread to connect to the network.
@@ -594,12 +631,11 @@ class Wired(Controller):
         The IP address of the interface in dotted notation.
 
         """
-        liface = wnettools.WiredInterface(self.wired_interface)
-        return liface.GetIP()
+        return self.liface.GetIP()
 
     def Disconnect(self):
         """ Disconnect from the network. """
-        liface = wnettools.WiredInterface(self.wired_interface)
+        liface = self.liface
         if self.disconnect_script != None:
             print 'Running wired disconnect script'
             misc.Run(self.disconnect_script)
@@ -607,6 +643,25 @@ class Wired(Controller):
         liface.SetAddress('0.0.0.0')
         liface.Down()
         liface.Up()
+        
+    def SetDriver(self):
+        self.driver = self.GetDriverName()
+        
+    def GetDriverName(self):
+        """ Get the driver associated with the wired interface. """
+        return self.liface.GetDriverName()
+
+    def LoadDriver(self):
+        return self.liface.LoadDriver(self.driver)
+    
+    def UnloadDriver(self):
+        return self.liface.UnloadDriver(self.driver)
+    
+    def EnableInterface(self):
+        return self.liface.Up()
+    
+    def DisableInterface(self):
+        return self.liface.Down()
 
 
 class WiredConnectThread(ConnectThread):
@@ -680,10 +735,9 @@ class WiredConnectThread(ConnectThread):
         wiface.SetAddress('0.0.0.0')
         liface.SetAddress('0.0.0.0')
 
-        print 'Stopping wpa_supplicant, dhclient, dhclient3'
-        wiface.StopDHCP()
+        print 'Stopping wpa_supplicant, and any dhcp clients'
         wiface.StopWPA()
-        liface.StopDHCP()
+        wnettools.StopDHCP()
 
         if self.should_die:
             liface.Up()

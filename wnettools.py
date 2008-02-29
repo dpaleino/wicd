@@ -99,6 +99,11 @@ def GetDefaultGateway():
         gateway = None
     return gateway
 
+def StopDHCP():
+    """ Stop the DHCP client. """
+    cmd = 'killall dhclient dhclient3 pump dhcpcd-bin'
+    misc.Run(cmd)
+
 def GetWirelessInterfaces():
     """ Get available wireless interfaces.
 
@@ -122,38 +127,124 @@ class Interface(object):
         """
         self.iface = iface
         self.verbose = verbose
+        self.Check()
+        
+    def SetInterface(self, iface):
+        """ Sets the interface. """
+        self.iface = iface
 
     def CheckDHCP(self):
         """ Check that all required tools are available. """
         # TODO: Implement this function.
         # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
-        dhcpclients = ["dhclient", "dhcpcd", "pump -i"]
+        dhcpclients = ["dhclient", "dhcpcd", "pump"]
         for client in dhcpclients:
-            if misc.Run("which " + client.split()[0]):
+            if misc.Run("which " + client):
                 DHCP_CLIENT = client
                 break
     
         if not DHCP_CLIENT:
-            print "WARNING: NO DHCP CLIENT DETECTED!"
+            print "WARNING: NO DHCP CLIENT DETECTED!  Make sure there is one \
+                   set in your path."
+            return
+        elif DHCP_CLIENT == "dhclient":
+            DHCP_CMD = "dhclient"
+            DHCP_RELEASE = "dhclient -r"
+        elif DHCP_CLIENT == "pump":
+            DHCP_CMD = "pump -i"
+            DHCP_RELEASE = "pump -r -i"
+        elif DHCP_CLIENT == "dhcpcd":
+            DHCP_CMD = "dhcpcd"
+            DHCP_RELEASE = "dhcpcd -r"
+
+        self.DHCP_CMD = DHCP_CMD
+        self.DHCP_RELEASE = DHCP_RELEASE
         self.DHCP_CLIENT = DHCP_CLIENT
+    
+    def CheckWiredTools(self):
+        """ Check for the existence of ethtool and mii-tool. """
+        if misc.Run("which mii-tool"):
+            self.MIITOOL_FOUND = True
+        else:
+            self.MIITOOL_FOUND = False
+        
+        if misc.Run("which ethtool"):
+            self.ETHTOOL_FOUND = True
+        else:
+            self.ETHTOOL_FOUND = False
 
     def Check(self):
         """ Check that all required tools are available."""
         # TODO: Implement this function.
         # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
-        pass
+        self.CheckDHCP()
+        self.CheckWiredTools()
+        
+        if misc.Run("which ip"):
+            self.IP_FOUND = True
+        else:
+            self.IP_FOUND = False
 
     def Up(self):
         """ Bring the network interface up. """
         cmd = 'ifconfig ' + self.iface + ' up'
         if self.verbose: print cmd
         misc.Run(cmd)
+        return True
 
     def Down(self):
         """ Take down the network interface. """
         cmd = 'ifconfig ' + self.iface + ' down'
         if self.verbose: print cmd
         misc.Run(cmd)
+        return True
+
+    def GetDriverName(self):
+        """ Determine the driver name for the interface.
+        
+        Attempt to use ethtool to get the driver associated with a given
+        interface.  If ethtool is not installed or ethtool fails to provide
+        a driver, None is returned.
+        
+        """
+        if self.ETHTOOL_FOUND:
+            cmd = 'ethtool -i ' + self.iface
+            driver_pattern = re.compile('.*driver: (.*?)\n', re.I | re.M  | 
+                                        re.S)
+            driver_name = misc.RunRegex(driver_pattern, misc.Run(cmd))
+            
+        if not driver_name or not self.ETHTOOL_FOUND:
+            print ("Could not determine driver name for iface " + self.iface +
+                  " Is ethtool installed?")
+        return driver_name
+        
+    def LoadDriver(self, driver):
+        """ Enables the interface by loading the module given by driver. """
+        if not driver:
+            print 'Error: No driver associated with this interface.'
+            return False
+        cmd = "modprobe " + driver
+        if self.verbose: print cmd
+        output = misc.Run(cmd, True, True)
+        out = output.readlines()
+        if out and out[0].startswith("FATAL"):
+            print "Could not enable Interface: " + out[0]
+            return False
+        return True
+    
+    def UnloadDriver(self, driver):
+        """ Disables the interface by removing the module given by driver """
+        if not driver:
+            print 'Error: No driver associated with this interface.'
+            return False
+        cmd = "modprobe -r " + driver
+        if self.verbose: print cmd
+        output = misc.Run(cmd, True, True)
+        out = output.readlines()
+        if out and out[0].startswith("FATAL"):
+            print "Could not enable Interface: " + out[0]
+            return False
+        return True
 
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
         """ Set the IP addresses of an interface.
@@ -252,30 +343,30 @@ class Interface(object):
             return "dhcp_failed"
             
     def StartDHCP(self):
-        """ Start the DHCP client to obtain an IP address. """
-        self.CheckDHCP()
-        DHCP_CLIENT = self.DHCP_CLIENT
-        
-        cmd = DHCP_CLIENT + " " + self.iface
+        """ Start the DHCP client to obtain an IP address. """        
+        cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
         
+        DHCP_CLIENT = self.DHCP_CLIENT        
         if DHCP_CLIENT == "dhclient":
             return self._parse_dhclient(pipe)
-        elif DHCP_CLIENT == "pump -i":
+        elif DHCP_CLIENT == "pump":
             return self._parse_pump(pipe)
         elif DHCP_CLIENT == "dhcpcd":
             return self._parse_dhcpcd(pipe)
-
-    def StopDHCP(self):
-        """ Stop the DHCP client. """
-        cmd = 'killall dhclient dhclient3 pump dhcpcd-bin'
-        if self.verbose: print cmd
+    
+    def ReleaseDHCP(self):
+        """ Release the DHCP lease for this interface. """
+        cmd = self.DHCP_RELEASE + " " + self.iface
         misc.Run(cmd)
 
     def FlushRoutes(self):
         """ Flush all network routes. """
-        cmd = 'ip route flush dev ' + self.iface
+        if self.IP_FOUND:
+            cmd = "ip route flush dev " + self.iface
+        else:
+            cmd = 'route del dev ' + self.iface
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -323,25 +414,44 @@ class WiredInterface(Interface):
         mii-tool will be used instead.
         
         """
+        if self.ETHTOOL_FOUND:
+            return self._eth_get_plugged_in()
+        elif self.MIITOOL_FOUND:
+            return self._mii_get_plugged_in()
+        else:
+            print 'Error: No way of checking for a wired connection. Make \
+                   sure that either mii-tool or ethtool is installed.'
+            return False
+
+    def _eth_get_plugged_in(self):
         link_tool = 'ethtool'
         if not self.IsUp():
             print 'Wired Interface is down, putting it up'
             self.Up()
             time.sleep(6)
         tool_data = misc.Run(link_tool + ' ' + self.iface, True)
-        if misc.RunRegex(re.compile('(Operation not supported|\
-                                    ethtool: command not found)', re.I),
-                                    tool_data) is not None:
-            print "ethtool check failed, falling back to mii-tool"
-            link_tool = 'mii-tool'
-            tool_data = misc.Run(link_tool + ' ' + self.iface, True)
-
-        if misc.RunRegex(re.compile('(Link detected: yes|link ok)',
-                                    re.I | re.M  | re.S), tool_data) is not None:
+        if misc.RunRegex(re.compile('(Link detected: yes)', re.I | re.M  | 
+                                    re.S), tool_data) is not None:
             return True
         else:
             return False
     
+    def _mii_get_plugged_in(self):
+        link_tool = 'mii-tool'
+        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+        if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M  | re.S), 
+                         tool_data) is not None:
+            print 'Wired Interface is down, putting it up'
+            self.Up()
+            time.sleep(4)
+            tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+        
+        if misc.RunRegex(re.compile('(link ok)', re.I | re.M | re.S),
+                         tool_data) is not None:
+            return True
+        else:
+            return False
+
     def IsUp(self):
         """ Determines if the interface is up. """
         cmd = "ifconfig " + self.iface
@@ -369,6 +479,10 @@ class WirelessInterface(Interface):
         """
         Interface.__init__(self, iface, verbose)
         self.wpa_driver = wpa_driver
+        
+    def SetWpaDriver(self, driver):
+        """ Sets the wpa_driver. """
+        self.wpa_driver = driver
 
     def SetEssid(self, essid):
         """ Set the essid of the wireless interface.

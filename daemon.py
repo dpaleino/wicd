@@ -351,33 +351,49 @@ class ConnectionWizard(dbus.service.Object):
             self.Scan()
             #self.AutoConnectScan()  # Also scans for hidden networks
         if self.CheckPluggedIn():
-            if self.GetWiredAutoConnectMethod() == 2 and \
+            self._wired_autoconnect()
+        else:
+            self._wireless_autoconnect()
+    
+    def _wired_autoconnect(self):
+        """ Attempts to autoconnect to a wired network. """
+        
+        if self.GetWiredInterface() is None:
+            print 'no wired interface available'
+            return
+
+        if self.GetWiredAutoConnectMethod() == 2 and \
                not self.GetNeedWiredProfileChooser():
                 self.LaunchChooser()
-            elif self.GetWiredAutoConnectMethod != 2:
-                defaultNetwork = self.GetDefaultWiredNetwork()
-                if defaultNetwork != None:
-                    self.ReadWiredNetworkProfile(defaultNetwork)
-                    self.ConnectWired()
-                    print "Attempting to autoconnect with wired interface..."
-                else:
-                    print "Couldn't find a default wired connection, \
-                           wired autoconnect failed"
-        else:
-            print "No wired connection present, attempting to autoconnect \
-                   to wireless network"
-            if self.GetWirelessInterface() != None:
-                for x, network in enumerate(self.LastScan):
-                    if bool(self.LastScan[x]["has_profile"]):
-                        print self.LastScan[x]["essid"] + ' has profile'
-                        if bool(self.LastScan[x].get('automatic')):
-                            print 'trying to automatically connect to...', self.LastScan[x]["essid"]
-                            self.ConnectWireless(x)
-                            time.sleep(1)
-                            return
-                print "Unable to autoconnect, you'll have to manually connect"
+        elif self.GetWiredAutoConnectMethod != 2:
+            defaultNetwork = self.GetDefaultWiredNetwork()
+            if defaultNetwork != None:
+                self.ReadWiredNetworkProfile(defaultNetwork)
+                self.ConnectWired()
+                print "Attempting to autoconnect with wired interface..."
             else:
-                print 'autoconnect failed because wireless interface returned None'
+                print "Couldn't find a default wired connection, \
+                       wired autoconnect failed"
+                self._wireless_autoconnect()
+                    
+    def _wireless_autoconnect(self):
+        print "No wired connection present, attempting to autoconnect \
+                   to wireless network"
+        if self.GetWirelessInterface() is None:
+            print 'autoconnect failed because wireless interface returned None'
+            return
+
+        for x, network in enumerate(self.LastScan):
+            if bool(self.LastScan[x]["has_profile"]):
+                print self.LastScan[x]["essid"] + ' has profile'
+                if bool(self.LastScan[x].get('automatic')):
+                    print 'trying to automatically connect to...', self.LastScan[x]["essid"]
+                    self.ConnectWireless(x)
+                    time.sleep(1)
+                    return
+        print "Unable to autoconnect, you'll have to manually connect"
+
+            
 
     @dbus.service.method('org.wicd.daemon')
     def GetAutoReconnect(self):

@@ -148,6 +148,7 @@ class ConnectionWizard(dbus.service.Object):
         self.suspended = False
         self.connection_state = 0
         self.connection_info = [""]
+        self.auto_connecting = False
 
         # Load the config file
         self.ReadConfig()
@@ -357,11 +358,6 @@ class ConnectionWizard(dbus.service.Object):
     
     def _wired_autoconnect(self):
         """ Attempts to autoconnect to a wired network. """
-        
-        if self.GetWiredInterface() is None:
-            print 'no wired interface available'
-            return
-
         if self.GetWiredAutoConnectMethod() == 2 and \
                not self.GetNeedWiredProfileChooser():
                 self.LaunchChooser()
@@ -371,12 +367,16 @@ class ConnectionWizard(dbus.service.Object):
                 self.ReadWiredNetworkProfile(defaultNetwork)
                 self.ConnectWired()
                 print "Attempting to autoconnect with wired interface..."
+                self.auto_connecting = True
+                time.sleep(1.5)
+                gobject.timeout_add(3000, self._monitor_wired_autoconnect)
             else:
                 print "Couldn't find a default wired connection, \
                        wired autoconnect failed"
                 self._wireless_autoconnect()
-                    
+
     def _wireless_autoconnect(self):
+        """ Attempts to autoconnect to a wireless network. """
         print "No wired connection present, attempting to autoconnect \
                    to wireless network"
         if self.GetWirelessInterface() is None:
@@ -393,7 +393,16 @@ class ConnectionWizard(dbus.service.Object):
                     return
         print "Unable to autoconnect, you'll have to manually connect"
 
-            
+    def _monitor_wired_autoconnect(self):
+        if self.CheckIfWiredConnecting():
+            return True
+        elif self.GetWiredIP():
+            self.auto_connecting = False
+            return False
+        elif not self.CheckIfWirelessConnecting():
+            self._wireless_autoconnect()
+        self.auto_connecting = False
+        return False
 
     @dbus.service.method('org.wicd.daemon')
     def GetAutoReconnect(self):
@@ -1243,7 +1252,7 @@ class ConnectionWizard(dbus.service.Object):
         print "using wireless interface...", self.GetWirelessInterface()[5:]
 
 
-class ConnectionStatus():
+class ConnectionStatus:
     """ Class for monitoring the computer's connection status. """
     def __init__(self, connection):
         """ Initialize variables needed for the connection status methods. """
@@ -1394,7 +1403,7 @@ class ConnectionStatus():
         self.status_changed = True
         
         if conn.GetAutoReconnect() and not conn.CheckIfConnecting() and \
-           not conn.GetForcedDisconnect():
+           not conn.GetForcedDisconnect() and not conn.auto_connecting:
             print 'Starting automatic reconnect process'
             # First try connecting through ethernet
             if conn.CheckPluggedIn():

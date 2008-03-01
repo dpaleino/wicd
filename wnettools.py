@@ -791,7 +791,7 @@ class WirelessInterface(Interface):
             if self.verbose: print cmd
             misc.Run(cmd)
 
-    def ValidateAuthentication(self):
+    def ValidateAuthentication(self, auth_time):
         """ Validate WPA authentication.
 
             Validate that the wpa_supplicant authentication
@@ -805,38 +805,45 @@ class WirelessInterface(Interface):
         # Right now there's no way to do this for these drivers
         if self.wpa_driver == RALINK_DRIVER:
             return True
+
+        MAX_TIME = 5
+        MAX_DISCONNECTED_TIME = 3
+        while (time.time() - auth_time) < MAX_TIME:
+            cmd = 'wpa_cli -i ' + self.iface + ' status'
+            output = misc.Run(cmd)
+            result = misc.RunRegex(auth_pattern, output)
+            if self.verbose:
+                print 'WPA_CLI RESULT IS', result
+
+            if not result:
+                return False
+            if result == "COMPLETED":
+                return True
+            elif result == "DISCONNECTED" and \
+                 (time.time() - auth_time) > MAX_DISCONNECTED_TIME:
+                # Force a rescan to get wpa_supplicant moving again.
+                self._ForceSupplicantScan()
+                MAX_TIME += 5
+            time.sleep(1)
+
+        print 'wpa_supplicant authentication may have failed.'
+        return False
         
-        cmd = 'wpa_cli -i ' + self.iface + ' status'
-        if self.verbose: print cmd
-        output = misc.Run(cmd)
-        result = misc.RunRegex(auth_pattern, output)
-        if result == "COMPLETED":
-            return True
-        elif result == "DISCONNECTED":
-            # Force a rescan to get wpa_supplicant moving again.
-            self._ForceSupplicantScan()
-            return self.ValidateAuthentication()
-        else:
-            print 'wpa_supplicant authentication may have failed.'
-            return False
-        pass
 
     def _ForceSupplicantScan(self):
         """ Force wpa_supplicant to rescan available networks.
     
-        This function forces wpa_supplicant to rescan, then sleeps
-        to allow the scan to finish and reassociation to take place.
+        This function forces wpa_supplicant to rescan.
         This works around authentication validation sometimes failing for
         wpa_supplicant because it remains in a DISCONNECTED state for 
         quite a while, after which a rescan is required, and then
-        attempting to authenticate.
+        attempting to authenticate.  This whole process takes a long
+        time, so we manually speed it up if we see it happening.
         
         """
         print 'wpa_supplicant rescan forced...'
         cmd = 'wpa_cli -i' + self.iface + ' scan'
         misc.Run(cmd)
-        time.sleep(5)
-        print 'Trying to validate authentication again'
 
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.

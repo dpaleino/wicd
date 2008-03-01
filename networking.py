@@ -483,7 +483,6 @@ class WirelessConnectThread(ConnectThread):
                 self.SetStatus('generating_wpa_config')
                 print 'Attempting to authenticate...'
                 wiface.Authenticate(self.network)
-                auth_time = time.time()
 
         if self.should_die:
             wiface.Up()
@@ -512,19 +511,9 @@ class WirelessConnectThread(ConnectThread):
                          self.network['bssid'])
 
         if self.network.get('enctype') is not None:
-            # Allow some time for wpa_supplicant to associate.
-            # Hopefully 3 sec is enough.  If it proves to be inconsistent,
-            # we might have to try to monitor wpa_supplicant more closely,
-            # so we can tell exactly when it fails/succeeds.
             self.SetStatus('validating_authentication')
-            elapsed = time.time() - auth_time
-            if elapsed < 3 and elapsed >= 0:
-                if self.debug:
-                    print 'sleeping for ' + str(3 - elapsed)
-                time.sleep(3 - elapsed)
-
             # Make sure wpa_supplicant was able to associate.
-            if not wiface.ValidateAuthentication():
+            if not wiface.ValidateAuthentication(time.time()):
                 self.connect_aborted('bad_pass')
                 return
 

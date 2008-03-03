@@ -1249,7 +1249,12 @@ class ConnectionWizard(dbus.service.Object):
         os.chown(self.wired_conf, 0, 0)
 
         print "autodetected wireless interface...", self.DetectWirelessInterface()
-        print "using wireless interface...", self.GetWirelessInterface()[5:]
+        print "using wireless interface...", self.GetWirelessInterface()
+
+        # Set the interfaces up
+        # and load the wnettools for them
+        self.wifi.LoadInterfaces()
+        self.wired.LoadInterfaces()
 
 
 class ConnectionStatus:

@@ -160,6 +160,10 @@ class ConnectionWizard(dbus.service.Object):
 
         # Make a variable that will hold the wired network profile
         self.WiredNetwork = {}
+        
+        # Load our wired/wireless interfaces
+        self.wifi.LoadInterfaces()
+        self.wired.LoadInterfaces()
 
         # Scan since we just got started
         if auto_connect:
@@ -361,19 +365,25 @@ class ConnectionWizard(dbus.service.Object):
         if self.GetWiredAutoConnectMethod() == 2 and \
                not self.GetNeedWiredProfileChooser():
                 self.LaunchChooser()
-        elif self.GetWiredAutoConnectMethod != 2:
-            defaultNetwork = self.GetDefaultWiredNetwork()
-            if defaultNetwork != None:
-                self.ReadWiredNetworkProfile(defaultNetwork)
-                self.ConnectWired()
-                print "Attempting to autoconnect with wired interface..."
-                self.auto_connecting = True
-                time.sleep(1.5)
-                gobject.timeout_add(3000, self._monitor_wired_autoconnect)
-            else:
-                print "Couldn't find a default wired connection, \
-                       wired autoconnect failed"
+        elif self.GetWiredAutoConnectMethod == 1:
+            network = self.GetDefaultWiredNetwork()
+            if not network:
+                print "Couldn't find a default wired connection,  wired \
+                       autoconnect failed."
                 self._wireless_autoconnect()
+        else: # Assume its last-used.
+            network = self.GetLastUsedWiredNetwork()
+            if not network:
+                print "no previous wired profile available, wired autoconnect \
+                      failed."
+                self._wireless_autoconnect()
+                return
+        self.ReadWiredNetworkProfile(network)
+        self.ConnectWired()
+        print "Attempting to autoconnect with wired interface..."
+        self.auto_connecting = True
+        time.sleep(1.5)
+        gobject.timeout_add(3000, self._monitor_wired_autoconnect)
 
     def _wireless_autoconnect(self):
         """ Attempts to autoconnect to a wireless network. """
@@ -387,7 +397,8 @@ class ConnectionWizard(dbus.service.Object):
             if bool(self.LastScan[x]["has_profile"]):
                 print self.LastScan[x]["essid"] + ' has profile'
                 if bool(self.LastScan[x].get('automatic')):
-                    print 'trying to automatically connect to...', self.LastScan[x]["essid"]
+                    print 'trying to automatically connect to...', \
+                          self.LastScan[x]["essid"]
                     self.ConnectWireless(x)
                     time.sleep(1)
                     return
@@ -882,7 +893,7 @@ class ConnectionWizard(dbus.service.Object):
     def CreateWiredNetworkProfile(self, profilename):
         """ Creates a wired network profile. """
         #should include: profilename, ip, netmask, gateway, dns1, dns2, dns3
-        profilename = profilename.encode('utf-8')
+        profilename = misc.to_unicode(profilename)
         print "creating profile for " + profilename
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
@@ -905,14 +916,15 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.config')
     def UnsetWiredLastUsed(self):
-        """Unsets the last used option in the current default wired profile"""
+        """ Finds the previous lastused network, and sets lastused to False. """
+        print 'unsetting last used'
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
         profileList = config.sections()
         print "profileList = ", profileList
         for profile in profileList:
             print "profile = ", profile
-            if config.has_option(profile,"lastused"):
+            if config.has_option(profile, "lastused"):
                 if config.get(profile, "lastused") == "True":
                     print "removing existing lastused"
                     config.set(profile, "lastused", False)
@@ -924,12 +936,10 @@ class ConnectionWizard(dbus.service.Object):
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
         profileList = config.sections()
-        print "profileList = ", profileList
         for profile in profileList:
-            print "profile = ", profile
             if config.has_option(profile, "default"):
                 if config.get(profile, "default") == "True":
-                    print "removing existing default"
+                    print "removing existing default", profile
                     config.set(profile, "default", False)
                     self.SaveWiredNetworkProfile(profile)
 
@@ -959,7 +969,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.config')
     def DeleteWiredNetworkProfile(self, profilename):
         """ Deletes a wired network profile """
-        profilename = profilename.encode('utf-8')
+        profilename = misc.to_unicode(profilename)
         print "deleting profile for " + str(profilename)
         config = ConfigParser.ConfigParser()
         config.read(self.wired_conf)
@@ -974,6 +984,8 @@ class ConnectionWizard(dbus.service.Object):
     def SaveWiredNetworkProfile(self, profilename):
         """ Writes a wired network profile to disk """
         #should include: profilename,ip,netmask,gateway,dns1,dns2
+        if profilename == "":
+            return "500: Bad Profile name"
         profilename = misc.to_unicode(profilename)
         print "setting profile for " + str(profilename)
         config = ConfigParser.ConfigParser()
@@ -1065,6 +1077,7 @@ class ConnectionWizard(dbus.service.Object):
                     self.LastScan[id][x] = misc.Noneify(config.get(self.LastScan[id]["bssid"], x))
             self.LastScan[id]['use_static_dns'] = bool(self.LastScan[id].get('use_static_dns'))
             self.LastScan[id]['use_global_dns'] = bool(self.LastScan[id].get('use_global_dns'))
+            self.LastScan[id]['encryption'] = bool(self.LastScan[id].get('encryption'))
             return "100: Loaded Profile"
         else:
             self.LastScan[id]["has_profile"] = False
@@ -1250,11 +1263,6 @@ class ConnectionWizard(dbus.service.Object):
 
         print "autodetected wireless interface...", self.DetectWirelessInterface()
         print "using wireless interface...", self.GetWirelessInterface()
-
-        # Set the interfaces up
-        # and load the wnettools for them
-        self.wifi.LoadInterfaces()
-        self.wired.LoadInterfaces()
 
 
 class ConnectionStatus:

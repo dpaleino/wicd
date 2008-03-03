@@ -72,24 +72,23 @@ class Controller(object):
         self.global_dns_2 = None
         self.global_dns_3 = None
         
-    def SetWiface(self, iface):
-        self.wiface.SetInterface(iface)
-    
-    def SetLiface(self, iface):
-        self.liface.SetInterface(iface)
-        
     def __setattr__(self, attr, value):
         if attr == 'wireless_interface':
             object.__setattr__(self, attr, value)
             if self.wiface:
                 self.SetWiface(value)
-            print 'hmm', self.wireless_interface
         elif attr == 'wired_interface':
             object.__setattr__(self, attr, value)
             if self.liface:
                 self.SetLiface(value)
         else:
             object.__setattr__(self, attr, value)
+            
+    def SetWiface(self, iface):
+        self.wiface.SetInterface(iface)
+    
+    def SetLiface(self, iface):
+        self.liface.SetInterface(iface)
 
 
 class ConnectThread(threading.Thread):

@@ -33,6 +33,7 @@ NOT_CONNECTED = 0
 CONNECTING = 1
 WIRELESS = 2
 WIRED = 3
+SUSPENDED = 4
 
 def Run(cmd, include_stderr=False, return_pipe=False):
     """ Run a command.
@@ -116,7 +117,7 @@ def ReadFile(filename):
 
 def to_bool(var):
     """ Convert a string to type bool, but make "False"/"0" become False. """
-    if var == "False" or var == "0":
+    if var in ("False", "0"):
         var = False
     else:
         var = bool(var)
@@ -125,20 +126,11 @@ def to_bool(var):
 def Noneify(variable):
     """ Convert string types to either None or booleans"""
     #set string Nones to real Nones
-    if variable == "None" or variable == "":
+    if variable in ("None", "", None):
         return None
-    if variable == "True": # or variable == "1": # or variable == 1:
-        return True
-    if variable == "False": #or variable == "0": # or variable == 0:
+    if variable in ("False", "0"):
         return False
-    #if str(variable).isdigit() == True:
-    #    return int(variable)
-    if str(variable) == "1":
-        return True
-    if str(variable) == "0":
-        return False
-    #otherwise...
-    return variable
+    return bool(variable)
 
 def ParseEncryption(network):
     """ Parse through an encryption template file
@@ -228,7 +220,7 @@ def noneToString(text):
     the box will be blank.
 
     """
-    if text == None or text == "None" or text == "":
+    if text in (None, ""):
         return "None"
     else:
         return str(text)
@@ -248,8 +240,7 @@ def get_gettext():
     if (osLanguage):
         langs += osLanguage.split(":")
     langs += ["en_US"]
-    lang = gettext.translation('wicd', local_path, languages=langs,
-                               fallback=True)
+    lang = gettext.translation('wicd', local_path, languages=langs, fallback=True)
     _ = lang.gettext
     return _
 

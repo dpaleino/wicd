@@ -222,7 +222,7 @@ class Wireless(Controller):
         # If there is a hidden essid then set it now, so that when it is
         # scanned it will be recognized.
         essid = misc.Noneify(essid)
-        if not essid == None:
+        if essid is not None:
             print 'Setting hidden essid' + essid
             wiface.SetEssid(essid)
 

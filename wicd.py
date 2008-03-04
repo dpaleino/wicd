@@ -177,7 +177,7 @@ class TrayIcon():
                                     cur_network + "...")
                 self.tr.set_from_file(wpath.images + "no-signal.png")
                 
-            elif state == misc.NOT_CONNECTED:
+            elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
                 self.tr.set_from_file(wpath.images + "no-signal.png")
                 if wireless.GetKillSwitchEnabled():
                     status = (language['not_connected'] + " (" + 

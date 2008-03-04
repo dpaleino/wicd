@@ -127,10 +127,6 @@ class LogWriter:
 
 
 class ConnectionWizard(dbus.service.Object):
-
-    ########## VARIABLES AND STUFF
-    #################################
-
     def __init__(self, bus_name, object_path='/org/wicd/daemon',
                  auto_connect=True):
         dbus.service.Object.__init__(self, bus_name, object_path)
@@ -147,7 +143,7 @@ class ConnectionWizard(dbus.service.Object):
         self.vpn_session =  None
         self.gui_open = False
         self.suspended = False
-        self.connection_state = 0
+        self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
 
@@ -156,7 +152,7 @@ class ConnectionWizard(dbus.service.Object):
 
         # This will speed up the scanning process - if a client doesn't 
         # need a fresh scan, just feed them the old one.  A fresh scan
-        # can be done by calling FreshScan(self,interface)
+        # can be done by calling Scan(fresh=True).
         self.LastScan = ''
 
         # Make a variable that will hold the wired network profile
@@ -338,14 +334,8 @@ class ConnectionWizard(dbus.service.Object):
         self.suspended = val
         if self.suspended:
             self.Disconnect()
-    
-    @dbus.service.method('org.wicd.daemon')
-    def StartVPNSession(self):
-        import vpn
-        self.vpn_session = vpn.PPTPConnection()
-        self.vpn_pid = None
 
-    @dbus.service. method('org.wicd.daemon')
+    @dbus.service.method('org.wicd.daemon')
     def AutoConnect(self, fresh):
         """ Attempts to autoconnect to a wired or wireless network.
         
@@ -613,7 +603,7 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetNumberOfNetworks(self):
-        """Returns number of networks. """
+        """ Returns number of networks. """
         if self.debug_mode:
             print 'returned number of networks...', len(self.LastScan)
         return len(self.LastScan)
@@ -680,8 +670,8 @@ class ConnectionWizard(dbus.service.Object):
         functions as a way to simply the strength polling process for
         the GUI and tray icon, by returning the strength that the user
         has requested to be displayed in wicd preferences.
-        """
         
+        """
         if self.GetSignalDisplayType() == 0:
             return self.GetCurrentSignalStrength(iwconfig)
         else:
@@ -901,7 +891,7 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.wired')
     def ConnectWired(self):
-        """connects to a wired network. """
+        """ Connects to a wired network. """
         self.SetForcedDisconnect(False)
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
@@ -1311,7 +1301,7 @@ class ConnectionStatus:
         self.connection_lost_counter = 0
         self.conn = connection
         self.status_changed = False
-        self.state = 0
+        self.state = misc.NOT_CONNECTED
 
     def check_for_wired_connection(self, wired_ip):
         """ Checks for an active wired connection.
@@ -1392,9 +1382,13 @@ class ConnectionStatus:
         
         """
         conn = self.conn
-        
+        wired_ip = None
+        wifi_ip = None
+
         if conn.suspended:
             print "Suspended."
+            self.state = misc.SUSPENDED
+            self.update_state()
             return True
 
         # Determine what our current state is.
@@ -1412,9 +1406,16 @@ class ConnectionStatus:
                 else:
                     self.state = misc.CONNECTING
                     self.status_changed = True
-        
+        self.update_state(wired_ip, wifi_ip)
+        return True
+
+    def update_state(self, wired_ip=None, wifi_ip=None):
+        """ Set the current connection state. """
+        conn = self.conn
         # Set our connection state/info.
         if self.state == misc.NOT_CONNECTED:
+            info = [""]
+        elif self.state == misc.SUSPENDED:
             info = [""]
         elif self.state == misc.CONNECTING:
             if conn.CheckIfWiredConnecting():

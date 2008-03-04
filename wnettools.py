@@ -60,8 +60,6 @@ wpa2_pattern        = re.compile('(WPA2)', re.I | re.M  | re.S)
 auth_pattern       = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
 
 RALINK_DRIVER = 'ralink legacy'
-DHCP_CLIENT = None
-
 
 def SetDNS(dns1=None, dns2=None, dns3=None):
     """ Set the DNS of the system to the specified DNS servers.
@@ -566,23 +564,25 @@ class WirelessInterface(Interface):
         The channel number, or None if not found.
 
         """
-        if freq == '2.412 GHz':   return 1
-        elif freq == '2.417 GHz': return 2
-        elif freq == '2.422 GHz': return 3
-        elif freq == '2.427 GHz': return 4
-        elif freq == '2.432 GHz': return 5
-        elif freq == '2.437 GHz': return 6
-        elif freq == '2.442 GHz': return 7
-        elif freq == '2.447 GHz': return 8
-        elif freq == '2.452 GHz': return 9
-        elif freq == '2.457 GHz': return 10
-        elif freq == '2.462 GHz': return 11
-        elif freq == '2.467 GHz': return 12
-        elif freq == '2.472 GHz': return 13
-        elif freq == '2.484 GHz': return 14
+        ret = None
+        if freq == '2.412 GHz':   ret = 1
+        elif freq == '2.417 GHz': ret = 2
+        elif freq == '2.422 GHz': ret = 3
+        elif freq == '2.427 GHz': ret = 4
+        elif freq == '2.432 GHz': ret = 5
+        elif freq == '2.437 GHz': ret = 6
+        elif freq == '2.442 GHz': ret = 7
+        elif freq == '2.447 GHz': ret = 8
+        elif freq == '2.452 GHz': ret = 9
+        elif freq == '2.457 GHz': ret = 10
+        elif freq == '2.462 GHz': ret = 11
+        elif freq == '2.467 GHz': ret = 12
+        elif freq == '2.472 GHz': ret = 13
+        elif freq == '2.484 GHz': ret = 14
         else:
             print 'Couldn\'t determine channel number for current network - ' + freq
-            return None
+        
+        return ret
 
     def _GetRalinkInfo(self):
         """ Get a network info list used for ralink drivers

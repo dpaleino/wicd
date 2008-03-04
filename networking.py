@@ -285,6 +285,10 @@ class Wireless(Controller):
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
         return self.wiface.GetIwconfig()
+    
+    def IsUp(self):
+        """ Calls the IsUp method for the wireless interface. """
+        return self.wiface.IsUp()
 
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key,
             enc_used, ics):
@@ -367,13 +371,12 @@ class Wireless(Controller):
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
         wiface.Up()
+
+    def EnableInterface(self):
+        return self.wiface.Up()
     
-    def SetDriver(self):
-        self.driver = self.GetDriverName()
-    
-    def GetDriverName(self):
-        """ Gets the driver associated with the wireless interface. """
-        return self.wiface.GetDriverName()
+    def DisableInterface(self):
+        return self.wiface.Down()
     
     def SetWPADriver(self, driver):
         self.wiface.SetWpaDriver(driver)
@@ -632,18 +635,9 @@ class Wired(Controller):
         liface.Down()
         liface.Up()
         
-    def SetDriver(self):
-        self.driver = self.GetDriverName()
-        
-    def GetDriverName(self):
-        """ Get the driver associated with the wired interface. """
-        return self.liface.GetDriverName()
-
-    def LoadDriver(self):
-        return self.liface.LoadDriver(self.driver)
-    
-    def UnloadDriver(self):
-        return self.liface.UnloadDriver(self.driver)
+    def IsUp(self):
+        """ Calls the IsUp method for the wired interface. """
+        return self.liface.IsUp()
     
     def EnableInterface(self):
         return self.liface.Up()

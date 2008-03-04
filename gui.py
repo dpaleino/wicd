@@ -1083,9 +1083,8 @@ class WiredProfileChooser:
         instruct_label.set_alignment(0, 0)
         stoppopcheckbox.set_active(False)
 
-        # Remove widgets that were added to the normal
-        # WiredNetworkEntry so that they can be added to
-        # the pop-up wizard.
+        # Remove widgets that were added to the normal WiredNetworkEntry
+        # so that they can be added to the pop-up wizard.
         wired_net_entry.vboxTop.remove(wired_net_entry.hbox_temp)
         wired_net_entry.vboxTop.remove(wired_net_entry.profile_help)
 
@@ -1133,7 +1132,11 @@ class appGui:
                 "connect_clicked" : self.connect_hidden,
                 "preferences_clicked" : self.settings_dialog,
                 "about_clicked" : self.about_dialog,
-                "create_adhoc_network_button_button" : self.create_adhoc_network}
+                "create_adhoc_network_button_button" : self.create_adhoc_network,
+                "on_iface_menu_enable_wireless" : self.on_enable_wireless,
+                "on_iface_menu_disable_wireless" : self.on_disable_wireless,
+                "on_iface_menu_enable_wired" : self.on_enable_wired,
+                "on_iface_menu_disable_wired" : self.on_disable_wired,}
         self.wTree.signal_autoconnect(dic)
 
         # Set some strings in the GUI - they may be translated
@@ -1157,7 +1160,16 @@ class appGui:
         self.is_visible = True
         
         self.window.connect('delete_event', self.exit)
-
+        
+        if not wireless.IsWirelessUp():
+            self.wTree.get_widget("iface_menu_disable_wireless").hide()
+        else:
+            self.wTree.get_widget("iface_menu_enable_wireless").hide()
+        if not wired.IsWiredUp():
+            self.wTree.get_widget("iface_menu_disable_wired").hide()
+        else:
+            self.wTree.get_widget("iface_menu_enable_wired").hide()
+        
         size = config.ReadWindowSize()
         width = size[0]
         height = size[1]
@@ -1381,6 +1393,50 @@ class appGui:
             self.refresh_networks(None, True, answer)
         else:
             dialog.destroy()
+    
+    def on_enable_wireless(self, widget):
+        """ Called when the Enable Wireless Interface button is clicked. """
+        success = wireless.EnableWirelessInterface()
+        if success:
+            enable_item = self.wTree.get_widget("iface_menu_enable_wireless")
+            disable_item = self.wTree.get_widget("iface_menu_disable_wireless")
+            enable_item.hide()
+            disable_item.show()
+        else:
+            misc.error(self.window, "Failed to enable wireless interface.")
+
+    def on_disable_wireless(self, widget):
+        """ Called when the Disable Wireless Interface button is clicked. """
+        success = wireless.DisableWirelessInterface()
+        if success:
+            enable_item = self.wTree.get_widget("iface_menu_enable_wireless")
+            disable_item = self.wTree.get_widget("iface_menu_disable_wireless")
+            enable_item.show()
+            disable_item.hide()
+        else:
+            misc.error(self.window, "Failed to disable wireless interface.")
+
+    def on_enable_wired(self, widget):
+        """ Called when the Enable Wired Interface button is clicked. """
+        success = wired.EnableWiredInterface()
+        if success:
+            enable_item = self.wTree.get_widget("iface_menu_enable_wired")
+            disable_item = self.wTree.get_widget("iface_menu_disable_wired")
+            enable_item.hide()
+            disable_item.show()
+        else:
+            misc.error(self.window, "Failed to enable wired interface.")
+
+    def on_disable_wired(self, widget):
+        """ Called when the Disable Wired Interface button is clicked. """
+        success = wired.DisableWiredInterface()
+        if success:
+            enable_item = self.wTree.get_widget("iface_menu_enable_wired")
+            disable_item = self.wTree.get_widget("iface_menu_disable_wired")
+            enable_item.show()
+            disable_item.hide()
+        else:
+            misc.error(self.window, "Failed to disable wired interface.")
 
     def cancel_connect(self, widget):
         """ Alerts the daemon to cancel the connection process. """

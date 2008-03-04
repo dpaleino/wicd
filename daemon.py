@@ -39,6 +39,7 @@ import sys
 import time
 import getopt
 import ConfigParser
+
 # DBUS
 import gobject
 import dbus
@@ -665,6 +666,11 @@ class ConnectionWizard(dbus.service.Object):
         iface = self.wifi.DetectWirelessInterface()
         print 'automatically detected wireless interface', iface
         return str(iface)
+    
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def IsWirelessUp(self):
+        """ Returns a boolean specifying if wireless is up or down. """
+        return self.wifi.IsUp()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetPrintableSignalStrength(self, iwconfig=None):
@@ -714,6 +720,18 @@ class ConnectionWizard(dbus.service.Object):
                 return x
         print 'returning -1, current network not found'
         return -1
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def EnableWirelessInterface(self):
+        """ Calls a method to enable the wireless interface. """
+        result = self.wifi.EnableInterface()
+        return result
+    
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def DisableWirelessInterface(self):
+        """ Calls a method to disable the wireless interface. """
+        result = self.wifi.DisableInterface()
+        return result
     
     @dbus.service.method('org.wicd.daemon.wireless')
     def ConnectWireless(self, id):
@@ -863,6 +881,23 @@ class ConnectionWizard(dbus.service.Object):
                                       self.wired.CheckPluggedIn())
         else:
             return self.__printReturn("returning plugged in", None)
+        
+    @dbus.service.method('org.wicd.daemon.wired')
+    def IsWiredUp(self):
+        """ Returns a boolean specifying if wired iface is up or down. """
+        return self.wired.IsUp()
+    
+    @dbus.service.method('org.wicd.daemon.wired')
+    def EnableWiredInterface(self):
+        """ Calls a method to enable the wired interface. """           
+        result = self.wired.EnableInterface()
+        return result
+    
+    @dbus.service.method('org.wicd.daemon.wired')
+    def DisableWiredInterface(self):
+        """ Calls a method to disable the wired interface. """
+        result = self.wired.DisableInterface()
+        return result
 
     @dbus.service.method('org.wicd.daemon.wired')
     def ConnectWired(self):
@@ -1453,7 +1488,6 @@ Arguments:
 \t-h\t--help\t\tPrint this help.
 """
 
-
 def daemonize():
     """ Disconnect from the controlling terminal.
 
@@ -1488,7 +1522,6 @@ def daemonize():
     except OSError, e:
         print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
         sys.exit(1)
-
 
 def main(argv):
     """ The main daemon program.

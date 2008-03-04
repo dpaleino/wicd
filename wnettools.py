@@ -392,6 +392,20 @@ class Interface(object):
         #if self.verbose: print cmd
         output = misc.Run(cmd)
         return misc.RunRegex(ip_pattern, output)
+    
+    def IsUp(self):
+        """ Determines if the interface is up. """
+        cmd = "ifconfig " + self.iface
+        output = misc.Run(cmd)
+        lines = output.split('\n')
+        if len(lines) < 5:
+            return False
+        
+        for line in lines[1:4]:
+            if line.strip().startswith('UP'):
+                return True
+            
+        return False
 
 
 class WiredInterface(Interface):
@@ -451,20 +465,6 @@ class WiredInterface(Interface):
             return True
         else:
             return False
-
-    def IsUp(self):
-        """ Determines if the interface is up. """
-        cmd = "ifconfig " + self.iface
-        output = misc.Run(cmd)
-        lines = output.split('\n')
-        if len(lines) < 5:
-            return False
-        
-        for line in lines[1:4]:
-            if line.strip().startswith('UP'):
-                return True
-            
-        return False
         
 
 class WirelessInterface(Interface):

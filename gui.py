@@ -48,7 +48,7 @@ except:
     print 'Missing GTK and gtk.glade.  Aborting.'
     sys.exit(1)
 
-if getattr(dbus, 'version', (0,0,0)) >= (0,41,0):
+if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib
 
 # Declare the connections to the daemon, so that they may be accessed
@@ -140,7 +140,7 @@ language['use_debug_mode'] = _('Enable debug mode')
 language['use_global_dns'] = _('Use global DNS servers')
 language['use_default_profile'] = _('Use default profile on wired autoconnect')
 language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
-language['use_last_used_profile'] =_ ('Use last used profile on wired autoconnect')
+language['use_last_used_profile'] = _('Use last used profile on wired autoconnect')
 language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
 language['wired_network_found'] = _('Wired connection detected')
 language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
@@ -198,32 +198,32 @@ class LinkButton(gtk.EventBox):
         self.add(label)
         self.show_all()
 
-    def __setHandCursor(self,widget):
+    def __setHandCursor(self, widget):
         # We need this to set the cursor to a hand for the link labels.
         # I'm not entirely sure what it does :P
         hand = gtk.gdk.Cursor(gtk.gdk.HAND1)
         widget.window.set_cursor(hand)
 
 class SmallLabel(gtk.Label):
-    def __init__(self,text=''):
-        gtk.Label.__init__(self,text)
-        self.set_size_request(50,-1)
+    def __init__(self, text=''):
+        gtk.Label.__init__(self, text)
+        self.set_size_request(50, -1)
 
 class LabelEntry(gtk.HBox):
     """ A label on the left with a textbox on the right. """
     def __init__(self,text):
         gtk.HBox.__init__(self)
         self.entry = gtk.Entry()
-        self.entry.set_size_request(200,-1)
+        self.entry.set_size_request(200, -1)
         self.label = SmallLabel()
         self.label.set_text(text)
-        self.label.set_size_request(170,-1)
-        self.pack_start(self.label,fill=False,expand=False)
-        self.pack_start(self.entry,fill=False,expand=False)
+        self.label.set_size_request(170, -1)
+        self.pack_start(self.label, fill=False, expand=False)
+        self.pack_start(self.entry, fill=False, expand=False)
         self.label.show()
         self.entry.show()
-        self.entry.connect('focus-out-event',self.hide_characters)
-        self.entry.connect('focus-in-event',self.show_characters)
+        self.entry.connect('focus-out-event', self.hide_characters)
+        self.entry.connect('focus-in-event', self.show_characters)
         self.auto_hide_text = False
         self.show()
 
@@ -256,9 +256,9 @@ class GreyLabel(gtk.Label):
     """ Creates a grey gtk.Label. """
     def __init__(self):
         gtk.Label.__init__(self)
-    def set_label(self,text):
+    def set_label(self, text):
         self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
-        self.set_alignment(0,0)
+        self.set_alignment(0, 0)
 
 ########################################
 ##### OTHER RANDOM FUNCTIONS
@@ -293,10 +293,10 @@ def stringToBoolean(text):
         return False
     return text
 
-def checkboxTextboxToggle(checkbox,textboxes):
+def checkboxTextboxToggle(checkbox, textboxes):
     # Really bad practice, but checkbox == self
     for textbox in textboxes:
-            textbox.set_sensitive(checkbox.get_active())
+        textbox.set_sensitive(checkbox.get_active())
 
 ########################################
 ##### NETWORK LIST CLASSES
@@ -316,44 +316,43 @@ class AdvancedSettingsDialog(gtk.Dialog):
                                                         gtk.STOCK_CANCEL,
                                                         gtk.RESPONSE_REJECT))
         # Set up the Advanced Settings Dialog.
-        self.txtIP = LabelEntry(language['ip'])
-        self.txtIP.entry.connect('focus-out-event', self.setDefaults)
-        self.txtNetmask = LabelEntry(language['netmask'])
-        self.txtGateway = LabelEntry(language['gateway'])
-        self.txtDNS1 = LabelEntry(language['dns'] + ' ' + language['1'])
-        self.txtDNS2 = LabelEntry(language['dns'] + ' ' + language['2'])
-        self.txtDNS3 = LabelEntry(language['dns'] + ' ' + language['3'])
-        self.checkboxStaticIP = gtk.CheckButton(language['use_static_ip'])
-        self.checkboxStaticDNS = gtk.CheckButton(language['use_static_dns'])
-        self.checkboxGlobalDNS = gtk.CheckButton(language['use_global_dns'])
-        self.hboxDNS = gtk.HBox(False, 0)
-        self.hboxDNS.pack_start(self.checkboxStaticDNS)
-        self.hboxDNS.pack_start(self.checkboxGlobalDNS)
+        self.txt_ip = LabelEntry(language['ip'])
+        self.txt_ip.entry.connect('focus-out-event', self.set_defaults)
+        self.txt_netmask = LabelEntry(language['netmask'])
+        self.txt_gateway = LabelEntry(language['gateway'])
+        self.txt_dns_1 = LabelEntry(language['dns'] + ' ' + language['1'])
+        self.txt_dns_2 = LabelEntry(language['dns'] + ' ' + language['2'])
+        self.txt_dns_3 = LabelEntry(language['dns'] + ' ' + language['3'])
+        self.chkbox_static_ip = gtk.CheckButton(language['use_static_ip'])
+        self.chkbox_static_dns = gtk.CheckButton(language['use_static_dns'])
+        self.chkbox_global_dns = gtk.CheckButton(language['use_global_dns'])
+        self.hbox_dns = gtk.HBox(False, 0)
+        self.hbox_dns.pack_start(self.chkbox_static_dns)
+        self.hbox_dns.pack_start(self.chkbox_global_dns)
         
-        self.vbox.pack_start(self.checkboxStaticIP, fill=False,
-                                     expand=False)
-        self.vbox.pack_start(self.txtIP, fill=False, expand=False)
-        self.vbox.pack_start(self.txtNetmask, fill=False, expand=False)
-        self.vbox.pack_start(self.txtGateway, fill=False, expand=False)
-        self.vbox.pack_start(self.hboxDNS, fill=False, expand=False)
-        self.vbox.pack_start(self.txtDNS1, fill=False, expand=False)
-        self.vbox.pack_start(self.txtDNS2, fill=False, expand=False)
-        self.vbox.pack_start(self.txtDNS3, fill=False, expand=False)
+        self.vbox.pack_start(self.chkbox_static_ip, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_ip, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_netmask, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_gateway, fill=False, expand=False)
+        self.vbox.pack_start(self.hbox_dns, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_dns_1, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_dns_2, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_dns_3, fill=False, expand=False)
         
         # Connect the events to the actions
-        self.checkboxStaticIP.connect("toggled", self.toggleIPCheckbox)
-        self.checkboxStaticDNS.connect("toggled", self.toggleDNSCheckbox)
-        self.checkboxGlobalDNS.connect("toggled", self.toggleGlobalDNSCheckbox)
+        self.chkbox_static_ip.connect("toggled", self.toggle_ip_checkbox)
+        self.chkbox_static_dns.connect("toggled", self.toggle_dns_checkbox)
+        self.chkbox_global_dns.connect("toggled", self.toggle_global_dns_checkbox)
         
         # Start with all disabled, then they will be enabled later.
-        self.checkboxStaticIP.set_active(False)
-        self.checkboxStaticDNS.set_active(False)
+        self.chkbox_static_ip.set_active(False)
+        self.chkbox_static_dns.set_active(False)
         
-    def setDefaults(self, widget=None, event=None):
+    def set_defaults(self, widget=None, event=None):
         """ Put some default values into entries to help the user out. """
-        ipAddress = self.txtIP.get_text()  # For easy typing :)
-        netmask = self.txtNetmask
-        gateway = self.txtGateway
+        ipAddress = self.txt_ip.get_text()  # For easy typing :)
+        netmask = self.txt_netmask
+        gateway = self.txt_gateway
         ip_parts = misc.IsValidIP(ipAddress)
         if ip_parts:
             if stringToNone(gateway.get_text()) == None:  # Make sure the gateway box is blank
@@ -365,71 +364,71 @@ class AdvancedSettingsDialog(gtk.Dialog):
         elif ipAddress != "":
             misc.error(None, "Invalid IP Address Entered.")
 
-    def resetStaticCheckboxes(self):
+    def reset_static_checkboxes(self):
         # Enable the right stuff
-        if not stringToNone(self.txtIP.get_text()) == None:
-            self.checkboxStaticIP.set_active(True)
-            self.checkboxStaticDNS.set_active(True)
-            self.checkboxStaticDNS.set_sensitive(False)
+        if not stringToNone(self.txt_ip.get_text()) == None:
+            self.chkbox_static_ip.set_active(True)
+            self.chkbox_static_dns.set_active(True)
+            self.chkbox_static_dns.set_sensitive(False)
         else:
-            self.checkboxStaticIP.set_active(False)
-            self.checkboxStaticDNS.set_active(False)
-            self.checkboxStaticDNS.set_sensitive(True)
+            self.chkbox_static_ip.set_active(False)
+            self.chkbox_static_dns.set_active(False)
+            self.chkbox_static_dns.set_sensitive(True)
 
-        if not stringToNone(self.txtDNS1.get_text()) == None:
-            self.checkboxStaticDNS.set_active(True)
+        if not stringToNone(self.txt_dns_1.get_text()) == None:
+            self.chkbox_static_dns.set_active(True)
         else:
-            self.checkboxStaticDNS.set_active(False)
+            self.chkbox_static_dns.set_active(False)
 
         # This will properly disable unused boxes.
-        self.toggleIPCheckbox()
-        self.toggleDNSCheckbox()
-        self.toggleGlobalDNSCheckbox()
+        self.toggle_ip_checkbox()
+        self.toggle_dns_checkbox()
+        self.toggle_global_dns_checkbox()
 
-    def toggleIPCheckbox(self, widget=None):
+    def toggle_ip_checkbox(self, widget=None):
         """Toggle entries/checkboxes based on the static IP checkbox. """
         # Should disable the static IP text boxes, and also enable the DNS
         #checkbox when disabled and disable when enabled.
-        if self.checkboxStaticIP.get_active():
-            self.checkboxStaticDNS.set_active(True)
-            self.checkboxStaticDNS.set_sensitive(False)
+        if self.chkbox_static_ip.get_active():
+            self.chkbox_static_dns.set_active(True)
+            self.chkbox_static_dns.set_sensitive(False)
         else:
-            self.checkboxStaticDNS.set_sensitive(True)
-            self.checkboxStaticDNS.set_active(False)
+            self.chkbox_static_dns.set_sensitive(True)
+            self.chkbox_static_dns.set_active(False)
 
-        self.txtIP.set_sensitive(self.checkboxStaticIP.get_active())
-        self.txtNetmask.set_sensitive(self.checkboxStaticIP.get_active())
-        self.txtGateway.set_sensitive(self.checkboxStaticIP.get_active())
+        self.txt_ip.set_sensitive(self.chkbox_static_ip.get_active())
+        self.txt_netmask.set_sensitive(self.chkbox_static_ip.get_active())
+        self.txt_gateway.set_sensitive(self.chkbox_static_ip.get_active())
 
-    def toggleDNSCheckbox(self, widget=None):
+    def toggle_dns_checkbox(self, widget=None):
         """ Toggle entries and checkboxes based on the static dns checkbox. """
         # Should disable the static DNS boxes
-        if self.checkboxStaticIP.get_active() == True:
-            self.checkboxStaticDNS.set_active(self.checkboxStaticIP.
+        if self.chkbox_static_ip.get_active() == True:
+            self.chkbox_static_dns.set_active(self.chkbox_static_ip.
                                                             get_active())
-            self.checkboxStaticDNS.set_sensitive(False)
+            self.chkbox_static_dns.set_sensitive(False)
 
-        self.checkboxGlobalDNS.set_sensitive(self.checkboxStaticDNS.
+        self.chkbox_global_dns.set_sensitive(self.chkbox_static_dns.
                                                             get_active())
-        if self.checkboxStaticDNS.get_active() == True:
+        if self.chkbox_static_dns.get_active() == True:
             # If global dns is on, don't use local dns
-            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
-            self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
-            self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
+            self.txt_dns_1.set_sensitive(not self.chkbox_global_dns.get_active())
+            self.txt_dns_2.set_sensitive(not self.chkbox_global_dns.get_active())
+            self.txt_dns_3.set_sensitive(not self.chkbox_global_dns.get_active())
         else:
-            self.txtDNS1.set_sensitive(False)
-            self.txtDNS2.set_sensitive(False)
-            self.txtDNS3.set_sensitive(False)
-            self.checkboxGlobalDNS.set_active(False)
+            self.txt_dns_1.set_sensitive(False)
+            self.txt_dns_2.set_sensitive(False)
+            self.txt_dns_3.set_sensitive(False)
+            self.chkbox_global_dns.set_active(False)
 
-    def toggleGlobalDNSCheckbox(self, widget=None):
+    def toggle_global_dns_checkbox(self, widget=None):
         """ Set the DNS entries' sensitivity based on the Global checkbox. """
-        if daemon.GetUseGlobalDNS() and self.checkboxStaticDNS.get_active():
-            self.txtDNS1.set_sensitive(not self.checkboxGlobalDNS.get_active())
-            self.txtDNS2.set_sensitive(not self.checkboxGlobalDNS.get_active())
-            self.txtDNS3.set_sensitive(not self.checkboxGlobalDNS.get_active())
+        if daemon.GetUseGlobalDNS() and self.chkbox_static_dns.get_active():
+            self.txt_dns_1.set_sensitive(not self.chkbox_global_dns.get_active())
+            self.txt_dns_2.set_sensitive(not self.chkbox_global_dns.get_active())
+            self.txt_dns_3.set_sensitive(not self.chkbox_global_dns.get_active())
             
-    def destroy_event(self):
+    def destroy_called(self):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
@@ -452,24 +451,24 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self):
         """ Build the wired settings dialog. """
         AdvancedSettingsDialog.__init__(self)
-        self.des = self.connect("destroy", self.destroy_event)
+        self.des = self.connect("destroy", self.destroy_called)
         
     def set_values(self):
         """ Fill in the Gtk.Entry objects with the correct values. """
-        self.txtIP.set_text(self.format_entry("ip"))
-        self.txtNetmask.set_text(self.format_entry("netmask"))
-        self.txtGateway.set_text(self.format_entry("gateway"))
+        self.txt_ip.set_text(self.format_entry("ip"))
+        self.txt_netmask.set_text(self.format_entry("netmask"))
+        self.txt_gateway.set_text(self.format_entry("gateway"))
 
-        self.txtDNS1.set_text(self.format_entry("dns1"))
-        self.txtDNS2.set_text(self.format_entry("dns2"))
-        self.txtDNS3.set_text(self.format_entry("dns3"))
-        self.resetStaticCheckboxes()
+        self.txt_dns_1.set_text(self.format_entry("dns1"))
+        self.txt_dns_2.set_text(self.format_entry("dns2"))
+        self.txt_dns_3.set_text(self.format_entry("dns3"))
+        self.reset_static_checkboxes()
 
     def format_entry(self, label):
         """ Helper method to fetch and format wired properties. """
         return noneToBlankString(wired.GetWiredProperty(label))
     
-    def destroy_event(self):
+    def destroy_called(self):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
@@ -484,7 +483,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
                 obj.__del__()
             else:
                 del obj
-        super(WiredSettingsDialog, self).destroy_event()
+        super(WiredSettingsDialog, self).destroy_called()
         self.destroy()
         del self
 
@@ -495,44 +494,41 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         AdvancedSettingsDialog.__init__(self)
         # Set up encryption stuff
         self.networkID = networkID
-        self.comboEncryption = gtk.combo_box_new_text()
-        self.checkboxEncryption = gtk.CheckButton(language['use_encryption'])
-        self.checkGlobalSettings = gtk.CheckButton(language['global_settings'])
+        self.combo_encryption = gtk.combo_box_new_text()
+        self.chkbox_encryption = gtk.CheckButton(language['use_encryption'])
         # Make the vbox to hold the encryption stuff.
-        self.vboxEncryptionInformation = gtk.VBox(False, 0)        
-        self.toggleEncryption()
-        self.checkboxEncryption.set_active(False)
-        self.comboEncryption.set_sensitive(False)
-        encryptionTypes = misc.LoadEncryptionMethods()
+        self.vbox_encrypt_info = gtk.VBox(False, 0)        
+        self.toggle_encryption()
+        self.chkbox_encryption.set_active(False)
+        self.combo_encryption.set_sensitive(False)
+        self.encrypt_types = misc.LoadEncryptionMethods()
         
         # Build the encryption menu
         activeID = -1  # Set the menu to this item when we are done
-        for x in encryptionTypes:
-            self.comboEncryption.append_text(encryptionTypes[x][0])
-            if encryptionTypes[x][1] == wireless.GetWirelessProperty(networkID,
+        for x in self.encrypt_types:
+            self.combo_encryption.append_text(self.encrypt_types[x][0])
+            if self.encrypt_types[x][1] == wireless.GetWirelessProperty(networkID,
                                                                      "enctype"):
                 activeID = x
-        self.comboEncryption.set_active(activeID)
+        self.combo_encryption.set_active(activeID)
         if activeID != -1:
-            self.checkboxEncryption.set_active(True)
-            self.comboEncryption.set_sensitive(True)
-            self.vboxEncryptionInformation.set_sensitive(True)
+            self.chkbox_encryption.set_active(True)
+            self.combo_encryption.set_sensitive(True)
+            self.vbox_encrypt_info.set_sensitive(True)
         else:
-            self.comboEncryption.set_active(0)
-        self.changeEncryptionMethod()
-        self.vbox.pack_start(self.checkGlobalSettings, fill=False,
+            self.combo_encryption.set_active(0)
+        self.change_encrypt_method()
+        self.vbox.pack_start(self.chkbox_encryption, fill=False,
                                      expand=False)
-        self.vbox.pack_start(self.checkboxEncryption, fill=False,
-                                     expand=False)
-        self.vbox.pack_start(self.comboEncryption)
-        self.vbox.pack_start(self.vboxEncryptionInformation)
+        self.vbox.pack_start(self.combo_encryption)
+        self.vbox.pack_start(self.vbox_encrypt_info)
         
         # Connect signals.
-        self.checkboxEncryption.connect("toggled", self.toggleEncryption)
-        self.comboEncryption.connect("changed", self.changeEncryptionMethod)
-        self.des = self.connect("destroy", self.destroy_event)
+        self.chkbox_encryption.connect("toggled", self.toggle_encryption)
+        self.combo_encryption.connect("changed", self.change_encrypt_method)
+        self.des = self.connect("destroy", self.destroy_called)
 
-    def destroy_event(self):
+    def destroy_called(self):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
@@ -547,53 +543,53 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 obj.__del__()
             else:
                 del obj
-        super(WirelessSettingsDialog, self).destroy_event()
+        super(WirelessSettingsDialog, self).destroy_called()
         self.destroy()
         del self
         
     def set_values(self):
         """ Set the various network settings to the right values. """
         networkID = self.networkID
-        self.txtIP.set_text(self.format_entry(networkID,"ip"))
-        self.txtNetmask.set_text(self.format_entry(networkID,"netmask"))
-        self.txtGateway.set_text(self.format_entry(networkID,"gateway"))
+        self.txt_ip.set_text(self.format_entry(networkID,"ip"))
+        self.txt_netmask.set_text(self.format_entry(networkID,"netmask"))
+        self.txt_gateway.set_text(self.format_entry(networkID,"gateway"))
 
         if wireless.GetWirelessProperty(networkID,'use_global_dns'):
-            self.checkboxGlobalDNS.set_active(True)
+            self.chkbox_global_dns.set_active(True)
         if wireless.GetWirelessProperty(networkID, "dns1") != None:
-            self.txtDNS1.set_text(self.format_entry(networkID, "dns1"))
+            self.txt_dns_1.set_text(self.format_entry(networkID, "dns1"))
         if wireless.GetWirelessProperty(networkID, 'dns2') != None:
-            self.txtDNS2.set_text(self.format_entry(networkID, "dns2"))
+            self.txt_dns_2.set_text(self.format_entry(networkID, "dns2"))
         if wireless.GetWirelessProperty(networkID, 'dns3') != None:
-            self.txtDNS3.set_text(self.format_entry(networkID, "dns3"))
+            self.txt_dns_3.set_text(self.format_entry(networkID, "dns3"))
         
-        self.resetStaticCheckboxes()
+        self.reset_static_checkboxes()
         if wireless.GetWirelessProperty(networkID, 'encryption'):
-            self.checkboxEncryption.set_active(True)
+            self.chkbox_encryption.set_active(True)
         else:
-            self.checkboxEncryption.set_active(False)
+            self.chkbox_encryption.set_active(False)
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
     
-    def toggleEncryption(self, widget=None):
+    def toggle_encryption(self, widget=None):
         """ Toggle the encryption combobox based on the encryption checkbox. """
-        active = self.checkboxEncryption.get_active()
-        self.vboxEncryptionInformation.set_sensitive(active)
-        self.comboEncryption.set_sensitive(active)
+        active = self.chkbox_encryption.get_active()
+        self.vbox_encrypt_info.set_sensitive(active)
+        self.combo_encryption.set_sensitive(active)
 
-    def changeEncryptionMethod(self, widget=None):
+    def change_encrypt_method(self, widget=None):
         """ Load all the entries for a given encryption method. """
-        for z in self.vboxEncryptionInformation:
+        for z in self.vbox_encrypt_info:
             z.destroy()  # Remove stuff in there already
-        ID = self.comboEncryption.get_active()
+        ID = self.combo_encryption.get_active()
         methods = misc.LoadEncryptionMethods()
-        self.encryptionInfo = {}
+        self.encryption_info = {}
         
         # If nothing is selected, select the first entry.
         if ID == -1:
-            self.comboEncryption.set_active(0)
+            self.combo_encryption.set_active(0)
             ID = 0
             
         opts = methods[ID][2]
@@ -604,15 +600,15 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             else:
                 box = LabelEntry(opts[x][0].replace('_',' '))
             box.set_auto_hidden(True)
-            self.vboxEncryptionInformation.pack_start(box)
+            self.vbox_encrypt_info.pack_start(box)
             #add the data to any array, so that the information
             #can be easily accessed by giving the name of the wanted
             #data
-            self.encryptionInfo[opts[x][1]] = box.entry
+            self.encryption_info[opts[x][1]] = box.entry
 
             box.entry.set_text(noneToBlankString(
                 wireless.GetWirelessProperty(self.networkID, opts[x][1])))
-        self.vboxEncryptionInformation.show_all() 
+        self.vbox_encrypt_info.show_all() 
         
         
 class NetworkEntry(gtk.HBox):
@@ -629,63 +625,66 @@ class NetworkEntry(gtk.HBox):
         self.pack_start(self.image, False, False)
         
         # Set up the Connect button
-        self.connectButton = gtk.Button(stock=gtk.STOCK_CONNECT)
-        connect_hbox = gtk.HBox(False, 2)
-        connect_hbox.pack_start(self.connectButton, False, False)
-        connect_hbox.show()
+        self.connect_button = gtk.Button(stock=gtk.STOCK_CONNECT)
+        self.connect_hbox = gtk.HBox(False, 2)
+        self.connect_hbox.pack_start(self.connect_button, False, False)
+        self.connect_hbox.show()
         
         # Set up the VBox that goes in the gtk.Expander
         self.expander_vbox = gtk.VBox(False, 1)
         self.expander_vbox.show()
         self.expander_vbox.pack_start(self.expander)
-        self.expander_vbox.pack_start(connect_hbox, fill=False, expand=False)
+        self.expander_vbox.pack_start(self.connect_hbox, fill=False,
+                                      expand=False)
         self.pack_end(self.expander_vbox)
         
         # Set up the advanced settings button
-        self.advancedButton = gtk.Button()
-        advanced_image = gtk.Image()
-        advanced_image.set_from_stock(gtk.STOCK_EDIT, 4)
-        advanced_image.set_padding(4, 0)
-        self.advancedButton.set_alignment(.5, .5)
-        self.advancedButton.set_label(language['advanced_settings'])
-        self.advancedButton.set_image(advanced_image)
+        self.advanced_button = gtk.Button()
+        self.advanced_image = gtk.Image()
+        self.advanced_image.set_from_stock(gtk.STOCK_EDIT, 4)
+        self.advanced_image.set_padding(4, 0)
+        self.advanced_button.set_alignment(.5, .5)
+        self.advanced_button.set_label(language['advanced_settings'])
+        self.advanced_button.set_image(self.advanced_image)
         
         # Set up the script settings button
-        self.scriptButton = gtk.Button()
-        script_image = gtk.Image()
-        script_image.set_from_icon_name('execute', 4)
-        script_image.set_padding(4, 0)
-        self.scriptButton.set_alignment(.5, .5)
-        self.scriptButton.set_image(script_image)
-        self.scriptButton.set_label(language['scripts'])
+        self.script_button = gtk.Button()
+        self.script_image = gtk.Image()
+        self.script_image.set_from_icon_name('execute', 4)
+        self.script_image.set_padding(4, 0)
+        self.script_button.set_alignment(.5, .5)
+        self.script_button.set_image(self.script_image)
+        self.script_button.set_label(language['scripts'])
         
-        settings_hbox = gtk.HBox(False, 3)
-        settings_hbox.set_border_width(5)
-        settings_hbox.pack_start(self.scriptButton, fill=False, expand=False)
-        settings_hbox.pack_start(self.advancedButton, fill=False, expand=False)
+        self.settings_hbox = gtk.HBox(False, 3)
+        self.settings_hbox.set_border_width(5)
+        self.settings_hbox.pack_start(self.script_button, fill=False,
+                                      expand=False)
+        self.settings_hbox.pack_start(self.advanced_button, fill=False,
+                                      expand=False)
         
-        self.vboxTop = gtk.VBox(False, 0)
-        self.vboxTop.pack_end(settings_hbox, fill=False, expand=False)
+        self.vbox_top = gtk.VBox(False, 0)
+        self.vbox_top.pack_end(self.settings_hbox, fill=False, expand=False)
         
         aligner = gtk.Alignment(xscale=1.0)
-        aligner.add(self.vboxTop)
+        aligner.add(self.vbox_top)
         aligner.set_padding(0, 0, 15, 0)
         self.expander.add(aligner)
     
-    def destroy_event(self, *args):
+    def destroy_called(self, *args):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
         memory leakage.
         
         """
-        for object in vars(self):
-            try: object.destroy()
+        for obj in vars(self):
+            try: obj.destroy()
             except: pass
-            if hasattr(object, '__del__'):
-                object.__del__()
+            if hasattr(obj, '__del__'):
+                obj.__del__()
             else:
-                del object
+                del obj
         for obj in vars(super(NetworkEntry, self)):
             try: obj.destroy()
             except: pass
@@ -707,80 +706,81 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.set_from_icon_name("network-wired", 6)
         self.image.show()
         self.expander.show()
-        self.connectButton.show()
+        self.connect_button.show()
         
         self.expander.set_label(language['wired_network'])
-        #self.resetStaticCheckboxes()
-        self.isFullGUI = True
+        #self.reset_static_checkboxes()
+        self.is_full_gui = True
         
-        self.buttonAdd = gtk.Button(stock=gtk.STOCK_ADD)
-        self.buttonDelete = gtk.Button(stock=gtk.STOCK_DELETE)
-        self.profileHelp = gtk.Label(language['wired_network_instructions'])
-        self.checkboxDefaultProfile = gtk.CheckButton(language['default_wired'])
+        self.button_add = gtk.Button(stock=gtk.STOCK_ADD)
+        self.button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
+        self.profile_help = gtk.Label(language['wired_network_instructions'])
+        self.chkbox_default_profile = gtk.CheckButton(language['default_wired'])
                 
         # Build the profile list.
-        self.comboProfileNames = gtk.combo_box_entry_new_text()
-        self.profileList = config.GetWiredProfileList()
-        if self.profileList:
-            for x in self.profileList:
-                self.comboProfileNames.append_text(x)
+        self.combo_profile_names = gtk.combo_box_entry_new_text()
+        self.profile_list = config.GetWiredProfileList()
+        if self.profile_list:
+            for x in self.profile_list:
+                self.combo_profile_names.append_text(x)
         
         # Format the profile help label.
-        self.profileHelp.set_justify(gtk.JUSTIFY_LEFT)
-        self.profileHelp.set_line_wrap(True)
+        self.profile_help.set_justify(gtk.JUSTIFY_LEFT)
+        self.profile_help.set_line_wrap(True)
 
         # Pack the various VBox objects.
-        self.hboxTemp = gtk.HBox(False, 0)
-        self.hboxDef = gtk.HBox(False, 0)
-        self.vboxTop.pack_start(self.profileHelp, fill=True, expand=True)
-        self.vboxTop.pack_start(self.hboxDef)
-        self.vboxTop.pack_start(self.hboxTemp)
-        self.hboxTemp.pack_start(self.comboProfileNames, fill=True, expand=True)
-        self.hboxTemp.pack_start(self.buttonAdd, fill=False, expand=False)
-        self.hboxTemp.pack_start(self.buttonDelete, fill=False, expand=False)
-        self.hboxDef.pack_start(self.checkboxDefaultProfile, fill=False, 
-                                expand=False)
+        self.hbox_temp = gtk.HBox(False, 0)
+        self.hbox_def = gtk.HBox(False, 0)
+        self.vbox_top.pack_start(self.profile_help, fill=True, expand=True)
+        self.vbox_top.pack_start(self.hbox_def)
+        self.vbox_top.pack_start(self.hbox_temp)
+        self.hbox_temp.pack_start(self.combo_profile_names, fill=True,
+                                  expand=True)
+        self.hbox_temp.pack_start(self.button_add, fill=False, expand=False)
+        self.hbox_temp.pack_start(self.button_delete, fill=False, expand=False)
+        self.hbox_def.pack_start(self.chkbox_default_profile, fill=False, 
+                                 expand=False)
 
         # Connect events
-        self.buttonAdd.connect("clicked", self.addProfile)
-        self.buttonDelete.connect("clicked", self.removeProfile)
-        self.checkboxDefaultProfile.connect("toggled",
-                                            self.toggleDefaultProfile)
-        self.comboProfileNames.connect("changed", self.changeProfile)
-        self.scriptButton.connect("button-press-event", self.editScripts)
+        self.button_add.connect("clicked", self.add_profile)
+        self.button_delete.connect("clicked", self.remove_profile)
+        self.chkbox_default_profile.connect("toggled",
+                                            self.toggle_default_profile)
+        self.combo_profile_names.connect("changed", self.change_profile)
+        self.script_button.connect("button-press-event", self.edit_scripts)
         
         # Toggle the default profile checkbox to the correct state.
         if stringToBoolean(wired.GetWiredProperty("default")):
-            self.checkboxDefaultProfile.set_active(True)
+            self.chkbox_default_profile.set_active(True)
         else:
-            self.checkboxDefaultProfile.set_active(False)
+            self.chkbox_default_profile.set_active(False)
 
         # Show everything, but hide the profile help label.
         self.show_all()
-        self.profileHelp.hide()
+        self.profile_help.hide()
         self.advanced_dialog = AdvancedSettingsDialog()
         
         # Display the default profile if it exists.
-        if self.profileList is not None:
+        if self.profile_list is not None:
             prof = config.GetDefaultWiredNetwork()
             if prof != None:  # Make sure the default profile gets displayed.
                 i = 0
-                while self.comboProfileNames.get_active_text() != prof:
-                    self.comboProfileNames.set_active(i)
+                while self.combo_profile_names.get_active_text() != prof:
+                    self.combo_profile_names.set_active(i)
                     i += 1
             else:
-                self.comboProfileNames.set_active(0)
+                self.combo_profile_names.set_active(0)
             print "wired profiles found"
             self.expander.set_expanded(False)
         else:
             print "no wired profiles found"
             if not wired.GetAlwaysShowWiredInterface():
                 self.expander.set_expanded(True)
-            self.profileHelp.show()        
-        self.checkEnable()
-        self.wireddis = self.connect("destroy", self.destroy_event)
+            self.profile_help.show()        
+        self.check_enable()
+        self.wireddis = self.connect("destroy", self.destroy_called)
         
-    def destroy_event(self, *args):
+    def destroy_called(self, *args):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
@@ -788,107 +788,106 @@ class WiredNetworkEntry(NetworkEntry):
         
         """
         self.disconnect(self.wireddis)
-        self.advanced_dialog.destroy_event()
+        self.advanced_dialog.destroy_called()
         del self.advanced_dialog
-        for object in vars(self):
-            if hasattr(object, "destroy"):
-                object.destroy()
-            if hasattr(object, '__del__'):
-                object.__del__()
+        for obj in vars(self):
+            if hasattr(obj, "destroy"):
+                obj.destroy()
+            if hasattr(obj, '__del__'):
+                obj.__del__()
             else:
-                del object
-        super(WiredNetworkEntry, self).destroy_event()
+                del obj
+        super(WiredNetworkEntry, self).destroy_called()
         self.destroy()
         del self
         
-    def editScripts(self, widget=None, event=None):
+    def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        profile = self.comboProfileNames.get_active_text()
+        profile = self.combo_profile_names.get_active_text()
         os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "./configscript.py",
                     profile, "wired", os.environ)
 
-    def checkEnable(self):
+    def check_enable(self):
         """ Disable objects if the profile list is empty. """
-        profileList = config.GetWiredProfileList()
-        if profileList == None:
-            self.buttonDelete.set_sensitive(False)
-            self.connectButton.set_sensitive(False)
-            self.advancedButton.set_sensitive(False)
-            self.scriptButton.set_sensitive(False)
+        profile_list = config.GetWiredProfileList()
+        if profile_list == None:
+            self.button_delete.set_sensitive(False)
+            self.connect_button.set_sensitive(False)
+            self.advanced_button.set_sensitive(False)
+            self.script_button.set_sensitive(False)
 
-    def addProfile(self, widget):
+    def add_profile(self, widget):
         """ Add a profile to the profile list. """
         print "adding profile"
-        profileName = self.comboProfileNames.get_active_text()
-        profileList = config.GetWiredProfileList()
-        if profileList:
-            if profileName in profileList:
+        profile_name = self.combo_profile_names.get_active_text()
+        profile_list = config.GetWiredProfileList()
+        if profile_list:
+            if profile_name in profile_list:
                 return False
-        if profileName != "":
-            self.profileHelp.hide()
-            config.CreateWiredNetworkProfile(profileName)
-            self.comboProfileNames.prepend_text(profileName)
-            self.comboProfileNames.set_active(0)
-            if self.isFullGUI == True:
-                self.buttonDelete.set_sensitive(True)
-                #self.vboxAdvanced.set_sensitive(True)
-                self.connectButton.set_sensitive(True)
-                self.advancedButton.set_sensitive(True)
-                self.scriptButton.set_sensitive(True)
+        if profile_name != "":
+            self.profile_help.hide()
+            config.CreateWiredNetworkProfile(profile_name)
+            self.combo_profile_names.prepend_text(profile_name)
+            self.combo_profile_names.set_active(0)
+            if self.is_full_gui == True:
+                self.button_delete.set_sensitive(True)
+                #self.vbox_ahdvanced.set_sensitive(True)
+                self.connect_button.set_sensitive(True)
+                self.advanced_button.set_sensitive(True)
+                self.script_button.set_sensitive(True)
 
-    def removeProfile(self, widget):
+    def remove_profile(self, widget):
         """ Remove a profile from the profile list. """
         print "removing profile"
-        config.DeleteWiredNetworkProfile(self.comboProfileNames.
+        config.DeleteWiredNetworkProfile(self.combo_profile_names.
                                                          get_active_text())
-        self.comboProfileNames.remove_text(self.comboProfileNames.get_active())
-        self.comboProfileNames.set_active(0)
+        self.combo_profile_names.remove_text(self.combo_profile_names.
+                                                                 get_active())
+        self.combo_profile_names.set_active(0)
         if config.GetWiredProfileList() == None:
-            self.profileHelp.show()
-            entry = self.comboProfileNames.child
+            self.profile_help.show()
+            entry = self.combo_profile_names.child
             entry.set_text("")
-            if self.isFullGUI == True:
-                self.buttonDelete.set_sensitive(False)
-                #self.vboxAdvanced.set_sensitive(False)
-                self.advancedButton.set_sensitive(False)
-                self.scriptButton.set_sensitive(False)
-                self.connectButton.set_sensitive(False)
+            if self.is_full_gui == True:
+                self.button_delete.set_sensitive(False)
+                self.advanced_button.set_sensitive(False)
+                self.script_button.set_sensitive(False)
+                self.connect_button.set_sensitive(False)
         else:
-            self.profileHelp.hide()
+            self.profile_help.hide()
 
-    def toggleDefaultProfile(self, widget):
+    def toggle_default_profile(self, widget):
         """ Change the default profile. """
-        if self.checkboxDefaultProfile.get_active():
+        if self.chkbox_default_profile.get_active():
             print 'unsetting previous default profile...'
             # Make sure there is only one default profile at a time
             config.UnsetWiredDefault()
         wired.SetWiredProperty("default",
-                               self.checkboxDefaultProfile.get_active())
+                               self.chkbox_default_profile.get_active())
         print 'toggle defualt prof'
-        config.SaveWiredNetworkProfile(self.comboProfileNames.get_active_text())
+        config.SaveWiredNetworkProfile(self.combo_profile_names.get_active_text())
 
-    def changeProfile(self, widget):
+    def change_profile(self, widget):
         """ Called when a new profile is chosen from the list. """
         # Make sure the name doesn't change everytime someone types something
-        if self.comboProfileNames.get_active() > -1:
-            if self.isFullGUI == False:
+        if self.combo_profile_names.get_active() > -1:
+            if self.is_full_gui == False:
                 return
             print "changing profile..."
-            profileName = self.comboProfileNames.get_active_text()
-            print profileName
-            config.ReadWiredNetworkProfile(profileName)
+            profile_name = self.combo_profile_names.get_active_text()
+            print profile_name
+            config.ReadWiredNetworkProfile(profile_name)
 
-            self.advanced_dialog.txtIP.set_text(self.format_entry("ip"))
-            self.advanced_dialog.txtNetmask.set_text(self.format_entry("netmask"))
-            self.advanced_dialog.txtGateway.set_text(self.format_entry("gateway"))
+            self.advanced_dialog.txt_ip.set_text(self.format_entry("ip"))
+            self.advanced_dialog.txt_netmask.set_text(self.format_entry("netmask"))
+            self.advanced_dialog.txt_gateway.set_text(self.format_entry("gateway"))
 
-            self.advanced_dialog.txtDNS1.set_text(self.format_entry("dns1"))
-            self.advanced_dialog.txtDNS2.set_text(self.format_entry("dns2"))
-            self.advanced_dialog.txtDNS3.set_text(self.format_entry("dns3"))
+            self.advanced_dialog.txt_dns_1.set_text(self.format_entry("dns1"))
+            self.advanced_dialog.txt_dns_2.set_text(self.format_entry("dns2"))
+            self.advanced_dialog.txt_dns_3.set_text(self.format_entry("dns3"))
 
             is_default = wired.GetWiredProperty("default")
-            self.checkboxDefaultProfile.set_active(stringToBoolean(is_default))
-            #self.resetStaticCheckboxes()
+            self.chkbox_default_profile.set_active(stringToBoolean(is_default))
 
     def format_entry(self, label):
         """Help method for fetching/formatting wired properties. """
@@ -901,66 +900,67 @@ class WirelessNetworkEntry(NetworkEntry):
         NetworkEntry.__init__(self)
         self.networkID = networkID
         self.image.set_padding(0, 0)
-        self.image.set_alignment(.5 ,0)
+        self.image.set_alignment(.5, 0)
         self.image.set_size_request(60, -1)
-        self.image.set_from_icon_name("network-wired",6)
+        self.image.set_from_icon_name("network-wired", 6)
         self.essid = wireless.GetWirelessProperty(networkID, "essid")
         print "ESSID : " + self.essid
         # Make the combo box.
-        self.lblStrength = GreyLabel()
-        self.lblEncryption = GreyLabel()
-        self.lblMAC = GreyLabel()
-        self.lblChannel = GreyLabel()
-        self.lblMode = GreyLabel()
-        self.hboxStatus = gtk.HBox(False, 5)
-        self.checkboxAutoConnect = gtk.CheckButton(language['automatic_connect'])
+        self.lbl_strength = GreyLabel()
+        self.lbl_encryption = GreyLabel()
+        self.lbl_mac = GreyLabel()
+        self.lbl_channel = GreyLabel()
+        self.lbl_mode = GreyLabel()
+        self.hbox_status = gtk.HBox(False, 5)
+        self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
         
         # Set the values of the network info labels.
-        self.setSignalStrength(wireless.GetWirelessProperty(networkID, 
-                                                            'quality'),
-                               wireless.GetWirelessProperty(networkID, 
-                                                            'strength'))
-        self.setMACAddress(wireless.GetWirelessProperty(networkID, 'bssid'))
-        self.setMode(wireless.GetWirelessProperty(networkID, 'mode'))
-        self.setChannel(wireless.GetWirelessProperty(networkID, 'channel'))
-        self.setEncryption(wireless.GetWirelessProperty(networkID, 'encryption'),
-                           wireless.GetWirelessProperty(networkID, 
+        self.set_signal_strength(wireless.GetWirelessProperty(networkID, 
+                                                              'quality'),
+                                 wireless.GetWirelessProperty(networkID, 
+                                                              'strength'))
+        self.set_mac_address(wireless.GetWirelessProperty(networkID, 'bssid'))
+        self.set_mode(wireless.GetWirelessProperty(networkID, 'mode'))
+        self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
+        self.set_encryption(wireless.GetWirelessProperty(networkID,
+                                                         'encryption'),
+                            wireless.GetWirelessProperty(networkID, 
                                                         'encryption_method'))
 
         # The the expander label.
         self.expander.set_use_markup(True)
         self.expander.set_label(self.essid + "   " + 
-                                self.lblEncryption.get_label() + "   "
-                                + self.lblStrength.get_label())
+                                self.lbl_encryption.get_label() + "   "
+                                + self.lbl_strength.get_label())
 
         # Pack the network status HBox.
-        self.hboxStatus.pack_start(self.lblStrength, fill=False, expand=True)
-        self.hboxStatus.pack_start(self.lblEncryption, fill=False, expand=True)
-        self.hboxStatus.pack_start(self.lblMAC, fill=False, expand=True)
-        self.hboxStatus.pack_start(self.lblMode, fill=False, expand=True)
-        self.hboxStatus.pack_start(self.lblChannel, fill=False, expand=True)
+        self.hbox_status.pack_start(self.lbl_strength, fill=False, expand=True)
+        self.hbox_status.pack_start(self.lbl_encryption, fill=False, expand=True)
+        self.hbox_status.pack_start(self.lbl_mac, fill=False, expand=True)
+        self.hbox_status.pack_start(self.lbl_mode, fill=False, expand=True)
+        self.hbox_status.pack_start(self.lbl_channel, fill=False, expand=True)
 
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
-        self.vboxTop.pack_start(self.checkboxAutoConnect, fill=False, 
+        self.vbox_top.pack_start(self.chkbox_autoconnect, fill=False, 
                                 expand=False)
-        self.vboxTop.pack_start(self.hboxStatus, fill=True, expand=True)
+        self.vbox_top.pack_start(self.hbox_status, fill=True, expand=True)
 
         if stringToBoolean(self.format_entry(networkID, "automatic")):
-            self.checkboxAutoConnect.set_active(True)
+            self.chkbox_autoconnect.set_active(True)
         else:
-            self.checkboxAutoConnect.set_active(False)
+            self.chkbox_autoconnect.set_active(False)
         
         # Connect signals.
-        self.checkboxAutoConnect.connect("toggled", self.updateAutoConnect)
-        self.scriptButton.connect("button-press-event", self.editScripts)       
+        self.chkbox_autoconnect.connect("toggled", self.update_autoconnect)
+        self.script_button.connect("button-press-event", self.edit_scripts)       
         
         # Show everything
         self.show_all()
         self.advanced_dialog = WirelessSettingsDialog(networkID)
-        self.wifides = self.connect("destroy", self.destroy_event)
+        self.wifides = self.connect("destroy", self.destroy_called)
         
-    def destroy_event(self, *args):
+    def destroy_called(self, *args):
         """ Clean up everything. 
         
         This might look excessive, but it was the only way to prevent
@@ -968,20 +968,20 @@ class WirelessNetworkEntry(NetworkEntry):
         
         """
         self.disconnect(self.wifides)
-        self.advanced_dialog.destroy_event()
-        for object in vars(self):
-            if hasattr(object, "destroy"):
-                object.destroy()
+        self.advanced_dialog.destroy_called()
+        for obj in vars(self):
+            if hasattr(obj, "destroy"):
+                obj.destroy()
                 
-            if hasattr(object, '__del__'):
-                object.__del__()
+            if hasattr(obj, '__del__'):
+                obj.__del__()
             else:
-                del object
-        super(WirelessNetworkEntry, self).destroy_event()
+                del obj
+        super(WirelessNetworkEntry, self).destroy_called()
         self.destroy()
         del self
 
-    def setSignalStrength(self, strength, dbm_strength):
+    def set_signal_strength(self, strength, dbm_strength):
         """ Set the signal strength displayed in the WirelessNetworkEntry. """
         if strength is not None:
             strength = int(strength)
@@ -1021,43 +1021,43 @@ class WirelessNetworkEntry(NetworkEntry):
             disp_strength = str(strength)
 
         self.image.set_from_file(wpath.images + signal_img)
-        self.lblStrength.set_label(disp_strength + ending)
+        self.lbl_strength.set_label(disp_strength + ending)
 
-    def setMACAddress(self, address):
+    def set_mac_address(self, address):
         """ Set the MAC address for the WirelessNetworkEntry. """
-        self.lblMAC.set_label(str(address))
+        self.lbl_mac.set_label(str(address))
 
-    def setEncryption(self, on, ttype):
+    def set_encryption(self, on, ttype):
         """ Set the encryption value for the WirelessNetworkEntry. """
         if on and ttype:
-            self.lblEncryption.set_label(str(ttype))
+            self.lbl_encryption.set_label(str(ttype))
         if on and not ttype: 
-            self.lblEncryption.set_label(language['secured'])
+            self.lbl_encryption.set_label(language['secured'])
         if not on:
-            self.lblEncryption.set_label(language['unsecured'])
+            self.lbl_encryption.set_label(language['unsecured'])
 
-    def setChannel(self, channel):
+    def set_channel(self, channel):
         """ Set the channel value for the WirelessNetworkEntry. """
-        self.lblChannel.set_label(language['channel'] + ' ' + str(channel))
+        self.lbl_channel.set_label(language['channel'] + ' ' + str(channel))
 
-    def setMode(self, mode):
+    def set_mode(self, mode):
         """ Set the mode value for the WirelessNetworkEntry. """
-        self.lblMode.set_label(str(mode))
+        self.lbl_mode.set_label(str(mode))
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
 
-    def editScripts(self, widget=None, event=None):
+    def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         result = os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "./configscript.py",
                              str(self.networkID), "wireless", os.environ)
         print result
 
-    def updateAutoConnect(self, widget=None):
+    def update_autoconnect(self, widget=None):
         """ Called when the autoconnect checkbox is toggled. """
         wireless.SetWirelessProperty(self.networkID, "automatic",
-                                     noneToString(self.checkboxAutoConnect.
+                                     noneToString(self.chkbox_autoconnect.
                                                                   get_active()))
         config.SaveWirelessNetworkProperty(self.networkID, "automatic")
 
@@ -1068,7 +1068,7 @@ class WiredProfileChooser:
         """ Initializes and runs the wired profile chooser. """
         # Import and init WiredNetworkEntry to steal some of the
         # functions and widgets it uses.
-        wiredNetEntry = WiredNetworkEntry()
+        wired_net_entry = WiredNetworkEntry()
 
         dialog = gtk.Dialog(title = language['wired_network_found'],
                             flags = gtk.DIALOG_MODAL,
@@ -1076,35 +1076,35 @@ class WiredProfileChooser:
                                        gtk.STOCK_CANCEL, 2))
         dialog.set_has_separator(False)
         dialog.set_size_request(400, 150)
-        instructLabel = gtk.Label(language['choose_wired_profile'] + ':\n')
+        instruct_label = gtk.Label(language['choose_wired_profile'] + ':\n')
         stoppopcheckbox = gtk.CheckButton(language['stop_showing_chooser'])
 
-        wiredNetEntry.isFullGUI = False
-        instructLabel.set_alignment(0, 0)
+        wired_net_entry.is_full_gui = False
+        instruct_label.set_alignment(0, 0)
         stoppopcheckbox.set_active(False)
 
         # Remove widgets that were added to the normal
         # WiredNetworkEntry so that they can be added to
         # the pop-up wizard.
-        wiredNetEntry.vboxTop.remove(wiredNetEntry.hboxTemp)
-        wiredNetEntry.vboxTop.remove(wiredNetEntry.profileHelp)
+        wired_net_entry.vboxTop.remove(wired_net_entry.hbox_temp)
+        wired_net_entry.vboxTop.remove(wired_net_entry.profile_help)
 
-        dialog.vbox.pack_start(instructLabel, fill=False, expand=False)
-        dialog.vbox.pack_start(wiredNetEntry.profileHelp, fill=False,
+        dialog.vbox.pack_start(instruct_label, fill=False, expand=False)
+        dialog.vbox.pack_start(wired_net_entry.profile_help, fill=False,
                                expand=False)
-        dialog.vbox.pack_start(wiredNetEntry.hboxTemp, fill=False,
+        dialog.vbox.pack_start(wired_net_entry.hbox_temp, fill=False,
                                expand=False)
         dialog.vbox.pack_start(stoppopcheckbox, fill=False, expand=False)
         dialog.show_all()
 
-        wired_profiles = wiredNetEntry.comboProfileNames
-        wiredNetEntry.profileHelp.hide()
-        if wiredNetEntry.profileList != None:
+        wired_profiles = wired_net_entry.combo_profile_names
+        wired_net_entry.profile_help.hide()
+        if wired_net_entry.profile_list != None:
             wired_profiles.set_active(0)
             print "wired profiles found"
         else:
             print "no wired profiles found"
-            wiredNetEntry.profileHelp.show()
+            wired_net_entry.profile_help.show()
 
         response = dialog.run()
         if response == 1:
@@ -1175,47 +1175,47 @@ class appGui:
                             buttons=(gtk.STOCK_OK, 1, gtk.STOCK_CANCEL, 2))
         dialog.set_has_separator(False)
         dialog.set_size_request(400, -1)
-        self.useEncryptionCheckbox = gtk.CheckButton(language['use_wep_encryption'])
-        self.useEncryptionCheckbox.set_active(False)
-        ipEntry = LabelEntry(language['ip'] + ':')
-        essidEntry = LabelEntry(language['essid'] + ':')
-        channelEntry = LabelEntry(language['channel'] + ':')
-        self.keyEntry = LabelEntry(language['key'] + ':')
-        self.keyEntry.set_auto_hidden(True)
-        self.keyEntry.set_sensitive(False)
+        self.chkbox_use_encryption = gtk.CheckButton(language['use_wep_encryption'])
+        self.chkbox_use_encryption.set_active(False)
+        ip_entry = LabelEntry(language['ip'] + ':')
+        essid_entry = LabelEntry(language['essid'] + ':')
+        channel_entry = LabelEntry(language['channel'] + ':')
+        self.key_entry = LabelEntry(language['key'] + ':')
+        self.key_entry.set_auto_hidden(True)
+        self.key_entry.set_sensitive(False)
 
-        useICSCheckbox = gtk.CheckButton(language['use_ics'])
+        chkbox_use_ics = gtk.CheckButton(language['use_ics'])
 
-        self.useEncryptionCheckbox.connect("toggled",
-                                           self.toggleEncryptionCheck)
-        channelEntry.entry.set_text('3')
-        essidEntry.entry.set_text('My_Adhoc_Network')
-        ipEntry.entry.set_text('169.254.12.10')  # Just a random IP
+        self.chkbox_use_encryption.connect("toggled",
+                                           self.toggle_encrypt_check)
+        channel_entry.entry.set_text('3')
+        essid_entry.entry.set_text('My_Adhoc_Network')
+        ip_entry.entry.set_text('169.254.12.10')  # Just a random IP
 
-        vboxA = gtk.VBox(False, 0)
-        vboxA.pack_start(self.useEncryptionCheckbox, fill=False, expand=False)
-        vboxA.pack_start(self.keyEntry, fill=False, expand=False)
-        vboxA.show()
-        dialog.vbox.pack_start(essidEntry)
-        dialog.vbox.pack_start(ipEntry)
-        dialog.vbox.pack_start(channelEntry)
-        dialog.vbox.pack_start(useICSCheckbox)
-        dialog.vbox.pack_start(vboxA)
+        vbox_ah = gtk.VBox(False, 0)
+        vbox_ah.pack_start(self.chkbox_use_encryption, fill=False, expand=False)
+        vbox_ah.pack_start(self.key_entry, fill=False, expand=False)
+        vbox_ah.show()
+        dialog.vbox.pack_start(essid_entry)
+        dialog.vbox.pack_start(ip_entry)
+        dialog.vbox.pack_start(channel_entry)
+        dialog.vbox.pack_start(chkbox_use_ics)
+        dialog.vbox.pack_start(vbox_ah)
         dialog.vbox.set_spacing(5)
         dialog.show_all()
         response = dialog.run()
         if response == 1:
-            wireless.CreateAdHocNetwork(essidEntry.entry.get_text(),
-                                        channelEntry.entry.get_text(),
-                                        ipEntry.entry.get_text(), "WEP",
-                                        self.keyEntry.entry.get_text(),
-                                        self.useEncryptionCheckbox.get_active(),
-                                        False) #useICSCheckbox.get_active())
+            wireless.CreateAdHocNetwork(essid_entry.entry.get_text(),
+                                        channel_entry.entry.get_text(),
+                                        ip_entry.entry.get_text(), "WEP",
+                                        self.key_entry.entry.get_text(),
+                                        self.chkbox_use_encryption.get_active(),
+                                        False) #chkbox_use_ics.get_active())
         dialog.destroy()
 
-    def toggleEncryptionCheck(self, widget=None):
+    def toggle_encrypt_check(self, widget=None):
         """ Toggles the encryption key entry box for the ad-hoc dialog. """
-        self.keyEntry.set_sensitive(self.useEncryptionCheckbox.get_active())
+        self.key_entry.set_sensitive(self.chkbox_use_encryption.get_active())
 
     def disconnect(self, widget=None):
         """ Disconnects from any active network. """
@@ -1386,8 +1386,8 @@ class appGui:
         """ Alerts the daemon to cancel the connection process. """
         #should cancel a connection if there
         #is one in progress
-        cancelButton = self.wTree.get_widget("cancel_button")
-        cancelButton.set_sensitive(False)
+        cancel_button = self.wTree.get_widget("cancel_button")
+        cancel_button.set_sensitive(False)
         daemon.CancelConnect()
         # Prevents automatic reconnecting if that option is enabled
         daemon.SetForcedDisconnect(True)
@@ -1500,9 +1500,9 @@ class appGui:
             printLine = True  # In this case we print a separator.
             wirednet = WiredNetworkEntry()
             self.network_list.pack_start(wirednet, fill=False, expand=False)
-            wirednet.connectButton.connect("button-press-event", self.connect,
+            wirednet.connect_button.connect("button-press-event", self.connect,
                                            "wired", 0, wirednet)
-            wirednet.advancedButton.connect("button-press-event",
+            wirednet.advanced_button.connect("button-press-event",
                                                      self.edit_advanced,
                                                      "wired", 0, wirednet)
         # Scan
@@ -1513,9 +1513,9 @@ class appGui:
 
         num_networks = wireless.GetNumberOfNetworks()
 
-        instructLabel = self.wTree.get_widget("label_instructions")
+        instruct_label = self.wTree.get_widget("label_instructions")
         if num_networks > 0:
-            instructLabel.show()
+            instruct_label.show()
             for x in range(0, num_networks):
                 if printLine:
                     sep = gtk.HSeparator()
@@ -1527,14 +1527,14 @@ class appGui:
                 tempnet = WirelessNetworkEntry(x)
                 tempnet.show_all()
                 self.network_list.pack_start(tempnet, expand=False, fill=False)
-                tempnet.connectButton.connect("button-press-event",
+                tempnet.connect_button.connect("button-press-event",
                                                self.connect, "wireless", x,
                                                tempnet)
-                tempnet.advancedButton.connect("button-press-event",
+                tempnet.advanced_button.connect("button-press-event",
                                                         self.edit_advanced,
                                                         "wireless", x, tempnet)
         else:
-            instructLabel.hide()
+            instruct_label.hide()
             if wireless.GetKillSwitchEnabled():
                 label = gtk.Label(language['killswitch_enabled'] + ".")
             else:
@@ -1548,15 +1548,15 @@ class appGui:
         entlist = []
         
         # First make sure all the Addresses entered are valid.
-        if entry.checkboxStaticIP.get_active():
-            for ent in [entry.txtIP, entry.txtNetmask, entry.txtGateway]:
+        if entry.chkbox_static_ip.get_active():
+            for ent in [entry.txt_ip, entry.txt_netmask, entry.txt_gateway]:
                 entlist.append(ent)
                 
-        if entry.checkboxStaticDNS.get_active() and \
-           not entry.checkboxGlobalDNS.get_active():
-            entlist.append(entry.txtDNS1)
+        if entry.chkbox_static_dns.get_active() and \
+           not entry.chkbox_global_dns.get_active():
+            entlist.append(entry.txt_dns_1)
             # Only append additional dns entries if they're entered.
-            for ent in [entry.txtDNS2, entry.txtDNS3]:
+            for ent in [entry.txt_dns_2, entry.txt_dns_3]:
                 if ent.get_text() != "":
                     entlist.append(ent)
                     
@@ -1570,15 +1570,6 @@ class appGui:
         if nettype == "wireless":
             if not self.save_wireless_settings(networkid, entry, networkentry):
                 return False
-            
-            # Copy settings if they're set to be used globally.
-            if entry.checkGlobalSettings.get_active():
-                all_ids = config.FindMatchingEssids(
-                    wireless.GetWirelessProperty(networkid, "essid"))
-                for network in all_ids:
-                    config.CopySettingsToProfile(
-                        wireless.GetWirelessProperty(networkid, "bssid"),
-                        network)
 
         elif nettype == "wired":
             if not self.save_wired_settings(entry):
@@ -1588,24 +1579,24 @@ class appGui:
     
     def save_wired_settings(self, entry):
         """ Saved wired network settings. """
-        if entry.checkboxStaticIP.get_active():
-            wired.SetWiredProperty("ip", noneToString(entry.txtIP.get_text()))
-            wired.SetWiredProperty("netmask", noneToString(entry.txtNetmask.get_text()))
-            wired.SetWiredProperty("gateway", noneToString(entry.txtGateway.get_text()))
+        if entry.chkbox_static_ip.get_active():
+            wired.SetWiredProperty("ip", noneToString(entry.txt_ip.get_text()))
+            wired.SetWiredProperty("netmask", noneToString(entry.txt_netmask.get_text()))
+            wired.SetWiredProperty("gateway", noneToString(entry.txt_gateway.get_text()))
         else:
             wired.SetWiredProperty("ip", '')
             wired.SetWiredProperty("netmask", '')
             wired.SetWiredProperty("gateway", '')
 
-        if entry.checkboxStaticDNS.get_active() and \
-           not entry.checkboxGlobalDNS.get_active():
+        if entry.chkbox_static_dns.get_active() and \
+           not entry.chkbox_global_dns.get_active():
             wired.SetWiredProperty('use_static_dns', True)
             wired.SetWiredProperty('use_global_dns', False)
-            wired.SetWiredProperty("dns1", noneToString(entry.txtDNS1.get_text()))
-            wired.SetWiredProperty("dns2", noneToString(entry.txtDNS2.get_text()))
-            wired.SetWiredProperty("dns3", noneToString(entry.txtDNS3.get_text()))
-        elif entry.checkboxStaticDNS.get_active() and \
-             entry.checkboxGlobalDNS.get_active():
+            wired.SetWiredProperty("dns1", noneToString(entry.txt_dns_1.get_text()))
+            wired.SetWiredProperty("dns2", noneToString(entry.txt_dns_2.get_text()))
+            wired.SetWiredProperty("dns3", noneToString(entry.txt_dns_3.get_text()))
+        elif entry.chkbox_static_dns.get_active() and \
+             entry.chkbox_global_dns.get_active():
             wired.SetWiredProperty('use_static_dns', True)
             wired.SetWiredProperty('use_global_dns', True)
         else:
@@ -1613,26 +1604,26 @@ class appGui:
             wired.SetWiredProperty("dns1", '')
             wired.SetWiredProperty("dns2", '')
             wired.SetWiredProperty("dns3", '')
-        config.SaveWiredNetworkProfile(entry.comboProfileNames.get_active_text())
+        config.SaveWiredNetworkProfile(entry.combo_profile_names.get_active_text())
         return True
             
     def save_wireless_settings(self, networkid, entry, netent):
         """ Save wireless network settings. """
         # Check encryption info
-        if entry.checkboxEncryption.get_active():
+        if entry.chkbox_encryption.get_active():
             print "setting encryption info..."
-            encryptionInfo = entry.encryptionInfo
+            encryption_info = entry.encryption_info
             encrypt_methods = misc.LoadEncryptionMethods()
             wireless.SetWirelessProperty(networkid, "enctype",
                                          encrypt_methods[entry.comboEncryption.
                                                          get_active()][1])
-            for x in encryptionInfo:
-                if encryptionInfo[x].get_text() == "":
+            for x in encryption_info:
+                if encryption_info[x].get_text() == "":
                     misc.error(self.window, language['encrypt_info_missing'])
                     return False
                 wireless.SetWirelessProperty(networkid, x,
-                                             noneToString(encryptionInfo[x].get_text()))
-        elif not entry.checkboxEncryption.get_active() and \
+                                             noneToString(encryption_info[x].get_text()))
+        elif not entry.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
             misc.error(self.window, language['enable_encryption'])
             return False
@@ -1644,13 +1635,13 @@ class appGui:
         wireless.SetWirelessProperty(networkid, "automatic",
                                      noneToString(netent.checkboxAutoConnect.get_active()))
         # Save IP info
-        if entry.checkboxStaticIP.get_active():
+        if entry.chkbox_static_ip.get_active():
             wireless.SetWirelessProperty(networkid, "ip",
-                                      noneToString(entry.txtIP.get_text()))
+                                      noneToString(entry.txt_ip.get_text()))
             wireless.SetWirelessProperty(networkid, "netmask",
-                                         noneToString(entry.txtNetmask.get_text()))
+                                         noneToString(entry.txt_netmask.get_text()))
             wireless.SetWirelessProperty(networkid, "gateway",
-                                         noneToString(entry.txtGateway.get_text()))
+                                         noneToString(entry.txt_gateway.get_text()))
         else:
             # Blank the values
             wireless.SetWirelessProperty(networkid, "ip", '')
@@ -1658,18 +1649,18 @@ class appGui:
             wireless.SetWirelessProperty(networkid, "gateway", '')
         
         # Save DNS info
-        if entry.checkboxStaticDNS.get_active() and \
-           not entry.checkboxGlobalDNS.get_active():
+        if entry.chkbox_static_dns.get_active() and \
+           not entry.chkbox_global_dns.get_active():
             wireless.SetWirelessProperty(networkid, 'use_static_dns', True)
             wireless.SetWirelessProperty(networkid, 'use_global_dns', False)
             wireless.SetWirelessProperty(networkid, 'dns1',
-                                         noneToString(entry.txtDNS1.get_text()))
+                                         noneToString(entry.txt_dns_1.get_text()))
             wireless.SetWirelessProperty(networkid, 'dns2',
-                                         noneToString(entry.txtDNS2.get_text()))
+                                         noneToString(entry.txt_dns_2.get_text()))
             wireless.SetWirelessProperty(networkid, 'dns3',
-                                         noneToString(entry.txtDNS3.get_text()))
-        elif entry.checkboxStaticDNS.get_active() and \
-             entry.checkboxGlobalDNS.get_active():
+                                         noneToString(entry.txt_dns_3.get_text()))
+        elif entry.chkbox_static_dns.get_active() and \
+             entry.chkbox_global_dns.get_active():
             wireless.SetWirelessProperty(networkid, 'use_static_dns', True)
             wireless.SetWirelessProperty(networkid, 'use_global_dns', True)
         else:
@@ -1716,8 +1707,8 @@ class appGui:
 
     def connect(self, widget, event, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
-        cancelButton = self.wTree.get_widget("cancel_button")
-        cancelButton.set_sensitive(True)
+        cancel_button = self.wTree.get_widget("cancel_button")
+        cancel_button.set_sensitive(True)
         
         if not self.save_settings(nettype, networkid, networkentry):
             return False

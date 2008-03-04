@@ -303,7 +303,7 @@ class Wireless(Controller):
         wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Killing dhclient and wpa_supplicant'
-        wiface.StopDHCP()
+        wnettools.StopDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()

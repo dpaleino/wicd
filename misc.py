@@ -130,7 +130,9 @@ def Noneify(variable):
         return None
     if variable in ("False", "0"):
         return False
-    return bool(variable)
+    if variable in ("True", "1"):
+        return True
+    return variable
 
 def ParseEncryption(network):
     """ Parse through an encryption template file

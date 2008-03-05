@@ -961,6 +961,7 @@ class WirelessNetworkEntry(NetworkEntry):
         """
         self.disconnect(self.wifides)
         self.advanced_dialog.destroy_called()
+        del self.advanced_dialog
         for obj in vars(self):
             if hasattr(obj, "destroy"):
                 obj.destroy()
@@ -1660,7 +1661,7 @@ class appGui:
             encryption_info = entry.encryption_info
             encrypt_methods = misc.LoadEncryptionMethods()
             wireless.SetWirelessProperty(networkid, "enctype",
-                                         encrypt_methods[entry.comboEncryption.
+                                         encrypt_methods[entry.combo_encryption.
                                                          get_active()][1])
             for x in encryption_info:
                 if encryption_info[x].get_text() == "":
@@ -1678,7 +1679,7 @@ class appGui:
             wireless.SetWirelessProperty(networkid, "enctype", "None")
             
         wireless.SetWirelessProperty(networkid, "automatic",
-                                     noneToString(netent.checkboxAutoConnect.get_active()))
+                                     noneToString(netent.chkbox_autoconnect.get_active()))
         # Save IP info
         if entry.chkbox_static_ip.get_active():
             wireless.SetWirelessProperty(networkid, "ip",

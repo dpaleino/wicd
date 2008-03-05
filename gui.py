@@ -927,11 +927,11 @@ class WirelessNetworkEntry(NetworkEntry):
                                 + self.lbl_strength.get_label())
 
         # Pack the network status HBox.
-        self.hbox_status.pack_start(self.lbl_strength, False, True)
-        self.hbox_status.pack_start(self.lbl_encryption, False, True)
-        self.hbox_status.pack_start(self.lbl_mac, False, True)
-        self.hbox_status.pack_start(self.lbl_mode, False, True)
-        self.hbox_status.pack_start(self.lbl_channel, False, True)
+        self.hbox_status.pack_start(self.lbl_strength, True, True)
+        self.hbox_status.pack_start(self.lbl_encryption, True, True)
+        self.hbox_status.pack_start(self.lbl_mac, True, True)
+        self.hbox_status.pack_start(self.lbl_mode, True, True)
+        self.hbox_status.pack_start(self.lbl_channel, True, True)
 
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.

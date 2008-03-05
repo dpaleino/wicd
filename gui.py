@@ -1148,6 +1148,7 @@ class appGui:
         self.first_dialog_load = True
         self.vpn_connection_pipe = None
         self.is_visible = True
+        self.pulse_active = False
         
         self.window.connect('delete_event', self.exit)
         
@@ -1159,15 +1160,14 @@ class appGui:
             self.wTree.get_widget("iface_menu_disable_wired").hide()
         else:
             self.wTree.get_widget("iface_menu_enable_wired").hide()
-        
+
         size = config.ReadWindowSize()
         width = size[0]
         height = size[1]
         if width > -1 and height > -1:
             self.window.resize(int(width), int(height))
 
-        gobject.timeout_add(800, self.update_statusbar)
-        gobject.timeout_add(250, self.pulse_progress_bar)
+        gobject.timeout_add(700, self.update_statusbar)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
@@ -1440,6 +1440,8 @@ class appGui:
 
     def pulse_progress_bar(self):
         """ Pulses the progress bar while connecting to a network. """
+        if not self.pulse_active:
+            return False
         if not self.is_visible:
             return True
         try:
@@ -1453,17 +1455,20 @@ class appGui:
         if not self.is_visible:
             return True
 
-        iwconfig = wireless.GetIwconfig()
-        wireless_ip = wireless.GetWirelessIP()
         wiredConnecting = wired.CheckIfWiredConnecting()
         wirelessConnecting = wireless.CheckIfWirelessConnecting()
         
         if wirelessConnecting or wiredConnecting:
+            if not self.pulse_active:
+                self.pulse_active = True
+                gobject.timeout_add(100, self.pulse_progress_bar)
+                
             self.network_list.set_sensitive(False)
             self.status_area.show_all()
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
             if wirelessConnecting:
+                iwconfig = wireless.GetIwconfig()
                 self.set_status(wireless.GetCurrentNetwork(iwconfig) + ': ' +
                        language[str(wireless.CheckWirelessConnectingMessage())])
             if wiredConnecting:
@@ -1471,16 +1476,17 @@ class appGui:
                              language[str(wired.CheckWiredConnectingMessage())])
         else:
             self.network_list.set_sensitive(True)
+            self.pulse_active = False
             self.status_area.hide_all()
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
 
             # Determine connection status.
-            if self.check_for_wireless(iwconfig, wireless_ip):
+            if self.check_for_wired(wired.GetWiredIP()):
                 return True
-
-            wired_ip = wired.GetWiredIP()
-            if self.check_for_wired(wired_ip):
+    
+            if self.check_for_wireless(wireless.GetIwconfig(),
+                                       wireless.GetWirelessIP()):
                 return True
             
             self.set_status(language['not_connected'])
@@ -1750,19 +1756,34 @@ class appGui:
             else:
                 return False
         return True
+    
+    def check_encryption_valid(self, entry):
+        """ Make sure that encryption settings are properly filled in. """
+        # Make sure no entries are left blank
+        if entry.chkbox_encryption.get_active():
+            encryption_info = entry.encryption_info
+            for x in encryption_info:
+                if encryption_info[x].get_text() == "":
+                    misc.error(self.window, language['encrypt_info_missing'])
+                    return False
+        # Make sure the checkbox is checked when it should be
+        elif not entry.chkbox_encryption.get_active() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            misc.error(self.window, language['enable_encryption'])
+            return False
+        return True
 
     def connect(self, widget, event, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
         cancel_button = self.wTree.get_widget("cancel_button")
         cancel_button.set_sensitive(True)
-        
-        if not self.save_settings(nettype, networkid, networkentry):
-            return False
-        
         if nettype == "wireless":
+            if not self.check_encryption_valid(networkentry.advanced_dialog):
+                return False
             wireless.ConnectWireless(networkid)
         elif nettype == "wired":
             wired.ConnectWired()
+        self.update_statusbar()
 
     def exit(self, widget=None, event=None):
         """ Hide the wicd GUI.

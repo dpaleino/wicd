@@ -806,7 +806,7 @@ class WirelessInterface(Interface):
         if self.wpa_driver == RALINK_DRIVER:
             return True
 
-        MAX_TIME = 5
+        MAX_TIME = 10
         MAX_DISCONNECTED_TIME = 3
         while (time.time() - auth_time) < MAX_TIME:
             cmd = 'wpa_cli -i ' + self.iface + ' status'

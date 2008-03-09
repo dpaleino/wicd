@@ -71,22 +71,34 @@ def none_to_blank(text):
     return '', otherwise it will just return str(text).
     
     """
-    if text == None or text == "None" or text == "":
+    if text in (None, "None", ""):
         return ""
     else:
         return str(text)
 
 def blank_to_none(text):
     """ Convert an empty or null string to 'None'. """
-    if text == "" or text == None:
+    if text in ("", None):
         return "None"
     else:
         return str(text)
     
-def get_val(con, network, val, default="None"):
-    if not con.has_option(network, val):
-        con.set(network, val, default)
-    return con.get(network, val)
+def get_val(con, network, option, default="None"):
+    """ Returns the specified option for the given network.
+
+    Returns the value stored in the config file for the given option,
+    unless the option isn't stored yet, in which case the default value
+    provided is stored and then returned.
+    
+    Keyword arguments:
+    network -- The section to search.
+    option -- The option to search for.
+    deafult -- The default value to store/return if the option isn't found.
+    
+    """
+    if not con.has_option(network, option):
+        con.set(network, option, default)
+    return con.get(network, option)
         
 
 def get_script_info(network, network_type):
@@ -169,7 +181,7 @@ def main (argv):
         script_info["disconnect_entry"] = blank_to_none(disconnect_entry.get_text())
         write_scripts(network, network_type, script_info)
     dialog.destroy()
-               
+ 
 
 if __name__ == '__main__':
     main(sys.argv)

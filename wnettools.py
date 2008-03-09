@@ -57,7 +57,7 @@ wpa1_pattern        = re.compile('(WPA Version 1)', re.I | re.M  | re.S)
 wpa2_pattern        = re.compile('(WPA2)', re.I | re.M  | re.S)
 
 # Patterns for wpa_cli output
-auth_pattern       = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
+auth_pattern        = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
 
 RALINK_DRIVER = 'ralink legacy'
 
@@ -72,19 +72,18 @@ def SetDNS(dns1=None, dns2=None, dns3=None):
     dns3 -- IP address of DNS server 1
 
     """
-    dns_ips = [dns1, dns2, dns3]
-
     resolv = open("/etc/resolv.conf","w")
-    for dns in dns_ips:
+    for dns in [dns1, dns2, dns3]:
         if dns:
             print 'Setting DNS : ' + dns
             resolv.write('nameserver ' + dns + '\n')
     resolv.close()
 
 def GetDefaultGateway():
-    """Attempts to determine the default gateway by parsing route -n"""
+    """ Attempts to determine the default gateway by parsing route -n. """
     route_info = misc.Run("route -n")
     lines = route_info.split('\n')
+    gateway = None
     for line in lines:
         words = line.split()
         print words
@@ -94,7 +93,6 @@ def GetDefaultGateway():
         
     if not gateway:
         print 'couldn\'t retrieve default gateway from route -n'
-        gateway = None
     return gateway
 
 def StopDHCP():
@@ -125,16 +123,32 @@ class Interface(object):
         """
         self.iface = iface
         self.verbose = verbose
+        self.DHCP_CLIENT = None
+        self.DHCP_CMD = None
+        self.DHCP_RELEASE = None
+        self.MIITOOL_FOUND = False
+        self.ETHTOOL_FOUND = False
+        self.IP_FOUND = False
         self.Check()
         
     def SetInterface(self, iface):
-        """ Sets the interface. """
+        """ Sets the interface.
+        
+        Keyword arguments:
+        iface -- the name of the interface.
+        
+        """
         self.iface = iface
 
     def CheckDHCP(self):
-        """ Check that all required tools are available. """
-        # TODO: Implement this function.
-        # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
+        """ Check for a valid DHCP client. 
+        
+        Checks for the existence of a support DHCP client.  If one is
+        found, the appropriate values for DHCP_CMD, DHCP_RELEASE, and
+        DHCP_CLIENT are set.  If a supported client is not found, a
+        warning is printed.
+        
+        """
         dhcpclients = ["dhclient", "dhcpcd", "pump"]
         for client in dhcpclients:
             if misc.Run("which " + client):
@@ -172,8 +186,7 @@ class Interface(object):
             self.ETHTOOL_FOUND = False
 
     def Check(self):
-        """ Check that all required tools are available."""
-        # TODO: Implement this function.
+        """ Check that all required tools are available. """
         # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
         self.CheckDHCP()
         self.CheckWiredTools()
@@ -184,64 +197,27 @@ class Interface(object):
             self.IP_FOUND = False
 
     def Up(self):
-        """ Bring the network interface up. """
+        """ Bring the network interface up.
+        
+        Returns:
+        True
+        
+        """
         cmd = 'ifconfig ' + self.iface + ' up'
         if self.verbose: print cmd
         misc.Run(cmd)
         return True
 
     def Down(self):
-        """ Take down the network interface. """
+        """ Take down the network interface. 
+        
+        Returns:
+        True
+        
+        """
         cmd = 'ifconfig ' + self.iface + ' down'
         if self.verbose: print cmd
         misc.Run(cmd)
-        return True
-
-    def GetDriverName(self):
-        """ Determine the driver name for the interface.
-        
-        Attempt to use ethtool to get the driver associated with a given
-        interface.  If ethtool is not installed or ethtool fails to provide
-        a driver, None is returned.
-        
-        """
-        if self.ETHTOOL_FOUND:
-            cmd = 'ethtool -i ' + self.iface
-            driver_pattern = re.compile('.*driver: (.*?)\n', re.I | re.M  | 
-                                        re.S)
-            driver_name = misc.RunRegex(driver_pattern, misc.Run(cmd))
-            
-        if not driver_name or not self.ETHTOOL_FOUND:
-            print ("Could not determine driver name for iface " + self.iface +
-                  " Is ethtool installed?")
-        return driver_name
-        
-    def LoadDriver(self, driver):
-        """ Enables the interface by loading the module given by driver. """
-        if not driver:
-            print 'Error: No driver associated with this interface.'
-            return False
-        cmd = "modprobe " + driver
-        if self.verbose: print cmd
-        output = misc.Run(cmd, True, True)
-        out = output.readlines()
-        if out and out[0].startswith("FATAL"):
-            print "Could not enable Interface: " + out[0]
-            return False
-        return True
-    
-    def UnloadDriver(self, driver):
-        """ Disables the interface by removing the module given by driver """
-        if not driver:
-            print 'Error: No driver associated with this interface.'
-            return False
-        cmd = "modprobe -r " + driver
-        if self.verbose: print cmd
-        output = misc.Run(cmd, True, True)
-        out = output.readlines()
-        if out and out[0].startswith("FATAL"):
-            print "Could not enable Interface: " + out[0]
-            return False
         return True
 
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
@@ -253,26 +229,34 @@ class Interface(object):
         broadcast -- broadcast address in dotted quad form
 
         """
-        cmd = 'ifconfig ' + self.iface + ' '
+        if not self.iface:
+            return
+
+        cmd = ''.join(['ifconfig ', self.iface, ' '])
         if ip:
-            cmd += ip + ' '
+            cmd = ''.join([cmd, ip, ' '])
         if netmask:
-            cmd += 'netmask ' + netmask + ' '
+            cmd = ''.join([cmd, 'netmask ', netmask, ' '])
         if broadcast:
-            cmd += 'broadcast ' + broadcast + ' '
+            cmd = ''.join([cmd, 'broadcast ', broadcast, ' '])
         if self.verbose: print cmd
         misc.Run(cmd)
 
     def _parse_dhclient(self, pipe):
-        """ Parse the output of dhclient
+        """ Parse the output of dhclient.
         
         Parses the output of dhclient and returns the status of
         the connection attempt.
+
+        Keyword arguments:
+        pipe -- stdout pipe to the dhcpcd process.
+        
+        Returns:
+        'success' if succesful', an error code string otherwise.
         
         """
         dhclient_complete = False
         dhclient_success = False
-        dh_no_offers = False
         
         while not dhclient_complete:
             line = pipe.readline()
@@ -283,44 +267,43 @@ class Interface(object):
             if line.startswith('bound'):
                 dhclient_success = True
                 dhclient_complete = True
-            if line.startswith('No DHCPOFFERS'):
-                # We don't break in this case because dhclient will
-                # try to use an old lease if possible, so we may
-                # still make a successful connection.
-                dh_no_offers = True
                 
-        if dhclient_success:
-            print 'DHCP connection successful'
-            return 'success'
-        if dh_no_offers:
-            print 'DHCP connection failed: No DHCP offers recieved'
-            return 'no_dhcp_offers'
-        else:
-            print 'DHCP connection failed: Reason unknown'
-            return 'dhcp_failed'
+        return self._check_dhcp_result(dhclient_success)
         
     def _parse_pump(self, pipe):
-        """ Determines if obtaining an IP using pump succeeded. """
+        """ Determines if obtaining an IP using pump succeeded.
+
+        Keyword arguments:
+        pipe -- stdout pipe to the dhcpcd process.
+        
+        Returns:
+        'success' if succesful', an error code string otherwise.
+        
+        """
         pump_complete = False
-        pump_succeded = True
+        pump_success = True
         
         while not pump_complete:
             line = pipe.readline()
             if line == '':
                 pump_complete = True
             elif line.strip().lower().startswith('Operation failed.'):
-                pump_succeded = False
+                pump_success = False
                 pump_complete = True
             print line
             
-        if pump_succeded:
-            print "DHCP connection successful"
-            return "success"
-        else:
-            print "DHCP connection failed: Reason unknown"
-            return 'dhcp_failed'
+        return self._check_dhcp_result(pump_success)
 
     def _parse_dhcpcd(self, pipe):
+        """ Determines if obtaining an IP using dhcpcd succeeded.
+        
+        Keyword arguments:
+        pipe -- stdout pipe to the dhcpcd process.
+        
+        Returns:
+        'success' if succesful', an error code string otherwise.
+        
+        """
         dhcpcd_complete = False
         dhcpcd_success = True
         
@@ -333,15 +316,33 @@ class Interface(object):
                 dhcpcd_complete = True
             print line
             
-        if dhcpcd_success:
-            print "DHCP connection successful"
-            return "success"
+        return self._check_dhcp_result(dhcpcd_success)
+        
+    def _check_dhcp_result(self, success):
+        """ Print and return the correct DHCP connection result. 
+        
+        Keyword Arguents:
+        success -- boolean specifying if DHCP was succesful.
+        
+        Returns:
+        'success' if success = True, 'dhcp_failed' otherwise.
+        
+        """
+        if success:
+            print 'DHCP connection successful'
+            return 'success'
         else:
-            print "DHCP connection failed"
-            return "dhcp_failed"
+            print 'DHCP connection failed'
+            return 'dhcp_failed'
             
     def StartDHCP(self):
-        """ Start the DHCP client to obtain an IP address. """        
+        """ Start the DHCP client to obtain an IP address.
+        
+        Returns:
+        A string representing the result of the DHCP command.  See
+        _check_dhcp_result for the possible values.
+        
+        """        
         cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
@@ -361,6 +362,8 @@ class Interface(object):
 
     def FlushRoutes(self):
         """ Flush all network routes. """
+        if not self.iface:
+            return
         if self.IP_FOUND:
             cmd = "ip route flush dev " + self.iface
         else:
@@ -392,7 +395,12 @@ class Interface(object):
         return misc.RunRegex(ip_pattern, output)
     
     def IsUp(self):
-        """ Determines if the interface is up. """
+        """ Determines if the interface is up.
+        
+        Returns:
+        True if the interface is up, False otherwise.
+        
+        """
         cmd = "ifconfig " + self.iface
         output = misc.Run(cmd)
         lines = output.split('\n')
@@ -425,7 +433,12 @@ class WiredInterface(Interface):
         physical connection state.  Should ethtool fail to run properly,
         mii-tool will be used instead.
         
+        Returns:
+        True if a link is detected, False otherwise.
+        
         """
+        if not self.iface:
+            return False
         if self.ETHTOOL_FOUND:
             return self._eth_get_plugged_in()
         elif self.MIITOOL_FOUND:
@@ -436,6 +449,12 @@ class WiredInterface(Interface):
             return False
 
     def _eth_get_plugged_in(self):
+        """ Use ethtool to determine the physical connection state.
+        
+        Returns:
+        True if a link is detected, False otherwise.
+        
+        """
         link_tool = 'ethtool'
         if not self.IsUp():
             print 'Wired Interface is down, putting it up'
@@ -449,6 +468,12 @@ class WiredInterface(Interface):
             return False
     
     def _mii_get_plugged_in(self):
+        """ Use mii-tool to determine the physical connection state. 
+                
+        Returns:
+        True if a link is detected, False otherwise.
+        
+        """
         link_tool = 'mii-tool'
         tool_data = misc.Run(link_tool + ' ' + self.iface, True)
         if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M  | re.S), 
@@ -500,7 +525,12 @@ class WirelessInterface(Interface):
         misc.Run(cmd)
 
     def GetKillSwitchStatus(self):
-        """ Determines if the wireless killswitch is enabled. """
+        """ Determines if the wireless killswitch is enabled.
+        
+        Returns:
+        True if the killswitch is enabled, False otherwise.
+        
+        """
         output = misc.Run("iwconfig " + self.iface)
 
         killswitch_pattern = re.compile('.*radio off', re.I | re.M | re.S)
@@ -554,8 +584,8 @@ class WirelessInterface(Interface):
     def _FreqToChannel(self, freq):
         """ Translate the specified frequency to a channel.
 
-        Note: This function is simply a lookup table and therefore the
-        freq argument must be in the table to provide a valid channel.
+        Note: This function is simply a lookup dict and therefore the
+        freq argument must be in the dict to provide a valid channel.
 
         Keyword arguments:
         freq -- string containing the specified frequency
@@ -565,22 +595,15 @@ class WirelessInterface(Interface):
 
         """
         ret = None
-        if freq == '2.412 GHz':   ret = 1
-        elif freq == '2.417 GHz': ret = 2
-        elif freq == '2.422 GHz': ret = 3
-        elif freq == '2.427 GHz': ret = 4
-        elif freq == '2.432 GHz': ret = 5
-        elif freq == '2.437 GHz': ret = 6
-        elif freq == '2.442 GHz': ret = 7
-        elif freq == '2.447 GHz': ret = 8
-        elif freq == '2.452 GHz': ret = 9
-        elif freq == '2.457 GHz': ret = 10
-        elif freq == '2.462 GHz': ret = 11
-        elif freq == '2.467 GHz': ret = 12
-        elif freq == '2.472 GHz': ret = 13
-        elif freq == '2.484 GHz': ret = 14
-        else:
-            print 'Couldn\'t determine channel number for current network - ' + freq
+        freq_dict = {'2.412 GHz': 1, '2.417 GHz': 2, '2.422 GHz': 3,
+                         '2.427 GHz': 4, '2.432 GHz': 5, '2.437 GHz': 6,
+                         '2.442 GHz': 7, '2.447 GHz': 8, '2.452 GHz': 9,
+                         '2.457 GHz': 10, '2.462 GHz': 11, '2.467 GHz': 12,
+                         '2.472 GHz': 13, '2.484 GHz': 14 }
+        try:
+            ret = freq_dict[freq]
+        except KeyError:
+            print "Couldn't determine channel number for frequency: " + freq
         
         return ret
 
@@ -606,7 +629,6 @@ class WirelessInterface(Interface):
                        for ralink cards.
 
         Returns:
-
         A dictionary containing the cell networks properties.
 
         """
@@ -766,11 +788,11 @@ class WirelessInterface(Interface):
         bssid -- bssid of the network
 
         """
-        cmd = 'iwconfig ' + self.iface + ' essid "' + essid + '"'
+        cmd = ''.join(['iwconfig ', self.iface, ' essid "', essid, '"'])
         if channel:
-            cmd += ' channel ' + str(channel)
+            cmd = ''.join([cmd, ' channel ', str(channel)])
         if bssid:
-            cmd += ' ap ' + bssid
+            cmd = ''.join([cmd, ' ap ', bssid])
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -785,9 +807,9 @@ class WirelessInterface(Interface):
         if self.wpa_driver == RALINK_DRIVER:
             self._AuthenticateRalinkLegacy(network)
         else:
-            cmd = ('wpa_supplicant -B -i ' + self.iface + ' -c "'
-                    + wpath.networks + network['bssid'].replace(':','').lower()
-                    + '" -D ' + self.wpa_driver)
+            cmd = ''.join(['wpa_supplicant -B -i ', self.iface, ' -c "',
+                       wpath.networks, network['bssid'].replace(':','').lower(),
+                       '" -D ', self.wpa_driver])
             if self.verbose: print cmd
             misc.Run(cmd)
 
@@ -800,6 +822,13 @@ class WirelessInterface(Interface):
             NOTE: It's possible this could return False,
             even though in actuality wpa_supplicant just isn't
             finished yet.
+            
+            Keyword arguments:
+            auth_time -- The time at which authentication began.
+            
+            Returns:
+            True if wpa_supplicant authenticated succesfully,
+            False otherwise.
 
         """
         # Right now there's no way to do this for these drivers
@@ -923,7 +952,7 @@ class WirelessInterface(Interface):
 
         [(strength, max_strength)] = strength_pattern.findall(output)
         if max_strength and strength:
-            return 100 * int(strength) / int(max_strength)
+            return 100 * int(strength) // int(max_strength)
         
         if strength == None:
             strength = misc.RunRegex(altstrength_pattern, output)
@@ -962,6 +991,6 @@ class WirelessInterface(Interface):
             output = iwconfig
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',
                                            re.I | re.M  | re.S), output)
-        if network is not None:
+        if network:
             network = misc.to_unicode(network)
         return network

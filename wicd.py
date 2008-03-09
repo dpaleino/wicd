@@ -43,6 +43,7 @@ import dbus
 import dbus.service
 import getopt
 import time
+import os
 
 # Wicd specific imports
 import wpath
@@ -51,8 +52,12 @@ import gui
 
 # Import egg.trayicon if we're using an older gtk version
 if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
-    import egg.trayicon
-    USE_EGG = True
+    try:
+        import egg.trayicon
+        USE_EGG = True
+    except ImportError:
+        print 'Unable to load wicd.py: Missing egg.trayicon module.'
+        sys.exit(1)
 else:
     USE_EGG = False
     
@@ -137,58 +142,70 @@ class TrayIcon():
             """Launch the wired profile chooser."""
             gui.WiredProfileChooser()
             daemon.SetNeedWiredProfileChooser(False)
+            
+        def set_wired_state(self, info):
+            """ Sets the icon info for a wired state. """
+            wired_ip = info[0]
+            self.tr.set_from_file(wpath.images + "wired.png")
+            self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
+                                                                     wired_ip))
+            
+        def set_wireless_state(self, info):
+            """ Sets the icon info for a wireless state. """
+            lock = ''
+            wireless_ip = info[0]
+            self.network = info[1]
+            strength = info[2]
+            cur_net_id = int(info[3])
+            sig_string = daemon.FormatSignalForPrinting(str(strength))
+            
+            if wireless.GetWirelessProperty(cur_net_id, "encryption"):
+                lock = "-lock"
+                
+            self.tr.set_tooltip(language['connected_to_wireless']
+                                .replace('$A', self.network)
+                                .replace('$B', sig_string)
+                                .replace('$C', str(wireless_ip)))
+            self.set_signal_image(strength, lock)
+            
+        def set_connecting_state(self, info):
+            """ Sets the icon info for a connecting state. """
+            if info[0] == 'wired' and len(info) == 1:
+                cur_network = language['wired']
+            else:
+                cur_network = info[1]
+            self.tr.set_tooltip(language['connecting'] + " to " + 
+                                cur_network + "...")
+            self.tr.set_from_file(wpath.images + "no-signal.png")  
+            
+        def set_not_connected_state(self, info):
+            """ Set the icon info for the not connected state. """
+            self.tr.set_from_file(wpath.images + "no-signal.png")
+            if wireless.GetKillSwitchEnabled():
+                status = (language['not_connected'] + " (" + 
+                         language['killswitch_enabled'] + ")")
+            else:
+                status = language['not_connected']
+            self.tr.set_tooltip(status)
 
         def update_tray_icon(self, state=None, info=None):
             """ Updates the tray icon and current connection status. """
-            if self.use_tray == False: return False
+            if not self.use_tray: return False
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
             
             if state == misc.WIRED:
-                wired_ip = info[0]
-                self.tr.set_from_file(wpath.images + "wired.png")
-                self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
-                                                                     wired_ip))
-
+                self.set_wired_state(info)
             elif state == misc.WIRELESS:
-                lock = ''
-                wireless_ip = info[0]
-                self.network = info[1]
-                strength = info[2]
-                cur_net_id = int(info[3])
-                sig_string = daemon.FormatSignalForPrinting(str(strength))
-                
-                if wireless.GetWirelessProperty(cur_net_id, "encryption"):
-                    lock = "-lock"
-                    
-                self.tr.set_tooltip(language['connected_to_wireless']
-                                    .replace('$A', self.network)
-                                    .replace('$B', sig_string)
-                                    .replace('$C', str(wireless_ip)))
-                self.set_signal_image(strength, lock)
-                
+                self.set_wireless_state(info)
             elif state == misc.CONNECTING:
-                if info[0] == 'wired' and len(info) == 1:
-                    cur_network = language['wired']
-                else:
-                    cur_network = info[1]
-                self.tr.set_tooltip(language['connecting'] + " to " + 
-                                    cur_network + "...")
-                self.tr.set_from_file(wpath.images + "no-signal.png")
-                
+                self.set_connecting_state(info)
             elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
-                self.tr.set_from_file(wpath.images + "no-signal.png")
-                if wireless.GetKillSwitchEnabled():
-                    status = (language['not_connected'] + " (" + 
-                             language['killswitch_enabled'] + ")")
-                else:
-                    status = language['not_connected']
-                self.tr.set_tooltip(status)
+                self.set_not_connected_state(info)
             else:
                 print 'Invalid state returned!!!'
                 return False
-
             return True
 
         def set_signal_image(self, wireless_signal, lock):
@@ -217,7 +234,7 @@ class TrayIcon():
 
 
     class TrayIconGUI():
-        """ Base Tray Icon class.
+        """ Base Tray Icon UI class.
         
         Implements methods and variables used by both egg/StatusIcon
         tray icons.
@@ -280,9 +297,9 @@ class TrayIcon():
 
         def toggle_wicd_gui(self):
             """ Toggles the wicd GUI. """
-            if self.gui_win == None:
+            if not self.gui_win:
                 self.gui_win = gui.appGui()
-            elif self.gui_win.is_visible == False:
+            elif not self.gui_win.is_visible:
                 self.gui_win.show_win()
             else:
                 self.gui_win.exit()
@@ -407,6 +424,10 @@ def main(argv):
             sys.exit()
         elif opt in ('-n', '--no-tray'):
             use_tray = False
+
+    if not use_tray:
+        os.spawnlp(os.P_NOWAIT, wpath.bin + 'gui.py')
+        sys.exit(0)
 
     # Set up the tray icon GUI and backend
     tray_icon = TrayIcon(use_tray)

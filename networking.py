@@ -73,6 +73,12 @@ class Controller(object):
         self.global_dns_3 = None
         
     def __setattr__(self, attr, value):
+        """ Provided custom self.variable assignments.
+
+        Calls the appropriate methods if self.wireless_interface or
+        self.wired_interface is set.
+        
+        """
         if attr == 'wireless_interface':
             object.__setattr__(self, attr, value)
             if self.wiface:
@@ -85,17 +91,23 @@ class Controller(object):
             object.__setattr__(self, attr, value)
             
     def SetWiface(self, iface):
-        self.wiface.SetInterface(iface)
+        """ Sets the wireless interface for the associated wnettools class. """
+        if self.wiface:
+            self.wiface.SetInterface(iface)
     
     def SetLiface(self, iface):
-        self.liface.SetInterface(iface)
+        """ Sets the wired interface for the associated wnettools class. """
+        if self.liface:
+            self.liface.SetInterface(iface)
 
 
 class ConnectThread(threading.Thread):
     """ A class to perform network connections in a multi-threaded way.
 
     Useless on it's own, this class provides the generic functions
-    necessary for connecting using a separate thread. """
+    necessary for connecting using a separate thread.
+    
+    """
 
     is_connecting = None
     connecting_thread = None
@@ -116,6 +128,7 @@ class ConnectThread(threading.Thread):
         gdns1 -- global DNS server 1
         gdns2 -- global DNS server 2
         gdns3 -- global DNS server 3
+        debug -- debug mode status
 
         """
         threading.Thread.__init__(self)
@@ -128,6 +141,7 @@ class ConnectThread(threading.Thread):
         self.before_script = before_script
         self.after_script = after_script
         self.disconnect_script = disconnect_script
+        self.should_die = False
 
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
@@ -166,6 +180,90 @@ class ConnectThread(threading.Thread):
         finally:
             self.lock.release()
         return message
+    
+    def reset_ip_addresses(self, wiface, liface):
+        """ Resets the IP addresse for both wired/wireless interfaces.
+        
+        Sets a false ip so that when we set the real one, the correct
+        routing entry is created.
+        
+        """
+        print 'Setting false IP...'
+        self.SetStatus('resetting_ip_address')
+        wiface.SetAddress('0.0.0.0')
+        liface.SetAddress('0.0.0.0')
+        
+    def put_iface_down(self, iface):
+        """ Puts the given interface down. """
+        print 'Interface down'
+        self.SetStatus('interface_down')
+        iface.Down()
+        
+    def run_script_if_needed(self, script, msg):
+        """ Execute a given script if needed.
+        
+        Keyword arguments:
+        script -- the script to execute, or None/'' if there isn't one.
+        msg -- the name of the script to display in the log.
+        
+        """
+        if script:
+            print 'Executing %s script' % (msg)
+            misc.ExecuteScript(script)
+            
+    def flush_routes(self, wiface, liface):
+        """ Flush the routes for both wired/wireless interfaces. """
+        self.SetStatus('flushing_routing_table')
+        print 'Flushing the routing table...'
+        wiface.FlushRoutes()
+        liface.FlushRoutes()
+
+    def set_broadcast_address(self, iface):
+        """ Set the broadcast address for the given interface. """
+        if not self.network.get('broadcast') == None:
+            self.SetStatus('setting_broadcast_address')
+            print 'Setting the broadcast address...' + self.network['broadcast']
+            iface.SetAddress(broadcast=self.network['broadcast'])
+            
+    def set_ip_address(self, iface):
+        """ Set the IP address for the given interface. 
+        
+        Assigns a static IP if one is requested, otherwise calls DHCP.
+        
+        """
+        if self.network.get('ip'):
+            self.SetStatus('setting_static_ip')
+            print 'Setting static IP : ' + self.network['ip']
+            iface.SetAddress(self.network['ip'], self.network['netmask'])
+            print 'Setting default gateway : ' + self.network['gateway']
+            iface.SetDefaultRoute(self.network['gateway'])
+        else:
+            # Run dhcp...
+            self.SetStatus('running_dhcp')
+            print "Running DHCP"
+            dhcp_status = iface.StartDHCP()
+            if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
+                self.connect_aborted(dhcp_status)
+                return
+            
+    def set_dns_addresses(self):
+        """ Set the DNS address(es).
+
+        If static DNS servers or global DNS servers are specified, set them.
+        Otherwise do nothing.
+        
+        """
+        if (((self.network.get('dns1') or self.network.get('dns2') or
+            self.network.get('dns3')) and self.network.get('use_static_dns')) or
+            self.network.get('use_global_dns')):
+            self.SetStatus('setting_static_dns')
+            if self.network.get('use_global_dns'):
+                wnettools.SetDNS(misc.Noneify(self.global_dns_1),
+                    misc.Noneify(self.global_dns_2),
+                    misc.Noneify(self.global_dns_3))
+            else:
+                wnettools.SetDNS(self.network.get('dns1'),
+                    self.network.get('dns2'), self.network.get('dns3'))
 
     def connect_aborted(self, reason):
         """ Sets the thread status to aborted in a thread-safe way.
@@ -179,13 +277,31 @@ class ConnectThread(threading.Thread):
         self.abort_msg = reason
         self.is_connecting = False
         print 'exiting connection thread'
+        
+    def stop_dhcp_clients(self, iface):
+        """ Stop and running DHCP clients, as well as wpa_supplicant. """
+        print 'Stopping wpa_supplicant, and any dhcp clients'
+        iface.StopWPA()
+        wnettools.StopDHCP()
+        
+    def abort_if_needed(self):
+        """ Abort the thread is it has been requested. """
+        if self.should_die:
+            self.connect_aborted('aborted')
+            thread.exit()
+            
+    def put_iface_up(self, iface):
+        """ Bring up given interface. """
+        print 'Interface up...'
+        self.SetStatus('interface_up')
+        iface.Up()
 
 
 class Wireless(Controller):
     """ A wrapper for common wireless interface functions. """
 
     def __init__(self):
-        """ Initialise the class. """
+        """ Initialize the class. """
         Controller.__init__(self)
         self.wpa_driver = None
         self.wiface = wnettools.WirelessInterface(self.wireless_interface,
@@ -243,6 +359,7 @@ class Wireless(Controller):
             self.wpa_driver, self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
             self.global_dns_2, self.global_dns_3)
+        self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
 
@@ -287,7 +404,12 @@ class Wireless(Controller):
         return self.wiface.GetIwconfig()
     
     def IsUp(self):
-        """ Calls the IsUp method for the wireless interface. """
+        """ Calls the IsUp method for the wireless interface.
+        
+        Returns:
+        True if the interface is up, False otherwise.
+        
+        """
         return self.wiface.IsUp()
 
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key,
@@ -359,12 +481,23 @@ class Wireless(Controller):
         return wnettools.GetWirelessInterfaces()
 
     def GetKillSwitchStatus(self):
+        """ Get the current status of the Killswitch. 
+        
+        Returns:
+        True if the killswitch is on, False otherwise.
+        
+        """
         return self.wiface.GetKillSwitchStatus()
 
     def Disconnect(self):
-        """ Disconnect from the network. """
+        """ Disconnect the given iface.
+        
+        Executes the disconnect script associated with a given interface,
+        Resets it's IP address, and puts the interface down then up.
+        
+        """
         wiface = self.wiface
-        if self.disconnect_script != None:
+        if self.disconnect_script not in (None, ""):
             print 'Running wireless network disconnect script'
             misc.ExecuteScript(self.disconnect_script)
 
@@ -373,12 +506,15 @@ class Wireless(Controller):
         wiface.Up()
 
     def EnableInterface(self):
+        """ Puts the interface up. """
         return self.wiface.Up()
     
     def DisableInterface(self):
+        """ Puts the interface down. """
         return self.wiface.Down()
     
     def SetWPADriver(self, driver):
+        """ Sets the wpa_supplicant driver associated with the interface. """
         self.wiface.SetWpaDriver(driver)
 
 class WirelessConnectThread(ConnectThread):
@@ -430,149 +566,86 @@ class WirelessConnectThread(ConnectThread):
         wiface = wnettools.WirelessInterface(self.wireless_interface,
                                              self.wpa_driver)
         liface = wnettools.WiredInterface(self.wired_interface)
-
         self.is_connecting = True
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        # Execute pre-connection script if necessary
-        if self.before_script != '' and self.before_script is not None:
-            print 'Executing pre-connection script'
-            misc.ExecuteScript(self.before_script)
         
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
+        # Run pre-connection script.
+        self.abort_if_needed()
+        self.run_script_if_needed(self.before_script, 'pre-connection')
+        self.abort_if_needed()
+        
+        # Dake down interface and clean up previous connections.
+        self.put_iface_down(wiface)
+        self.abort_if_needed()
+        self.reset_ip_addresses(wiface, liface)
+        self.stop_dhcp_clients(wiface)
+        self.abort_if_needed()
+        self.flush_routes(wiface, liface)
 
-        # Put it down
-        print 'Interface down'
-        self.SetStatus('interface_down')
-        wiface.Down()
-
-        # Set a false ip so that when we set the real one, the correct
-        # routing entry is created
-        print 'Setting false IP...'
-        self.SetStatus('resetting_ip_address')
-        wiface.SetAddress('0.0.0.0')
-        liface.SetAddress('0.0.0.0')
-
-        print 'Stopping wpa_supplicant, and any running dhcp clients'
-        wiface.StopWPA()
-        wnettools.StopDHCP()
-
-        if self.should_die:
-            wiface.Up()
-            self.connect_aborted('aborted')
-            return
-
-        # Check to see if we need to generate a PSK (only for non-ralink
-        # cards).
+        # Generate PSK and authenticate if needed.
         if self.wpa_driver != 'ralink legacy':
-            if not self.network.get('key') is None:
-                self.SetStatus('generating_psk')
+            self.generate_psk_and_authenticate(wiface)
 
-                print 'Generating psk...'
-                key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
-                                         re.I | re.M  | re.S)
-                self.network['psk'] = misc.RunRegex(key_pattern,
-                        misc.Run('wpa_passphrase "' + self.network['essid'] +
-                                 '" "' + re.escape(self.network['key'])
-                                 + '"'))
-            # Generate the wpa_supplicant file...
-            if self.network.get('enctype') is not None:
-                self.SetStatus('generating_wpa_config')
-                print 'Attempting to authenticate...'
-                wiface.Authenticate(self.network)
-
-        if self.should_die:
-            wiface.Up()
-            self.connect_aborted('aborted')
-            return
-
-        self.SetStatus('flushing_routing_table')
-        print 'Flushing the routing table...'
-        wiface.FlushRoutes()
-        liface.FlushRoutes()
-
+        # Put interface up.
+        self.abort_if_needed()
         self.SetStatus('configuring_interface')
-        print 'Configuring the wireless interface...'
-
-        # Bring up the network.
-        print 'Interface up...'
-        self.SetStatus('interface_up')
-        wiface.Up()
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
+        self.put_iface_up(wiface)
+        self.abort_if_needed()
+        
+        # Associate.
         wiface.SetMode(self.network['mode'])
         wiface.Associate(self.network['essid'], self.network['channel'],
                          self.network['bssid'])
 
-        if self.network.get('enctype') is not None:
+        # Authenticate after association for Ralink legacy cards.
+        if self.wpa_driver == 'ralink legacy':
+            if self.network.get('key'):
+                wiface.Authenticate(self.network)
+                
+        # Validate Authentication.
+        if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
-            # Make sure wpa_supplicant was able to associate.
             if not wiface.ValidateAuthentication(time.time()):
                 self.connect_aborted('bad_pass')
                 return
 
-        # Authenticate after association for Ralink legacy cards.
-        if self.wpa_driver == 'ralink legacy':
-            if self.network.get('key') is not None:
-                wiface.Authenticate(self.network)
-
-        if self.network.get('broadcast') is not None:
-            self.SetStatus('setting_broadcast_address')
-
-            print 'Setting the broadcast address...' + self.network['broadcast']
-            wiface.SetAddress(broadcast=self.network['broadcast'])
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        if self.network.get('ip'):
-            self.SetStatus('setting_static_ip')
-            print 'Setting static IP : ' + self.network['ip']
-            wiface.SetAddress(self.network['ip'], self.network['netmask'])
-            print 'Setting default gateway : ' + self.network['gateway']
-            wiface.SetDefaultRoute(self.network['gateway'])
-        else:
-            # Run DHCP...
-            self.SetStatus('running_dhcp')
-            print "Running DHCP"
-            dhcp_status = wiface.StartDHCP()
-            if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
-                self.connect_aborted(dhcp_status)
-                return
-
-        if ((self.network.get('dns1') or self.network.get('dns2') or
-            self.network.get('dns3')) and self.network.get('use_static_dns')):
-            self.SetStatus('setting_static_dns')
-            if self.network.get('use_global_dns'):
-                wnettools.SetDNS(misc.Noneify(self.global_dns_1),
-                    misc.Noneify(self.global_dns_2),
-                    misc.Noneify(self.global_dns_3))
-            else:
-                wnettools.SetDNS(self.network.get('dns1'),
-                    self.network.get('dns2'), self.network.get('dns3'))
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        # Execute post-connection script if necessary
-        if misc.Noneify(self.after_script):
-            print 'Executing post-connection script'
-            misc.ExecuteScript(self.after_script)
+        # Set up gateway, IP address, and DNS servers.
+        self.set_broadcast_address(wiface)
+        self.abort_if_needed()
+        self.set_ip_address(wiface)
+        self.set_dns_addresses()
+        
+        # Run post-connection script.
+        self.abort_if_needed()
+        self.run_script_if_needed(self.after_script, 'post-connection')
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         self.is_connecting = False
+    
+    def generate_psk_and_authenticate(self, wiface):
+        """ Generates a PSK and authenticates if necessary. 
+        
+        Generates a PSK using wpa_passphrase, and starts the authentication
+        process if encryption is on.
+        
+        """
+        # Check to see if we need to generate a PSK (only for non-ralink
+        # cards).
+        if self.network.get('key'):
+            self.SetStatus('generating_psk')
 
+            print 'Generating psk...'
+            key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
+                                     re.I | re.M  | re.S)
+            self.network['psk'] = misc.RunRegex(key_pattern,
+                                misc.Run(''.join(['wpa_passphrase "',
+                                         self.network['essid'], '" "', 
+                                         re.escape(self.network['key']), '"'])))
+        # Generate the wpa_supplicant file...
+        if self.network.get('enctype'):
+            self.SetStatus('generating_wpa_config')
+            print 'Attempting to authenticate...'
+            wiface.Authenticate(self.network)
 
 
 class Wired(Controller):
@@ -612,6 +685,7 @@ class Wired(Controller):
             self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
             self.global_dns_2, self.global_dns_3)
+        self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
 
@@ -636,13 +710,30 @@ class Wired(Controller):
         liface.Up()
         
     def IsUp(self):
-        """ Calls the IsUp method for the wired interface. """
+        """ Calls the IsUp method for the wired interface. 
+        
+        Returns:
+        True if the interface is up, False otherwise.
+        
+        """
         return self.liface.IsUp()
     
     def EnableInterface(self):
+        """ Puts the interface up.
+        
+        Returns:
+        True if the interface was put up succesfully, False otherwise.
+        
+        """
         return self.liface.Up()
     
     def DisableInterface(self):
+        """ Puts the interface down.
+        
+        Returns:
+        True if the interface was put down succesfully, False otherwise.
+        
+        """
         return self.liface.Down()
 
 
@@ -685,6 +776,7 @@ class WiredConnectThread(ConnectThread):
            connections.
         3. Bring up the interface.
         4. Get/set IP address and DNS servers.
+        5. Run post-connection script.
 
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface)
@@ -692,97 +784,31 @@ class WiredConnectThread(ConnectThread):
 
         self.is_connecting = True
 
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        # Execute pre-connection script if necessary
-        if self.before_script != '' and self.before_script != None:
-            print 'executing pre-connection script'
-            misc.ExecuteScript(self.before_script)
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        # Put it down
-        print 'Interface down'
-        self.SetStatus('interface_down')
-        liface.Down()
-
-        # Set a false ip so that when we set the real one, the correct
-        # routing entry is created
-        print 'Setting false IP...'
-        self.SetStatus('resetting_ip_address')
-        wiface.SetAddress('0.0.0.0')
-        liface.SetAddress('0.0.0.0')
-
-        print 'Stopping wpa_supplicant, and any dhcp clients'
-        wiface.StopWPA()
-        wnettools.StopDHCP()
-
-        if self.should_die:
-            liface.Up()
-            self.connect_aborted('aborted')
-            return
-
-        self.SetStatus('flushing_routing_table')
-        print 'Flushing the routing table...'
-        wiface.FlushRoutes()
-        liface.FlushRoutes()
-
-        # Bring up the network.
-        print 'Interface up...'
-        self.SetStatus('interface_up')
-        liface.Up()
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        if not self.network.get('broadcast') == None:
-            self.SetStatus('setting_broadcast_address')
-            print 'Setting the broadcast address...' + self.network['broadcast']
-            liface.SetAddress(broadcast=self.network['broadcast'])
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        if self.network.get('ip'):
-            self.SetStatus('setting_static_ip')
-            print 'Setting static IP : ' + self.network['ip']
-            liface.SetAddress(self.network['ip'], self.network['netmask'])
-            print 'Setting default gateway : ' + self.network['gateway']
-            liface.SetDefaultRoute(self.network['gateway'])
-        else:
-            # Run dhcp...
-            self.SetStatus('running_dhcp')
-            print "Running DHCP"
-            dhcp_status = liface.StartDHCP()
-            if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
-                self.connect_aborted(dhcp_status)
-                return
-
-        if ((self.network.get('dns1') or self.network.get('dns2') or
-            self.network.get('dns3')) and self.network.get('use_static_dns')):
-            self.SetStatus('setting_static_dns')
-            if self.network.get('use_global_dns'):
-                wnettools.SetDNS(misc.Noneify(self.global_dns_1),
-                    misc.Noneify(self.global_dns_2),
-                    misc.Noneify(self.global_dns_3))
-            else:
-                wnettools.SetDNS(self.network.get('dns1'),
-                    self.network.get('dns2'), self.network.get('dns3'))
-
-        if self.should_die:
-            self.connect_aborted('aborted')
-            return
-
-        # Execute post-connection script if necessary
-        if misc.Noneify(self.after_script):
-            print 'executing post connection script'
-            misc.ExecuteScript(self.after_script)
+        # Run pre-connection script.
+        self.abort_if_needed()
+        self.run_script_if_needed(self.before_script, 'pre-connection')
+        self.abort_if_needed()
+        
+        # Take down interface and clean up previous connections.
+        self.put_iface_down(liface)
+        self.reset_ip_addresses(wiface, liface)
+        self.stop_dhcp_clients(wiface)
+        self.abort_if_needed()
+        self.flush_routes(wiface, liface)
+        
+        # Bring up interface.
+        self.put_iface_up(liface)
+        self.abort_if_needed()
+        
+        # Set gateway, IP adresses, and DNS servers.
+        self.set_broadcast_address(liface)
+        self.abort_if_needed()
+        self.set_ip_address(liface)
+        self.set_dns_addresses()
+        self.abort_if_needed()
+        
+        # Run post-connection script.
+        self.run_script_if_needed(self.after_script, 'post-connection')
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'

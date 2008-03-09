@@ -403,14 +403,14 @@ class AdvancedSettingsDialog(gtk.Dialog):
     def toggle_dns_checkbox(self, widget=None):
         """ Toggle entries and checkboxes based on the static dns checkbox. """
         # Should disable the static DNS boxes
-        if self.chkbox_static_ip.get_active() == True:
+        if self.chkbox_static_ip.get_active():
             self.chkbox_static_dns.set_active(self.chkbox_static_ip.
                                                             get_active())
             self.chkbox_static_dns.set_sensitive(False)
 
         self.chkbox_global_dns.set_sensitive(self.chkbox_static_dns.
                                                             get_active())
-        if self.chkbox_static_dns.get_active() == True:
+        if self.chkbox_static_dns.get_active():
             # If global dns is on, don't use local dns
             self.txt_dns_1.set_sensitive(not self.chkbox_global_dns.get_active())
             self.txt_dns_2.set_sensitive(not self.chkbox_global_dns.get_active())
@@ -824,7 +824,7 @@ class WiredNetworkEntry(NetworkEntry):
             config.CreateWiredNetworkProfile(profile_name)
             self.combo_profile_names.prepend_text(profile_name)
             self.combo_profile_names.set_active(0)
-            if self.is_full_gui == True:
+            if self.is_full_gui:
                 self.button_delete.set_sensitive(True)
                 #self.vbox_ahdvanced.set_sensitive(True)
                 self.connect_button.set_sensitive(True)
@@ -839,11 +839,11 @@ class WiredNetworkEntry(NetworkEntry):
         self.combo_profile_names.remove_text(self.combo_profile_names.
                                                                  get_active())
         self.combo_profile_names.set_active(0)
-        if config.GetWiredProfileList() == None:
+        if not config.GetWiredProfileList():
             self.profile_help.show()
             entry = self.combo_profile_names.child
             entry.set_text("")
-            if self.is_full_gui == True:
+            if self.is_full_gui:
                 self.button_delete.set_sensitive(False)
                 self.advanced_button.set_sensitive(False)
                 self.script_button.set_sensitive(False)
@@ -866,7 +866,7 @@ class WiredNetworkEntry(NetworkEntry):
         """ Called when a new profile is chosen from the list. """
         # Make sure the name doesn't change everytime someone types something
         if self.combo_profile_names.get_active() > -1:
-            if self.is_full_gui == False:
+            if not self.is_full_gui:
                 return
             
             profile_name = self.combo_profile_names.get_active_text()
@@ -1108,7 +1108,7 @@ class WiredProfileChooser:
 
 class appGui:
     """ The main wicd GUI class. """
-    def __init__(self):
+    def __init__(self, standalone=False):
         """ Initializes everything needed for the GUI. """
         gladefile = "data/wicd.glade"
         self.windowname = "gtkbench"
@@ -1149,6 +1149,7 @@ class appGui:
         self.vpn_connection_pipe = None
         self.is_visible = True
         self.pulse_active = False
+        self.standalone = standalone
         
         self.window.connect('delete_event', self.exit)
         
@@ -1757,7 +1758,7 @@ class appGui:
                 return False
         return True
     
-    def check_encryption_valid(self, entry):
+    def check_encryption_valid(self, networkid, entry):
         """ Make sure that encryption settings are properly filled in. """
         # Make sure no entries are left blank
         if entry.chkbox_encryption.get_active():
@@ -1778,7 +1779,8 @@ class appGui:
         cancel_button = self.wTree.get_widget("cancel_button")
         cancel_button.set_sensitive(True)
         if nettype == "wireless":
-            if not self.check_encryption_valid(networkentry.advanced_dialog):
+            if not self.check_encryption_valid(networkid,
+                                               networkentry.advanced_dialog):
                 return False
             wireless.ConnectWireless(networkid)
         elif nettype == "wired":
@@ -1787,16 +1789,21 @@ class appGui:
 
     def exit(self, widget=None, event=None):
         """ Hide the wicd GUI.
-        
+
         This method hides the wicd GUI and writes the current window size
-        to disc for later use.  This method does NOT actually destroy the
-        GUI, it just hides it.
-        
+        to disc for later use.  This method normally does NOT actually 
+        destroy the GUI, it just hides it.
+
         """
         self.window.hide()
-        self.is_visible = False
         [width, height] = self.window.get_size()
         config.WriteWindowSize(width, height)
+
+        if self.standalone:
+            self.window.destroy()
+            sys.exit(0)
+
+        self.is_visible = False
         daemon.SetGUIOpen(False)
         while gtk.events_pending():
             gtk.main_iteration()
@@ -1816,5 +1823,5 @@ class appGui:
         
         
 if __name__ == '__main__':
-    app = appGui()
+    app = appGui(standalone=True)
     gtk.main()

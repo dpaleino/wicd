@@ -247,11 +247,10 @@ def get_gettext():
     return _
 
 def to_unicode(x):
-    """ Attempts to convert a string to unicode """
+    """ Attempts to convert a string to utf-8. """
     try: # This may never fail, but let's be safe
         default_encoding = locale.getpreferredencoding()
     except:
-        print 'Could not get default encoding'
         default_encoding = None
 
     if default_encoding:

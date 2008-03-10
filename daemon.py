@@ -367,17 +367,17 @@ class ConnectionWizard(dbus.service.Object):
         if self.GetWiredAutoConnectMethod() == 2 and \
            not self.GetNeedWiredProfileChooser():
             self.LaunchChooser()
+            return
         elif self.GetWiredAutoConnectMethod() == 1:
             network = self.GetDefaultWiredNetwork()
             if not network:
-                print "Couldn't find a default wired connection,  wired \
-                       autoconnect failed."
+                print "Couldn't find a default wired connection, wired autoconnect failed."
                 self._wireless_autoconnect()
+                return
         else: # Assume its last-used.
             network = self.GetLastUsedWiredNetwork()
             if not network:
-                print "no previous wired profile available, wired autoconnect \
-                      failed."
+                print "no previous wired profile available, wired autoconnect failed."
                 self._wireless_autoconnect()
                 return
         self.ReadWiredNetworkProfile(network)
@@ -551,6 +551,7 @@ class ConnectionWizard(dbus.service.Object):
                    info[1] = essid
                    info[2] = signal strength
                    info[3] = internal networkid
+        SUSPENDED - info[0] = ""
                 
         
         """
@@ -983,7 +984,7 @@ class ConnectionWizard(dbus.service.Object):
         profileList = config.sections()
         for profile in profileList:
             if config.has_option(profile, "default"):
-                if config.get(profile, "default") == "True":
+                if misc.to_bool(config.get(profile, "default")):
                     print "removing existing default", profile
                     config.set(profile, "default", False)
                     self.SaveWiredNetworkProfile(profile)
@@ -996,7 +997,7 @@ class ConnectionWizard(dbus.service.Object):
         profileList = config.sections()
         for profile in profileList:
             if config.has_option(profile, "default"):
-                if config.get(profile, "default") == "True":
+                if misc.to_bool(config.get(profile, "default")):
                     return profile
         return None
 
@@ -1078,58 +1079,98 @@ class ConnectionWizard(dbus.service.Object):
         print "setting network profile"
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
-        if config.has_section(self.LastScan[id]["bssid"]):
-            config.remove_section(self.LastScan[id]["bssid"])
-        config.add_section(self.LastScan[id]["bssid"])
-        #add the essid so that people reading the config can figure
-        #out which network is which. it will not be read
-        for x in self.LastScan[id]:
-            config.set(self.LastScan[id]["bssid"], x, self.LastScan[id][x])
+        cur_network = self.LastScan[id]
+        bssid_key = cur_network["bssid"]
+        essid_key = "essid:" + cur_network["essid"]
+
+        if config.has_section(bssid_key):
+            config.remove_section(bssid_key)
+        config.add_section(bssid_key)
+        
+        # We want to write the essid and bssid sections if global
+        # settings are enabled.
+        if cur_network["use_settings_globally"]:
+            if config.has_section(essid_key):
+                config.remove_section(essid_key)
+            config.add_section(essid_key)
+
+        for x in cur_network:
+            config.set(bssid_key, x, cur_network[x])
+            if cur_network["use_settings_globally"]:
+                config.set(essid_key, x, cur_network[x])
+
         config.write(open(self.wireless_conf, "w"))
 
     @dbus.service.method('org.wicd.daemon.config')
     def SaveWirelessNetworkProperty(self, id, option):
         """ Writes a particular wireless property to disk """
         if (option.strip()).endswith("script"):
-            print 'you cannot save script information to disk through the daemon.'
+            print 'you cannot save script information to disk through \
+            the daemon.'
             return
-        
-        print ("setting network option " + str(option) + " to " + 
-              str(self.LastScan[id][option]))
+        cur_network = self.LastScan[id]
+        essid_key = "essid:" + cur_network["essid"]
+        print ''.join("setting network option ", str(option), " to ",
+              str(cur_network[option]))
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
-        if config.has_section(self.LastScan[id]["bssid"]):
-            config.set(self.LastScan[id]["bssid"], option,
-                       str(self.LastScan[id][option]))
+        
+        if config.has_section(cur_network["bssid"]):
+            config.set(cur_network["bssid"], option,
+                       str(cur_network[option]))
+
+        # Write the global section as well, if required.
+        if config.has_section(essid_key):
+            if config.get(essid_key, 'use_settings_globally'):
+                config.set(essid_key, option, str(cur_network[option]))
+
         config.write(open(self.wireless_conf, "w"))
+    
+    @dbus.service.method('org.wicd.daemon.config')
+    def RemoveGlobalEssidEntry(self, networkid):
+        """ Removes the global entry for the networkid provided. """
+        config = ConfigParser.ConfigParser()
+        config.read(self.wireless_conf)
+        cur_network = self.LastScan[networkid]
+        essid_key = "essid:" + cur_network["essid"]
+        if config.has_section(essid_key):
+            config.remove_section(essid_key)
 
     @dbus.service.method('org.wicd.daemon.config')
     def ReadWirelessNetworkProfile(self, id):
         """ Reads in wireless profile as the active network """
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
-        print self.LastScan[id]["bssid"]
-        if config.has_section(self.LastScan[id]["bssid"]):
-            self.LastScan[id]["has_profile"] = True
-
-            # Read the essid because we be needing to name those hidden
-            # wireless networks now - but only read it if it is hidden.
-            if self.LastScan[id]["hidden"]:
-                self.LastScan[id]["essid"] = misc.Noneify(config.get(self.LastScan[id]["bssid"],
-                                                                     "essid"))
-            for x in config.options(self.LastScan[id]["bssid"]):
-                if not self.LastScan[id].has_key(x) or x.endswith("script"):
-                    self.LastScan[id][x] = misc.Noneify(config.get(self.LastScan[id]["bssid"], x))
-            self.LastScan[id]['use_static_dns'] = bool(self.LastScan[id].get('use_static_dns'))
-            self.LastScan[id]['use_global_dns'] = bool(self.LastScan[id].get('use_global_dns'))
-            self.LastScan[id]['encryption'] = bool(self.LastScan[id].get('encryption'))
-            return "100: Loaded Profile"
+        cur_network = self.LastScan[id]
+        essid_key = "essid:" + cur_network["essid"]
+        bssid_key = cur_network["bssid"]
+        print bssid_key
+        if config.has_section(essid_key):
+            if config.get(essid_key, 'use_settings_globally'):
+                return self._read_wireless_profile(config, cur_network, 
+                                                   essid_key)
+        elif config.has_section(bssid_key):
+            return self._read_wireless_profile(config, cur_network, bssid_key)
         else:
-            self.LastScan[id]["has_profile"] = False
-            # Are these next two lines needed? -Dan
-            self.LastScan[id]['use_static_dns'] = bool(self.GetUseGlobalDNS())
-            self.LastScan[id]['use_global_dns'] = bool(self.GetUseGlobalDNS())
+            cur_network["has_profile"] = False
             return "500: Profile Not Found"
+        
+    def _read_wireless_profile(self, config, cur_network, section):
+        cur_network["has_profile"] = True
+
+        # Read the essid because we be needing to name those hidden
+        # wireless networks now - but only read it if it is hidden.
+        if cur_network["hidden"]:
+            cur_network["essid"] = misc.Noneify(config.get(section,
+                                                           "essid"))
+        for x in config.options(section):
+            if not cur_network.has_key(x) or x.endswith("script"):
+                cur_network[x] = misc.Noneify(config.get(section, 
+                                                         x))
+        for option in ['use_static_dns', 'use_global_dns', 'encryption',
+                       'use_settings_globally']:
+            cur_network[option] = bool(cur_network.get(option))
+        return "100: Loaded Profile"
 
     @dbus.service.method('org.wicd.daemon.config')
     def WriteWindowSize(self, width, height):

@@ -938,7 +938,6 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.config')
     def CreateWiredNetworkProfile(self, profilename):
         """ Creates a wired network profile. """
-        #should include: profilename, ip, netmask, gateway, dns1, dns2, dns3
         profilename = misc.to_unicode(profilename)
         print "creating profile for " + profilename
         config = ConfigParser.ConfigParser()
@@ -971,7 +970,7 @@ class ConnectionWizard(dbus.service.Object):
         for profile in profileList:
             print "profile = ", profile
             if config.has_option(profile, "lastused"):
-                if config.get(profile, "lastused") == "True":
+                if misc.to_bool(config.get(profile, "lastused")):
                     print "removing existing lastused"
                     config.set(profile, "lastused", False)
                     self.SaveWiredNetworkProfile(profile)
@@ -1008,7 +1007,7 @@ class ConnectionWizard(dbus.service.Object):
         profileList = config.sections()
         for profile in profileList:
             if config.has_option(profile,"lastused"):
-                if config.get(profile,"lastused") == "True":
+                if misc.to_bool(config.get(profile,"lastused")):
                     return profile
         return None
 
@@ -1110,8 +1109,8 @@ class ConnectionWizard(dbus.service.Object):
             return
         cur_network = self.LastScan[id]
         essid_key = "essid:" + cur_network["essid"]
-        print ''.join("setting network option ", str(option), " to ",
-              str(cur_network[option]))
+        print ''.join(["setting network option ", str(option), " to ",
+              str(cur_network[option])])
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
         
@@ -1235,7 +1234,7 @@ class ConnectionWizard(dbus.service.Object):
 
         if config.has_option(section, option):
             ret = config.get(section, option)
-            print 'found ' + option + ' in configuration', ret
+            print ''.join(['found ', option, ' in configuration ', ret])
         else:
             config.set(section, option, default)
             ret = default

@@ -580,6 +580,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             
         if wireless.GetWirelessProperty(networkID, 'use_settings_globally'):
             self.chkbox_global_settings.set_active(True)
+        else:
+            self.chkbox_global_settings.set_active(False)
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
@@ -1614,8 +1616,8 @@ class appGui:
         
         # First make sure all the Addresses entered are valid.
         if entry.chkbox_static_ip.get_active():
-            for ent in [entry.txt_ip, entry.txt_netmask, entry.txt_gateway]:
-                entlist.append(ent)
+            enlist = [ent for ent in [entry.txt_ip, entry.txt_netmask,
+                                     entry.txt_gateway]]
                 
         if entry.chkbox_static_dns.get_active() and \
            not entry.chkbox_global_dns.get_active():

@@ -954,10 +954,10 @@ class WirelessInterface(Interface):
         if max_strength and strength:
             return 100 * int(strength) // int(max_strength)
         
-        if strength == None:
+        if strength is None:
             strength = misc.RunRegex(altstrength_pattern, output)
+        
         return strength
-
 
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.

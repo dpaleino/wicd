@@ -195,7 +195,7 @@ class ConnectThread(threading.Thread):
         
     def put_iface_down(self, iface):
         """ Puts the given interface down. """
-        print 'Interface down'
+        print 'Putting interface down'
         self.SetStatus('interface_down')
         iface.Down()
         
@@ -292,7 +292,7 @@ class ConnectThread(threading.Thread):
             
     def put_iface_up(self, iface):
         """ Bring up given interface. """
-        print 'Interface up...'
+        print 'Putting interface up...'
         self.SetStatus('interface_up')
         iface.Up()
 
@@ -620,6 +620,8 @@ class WirelessConnectThread(ConnectThread):
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
+        if self.debug:
+            print "IP Address is: " + wiface.GetIP()
         self.is_connecting = False
     
     def generate_psk_and_authenticate(self, wiface):
@@ -812,4 +814,6 @@ class WiredConnectThread(ConnectThread):
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
+        if self.debug:
+            print "IP Address is: " + liface.GetIP()
         self.is_connecting = False

@@ -336,7 +336,7 @@ class TrayIcon():
             """ Handles tray mouse click events. """
             if event.button == 1:
                 self.toggle_wicd_gui()
-            if event.button == 3:
+            elif event.button == 3:
                 self.menu.popup(None, None, None, event.button, event.time)
 
         def set_from_file(self, val=None):

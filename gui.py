@@ -1503,7 +1503,6 @@ class appGui:
             if self.check_for_wireless(wireless.GetIwconfig(),
                                        wireless.GetWirelessIP()):
                 return True
-            
             self.set_status(language['not_connected'])
         return True
     
@@ -1556,6 +1555,8 @@ class appGui:
         
         """
         print "refreshing..."
+        self.network_list.set_sensitive(False)
+        self.wait_for_events()
         printLine = False  # We don't print a separator by default.
         # Remove stuff already in there.
         for z in self.network_list:
@@ -1608,6 +1609,7 @@ class appGui:
                 label = gtk.Label(language['no_wireless_networks_found'])
             self.network_list.pack_start(label)
             label.show()
+        self.network_list.set_sensitive(True)
 
     def save_settings(self, nettype, networkid, networkentry):
         """ Verifies and saves the settings for the network entry. """
@@ -1802,6 +1804,18 @@ class appGui:
         elif nettype == "wired":
             wired.ConnectWired()
         self.update_statusbar()
+        
+    def wait_for_events(self, amt=0):
+        """ Wait for any pending gtk events to finish before moving on. 
+
+        Keyword arguments:
+        amt -- a number specifying the number of ms to wait before checking
+               for pending events.
+        
+        """
+        time.sleep(amt)
+        while gtk.events_pending():
+            gtk.main_iteration()
 
     def exit(self, widget=None, event=None):
         """ Hide the wicd GUI.
@@ -1821,8 +1835,7 @@ class appGui:
 
         self.is_visible = False
         daemon.SetGUIOpen(False)
-        while gtk.events_pending():
-            gtk.main_iteration()
+        self.wait_for_events()
         return True
 
     def show_win(self):
@@ -1833,9 +1846,11 @@ class appGui:
         
         """
         self.window.show()
+        self.wait_for_events()
         self.is_visible = True
         daemon.SetGUIOpen(True)
-        self.refresh_networks()
+        self.wait_for_events(0.1)
+        gobject.idle_add(self.refresh_networks)
         
         
 if __name__ == '__main__':

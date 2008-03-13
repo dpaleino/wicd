@@ -111,7 +111,7 @@ language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
 language['connecting'] = _('Connecting')
 language['wired'] = _('Wired Network')
 
-class TrayIcon():
+class TrayIcon:
     """ Base Tray Icon class.
     
     Base Class for implementing a tray icon to display network status.
@@ -125,7 +125,7 @@ class TrayIcon():
         self.icon_info = self.TrayConnectionInfo(self.tr, use_tray)
         
 
-    class TrayConnectionInfo():
+    class TrayConnectionInfo:
         """ Class for updating the tray icon status. """
         def __init__(self, tr, use_tray=True):
             """ Initialize variables needed for the icon status methods. """
@@ -233,7 +233,7 @@ class TrayIcon():
             self.tr.set_from_file(img_file)
 
 
-    class TrayIconGUI():
+    class TrayIconGUI:
         """ Base Tray Icon UI class.
         
         Implements methods and variables used by both egg/StatusIcon

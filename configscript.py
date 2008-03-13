@@ -27,10 +27,10 @@ run as the current user.
 #
 
 import sys
+import os
 import gtk
 import ConfigParser
 import dbus
-import dbus.service
 import gtk.glade
 
 import wpath
@@ -184,4 +184,7 @@ def main (argv):
  
 
 if __name__ == '__main__':
+    if os.getuid() != 0:
+        print "Root priviledges are required to configure scripts.  Exiting."
+        sys.exit(0)
     main(sys.argv)

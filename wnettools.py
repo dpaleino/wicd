@@ -204,7 +204,7 @@ class Interface(object):
         
         """
         cmd = 'ifconfig ' + self.iface + ' up'
-        if self.verbose: print cmd
+        #if self.verbose: print cmd
         misc.Run(cmd)
         return True
 

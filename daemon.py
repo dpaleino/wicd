@@ -371,13 +371,15 @@ class ConnectionWizard(dbus.service.Object):
         elif self.GetWiredAutoConnectMethod() == 1:
             network = self.GetDefaultWiredNetwork()
             if not network:
-                print "Couldn't find a default wired connection, wired autoconnect failed."
+                print "Couldn't find a default wired connection," + \
+                      " wired autoconnect failed."
                 self._wireless_autoconnect()
                 return
         else: # Assume its last-used.
             network = self.GetLastUsedWiredNetwork()
             if not network:
-                print "no previous wired profile available, wired autoconnect failed."
+                print "no previous wired profile available, wired " + \
+                      "autoconnect failed."
                 self._wireless_autoconnect()
                 return
         self.ReadWiredNetworkProfile(network)
@@ -393,18 +395,19 @@ class ConnectionWizard(dbus.service.Object):
 
     def _wireless_autoconnect(self):
         """ Attempts to autoconnect to a wireless network. """
-        print "No wired connection present, attempting to autoconnect \
-                   to wireless network"
+        print "No wired connection present, attempting to autoconnect" + \
+              "to wireless network"
         if self.GetWirelessInterface() is None:
-            print 'autoconnect failed because wireless interface returned None'
+            print 'Autoconnect failed because wireless interface returned None'
             return
 
         for x, network in enumerate(self.LastScan):
-            if bool(self.LastScan[x]["has_profile"]):
-                print self.LastScan[x]["essid"] + ' has profile'
-                if bool(self.LastScan[x].get('automatic')):
-                    print 'trying to automatically connect to...', \
-                          self.LastScan[x]["essid"]
+            if bool(network["has_profile"]):
+                if self.debug_mode:
+                    print network["essid"] + ' has profile'
+                if bool(network.get('automatic')):
+                    print 'trying to automatically connect to...' + \
+                          network["essid"]
                     self.ConnectWireless(x)
                     time.sleep(1)
                     return
@@ -597,7 +600,6 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetHiddenNetworkESSID(self, essid):
         """ Sets the ESSID of a hidden network for use with Scan(). """
-        print 'setting hidden essid: ' + str(essid)
         self.hidden_essid = str(misc.Noneify(essid))
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -632,7 +634,6 @@ class ConnectionWizard(dbus.service.Object):
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
                            ics):
         """ Creates an ad-hoc network using user inputted settings. """
-        print 'attempting to create ad-hoc network...'
         self.wifi.CreateAdHocNetwork(essid, channel, ip, enctype, key, encused,
                                      ics)
 
@@ -1253,7 +1254,6 @@ class ConnectionWizard(dbus.service.Object):
             self.SetSignalDisplayType(self.get_option("Settings",
                                                       "signal_display_type",
                                                       default=0))
-
         else:
             # Write some defaults maybe?
             print "Configuration file not found, creating, adding defaults..."

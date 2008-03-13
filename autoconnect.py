@@ -24,8 +24,15 @@ bus = dbus.SystemBus()
 proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 
+def reply_handle(r):
+    pass
+def error_handle(e):
+    pass
+
 print daemon.Hello()
 time.sleep(3)
 daemon.SetSuspend(False)
-if daemon.CheckIfConnecting() == False:
-    print daemon.AutoConnect(True)
+daemon.SetForcedDisconnect(False)
+if not daemon.CheckIfConnecting():
+    print daemon.AutoConnect(True, reply_handler=reply_handle,
+                             error_handler=error_handle)

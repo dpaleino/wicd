@@ -31,6 +31,8 @@ import gobject
 import dbus
 import dbus.service
 import pango
+import gtk
+import gtk.glade
 
 import misc
 import wpath
@@ -42,11 +44,6 @@ try:
     pygtk.require("2.0")
 except:
     pass
-try:
-    import gtk, gtk.glade
-except:
-    print 'Missing GTK and gtk.glade.  Aborting.'
-    sys.exit(1)
 
 if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib

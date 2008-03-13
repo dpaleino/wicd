@@ -216,7 +216,8 @@ class ConnectionStatus():
             # First try connecting through ethernet
             if wired.CheckPluggedIn():
                 print "Wired connection available, trying to connect..."
-                daemon.AutoConnect(False)
+                daemon.AutoConnect(False, reply_handler=reply_handle,
+                                   error_handler=err_handle)
                 self.reconnecting = False
                 return
 
@@ -231,10 +232,18 @@ class ConnectionStatus():
                 elif not wireless.CheckIfWirelessConnecting():
                     print "Couldn't reconnect to last used network, \
                            scanning for an autoconnect network..."
-                    daemon.AutoConnect(True)
+                    daemon.AutoConnect(True, reply_handler=reply_handle,
+                                       error_handler=err_handle)
             else:
-                daemon.AutoConnect(True)
+                daemon.AutoConnect(True, reply_handler=reply_handle,
+                                   error_handler=err_handle)
         self.reconnecting = False
+        
+def reply_handle(r):
+        pass
+    
+def err_handle(e):
+        pass
     
         
 def main():

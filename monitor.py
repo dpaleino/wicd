@@ -21,6 +21,7 @@ import dbus
 import gobject
 import os
 import sys
+from dbus.mainloop.glib import DBusGMainLoop
 
 import wpath
 import misc
@@ -37,6 +38,7 @@ if sys.platform == 'linux2':
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
+DBusGMainLoop(set_as_default=True)
 proxy_obj = dbus.SystemBus().get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
@@ -239,7 +241,7 @@ class ConnectionStatus():
                                    error_handler=err_handle)
         self.reconnecting = False
         
-def reply_handle(r):
+def reply_handle():
         pass
     
 def err_handle(e):

@@ -76,8 +76,7 @@ if sys.platform == 'linux2':
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
-    
-log = misc.LogWriter()
+
 bus = dbus.SystemBus()
 
 # Connect to the daemon

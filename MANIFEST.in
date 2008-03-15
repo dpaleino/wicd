@@ -1,0 +1,6 @@
+include data/wicd.glade
+include data/wicd.png
+recursive-include other *
+recursive-include encryption *
+recursive-include images *
+recursive-include translations *

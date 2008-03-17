@@ -292,6 +292,8 @@ class ConnectionWizard(dbus.service.Object):
         configfile = open(self.app_conf, "w")
         config.write(configfile)
         self.debug_mode = misc.to_bool(debug)
+        self.wifi.debug = self.debug_mode
+        self.wired.debug = self.debug_mode
 
     @dbus.service.method('org.wicd.daemon')
     def GetDebugMode(self):
@@ -750,7 +752,7 @@ class ConnectionWizard(dbus.service.Object):
         self.wifi.disconnect_script = self.GetWirelessProperty(id,
                                                                'disconnectscript')
         print 'Connecting to wireless network', self.LastScan[id]['essid']
-        return self.wifi.Connect(self.LastScan[id])
+        return self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CheckIfWirelessConnecting(self):
@@ -901,7 +903,7 @@ class ConnectionWizard(dbus.service.Object):
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")
-        self.wired.Connect(self.WiredNetwork)
+        self.wired.Connect(self.WiredNetwork, debug=self.debug_mode)
 
     ########## LOG FILE STUFF
     #################################
@@ -1193,7 +1195,7 @@ class ConnectionWizard(dbus.service.Object):
     def __printReturn(self, text, value):
         """prints the specified text and value, then returns the value"""
         if self.debug_mode:
-            print text + " " + value
+            print ''.join([text, " ", str(value)])
         return value
 
     def get_option(self, section, option, default=None):

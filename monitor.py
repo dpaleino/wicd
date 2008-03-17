@@ -163,7 +163,11 @@ class ConnectionStatus():
             state = misc.CONNECTING
         else:  # No connection at all.
             state = misc.NOT_CONNECTED
-            self.auto_reconnect()
+            if self.last_state == misc.WIRELESS:
+                from_wireless = True
+            else:
+                from_wireless = False
+            self.auto_reconnect(from_wireless)
         self.update_state(state)
         return True
 
@@ -197,7 +201,7 @@ class ConnectionStatus():
         self.last_state = state
         return True
 
-    def auto_reconnect(self):
+    def auto_reconnect(self, from_wireless=None):
         """ Automatically reconnects to a network if needed.
 
         If automatic reconnection is turned on, this method will
@@ -215,27 +219,14 @@ class ConnectionStatus():
         if daemon.GetAutoReconnect() and not daemon.CheckIfConnecting() and \
            not daemon.GetForcedDisconnect() and not daemon.GetAutoConnecting():
             print 'Starting automatic reconnect process'
-            # First try connecting through ethernet
-            if wired.CheckPluggedIn():
-                print "Wired connection available, trying to connect..."
-                daemon.AutoConnect(False, reply_handler=reply_handle,
-                                   error_handler=err_handle)
-                self.reconnecting = False
-                return
-
-            # Next try the last wireless network we were connected to
+            
+            # If we just lost a wireless connection, try to connect to that
+            # network again.  Otherwise just call Autoconnect.
             cur_net_id = wireless.GetCurrentNetworkID(self.iwconfig)
-            if cur_net_id > -1:  # Needs to be a valid network
-                if not self.tried_reconnect:
-                    print 'Trying to reconnect to last used wireless \
-                           network'
-                    wireless.ConnectWireless(cur_net_id)
-                    self.tried_reconnect = True
-                elif not wireless.CheckIfWirelessConnecting():
-                    print "Couldn't reconnect to last used network, \
-                           scanning for an autoconnect network..."
-                    daemon.AutoConnect(True, reply_handler=reply_handle,
-                                       error_handler=err_handle)
+            if from_wireless and cur_net_id > -1:  # Needs to be a valid network
+                print 'Trying to reconnect to last used wireless ' + \
+                       'network'
+                wireless.ConnectWireless(cur_net_id)
             else:
                 daemon.AutoConnect(True, reply_handler=reply_handle,
                                    error_handler=err_handle)

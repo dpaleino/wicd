@@ -56,8 +56,6 @@ if __name__ == '__main__':
 
 class Controller(object):
     """ Parent class for the different interface types. """
-    wireless_interface = None
-    wired_interface = None
     connecting_thread = None
     before_script = None
     after_script = None
@@ -65,30 +63,45 @@ class Controller(object):
     driver = None
     wiface = None
     liface = None
-
+    
     def __init__(self):
         """ Initialise the class. """
         self.global_dns_1 = None
         self.global_dns_2 = None
         self.global_dns_3 = None
+        self._wired_interface = None
+        self._wireless_interface = None
+        self._debug = None
         
-    def __setattr__(self, attr, value):
-        """ Provided custom self.variable assignments.
-
-        Calls the appropriate methods if self.wireless_interface or
-        self.wired_interface is set.
+    def set_wireless_iface(self, value):
+        self._wireless_interface = value
+        if self.wiface:
+            self.wiface.SetInterface(value)
+            
+    def get_wireless_iface(self):
+        return self._wireless_interface
         
-        """
-        if attr == 'wireless_interface':
-            object.__setattr__(self, attr, value)
-            if self.wiface:
-                self.SetWiface(value)
-        elif attr == 'wired_interface':
-            object.__setattr__(self, attr, value)
-            if self.liface:
-                self.SetLiface(value)
-        else:
-            object.__setattr__(self, attr, value)
+    def set_wired_iface(self, value):
+        self._wired_interface = value
+        if self.liface:
+            self.liface.SetInterface(value)
+            
+    def get_wired_iface(self):
+        return self._wired_interface
+    
+    def set_debug(self, value):
+        self._debug = value
+        if self.wiface:
+            self.wiface.SetDebugMode(value)
+        if self.liface:
+            self.liface.SetDebugMode(value)
+            
+    def get_debug(self):
+        return self._debug
+        
+    wireless_interface = property(get_wireless_iface, set_wireless_iface)
+    wired_interface = property(get_wired_iface, set_wired_iface)
+    debug = property(get_debug, set_debug)
             
     def SetWiface(self, iface):
         """ Sets the wireless interface for the associated wnettools class. """
@@ -303,22 +316,24 @@ class Wireless(Controller):
     def __init__(self):
         """ Initialize the class. """
         Controller.__init__(self)
-        self.wpa_driver = None
+        self._wpa_driver = None
         self.wiface = wnettools.WirelessInterface(self.wireless_interface,
                                                   self.wpa_driver)
+        
+    def set_wpa_driver(self, value):
+        self._wpa_driver = value
+        if self.wiface:
+            self.SetWPADriver(value)
     
-    def __setattr__(self, attr, value):
-        if attr == 'wpa_driver':
-            self.__dict__[attr] = value
-            if self.wiface:
-                self.SetWPADriver(value)
-        else:
-            object.__setattr__(self, attr, value)
+    def get_wpa_driver(self): return self._wpa_driver
+    
+    wpa_driver = property(get_wpa_driver, set_wpa_driver)
+    
                 
     def LoadInterfaces(self):
         """ Load the wnettools controls for the wired/wireless interfaces. """
         self.wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                                  self.wpa_driver)
+                                                  self.debug, self.wpa_driver)
 
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
@@ -347,7 +362,7 @@ class Wireless(Controller):
         aps.sort(key=lambda x: x['strength'])
         return aps
 
-    def Connect(self, network):
+    def Connect(self, network, debug=False):
         """ Spawn a connection thread to connect to the network.
 
         Keyword arguments:
@@ -358,7 +373,7 @@ class Wireless(Controller):
             self.wireless_interface, self.wired_interface,
             self.wpa_driver, self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3)
+            self.global_dns_2, self.global_dns_3, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -657,14 +672,14 @@ class Wired(Controller):
         """ Initialise the class. """
         Controller.__init__(self)
         self.wpa_driver = None
-        self.liface = wnettools.WiredInterface(self.wired_interface)
+        self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
         
     def __setattr__(self, attr, val):
         object.__setattr__(self, attr, val)
         
     def LoadInterfaces(self):
         """ Load the wnettools controls for the wired/wireless interfaces. """
-        self.liface = wnettools.WiredInterface(self.wired_interface)
+        self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
 
     def CheckPluggedIn(self):
         """ Check whether the wired connection is plugged in.
@@ -675,7 +690,7 @@ class Wired(Controller):
         """
         return self.liface.GetPluggedIn()
 
-    def Connect(self, network):
+    def Connect(self, network, debug=False):
         """ Spawn a connection thread to connect to the network.
 
         Keyword arguments:
@@ -686,7 +701,7 @@ class Wired(Controller):
             self.wireless_interface, self.wired_interface,
             self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3)
+            self.global_dns_2, self.global_dns_3, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True

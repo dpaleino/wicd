@@ -131,6 +131,10 @@ class Interface(object):
         self.IP_FOUND = False
         self.Check()
         
+    def SetDebugMode(self, value):
+        """ If True, verbose output is enabled. """
+        self.verbose = value
+
     def SetInterface(self, iface):
         """ Sets the interface.
         
@@ -204,7 +208,7 @@ class Interface(object):
         
         """
         cmd = 'ifconfig ' + self.iface + ' up'
-        #if self.verbose: print cmd
+        if self.verbose: print cmd
         misc.Run(cmd)
         return True
 
@@ -390,7 +394,7 @@ class Interface(object):
 
         """
         cmd = 'ifconfig ' + self.iface
-        #if self.verbose: print cmd
+        if self.verbose: print cmd
         output = misc.Run(cmd)
         return misc.RunRegex(ip_pattern, output)
     
@@ -514,7 +518,7 @@ class WirelessInterface(Interface):
         essid -- essid to set the interface to
 
         """
-        cmd = 'iwconfig ' + self.iface + ' essid "' + essid + '"'
+        cmd = ''.join(['iwconfig ', self.iface, ' essid "', essid, '"'])
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -573,7 +577,7 @@ class WirelessInterface(Interface):
         access_points = []
         for cell in networks:
             # Only use sections where there is an ESSID.
-            if cell.count('ESSID:') > 0:
+            if 'ESSID:' in cell:
                 # Add this network to the list of networks
                 entry = self._ParseAccessPoint(cell, ralink_info)
                 if entry is not None:
@@ -891,9 +895,11 @@ class WirelessInterface(Interface):
                 if len(info) < 5:
                     break
                 if info[2] == network.get('essid'):
-                    if info[5] == 'WEP' or (info[5] == 'OPEN' and info[4] == 'WEP'):
+                    if info[5] == 'WEP' or (info[5] == 'OPEN' and \
+                                            info[4] == 'WEP'):
                         print 'Setting up WEP'
-                        cmd = 'iwconfig ' + self.iface + ' key ' + network.get('key')
+                        cmd = ''.join(['iwconfig ', self.iface, ' key ',
+                                      network.get('key')])
                         if self.verbose: print cmd
                         misc.Run(cmd)
                     else:
@@ -939,7 +945,7 @@ class WirelessInterface(Interface):
         """
         if not iwconfig:
             cmd = 'iwconfig ' + self.iface
-            # if self.verbose: print cmd
+            if self.verbose: print cmd
             output = misc.Run(cmd)
         else:
             output = iwconfig
@@ -968,7 +974,7 @@ class WirelessInterface(Interface):
         """
         if iwconfig:
             cmd = 'iwconfig ' + self.iface
-            # if self.verbose: print cmd
+            if self.verbose: print cmd
             output = misc.Run(cmd)
         else:
             output = iwconfig
@@ -985,7 +991,7 @@ class WirelessInterface(Interface):
         """
         if not iwconfig:
             cmd = 'iwconfig ' + self.iface
-            # if self.verbose: print cmd
+            if self.verbose: print cmd
             output = misc.Run(cmd)
         else:
             output = iwconfig

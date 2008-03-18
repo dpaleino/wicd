@@ -1283,28 +1283,31 @@ class appGui:
 
         self.set_label("pref_driver_label", language['wpa_supplicant_driver'] +
                        ':')
+
         # Hack to get the combo box we need, which you can't do with glade.
-        wpadrivercombo = gtk.combo_box_new_text()
-        if self.first_dialog_load:
+        wpa_hbox = self.wTree.get_widget("hbox_wpa")
+        if not self.first_dialog_load:
+            wpa_hbox.remove(self.wpadrivercombo)
+        else:
             self.first_dialog_load = False
-            wpa_hbox = self.wTree.get_widget("hbox_wpa")
-            wpa_hbox.pack_end(wpadrivercombo)
+        self.wpadrivercombo = gtk.combo_box_new_text()
+        wpadrivercombo = self.wpadrivercombo  # Just to make my life easier
+        wpa_hbox.pack_end(wpadrivercombo)
             
         wpadrivers = ["hostap", "hermes", "madwifi", "atmel", "wext",
                       "ndiswrapper", "broadcom", "ipw", "ralink legacy"]
-        i = 0
         found = False
-        for x in wpadrivers:
+        for i, x in enumerate(wpadrivers):
             if x == daemon.GetWPADriver() and not found:
                 found = True
-            elif not found:
-                i += 1
+                user_driver_index = i
             wpadrivercombo.append_text(x)
 
         # Set the active choice here.  Doing it before all the items are
         # added the combobox causes the choice to be reset.
-        wpadrivercombo.set_active(i)
-        if not found:
+        if found:
+            wpadrivercombo.set_active(user_driver_index)
+        else:
             # Use wext as default, since normally it is the correct driver.
             wpadrivercombo.set_active(4)
 
@@ -1356,7 +1359,6 @@ class appGui:
                                 dns3Entry.get_text())
             daemon.SetWirelessInterface(entryWirelessInterface.get_text())
             daemon.SetWiredInterface(entryWiredInterface.get_text())
-            print "setting: " + wpadrivers[wpadrivercombo.get_active()]
             daemon.SetWPADriver(wpadrivers[wpadrivercombo.get_active()])
             wired.SetAlwaysShowWiredInterface(wiredcheckbox.get_active())
             daemon.SetAutoReconnect(reconnectcheckbox.get_active())

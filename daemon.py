@@ -390,10 +390,6 @@ class ConnectionWizard(dbus.service.Object):
         self.auto_connecting = True
         time.sleep(1.5)
         gobject.timeout_add(3000, self._monitor_wired_autoconnect)
-        
-    @dbus.service.method('org.wicd.daemon')
-    def GetAutoConnecting(self):
-        return self.auto_connecting
 
     def _wireless_autoconnect(self):
         """ Attempts to autoconnect to a wireless network. """
@@ -496,6 +492,15 @@ class ConnectionWizard(dbus.service.Object):
         
         """
         self.need_profile_chooser = misc.to_bool(val)
+        
+    @dbus.service.method('org.wicd.daemon')
+    def ShouldAutoReconnect(self):
+        """ Returns True if it's the right time to try autoreconnecting. """
+        if self.GetAutoReconnect() and not self.CheckIfConnecting() and \
+           not self.GetForcedDisconnect() and not self.auto_connecting:
+            return True
+        else:
+            return False
 
     @dbus.service.method('org.wicd.daemon')
     def GetForcedDisconnect(self):

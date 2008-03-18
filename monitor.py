@@ -21,6 +21,7 @@ import dbus
 import gobject
 import os
 import sys
+import time
 from dbus.mainloop.glib import DBusGMainLoop
 
 import wpath
@@ -56,6 +57,8 @@ class ConnectionStatus():
         self.connection_lost_counter = 0
         self.last_state = misc.NOT_CONNECTED
         self.reconnecting = False
+        self.reconnect_tries = 0
+        self.last_reconnect_time = time.time()
         self.signal_changed = False
 
     def check_for_wired_connection(self, wired_ip):
@@ -184,10 +187,12 @@ class ConnectionStatus():
             else:
                 info = ["wireless", wireless.GetCurrentNetwork(self.iwconfig)]
         elif state == misc.WIRELESS:
+            self.reconnect_tries = 0
             info = [wifi_ip, wireless.GetCurrentNetwork(self.iwconfig),
                     str(wireless.GetPrintableSignalStrength(self.iwconfig)),
                     str(wireless.GetCurrentNetworkID(self.iwconfig))]
         elif state == misc.WIRED:
+            self.reconnect_tries = 0
             info = [wired_ip]
         else:
             print 'ERROR: Invalid state!'
@@ -212,13 +217,19 @@ class ConnectionStatus():
         if self.reconnecting:
             return
         
+        # Some checks to keep reconnect retries from going crazy.
+        if self.reconnect_tries > 2 and \
+           time.time() - self.last_reconnect_time < 30:
+            return
+
         self.reconnecting = True
         daemon.SetCurrentInterface('')
         
         print 'autoreconnect'
-        if daemon.GetAutoReconnect() and not daemon.CheckIfConnecting() and \
-           not daemon.GetForcedDisconnect() and not daemon.GetAutoConnecting():
+        if daemon.ShouldAutoReconnect():
             print 'Starting automatic reconnect process'
+            self.last_reconnect_time = time.time()
+            self.reconnect_tries += 1
             
             # If we just lost a wireless connection, try to connect to that
             # network again.  Otherwise just call Autoconnect.

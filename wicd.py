@@ -116,17 +116,17 @@ class TrayIcon:
     Base Class for implementing a tray icon to display network status.
     
     """
-    def __init__(self, use_tray):
+    def __init__(self, use_tray, animate):
         if USE_EGG:
             self.tr = self.EggTrayIconGUI(use_tray)
         else:
             self.tr = self.StatusTrayIconGUI(use_tray)
-        self.icon_info = self.TrayConnectionInfo(self.tr, use_tray)
+        self.icon_info = self.TrayConnectionInfo(self.tr, use_tray, animate)
         
 
     class TrayConnectionInfo:
         """ Class for updating the tray icon status. """
-        def __init__(self, tr, use_tray=True):
+        def __init__(self, tr, use_tray=True, animate=True):
             """ Initialize variables needed for the icon status methods. """
             self.last_strength = -2
             self.still_wired = False
@@ -135,6 +135,11 @@ class TrayIcon:
             self.connection_lost_counter = 0
             self.tr = tr
             self.use_tray = use_tray
+            self.last_sndbytes = -1
+            self.last_rcvbytes = -1
+            self.max_snd_gain = 10000
+            self.max_rcv_gain = 10000
+            self.animate = animate
             self.update_tray_icon()
 
         def wired_profile_chooser(self):
@@ -209,6 +214,10 @@ class TrayIcon:
 
         def set_signal_image(self, wireless_signal, lock):
             """ Sets the tray icon image for an active wireless connection. """
+            if self.animate:
+                prefix = self.get_bandwidth_state()
+            else:
+                prefix = ''
             if daemon.GetSignalDisplayType() == 0:
                 if wireless_signal > 75:
                     signal_img = "high-signal"
@@ -228,8 +237,80 @@ class TrayIcon:
                 else:
                     signal_img = "bad-signal"
 
-            img_file = (wpath.images + signal_img + lock + ".png")
+            img_file = ''.join([wpath.images, prefix, signal_img, lock, ".png"])
             self.tr.set_from_file(img_file)
+            
+        def get_bandwidth_state(self):
+            """ Determines what network activity state we are in. """
+            transmitting = False
+            receiving = False
+            rcvbytes = None
+            sndbytes = None
+    
+            dev_file = open('/proc/net/dev','r')
+            device_data = dev_file.read().split('\n')
+            dev_file.close()
+
+            # Get the data for the wireless interface.
+            for line in device_data:
+                if daemon.GetWirelessInterface() in line:
+                    line = line.replace(':', ' ').split()
+                    rcvbytes = int(line[1])
+                    sndbytes = int(line[9])
+                    break
+                
+            if not rcvbytes or not sndbytes:
+                return 'idle-'
+                    
+            # Figure out receiving data info.
+            activity = self.is_network_active(rcvbytes, self.max_rcv_gain,
+                                              self.last_rcvbytes)
+            receiving = activity[0]
+            self.max_rcv_gain = activity[1]
+            self.last_rcvbytes = activity[2]
+                    
+            # Figure out out transmitting data info.
+            activity = self.is_network_active(sndbytes, self.max_snd_gain,
+                                              self.last_sndbytes)
+            transmitting = activity[0]
+            self.max_snd_gain = activity[1]
+            self.last_sndbytes = activity[2]
+                    
+            if transmitting and receiving:
+                return 'both-'
+            elif transmitting:
+                return 'transmitting-'
+            elif receiving:
+                return 'receiving-'
+            else:
+                return 'idle-'
+            
+        def is_network_active(self, bytes, max_gain, last_bytes):
+            """ Determines if a network is active.
+            
+            Determines if a network is active by looking at the
+            number of bytes sent since the previous check.  This method
+            is generic, and can be used to determine activity in both
+            the sending and receiving directions.
+            
+            Returns:
+            A tuple containing three elements:
+            1) a boolean specifying if the network is active.
+            2) an int specifying the maximum gain the network has had.
+            3) an int specifying the last record number of bytes sent.
+            
+            """
+            active = False
+            if last_bytes == -1:
+                last_bytes = bytes
+            elif bytes > (last_bytes + float(max_gain / 20.0)):
+                last_bytes = bytes
+                active = True
+                
+                gain = bytes - last_bytes
+                if gain > max_gain:
+                    max_gain = gain
+            return (active, max_gain, last_bytes)
 
 
     class TrayIconGUI:
@@ -398,6 +479,7 @@ wireless (and wired) connection daemon front-end.
 Arguments:
 \t-n\t--no-tray\tRun wicd without the tray icon.
 \t-h\t--help\t\tPrint this help information.
+\t-a\t--no-animate\tRun the tray without network traffic tray animations.
 """
 
 def main(argv):
@@ -409,9 +491,11 @@ def main(argv):
     """
     print 'Loading...'
     use_tray = True
+    animate = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'nh', ['help', 'no-tray'])
+        opts, args = getopt.getopt(sys.argv[1:], 'nha', ['help', 'no-tray', 
+                                                         'no-animate'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -423,13 +507,15 @@ def main(argv):
             sys.exit()
         elif opt in ('-n', '--no-tray'):
             use_tray = False
+        elif opt in ('-a', '--no-animate'):
+            animate = False
 
     if not use_tray:
         os.spawnlp(os.P_NOWAIT, wpath.bin + 'gui.py')
         sys.exit(0)
 
     # Set up the tray icon GUI and backend
-    tray_icon = TrayIcon(use_tray)
+    tray_icon = TrayIcon(use_tray, animate)
 
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).

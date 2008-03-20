@@ -104,7 +104,7 @@ def WriteLine(my_file, text):
 
 def ExecuteScript(script):
     """ Execute a command """
-    os.system(script + ' &')
+    os.system(script)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """

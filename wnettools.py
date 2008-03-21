@@ -129,6 +129,8 @@ class Interface(object):
         self.MIITOOL_FOUND = False
         self.ETHTOOL_FOUND = False
         self.IP_FOUND = False
+        self.flush_tool = None
+        self.link_detect = None
         self.Check()
         
     def SetDebugMode(self, value):
@@ -142,7 +144,7 @@ class Interface(object):
         iface -- the name of the interface.
         
         """
-        self.iface = iface
+        self.iface = str(iface)
 
     def CheckDHCP(self):
         """ Check for a valid DHCP client. 
@@ -153,23 +155,29 @@ class Interface(object):
         warning is printed.
         
         """
-        dhcpclients = ["dhclient", "dhcpcd", "pump"]
-        for client in dhcpclients:
-            if misc.Run("which " + client):
-                DHCP_CLIENT = client
-                break
+        if self.DHCP_CLIENT:
+            DHCP_CLIENT = self.DHCP_CLIENT
+        else:
+            dhcpclients = ["dhclient", "dhcpcd", "pump"]
+            for client in dhcpclients:
+                if misc.Run("which " + client):
+                    DHCP_CLIENT = client
+                    break
     
         if not DHCP_CLIENT:
             print "WARNING: NO DHCP CLIENT DETECTED!  Make sure there is one \
                    set in your path."
             return
-        elif DHCP_CLIENT == "dhclient":
+        elif DHCP_CLIENT in [misc.DHCLIENT, "dhclient"]:
+            DHCP_CLIENT = misc.DHCLIENT
             DHCP_CMD = "dhclient"
             DHCP_RELEASE = "dhclient -r"
-        elif DHCP_CLIENT == "pump":
+        elif DHCP_CLIENT in [misc.PUMP, "pump"]:
+            DHCP_CLIENT = misc.PUMP
             DHCP_CMD = "pump -i"
             DHCP_RELEASE = "pump -r -i"
-        elif DHCP_CLIENT == "dhcpcd":
+        elif DHCP_CLIENT in [misc.DHCPCD, "dhcpcd"]:
+            DHCP_CLIENT = misc.DHCPCD
             DHCP_CMD = "dhcpcd"
             DHCP_RELEASE = "dhcpcd -r"
 
@@ -352,11 +360,11 @@ class Interface(object):
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
         
         DHCP_CLIENT = self.DHCP_CLIENT        
-        if DHCP_CLIENT == "dhclient":
+        if DHCP_CLIENT == misc.DHCLIENT:
             return self._parse_dhclient(pipe)
-        elif DHCP_CLIENT == "pump":
+        elif DHCP_CLIENT == misc.PUMP:
             return self._parse_pump(pipe)
-        elif DHCP_CLIENT == "dhcpcd":
+        elif DHCP_CLIENT == misc.DHCPCD:
             return self._parse_dhcpcd(pipe)
     
     def ReleaseDHCP(self):
@@ -368,7 +376,7 @@ class Interface(object):
         """ Flush all network routes. """
         if not self.iface:
             return
-        if self.IP_FOUND:
+        if self.IP_FOUND and self.flush_tool != misc.ROUTE:
             cmd = "ip route flush dev " + self.iface
         else:
             cmd = 'route del dev ' + self.iface
@@ -443,7 +451,7 @@ class WiredInterface(Interface):
         """
         if not self.iface:
             return False
-        if self.ETHTOOL_FOUND:
+        if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
             return self._eth_get_plugged_in()
         elif self.MIITOOL_FOUND:
             return self._mii_get_plugged_in()
@@ -839,7 +847,7 @@ class WirelessInterface(Interface):
         if self.wpa_driver == RALINK_DRIVER:
             return True
 
-        MAX_TIME = 10
+        MAX_TIME = 15
         MAX_DISCONNECTED_TIME = 3
         while (time.time() - auth_time) < MAX_TIME:
             cmd = 'wpa_cli -i ' + self.iface + ' status'

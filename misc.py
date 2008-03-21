@@ -35,6 +35,17 @@ WIRELESS = 2
 WIRED = 3
 SUSPENDED = 4
 
+AUTO = 0
+DHCLIENT = 1
+DHCPCD = 2
+PUMP = 3
+
+ETHTOOL = 1
+MIITOOL = 2
+
+IP = 1
+ROUTE = 2
+
 def Run(cmd, include_stderr=False, return_pipe=False):
     """ Run a command.
 

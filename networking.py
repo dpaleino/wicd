@@ -71,6 +71,8 @@ class Controller(object):
         self.global_dns_3 = None
         self._wired_interface = None
         self._wireless_interface = None
+        self._dhcp_client = None
+        self._flush_tool = None
         self._debug = None
         
     def set_wireless_iface(self, value):
@@ -98,10 +100,32 @@ class Controller(object):
             
     def get_debug(self):
         return self._debug
+    
+    def set_dhcp_client(self, value):
+        self._dhcp_client = value
+        if self.wiface:
+            self.wiface.DHCP_CLIENT = value
+        if self.liface:
+            self.liface.DHCP_CLIENT = value    
+
+    def get_dhcp_client(self):
+        return self._dhcp_client
+    
+    def set_flush_tool(self, value):
+        self._flush_tool = value
+        if self.wiface:
+            self.wiface.flush_tool = value
+        if self.liface:
+            self.liface.flush_tool = value
+            
+    def get_flush_tool(self):
+        return self._flush_tool
         
     wireless_interface = property(get_wireless_iface, set_wireless_iface)
     wired_interface = property(get_wired_iface, set_wired_iface)
     debug = property(get_debug, set_debug)
+    flush_tool = property(get_flush_tool, set_flush_tool)
+    dhcp_client = property(get_dhcp_client, set_dhcp_client)
             
     def SetWiface(self, iface):
         """ Sets the wireless interface for the associated wnettools class. """
@@ -266,17 +290,15 @@ class ConnectThread(threading.Thread):
         Otherwise do nothing.
         
         """
-        if (((self.network.get('dns1') or self.network.get('dns2') or
-            self.network.get('dns3')) and self.network.get('use_static_dns')) or
-            self.network.get('use_global_dns')):
+        if self.network.get('use_global_dns'):
+            wnettools.SetDNS(misc.Noneify(self.global_dns_1),
+                             misc.Noneify(self.global_dns_2), 
+                             misc.Noneify(self.global_dns_3))
+        elif self.network.get('use_static_dns') and (self.network.get('dns1') or
+                    self.network.get('dns2') or self.network.get('dns3')):
             self.SetStatus('setting_static_dns')
-            if self.network.get('use_global_dns'):
-                wnettools.SetDNS(misc.Noneify(self.global_dns_1),
-                    misc.Noneify(self.global_dns_2),
-                    misc.Noneify(self.global_dns_3))
-            else:
-                wnettools.SetDNS(self.network.get('dns1'),
-                    self.network.get('dns2'), self.network.get('dns3'))
+            wnettools.SetDNS(self.network.get('dns1'), self.network.get('dns2'),
+                             self.network.get('dns3'))
 
     def connect_aborted(self, reason):
         """ Sets the thread status to aborted in a thread-safe way.
@@ -672,10 +694,17 @@ class Wired(Controller):
         """ Initialise the class. """
         Controller.__init__(self)
         self.wpa_driver = None
+        self._link_detect = None
         self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
         
-    def __setattr__(self, attr, val):
-        object.__setattr__(self, attr, val)
+    def set_link_detect(self, value):
+        self._link_detect = value
+        if self.liface:
+            self.liface.link_detect = value
+        
+    def get_link_detect(self): return self._link_detect
+    
+    link_detect = property(get_link_detect, set_link_detect)
         
     def LoadInterfaces(self):
         """ Load the wnettools controls for the wired/wireless interfaces. """

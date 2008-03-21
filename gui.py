@@ -147,6 +147,12 @@ language['invalid_address'] = _('Invalid address in $A entry.')
 language['global_settings'] = _('Use these settings for all networks sharing this essid')
 language['encrypt_info_missing'] = _('Required encryption information is missing.')
 language['enable_encryption'] = _('This network requires encryption to be enabled.')
+language['wicd_auto_config'] = _('Automatic (recommended)')
+language["gen_settings"] = _("General Settings")
+language["ext_programs"] = _("External Programs")
+language["dhcp_client"] = _("DHCP Client")
+language["wired_detect"] = _("Wired Link Detection")
+language["route_flush"] = _("Route Table Flushing")
 
 language['0'] = _('0')
 language['1'] = _('1')
@@ -1273,6 +1279,43 @@ class appGui:
         showlistradiobutton.set_label(language['show_wired_list'])
         lastusedradiobutton = self.wTree.get_widget("pref_use_last_radio")
         lastusedradiobutton.set_label(language['use_last_used_profile'])
+
+        ## External Programs tab
+        self.wTree.get_widget("gen_settings_label").set_label(language["gen_settings"])
+        self.wTree.get_widget("ext_prog_label").set_label(language["ext_programs"])
+        self.wTree.get_widget("dhcp_client_label").set_label(language["dhcp_client"])
+        self.wTree.get_widget("wired_detect_label").set_label(language["wired_detect"])
+        self.wTree.get_widget("route_flush_label").set_label(language["route_flush"])
+        
+        # DHCP Clients
+        dhcpautoradio = self.wTree.get_widget("dhcp_auto_radio")
+        dhcpautoradio.set_label(language["wicd_auto_config"])
+        dhclientradio = self.wTree.get_widget("dhclient_radio")
+        pumpradio = self.wTree.get_widget("pump_radio")
+        dhcpcdradio = self.wTree.get_widget("dhcpcd_radio")
+        dhcp_list = [dhcpautoradio, dhclientradio, pumpradio, dhcpcdradio]
+        
+        dhcp_method = daemon.GetDHCPClient()
+        dhcp_list[dhcp_method].set_active(True)
+        
+        # Wired Link Detection Apps
+        linkautoradio = self.wTree.get_widget("link_auto_radio")
+        linkautoradio.set_label(language['wicd_auto_config'])
+        linkautoradio = self.wTree.get_widget("link_auto_radio")
+        ethtoolradio = self.wTree.get_widget("ethtool_radio")
+        miitoolradio = self.wTree.get_widget("miitool_radio")
+        wired_link_list = [linkautoradio, ethtoolradio, miitoolradio]
+        wired_link_method = daemon.GetLinkDetectionTool()
+        wired_link_list[wired_link_method].set_active(True)
+        
+        # Route Flushing Apps
+        flushautoradio = self.wTree.get_widget("flush_auto_radio")
+        flushautoradio.set_label(language['wicd_auto_config'])
+        ipflushradio = self.wTree.get_widget("ip_flush_radio")
+        routeflushradio = self.wTree.get_widget("route_flush_radio")
+        flush_list = [flushautoradio, ipflushradio, routeflushradio]
+        flush_method = daemon.GetFlushTool()
+        flush_list[flush_method].set_active(True)
         
         if wired.GetWiredAutoConnectMethod() == 1:
             usedefaultradiobutton.set_active(True)
@@ -1350,6 +1393,8 @@ class appGui:
         atrlist = pango.AttrList()
         atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, 50))
         entryWiredAutoMethod.set_attributes(atrlist)
+        
+        self.wTree.get_widget("notebook2").set_current_page(0)
         dialog.show_all()
 
         response = dialog.run()
@@ -1370,6 +1415,34 @@ class appGui:
                 wired.SetWiredAutoConnectMethod(3)
             else:
                 wired.SetWiredAutoConnectMethod(1)
+                
+            # External Programs Tab
+            if dhcpautoradio.get_active():
+                dhcp_client = misc.AUTO
+            elif dhclientradio.get_active():
+                dhcp_client = misc.DHCLIENT
+            elif dhcpcdradio.get_active():
+                dhcp_client = misc.DHCPCD
+            else:
+                dhcp_client = misc.PUMP
+            daemon.SetDHCPClient(dhcp_client)
+            
+            if linkautoradio.get_active():
+                link_tool = misc.AUTO
+            elif ethtoolradio.get_active():
+                link_tool = misc.ETHTOOL
+            else:
+                link_tool = misc.MIITOOL
+            daemon.SetLinkDetectionTool(link_tool)
+            
+            if flushautoradio.get_active():
+                flush_tool = misc.AUTO
+            elif ipflushradio.get_active():
+                flush_tool = misc.IP
+            else:
+                flush_tool = misc.ROUTE
+            daemon.SetFlushTool(flush_tool)
+                
         dialog.hide()
 
     def set_label(self, glade_str, label):
@@ -1523,21 +1596,21 @@ class appGui:
         if not network:
             return False
     
-        strength = wireless.GetCurrentSignalStrength(iwconfig)
-        dbm_strength = wireless.GetCurrentDBMStrength(iwconfig)
-        if strength is not None and dbm_strength is not None:
-            network = str(network)
-            if daemon.GetSignalDisplayType() == 0:
-                strength = str(strength)
-            else:
-                strength = str(dbm_strength)
-            ip = str(wireless_ip)
-            self.set_status(language['connected_to_wireless'].replace
-                            ('$A', network).replace
-                            ('$B', daemon.FormatSignalForPrinting(strength)).replace
-                            ('$C', wireless_ip))
-            return True
-        return False
+        network = str(network)
+        if daemon.GetSignalDisplayType() == 0:
+            strength = wireless.GetCurrentSignalStrength(iwconfig)
+        else:
+            strength = wireless.GetCurrentDBMStrength(iwconfig)
+
+        if strength is None:
+            return False        
+        strength = str(strength)            
+        ip = str(wireless_ip)
+        self.set_status(language['connected_to_wireless'].replace
+                        ('$A', network).replace
+                        ('$B', daemon.FormatSignalForPrinting(strength)).replace
+                        ('$C', wireless_ip))
+        return True
 
     def set_status(self, msg):
         """ Sets the status bar message for the GUI. """
@@ -1660,9 +1733,12 @@ class appGui:
            not entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
             entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop("dns1", noneToString(entry.txt_dns_1.get_text()))
-            entry.set_net_prop("dns2", noneToString(entry.txt_dns_2.get_text()))
-            entry.set_net_prop("dns3", noneToString(entry.txt_dns_3.get_text()))
+            entry.set_net_prop("dns1", 
+                               noneToString(entry.txt_dns_1.get_text()))
+            entry.set_net_prop("dns2", 
+                               noneToString(entry.txt_dns_2.get_text()))
+            entry.set_net_prop("dns3", 
+                               noneToString(entry.txt_dns_3.get_text()))
         elif entry.chkbox_static_dns.get_active() and \
              entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
@@ -1696,7 +1772,8 @@ class appGui:
             misc.error(self.window, language['enable_encryption'])
             return False
         else:
-            print 'encryption is', wireless.GetWirelessProperty(networkid, "encryption")
+            print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
+                                                                  "encryption"))
             print "no encryption specified..."
             entry.set_net_prop("enctype", "None")
             

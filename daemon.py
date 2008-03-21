@@ -148,6 +148,9 @@ class ConnectionWizard(dbus.service.Object):
         self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
+        self.dhcp_client = 0
+        self.link_detect_tool = 0
+        self.flush_tool = 0
 
         # Load the config file
         self.ReadConfig()
@@ -342,7 +345,7 @@ class ConnectionWizard(dbus.service.Object):
         self.suspended = val
         if self.suspended:
             self.Disconnect()
-            
+
     @dbus.service.method('org.wicd.daemon')
     def GetSuspend(self):
         """ Returns True if the computer is in the suspend state. """
@@ -376,6 +379,8 @@ class ConnectionWizard(dbus.service.Object):
            not self.GetNeedWiredProfileChooser():
             self.LaunchChooser()
             return
+        
+        # Default Profile.
         elif self.GetWiredAutoConnectMethod() == 1:
             network = self.GetDefaultWiredNetwork()
             if not network:
@@ -383,6 +388,8 @@ class ConnectionWizard(dbus.service.Object):
                       " wired autoconnect failed."
                 self._wireless_autoconnect()
                 return
+
+        # Last-Used.
         else: # Assume its last-used.
             network = self.GetLastUsedWiredNetwork()
             if not network:
@@ -390,6 +397,7 @@ class ConnectionWizard(dbus.service.Object):
                       "autoconnect failed."
                 self._wireless_autoconnect()
                 return
+
         self.ReadWiredNetworkProfile(network)
         self.ConnectWired()
         print "Attempting to autoconnect with wired interface..."
@@ -454,18 +462,16 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def GetGlobalDNSAddresses(self):
         """ Returns the global dns addresses. """
-        print 'returning global dns addresses to client'
         return (misc.noneToString(self.dns1), misc.noneToString(self.dns2),
                 misc.noneToString(self.dns3))
 
     @dbus.service.method('org.wicd.daemon')
     def CheckIfConnecting(self):
         """ Returns if a network connection is being made. """
-        if not self.CheckIfWiredConnecting() and \
-           not self.CheckIfWirelessConnecting():
-            return False
-        else:
+        if self.CheckIfWiredConnecting() or self.CheckIfWirelessConnecting():
             return True
+        else:
+            return False
     
     @dbus.service.method('org.wicd.daemon')
     def CancelConnect(self):
@@ -588,6 +594,48 @@ class ConnectionWizard(dbus.service.Object):
         """
         return bool(self.need_profile_chooser)
 
+    @dbus.service.method('org.wicd.daemon')
+    def GetDHCPClient(self):
+        return self.dhcp_client
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetDHCPClient(self, client):
+        self.dhcp_client = int(client)
+        self.wifi.dhcp_client = int(client)
+        self.wired.dhcp_client = int(client)
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        config.set("Settings", "dhcp_client", client)
+        config.write(open(self.app_conf, "w"))
+
+    @dbus.service.method('org.wicd.daemon')
+    def GetLinkDetectionTool(self):
+        return self.link_detect_tool
+    
+
+    @dbus.service.method('org.wicd.daemon')
+    def SetLinkDetectionTool(self, link_tool):
+        self.link_detect_tool = int(link_tool)
+        self.wired.link_tool = int(link_tool)
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        config.set("Settings", "link_detect_tool", link_tool)
+        config.write(open(self.app_conf, "w"))
+
+    @dbus.service.method('org.wicd.daemon')
+    def GetFlushTool(self):
+        return self.flush_tool
+
+    @dbus.service.method('org.wicd.daemon')
+    def SetFlushTool(self, flush_tool):
+        self.flush_tool = int(flush_tool)
+        self.wired.flush_tool = int(flush_tool)
+        self.wifi.flush_tool = int(flush_tool)
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        config.set("Settings", "flush_tool", flush_tool)
+        config.write(open(self.app_conf, "w"))
+    
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
         """ Emits the wired profile chooser dbus signal. """
@@ -629,7 +677,7 @@ class ConnectionWizard(dbus.service.Object):
         self.LastScan = scan
         if self.debug_mode:
             print 'scanning done'
-            print 'found' + str(len(scan)) + 'networks:'
+            print 'found ' + str(len(scan)) + ' networks:'
         for i, network in enumerate(scan):
             self.ReadWirelessNetworkProfile(i)
 
@@ -805,11 +853,8 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckIfWiredConnecting(self):
         """ Returns True if wired interface is connecting, otherwise False. """
-        if self.wired.connecting_thread is not None:
-            #if connecting_thread exists, then check for it's
-            #status, if it doesn't exist, we aren't connecting
-            status = self.wired.connecting_thread.is_connecting
-            return status
+        if self.wired.connecting_thread:
+            return self.wired.connecting_thread.is_connecting
         else:
             return False
 
@@ -833,9 +878,8 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
         """ Returns the wired interface\'s status message. """
-        if not self.wired.connecting_thread == None:
-            status = self.wired.connecting_thread.GetStatus()
-            return status
+        if self.wired.connecting_thread:
+            return self.wired.connecting_thread.GetStatus()
         else:
             return False
 
@@ -898,14 +942,12 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def EnableWiredInterface(self):
         """ Calls a method to enable the wired interface. """           
-        result = self.wired.EnableInterface()
-        return result
-    
+        return self.wired.EnableInterface()
+
     @dbus.service.method('org.wicd.daemon.wired')
     def DisableWiredInterface(self):
         """ Calls a method to disable the wired interface. """
-        result = self.wired.DisableInterface()
-        return result
+        return self.wired.DisableInterface()
 
     @dbus.service.method('org.wicd.daemon.wired')
     def ConnectWired(self):
@@ -1075,8 +1117,8 @@ class ConnectionWizard(dbus.service.Object):
             config.remove_section(bssid_key)
         config.add_section(bssid_key)
         
-        # We want to write the essid and bssid sections if global
-        # settings are enabled.
+        # We want to write the essid in addition to bssid
+        # sections if global settings are enabled.
         if cur_network["use_settings_globally"]:
             if config.has_section(essid_key):
                 config.remove_section(essid_key)
@@ -1091,10 +1133,10 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.config')
     def SaveWirelessNetworkProperty(self, id, option):
-        """ Writes a particular wireless property to disk """
+        """ Writes a particular wireless property to disk. """
         if (option.strip()).endswith("script"):
-            print 'you cannot save script information to disk through \
-            the daemon.'
+            print 'You cannot save script information to disk through ' + \
+                  'the daemon.'
             return
         cur_network = self.LastScan[id]
         essid_key = "essid:" + cur_network["essid"]
@@ -1255,7 +1297,6 @@ class ConnectionWizard(dbus.service.Object):
             dns2 = self.get_option("Settings", "global_dns_2", default='None')
             dns3 = self.get_option("Settings", "global_dns_3", default='None')
             self.SetGlobalDNS(dns1, dns2, dns3)
-            
             self.SetAutoReconnect(self.get_option("Settings", "auto_reconnect",
                                                   default=False))
             self.SetDebugMode(self.get_option("Settings", "debug_mode",
@@ -1267,6 +1308,13 @@ class ConnectionWizard(dbus.service.Object):
             self.SetSignalDisplayType(self.get_option("Settings",
                                                       "signal_display_type",
                                                       default=0))
+            self.SetDHCPClient(self.get_option("Settings", "dhcp_client",
+                                               default=0))
+            self.SetLinkDetectionTool(self.get_option("Settings",
+                                                      "link_detect_tool",
+                                                      default=0))
+            self.SetFlushTool(self.get_option("Settings", "flush_tool",
+                                              default=0))
         else:
             # Write some defaults maybe?
             print "Configuration file not found, creating, adding defaults..."
@@ -1280,6 +1328,9 @@ class ConnectionWizard(dbus.service.Object):
             config.set("Settings", "debug_mode", "False")
             config.set("Settings", "wired_connect_mode", "1")
             config.set("Settings", "signal_display_type", "0")
+            config.set("Settings", "dhcp_client", "0")
+            config.set("Settings", "link_detect_tool", "0")
+            config.set("Settings", "flush_tool", "0")
             config.set("Settings", "dns1", "None")
             config.set("Settings", "dns2", "None")
             config.set("Settings", "dns3", "None")
@@ -1297,6 +1348,10 @@ class ConnectionWizard(dbus.service.Object):
                                               "wired_interface"))
             self.SetWPADriver(config.get("Settings",
                                          "wpa_driver"))
+            self.SetDHCPClient(config.get("Settings", "dhcp_client"))
+            self.SetLinkDetectionTool(config.get("Settings", 
+                                                 "link_detect_tool"))
+            self.SetFlushTool(config.get("Settings", "flush_tool"))
             self.SetAlwaysShowWiredInterface(False)
             self.SetAutoReconnect(False)
             self.SetDebugMode(False)

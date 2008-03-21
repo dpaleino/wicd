@@ -166,7 +166,7 @@ class ConnectionWizard(dbus.service.Object):
 
         # Scan since we just got started
         if auto_connect:
-            print "autoconnecting...", str(self.GetWirelessInterface()[5:])
+            print "autoconnecting...", str(self.GetWirelessInterface())
             self.AutoConnect(True)
         else:
             print "--no-scan detected, not autoconnecting..."
@@ -366,6 +366,12 @@ class ConnectionWizard(dbus.service.Object):
     
     def _wired_autoconnect(self):
         """ Attempts to autoconnect to a wired network. """
+        if self.GetWiredAutoConnectMethod() == 3 and \
+           not self.GetNeedWiredProfileChooser():
+            # attempt to smartly connect to a wired network
+            # by using various wireless networks detected
+            # and by using plugged in USB devices
+            print self.LastScan
         if self.GetWiredAutoConnectMethod() == 2 and \
            not self.GetNeedWiredProfileChooser():
             self.LaunchChooser()

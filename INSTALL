@@ -2,7 +2,7 @@ To install, just run:
 sudo python setup.py install
 
 For now almost all the files and directories are dumped to /opt/wicd, though
-it's possible for the user to specify a different directory by editting two files;
+it's possible for the user to specify a different directory by editing two files;
 setup.cfg, and wpath.py.  Simply change all mentions of /opt/wicd in those files
 to the directory of your choice.
 

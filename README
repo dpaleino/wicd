@@ -1,7 +1,7 @@
 THEORY OF OPERATION:
 
 Wicd is designed to give the user as much control over the behavior of network connections
-as possible.  Every network, both wired and wireless, has it's own profile, with it's own
+as possible.  Every network, both wired and wireless, has its own profile, with its own
 configuration options and connection behavior.  Wicd will try to automatically connect
 only to the networks the user specifies it should try, with a preference first to a wired
 network, then to wireless.
@@ -47,7 +47,7 @@ is split between two processes, daemon.py and monitor.py.  All the connection st
 monitoring, as well as the auto-reconnection logic, takes place in monitor.py.  
 Everthing else is done by daemon.py.
 
-The user-interface, made up of a tray icon, main GUI window, and its child dialogs, 
+The user-interface (stored in wicd.py), made up of a tray icon, main GUI window, and its child dialogs, 
 gets configuration and network information from the daemon by either querying it, using 
 the methods in the daemon's dbus interface, or by receiving signals emitted from the daemon 
 over D-Bus.  Any configuration changes made in the UI are passed back to the daemon, which

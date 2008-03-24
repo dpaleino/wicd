@@ -1,0 +1,44 @@
+#!/sbin/runscript
+#
+# wicd:   wicd daemon
+#
+# chkconfig: 345 98 02
+# description:  This is a daemon for managing network connections.
+#
+# processname: wicd
+# pidfile: /var/run/wicd.pid
+#
+### BEGIN INIT INFO
+# Provides: $network
+### END INIT INFO
+WICD_BIN=/opt/wicd/daemon.py
+NAME=wicd-daemon
+
+# Sanity checks.
+[ -x $WICD_BIN ] || exit 0
+
+# so we can rearrange this easily
+processname=$WICD_BIN
+pidfile=/var/run/wicd.pid
+processargs="-P ${pidfile}"
+
+start()
+{
+        if [ -e ${pidfile} ]; then
+                rm -f ${pidfile}
+        fi
+        ebegin "Starting wicd"
+        start-stop-daemon --start --quiet --exec ${processname} -- ${processargs}
+        eend $?
+}
+
+stop()
+{
+        ebegin "Stopping wicd"
+        start-stop-daemon --stop --quiet --name ${NAME} --pidfile ${pidfile}
+        eend $?
+        if [ -e ${pidfile} ]; then
+                rm -f $pidfile
+        fi
+}
+

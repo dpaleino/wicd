@@ -172,6 +172,7 @@ class ConnectionWizard(dbus.service.Object):
             print "autoconnecting...", str(self.GetWirelessInterface())
             self.AutoConnect(True)
         else:
+            self.Scan()
             print "--no-scan detected, not autoconnecting..."
 
     ########## DAEMON FUNCTIONS
@@ -440,8 +441,8 @@ class ConnectionWizard(dbus.service.Object):
     def GetAutoReconnect(self):
         """ Returns the value of self.auto_reconnect. See SetAutoReconnect. """
         do = bool(self.auto_reconnect)
-        return self.__printReturn('returning automatically reconnect when\
-                                   connection drops', do)
+        return self.__printReturn('returning automatically reconnect when ' \
+                                   + 'connection drops', do)
 
     @dbus.service.method('org.wicd.daemon')
     def SetAutoReconnect(self, value):
@@ -567,7 +568,7 @@ class ConnectionWizard(dbus.service.Object):
         state - info contents:
         NOT_CONNECTED - info[0] = ""
         CONNECTING - info[0] = "wired" or "wireless"
-                     info[1] = None for wired, essid for wireless
+                     info[1] = None if wired, an essid if wireless
         WIRED - info[0] = IP Adresss
         WIRELESS - info[0] = IP Address
                    info[1] = essid
@@ -719,8 +720,8 @@ class ConnectionWizard(dbus.service.Object):
         """ Sets property to value in network specified. """
         # We don't write script settings here.
         if (property.strip()).endswith("script"):
-            print "Setting script properties through the daemon is not \
-                   permitted."
+            print "Setting script properties through the daemon is not" \
+                   + " permitted."
             return False
         self.LastScan[networkid][property] = misc.Noneify(value)
     #end function SetProperty
@@ -729,7 +730,10 @@ class ConnectionWizard(dbus.service.Object):
     def DetectWirelessInterface(self):
         """ Returns an automatically detected wireless interface. """
         iface = self.wifi.DetectWirelessInterface()
-        print 'automatically detected wireless interface ' + iface
+        if iface:
+            print 'automatically detected wireless interface ' + iface
+        else:
+            print "Couldn't detect a wireless interface."
         return str(iface)
     
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -877,7 +881,7 @@ class ConnectionWizard(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
-        """ Returns the wired interface\'s status message. """
+        """ Returns the wired interface's status message. """
         if self.wired.connecting_thread:
             return self.wired.connecting_thread.GetStatus()
         else:
@@ -887,8 +891,8 @@ class ConnectionWizard(dbus.service.Object):
     def SetWiredProperty(self, property, value):
         if self.WiredNetwork:
             if (property.strip()).endswith("script"):
-                print "Setting script properties through the daemon \
-                      is not permitted."
+                print "Setting script properties through the daemon" \
+                      + " is not permitted."
                 return False
             self.WiredNetwork[property] = misc.Noneify(value)
             return True
@@ -1404,10 +1408,11 @@ Arguments:
 \t-f\t--no-daemon\tDon't daemonize (run in foreground).
 \t-e\t--no-stderr\tDon't redirect stderr.
 \t-o\t--no-stdout\tDon't redirect stdout.
+\t-P\t--pidfile path\tCreate a pidfile at the specified path.
 \t-h\t--help\t\tPrint this help.
 """
 
-def daemonize():
+def daemonize(write_pid, pidfile):
     """ Disconnect from the controlling terminal.
 
     Fork twice, once to disconnect ourselves from the parent terminal and a
@@ -1436,7 +1441,10 @@ def daemonize():
     try:
         pid = os.fork()
         if pid > 0:
-            print "wicd daemon: pid " + str(pid)
+            if not write_pid:
+                print "wicd daemon: pid " + str(pid)
+            else:
+                print >> open(pidfile,'wt'), str(pid)
             sys.exit(0)
     except OSError, e:
         print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
@@ -1456,13 +1464,16 @@ def main(argv):
     auto_scan = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'feos',
-                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan'])
+        opts, args = getopt.getopt(sys.argv[1:], 'feosP:',
+                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan',
+                 'pidfile:'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
         sys.exit(2)
-
+        
+    write_pid = False
+    pid_file = None
     for o, a in opts:
         if o in ('-h', '--help'):
             usage()
@@ -1475,12 +1486,16 @@ def main(argv):
             do_daemonize = False
         if o in ('-s', '--no-scan'):
             auto_scan = False
+        if o in ('-P', '--pidfile'):
+            write_pid = True
+            pid_file = a
 
-    if do_daemonize: daemonize()
-
+    if do_daemonize: daemonize(write_pid, pid_file)
+      
     if redirect_stderr or redirect_stdout: output = LogWriter()
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output
+    time.sleep(1)
 
     print '---------------------------'
     print 'wicd initializing...'

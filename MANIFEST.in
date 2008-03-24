@@ -4,3 +4,4 @@ recursive-include other *
 recursive-include encryption *
 recursive-include images *
 recursive-include translations *
+include launchdaemon.sh

@@ -253,7 +253,8 @@ def get_gettext():
     if (osLanguage):
         langs += osLanguage.split(":")
     langs += ["en_US"]
-    lang = gettext.translation('wicd', local_path, languages=langs, fallback=True)
+    lang = gettext.translation('wicd', local_path, languages=langs, 
+                               fallback=True)
     _ = lang.gettext
     return _
 
@@ -277,62 +278,3 @@ def error(parent, message):
     dialog.set_markup(message)
     dialog.run()
     dialog.destroy()
-
-
-class LogWriter:
-    """ A class to provide timestamped logging. """
-    def __init__(self):
-        self.file = open(wpath.log + 'wicd.log','a')
-        self.eol = True
-        self.logging_enabled = True
-
-    def __del__(self):
-        self.file.close()
-
-
-    def write(self, data):
-        """ Writes the data to the log with a timestamp.
-
-        This function handles writing of data to a log file. In order to
-        handle output redirection, we need to be careful with how we
-        handle the addition of timestamps. In any set of data that is
-        written, we replace the newlines with a timestamp + new line,
-        except for newlines that are the final character in data.
-
-        When a newline is the last character in data, we set a flag to
-        indicate that the next write should have a timestamp prepended
-        as well, which ensures that the timestamps match the time at
-        which the data is written, rather than the previous write.
-
-        Keyword arguments:
-        data -- The string to write to the log.
-
-        """
-        #global logging_enabled
-        data = data.encode('utf-8')
-        if len(data) <= 0: return
-        if self.logging_enabled:
-            if self.eol:
-                self.file.write(self.get_time() + ' :: ')
-                self.eol = False
-
-            if data[-1] == '\n':
-                self.eol = True
-                data = data[:-1]
-
-            self.file.write(
-                    data.replace('\n', '\n' + self.get_time() + ' :: '))
-            if self.eol: self.file.write('\n')
-            self.file.close()
-            
-    def get_time(self):
-        """ Return a string with the current time nicely formatted.
-
-        The format of the returned string is yyyy/mm/dd HH:MM:SS
-
-        """
-        x = time.localtime()
-        return ''.join([
-            str(x[0]).rjust(4,'0'), '/', str(x[1]).rjust(2,'0'), '/',
-            str(x[2]).rjust(2,'0'), ' ', str(x[3]).rjust(2,'0'), ':',
-            str(x[4]).rjust(2,'0'), ':', str(x[5]).rjust(2,'0')])

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Categories=Application;Network;
+Encoding=UTF-8
+Exec=/opt/wicd/gui.py
+GenericName=Network Manager
+Icon=/opt/wicd/images/wicd.png
+Icon[en_US]=/opt/wicd/images/wicd.png
+Name=Wicd
+Name[en_US]=Wicd
+Terminal=false
+Type=Application
+Version=1.0

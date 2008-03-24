@@ -56,14 +56,6 @@ if __name__ == '__main__':
 
 class Controller(object):
     """ Parent class for the different interface types. """
-    connecting_thread = None
-    before_script = None
-    after_script = None
-    disconnect_script = None
-    driver = None
-    wiface = None
-    liface = None
-    
     def __init__(self):
         """ Initialise the class. """
         self.global_dns_1 = None
@@ -74,6 +66,13 @@ class Controller(object):
         self._dhcp_client = None
         self._flush_tool = None
         self._debug = None
+        self.connecting_thread = None
+        self.before_script = None
+        self.after_script = None
+        self.disconnect_script = None
+        self.driver = None
+        self.wiface = None
+        self.liface = None
         
     def set_wireless_iface(self, value):
         self._wireless_interface = value

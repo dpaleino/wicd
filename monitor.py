@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+""" monitor -- connection monitoring process
+
+This process is spawned as a child of the daemon, and is responsible
+for monitoring connection status and initiating autoreconnection
+when appropriate.
+
+
+"""
 #
 #   Copyright (C) 2007 Adam Blackburn
 #   Copyright (C) 2007 Dan O'Reilly
@@ -19,7 +27,6 @@
 
 import dbus
 import gobject
-import os
 import sys
 import time
 from dbus.mainloop.glib import DBusGMainLoop
@@ -34,8 +41,8 @@ if sys.platform == 'linux2':
         libc = dl.open('/lib/libc.so.6')
         libc.call('prctl', 15, 'wicd-monitor\0', 0, 0, 0) # 15 is PR_SET_NAME
     except:
-        pass
-    
+        print 'Failed to set the process name'
+
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
@@ -244,13 +251,16 @@ class ConnectionStatus():
         self.reconnecting = False
         
 def reply_handle():
-        pass
+    """ Just a dummy function needed for asynchronous dbus calls. """
+    pass
     
-def err_handle(e):
-        pass
+def err_handle(error):
+    """ Just a dummy function needed for asynchronous dbus calls. """
+    pass
     
         
 def main():
+    """ Start the connection monitor and set the updater to run every 2 sec. """
     monitor = ConnectionStatus()
     gobject.timeout_add(3000, monitor.update_connection_status)
     

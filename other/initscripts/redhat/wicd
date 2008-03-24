@@ -1,0 +1,75 @@
+#!/bin/sh
+#
+# wicd:   wicd daemon
+#
+# chkconfig: 345 20 89
+# description:  This is a daemon for managing network connections.
+#
+# processname: wicd
+# pidfile: /var/run/wicd/wicd.pid
+#
+
+WICD_BIN=/opt/wicd/daemon.py
+
+# Sanity checks.
+[ -x $WICD_BIN ] || exit 11
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# so we can rearrange this easily
+processname=$WICD_BIN
+servicename=wicd
+pidfile=/var/run/wicd/wicd.pid
+
+RETVAL=0
+
+start()
+{
+        echo -n $"Starting wicd daemon: "
+        daemon --check $servicename $processname --pid-file=$pidfile
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$servicename
+}
+
+stop()
+{
+        echo -n $"Stopping wicd daemon: "
+        killproc -p $pidfile $servicename
+        RETVAL=$?
+        echo
+        if [ $RETVAL -eq 0 ]; then
+                rm -f /var/lock/subsys/$servicename
+                rm -f $pidfile
+        fi
+}
+
+# See how we were called.
+case "$1" in
+        start)
+                start
+                ;;
+        stop)
+                stop
+                ;;
+        status)
+                status -p $pidfile $processname
+                RETVAL=$?
+                ;;
+        restart)
+                stop
+                start
+                ;;
+        condrestart)
+                if [ -f /var/lock/subsys/$servicename ]; then
+                        stop
+                        start
+                fi
+                ;;
+        *)
+                echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+                ;;
+esac
+exit $RETVAL
+

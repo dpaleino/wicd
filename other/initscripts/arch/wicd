@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#
+#   Copyright (C) 2007 Dan O'Reilly
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License Version 2 as
+#   published by the Free Software Foundation.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+WICD_BIN=$/opt/wicd/daemon.py
+CMD=$0
+ARG=$1
+
+# general config
+. /etc/rc.conf
+. /etc/rc.d/functions
+# Sanity checks.
+[ -x $WICD_BIN ] || exit 0
+set -- $(ps ax | grep 'python.*$WICD_BIN')
+PID=$1
+case "$ARG" in
+        start)
+                stat_busy "Starting wicd"
+                if [ -z "$PID" ]; then
+                        $WICD_BIN
+                fi
+                if [ ! -z "$PID" -o $? -gt 0 ]; then
+                        stat_fail
+                else
+                        add_daemon wicd
+                        stat_done
+                fi
+                ;;
+        stop)
+                stat_busy "Stopping wicd"
+                        [ ! -z "$PID" ] && kill $PID &> /dev/null
+                if [ $? -gt 0 ]; then
+                        stat_fail
+                else
+                        rm_daemon wicd
+                        stat_done
+                fi
+                ;;
+        restart)
+                $CMD stop
+                sleep 1
+                $CMD start
+                ;;
+        *)
+                echo "usage: $CMD {start|stop|restart}"
+                ;;
+esac
+exit 0
+

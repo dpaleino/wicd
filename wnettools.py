@@ -87,6 +87,8 @@ def GetDefaultGateway():
     for line in lines:
         words = line.split()
         print words
+        if not words:
+            continue
         if words[0] == '0.0.0.0':
             gateway = words[1]
             break
@@ -145,6 +147,12 @@ class Interface(object):
         
         """
         self.iface = str(iface)
+        
+    def _client_found(self, client):
+        output = misc.Run("which " + client)
+        if output and not ("no " + client) in output:
+            return True
+        return False
 
     def CheckDHCP(self):
         """ Check for a valid DHCP client. 
@@ -158,9 +166,10 @@ class Interface(object):
         if self.DHCP_CLIENT:
             DHCP_CLIENT = self.DHCP_CLIENT
         else:
+            DHCP_CLIENT = None
             dhcpclients = ["dhclient", "dhcpcd", "pump"]
             for client in dhcpclients:
-                if misc.Run("which " + client):
+                if self._client_found(client):
                     DHCP_CLIENT = client
                     break
     
@@ -187,12 +196,12 @@ class Interface(object):
     
     def CheckWiredTools(self):
         """ Check for the existence of ethtool and mii-tool. """
-        if misc.Run("which mii-tool"):
+        if self._client_found("mii-tool"):
             self.MIITOOL_FOUND = True
         else:
             self.MIITOOL_FOUND = False
         
-        if misc.Run("which ethtool"):
+        if self._client_found("ethtool"):
             self.ETHTOOL_FOUND = True
         else:
             self.ETHTOOL_FOUND = False
@@ -203,7 +212,7 @@ class Interface(object):
         self.CheckDHCP()
         self.CheckWiredTools()
         
-        if misc.Run("which ip"):
+        if self._client_found("ip"):
             self.IP_FOUND = True
         else:
             self.IP_FOUND = False

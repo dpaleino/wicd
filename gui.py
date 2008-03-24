@@ -392,7 +392,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
     def toggle_ip_checkbox(self, widget=None):
         """Toggle entries/checkboxes based on the static IP checkbox. """
         # Should disable the static IP text boxes, and also enable the DNS
-        #checkbox when disabled and disable when enabled.
+        # checkbox when disabled and disable when enabled.
         if self.chkbox_static_ip.get_active():
             self.chkbox_static_dns.set_active(True)
             self.chkbox_static_dns.set_sensitive(False)
@@ -1167,6 +1167,7 @@ class appGui:
         self.is_visible = True
         self.pulse_active = False
         self.standalone = standalone
+        self.wpadrivercombo = None
         
         self.window.connect('delete_event', self.exit)
         
@@ -1179,7 +1180,7 @@ class appGui:
         else:
             self.wTree.get_widget("iface_menu_enable_wired").hide()
 
-        size = config.ReadWindowSize()
+        size = config.ReadWindowSize("main")
         width = size[0]
         height = size[1]
         if width > -1 and height > -1:
@@ -1255,6 +1256,11 @@ class appGui:
         """ Displays a general settings dialog. """
         dialog = self.wTree.get_widget("pref_dialog")
         dialog.set_title(language['preferences'])
+        size = config.ReadWindowSize("pref")
+        width = size[0]
+        height = size[1]
+        if width > -1 and height > -1:
+            dialog.resize(int(width), int(height))
         wiredcheckbox = self.wTree.get_widget("pref_always_check")
         wiredcheckbox.set_label(language['wired_always_on'])
         wiredcheckbox.set_active(wired.GetAlwaysShowWiredInterface())
@@ -1442,8 +1448,10 @@ class appGui:
             else:
                 flush_tool = misc.ROUTE
             daemon.SetFlushTool(flush_tool)
-                
+    
         dialog.hide()
+        [width, height] = dialog.get_size()
+        config.WriteWindowSize(width, height, "pref")
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
@@ -1903,7 +1911,7 @@ class appGui:
         """
         self.window.hide()
         [width, height] = self.window.get_size()
-        config.WriteWindowSize(width, height)
+        config.WriteWindowSize(width, height, "main")
 
         if self.standalone:
             self.window.destroy()

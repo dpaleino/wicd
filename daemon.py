@@ -1206,34 +1206,52 @@ class ConnectionWizard(dbus.service.Object):
         return "100: Loaded Profile"
 
     @dbus.service.method('org.wicd.daemon.config')
-    def WriteWindowSize(self, width, height):
+    def WriteWindowSize(self, width, height, win_name):
         """Write the desired default window size"""
+        if win_name == "main":
+            height_str = "window_height"
+            width_str = "window_width"
+        else:
+            height_str = "pref_height"
+            width_str = "pref_width"
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
         if config.has_section("Settings"):
-            config.set("Settings", "window_width", width)
-            config.set("Settings", "window_height", height)
+            config.set("Settings", width_str, width)
+            config.set("Settings", height_str, height)
             config.write(open(self.app_conf, "w"))
             
     @dbus.service.method('org.wicd.daemon.config')
-    def ReadWindowSize(self):
+    def ReadWindowSize(self, win_name):
         """Returns a list containing the desired default window size
         
         Attempts to read the default size from the config file,
         and if that fails, returns a default of 605 x 400.
         
         """
+        if win_name == "main":
+            default_width = 605
+            default_height = 400
+            width_str = "window_width"
+            height_str = "window_height"
+        else:
+            default_width = 125
+            default_height = 590
+            width_str = "pref_width"
+            height_str = "pref_height"
+        
+
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
         if config.has_section("Settings"):
-            if config.has_option("Settings", "window_width"):
-                width = config.get("Settings", "window_width")
+            if config.has_option("Settings", width_str):
+                width = config.get("Settings", width_str)
             else:
-                width = 605
-            if config.has_option("Settings", "window_height"):
-                height = config.get("Settings", "window_height")
+                width = default_width
+            if config.has_option("Settings", height_str):
+                height = config.get("Settings", height_str)
             else:
-                height = 400
+                height = default_height
         size = []
         size.append(int(width))
         size.append(int(height))

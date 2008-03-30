@@ -161,7 +161,8 @@ def main (argv):
     dialog = wTree.get_widget("configure_script_dialog")
     wTree.get_widget("pre_label").set_label(language['before_script'] + ":")
     wTree.get_widget("post_label").set_label(language['after_script'] + ":")
-    wTree.get_widget("disconnect_label").set_label(language['disconnect_script'] + ":")
+    wTree.get_widget("disconnect_label").set_label(language['disconnect_script'] 
+                                                   + ":")
     wTree.get_widget("window1").hide()
     
     pre_entry = wTree.get_widget("pre_entry")

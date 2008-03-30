@@ -182,7 +182,7 @@ language['running_dhcp'] = _('Obtaining IP address...')
 language['no_dhcp_offers'] = _('Connection Failed: No DHCP offers received.  \
                                 Couldn\'t get an IP Address.')
 language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
-language['aborted'] = _('Connection cancelled')
+language['aborted'] = _('Connection Cancelled')
 language['bad_pass'] = _('Connection Failed: Bad password')
 language['done'] = _('Done connecting...')
 
@@ -1611,7 +1611,7 @@ class appGui:
             strength = wireless.GetCurrentDBMStrength(iwconfig)
 
         if strength is None:
-            return False        
+            return False
         strength = str(strength)            
         ip = str(wireless_ip)
         self.set_status(language['connected_to_wireless'].replace

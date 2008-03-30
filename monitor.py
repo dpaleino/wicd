@@ -241,7 +241,7 @@ class ConnectionStatus():
             # If we just lost a wireless connection, try to connect to that
             # network again.  Otherwise just call Autoconnect.
             cur_net_id = wireless.GetCurrentNetworkID(self.iwconfig)
-            if from_wireless and cur_net_id > -1:  # Needs to be a valid network
+            if from_wireless and cur_net_id > -1:
                 print 'Trying to reconnect to last used wireless ' + \
                        'network'
                 wireless.ConnectWireless(cur_net_id)

@@ -105,13 +105,37 @@ def StopDHCP():
 def GetWirelessInterfaces():
     """ Get available wireless interfaces.
 
+    Attempts to get an interface first by parsing /proc/net/wireless,
+    and should that fail, by parsing iwconfig.
     Returns:
     The first interface available.
 
     """
-    output = misc.Run('iwconfig')
-    return misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',
+    iface = _fast_get_wifi_interfaces()
+    if not iface:
+        output = misc.Run('iwconfig')
+        iface = misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',
                          re.I | re.M  | re.S), output)
+    return iface
+
+def _fast_get_wifi_interfaces():
+    """ Tries to get a wireless interface by parsing /proc/net/wireless. """
+    device = re.compile('[a-z]{3,4}[0-9]') 
+    ifnames = []
+    
+    f = open('/proc/net/wireless', 'r')
+    data = f.readlines()
+    f.close()
+    for line in data:
+        try:
+            ifnames.append(device.search(line).group())
+        except AttributeError:
+            pass 
+    
+    if ifnames:
+        return ifnames[0]
+    else:
+        return None
 
 class Interface(object):
     """ Control a network interface. """
@@ -944,7 +968,6 @@ class WirelessInterface(Interface):
                         cmd_list.append(key_name + '=' + network.get('key'))
                         if info[5] == 'SHARED' and info[4] == 'WEP':
                             cmd_list.append('DefaultKeyID=1')
-                        #TODO: Confirm whether this second SSID set is required.
                         cmd_list.append('SSID=' + info[2])
 
                         for cmd in cmd_list:

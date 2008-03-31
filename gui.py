@@ -1576,32 +1576,37 @@ class appGui:
             return True
 
         fast = self.fast
-        wiredConnecting = wired.CheckIfWiredConnecting()
-        wirelessConnecting = wireless.CheckIfWirelessConnecting()
-        connecting = wiredConnecting or wirelessConnecting
+        wired_connecting = wired.CheckIfWiredConnecting()
+        wireless_connecting = wireless.CheckIfWirelessConnecting()
+        connecting = wired_connecting or wireless_connecting
         
-        if connecting and not self.pulse_active:
-            self.pulse_active = True
-            gobject.timeout_add(100, self.pulse_progress_bar)
-            self.network_list.set_sensitive(False)
-            self.status_area.show_all()
+        if connecting:
+            if not self.pulse_active:
+                self.pulse_active = True
+                gobject.timeout_add(100, self.pulse_progress_bar)
+                self.network_list.set_sensitive(False)
+                self.status_area.show_all()
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
-            if wirelessConnecting:
+            if wireless_connecting:
                 if not fast:
                     iwconfig = wireless.GetIwconfig()
                 else:
                     iwconfig = ''
                 self.set_status(wireless.GetCurrentNetwork(iwconfig, fast) + ': ' +
                        language[str(wireless.CheckWirelessConnectingMessage())])
-            if wiredConnecting:
+            if wired_connecting:
                 self.set_status(language['wired_network'] + ': ' + 
                              language[str(wired.CheckWiredConnectingMessage())])
-        elif self.pulse_active and not connecting:
-            self.pulse_active = False
-            self.update_connect_buttons()
-            self.network_list.set_sensitive(True)
-            self.status_area.hide_all()
+            return True
+        else:
+            if self.pulse_active:
+                self.pulse_progress_bar()
+                self.pulse_active = False
+                self.update_connect_buttons()
+                self.network_list.set_sensitive(True)
+                self.status_area.hide_all()
+
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
 
@@ -1616,7 +1621,7 @@ class appGui:
                                        wireless.GetWirelessIP(fast)):
                 return True
             self.set_status(language['not_connected'])
-        return True
+            return True
     
     def update_connect_buttons(self):
         """ Updates the connect/disconnect buttons for each network entry. """
@@ -1933,11 +1938,12 @@ class appGui:
         self.update_statusbar()
         
     def disconnect(self, widget, event, nettype, networkid, networkentry):
+        widget.hide()
+        networkentry.connect_button.show()
         if nettype == "wired":
             wired.DisconnectWired()
         else:
             wireless.DisconnectWireless()
-        self.update_connect_buttons()
         
     def wait_for_events(self, amt=0):
         """ Wait for any pending gtk events to finish before moving on. 

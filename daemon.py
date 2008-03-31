@@ -173,6 +173,7 @@ class ConnectionWizard(dbus.service.Object):
             self.AutoConnect(True)
         else:
             self.Scan()
+            self.SetForcedDisconnect(True)
             print "--no-scan detected, not autoconnecting..."
 
     ########## DAEMON FUNCTIONS

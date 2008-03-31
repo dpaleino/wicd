@@ -159,19 +159,17 @@ def ParseEncryption(network):
     template = enctemplate.readlines()
     # Set these to nothing so that we can hold them outside the loop
     z = "ap_scan=1\n"
-    y = 0
     # Loop through the lines in the template, selecting ones to use
-    for x in template:
+    for y, x in enumerate(template):
         x = x.strip("\n")
         if y > 4:
             # replace values
             x = x.replace("$_SCAN","0")
             for t in network:
                 # Don't bother if z's value is None cause it will cause errors
-                if Noneify(network[t]) != None:
+                if Noneify(network[t]) is not None:
                     x = x.replace("$_" + str(t).upper(), str(network[t]))
             z = z + "\n" + x
-        y += 1
 
     # Write the data to the files then chmod them so they can't be read 
     # by normal users.

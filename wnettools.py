@@ -610,7 +610,7 @@ class WiredInterface(Interface):
     def _fast_eth_get_plugged_in(self):
         if not self.IsUp():
             self.Up()
-            time.sleep(1)
+            time.sleep(2.5)
         buff = array.array('i', [0x0000000a, 0x00000000])
         addr, length = buff.buffer_info()
         arg = struct.pack('Pi', addr, length)
@@ -652,7 +652,7 @@ class WiredInterface(Interface):
         """ Get link status usingthe  SIOCGMIIPHY ioctl. """
         if not self.IsUp():
             self.Up()
-            time.sleep(1)
+            time.sleep(2.5)
         buff = struct.pack('16shhhh', (self.iface + '\0' * 16)[:16], 0, 1,
                                        0x0004, 0)
         try:

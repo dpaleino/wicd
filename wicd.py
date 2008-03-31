@@ -170,7 +170,7 @@ class TrayIcon:
                                 .replace('$A', self.network)
                                 .replace('$B', sig_string)
                                 .replace('$C', str(wireless_ip)))
-            self.set_signal_image(strength, lock)
+            self.set_signal_image(int(strength), lock)
             
         def set_connecting_state(self, info):
             """ Sets the icon info for a connecting state. """

@@ -179,8 +179,6 @@ language['setting_broadcast_address'] = _('Setting broadcast address...')
 language['setting_static_dns'] = _('Setting static DNS servers...')
 language['setting_static_ip'] = _('Setting static IP addresses...')
 language['running_dhcp'] = _('Obtaining IP address...')
-language['no_dhcp_offers'] = _('Connection Failed: No DHCP offers received.  \
-                                Couldn\'t get an IP Address.')
 language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
 language['aborted'] = _('Connection Cancelled')
 language['bad_pass'] = _('Connection Failed: Bad password')
@@ -647,6 +645,10 @@ class NetworkEntry(gtk.HBox):
         self.connect_hbox.pack_start(self.connect_button, False, False)
         self.connect_hbox.show()
         
+        # Set up the Disconnect button
+        self.disconnect_button = gtk.Button(stock=gtk.STOCK_DISCONNECT)
+        self.connect_hbox.pack_start(self.disconnect_button, False, False)
+        
         # Set up the VBox that goes in the gtk.Expander
         self.expander_vbox = gtk.VBox(False, 1)
         self.expander_vbox.show()
@@ -790,6 +792,7 @@ class WiredNetworkEntry(NetworkEntry):
                 self.expander.set_expanded(True)
             self.profile_help.show()        
         self.check_enable()
+        self.update_connect_button()
         self.wireddis = self.connect("destroy", self.destroy_called)
         
     def destroy_called(self, *args):
@@ -827,7 +830,17 @@ class WiredNetworkEntry(NetworkEntry):
             self.connect_button.set_sensitive(False)
             self.advanced_button.set_sensitive(False)
             self.script_button.set_sensitive(False)
-
+            
+    def update_connect_button(self, apbssid=None):
+        """ Update the connection/disconnect button for this entry. """
+        state, x = daemon.GetConnectionStatus()
+        if state == misc.WIRED:
+            self.disconnect_button.show()
+            self.connect_button.hide()
+        else:
+            self.disconnect_button.hide()
+            self.connect_button.show()
+            
     def add_profile(self, widget):
         """ Add a profile to the profile list. """
         print "adding profile"
@@ -871,12 +884,10 @@ class WiredNetworkEntry(NetworkEntry):
     def toggle_default_profile(self, widget):
         """ Change the default profile. """
         if self.chkbox_default_profile.get_active():
-            print 'unsetting previous default profile...'
             # Make sure there is only one default profile at a time
             config.UnsetWiredDefault()
         wired.SetWiredProperty("default",
                                self.chkbox_default_profile.get_active())
-        print 'toggle defualt prof'
         config.SaveWiredNetworkProfile(self.combo_profile_names.get_active_text())
 
     def change_profile(self, widget):
@@ -967,6 +978,7 @@ class WirelessNetworkEntry(NetworkEntry):
         # Show everything
         self.show_all()
         self.advanced_dialog = WirelessSettingsDialog(networkID)
+        self.update_connect_button(wireless.GetApBssid())
         self.wifides = self.connect("destroy", self.destroy_called)
         
     def destroy_called(self, *args):
@@ -1032,6 +1044,17 @@ class WirelessNetworkEntry(NetworkEntry):
 
         self.image.set_from_file(wpath.images + signal_img)
         self.lbl_strength.set_label(disp_strength + ending)
+        
+    def update_connect_button(self, apbssid):
+        """ Update the connection/disconnect button for this entry. """
+        state, x = daemon.GetConnectionStatus()
+        if state == misc.WIRELESS and apbssid == \
+           wireless.GetWirelessProperty(self.networkID, "bssid"):
+            self.disconnect_button.show()
+            self.connect_button.hide()
+        else:
+            self.disconnect_button.hide()
+            self.connect_button.show()
 
     def set_mac_address(self, address):
         """ Set the MAC address for the WirelessNetworkEntry. """
@@ -1133,7 +1156,7 @@ class appGui:
 
         dic = { "refresh_clicked" : self.refresh_networks, 
                 "quit_clicked" : self.exit, 
-                "disconnect_clicked" : self.disconnect,
+                "disconnect_clicked" : self.disconnect_all,
                 "main_exit" : self.exit, 
                 "cancel_clicked" : self.cancel_connect,
                 "connect_clicked" : self.connect_hidden,
@@ -1157,7 +1180,6 @@ class appGui:
         self.network_list = self.wTree.get_widget("network_list_vbox")
         self.status_area = self.wTree.get_widget("connecting_hbox")
         self.status_bar = self.wTree.get_widget("statusbar")
-        self.refresh_networks(fresh=False)
 
         self.status_area.hide_all()
 
@@ -1168,6 +1190,8 @@ class appGui:
         self.pulse_active = False
         self.standalone = standalone
         self.wpadrivercombo = None
+        self.fast = True  # Use ioctl instead of external program calls
+        self.refresh_networks(fresh=False)
         
         self.window.connect('delete_event', self.exit)
         
@@ -1186,7 +1210,7 @@ class appGui:
         if width > -1 and height > -1:
             self.window.resize(int(width), int(height))
 
-        gobject.timeout_add(700, self.update_statusbar)
+        gobject.timeout_add(400, self.update_statusbar)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
@@ -1238,9 +1262,10 @@ class appGui:
         """ Toggles the encryption key entry box for the ad-hoc dialog. """
         self.key_entry.set_sensitive(self.chkbox_use_encryption.get_active())
 
-    def disconnect(self, widget=None):
+    def disconnect_all(self, widget=None):
         """ Disconnects from any active network. """
         daemon.Disconnect()
+        self.update_connect_buttons()
 
     def about_dialog(self, widget, event=None):
         """ Displays an about dialog. """
@@ -1550,45 +1575,59 @@ class appGui:
         if not self.is_visible:
             return True
 
+        fast = self.fast
         wiredConnecting = wired.CheckIfWiredConnecting()
         wirelessConnecting = wireless.CheckIfWirelessConnecting()
+        connecting = wiredConnecting or wirelessConnecting
         
-        if wirelessConnecting or wiredConnecting:
-            if not self.pulse_active:
-                self.pulse_active = True
-                gobject.timeout_add(100, self.pulse_progress_bar)
-                
+        if connecting and not self.pulse_active:
+            self.pulse_active = True
+            gobject.timeout_add(100, self.pulse_progress_bar)
             self.network_list.set_sensitive(False)
             self.status_area.show_all()
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
             if wirelessConnecting:
-                iwconfig = wireless.GetIwconfig()
-                self.set_status(wireless.GetCurrentNetwork(iwconfig) + ': ' +
+                if not fast:
+                    iwconfig = wireless.GetIwconfig()
+                else:
+                    iwconfig = ''
+                self.set_status(wireless.GetCurrentNetwork(iwconfig, fast) + ': ' +
                        language[str(wireless.CheckWirelessConnectingMessage())])
             if wiredConnecting:
                 self.set_status(language['wired_network'] + ': ' + 
                              language[str(wired.CheckWiredConnectingMessage())])
-        else:
-            self.network_list.set_sensitive(True)
+        elif self.pulse_active and not connecting:
             self.pulse_active = False
+            self.update_connect_buttons()
+            self.network_list.set_sensitive(True)
             self.status_area.hide_all()
             if self.statusID:
                 self.status_bar.remove(1, self.statusID)
 
             # Determine connection status.
-            if self.check_for_wired(wired.GetWiredIP()):
+            if self.check_for_wired(wired.GetWiredIP(fast)):
                 return True
-    
-            if self.check_for_wireless(wireless.GetIwconfig(),
-                                       wireless.GetWirelessIP()):
+            if not fast:
+                iwconfig = wireless.GetIwconfig()
+            else:
+                iwconfig = ''
+            if self.check_for_wireless(iwconfig,
+                                       wireless.GetWirelessIP(fast)):
                 return True
             self.set_status(language['not_connected'])
         return True
     
+    def update_connect_buttons(self):
+        """ Updates the connect/disconnect buttons for each network entry. """
+        apbssid = wireless.GetApBssid()
+        for entry in self.network_list:
+            if hasattr(entry, "update_connect_button"):
+                entry.update_connect_button(apbssid)
+    
     def check_for_wired(self, wired_ip):
         """ Determine if wired is active, and if yes, set the status. """
-        if wired_ip and wired.CheckPluggedIn():
+        if wired_ip and wired.CheckPluggedIn(self.fast):
             self.set_status(language['connected_to_wired'].replace('$A',
                                                                    wired_ip))
             return True
@@ -1600,15 +1639,15 @@ class appGui:
         if not wireless_ip:
             return False
         
-        network = wireless.GetCurrentNetwork(iwconfig)
+        network = wireless.GetCurrentNetwork(iwconfig, self.fast)
         if not network:
             return False
     
         network = str(network)
         if daemon.GetSignalDisplayType() == 0:
-            strength = wireless.GetCurrentSignalStrength(iwconfig)
+            strength = wireless.GetCurrentSignalStrength(iwconfig, self.fast)
         else:
-            strength = wireless.GetCurrentDBMStrength(iwconfig)
+            strength = wireless.GetCurrentDBMStrength(iwconfig, self.fast)
 
         if strength is None:
             return False
@@ -1644,12 +1683,14 @@ class appGui:
             z.destroy()
             del z
 
-        if wired.CheckPluggedIn() or wired.GetAlwaysShowWiredInterface():
+        if wired.CheckPluggedIn(self.fast) or wired.GetAlwaysShowWiredInterface():
             printLine = True  # In this case we print a separator.
             wirednet = WiredNetworkEntry()
             self.network_list.pack_start(wirednet, False, False)
             wirednet.connect_button.connect("button-press-event", self.connect,
                                            "wired", 0, wirednet)
+            wirednet.disconnect_button.connect("button-press-event", self.disconnect,
+                                               "wired", 0, wirednet)
             wirednet.advanced_button.connect("button-press-event",
                                              self.edit_advanced, "wired", 0, 
                                              wirednet)
@@ -1673,11 +1714,13 @@ class appGui:
                 else:
                     printLine = True
                 tempnet = WirelessNetworkEntry(x)
-                tempnet.show_all()
                 self.network_list.pack_start(tempnet, False, False)
                 tempnet.connect_button.connect("button-press-event",
                                                self.connect, "wireless", x,
                                                tempnet)
+                tempnet.disconnect_button.connect("button-press-event",
+                                                  self.disconnect, "wireless",
+                                                  x, tempnet)
                 tempnet.advanced_button.connect("button-press-event",
                                                 self.edit_advanced, "wireless",
                                                 x, tempnet)
@@ -1888,6 +1931,13 @@ class appGui:
         elif nettype == "wired":
             wired.ConnectWired()
         self.update_statusbar()
+        
+    def disconnect(self, widget, event, nettype, networkid, networkentry):
+        if nettype == "wired":
+            wired.DisconnectWired()
+        else:
+            wireless.DisconnectWireless()
+        self.update_connect_buttons()
         
     def wait_for_events(self, amt=0):
         """ Wait for any pending gtk events to finish before moving on. 

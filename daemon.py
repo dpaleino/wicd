@@ -195,11 +195,9 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetWiredInterface(self, interface):
         """ Sets the wired interface for the daemon to use. """
-        print "setting wired interface", str(interface)
+        print "setting wired interface %s" % (str(interface))
         self.wired.wired_interface = interface
-        self.wired.SetLiface(interface)
         self.wifi.wired_interface = interface
-        self.wifi.SetLiface(interface)
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
         config.set("Settings","wired_interface", interface)
@@ -208,11 +206,9 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetWirelessInterface(self, interface):
         """ Sets the wireless interface the daemon will use. """
-        print "setting wireless interface" , str(interface)
+        print "setting wireless interface %s" % (str(interface))
         self.wifi.wireless_interface = interface
-        self.wifi.SetWiface(interface)
         self.wired.wireless_interface = interface
-        self.wired.SetWiface(interface)
         config = ConfigParser.ConfigParser()
         config.read(self.app_conf)
         config.set("Settings","wireless_interface", interface)
@@ -363,7 +359,7 @@ class ConnectionWizard(dbus.service.Object):
         if fresh:
             self.Scan()
             #self.AutoConnectScan()  # Also scans for hidden networks
-        if self.CheckPluggedIn():
+        if self.CheckPluggedIn(True):
             self._wired_autoconnect()
         else:
             self._wireless_autoconnect()
@@ -691,6 +687,10 @@ class ConnectionWizard(dbus.service.Object):
     def GetNumberOfNetworks(self):
         """ Returns number of networks. """
         return len(self.LastScan)
+    
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetApBssid(self):
+        return self.wifi.GetBSSID()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
@@ -737,12 +737,18 @@ class ConnectionWizard(dbus.service.Object):
         return str(iface)
     
     @dbus.service.method('org.wicd.daemon.wireless')
+    def DisconnectWireless(self):
+        """ Disconnects the wireless network. """
+        self.SetForcedDisconnect(True)
+        self.wifi.Disconnect()
+    
+    @dbus.service.method('org.wicd.daemon.wireless')
     def IsWirelessUp(self):
         """ Returns a boolean specifying if wireless is up or down. """
         return self.wifi.IsUp()
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetPrintableSignalStrength(self, iwconfig=None):
+    def GetPrintableSignalStrength(self, iwconfig=None, fast=False):
         """ Assigns a signal strength appropriate for display
         
         This is used separately from the raw signal strength retrieving
@@ -752,38 +758,38 @@ class ConnectionWizard(dbus.service.Object):
         
         """
         if self.GetSignalDisplayType() == 0:
-            return self.GetCurrentSignalStrength(iwconfig)
+            return self.GetCurrentSignalStrength(iwconfig, fast)
         else:
-            return self.GetCurrentDBMStrength(iwconfig)
+            return self.GetCurrentDBMStrength(iwconfig, fast)
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetCurrentSignalStrength(self, iwconfig=None):
+    def GetCurrentSignalStrength(self, iwconfig=None, fast=False):
         """ Returns the current signal strength. """
         try:
-            strength = int(self.wifi.GetSignalStrength(iwconfig))
+            strength = int(self.wifi.GetSignalStrength(iwconfig, fast))
         except:
             strength = 0
         return strength
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetCurrentDBMStrength(self, iwconfig=None):
+    def GetCurrentDBMStrength(self, iwconfig=None, fast=False):
         """ Returns the current dbm signal strength. """
         try:
-            dbm_strength = int(self.wifi.GetDBMStrength(iwconfig))
+            dbm_strength = int(self.wifi.GetDBMStrength(iwconfig, fast))
         except:
             dbm_strength = 0
         return dbm_strength
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetCurrentNetwork(self, iwconfig=None):
+    def GetCurrentNetwork(self, iwconfig=None, fast=False):
         """ Returns the current network. """
-        current_network = str(self.wifi.GetCurrentNetwork(iwconfig))
+        current_network = str(self.wifi.GetCurrentNetwork(iwconfig, fast))
         return current_network
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetCurrentNetworkID(self, iwconfig=None):
+    def GetCurrentNetworkID(self, iwconfig=None, fast=False):
         """ Returns the id of the current network, or -1 if its not found. """
-        currentESSID = self.GetCurrentNetwork(iwconfig)
+        currentESSID = self.GetCurrentNetwork(iwconfig, fast)
         for x in xrange(0, len(self.LastScan)):
             if self.LastScan[x]['essid'] == currentESSID:
                 return x
@@ -820,18 +826,15 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def CheckIfWirelessConnecting(self):
         """Returns True if wireless interface is connecting, otherwise False."""
-        if self.wifi.connecting_thread is not None:
-            # If connecting_thread exists, then check for it's
-            # status, if it doesn't, we aren't connecting.
-            status =  self.wifi.connecting_thread.is_connecting
-            return status
+        if self.wifi.connecting_thread:
+            return self.wifi.connecting_thread.is_connecting
         else:
             return False
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetWirelessIP(self):
+    def GetWirelessIP(self, fast=False):
         """ Returns the IP associated with the wireless interface. """
-        ip = self.wifi.GetIP()
+        ip = self.wifi.GetIP(fast)
         #if self.debug_mode == 1:
             #print 'returning wireless ip', ip
         return ip
@@ -849,9 +852,9 @@ class ConnectionWizard(dbus.service.Object):
     #################################
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def GetWiredIP(self):
+    def GetWiredIP(self, fast=False):
         """ Returns the wired interface's ip address. """
-        ip = self.wired.GetIP()
+        ip = self.wired.GetIP(True)
         return ip
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -917,6 +920,12 @@ class ConnectionWizard(dbus.service.Object):
             return True
         else:
             return False
+        
+    @dbus.service.method('org.wicd.daemon.wired')
+    def DisconnectWired(self):
+        """ Disconnects the wired network. """
+        self.SetForcedDisconnect(True)
+        self.wired.Disconnect()
 
     @dbus.service.method('org.wicd.daemon.wired')
     def SetAlwaysShowWiredInterface(self, value):
@@ -932,9 +941,9 @@ class ConnectionWizard(dbus.service.Object):
         return bool(self.always_show_wired_interface)
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def CheckPluggedIn(self):
+    def CheckPluggedIn(self, fast=False):
         if self.wired.wired_interface and self.wired.wired_interface != "None":
-            return self.wired.CheckPluggedIn()
+            return self.wired.CheckPluggedIn(fast)
         else:
             return None
         

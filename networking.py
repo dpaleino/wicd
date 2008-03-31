@@ -53,7 +53,6 @@ if __name__ == '__main__':
     wpath.chdir(__file__)
 
 
-
 class Controller(object):
     """ Parent class for the different interface types. """
     def __init__(self):
@@ -125,17 +124,7 @@ class Controller(object):
     debug = property(get_debug, set_debug)
     flush_tool = property(get_flush_tool, set_flush_tool)
     dhcp_client = property(get_dhcp_client, set_dhcp_client)
-            
-    def SetWiface(self, iface):
-        """ Sets the wireless interface for the associated wnettools class. """
-        if self.wiface:
-            self.wiface.SetInterface(iface)
     
-    def SetLiface(self, iface):
-        """ Sets the wired interface for the associated wnettools class. """
-        if self.liface:
-            self.liface.SetInterface(iface)
-
 
 class ConnectThread(threading.Thread):
     """ A class to perform network connections in a multi-threaded way.
@@ -178,6 +167,7 @@ class ConnectThread(threading.Thread):
         self.after_script = after_script
         self.disconnect_script = disconnect_script
         self.should_die = False
+        self.abort_reason = ""
 
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
@@ -279,7 +269,7 @@ class ConnectThread(threading.Thread):
             print "Running DHCP"
             dhcp_status = iface.StartDHCP()
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
-                self.connect_aborted(dhcp_status)
+                self.abort_connection(dhcp_status)
                 return
             
     def set_dns_addresses(self):
@@ -306,11 +296,18 @@ class ConnectThread(threading.Thread):
         a few seconds to make sure the message is readable
         
         """
+        if self.abort_reason:
+            reason = self.abort_reason
         self.SetStatus(reason)
         self.is_aborted = True
         self.abort_msg = reason
         self.is_connecting = False
         print 'exiting connection thread'
+        
+    def abort_connection(self, reason):
+        """ Schedule a connection abortion for the given reason. """
+        self.abort_reason = reason
+        self.should_die = True
         
     def stop_dhcp_clients(self, iface):
         """ Stop and running DHCP clients, as well as wpa_supplicant. """
@@ -399,41 +396,51 @@ class Wireless(Controller):
         self.connecting_thread.start()
         return True
 
-    def GetSignalStrength(self, iwconfig=None):
+    def GetSignalStrength(self, iwconfig=None, fast=False):
         """ Get signal strength of the current network.
 
         Returns:
         The current signal strength.
 
         """
-        return self.wiface.GetSignalStrength(iwconfig)
+        return self.wiface.GetSignalStrength(iwconfig, fast)
 
-    def GetDBMStrength(self, iwconfig=None):
+    def GetDBMStrength(self, iwconfig=None, fast=False):
         """ Get the dBm signal strength of the current network.
 
         Returns:
         The current dBm signal strength.
 
         """
-        return self.wiface.GetDBMStrength(iwconfig)
+        return self.wiface.GetDBMStrength(iwconfig, fast)
 
-    def GetCurrentNetwork(self, iwconfig=None):
+    def GetCurrentNetwork(self, iwconfig=None, fast=False):
         """ Get current network name.
 
         Returns:
         The name of the currently connected network.
 
         """
-        return self.wiface.GetCurrentNetwork(iwconfig)
+        return self.wiface.GetCurrentNetwork(iwconfig, fast)
 
-    def GetIP(self):
+    def GetIP(self, fast=False):
         """ Get the IP of the interface.
 
         Returns:
         The IP address of the interface in dotted notation.
 
         """
-        return self.wiface.GetIP()
+        return self.wiface.GetIP(fast)
+    
+    def GetBSSID(self, fast=True):
+        """ Get the BSSID of the current access point. 
+        
+        Returns:
+        The MAC Adress of the active access point as a string, or
+        None the BSSID can't be found.
+        
+        """
+        return self.wiface.GetBSSID(fast)
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
@@ -641,8 +648,8 @@ class WirelessConnectThread(ConnectThread):
         if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
             if not wiface.ValidateAuthentication(time.time()):
-                self.connect_aborted('bad_pass')
-                return
+                self.abort_connection('bad_pass')
+        self.abort_if_needed()
 
         # Set up gateway, IP address, and DNS servers.
         self.set_broadcast_address(wiface)
@@ -657,7 +664,7 @@ class WirelessConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + wiface.GetIP()
+            print "IP Address is: " + wiface.GetIP(fast=True)
         self.is_connecting = False
     
     def generate_psk_and_authenticate(self, wiface):
@@ -709,14 +716,14 @@ class Wired(Controller):
         """ Load the wnettools controls for the wired/wireless interfaces. """
         self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
 
-    def CheckPluggedIn(self):
+    def CheckPluggedIn(self, fast=False):
         """ Check whether the wired connection is plugged in.
 
         Returns:
         The status of the physical connection link.
 
         """
-        return self.liface.GetPluggedIn()
+        return self.liface.GetPluggedIn(fast)
 
     def Connect(self, network, debug=False):
         """ Spawn a connection thread to connect to the network.
@@ -734,14 +741,14 @@ class Wired(Controller):
         self.connecting_thread.start()
         return True
 
-    def GetIP(self):
+    def GetIP(self, fast=False):
         """ Get the IP of the interface.
 
         Returns:
         The IP address of the interface in dotted notation.
 
         """
-        return self.liface.GetIP()
+        return self.liface.GetIP(fast)
 
     def Disconnect(self):
         """ Disconnect from the network. """
@@ -858,5 +865,5 @@ class WiredConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + liface.GetIP()
+            print "IP Address is: " + liface.GetIP(fast=True)
         self.is_connecting = False

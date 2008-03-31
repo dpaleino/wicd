@@ -278,3 +278,4 @@ def error(parent, message):
     dialog.set_markup(message)
     dialog.run()
     dialog.destroy()
+

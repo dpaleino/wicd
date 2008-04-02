@@ -110,6 +110,7 @@ language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
 language['connecting'] = _('Connecting')
 language['wired'] = _('Wired Network')
 
+
 class TrayIcon:
     """ Base Tray Icon class.
     
@@ -143,7 +144,7 @@ class TrayIcon:
             self.update_tray_icon()
 
         def wired_profile_chooser(self):
-            """Launch the wired profile chooser."""
+            """ Launch the wired profile chooser. """
             gui.WiredProfileChooser()
             daemon.SetNeedWiredProfileChooser(False)
             
@@ -390,6 +391,8 @@ class TrayIcon:
         """ Tray Icon for gtk < 2.10.
         
         Uses the deprecated egg.trayicon module to implement the tray icon.
+        Since it relies on a deprecated module, this class is only used
+        for machines running versions of GTK < 2.10.
         
         """
         def __init__(self, use_tray=True):
@@ -451,7 +454,6 @@ class TrayIcon:
             gtk.StatusIcon.__init__(self)
 
             self.current_icon_path = ''
-            daemon.SetForcedDisconnect(False)
             self.set_visible(True)
             self.connect('activate', self.on_activate)
             self.connect('popup-menu', self.on_popup_menu)

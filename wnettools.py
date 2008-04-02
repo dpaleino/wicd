@@ -155,6 +155,15 @@ def _fast_get_wifi_interfaces():
         return None
     
 def get_iw_ioctl_result(iface, call):
+    """ Makes the given ioctl call and returns the results.
+    
+    Keyword arguments:
+    call -- The ioctl call to make
+    
+    Returns:
+    The results of the ioctl call.
+    
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     buff = array.array('c', '\0' * 32)
     addr, length = buff.buffer_info()
@@ -205,6 +214,17 @@ class Interface(object):
         self.iface = str(iface)
         
     def _find_client_path(self, client):
+        """ Determines the full path for the given program.
+        
+        Searches a hardcoded list of paths for a given program name.
+        
+        Keyword arguments:
+        client -- The name of the program to search for
+        
+        Returns:
+        The full path of the program or None
+        
+        """
         paths = ['/sbin/', '/usr/sbin/', '/bin/', '/usr/bin/',
                  '/usr/local/sbin/', '/usr/local/bin/']
         for path in paths:
@@ -215,7 +235,14 @@ class Interface(object):
         return None
         
     def _client_found(self, client):
-        # TODO: Don't use which anymore.  Just search path manually.
+        """ Searches for the existence of the given program in PATH.
+        
+        Uses "which" to determine if a given program exists in PATH.
+        
+        Returns:
+        True if the program exists, False otherwise.
+        
+        """
         output = misc.Run("which " + client)
         if output and not ("no " + client) in output:
             return True
@@ -539,6 +566,7 @@ class Interface(object):
         return False
     
     def _fast_is_up(self):
+        """ Determines if the interfae is up using an ioctl call. """
         data = (self.iface + '\0' * 16)[:18]
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGIFFLAGS, data)
@@ -549,7 +577,6 @@ class Interface(object):
             
         flags, = struct.unpack('H', result[16:18])
         return bool(flags & 1)
-        
 
 
 class WiredInterface(Interface):
@@ -608,6 +635,14 @@ class WiredInterface(Interface):
             return False
         
     def _fast_eth_get_plugged_in(self):
+        """ Determines link connection status using an ioctl call.
+        
+        Uses the SIOCGETHTOOL ioctl call to determine link status.
+        
+        Returns:
+        True if a wire is plugged in, False otherwise.
+        
+        """
         if not self.IsUp():
             self.Up()
             time.sleep(2.5)
@@ -649,7 +684,7 @@ class WiredInterface(Interface):
             return False
         
     def _fast_mii_get_plugged_in(self):
-        """ Get link status usingthe  SIOCGMIIPHY ioctl. """
+        """ Get link status using the SIOCGMIIPHY ioctl call. """
         if not self.IsUp():
             self.Up()
             time.sleep(2.5)
@@ -1199,6 +1234,12 @@ class WirelessInterface(Interface):
         return dbm_strength
     
     def _get_dbm_strength_fast(self):
+        """ Uses the SIOCGIWSTATS ioctl call to get dbm signal strength.
+        
+        Returns:
+        The dBm signal strength or None if it can't be found.
+        
+        """
         buff = misc.get_irwange_ioctl_result(self.iface, SIOCGIWSTATS)
         if not buff:
             return None

@@ -456,6 +456,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.des = self.connect("destroy", self.destroy_called)
         
     def set_net_prop(self, option, value):
+        """ Sets the given option to the given value for this network. """
         wired.SetWiredProperty(option, value)
         
     def set_values(self):
@@ -911,7 +912,7 @@ class WiredNetworkEntry(NetworkEntry):
             self.chkbox_default_profile.set_active(stringToBoolean(is_default))
 
     def format_entry(self, label):
-        """Help method for fetching/formatting wired properties. """
+        """ Help method for fetching/formatting wired properties. """
         return noneToBlankString(wired.GetWiredProperty(label))
 
 
@@ -1183,6 +1184,7 @@ class appGui:
 
         self.status_area.hide_all()
 
+        self.window.set_icon_from_file(wpath.etc + "wicd.png")
         self.statusID = None
         self.first_dialog_load = True
         self.vpn_connection_pipe = None
@@ -1484,9 +1486,6 @@ class appGui:
 
     def connect_hidden(self, widget):
         """ Prompts the user for a hidden network, then scans for it. """
-        # Should display a dialog asking
-        # for the ssid of a hidden network
-        # and displaying connect/cancel buttons
         dialog = gtk.Dialog(title=language['hidden_network'],
                             flags=gtk.DIALOG_MODAL,
                             buttons=(gtk.STOCK_CONNECT, 1, gtk.STOCK_CANCEL, 2))
@@ -1938,6 +1937,16 @@ class appGui:
         self.update_statusbar()
         
     def disconnect(self, widget, event, nettype, networkid, networkentry):
+        """ Disconnects from the given network.
+        
+        Keyword arguments:
+        widget -- The disconnect button that was pressed.
+        event -- unused
+        nettype -- "wired" or "wireless", depending on the network entry type.
+        networkid -- unused
+        networkentry -- The NetworkEntry containing the disconnect button.
+        
+        """
         widget.hide()
         networkentry.connect_button.show()
         if nettype == "wired":

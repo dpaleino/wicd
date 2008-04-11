@@ -124,7 +124,7 @@ class Controller(object):
     debug = property(get_debug, set_debug)
     flush_tool = property(get_flush_tool, set_flush_tool)
     dhcp_client = property(get_dhcp_client, set_dhcp_client)
-    
+
 
 class ConnectThread(threading.Thread):
     """ A class to perform network connections in a multi-threaded way.

@@ -34,27 +34,16 @@ data=[
 ('translations/zh_HK/LC_MESSAGES', ['translations/zh_HK/LC_MESSAGES/wicd.mo']),
 ('translations/fr_FR/LC_MESSAGES', ['translations/fr_FR/LC_MESSAGES/wicd.mo']),
 ('translations/ca_ES/LC_MESSAGES', ['translations/ca_ES/LC_MESSAGES/wicd.mo']),
-('translations/ko_KR/LC_MESSAGES', ['translations/ko_KR/LC_MESSAGES/wicd.mo']),
 ('translations/gl_GL/LC_MESSAGES', ['translations/gl_GL/LC_MESSAGES/wicd.mo']),
-('translations/no_NO/LC_MESSAGES', ['translations/no_NO/LC_MESSAGES/wicd.mo']),
-('translations/bg_PHO/LC_MESSAGES', ['translations/bg_PHO/LC_MESSAGES/wicd.mo']),
 ('translations/po', [('translations/po/' + b) for b in os.listdir('translations/po') if not b.startswith('.')]),
 ('translations/sl_SI/LC_MESSAGES', ['translations/sl_SI/LC_MESSAGES/wicd.mo']),
-('translations/da_DK/LC_MESSAGES', ['translations/da_DK/LC_MESSAGES/wicd.mo']),
 ('translations/ja_JA/LC_MESSAGES', ['translations/ja_JA/LC_MESSAGES/wicd.mo']),
-('translations/zh_CN/LC_MESSAGES', ['translations/zh_CN/LC_MESSAGES/wicd.mo']),
-('translations/ru_RU/LC_MESSAGES', ['translations/ru_RU/LC_MESSAGES/wicd.mo']),
 ('translations/it_IT/LC_MESSAGES', ['translations/it_IT/LC_MESSAGES/wicd.mo']),
 ('translations/es_ES/LC_MESSAGES', ['translations/es_ES/LC_MESSAGES/wicd.mo']),
-('translations/pt_BR/LC_MESSAGES', ['translations/pt_BR/LC_MESSAGES/wicd.mo']),
-('translations/cs_CZ/LC_MESSAGES', ['translations/cs_CZ/LC_MESSAGES/wicd.mo']),
 ('translations/sv_SE/LC_MESSAGES', ['translations/sv_SE/LC_MESSAGES/wicd.mo']),
-('translations/ar_EG/LC_MESSAGES', ['translations/ar_EG/LC_MESSAGES/wicd.mo']),
-('translations/tr_TR/LC_MESSAGES', ['translations/tr_TR/LC_MESSAGES/wicd.mo']),
 ('translations/en_US/LC_MESSAGES', ['translations/en_US/LC_MESSAGES/wicd.mo']),
 ('translations/fi_FI/LC_MESSAGES', ['translations/fi_FI/LC_MESSAGES/wicd.mo']),
 ('translations/pl_PL/LC_MESSAGES', ['translations/pl_PL/LC_MESSAGES/wicd.mo']),
-('translations/hu_HU/LC_MESSAGES', ['translations/hu_HU/LC_MESSAGES/wicd.mo']),
 ('translations/nl_NL/LC_MESSAGES', ['translations/nl_NL/LC_MESSAGES/wicd.mo'])]
 if os.access('/etc/redhat-release', os.F_OK):
     data.append(('/etc/rc.d/init.d', ['other/initscripts/redhat/wicd']))
@@ -64,11 +53,11 @@ elif os.access('/etc/fedora-release', os.F_OK):
     data.append(('/etc/rc.d/init.d', ['other/initscripts/redhat/wicd']))
 elif os.access('/etc/gentoo-release', os.F_OK):
     data.append(('/etc/init.d', ['other/initscripts/gentoo/wicd']))
-elif os.access('/etc/debian-release', os.F_OK):
+elif os.access('/etc/debian_version', os.F_OK):
     data.append(('/etc/init.d', ['other/initscripts/debian/wicd']))
 elif os.access('/etc/arch-release', os.F_OK):
     data.append(('/etc/rc.d', ['other/initscripts/arch/wicd']))
-elif os.access('/etc/slackware-release', os.F_OK):
+elif os.access('/etc/slackware-version', os.F_OK):
     data.append(('/etc/rc.d', ['other/initscripts/slackware/wicd']))
 
 

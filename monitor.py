@@ -67,6 +67,7 @@ class ConnectionStatus():
         self.reconnect_tries = 0
         self.last_reconnect_time = time.time()
         self.signal_changed = False
+        
         # This determines if we use ioctl or external programs
         self.fast = True
         self.iwconfig = ''

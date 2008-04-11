@@ -723,7 +723,7 @@ class WirelessInterface(Interface):
         essid -- essid to set the interface to
 
         """
-        cmd = ''.join(['iwconfig ', self.iface, ' essid "', essid, '"'])
+        cmd = 'iwconfig %s essid "%s"' % (self.iface, essid)
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -962,7 +962,7 @@ class WirelessInterface(Interface):
         """
         if mode.lower() == 'master':
             mode = 'managed'
-        cmd = 'iwconfig ' + self.iface + ' mode ' + mode
+        cmd = 'iwconfig %s mode %s' % (self.iface, mode)
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -973,7 +973,7 @@ class WirelessInterface(Interface):
         channel -- channel to set the interface to
 
         """
-        cmd = 'iwconfig ' + self.iface + ' channel ' + str(channel)
+        cmd = 'iwconfig %s channel %s' % (self.iface, str(channel))
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -984,7 +984,7 @@ class WirelessInterface(Interface):
         key -- encryption key to set
 
         """
-        cmd = 'iwconfig ' + self.iface + ' key ' + key
+        cmd = 'iwconfig %s key %s' % (self.iface, key)
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -997,7 +997,7 @@ class WirelessInterface(Interface):
         bssid -- bssid of the network
 
         """
-        cmd = ''.join(['iwconfig ', self.iface, ' essid "', essid, '"'])
+        cmd = 'iwconfig %s essid "%s"' % (self.iface, essid)
         if channel:
             cmd = ''.join([cmd, ' channel ', str(channel)])
         if bssid:
@@ -1121,7 +1121,8 @@ class WirelessInterface(Interface):
                             auth_mode = 'WPA2PSK'
                             key_name = 'WPAPSK'
                         else:
-                            print 'Unknown AuthMode, can\'t complete connection process!'
+                            print 'Unknown AuthMode, can\'t complete ' + \
+                            'connection process!'
                             return
 
                         cmd_list = []

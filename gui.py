@@ -258,6 +258,7 @@ class GreyLabel(gtk.Label):
     """ Creates a grey gtk.Label. """
     def __init__(self):
         gtk.Label.__init__(self)
+
     def set_label(self, text):
         self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
         self.set_alignment(0, 0)
@@ -773,7 +774,7 @@ class WiredNetworkEntry(NetworkEntry):
         # Show everything, but hide the profile help label.
         self.show_all()
         self.profile_help.hide()
-        self.advanced_dialog = AdvancedSettingsDialog()
+        self.advanced_dialog = WiredSettingsDialog()
         
         # Display the default profile if it exists.
         if self.profile_list is not None:
@@ -952,8 +953,9 @@ class WirelessNetworkEntry(NetworkEntry):
         # The the expander label.
         self.expander.set_use_markup(True)
         self.expander.set_label(self.essid + "   " + 
-                                self.lbl_encryption.get_label() + "   "
-                                + self.lbl_strength.get_label())
+                                self.lbl_strength.get_label() + "   " +
+                                self.lbl_encryption.get_label() + "   " +
+                                self.lbl_mac.get_label())
 
         # Pack the network status HBox.
         self.hbox_status.pack_start(self.lbl_strength, True, True)

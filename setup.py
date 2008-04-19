@@ -81,3 +81,7 @@ connect at startup to any preferred network within range.
       py_modules=['networking', 'misc', 'wnettools', 'wpath'],
       data_files=data
       )
+      
+print "Running post-install configuration..."
+os.system("other/postinst")
+print 'Done.'

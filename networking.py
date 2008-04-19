@@ -336,7 +336,7 @@ class Wireless(Controller):
         Controller.__init__(self)
         self._wpa_driver = None
         self.wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                                  self.wpa_driver)
+                                                  self.debug, self.wpa_driver)
         
     def set_wpa_driver(self, value):
         self._wpa_driver = value
@@ -607,8 +607,8 @@ class WirelessConnectThread(ConnectThread):
 
         """
         wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.wpa_driver)
-        liface = wnettools.WiredInterface(self.wired_interface)
+                                             self.debug, self.wpa_driver)
+        liface = wnettools.WiredInterface(self.wired_interface, self.debug)
         self.is_connecting = True
         
         # Run pre-connection script.
@@ -664,7 +664,7 @@ class WirelessConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + wiface.GetIP(fast=True)
+            print "IP Address is: " + str(wiface.GetIP(fast=True))
         self.is_connecting = False
     
     def generate_psk_and_authenticate(self, wiface):
@@ -831,8 +831,8 @@ class WiredConnectThread(ConnectThread):
         5. Run post-connection script.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface)
-        liface = wnettools.WiredInterface(self.wired_interface)
+        wiface = wnettools.WirelessInterface(self.wireless_interface, self.debug)
+        liface = wnettools.WiredInterface(self.wired_interface, self.debug)
 
         self.is_connecting = True
 
@@ -865,5 +865,5 @@ class WiredConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + liface.GetIP(fast=True)
+            print "IP Address is: " + str(liface.GetIP(fast=True))
         self.is_connecting = False

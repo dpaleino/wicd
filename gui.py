@@ -952,7 +952,8 @@ class WirelessNetworkEntry(NetworkEntry):
 
         # The the expander label.
         self.expander.set_use_markup(True)
-        self.expander.set_label(self.essid + "   " + 
+
+        self.expander.set_label(self._escape(self.essid) + "   " + 
                                 self.lbl_strength.get_label() + "   " +
                                 self.lbl_encryption.get_label() + "   " +
                                 self.lbl_mac.get_label())
@@ -983,6 +984,10 @@ class WirelessNetworkEntry(NetworkEntry):
         self.advanced_dialog = WirelessSettingsDialog(networkID)
         self.update_connect_button(wireless.GetApBssid())
         self.wifides = self.connect("destroy", self.destroy_called)
+        
+    def _escape(self, val):
+        return val.replace("&", "&amp;").replace("<", "&lt;").\
+               replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
         
     def destroy_called(self, *args):
         """ Clean up everything. 

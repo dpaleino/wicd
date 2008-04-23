@@ -674,6 +674,10 @@ class WirelessConnectThread(ConnectThread):
         process if encryption is on.
         
         """
+        def _sanitize(key):
+            """ Escapes characters wpa_supplicant doesn't handle properly. """
+            return key.replace("$", "\$").replace("`", "\`").replace("\"", 
+                                                                     "\\\"")
         # Check to see if we need to generate a PSK (only for non-ralink
         # cards).
         if self.network.get('key'):
@@ -685,7 +689,7 @@ class WirelessConnectThread(ConnectThread):
             self.network['psk'] = misc.RunRegex(key_pattern,
                                 misc.Run(''.join(['wpa_passphrase "',
                                          self.network['essid'], '" "', 
-                                         re.escape(self.network['key']), '"'])))
+                                         _sanitize(self.network['key']), '"'])))
         # Generate the wpa_supplicant file...
         if self.network.get('enctype'):
             self.SetStatus('generating_wpa_config')

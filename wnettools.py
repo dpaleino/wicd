@@ -310,12 +310,22 @@ class Interface(object):
         else:
             self.ethtool_cmd = None
             self.ETHTOOL_FOUND = False
+            
+    def CheckWirelessTools(self):
+        """ Check for the existence of wpa_cli """
+        wpa_cli_path = self._find_client_path("wpa_cli")
+        if wpa_cli_path:
+            self.WPA_CLI_FOUND = True
+        else:
+            self.WPA_CLI_FOUND = False
+            print "wpa_cli not found.  Authentication will not be validated."
 
     def Check(self):
         """ Check that all required tools are available. """
         # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
         self.CheckDHCP()
         self.CheckWiredTools()
+        self.CheckWirelessTools()
         
         ip_path = self._find_client_path("ip")
         if ip_path:
@@ -645,7 +655,7 @@ class WiredInterface(Interface):
         """
         if not self.IsUp():
             self.Up()
-            time.sleep(2.5)
+            time.sleep(5)
         buff = array.array('i', [0x0000000a, 0x00000000])
         addr, length = buff.buffer_info()
         arg = struct.pack('Pi', addr, length)
@@ -1041,7 +1051,7 @@ class WirelessInterface(Interface):
 
         """
         # Right now there's no way to do this for these drivers
-        if self.wpa_driver == RALINK_DRIVER:
+        if self.wpa_driver == RALINK_DRIVER or not self.WPA_CLI_FOUND:
             return True
 
         MAX_TIME = 15

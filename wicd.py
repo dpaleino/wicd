@@ -245,20 +245,19 @@ class TrayIcon:
             """ Determines what network activity state we are in. """
             transmitting = False
             receiving = False
-            rcvbytes = None
-            sndbytes = None
-    
-            dev_file = open('/proc/net/dev','r')
-            device_data = dev_file.read().split('\n')
-            dev_file.close()
-
-            # Get the data for the wireless interface.
-            for line in device_data:
-                if daemon.GetWirelessInterface() in line:
-                    line = line.replace(':', ' ').split()
-                    rcvbytes = int(line[1])
-                    sndbytes = int(line[9])
+                    
+            dev_dir = '/sys/class/net/'
+            wiface = daemon.GetWirelessInterface()
+            for fldr in os.listdir(dev_dir):
+                if fldr == wiface:
+                    dev_dir = dev_dir + fldr + "/statistics/"
                     break
+            try:
+                rcvbytes = int(open(dev_dir + "rx_bytes", "r").read().strip())
+                sndbytes = int(open(dev_dir + "tx_bytes", "r").read().strip())
+            except IOError:
+                sndbytes = None
+                rcvbytes = None
                 
             if not rcvbytes or not sndbytes:
                 return 'idle-'

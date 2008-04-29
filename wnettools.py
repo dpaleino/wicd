@@ -133,26 +133,14 @@ def GetWirelessInterfaces():
     return iface
 
 def _fast_get_wifi_interfaces():
-    """ Tries to get a wireless interface by parsing /proc/net/wireless. """
-    device = re.compile('[a-z]{3,4}[0-9]') 
+    """ Tries to get a wireless interface using /sys/class/net. """
+    dev_dir = '/sys/class/net/'    
     ifnames = []
     
-    try:
-        f = open('/proc/net/wireless', 'r')
-    except IOError:
-        return None
-    data = f.readlines()
-    f.close()
-    for line in data:
-        try:
-            ifnames.append(device.search(line).group())
-        except AttributeError:
-            pass 
+    ifnames = [iface for iface in os.listdir(dev_dir) if 'wireless' \
+               in os.listdir(dev_dir + iface)]
     
-    if ifnames:
-        return ifnames[0]
-    else:
-        return None
+    return bool(ifnames) and ifnames[0] or None
     
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.

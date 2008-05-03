@@ -404,7 +404,7 @@ class Interface(object):
         pipe -- stdout pipe to the dhcpcd process.
         
         Returns:
-        'success' if succesful', an error code string otherwise.
+        'success' if succesful, an error code string otherwise.
         
         """
         pump_complete = False
@@ -452,7 +452,7 @@ class Interface(object):
         success -- boolean specifying if DHCP was succesful.
         
         Returns:
-        'success' if success = True, 'dhcp_failed' otherwise.
+        'success' if success == True, 'dhcp_failed' otherwise.
         
         """
         if success:

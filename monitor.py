@@ -155,42 +155,46 @@ class ConnectionStatus():
         wired_ip = None
         wifi_ip = None
 
-        if daemon.GetSuspend():
-            print "Suspended."
-            state = misc.SUSPENDED
+        try:
+            if daemon.GetSuspend():
+                print "Suspended."
+                state = misc.SUSPENDED
+                self.update_state(state)
+                return True
+    
+            # Determine what our current state is.
+            # Check for wired.
+            wired_ip = wired.GetWiredIP(self.fast)
+            wired_found = self.check_for_wired_connection(wired_ip)
+            if wired_found:
+                self.update_state(misc.WIRED, wired_ip=wired_ip)
+                return True
+    
+            # Check for wireless
+            wifi_ip = wireless.GetWirelessIP(self.fast)
+            #self.iwconfig = wireless.GetIwconfig()
+            self.signal_changed = False
+            wireless_found = self.check_for_wireless_connection(wifi_ip)
+            if wireless_found:
+                self.update_state(misc.WIRELESS, wifi_ip=wifi_ip)
+                return True
+                
+            # Are we currently connecting?
+            if daemon.CheckIfConnecting():
+                state = misc.CONNECTING
+            else:  # No connection at all.
+                state = misc.NOT_CONNECTED
+                if self.last_state == misc.WIRELESS:
+                    from_wireless = True
+                else:
+                    from_wireless = False
+                self.auto_reconnect(from_wireless)
             self.update_state(state)
+        except dbus.exceptions.DBusException, e:
+            print 'DBus Error: ' + str(e)
+        finally:
             return True
-
-        # Determine what our current state is.
-        # Check for wired.
-        wired_ip = wired.GetWiredIP(self.fast)
-        wired_found = self.check_for_wired_connection(wired_ip)
-        if wired_found:
-            self.update_state(misc.WIRED, wired_ip=wired_ip)
-            return True
-
-        # Check for wireless
-        wifi_ip = wireless.GetWirelessIP(self.fast)
-        #self.iwconfig = wireless.GetIwconfig()
-        self.signal_changed = False
-        wireless_found = self.check_for_wireless_connection(wifi_ip)
-        if wireless_found:
-            self.update_state(misc.WIRELESS, wifi_ip=wifi_ip)
-            return True
-            
-        # Are we currently connecting?
-        if daemon.CheckIfConnecting():
-            state = misc.CONNECTING
-        else:  # No connection at all.
-            state = misc.NOT_CONNECTED
-            if self.last_state == misc.WIRELESS:
-                from_wireless = True
-            else:
-                from_wireless = False
-            self.auto_reconnect(from_wireless)
-        self.update_state(state)
-        return True
-
+    
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
         # Set our connection state/info.
@@ -262,6 +266,17 @@ class ConnectionStatus():
                                    error_handler=err_handle)
         self.reconnecting = False
         
+    def rescan_networks(self):
+        """ Calls a wireless scan. """
+        try:
+            if daemon.GetSuspend():
+                return True
+            wireless.Scan()
+        except dbus.exceptions.DBusException:
+            pass
+        finally:
+            return True
+        
 def reply_handle():
     """ Just a dummy function needed for asynchronous dbus calls. """
     pass
@@ -272,9 +287,16 @@ def err_handle(error):
     
         
 def main():
-    """ Start the connection monitor and set the updater to run every 2 sec. """
+    """ Starts the connection monitor. 
+    
+    Starts a ConnectionStatus instance, sets the status to update
+    every two seconds, and sets a wireless scan to be called every
+    two minutes.
+    
+    """
     monitor = ConnectionStatus()
     gobject.timeout_add(2000, monitor.update_connection_status)
+    gobject.timeout_add(120000, monitor.rescan_networks)
     
     mainloop = gobject.MainLoop()
     mainloop.run()

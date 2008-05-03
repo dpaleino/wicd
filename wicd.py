@@ -323,20 +323,20 @@ class TrayIcon:
         def __init__(self, use_tray):
             menu = """
                     <ui>
-                    <menubar name="Menubar">
-                    <menu action="Menu">
-                    <menuitem action="Connect"/>
-                    <separator/>
-                    <menuitem action="About"/>
-                    <menuitem action="Quit"/>
-                    </menu>
-                    </menubar>
+                        <menubar name="Menubar">
+                            <menu action="Menu">
+                                <menu action="Connect">
+                                </menu>
+                                <separator/>
+                                <menuitem action="About"/>
+                                <menuitem action="Quit"/>
+                            </menu>
+                        </menubar>
                     </ui>
             """
             actions = [
                     ('Menu',  None, 'Menu'),
-                    ('Connect', gtk.STOCK_CONNECT, '_Connect...', None,
-                     'Connect to network', self.on_preferences),
+                    ('Connect', gtk.STOCK_CONNECT, "Connect"),
                     ('About', gtk.STOCK_ABOUT, '_About...', None,
                      'About wicd-tray-icon', self.on_about),
                     ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
@@ -361,19 +361,102 @@ class TrayIcon:
             """ Closes the tray icon. """
             sys.exit(0)
 
-        def on_preferences(self, data=None):
-            """ Opens the wicd GUI. """
-            self.toggle_wicd_gui()
-
-        def on_about(self, data = None):
+        def on_about(self, data=None):
             """ Opens the About Dialog. """
             dialog = gtk.AboutDialog()
-            dialog.set_name('wicd tray icon')
-            dialog.set_version('1.0')
+            dialog.set_name('Wicd Tray Icon')
+            dialog.set_version('2.0')
             dialog.set_comments('An icon that shows your network connectivity')
-            dialog.set_website('http://wicd.sourceforge.net')
+            dialog.set_website('http://wicd.net')
             dialog.run()
             dialog.destroy()
+        
+        def _add_item_to_menu(self, net_menu, lbl, type_, n_id, is_connecting):
+            """ Add an item to the network list submenu. """
+            def network_selected(widget, net_type, net_id):
+                """ Callback method for a menu item selection. """
+                if net_type == "wired":
+                    wired.ConnectWired()
+                else:
+                    wireless.ConnectWireless(net_id)
+                    
+            item = gtk.ImageMenuItem(lbl)
+            image = gtk.Image()
+            
+            if type_ == "wired":
+                image.set_from_icon_name("network-wired", 2)
+            else:
+                pb = gtk.gdk.pixbuf_new_from_file_at_size(self._get_img(n_id),
+                                                          20, 20)
+                image.set_from_pixbuf(pb)
+            item.set_image(image)
+            item.connect("activate", network_selected, type_, n_id)
+            net_menu.append(item)
+            item.show()
+            if is_connecting:
+                item.set_sensitive(False)  
+                
+        def _get_img(self, net_id):
+            """ Determines which image to use for the wireless entries. """
+            def fix_strength(val, default):
+                """ Assigns given strength to a default value if needed. """
+                return val is not None and int(val) or default
+            
+            def get_prop(prop):
+                return wireless.GetWirelessProperty(net_id, prop)
+            
+            strength = fix_strength(get_prop("quality"), -1)
+            dbm_strength = fix_strength(get_prop('strength'), -100)
+
+            if daemon.GetWPADriver() == 'ralink legacy' or \
+               daemon.GetSignalDisplayType() == 1:
+                if dbm_strength >= -60:
+                    signal_img = 'signal-100.png'
+                elif dbm_strength >= -70:
+                    signal_img = 'signal-75.png'
+                elif dbm_strength >= -80:
+                    signal_img = 'signal-50.png'
+                else:
+                    signal_img = 'signal-25.png'
+            else:
+                if strength > 75:
+                    signal_img = 'signal-100.png'
+                elif strength > 50:
+                    signal_img = 'signal-75.png'
+                elif strength > 25:
+                    signal_img = 'signal-50.png'
+                else:
+                    signal_img = 'signal-25.png'
+            return wpath.images + signal_img
+            
+        def populate_network_menu(self, data=None):
+            """ Populates the network list submenu. """
+            def get_prop(net_id, prop):
+                return wireless.GetWirelessProperty(net_id, prop)
+
+            net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
+            net_menuitem.get_submenu().destroy()
+            net_menu = gtk.Menu()
+            is_connecting = daemon.CheckIfConnecting()
+            num_networks = wireless.GetNumberOfNetworks()
+            #TODO Eventually do something to indicate the active network.
+            #[status, info] = daemon.GetConnectionStatus()
+
+            if wired.GetAlwaysShowWiredInterface() or \
+               wired.CheckPluggedIn(True):
+                self._add_item_to_menu(net_menu, "Wired Network", "wired", 0, 
+                                      is_connecting)
+                sep = gtk.SeparatorMenuItem()
+                net_menu.append(sep)
+                sep.show()
+            
+            if num_networks > 0:
+                for x in range(0, num_networks):
+                    self._add_item_to_menu(net_menu, get_prop(x, "essid"), 
+                                          "wifi", x, is_connecting)
+                    
+            net_menuitem.set_submenu(net_menu)
+            net_menuitem.show()
 
         def toggle_wicd_gui(self):
             """ Toggles the wicd GUI. """
@@ -419,6 +502,7 @@ class TrayIcon:
             if event.button == 1:
                 self.toggle_wicd_gui()
             elif event.button == 3:
+                self.populate_network_menu()
                 self.menu.popup(None, None, None, event.button, event.time)
 
         def set_from_file(self, val=None):
@@ -461,6 +545,7 @@ class TrayIcon:
 
         def on_popup_menu(self, status, button, timestamp):
             """ Opens the right click menu for the tray icon. """
+            self.populate_network_menu()
             self.menu.popup(None, None, None, button, timestamp)
 
         def set_from_file(self, path = None):

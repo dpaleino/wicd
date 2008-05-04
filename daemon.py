@@ -652,6 +652,12 @@ class ConnectionWizard(dbus.service.Object):
         
         """
         pass
+    
+    @dbus.service.method('org.wicd.daemon')
+    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
+    def SendScanSignal(self):
+        """ Emits a signal announcing a scan has occurred. """
+        pass
 
     ########## WIRELESS FUNCTIONS
     #################################

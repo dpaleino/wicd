@@ -69,7 +69,6 @@ except:
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-vpn_session = dbus.Interface(proxy_obj, 'org.wicd.daemon.vpn')
 config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 
 _ = misc.get_gettext()
@@ -821,7 +820,7 @@ class WiredNetworkEntry(NetworkEntry):
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         profile = self.combo_profile_names.get_active_text()
-        os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "./configscript.py",
+        os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "-m", "You must enter your password to configure scripts.", "./configscript.py",
                     profile, "wired", os.environ)
 
     def check_enable(self):
@@ -1020,7 +1019,7 @@ class WirelessNetworkEntry(NetworkEntry):
         if dbm_strength is not None:
             dbm_strength = int(dbm_strength)
         else:
-            dbm_strength = -1
+            dbm_strength = -100
         display_type = daemon.GetSignalDisplayType()
         if daemon.GetWPADriver() == 'ralink legacy' or display_type == 1:
             # Use the -xx dBm signal strength to display a signal icon
@@ -1091,7 +1090,7 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        result = os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "./configscript.py",
+        result = os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "-m", "You must enter your password to configure scripts.", "./configscript.py",
                              str(self.networkID), "wireless", os.environ)
 
     def update_autoconnect(self, widget=None):
@@ -1194,7 +1193,6 @@ class appGui:
         self.window.set_icon_from_file(wpath.etc + "wicd.png")
         self.statusID = None
         self.first_dialog_load = True
-        self.vpn_connection_pipe = None
         self.is_visible = True
         self.pulse_active = False
         self.standalone = standalone
@@ -1673,6 +1671,16 @@ class appGui:
     def set_status(self, msg):
         """ Sets the status bar message for the GUI. """
         self.statusID = self.status_bar.push(1, msg)
+        
+    def dbus_refresh_networks(self):
+        """ Calls for a non-fresh update of the gui window.
+        
+        This method is called after the daemon runs an automatic
+        rescan.
+        
+        """
+        print 'got rescan signal'
+        self.refresh_networks(fresh=False)
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
         """ Refreshes the network list.
@@ -2011,4 +2019,6 @@ class appGui:
         
 if __name__ == '__main__':
     app = appGui(standalone=True)
+    bus.add_signal_receiver(app.dbus_refresh_networks, 'SendScanSignal',
+                            'org.wicd.daemon')
     gtk.main()

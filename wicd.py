@@ -389,12 +389,15 @@ class TrayIcon:
                 pb = gtk.gdk.pixbuf_new_from_file_at_size(self._get_img(n_id),
                                                           20, 20)
                 image.set_from_pixbuf(pb)
+                del pb
             item.set_image(image)
+            del image
             item.connect("activate", network_selected, type_, n_id)
             net_menu.append(item)
             item.show()
             if is_connecting:
                 item.set_sensitive(False)  
+            del item
                 
         def _get_img(self, net_id):
             """ Determines which image to use for the wireless entries. """
@@ -462,6 +465,8 @@ class TrayIcon:
             """ Toggles the wicd GUI. """
             if not self.gui_win:
                 self.gui_win = gui.appGui()
+                bus.add_signal_receiver(self.gui_win.dbus_refresh_networks,
+                                        'SendScanSignal', 'org.wicd.daemon')
             elif not self.gui_win.is_visible:
                 self.gui_win.show_win()
             else:

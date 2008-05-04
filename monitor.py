@@ -154,7 +154,7 @@ class ConnectionStatus():
         """
         wired_ip = None
         wifi_ip = None
-
+    
         try:
             if daemon.GetSuspend():
                 print "Suspended."
@@ -191,10 +191,10 @@ class ConnectionStatus():
                 self.auto_reconnect(from_wireless)
             self.update_state(state)
         except dbus.exceptions.DBusException, e:
-            print 'DBus Error: ' + str(e)
+            print 'Ignoring DBus Error: ' + str(e)
         finally:
             return True
-    
+
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
         # Set our connection state/info.
@@ -272,8 +272,9 @@ class ConnectionStatus():
             if daemon.GetSuspend():
                 return True
             wireless.Scan()
+            daemon.SendScanSignal()
         except dbus.exceptions.DBusException:
-            pass
+            print 'dbus exception while attempting rescan'
         finally:
             return True
         

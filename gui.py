@@ -299,6 +299,15 @@ def checkboxTextboxToggle(checkbox, textboxes):
     # Really bad practice, but checkbox == self
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())
+     
+
+def error(parent, message): 
+    """ Shows an error dialog """
+    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
+                               gtk.BUTTONS_OK)
+    dialog.set_markup(message)
+    dialog.run()
+    dialog.destroy()
 
 ########################################
 ##### NETWORK LIST CLASSES
@@ -364,7 +373,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             if stringToNone(netmask.get_text()) is None:  # Make sure the netmask is blank
                 netmask.set_text('255.255.255.0')  # Fill in the most common one
         elif ipAddress != "":
-            misc.error(None, "Invalid IP Address Entered.")
+            error(None, "Invalid IP Address Entered.")
 
     def reset_static_checkboxes(self):
         # Enable the right stuff
@@ -1517,7 +1526,7 @@ class appGui:
             enable_item.hide()
             disable_item.show()
         else:
-            misc.error(self.window, "Failed to enable wireless interface.")
+            error(self.window, "Failed to enable wireless interface.")
 
     def on_disable_wireless(self, widget):
         """ Called when the Disable Wireless Interface button is clicked. """
@@ -1528,7 +1537,7 @@ class appGui:
             enable_item.show()
             disable_item.hide()
         else:
-            misc.error(self.window, "Failed to disable wireless interface.")
+            error(self.window, "Failed to disable wireless interface.")
 
     def on_enable_wired(self, widget):
         """ Called when the Enable Wired Interface button is clicked. """
@@ -1539,7 +1548,7 @@ class appGui:
             enable_item.hide()
             disable_item.show()
         else:
-            misc.error(self.window, "Failed to enable wired interface.")
+            error(self.window, "Failed to enable wired interface.")
 
     def on_disable_wired(self, widget):
         """ Called when the Disable Wired Interface button is clicked. """
@@ -1550,7 +1559,7 @@ class appGui:
             enable_item.show()
             disable_item.hide()
         else:
-            misc.error(self.window, "Failed to disable wired interface.")
+            error(self.window, "Failed to disable wired interface.")
 
     def cancel_connect(self, widget):
         """ Alerts the daemon to cancel the connection process. """
@@ -1773,8 +1782,8 @@ class appGui:
                     
         for lblent in entlist:
             if not misc.IsValidIP(lblent.get_text()):
-                misc.error(self.window, language['invalid_address'].
-                                        replace('$A', lblent.label.get_label()))
+                error(self.window, language['invalid_address'].
+                                    replace('$A', lblent.label.get_label()))
                 return False
 
         # Now save the settings.
@@ -1833,13 +1842,13 @@ class appGui:
                                                get_active()][1])
             for x in encryption_info:
                 if encryption_info[x].get_text() == "":
-                    misc.error(self.window, language['encrypt_info_missing'])
+                    error(self.window, language['encrypt_info_missing'])
                     return False
                 entry.set_net_prop(x, noneToString(encryption_info[x].
                                                    get_text()))
         elif not entry.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
-            misc.error(self.window, language['enable_encryption'])
+            error(self.window, language['enable_encryption'])
             return False
         else:
             print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
@@ -1929,12 +1938,12 @@ class appGui:
             encryption_info = entry.encryption_info
             for x in encryption_info:
                 if encryption_info[x].get_text() == "":
-                    misc.error(self.window, language['encrypt_info_missing'])
+                    error(self.window, language['encrypt_info_missing'])
                     return False
         # Make sure the checkbox is checked when it should be
         elif not entry.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
-            misc.error(self.window, language['enable_encryption'])
+            error(self.window, language['enable_encryption'])
             return False
         return True
 

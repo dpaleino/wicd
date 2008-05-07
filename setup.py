@@ -19,9 +19,7 @@ from distutils.core import setup
 import os
 
 data=[
-('/etc/acpi/resume.d', ['other/80-wicd-connect.sh']),
 ('/etc/dbus-1/system.d', ['other/wicd.conf']),
-('/etc/acpi/suspend.d', ['other/50-wicd-suspend.sh']),
 ('/usr/share/applications', ['other/hammer-00186ddbac.desktop']),
 ('', ['launchdaemon.sh']),
 ('/usr/share/pixmaps', ['other/wicd.png']),
@@ -59,6 +57,11 @@ elif os.access('/etc/arch-release', os.F_OK):
     data.append(('/etc/rc.d', ['other/initscripts/arch/wicd']))
 elif os.access('/etc/slackware-version', os.F_OK):
     data.append(('/etc/rc.d', ['other/initscripts/slackware/wicd']))
+    
+# pm-utils and acpi stuff
+if os.access('/etc/acpi/', os.F_OK):
+    data.append(('/etc/acpi/resume.d', ['other/80-wicd-connect.sh']))
+    data.append(('/etc/acpi/suspend.d', ['other/50-wicd-suspend.sh']))
 
 
 

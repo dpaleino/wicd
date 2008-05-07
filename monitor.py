@@ -34,14 +34,7 @@ from dbus.mainloop.glib import DBusGMainLoop
 import wpath
 import misc
 
-if sys.platform == 'linux2':
-    # Set process name.  Only works on Linux >= 2.1.57.
-    try:
-        import dl
-        libc = dl.open('/lib/libc.so.6')
-        libc.call('prctl', 15, 'wicd-monitor\0', 0, 0, 0) # 15 is PR_SET_NAME
-    except:
-        print 'Failed to set the process name'
+misc.RenameProcess("wicd-monitor")
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -248,7 +241,6 @@ class ConnectionStatus():
         self.reconnecting = True
         daemon.SetCurrentInterface('')
         
-        print 'autoreconnect'
         if daemon.ShouldAutoReconnect():
             print 'Starting automatic reconnect process'
             self.last_reconnect_time = time.time()

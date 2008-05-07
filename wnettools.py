@@ -1027,7 +1027,7 @@ class WirelessInterface(Interface):
             process was successful.
 
             NOTE: It's possible this could return False,
-            even though in actuality wpa_supplicant just isn't
+            though in reality wpa_supplicant just isn't
             finished yet.
             
             Keyword arguments:

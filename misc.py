@@ -23,7 +23,6 @@ import locale
 import gettext
 import time
 import sys
-import gtk
 from subprocess import *
 
 if __name__ == '__main__':
@@ -268,12 +267,20 @@ def to_unicode(x):
     else:  # Just guess UTF-8
         ret = x.decode('utf-8', 'replace').encode('utf-8')
     return ret
-
-def error(parent, message): 
-    """ Shows an error dialog """
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
+    
+def RenameProcess(new_name):
+    if sys.platform != 'linux2':
+        print 'Unsupported platform'
+        return False
+    try:
+        import ctypes
+        is_64 = os.path.exists('/lib64/libc.so.6')
+        if is_64:
+            libc = ctypes.CDLL('/lib64/libc.so.6')
+        else:
+            libc = ctypes.CDLL('/lib/libc.so.6')
+        libc.prctl(15, new_name, 0, 0, 0)
+        return True
+    except:
+        return False
 

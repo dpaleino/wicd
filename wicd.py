@@ -64,15 +64,7 @@ else:
 if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
     import dbus.glib
 
-if sys.platform == 'linux2':
-    # Set process name.  Only works on Linux >= 2.1.57.
-    try:
-        import dl
-        libc = dl.open('/lib/libc.so.6')
-        libc.call('prctl', 15, 'wicd\0', 0, 0, 0) # 15 is PR_SET_NAME
-    except Exception:
-        print 'Failed to rename wicd process'
-        pass
+misc.RenameProcess("wicd")
 
 if __name__ == '__main__':
     wpath.chdir(__file__)

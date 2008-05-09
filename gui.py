@@ -521,10 +521,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
         # Build the encryption menu
         activeID = -1  # Set the menu to this item when we are done
-        for x in self.encrypt_types:
-            self.combo_encryption.append_text(self.encrypt_types[x][0])
-            if self.encrypt_types[x][1] == wireless.GetWirelessProperty(networkID,
-                                                                     "enctype"):
+        for x, enc_type in enumerate(self.encrypt_types):
+            self.combo_encryption.append_text(enc_type[0])
+            if enc_type[1] == wireless.GetWirelessProperty(networkID,
+                                                           "enctype"):
                 activeID = x
         self.combo_encryption.set_active(activeID)
         if activeID != -1:
@@ -1199,7 +1199,9 @@ class appGui:
 
         self.status_area.hide_all()
 
-        self.window.set_icon_from_file(wpath.etc + "wicd.png")
+        # self.window.set_icon_from_file(wpath.etc + "wicd.png")
+        if os.path.exists(wpath.etc + "wicd.png"):
+            self.window.set_icon_from_file(wpath.etc + "wicd.png")
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True

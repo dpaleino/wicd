@@ -189,24 +189,43 @@ def LoadEncryptionMethods():
     loaded, the template must be listed in the "active" file.
 
     """
-    encryptionTypes = {}
-    types = open("encryption/templates/active","r")
-    enctypes = types.readlines()
+    def parse_ent(line, key):
+        return line.replace(key, "").replace("=", "").strip()
+    
+    encryptionTypes = []
+    try:
+        enctypes = open("encryption/templates/active","r").readlines()
+    except IOError, e:
+        print "Fatal Error: template index file is missing."
+        raise IOError(e)
+    
+    # Parse each encryption method
     for x in enctypes:
-        # Skip some lines, we don't care who the author is/was, etc
-        # we don't care about version either.
-        x = x.strip("\n")
-        current = open("encryption/templates/" + x,"r")
-        line = current.readlines()
-        # Get the length so we know where in the array to add data
-        typeID = len(encryptionTypes)
-        encryptionTypes[typeID] = {}
-        encryptionTypes[typeID][0] = line[0][7:].strip("\n")
-        encryptionTypes[typeID][1] = x
-        encryptionTypes[typeID][2] = {}
-        requiredFields = line[3][8:]
-        requiredFields = requiredFields.strip("\n")
+        x = x.strip()
+        try:
+            f = open("encryption/templates/" + x, "r")
+        except IOError:
+            print 'Failed to load encryption type ' + str(x)
+            continue
+        line = f.readlines()
+        f.close()
+        
+        cur_type = {}
+        cur_type[0] = parse_ent(line[0], "name")
+        cur_type[1] = x
+        cur_type[2] = {}
+        
+        # Find the line containing our required fields.
+        i = 1
+        try:
+            while not line[i].startswith("require"):
+                i += 1
+        except IndexError:
+            print "Bad encryption template: Couldn't find 'require' line"
+        requiredFields = parse_ent(line[i], "require")
         requiredFields = requiredFields.split(" ")
+
+        # Get the required fields.
         index = -1
         for current in requiredFields:
             # The pretty names will start with an * so we can
@@ -214,13 +233,14 @@ def LoadEncryptionMethods():
             if current[0] == "*":
                 # Make underscores spaces
                 # and remove the *
-                encryptionTypes[typeID][2][index][0] = current.replace("_",
-                                                       " ").lstrip("*")
+                cur_type[2][index][0] = current.replace("_", " ").lstrip("*")
             else:
                 # Add to the list of things that are required.
-                index = len(encryptionTypes[typeID][2])
-                encryptionTypes[typeID][2][index] = {}
-                encryptionTypes[typeID][2][index][1] = current
+                index = len(cur_type[2])
+                cur_type[2][index] = {}
+                cur_type[2][index][1] = current
+        # Add the current type to the dict of encryption types.
+        encryptionTypes.append(cur_type)
     return encryptionTypes
 
 def noneToString(text):

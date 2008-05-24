@@ -322,10 +322,10 @@ class AdvancedSettingsDialog(gtk.Dialog):
         
         """
         gtk.Dialog.__init__(self, title=language['advanced_settings'],
-                            flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_OK,
-                                                        gtk.RESPONSE_ACCEPT,
-                                                        gtk.STOCK_CANCEL,
-                                                        gtk.RESPONSE_REJECT))
+                            flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CANCEL,
+                                                           gtk.RESPONSE_REJECT,
+                                                           gtk.STOCK_OK,
+                                                           gtk.RESPONSE_ACCEPT))
         # Set up the Advanced Settings Dialog.
         self.txt_ip = LabelEntry(language['ip'])
         self.txt_ip.entry.connect('focus-out-event', self.set_defaults)
@@ -459,10 +459,11 @@ class AdvancedSettingsDialog(gtk.Dialog):
 
         
 class WiredSettingsDialog(AdvancedSettingsDialog):
-    def __init__(self):
+    def __init__(self, name):
         """ Build the wired settings dialog. """
         AdvancedSettingsDialog.__init__(self)
         self.des = self.connect("destroy", self.destroy_called)
+        self.prof_name = name
         
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
@@ -782,7 +783,7 @@ class WiredNetworkEntry(NetworkEntry):
         # Show everything, but hide the profile help label.
         self.show_all()
         self.profile_help.hide()
-        self.advanced_dialog = WiredSettingsDialog()
+        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
         
         # Display the default profile if it exists.
         if self.profile_list is not None:
@@ -829,8 +830,18 @@ class WiredNetworkEntry(NetworkEntry):
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         profile = self.combo_profile_names.get_active_text()
-        os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "-m", "You must enter your password to configure scripts.", "./configscript.py",
-                    profile, "wired", os.environ)
+        try:
+            sudo_prog = misc.choose_sudo_prog()
+            if sudo_prog.endswith("gksu"):
+                msg = "-m"
+            else:
+                msg = "--caption"
+            os.spawnlpe(os.P_WAIT, sudo_prog, msg, 
+                        "You must enter your password to configure scripts.", 
+                        "./configscript.py", profile, "wired", os.environ)
+        except IOError:
+            gui.error("Could not find a graphical sudo program." + \
+                      "  Script editor could no be launched.")
 
     def check_enable(self):
         """ Disable objects if the profile list is empty. """
@@ -864,9 +875,9 @@ class WiredNetworkEntry(NetworkEntry):
             config.CreateWiredNetworkProfile(profile_name)
             self.combo_profile_names.prepend_text(profile_name)
             self.combo_profile_names.set_active(0)
+            self.advanced_dialog.prof_name = profile_name
             if self.is_full_gui:
                 self.button_delete.set_sensitive(True)
-                #self.vbox_ahdvanced.set_sensitive(True)
                 self.connect_button.set_sensitive(True)
                 self.advanced_button.set_sensitive(True)
                 self.script_button.set_sensitive(True)
@@ -874,11 +885,12 @@ class WiredNetworkEntry(NetworkEntry):
     def remove_profile(self, widget):
         """ Remove a profile from the profile list. """
         print "removing profile"
-        config.DeleteWiredNetworkProfile(self.combo_profile_names.
-                                                             get_active_text())
+        profile_name = self.combo_profile_names.get_active_text()
+        config.DeleteWiredNetworkProfile(profile_name)
         self.combo_profile_names.remove_text(self.combo_profile_names.
                                                                  get_active())
         self.combo_profile_names.set_active(0)
+        self.advanced_dialog.prof_name = self.combo_profile_names.get_active_text()
         if not config.GetWiredProfileList():
             self.profile_help.show()
             entry = self.combo_profile_names.child
@@ -916,6 +928,7 @@ class WiredNetworkEntry(NetworkEntry):
             self.advanced_dialog.txt_dns_1.set_text(self.format_entry("dns1"))
             self.advanced_dialog.txt_dns_2.set_text(self.format_entry("dns2"))
             self.advanced_dialog.txt_dns_3.set_text(self.format_entry("dns3"))
+            self.advanced_dialog.prof_name = profile_name
 
             is_default = wired.GetWiredProperty("default")
             self.chkbox_default_profile.set_active(stringToBoolean(is_default))
@@ -929,6 +942,7 @@ class WirelessNetworkEntry(NetworkEntry):
     def __init__(self, networkID):
         """ Build the wireless network entry. """
         NetworkEntry.__init__(self)
+
         self.networkID = networkID
         self.image.set_padding(0, 0)
         self.image.set_alignment(.5, 0)
@@ -1099,8 +1113,19 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        result = os.spawnlpe(os.P_WAIT, "gksudo", "gksudo", "-m", "You must enter your password to configure scripts.", "./configscript.py",
-                             str(self.networkID), "wireless", os.environ)
+        try:
+            sudo_prog = misc.choose_sudo_prog()
+            if sudo_prog.endswith("gksu"):
+                msg = "-m"
+            else:
+                msg = "--caption"
+            os.spawnlpe(os.P_WAIT, sudo_prog, msg, 
+                        "You must enter your password to configure scripts.", 
+                        "./configscript.py", str(self.networkID), "wireless", 
+                        os.environ)
+        except IOError:
+            gui.error("Could not find a graphical sudo program." + \
+                      "  Script editor could no be launched.")
 
     def update_autoconnect(self, widget=None):
         """ Called when the autoconnect checkbox is toggled. """
@@ -1212,6 +1237,7 @@ class appGui:
         self.refresh_networks(fresh=False)
         
         self.window.connect('delete_event', self.exit)
+        self.window.connect('key-release-event', self.key_event)
         
         if not wireless.IsWirelessUp():
             self.wTree.get_widget("iface_menu_disable_wireless").hide()
@@ -1294,7 +1320,13 @@ class appGui:
         dialog.set_website("http://wicd.sourceforge.net")
         dialog.run()
         dialog.destroy()
-
+        
+    def key_event (self, widget, event=None):
+        """ Handle key-release-events. """
+        if event.state & gtk.gdk.CONTROL_MASK and \
+           gtk.gdk.keyval_name(event.keyval) in ["w", "q"]:
+            self.exit()
+        
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         dialog = self.wTree.get_widget("pref_dialog")
@@ -1829,7 +1861,7 @@ class appGui:
             entry.set_net_prop("dns1", '')
             entry.set_net_prop("dns2", '')
             entry.set_net_prop("dns3", '')
-        config.SaveWiredNetworkProfile(entry.combo_profile_names.get_active_text())
+        config.SaveWiredNetworkProfile(entry.prof_name)
         return True
             
     def save_wireless_settings(self, networkid, entry, netent):
@@ -2025,6 +2057,7 @@ class appGui:
         self.is_visible = True
         daemon.SetGUIOpen(True)
         self.wait_for_events(0.1)
+        self.window.grab_focus()
         gobject.idle_add(self.refresh_networks)
         
         

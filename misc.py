@@ -91,7 +91,12 @@ def IsValidIP(ip):
 def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.bin + 'launchdaemon.sh'
-    gksudo_args = ['gksudo', '--message', 
+    sudo_prog = choose_sudo_prog
+    if sudo_prog.endswith("gksu"):
+        msg = '--message'
+    else:
+        msg = '-- caption'
+    gksudo_args = [sudo_prog, msg, 
                    'Wicd needs to access your computer\'s network cards.',
                    '--', daemonloc]
     os.spawnvpe(os.P_WAIT, 'gksudo', gksudo_args, os.environ)
@@ -151,9 +156,6 @@ def ParseEncryption(network):
     and creating a config file for it
 
     """
-    #list = open("encryption/templates/active","r")
-    #types = list.readlines()
-    #for i in types:
     enctemplate = open("encryption/templates/" + network["enctype"])
     template = enctemplate.readlines()
     # Set these to nothing so that we can hold them outside the loop
@@ -304,3 +306,13 @@ def RenameProcess(new_name):
     except:
         return False
 
+def choose_sudo_prog():
+    paths = ["/usr/bin/", "/usr/local/bin/"]
+    progs = ["gksu", "kdesu"]
+    choices = []
+    for path in paths:
+        for prog in progs:
+            if os.access(path, os.F_OK):
+                return path + prog
+    
+    raise IOError("Couldn't find graphic sudo program")

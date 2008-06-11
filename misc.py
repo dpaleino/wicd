@@ -21,9 +21,10 @@ import os
 import wpath
 import locale
 import gettext
-import time
 import sys
 from subprocess import *
+import subprocess
+import commands
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -44,6 +45,10 @@ MIITOOL = 2
 
 IP = 1
 ROUTE = 2
+
+class WicdError(Exception):
+    pass
+    
 
 def Run(cmd, include_stderr=False, return_pipe=False):
     """ Run a command.
@@ -76,6 +81,10 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         return f.stdout
     else:
         return f.communicate()[0]
+    
+def LaunchAndWait(cmd):
+    """ Launches the given program with the given arguments, then blocks. """
+    subprocess.call(cmd)
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid """
@@ -91,15 +100,15 @@ def IsValidIP(ip):
 def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.bin + 'launchdaemon.sh'
-    sudo_prog = choose_sudo_prog
+    sudo_prog = choose_sudo_prog()
     if sudo_prog.endswith("gksu"):
         msg = '--message'
     else:
         msg = '-- caption'
-    gksudo_args = [sudo_prog, msg, 
+    sudo_args = [sudo_prog, msg, 
                    'Wicd needs to access your computer\'s network cards.',
                    '--', daemonloc]
-    os.spawnvpe(os.P_WAIT, 'gksudo', gksudo_args, os.environ)
+    os.spawnvpe(os.P_WAIT, sudo_prog, sudo_args, os.environ)
 
 def RunRegex(regex, string):
     """ runs a regex search on a string """
@@ -108,10 +117,6 @@ def RunRegex(regex, string):
         return m.groups()[0]
     else:
         return None
-    
-def log(text):
-    log = LogWriter()
-    log.write(text + "\n")
 
 def WriteLine(my_file, text):
     """ write a line to a file """
@@ -174,8 +179,7 @@ def ParseEncryption(network):
 
     # Write the data to the files then chmod them so they can't be read 
     # by normal users.
-    file = open(wpath.networks + network["bssid"].replace(":", "").lower(),
-                    "w")
+    file = open(wpath.networks + network["bssid"].replace(":", "").lower(), "w")
     os.chmod(wpath.networks + network["bssid"].replace(":", "").lower(), 0600)
     os.chown(wpath.networks + network["bssid"].replace(":", "").lower(), 0, 0)
     # We could do this above, but we'd like to read protect
@@ -259,8 +263,7 @@ def noneToString(text):
     
 def get_gettext():
     """ Set up gettext for translations. """
-    # Translation stuff
-    # borrowed from an excellent post on how to do this on
+    # Borrowed from an excellent post on how to do this at
     # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
     local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + \
                  '/translations'
@@ -305,14 +308,185 @@ def RenameProcess(new_name):
         return True
     except:
         return False
+    
+def detect_desktop_environment():
+    desktop_environment = 'generic'
+    if os.environ.get('KDE_FULL_SESSION') == 'true':
+        desktop_environment = 'kde'
+    elif os.environ.get('GNOME_DESKTOP_SESSION_ID'):
+        desktop_environment = 'gnome'
+    else:
+        try:
+            info = commands.getoutput('xprop -root _DT_SAVE_MODE')
+            if ' = "xfce4"' in info:
+                desktop_environment = 'xfce'
+        except (OSError, RuntimeError):
+            pass
+    
+    return desktop_environment
 
 def choose_sudo_prog():
-    paths = ["/usr/bin/", "/usr/local/bin/"]
-    progs = ["gksu", "kdesu"]
-    choices = []
+    desktop_env = detect_desktop_environment()
+    gk_paths = ["/usr/bin/gksu", "/usr/local/bin/gksu", "/bin/gksu"]
+    kde_paths = ["/usr/bin/kdesu", "/usr/local/bin/kdesu", "/bin/kdesu"]
+    if desktop_env == "kde":
+        paths = kde_paths
+        paths.extend(gk_paths)
+    else:
+        paths = gk_paths
+        paths.extend(kde_paths)
     for path in paths:
-        for prog in progs:
-            if os.access(path, os.F_OK):
-                return path + prog
+        if os.access(path, os.F_OK):
+            return path
     
-    raise IOError("Couldn't find graphic sudo program")
+    raise WicdError("Couldn't find graphical sudo program.")
+
+def get_language_list_gui():
+    """ Returns a dict of translatable strings used by the GUI.
+    
+    translations are done at http://wicd.net/translator. Please 
+    translate if you can.
+    
+    """
+    _ = get_gettext()
+    language = {}
+    language['connect'] = _("Connect")
+    language['ip'] = _("IP")
+    language['netmask'] = _("Netmask")
+    language['gateway'] = _('Gateway')
+    language['dns'] = _('DNS')
+    language['use_static_ip'] = _('Use Static IPs')
+    language['use_static_dns'] = _('Use Static DNS')
+    language['use_encryption'] = _('Use Encryption')
+    language['advanced_settings'] = _('Advanced Settings')
+    language['wired_network'] = _('Wired Network')
+    language['wired_network_instructions'] = _('To connect to a wired network,'
+    ' you must create a network profile. To create a network profile, type a'
+    ' name that describes this network, and press Add.')
+    language['automatic_connect'] = _('Automatically connect to this network')
+    language['secured'] = _('Secured')
+    language['unsecured'] = _('Unsecured')
+    language['channel'] = _('Channel')
+    language['preferences'] = _('Preferences')
+    language['wpa_supplicant_driver'] = _('WPA Supplicant Driver')
+    language['wireless_interface'] = _('Wireless Interface')
+    language['wired_interface'] = _('Wired Interface')
+    language['hidden_network'] = _('Hidden Network')
+    language['hidden_network_essid'] = _('Hidden Network ESSID')
+    language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
+    language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
+    language['not_connected'] = _('Not connected')
+    language['no_wireless_networks_found'] = _('No wireless networks found.')
+    language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
+    language['key'] = _('Key')
+    language['username'] = _('Username')
+    language['password'] = _('Password')
+    language['anonymous_identity'] = _('Anonymous Identity')
+    language['identity'] = _('Identity')
+    language['authentication'] = _('Authentication')
+    language['path_to_pac_file'] = _('Path to PAC File')
+    language['select_a_network'] = _('Choose from the networks below:')
+    language['connecting'] = _('Connecting...')
+    language['wired_always_on'] = _('Always show wired interface')
+    language['auto_reconnect'] = _('Automatically reconnect on connection loss')
+    language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
+    language['essid'] = _('ESSID')
+    language['use_wep_encryption'] = _('Use Encryption (WEP only)')
+    language['before_script'] = _('Run script before connect')
+    language['after_script'] = _('Run script after connect')
+    language['disconnect_script'] = _('Run disconnect script')
+    language['script_settings'] = _('Scripts')
+    language['use_ics'] = _('Activate Internet Connection Sharing')
+    language['madwifi_for_adhoc'] = _('Check if using madwifi/atheros drivers')
+    language['default_wired'] = _('Use as default profile (overwrites any previous default)')
+    language['use_debug_mode'] = _('Enable debug mode')
+    language['use_global_dns'] = _('Use global DNS servers')
+    language['use_default_profile'] = _('Use default profile on wired autoconnect')
+    language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
+    language['use_last_used_profile'] = _('Use last used profile on wired autoconnect')
+    language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
+    language['wired_network_found'] = _('Wired connection detected')
+    language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
+    language['display_type_dialog'] = _('Use dBm to measure signal strength')
+    language['scripts'] = _('Scripts')
+    language['invalid_address'] = _('Invalid address in $A entry.')
+    language['global_settings'] = _('Use these settings for all networks sharing this essid')
+    language['encrypt_info_missing'] = _('Required encryption information is missing.')
+    language['enable_encryption'] = _('This network requires encryption to be enabled.')
+    language['wicd_auto_config'] = _('Automatic (recommended)')
+    language["gen_settings"] = _("General Settings")
+    language["ext_programs"] = _("External Programs")
+    language["dhcp_client"] = _("DHCP Client")
+    language["wired_detect"] = _("Wired Link Detection")
+    language["route_flush"] = _("Route Table Flushing")
+    
+    language['0'] = _('0')
+    language['1'] = _('1')
+    language['2'] = _('2')
+    language['3'] = _('3')
+    language['4'] = _('4')
+    language['5'] = _('5')
+    language['6'] = _('6')
+    language['7'] = _('7')
+    language['8'] = _('8')
+    language['9'] = _('9')
+    
+    language['interface_down'] = _('Putting interface down...')
+    language['resetting_ip_address'] = _('Resetting IP address...')
+    language['interface_up'] = _('Putting interface up...')
+    language['setting_encryption_info'] = _('Setting encryption info')
+    language['removing_old_connection'] = _('Removing old connection...')
+    language['generating_psk'] = _('Generating PSK...')
+    language['generating_wpa_config'] = _('Generating WPA configuration file...')
+    language['flushing_routing_table'] = _('Flushing the routing table...')
+    language['configuring_interface'] = _('Configuring wireless interface...')
+    language['validating_authentication'] = _('Validating authentication...')
+    language['setting_broadcast_address'] = _('Setting broadcast address...')
+    language['setting_static_dns'] = _('Setting static DNS servers...')
+    language['setting_static_ip'] = _('Setting static IP addresses...')
+    language['running_dhcp'] = _('Obtaining IP address...')
+    language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
+    language['aborted'] = _('Connection Cancelled')
+    language['bad_pass'] = _('Connection Failed: Bad password')
+    language['done'] = _('Done connecting...')
+    
+    return language
+
+def get_language_list_tray():
+    _ = get_gettext()
+    language = {}
+    language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
+    language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
+    language['not_connected'] = _('Not connected')
+    language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
+    language['connecting'] = _('Connecting')
+    language['wired'] = _('Wired Network')
+    
+    return language
+
+def noneToBlankString(text):
+    """ Converts NoneType or "None" to a blank string. """
+    if text in (None, "None"):
+        return ""
+    else:
+        return str(text)
+
+def stringToNone(text):
+    """ Performs opposite function of noneToString. """
+    if text in ("", None, "None"):
+        return None
+    else:
+        return str(text)
+
+def stringToBoolean(text):
+    """ Turns a string representation of a bool to a boolean if needed. """
+    if text in ("True", "1"):
+        return True
+    if text in ("False", "0"):
+        return False
+    return text
+
+def checkboxTextboxToggle(checkbox, textboxes):
+    # Really bad practice, but checkbox == self
+    for textbox in textboxes:
+        textbox.set_sensitive(checkbox.get_active())

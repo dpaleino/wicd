@@ -6,7 +6,6 @@ This process is spawned as a child of the daemon, and is responsible
 for monitoring connection status and initiating autoreconnection
 when appropriate.
 
-
 """
 #
 #   Copyright (C) 2007 Adam Blackburn
@@ -27,7 +26,6 @@ when appropriate.
 
 import dbus
 import gobject
-import sys
 import time
 from dbus.mainloop.glib import DBusGMainLoop
 
@@ -130,7 +128,8 @@ class ConnectionStatus():
         # Only update if the signal strength has changed because doing I/O
         # calls is expensive, and the icon flickers.
         if (wifi_signal != self.last_strength or
-            self.network != wireless.GetCurrentNetwork(self.iwconfig, self.fast)):
+            self.network != wireless.GetCurrentNetwork(self.iwconfig,
+                                                       self.fast)):
             self.last_strength = wifi_signal
             self.signal_changed = True
             daemon.SetCurrentInterface(daemon.GetWirelessInterface())    
@@ -154,7 +153,7 @@ class ConnectionStatus():
                 state = misc.SUSPENDED
                 self.update_state(state)
                 return True
-    
+
             # Determine what our current state is.
             # Check for wired.
             wired_ip = wired.GetWiredIP(self.fast)
@@ -162,7 +161,7 @@ class ConnectionStatus():
             if wired_found:
                 self.update_state(misc.WIRED, wired_ip=wired_ip)
                 return True
-    
+
             # Check for wireless
             wifi_ip = wireless.GetWirelessIP(self.fast)
             #self.iwconfig = wireless.GetIwconfig()

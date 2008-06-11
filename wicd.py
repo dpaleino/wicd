@@ -42,7 +42,6 @@ import gobject
 import dbus
 import dbus.service
 import getopt
-import time
 import os
 
 # Wicd specific imports
@@ -69,39 +68,14 @@ misc.RenameProcess("wicd")
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
-bus = dbus.SystemBus()
+bus = None
+daemon = None
+wireless = None
+wired = None
+wired = None
+config = None
 
-# Connect to the daemon
-try:
-    print 'Attempting to connect tray to daemon...'
-    proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    print 'Success.'
-except Exception:
-    print 'Can\'t connect to the daemon, trying to start it automatically...'
-    misc.PromptToStartDaemon()
-    time.sleep(1)
-    try:
-        print 'Attempting to connect tray to daemon...'
-        proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-        print 'Success.'
-    except:
-        print 'Failed to start daemon.  Aborting.'
-        sys.exit(1)
-
-daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
-wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
-                    
-_ = misc.get_gettext()
-language = {}
-language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
-language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
-language['not_connected'] = _('Not connected')
-language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
-language['connecting'] = _('Connecting')
-language['wired'] = _('Wired Network')
-
+language = misc.get_language_list_tray()
 
 class TrayIcon:
     """ Base Tray Icon class.
@@ -289,7 +263,7 @@ class TrayIcon:
             A tuple containing three elements:
             1) a boolean specifying if the network is active.
             2) an int specifying the maximum gain the network has had.
-            3) an int specifying the last record number of bytes sent.
+            3) an int specifying the last recorded number of bytes sent.
             
             """
             active = False
@@ -564,6 +538,31 @@ Arguments:
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
 """
+    
+def connect_to_dbus():
+    global bus, daemon, wireless, wired, config
+    # Connect to the daemon
+    bus = dbus.SystemBus()
+    try:
+        print 'Attempting to connect tray to daemon...'
+        proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+        print 'Success.'
+    except dbus.DBusException:
+        print "Can't connect to the daemon, trying to start it automatically..."
+        misc.PromptToStartDaemon()
+        try:
+            print 'Attempting to connect tray to daemon...'
+            proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+            print 'Success.'
+        except dbus.DBusException:
+            gui.error("Could not connect to wicd's D-Bus interface.  " +
+                      "Make sure the daemon is started.")
+            sys.exit(1)
+    
+    daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+    wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
+    wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
+    config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 
 def main(argv):
     """ The main frontend program.
@@ -572,12 +571,11 @@ def main(argv):
     argv -- The arguments passed to the script.
 
     """
-    print 'Loading...'
     use_tray = True
     animate = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'nha', ['help', 'no-tray', 
+        opts, args = getopt.getopt(sys.argv[1:], 'nha', ['help', 'no-tray',
                                                          'no-animate'])
     except getopt.GetoptError:
         # Print help information and exit
@@ -592,6 +590,9 @@ def main(argv):
             use_tray = False
         elif opt in ('-a', '--no-animate'):
             animate = False
+    
+    print 'Loading...'
+    connect_to_dbus()
 
     if not use_tray:
         os.spawnlp(os.P_NOWAIT, wpath.bin + 'gui.py')
@@ -612,7 +613,6 @@ def main(argv):
     bus.add_signal_receiver(tray_icon.icon_info.update_tray_icon,
                             'StatusChanged', 'org.wicd.daemon')
     print 'Done.'
-    
     mainloop = gobject.MainLoop()
     mainloop.run()
 

@@ -676,8 +676,15 @@ class WirelessConnectThread(ConnectThread):
         """
         def _sanitize(key):
             """ Escapes characters wpa_supplicant doesn't handle properly. """
-            return key.replace("$", "\$").replace("`", "\`").replace("\"", 
-                                                                     "\\\"")
+            new_key = []
+            blacklist = ["$", "`", "\""]
+            for c in key:
+                if c in blacklist:
+                    new_key.append("\\" + c)
+                else:
+                    new_key.append(c)
+            return ''.join(new_key)
+        
         # Check to see if we need to generate a PSK (only for non-ralink
         # cards).
         if self.network.get('key'):

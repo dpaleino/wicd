@@ -8,7 +8,7 @@ network={
 	ssid="$_ESSID"
 	scan_ssid=$_SCAN
 	eap=TTLS
-	key-mgmt=IEEE8021X
+	key_mgmt=IEEE8021X
 	identity="$_USERNAME"
 	password="$_PASSWORD"
 	phase2="auth=$_AUTH"

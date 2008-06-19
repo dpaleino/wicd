@@ -260,7 +260,7 @@ class ConnectionStatus():
     def rescan_networks(self):
         """ Calls a wireless scan. """
         try:
-            if daemon.GetSuspend():
+            if daemon.GetSuspend() or daemon.CheckIfConnecting():
                 return True
             wireless.Scan()
             daemon.SendScanSignal()

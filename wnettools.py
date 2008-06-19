@@ -134,7 +134,7 @@ def GetWirelessInterfaces():
 
 def _fast_get_wifi_interfaces():
     """ Tries to get a wireless interface using /sys/class/net. """
-    dev_dir = '/sys/class/net/'    
+    dev_dir = '/sys/class/net/'
     ifnames = []
     
     ifnames = [iface for iface in os.listdir(dev_dir) if 'wireless' \
@@ -239,15 +239,31 @@ class Interface(object):
     def CheckDHCP(self):
         """ Check for a valid DHCP client. 
         
-        Checks for the existence of a support DHCP client.  If one is
+        Checks for the existence of a supported DHCP client.  If one is
         found, the appropriate values for DHCP_CMD, DHCP_RELEASE, and
         DHCP_CLIENT are set.  If a supported client is not found, a
         warning is printed.
         
         """
+        def get_client_name(cl):
+            """ Converts the integer value for a dhcp client to a string. """
+            if cl in [misc.DHCLIENT, "dhclient"]:
+                client = "dhclient"
+            elif cl in [misc.DHCPCD, "dhcpcd"]:
+                client = "dhcpcd"
+            else:
+                client = "pump"
+            return client
+        
+        print 'checking dhcp...'
+        
         if self.DHCP_CLIENT:
-            dhcp_client = self.DHCP_CLIENT
-        else:
+            dhcp_client = get_client_name(self.DHCP_CLIENT)
+            dhcp_path = self._find_client_path(dhcp_client)
+            if not dhcp_path:
+                print "WARNING: Could not find selected dhcp client.  Wicd " + \
+                      " will try to find another supported client."
+        if not self.DHCP_CLIENT or not dhcp_path:
             dhcp_client = None
             dhcp_path = None
             dhcpclients = ["dhclient", "dhcpcd", "pump"]
@@ -271,7 +287,7 @@ class Interface(object):
         elif dhcp_client in [misc.DHCPCD, "dhcpcd"]:
             dhcp_client = misc.DHCPCD
             dhcp_cmd = dhcp_path
-            dhcp_release = dhcp_cmd + " -r"
+            dhcp_release = dhcp_cmd + " -k"
         else:
             dhcp_client = None
             dhcp_cmd = None
@@ -1126,7 +1142,7 @@ class WirelessInterface(Interface):
                         cmd_list = []
                         cmd_list.append('NetworkType=' + info[6])
                         cmd_list.append('AuthMode=' + auth_mode)
-                        cmd_list.append('EncryptType=' + info[4])
+                        cmd_list.append('EncrypType=' + info[4])
                         cmd_list.append('SSID=' + info[2])
                         cmd_list.append(key_name + '=' + network.get('key'))
                         if info[5] == 'SHARED' and info[4] == 'WEP':
@@ -1207,7 +1223,8 @@ class WirelessInterface(Interface):
             if self.verbose:
                 print "SIOCGIWRANGE failed: " + str(e)
             return None
-        fmt = "iiihb6ii4B4Bi32i2i2i2i2i3h8h2b2bhi8i2b3h2i2ihB17x" + 32*"ihbb"
+        # This defines the iwfreq struct, used to get singal strength.
+        fmt = "iiihb6ii4B4Bi32i2i2i2i2i3h8h2b2bhi8i2b3h2i2ihB17x" + 32 * "ihbb"
         size = struct.calcsize(fmt)
         data = buff.tostring()
         data = data[0:size]

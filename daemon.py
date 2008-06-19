@@ -154,10 +154,11 @@ class ConnectionWizard(dbus.service.Object):
 
         # Make a variable that will hold the wired network profile
         self.WiredNetwork = {}
-        
-        # Load our wired/wireless interfaces
-        self.wifi.LoadInterfaces()
-        self.wired.LoadInterfaces()
+
+        # Kind of hackish way to load the secondary wnettools interface
+        # for both wired and wireless connection managers.
+        self.wifi.liface = self.wired.liface
+        self.wired.wiface = self.wifi.wiface
 
         # Scan since we just got started
         if auto_connect:
@@ -590,6 +591,7 @@ class ConnectionWizard(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon')
     def SetDHCPClient(self, client):
+        print "Setting dhcp client to %i" % (int(client))
         self.dhcp_client = int(client)
         self.wifi.dhcp_client = int(client)
         self.wired.dhcp_client = int(client)

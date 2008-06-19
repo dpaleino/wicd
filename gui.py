@@ -382,7 +382,7 @@ class appGui:
         dhclientradio = self.wTree.get_widget("dhclient_radio")
         pumpradio = self.wTree.get_widget("pump_radio")
         dhcpcdradio = self.wTree.get_widget("dhcpcd_radio")
-        dhcp_list = [dhcpautoradio, dhclientradio, pumpradio, dhcpcdradio]
+        dhcp_list = [dhcpautoradio, dhclientradio, dhcpcdradio, pumpradio]
         
         dhcp_method = daemon.GetDHCPClient()
         dhcp_list[dhcp_method].set_active(True)

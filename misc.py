@@ -283,14 +283,11 @@ def get_gettext():
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
     try: # This may never fail, but let's be safe
-        default_encoding = locale.getpreferredencoding()
+        encoding = locale.getpreferredencoding()
     except:
-        default_encoding = None
-
-    if default_encoding:
-        ret = x.decode(default_encoding, 'replace').encode('utf-8')
-    else:  # Just guess UTF-8
-        ret = x.decode('utf-8', 'replace').encode('utf-8')
+        # Just guess utf-8 if it fails.
+        encoding = 'utf-8'
+    ret = x.decode(encoding, 'replace').encode('utf-8')
     return ret
     
 def RenameProcess(new_name):

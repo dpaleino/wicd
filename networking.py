@@ -103,8 +103,10 @@ class Controller(object):
         self._dhcp_client = value
         if self.wiface:
             self.wiface.DHCP_CLIENT = value
+            self.wiface.CheckDHCP()
         if self.liface:
             self.liface.DHCP_CLIENT = value    
+            self.liface.CheckDHCP()
 
     def get_dhcp_client(self):
         return self._dhcp_client
@@ -140,7 +142,7 @@ class ConnectThread(threading.Thread):
     lock = thread.allocate_lock()
 
     def __init__(self, network, wireless, wired, before_script, after_script, 
-                 disconnect_script, gdns1, gdns2, gdns3, debug):
+                 disconnect_script, gdns1, gdns2, gdns3, wiface, liface, debug):
         """ Initialise the required object variables and the thread.
 
         Keyword arguments:
@@ -172,6 +174,9 @@ class ConnectThread(threading.Thread):
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
         self.global_dns_3 = gdns3
+        
+        self.wiface = wiface
+        self.liface = liface
 
         self.connecting_message = None
         self.debug = debug
@@ -391,7 +396,8 @@ class Wireless(Controller):
             self.wireless_interface, self.wired_interface,
             self.wpa_driver, self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3, debug)
+            self.global_dns_2, self.global_dns_3, self.wiface, self.liface,
+            debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -570,7 +576,7 @@ class WirelessConnectThread(ConnectThread):
 
     def __init__(self, network, wireless, wired, wpa_driver,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3, debug=False):
+            gdns2, gdns3, wiface, liface, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -588,7 +594,7 @@ class WirelessConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3, debug)
+            gdns2, gdns3, wiface, liface, debug)
         self.wpa_driver = wpa_driver
 
 
@@ -606,9 +612,8 @@ class WirelessConnectThread(ConnectThread):
         5. Get/set IP address and DNS servers.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                             self.debug, self.wpa_driver)
-        liface = wnettools.WiredInterface(self.wired_interface, self.debug)
+        wiface = self.wiface
+        liface = self.liface
         self.is_connecting = True
         
         # Run pre-connection script.
@@ -747,7 +752,7 @@ class Wired(Controller):
             self.wireless_interface, self.wired_interface,
             self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3, debug)
+            self.global_dns_2, self.global_dns_3, wiface, liface, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -809,7 +814,7 @@ class WiredConnectThread(ConnectThread):
     """
     def __init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3, debug=False):
+            gdns2, gdns3, wiface, liface, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -826,7 +831,7 @@ class WiredConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, wired,
             before_script, after_script, disconnect_script, gdns1,
-            gdns2, gdns3, debug)
+            gdns2, gdns3, wiface, liface, debug)
 
     def run(self):
         """ The main function of the connection thread.
@@ -842,8 +847,8 @@ class WiredConnectThread(ConnectThread):
         5. Run post-connection script.
 
         """
-        wiface = wnettools.WirelessInterface(self.wireless_interface, self.debug)
-        liface = wnettools.WiredInterface(self.wired_interface, self.debug)
+        wiface = self.wiface
+        liface = self.liface
 
         self.is_connecting = True
 

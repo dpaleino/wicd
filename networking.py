@@ -550,6 +550,7 @@ class Wireless(Controller):
             print 'Running wireless network disconnect script'
             misc.ExecuteScript(self.disconnect_script)
 
+        wiface.ReleaseDHCP()
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
         wiface.Up()
@@ -752,7 +753,8 @@ class Wired(Controller):
             self.wireless_interface, self.wired_interface,
             self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3, wiface, liface, debug)
+            self.global_dns_2, self.global_dns_3, self.wiface, self.liface,
+            debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -773,6 +775,7 @@ class Wired(Controller):
             print 'Running wired disconnect script'
             misc.Run(self.disconnect_script)
 
+        liface.ReleaseDHCP()
         liface.SetAddress('0.0.0.0')
         liface.Down()
         liface.Up()

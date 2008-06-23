@@ -314,6 +314,11 @@ class ConnectThread(threading.Thread):
         self.abort_reason = reason
         self.should_die = True
         
+    def release_dhcp_clients(self, wiface, liface):
+        """ Release all running dhcp clients. """
+        wiface.ReleaseDHCP()
+        liface.ReleaseDHCP()
+        
     def stop_dhcp_clients(self, iface):
         """ Stop and running DHCP clients, as well as wpa_supplicant. """
         print 'Stopping wpa_supplicant, and any dhcp clients'
@@ -625,6 +630,7 @@ class WirelessConnectThread(ConnectThread):
         # Dake down interface and clean up previous connections.
         self.put_iface_down(wiface)
         self.abort_if_needed()
+        self.release_dhcp_clients(wiface, liface)
         self.reset_ip_addresses(wiface, liface)
         self.stop_dhcp_clients(wiface)
         self.abort_if_needed()
@@ -862,6 +868,7 @@ class WiredConnectThread(ConnectThread):
         
         # Take down interface and clean up previous connections.
         self.put_iface_down(liface)
+        self.release_dhcp_clients(wiface, liface)
         self.reset_ip_addresses(wiface, liface)
         self.stop_dhcp_clients(wiface)
         self.abort_if_needed()

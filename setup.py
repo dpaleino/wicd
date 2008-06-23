@@ -86,5 +86,5 @@ connect at startup to any preferred network within range.
       )
       
 print "Running post-install configuration..."
-os.system("other/postinst")
+#os.system("other/postinst")
 print 'Done.'

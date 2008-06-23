@@ -317,8 +317,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.change_encrypt_method()
         self.vbox.pack_start(self.chkbox_global_settings, False, False)
         self.vbox.pack_start(self.chkbox_encryption, False, False)
-        self.vbox.pack_start(self.combo_encryption)
-        self.vbox.pack_start(self.vbox_encrypt_info)
+        self.vbox.pack_start(self.combo_encryption, False, False)
+        self.vbox.pack_start(self.vbox_encrypt_info, False, False)
         
         # Connect signals.
         self.chkbox_encryption.connect("toggled", self.toggle_encryption)

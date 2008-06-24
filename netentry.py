@@ -185,7 +185,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.chkbox_static_dns.set_sensitive(False)
         else:
             self.chkbox_static_dns.set_sensitive(True)
-            self.chkbox_static_dns.set_active(False)
+            #self.chkbox_static_dns.set_active(False)
 
         self.txt_ip.set_sensitive(self.chkbox_static_ip.get_active())
         self.txt_netmask.set_sensitive(self.chkbox_static_ip.get_active())
@@ -374,6 +374,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.chkbox_global_settings.set_active(True)
         else:
             self.chkbox_global_settings.set_active(False)
+        self.change_encrypt_method()
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """

@@ -325,7 +325,8 @@ def detect_desktop_environment():
 def choose_sudo_prog():
     desktop_env = detect_desktop_environment()
     gk_paths = ["/usr/bin/gksu", "/usr/local/bin/gksu", "/bin/gksu"]
-    kde_paths = ["/usr/bin/kdesu", "/usr/local/bin/kdesu", "/bin/kdesu"]
+    kde_paths = ["/usr/bin/kdesu", "/usr/local/bin/kdesu", "/bin/kdesu",
+                 "/usr/bin/kdesudo", "/usr/local/bin/kdesudo", "/bin/kdesudo"]
     if desktop_env == "kde":
         paths = kde_paths
         paths.extend(gk_paths)

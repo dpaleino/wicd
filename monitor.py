@@ -27,7 +27,11 @@ when appropriate.
 import dbus
 import gobject
 import time
-from dbus.mainloop.glib import DBusGMainLoop
+if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
+    import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 
 import wpath
 import misc
@@ -37,7 +41,6 @@ misc.RenameProcess("wicd-monitor")
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
-DBusGMainLoop(set_as_default=True)
 proxy_obj = dbus.SystemBus().get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
@@ -61,7 +64,7 @@ class ConnectionStatus():
         
         # This determines if we use ioctl or external programs
         self.fast = True
-        self.iwconfig = ''
+        self.iwconfig = ""
 
     def check_for_wired_connection(self, wired_ip):
         """ Checks for an active wired connection.

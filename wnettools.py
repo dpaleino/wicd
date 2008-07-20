@@ -55,6 +55,7 @@ signaldbm_pattern   = re.compile('.*Signal level:?=? ?(-\d\d*)', re.I | re.M | r
 mode_pattern        = re.compile('.*Mode:(.*?)\n', re.I | re.M  | re.S)
 freq_pattern        = re.compile('.*Frequency:(.*?)\n', re.I | re.M  | re.S)
 ip_pattern          = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
+bssid_pattern       = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', re.I | re.M | re.S)
 
 wep_pattern         = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
 altwpa_pattern      = re.compile('(wpa_ie)', re.I | re.M | re.S)
@@ -131,6 +132,12 @@ def GetWirelessInterfaces():
         iface = misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',
                          re.I | re.M  | re.S), output)
     return iface
+
+def GetWiredInterfaces():
+    basedir = '/sys/class/net/'
+    return [iface for iface in os.listdir(basedir) if not 'wireless' \
+            in os.listdir(basedir + iface) and \
+            open(basedir + iface + "/type").readlines()[0].strip() == "1"]
 
 def _fast_get_wifi_interfaces():
     """ Tries to get a wireless interface using /sys/class/net. """
@@ -500,7 +507,7 @@ class Interface(object):
     
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
-        cmd = self.DHCP_RELEASE + " " + self.iface
+        cmd = self.DHCP_RELEASE + " " + self.iface + " 2>/dev/null"
         misc.Run(cmd)
 
     def FlushRoutes(self):
@@ -725,6 +732,7 @@ class WirelessInterface(Interface):
         """
         Interface.__init__(self, iface, verbose)
         self.wpa_driver = wpa_driver
+        self.scan_iface = None
         
     def SetWpaDriver(self, driver):
         """ Sets the wpa_driver. """
@@ -864,7 +872,7 @@ class WirelessInterface(Interface):
         except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
-        if ap['essid'] == '<hidden>':
+        if ap['essid'] in ['<hidden>', ""]:
             ap['essid'] = 'Hidden'
             ap['hidden'] = True
         else:
@@ -1153,13 +1161,21 @@ class WirelessInterface(Interface):
                             cmd = 'iwpriv ' + self.iface + ' '
                             if self.verbose: print cmd
                             misc.Run(cmd)
-                            
-    def GetBSSID(self, fast=True):
+
+    def GetBSSID(self, iwconfig=None, fast=True):
         """ Get the MAC address for the interface. """
         if fast:
             return self._fast_get_bssid()
         else:
-            return ""
+            if not iwconfig:
+                cmd = 'iwconfig ' + self.iface
+                if self.verbose: print cmd
+                output = misc.Run(cmd)
+            else:
+                output = iwconfig
+                
+            bssid = misc.RunRegex(bssid_pattern, output)
+            return bssid
         
     def _fast_get_bssid(self):
         """ Gets the MAC address for the connected AP using ioctl calls. """
@@ -1223,7 +1239,7 @@ class WirelessInterface(Interface):
             if self.verbose:
                 print "SIOCGIWRANGE failed: " + str(e)
             return None
-        # This defines the iwfreq struct, used to get singal strength.
+        # This defines the iwfreq struct, used to get signal strength.
         fmt = "iiihb6ii4B4Bi32i2i2i2i2i3h8h2b2bhi8i2b3h2i2ihB17x" + 32 * "ihbb"
         size = struct.calcsize(fmt)
         data = buff.tostring()

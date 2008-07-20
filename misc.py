@@ -22,7 +22,7 @@ import wpath
 import locale
 import gettext
 import sys
-from subprocess import *
+from subprocess import Popen, STDOUT, PIPE
 import subprocess
 import commands
 
@@ -101,7 +101,7 @@ def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.bin + 'launchdaemon.sh'
     sudo_prog = choose_sudo_prog()
-    if sudo_prog.endswith("gksu"):
+    if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
         msg = '--message'
     else:
         msg = '-- caption'
@@ -123,8 +123,8 @@ def WriteLine(my_file, text):
     my_file.write(text + "\n")
 
 def ExecuteScript(script):
-    """ Execute a command """
-    os.system(script)
+    """ Execute a command and send its output to the bit bucket. """
+    os.system("%s > /dev/null 2>&1" % script)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """
@@ -324,15 +324,16 @@ def detect_desktop_environment():
 
 def choose_sudo_prog():
     desktop_env = detect_desktop_environment()
-    gk_paths = ["/usr/bin/gksu", "/usr/local/bin/gksu", "/bin/gksu"]
-    kde_paths = ["/usr/bin/kdesu", "/usr/local/bin/kdesu", "/bin/kdesu",
-                 "/usr/bin/kdesudo", "/usr/local/bin/kdesudo", "/bin/kdesudo"]
+    env_path = os.environ['PATH'].split(":")
+    
     if desktop_env == "kde":
-        paths = kde_paths
-        paths.extend(gk_paths)
+        paths = []
+        for p in env_path:
+            paths.extend([p + '/kdesu', p + '/kdesudo', p + '/ktsuss'])
     else:
-        paths = gk_paths
-        paths.extend(kde_paths)
+        paths = []
+        for p in env_path:
+            paths.extend([p + '/gksu', p + '/ktsuss'])
     for path in paths:
         if os.access(path, os.F_OK):
             return path

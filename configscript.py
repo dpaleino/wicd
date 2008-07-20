@@ -123,27 +123,28 @@ def get_script_info(network, network_type):
 def write_scripts(network, network_type, script_info):
     """ Writes script info to disk and loads it into the daemon. """
     con = ConfigParser.ConfigParser()
-    print "Writing scripts, type", network_type
+
     if network_type == "wired":
         con.read(wired_conf)
-        if con.has_section(network):
-            con.set(network, "beforescript", script_info["pre_entry"])
-            con.set(network, "afterscript", script_info["post_entry"])
-            con.set(network, "disconnectscript",
-                    script_info["disconnect_entry"])
-            con.write(open(wired_conf, "w"))
-            config.ReadWiredNetworkProfile(network)
-            config.SaveWiredNetworkProfile(network)
+        if not con.has_section(network):
+            con.add_section(network)
+        con.set(network, "beforescript", script_info["pre_entry"])
+        con.set(network, "afterscript", script_info["post_entry"])
+        con.set(network, "disconnectscript", script_info["disconnect_entry"])
+        con.write(open(wired_conf, "w"))
+        config.ReadWiredNetworkProfile(network)
+        config.SaveWiredNetworkProfile(network)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
-        if con.has_section(bssid):
-            con.set(bssid, "beforescript", script_info["pre_entry"])
-            con.set(bssid, "afterscript", script_info["post_entry"])
-            con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
-            con.write(open(wireless_conf, "w"))
-            config.ReadWirelessNetworkProfile(int(network))
-            config.SaveWirelessNetworkProfile(int(network))
+        if not con.has_section(bssid):
+            con.add_section(bssid)
+        con.set(bssid, "beforescript", script_info["pre_entry"])
+        con.set(bssid, "afterscript", script_info["post_entry"])
+        con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
+        con.write(open(wireless_conf, "w"))
+        config.ReadWirelessNetworkProfile(int(network))
+        config.SaveWirelessNetworkProfile(int(network))
 
 def main (argv):
     """ Runs the script configuration dialog. """
@@ -186,6 +187,6 @@ def main (argv):
 
 if __name__ == '__main__':
     if os.getuid() != 0:
-        print "Root priviledges are required to configure scripts.  Exiting."
+        print "Root privileges are required to configure scripts.  Exiting."
         sys.exit(0)
     main(sys.argv)

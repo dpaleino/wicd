@@ -45,9 +45,11 @@ import signal
 import gobject
 import dbus
 import dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
-if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
+if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 
 # wicd specific libraries
 import wpath
@@ -155,8 +157,7 @@ class ConnectionWizard(dbus.service.Object):
         # Make a variable that will hold the wired network profile
         self.WiredNetwork = {}
 
-        # Kind of hackish way to load the secondary wnettools interface
-        # for both wired and wireless connection managers.
+        # Kind of hackish way to set correct wnettools interfaces.
         self.wifi.liface = self.wired.liface
         self.wired.wiface = self.wifi.wiface
 
@@ -993,7 +994,7 @@ class ConnectionWizard(dbus.service.Object):
     #################################
 
     @dbus.service.method('org.wicd.daemon.config')
-    def CreateWiredNetworkProfile(self, profilename):
+    def CreateWiredNetworkProfile(self, profilename, default=False):
         """ Creates a wired network profile. """
         profilename = misc.to_unicode(profilename)
         print "Creating wired profile for " + profilename
@@ -1012,7 +1013,7 @@ class ConnectionWizard(dbus.service.Object):
         config.set(profilename, "beforescript", None)
         config.set(profilename, "afterscript", None)
         config.set(profilename, "disconnectscript", None)
-        config.set(profilename, "default", False)
+        config.set(profilename, "default", default)
         config.write(open(self.wired_conf, "w"))
         return True
 
@@ -1081,6 +1082,9 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.config')
     def SaveWiredNetworkProfile(self, profilename):
         """ Writes a wired network profile to disk. """
+        def write_script_ent(prof, conf, script):
+            if not conf.has_option(prof, script):
+                conf.set(prof, script, None)
         if profilename == "":
             return "500: Bad Profile name"
         profilename = misc.to_unicode(profilename)
@@ -1091,6 +1095,10 @@ class ConnectionWizard(dbus.service.Object):
         config.add_section(profilename)
         for x in self.WiredNetwork:
             config.set(profilename, x, self.WiredNetwork[x])
+        
+        write_script_ent(profilename, config, "beforescript")
+        write_script_ent(profilename, config, "afterscript")
+        write_script_ent(profilename, config, "disconnectscript")
         config.write(open(self.wired_conf, "w"))
         return "100: Profile Written"
 
@@ -1125,6 +1133,10 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.config')
     def SaveWirelessNetworkProfile(self, id):
         """ Writes a wireless profile to disk. """
+        def write_script_ent(prof, conf, script):
+            if not conf.has_option(prof, script):
+                conf.set(prof, script, None)
+                
         config = ConfigParser.ConfigParser()
         config.read(self.wireless_conf)
         cur_network = self.LastScan[id]
@@ -1146,7 +1158,16 @@ class ConnectionWizard(dbus.service.Object):
             config.set(bssid_key, x, cur_network[x])
             if cur_network["use_settings_globally"]:
                 config.set(essid_key, x, cur_network[x])
-
+        
+        write_script_ent(bssid_key, config, "beforescript")
+        write_script_ent(bssid_key, config, "afterscript")
+        write_script_ent(bssid_key, config, "disconnect")
+        
+        if cur_network["use_settings_globally"]:
+            write_script_ent(essid_key, config, "beforescript")
+            write_script_ent(essid_key, config, "afterscript")
+            write_script_ent(essid_key, config, "disconnect")
+            
         config.write(open(self.wireless_conf, "w"))
 
     @dbus.service.method('org.wicd.daemon.config')
@@ -1419,7 +1440,7 @@ class ConnectionWizard(dbus.service.Object):
             print "Wired configuration file not found, creating a default..."
             # Create the file and a default profile
             open(self.wired_conf, "w").close()
-            self.CreateWiredNetworkProfile("wired-default")
+            self.CreateWiredNetworkProfile("wired-default", default=True)
 
         # Hide the files, so the keys aren't exposed.
         print "chmoding configuration files 0600..."
@@ -1445,19 +1466,20 @@ Arguments:
 \t-s\t--no-scan\tDon't auto-scan/auto-connect.
 \t-f\t--no-daemon\tDon't daemonize (run in foreground).
 \t-e\t--no-stderr\tDon't redirect stderr.
+\t-n\t--no-poll\tDon't monitor network status.
 \t-o\t--no-stdout\tDon't redirect stdout.
-\t-P\t--pidfile path\tCreate a pidfile at the specified path.
 \t-h\t--help\t\tPrint this help.
 """
 
-def daemonize(write_pid, pidfile):
+def daemonize():
     """ Disconnect from the controlling terminal.
 
     Fork twice, once to disconnect ourselves from the parent terminal and a
     second time to prevent any files we open from becoming our controlling
     terminal.
 
-    For more info see http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
+    For more info see:
+    http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66012
 
     """
     # Fork the first time to disconnect from the parent terminal and
@@ -1479,10 +1501,7 @@ def daemonize(write_pid, pidfile):
     try:
         pid = os.fork()
         if pid > 0:
-            if not write_pid:
-                print "wicd daemon: pid " + str(pid)
-            else:
-                print >> open(pidfile,'wt'), str(pid)
+            print "wicd daemon: pid " + str(pid)
             sys.exit(0)
     except OSError, e:
         print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
@@ -1502,16 +1521,15 @@ def main(argv):
     auto_scan = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'feosP:',
-                ['help', 'no-daemon', 'no-stderr', 'no-stdout', 'no-scan',
-                 'pidfile:'])
+        opts, args = getopt.getopt(sys.argv[1:], 'fenosP:',
+                ['help', 'no-daemon', 'no-poll', 'no-stderr', 'no-stdout',
+                 'no-scan''])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
         sys.exit(2)
         
-    write_pid = False
-    pid_file = None
+    no_poll = False
     for o, a in opts:
         if o in ('-h', '--help'):
             usage()
@@ -1524,11 +1542,10 @@ def main(argv):
             do_daemonize = False
         if o in ('-s', '--no-scan'):
             auto_scan = False
-        if o in ('-P', '--pidfile'):
-            write_pid = True
-            pid_file = a
+        if o in ('-n', '--no-poll'):
+            no_poll = True
 
-    if do_daemonize: daemonize(write_pid, pid_file)
+    if do_daemonize: daemonize()
       
     if redirect_stderr or redirect_stdout: output = LogWriter()
     if redirect_stdout: sys.stdout = output
@@ -1545,11 +1562,10 @@ def main(argv):
     obj = ConnectionWizard(d_bus_name, auto_connect=auto_scan)
 
     gobject.threads_init()
-    (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py"], 
+    if not no_poll:
+        (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py"], 
                                        flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
-    
-    
-    signal.signal(signal.SIGTERM, sigterm_caught)
+        signal.signal(signal.SIGTERM, sigterm_caught)
     
     # Enter the main loop
     mainloop = gobject.MainLoop()
@@ -1569,5 +1585,4 @@ if __name__ == '__main__':
         print ("Root priviledges are required for the daemon to run properly." +
                "  Exiting.")
         sys.exit(1)
-    DBusGMainLoop(set_as_default=True)
     main(sys.argv)

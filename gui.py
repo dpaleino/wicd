@@ -48,29 +48,30 @@ try:
 except:
     pass
 
-if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
+if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 
 bus = dbus.SystemBus()
-try:
-    proxy_obj = bus.get_object("org.wicd.daemon", '/org/wicd/daemon')
-except dbus.DBusException, e:
-    misc.PromptToStartDaemon()
-    time.sleep(1)
-    try:
-        proxy_obj = bus.get_object("org.wicd.daemon", '/org/wicd/daemon')
-        daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-        wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
-        wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-        vpn_session = dbus.Interface(proxy_obj, 'org.wicd.daemon.vpn')
-        config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
-        dbus_ifaces = {"daemon" : daemon, "wireless" : wireless, "wired" : wired,
-                       "vpn_session" : vpn_session, "config" : config}
-    except:
-        proxy_obj = None
-
+proxy_obj, daemon, wireless, wired, vpn_session, config = [None for x in
+                                                           range(0, 6)]
+dbus_ifaces = {}
 language = misc.get_language_list_gui()
 
+def setup_dbus():
+    global proxy_obj, daemon, wireless, wired, vpn_session, config, dbus_ifaces
+    proxy_obj = bus.get_object("org.wicd.daemon", '/org/wicd/daemon')
+    daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+    wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
+    wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
+    vpn_session = dbus.Interface(proxy_obj, 'org.wicd.daemon.vpn')
+    config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
+    dbus_ifaces = {"daemon" : daemon, "wireless" : wireless, "wired" : wired, 
+                   "vpn_session" : vpn_session, "config" : config}
+    
+    
 def error(parent, message): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
@@ -201,6 +202,11 @@ class appGui:
         gladefile = "data/wicd.glade"
         self.windowname = "gtkbench"
         self.wTree = gtk.glade.XML(gladefile)
+        
+        try:
+            setup_dbus() 
+        except dbus.DBusException:
+            pass # wicd.py handles this.
 
         dic = { "refresh_clicked" : self.refresh_networks, 
                 "quit_clicked" : self.exit, 
@@ -242,6 +248,7 @@ class appGui:
         self.wpadrivercombo = None
         self.connecting = False
         self.fast = True  # Use ioctl instead of external program calls
+        self.prev_state = None
         self.refresh_networks(fresh=False)
         
         self.window.connect('delete_event', self.exit)
@@ -317,7 +324,6 @@ class appGui:
     def disconnect_all(self, widget=None):
         """ Disconnects from any active network. """
         daemon.Disconnect()
-        self.update_connect_buttons()
 
     def about_dialog(self, widget, event=None):
         """ Displays an about dialog. """
@@ -337,6 +343,18 @@ class appGui:
         
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
+        def build_combobox(lbl):
+            """ Sets up a ComboBox using the given widget name. """
+            liststore = gtk.ListStore(gobject.TYPE_STRING)
+            combobox = self.wTree.get_widget(lbl)
+            combobox.clear()
+            combobox.set_model(liststore)
+            cell = gtk.CellRendererText()
+            combobox.pack_start(cell, True)
+            combobox.add_attribute(cell, 'text', 0)
+            
+            return combobox
+
         dialog = self.wTree.get_widget("pref_dialog")
         dialog.set_title(language['preferences'])
         size = config.ReadWindowSize("pref")
@@ -416,23 +434,28 @@ class appGui:
         self.set_label("pref_driver_label", language['wpa_supplicant_driver'] +
                        ':')
 
+        # Replacement for the combo box hack
+        wpadrivercombo = build_combobox("pref_wpa_combobox")
+
         # Hack to get the combo box we need, which you can't do with glade.
-        wpa_hbox = self.wTree.get_widget("hbox_wpa")
-        if not self.first_dialog_load:
-            wpa_hbox.remove(self.wpadrivercombo)
-        else:
-            self.first_dialog_load = False
-        self.wpadrivercombo = gtk.combo_box_new_text()
-        wpadrivercombo = self.wpadrivercombo  # Just to make my life easier
-        wpa_hbox.pack_end(wpadrivercombo)
+        #wpa_hbox = self.wTree.get_widget("hbox_wpa")
+        #if not self.first_dialog_load:
+            #wpa_hbox.remove(self.wpadrivercombo)
+        #else:
+            #self.first_dialog_load = False
+        #self.wpadrivercombo = gtk.combo_box_new_text()
+        #wpadrivercombo = self.wpadrivercombo  # Just to make my life easier
+        #wpa_hbox.pack_end(wpadrivercombo)
             
-        wpadrivers = ["hostap", "hermes", "madwifi", "atmel", "wext",
-                      "ndiswrapper", "broadcom", "ipw", "ralink legacy"]
+        wpadrivers = ["wext", "hostap", "madwifi", "atmel", "ndiswrapper", 
+                      "ipw", "ralink legacy"]
         found = False
+        def_driver = daemon.GetWPADriver()
         for i, x in enumerate(wpadrivers):
-            if x == daemon.GetWPADriver() and not found:
+            if x == def_driver: #and not found:
                 found = True
                 user_driver_index = i
+            wpadrivercombo.remove_text(i)
             wpadrivercombo.append_text(x)
 
         # Set the active choice here.  Doing it before all the items are
@@ -441,7 +464,7 @@ class appGui:
             wpadrivercombo.set_active(user_driver_index)
         else:
             # Use wext as default, since normally it is the correct driver.
-            wpadrivercombo.set_active(4)
+            wpadrivercombo.set_active(0)
 
         self.set_label("pref_wifi_label", language['wireless_interface'] + ':')
         self.set_label("pref_wired_label", language['wired_interface'] + ':')
@@ -658,7 +681,6 @@ class appGui:
             if self.pulse_active:
                 self.pulse_progress_bar()
                 self.pulse_active = False
-                self.update_connect_buttons()
                 self.network_list.set_sensitive(True)
                 self.status_area.hide_all()
 
@@ -678,12 +700,18 @@ class appGui:
             self.set_status(language['not_connected'])
             return True
     
-    def update_connect_buttons(self):
+    def update_connect_buttons(self, state=None, x=None, force_check=False):
         """ Updates the connect/disconnect buttons for each network entry. """
-        apbssid = wireless.GetApBssid()
-        for entry in self.network_list:
-            if hasattr(entry, "update_connect_button"):
-                entry.update_connect_button(apbssid)
+        if not state:
+            state, x = daemon.GetConnectionStatus()
+        
+        if self.prev_state != state or force_check:
+            print 'we actually update now'
+            apbssid = wireless.GetApBssid()
+            for entry in self.network_list:
+                if hasattr(entry, "update_connect_button"):
+                    entry.update_connect_button(state, apbssid)
+        self.prev_state = state
     
     def check_for_wired(self, wired_ip):
         """ Determine if wired is active, and if yes, set the status. """
@@ -730,7 +758,6 @@ class appGui:
         rescan.
         
         """
-        print 'got rescan signal'
         if not self.connecting:
             self.refresh_networks(fresh=False)
 
@@ -803,6 +830,7 @@ class appGui:
                 label = gtk.Label(language['no_wireless_networks_found'])
             self.network_list.pack_start(label)
             label.show()
+        self.update_connect_buttons(force_check=True)
         self.network_list.set_sensitive(True)
 
     def save_settings(self, nettype, networkid, networkentry):
@@ -855,12 +883,9 @@ class appGui:
            not entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
             entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop("dns1", 
-                               noneToString(entry.txt_dns_1.get_text()))
-            entry.set_net_prop("dns2", 
-                               noneToString(entry.txt_dns_2.get_text()))
-            entry.set_net_prop("dns3", 
-                               noneToString(entry.txt_dns_3.get_text()))
+            entry.set_net_prop("dns1", noneToString(entry.txt_dns_1.get_text()))
+            entry.set_net_prop("dns2", noneToString(entry.txt_dns_2.get_text()))
+            entry.set_net_prop("dns3", noneToString(entry.txt_dns_3.get_text()))
         elif entry.chkbox_static_dns.get_active() and \
              entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
@@ -1073,7 +1098,8 @@ class appGui:
 if __name__ == '__main__':
     if not proxy_obj:
         error("Could not connect to wicd's D-Bus interface.  Make sure the " +
-              "daemon is started")
+              "daemon is started.  If the error persists, please report the" +
+              "behavior at wicd.net.")
         sys.exit(1)
 
     app = appGui(standalone=True)

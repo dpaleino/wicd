@@ -157,7 +157,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
 
     def reset_static_checkboxes(self):
         # Enable the right stuff
-        if stringToNone(self.txt_ip.get_text()) is not None:
+        if stringToNone(self.txt_ip.get_text()):
             self.chkbox_static_ip.set_active(True)
             self.chkbox_static_dns.set_active(True)
             self.chkbox_static_dns.set_sensitive(False)
@@ -166,7 +166,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.chkbox_static_dns.set_active(False)
             self.chkbox_static_dns.set_sensitive(True)
 
-        if stringToNone(self.txt_dns_1.get_text()) is not None:
+        if stringToNone(self.txt_dns_1.get_text()):
             self.chkbox_static_dns.set_active(True)
         else:
             self.chkbox_static_dns.set_active(False)
@@ -315,6 +315,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             self.combo_encryption.set_active(0)
         self.change_encrypt_method()
+
         self.vbox.pack_start(self.chkbox_global_settings, False, False)
         self.vbox.pack_start(self.chkbox_encryption, False, False)
         self.vbox.pack_start(self.combo_encryption, False, False)
@@ -355,25 +356,33 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.txt_netmask.set_text(self.format_entry(networkID,"netmask"))
         self.txt_gateway.set_text(self.format_entry(networkID,"gateway"))
 
-        if wireless.GetWirelessProperty(networkID,'use_global_dns'):
-            self.chkbox_global_dns.set_active(True)
-        if wireless.GetWirelessProperty(networkID, "dns1") is not None:
-            self.txt_dns_1.set_text(self.format_entry(networkID, "dns1"))
-        if wireless.GetWirelessProperty(networkID, 'dns2') is not None:
-            self.txt_dns_2.set_text(self.format_entry(networkID, "dns2"))
-        if wireless.GetWirelessProperty(networkID, 'dns3') is not None:
-            self.txt_dns_3.set_text(self.format_entry(networkID, "dns3"))
+        self.chkbox_global_dns.set_active(wireless.GetWirelessProperty(networkID,
+                                                                       'use_global_dns'))
+        
+        self.txt_dns_1.set_text(self.format_entry(networkID, "dns1"))
+        self.txt_dns_2.set_text(self.format_entry(networkID, "dns2"))
+        self.txt_dns_3.set_text(self.format_entry(networkID, "dns3"))
         
         self.reset_static_checkboxes()
-        if wireless.GetWirelessProperty(networkID, 'encryption'):
-            self.chkbox_encryption.set_active(True)
-        else:
-            self.chkbox_encryption.set_active(False)
+        self.chkbox_encryption.set_active(wireless.GetWirelessProperty(networkID,
+                                                                       'encryption'))
+        self.chkbox_global_settings.set_active(wireless.GetWirelessProperty(networkID,
+                                                             'use_settings_globally'))
+
             
-        if wireless.GetWirelessProperty(networkID, 'use_settings_globally'):
-            self.chkbox_global_settings.set_active(True)
+        activeID = -1  # Set the menu to this item when we are done
+        user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
+        for x, enc_type in enumerate(self.encrypt_types):
+            if enc_type[1] == user_enctype:
+                activeID = x
+        
+        self.combo_encryption.set_active(activeID)
+        if activeID != -1:
+            self.chkbox_encryption.set_active(True)
+            self.combo_encryption.set_sensitive(True)
+            self.vbox_encrypt_info.set_sensitive(True)
         else:
-            self.chkbox_global_settings.set_active(False)
+            self.combo_encryption.set_active(0)
         self.change_encrypt_method()
 
     def format_entry(self, networkid, label):
@@ -466,7 +475,7 @@ class NetworkEntry(gtk.HBox):
         # Set up the script settings button
         self.script_button = gtk.Button()
         self.script_image = gtk.Image()
-        self.script_image.set_from_icon_name('execute', 4)
+        self.script_image.set_from_stock(gtk.STOCK_EXECUTE, 4)
         self.script_image.set_padding(4, 0)
         self.script_button.set_alignment(.5, .5)
         self.script_button.set_image(self.script_image)
@@ -590,7 +599,6 @@ class WiredNetworkEntry(NetworkEntry):
                 self.expander.set_expanded(True)
             self.profile_help.show()        
         self.check_enable()
-        self.update_connect_button()
         self.wireddis = self.connect("destroy", self.destroy_called)
         
     def destroy_called(self, *args):
@@ -639,9 +647,8 @@ class WiredNetworkEntry(NetworkEntry):
             self.advanced_button.set_sensitive(False)
             self.script_button.set_sensitive(False)
             
-    def update_connect_button(self, apbssid=None):
+    def update_connect_button(self, state, apbssid=None):
         """ Update the connection/disconnect button for this entry. """
-        state, x = daemon.GetConnectionStatus()
         if state == misc.WIRED:
             self.disconnect_button.show()
             self.connect_button.hide()
@@ -791,7 +798,6 @@ class WirelessNetworkEntry(NetworkEntry):
         # Show everything
         self.show_all()
         self.advanced_dialog = WirelessSettingsDialog(networkID)
-        self.update_connect_button(wireless.GetApBssid())
         self.wifides = self.connect("destroy", self.destroy_called)
         
     def _escape(self, val):
@@ -862,9 +868,8 @@ class WirelessNetworkEntry(NetworkEntry):
         self.image.set_from_file(wpath.images + signal_img)
         self.lbl_strength.set_label(disp_strength + ending)
         
-    def update_connect_button(self, apbssid):
+    def update_connect_button(self, state, apbssid):
         """ Update the connection/disconnect button for this entry. """
-        state, x = daemon.GetConnectionStatus()
         if state == misc.WIRELESS and apbssid == \
            wireless.GetWirelessProperty(self.networkID, "bssid"):
             self.disconnect_button.show()

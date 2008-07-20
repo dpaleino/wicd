@@ -59,9 +59,12 @@ if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
         sys.exit(1)
 else:
     USE_EGG = False
-    
-if getattr(dbus, 'version', (0, 0, 0)) >= (0, 41, 0):
+
+if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 
 misc.RenameProcess("wicd")
 
@@ -433,6 +436,8 @@ class TrayIcon:
                 self.gui_win = gui.appGui()
                 bus.add_signal_receiver(self.gui_win.dbus_refresh_networks,
                                         'SendScanSignal', 'org.wicd.daemon')
+                bus.add_signal_receiver(self.gui_win.update_connect_buttons,
+                        				'StatusChanged', 'org.wicd.daemon')
             elif not self.gui_win.is_visible:
                 self.gui_win.show_win()
             else:
@@ -555,7 +560,7 @@ def connect_to_dbus():
             proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
             print 'Success.'
         except dbus.DBusException:
-            gui.error("Could not connect to wicd's D-Bus interface.  " +
+            gui.error(None, "Could not connect to wicd's D-Bus interface.  " +
                       "Make sure the daemon is started.")
             sys.exit(1)
     
@@ -563,6 +568,7 @@ def connect_to_dbus():
     wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
     wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
     config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
+    return True
 
 def main(argv):
     """ The main frontend program.
@@ -590,12 +596,18 @@ def main(argv):
             use_tray = False
         elif opt in ('-a', '--no-animate'):
             animate = False
+        else:
+            usage()
+            sys.exit(2)
     
     print 'Loading...'
     connect_to_dbus()
 
     if not use_tray:
-        os.spawnlp(os.P_NOWAIT, wpath.bin + 'gui.py')
+        the_gui = gui.appGui()
+        the_gui.standalone = True
+        mainloop = gobject.MainLoop()
+        mainloop.run()
         sys.exit(0)
 
     # Set up the tray icon GUI and backend

@@ -316,12 +316,13 @@ class ConnectThread(threading.Thread):
         
     def release_dhcp_clients(self, wiface, liface):
         """ Release all running dhcp clients. """
+        print "Releasing DHCP leases..."
         wiface.ReleaseDHCP()
         liface.ReleaseDHCP()
         
     def stop_dhcp_clients(self, iface):
         """ Stop and running DHCP clients, as well as wpa_supplicant. """
-        print 'Stopping wpa_supplicant, and any dhcp clients'
+        print 'Stopping wpa_supplicant and any DHCP clients'
         iface.StopWPA()
         wnettools.StopDHCP()
         
@@ -358,10 +359,12 @@ class Wireless(Controller):
     wpa_driver = property(get_wpa_driver, set_wpa_driver)
     
                 
-    def LoadInterfaces(self):
-        """ Load the wnettools controls for the wired/wireless interfaces. """
-        self.wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                                  self.debug, self.wpa_driver)
+    #def LoadInterfaces(self, dhcp_client, flush_tool):
+    #    """ Load the wnettools controls for the wired/wireless interfaces. """
+    #    #self.wiface = wnettools.WirelessInterface(self.wireless_interface,
+    #    #                                          self.debug, self.wpa_driver)
+    #    self.dhcp_client = dhcp_client
+    #    self.flush_tool = flush_tool
 
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
@@ -373,6 +376,22 @@ class Wireless(Controller):
         A list of available networks sorted by strength.
 
         """
+        def comp(x, y):
+            if x.has_key('quality'):
+                if x['quality'] > y['quality']:
+                    return 1
+                elif x['quality'] < y['quality']:
+                    return -1
+                else:
+                    return 0
+            else:
+                if x['strength'] < y['strength']:
+                    return 1
+                elif x['strength'] > y['strength']:
+                    return -1
+                else:
+                    return 0
+                
         wiface = self.wiface
 
         # Prepare the interface for scanning
@@ -386,8 +405,8 @@ class Wireless(Controller):
             wiface.SetEssid(essid)
 
         aps = wiface.GetNetworks()
-        #print aps
-        aps.sort(key=lambda x: x['strength'])
+        aps.sort(cmp=comp, reverse=True)
+        
         return aps
 
     def Connect(self, network, debug=False):
@@ -621,13 +640,14 @@ class WirelessConnectThread(ConnectThread):
         wiface = self.wiface
         liface = self.liface
         self.is_connecting = True
+        self.is_fast = True
         
         # Run pre-connection script.
         self.abort_if_needed()
         self.run_script_if_needed(self.before_script, 'pre-connection')
         self.abort_if_needed()
         
-        # Dake down interface and clean up previous connections.
+        # Take down interface and clean up previous connections.
         self.put_iface_down(wiface)
         self.abort_if_needed()
         self.release_dhcp_clients(wiface, liface)
@@ -659,7 +679,8 @@ class WirelessConnectThread(ConnectThread):
         # Validate Authentication.
         if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
-            if not wiface.ValidateAuthentication(time.time()):
+            if not wiface.ValidateAuthentication(time.time(), 
+                                                 fast=self.is_fast):
                 self.abort_connection('bad_pass')
         self.abort_if_needed()
 
@@ -676,7 +697,7 @@ class WirelessConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + str(wiface.GetIP(fast=True))
+            print "IP Address is: " + str(wiface.GetIP(fast=self.is_fast))
         self.is_connecting = False
     
     def generate_psk_and_authenticate(self, wiface):
@@ -709,6 +730,12 @@ class WirelessConnectThread(ConnectThread):
                                 misc.Run(''.join(['wpa_passphrase "',
                                          self.network['essid'], '" "', 
                                          _sanitize(self.network['key']), '"'])))
+            
+            if not self.network['psk']:
+                self.network['psk'] = self.network['key']
+                print 'WARNING: PSK generation failed!  Falling back to ' + \
+                      'wireless key.\nPlease report this error to the wicd ' + \
+                      'developers!'
         # Generate the wpa_supplicant file...
         if self.network.get('enctype'):
             self.SetStatus('generating_wpa_config')
@@ -735,9 +762,12 @@ class Wired(Controller):
     
     link_detect = property(get_link_detect, set_link_detect)
         
-    def LoadInterfaces(self):
-        """ Load the wnettools controls for the wired/wireless interfaces. """
-        self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
+    #def LoadInterfaces(self, dhcp_client, link_tool, flush_tool):
+    #    """ Load the wnettools controls for the wired/wireless interfaces. """
+    #    #self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
+    #    self.dhcp_client = dhcp_client
+    #    self.link_detect = link_tool
+    #    self.flush_tool = flush_tool
 
     def CheckPluggedIn(self, fast=False):
         """ Check whether the wired connection is plugged in.
@@ -860,6 +890,8 @@ class WiredConnectThread(ConnectThread):
         liface = self.liface
 
         self.is_connecting = True
+        #TODO pass is_fast in.
+        self.is_fast = True
 
         # Run pre-connection script.
         self.abort_if_needed()
@@ -891,5 +923,5 @@ class WiredConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + str(liface.GetIP(fast=True))
+            print "IP Address is: " + str(liface.GetIP(fast=self.is_fast))
         self.is_connecting = False

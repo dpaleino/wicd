@@ -1523,7 +1523,7 @@ def main(argv):
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'fenosP:',
                 ['help', 'no-daemon', 'no-poll', 'no-stderr', 'no-stdout',
-                 'no-scan''])
+                 'no-scan'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()

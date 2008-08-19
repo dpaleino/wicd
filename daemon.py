@@ -55,71 +55,12 @@ else:
 import wpath
 import networking
 import misc
+from logfile import ManagedStdio
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
     
 misc.RenameProcess("wicd-daemon")
-
-logging_enabled = True
-
-class LogWriter:
-    """ A class to provide timestamped logging. """
-    def __init__(self):
-        self.file = open(wpath.log + 'wicd.log', 'a')
-        self.eol = True
-
-
-    def __del__(self):
-        self.file.close()
-
-    def write(self, data):
-        """ Writes the data to the log with a timestamp.
-
-        This function handles writing of data to a log file. In order to
-        handle output redirection, we need to be careful with how we
-        handle the addition of timestamps. In any set of data that is
-        written, we replace the newlines with a timestamp + new line,
-        except for newlines that are the final character in data.
-
-        When a newline is the last character in data, we set a flag to
-        indicate that the next write should have a timestamp prepended
-        as well, which ensures that the timestamps match the time at
-        which the data is written, rather than the previous write.
-
-        Keyword arguments:
-        data -- The string to write to the log.
-
-        """
-        global logging_enabled
-        data = data.decode('utf-8').encode('utf-8')
-        if len(data) <= 0: return
-        if logging_enabled:
-            if self.eol:
-                self.file.write(self.get_time() + ' :: ')
-                self.eol = False
-
-            if data[-1] == '\n':
-                self.eol = True
-                data = data[:-1]
-
-            self.file.write(
-                    data.replace('\n', '\n' + self.get_time() + ' :: '))
-            if self.eol: self.file.write('\n')
-            self.file.flush()
-
-
-    def get_time(self):
-        """ Return a string with the current time nicely formatted.
-
-        The format of the returned string is yyyy/mm/dd HH:MM:SS
-
-        """
-        x = time.localtime()
-        return ''.join([
-            str(x[0]).rjust(4, '0'), '/', str(x[1]).rjust(2, '0'), '/',
-            str(x[2]).rjust(2, '0'), ' ', str(x[3]).rjust(2, '0'), ':',
-            str(x[4]).rjust(2, '0'), ':', str(x[5]).rjust(2, '0')])
 
 
 class ConnectionWizard(dbus.service.Object):
@@ -353,7 +294,6 @@ class ConnectionWizard(dbus.service.Object):
         """
         if fresh:
             self.Scan()
-            #self.AutoConnectScan()  # Also scans for hidden networks
         if self.CheckPluggedIn(True):
             self._wired_autoconnect()
         else:
@@ -382,7 +322,7 @@ class ConnectionWizard(dbus.service.Object):
                 return
 
         # Last-Used.
-        else: # Assume its last-used.
+        else:
             network = self.GetLastUsedWiredNetwork()
             if not network:
                 print "no previous wired profile available, wired " + \
@@ -650,8 +590,15 @@ class ConnectionWizard(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon')
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
-    def SendScanSignal(self):
-        """ Emits a signal announcing a scan has occurred. """
+    def SendStartScanSignal(self):
+        """ Emits a signal announcing a scan has started. """
+        pass
+
+    
+    @dbus.service.method('org.wicd.daemon')
+    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
+    def SendEndScanSignal(self):
+        """ Emits a signal announcing a scan has finished. """
         pass
 
     ########## WIRELESS FUNCTIONS
@@ -672,13 +619,16 @@ class ConnectionWizard(dbus.service.Object):
         """
         if self.debug_mode:
             print 'scanning start'
-        scan = self.wifi.Scan(str(self.hidden_essid))
+        self.SendStartScanSignal()
+        time.sleep(.2)
+        scan = self.wifi.Scan(str(self.hidden_essid), fast=True)
         self.LastScan = scan
         if self.debug_mode:
             print 'scanning done'
             print 'found ' + str(len(scan)) + ' networks:'
         for i, network in enumerate(scan):
             self.ReadWirelessNetworkProfile(i)
+        self.SendEndScanSignal()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetIwconfig(self):
@@ -1353,7 +1303,6 @@ class ConnectionWizard(dbus.service.Object):
             self.SetAlwaysShowWiredInterface(self.get_option("Settings",
                                                   "always_show_wired_interface",
                                                   default=False))
-
             self.SetUseGlobalDNS(self.get_option("Settings", "use_global_dns",
                                                  default=False))
             dns1 = self.get_option("Settings", "global_dns_1", default='None')
@@ -1506,6 +1455,17 @@ def daemonize():
     except OSError, e:
         print >> sys.stderr, "Fork #2 failed: %d (%s)" % (e.errno, e.strerror)
         sys.exit(1)
+        
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os.close(sys.__stdin__.fileno())
+    os.close(sys.__stdout__.fileno())
+    os.close(sys.__stderr__.fileno())
+    
+    # stdin always from /dev/null
+    sys.stdin = open('/dev/null', 'r')
+
+
 
 def main(argv):
     """ The main daemon program.
@@ -1521,15 +1481,16 @@ def main(argv):
     auto_scan = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'fenosP:',
+        opts, args = getopt.getopt(sys.argv[1:], 'fenoahi:',
                 ['help', 'no-daemon', 'no-poll', 'no-stderr', 'no-stdout',
-                 'no-scan'])
+                 'no-autoconnect', 'scan-interval'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
         sys.exit(2)
         
     no_poll = False
+    scan_interval = "120000"
     for o, a in opts:
         if o in ('-h', '--help'):
             usage()
@@ -1540,17 +1501,18 @@ def main(argv):
             redirect_stdout = False
         if o in ('-f', '--no-daemon'):
             do_daemonize = False
-        if o in ('-s', '--no-scan'):
+        if o in ('-a', '--no-autoconnect'):
             auto_scan = False
         if o in ('-n', '--no-poll'):
             no_poll = True
+        if o in ('i', '--scan-interval'):
+            scan_interval = a
 
     if do_daemonize: daemonize()
       
-    if redirect_stderr or redirect_stdout: output = LogWriter()
+    if redirect_stderr or redirect_stdout: output = ManagedStdio(wpath.log + 'wicd.log')
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output
-    time.sleep(1)
 
     print '---------------------------'
     print 'wicd initializing...'
@@ -1563,7 +1525,8 @@ def main(argv):
 
     gobject.threads_init()
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py"], 
+        (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py", 
+                                                    scan_interval], 
                                        flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
         signal.signal(signal.SIGTERM, sigterm_caught)
     

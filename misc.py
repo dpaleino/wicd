@@ -104,10 +104,10 @@ def PromptToStartDaemon():
     if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
         msg = '--message'
     else:
-        msg = '-- caption'
+        msg = '--caption'
     sudo_args = [sudo_prog, msg, 
-                   'Wicd needs to access your computer\'s network cards.',
-                   '--', daemonloc]
+                 'Wicd needs to access your computer\'s network cards.',
+                 daemonloc]
     os.spawnvpe(os.P_WAIT, sudo_prog, sudo_args, os.environ)
 
 def RunRegex(regex, string):

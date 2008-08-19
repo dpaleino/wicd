@@ -706,7 +706,6 @@ class appGui:
             state, x = daemon.GetConnectionStatus()
         
         if self.prev_state != state or force_check:
-            print 'we actually update now'
             apbssid = wireless.GetApBssid()
             for entry in self.network_list:
                 if hasattr(entry, "update_connect_button"):
@@ -751,7 +750,7 @@ class appGui:
         """ Sets the status bar message for the GUI. """
         self.statusID = self.status_bar.push(1, msg)
         
-    def dbus_refresh_networks(self):
+    def dbus_scan_finished(self):
         """ Calls for a non-fresh update of the gui window.
         
         This method is called after the daemon runs an automatic
@@ -760,6 +759,9 @@ class appGui:
         """
         if not self.connecting:
             self.refresh_networks(fresh=False)
+            
+    def dbus_scan_started(self):
+        self.network_list.set_sensitive(False)
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
         """ Refreshes the network list.
@@ -799,7 +801,6 @@ class appGui:
             wireless.Scan()
 
         num_networks = wireless.GetNumberOfNetworks()
-
         instruct_label = self.wTree.get_widget("label_instructions")
         if num_networks > 0:
             instruct_label.show()
@@ -840,7 +841,7 @@ class appGui:
         
         # First make sure all the Addresses entered are valid.
         if entry.chkbox_static_ip.get_active():
-            enlist = [ent for ent in [entry.txt_ip, entry.txt_netmask,
+            entlist = [ent for ent in [entry.txt_ip, entry.txt_netmask,
                                      entry.txt_gateway]]
                 
         if entry.chkbox_static_dns.get_active() and \
@@ -850,7 +851,6 @@ class appGui:
             for ent in [entry.txt_dns_2, entry.txt_dns_3]:
                 if ent.get_text() != "":
                     entlist.append(ent)
-                    
         for lblent in entlist:
             if not misc.IsValidIP(lblent.get_text()):
                 error(self.window, language['invalid_address'].
@@ -1093,8 +1093,8 @@ class appGui:
         self.wait_for_events(0.1)
         self.window.grab_focus()
         gobject.idle_add(self.refresh_networks)
-        
-        
+
+
 if __name__ == '__main__':
     if not proxy_obj:
         error("Could not connect to wicd's D-Bus interface.  Make sure the " +
@@ -1103,6 +1103,10 @@ if __name__ == '__main__':
         sys.exit(1)
 
     app = appGui(standalone=True)
-    bus.add_signal_receiver(app.dbus_refresh_networks, 'SendScanSignal',
+    bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
                             'org.wicd.daemon')
+    bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
+                            'org.wicd.daemon')
+    bus.add_signal_receiver(app.update_connect_buttons, 'StatusChanged',
+                           'org.wicd.daemon')
     gtk.main()

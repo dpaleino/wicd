@@ -309,7 +309,7 @@ class ConnectThread(threading.Thread):
         self.is_connecting = False
         print 'exiting connection thread'
         
-    def abort_connection(self, reason):
+    def abort_connection(self, reason=""):
         """ Schedule a connection abortion for the given reason. """
         self.abort_reason = reason
         self.should_die = True
@@ -392,6 +392,8 @@ class Wireless(Controller):
                 else:
                     return 0
                 
+        if not self.wireless_interface: return []
+        
         wiface = self.wiface
 
         # Prepare the interface for scanning
@@ -416,6 +418,8 @@ class Wireless(Controller):
         network -- network to connect to
 
         """
+        if not self.wireless_interface: return False
+        
         self.connecting_thread = WirelessConnectThread(network,
             self.wireless_interface, self.wired_interface,
             self.wpa_driver, self.before_script, self.after_script,
@@ -785,6 +789,7 @@ class Wired(Controller):
         network -- network to connect to
 
         """
+        if not self.wired_interface: return False
         self.connecting_thread = WiredConnectThread(network,
             self.wireless_interface, self.wired_interface,
             self.before_script, self.after_script,

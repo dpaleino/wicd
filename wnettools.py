@@ -14,9 +14,9 @@ class WirelessInterface() -- Control a wireless network interface.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
-#   Copyright (C) 2007 Byron Hillis
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -31,15 +31,16 @@ class WirelessInterface() -- Control a wireless network interface.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import misc
 import re
 import os
-import wpath
 import time
 import socket
 import fcntl
 import struct
 import array
+
+import wpath
+import misc
 
 # Compile the regex patterns that will be used to search the output of iwlist
 # scan for info these are well tested, should work on most cards
@@ -76,6 +77,16 @@ SIOCGIFFLAGS = 0x8913
 SIOCGIWRANGE = 0x8B0B
 SIOCGIWAP = 0x8B15
 
+def _sanitize_string(string):
+    blacklist = [';', '`', '$', '!', '*', '|', '>', '<']
+    new_string = []
+    for c in string:
+        if c in blacklist:
+            new_string.append("\\" + c)
+        else:
+            new_string.append(c)
+    return ''.join(new_string)
+
 def SetDNS(dns1=None, dns2=None, dns3=None):
     """ Set the DNS of the system to the specified DNS servers.
 
@@ -90,8 +101,11 @@ def SetDNS(dns1=None, dns2=None, dns3=None):
     resolv = open("/etc/resolv.conf","w")
     for dns in [dns1, dns2, dns3]:
         if dns:
-            print 'Setting DNS : ' + dns
-            resolv.write('nameserver ' + dns + '\n')
+            if misc.IsValidIP(dns):
+                print 'Setting DNS : ' + dns
+                resolv.write('nameserver ' + dns + '\n')
+            else:
+                print 'DNS IP is not a valid IP address, not writing to resolv.conf'
     resolv.close()
 
 def GetDefaultGateway():
@@ -126,12 +140,13 @@ def GetWirelessInterfaces():
     The first interface available.
 
     """
-    iface = _fast_get_wifi_interfaces()
-    if not iface:
-        output = misc.Run('iwconfig')
-        iface = misc.RunRegex(re.compile('(\w*)\s*\w*\s*[a-zA-Z0-9.-_]*\s*(?=ESSID)',
-                         re.I | re.M  | re.S), output)
-    return iface
+    dev_dir = '/sys/class/net/'
+    ifnames = []
+    
+    ifnames = [iface for iface in os.listdir(dev_dir) if os.path.isdir(dev_dir + iface) \
+               and 'wireless' in os.listdir(dev_dir + iface)]
+    
+    return bool(ifnames) and ifnames[0] or None
 
 def GetWiredInterfaces():
     basedir = '/sys/class/net/'
@@ -139,16 +154,7 @@ def GetWiredInterfaces():
             in os.listdir(basedir + iface) and \
             open(basedir + iface + "/type").readlines()[0].strip() == "1"]
 
-def _fast_get_wifi_interfaces():
-    """ Tries to get a wireless interface using /sys/class/net. """
-    dev_dir = '/sys/class/net/'
-    ifnames = []
-    
-    ifnames = [iface for iface in os.listdir(dev_dir) if 'wireless' \
-               in os.listdir(dev_dir + iface)]
-    
-    return bool(ifnames) and ifnames[0] or None
-    
+
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.
     
@@ -182,7 +188,7 @@ class Interface(object):
         verbose -- whether to print every command run
 
         """
-        self.iface = iface
+        self.iface = _sanitize_string(iface)
         self.verbose = verbose
         self.DHCP_CLIENT = None
         self.DHCP_CMD = None
@@ -206,7 +212,7 @@ class Interface(object):
         iface -- the name of the interface.
         
         """
-        self.iface = str(iface)
+        self.iface = _sanitize_string(str(iface))
         
     def _find_client_path(self, client):
         """ Determines the full path for the given program.
@@ -238,6 +244,7 @@ class Interface(object):
         True if the program exists, False otherwise.
         
         """
+        client = _sanitize_string(client)
         output = misc.Run("which " + client)
         if output and not ("no " + client) in output:
             return True
@@ -353,6 +360,7 @@ class Interface(object):
         True
         
         """
+        if not self.iface: return False
         cmd = 'ifconfig ' + self.iface + ' up'
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -365,6 +373,7 @@ class Interface(object):
         True
         
         """
+        if not self.iface: return False
         cmd = 'ifconfig ' + self.iface + ' down'
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -381,7 +390,14 @@ class Interface(object):
         """
         if not self.iface:
             return
-
+        
+        for val in [ip, netmask, broadcast]:
+            if not val:
+                continue
+            if not misc.IsValidIP(val):
+                print 'WARNING: Invalid IP address found, aborting!'
+                return False
+        
         cmd = ''.join(['ifconfig ', self.iface, ' '])
         if ip:
             cmd = ''.join([cmd, ip, ' '])
@@ -492,7 +508,9 @@ class Interface(object):
         A string representing the result of the DHCP command.  See
         _check_dhcp_result for the possible values.
         
-        """        
+        """
+        if not self.iface: return False
+        
         cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
@@ -507,13 +525,13 @@ class Interface(object):
     
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
+        if not self.iface: return False
         cmd = self.DHCP_RELEASE + " " + self.iface + " 2>/dev/null"
         misc.Run(cmd)
 
     def FlushRoutes(self):
         """ Flush all network routes. """
-        if not self.iface:
-            return
+        if not self.iface: return False
         if self.IP_FOUND and self.flush_tool != misc.ROUTE:
             cmd = "ip route flush dev " + self.iface
         else:
@@ -528,6 +546,9 @@ class Interface(object):
         gw -- gateway of the default route in dotted quad form
 
         """
+        if not misc.IsValidIP(gw):
+            print 'WARNING: Invalid gateway found.  Aborting!'
+            return False
         cmd = 'route add default gw ' + gw
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -539,6 +560,7 @@ class Interface(object):
         The IP address of the interface in dotted quad form.
 
         """
+        if not self.iface: return False
         if fast:
             return self._fast_get_ip()
         cmd = 'ifconfig ' + self.iface
@@ -572,6 +594,7 @@ class Interface(object):
         True if the interface is up, False otherwise.
         
         """
+        if not self.iface: return False
         if fast:
             return self._fast_is_up()
         cmd = "ifconfig " + self.iface
@@ -623,8 +646,7 @@ class WiredInterface(Interface):
         True if a link is detected, False otherwise.
         
         """
-        if not self.iface:
-            return False
+        if not self.iface: return False
         if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
             return self._eth_get_plugged_in(fast)
         elif self.MIITOOL_FOUND:
@@ -720,6 +742,7 @@ class WiredInterface(Interface):
         reg = struct.unpack('16shhhh', result)[-1]
         return bool(reg & 0x0004)
 
+
 class WirelessInterface(Interface):
     """ Control a wireless network interface. """
     def __init__(self, iface, verbose=False, wpa_driver='wext'):
@@ -736,7 +759,7 @@ class WirelessInterface(Interface):
         
     def SetWpaDriver(self, driver):
         """ Sets the wpa_driver. """
-        self.wpa_driver = driver
+        self.wpa_driver = _sanitize_string(driver)
 
     def SetEssid(self, essid):
         """ Set the essid of the wireless interface.
@@ -745,6 +768,7 @@ class WirelessInterface(Interface):
         essid -- essid to set the interface to
 
         """
+        essid = _sanitize_string(essid)
         cmd = 'iwconfig %s essid "%s"' % (self.iface, essid)
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -762,6 +786,7 @@ class WirelessInterface(Interface):
         True if the killswitch is enabled, False otherwise.
         
         """
+        if not self.iface: return False
         output = misc.Run("iwconfig " + self.iface)
 
         killswitch_pattern = re.compile('.*radio off', re.I | re.M | re.S)
@@ -774,6 +799,7 @@ class WirelessInterface(Interface):
     
     def GetIwconfig(self):
         """ Returns the output of iwconfig for this interface. """
+        if not self.iface: return ""
         return misc.Run("iwconfig " + self.iface)
 
     def GetNetworks(self):
@@ -834,7 +860,7 @@ class WirelessInterface(Interface):
         try:
             ret = freq_dict[freq]
         except KeyError:
-            print "Couldn't determine channel number for frequency: " + freq
+            print "Couldn't determine channel number for frequency: " + str(freq)
         
         return ret
 
@@ -982,6 +1008,8 @@ class WirelessInterface(Interface):
         mode -- mode to set the interface to
 
         """
+        if not self.iface: return False
+        mode = _sanitize_string(mode)
         if mode.lower() == 'master':
             mode = 'managed'
         cmd = 'iwconfig %s mode %s' % (self.iface, mode)
@@ -995,6 +1023,11 @@ class WirelessInterface(Interface):
         channel -- channel to set the interface to
 
         """
+        if not self.iface: return False
+        if not channel.isdigit():
+            print 'WARNING: Invalid channel found.  Aborting!'
+            return False
+        
         cmd = 'iwconfig %s channel %s' % (self.iface, str(channel))
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -1006,6 +1039,8 @@ class WirelessInterface(Interface):
         key -- encryption key to set
 
         """
+        if not self.iface: return False
+        key = _sanitize_string(key)
         cmd = 'iwconfig %s key %s' % (self.iface, key)
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -1019,6 +1054,7 @@ class WirelessInterface(Interface):
         bssid -- bssid of the network
 
         """
+        if not self.iface: return False
         cmd = 'iwconfig %s essid "%s"' % (self.iface, essid)
         if channel:
             cmd = ''.join([cmd, ' channel ', str(channel)])
@@ -1062,7 +1098,7 @@ class WirelessInterface(Interface):
             False otherwise.
 
         """
-        # Right now there's no way to do this for these drivers
+        # Right now there's no way to do this for ralink drivers
         if self.wpa_driver == RALINK_DRIVER or not self.WPA_CLI_FOUND:
             return True
 
@@ -1076,6 +1112,10 @@ class WirelessInterface(Interface):
                 print 'WPA_CLI RESULT IS', result
 
             if not result:
+                print "WARNING: Received an unexpected result from wpa_cli!" + \
+                      "\nMake sure you're using the right wpa_supplicant " + \
+                      "driver (you probably want wext).\nIf the problem " + \
+                      "persists, please file a bug report."
                 return False
             if result == "COMPLETED":
                 return True
@@ -1162,8 +1202,9 @@ class WirelessInterface(Interface):
                             if self.verbose: print cmd
                             misc.Run(cmd)
 
-    def GetBSSID(self, iwconfig=None, fast=True):
+    def GetBSSID(self, iwconfig="", fast=True):
         """ Get the MAC address for the interface. """
+        if not self.iface: return ""
         if fast:
             return self._fast_get_bssid()
         else:
@@ -1198,6 +1239,7 @@ class WirelessInterface(Interface):
         The signal strength.
 
         """
+        if not self.iface: return -1
         if fast:
             return self._get_signal_strength_fast()
 
@@ -1254,6 +1296,7 @@ class WirelessInterface(Interface):
         The dBm signal strength.
 
         """
+        if not self.iface: return -100
         if fast:
             return self._get_dbm_strength_fast()
         if iwconfig:
@@ -1286,6 +1329,7 @@ class WirelessInterface(Interface):
         The current network essid.
 
         """
+        if not self.iface: return ""
         if fast:
             return self._get_essid_fast()
 
@@ -1308,4 +1352,4 @@ class WirelessInterface(Interface):
             return None
 
         return buff.strip('\x00')
-        
+

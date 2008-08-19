@@ -8,8 +8,8 @@ when appropriate.
 
 """
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -46,7 +46,7 @@ daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 
-class ConnectionStatus():
+class ConnectionStatus(object):
     """ Class for monitoring the computer's connection status. """
     def __init__(self):
         """ Initialize variables needed for the connection status methods. """
@@ -266,9 +266,8 @@ class ConnectionStatus():
             if daemon.GetSuspend() or daemon.CheckIfConnecting():
                 return True
             wireless.Scan()
-            daemon.SendScanSignal()
-        except dbus.exceptions.DBusException:
-            print 'dbus exception while attempting rescan'
+        except dbus.exceptions.DBusException, e:
+            print 'dbus exception while attempting rescan: %s' % str(e)
         finally:
             return True
         

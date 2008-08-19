@@ -82,7 +82,7 @@ class LabelEntry(gtk.HBox):
         if self.auto_hide_text and widget:
             self.entry.set_visibility(False)
 
-            
+
 class GreyLabel(gtk.Label):
     """ Creates a grey gtk.Label. """
     def __init__(self):
@@ -356,18 +356,18 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.txt_netmask.set_text(self.format_entry(networkID,"netmask"))
         self.txt_gateway.set_text(self.format_entry(networkID,"gateway"))
 
-        self.chkbox_global_dns.set_active(wireless.GetWirelessProperty(networkID,
-                                                                       'use_global_dns'))
+        self.chkbox_global_dns.set_active(bool(wireless.GetWirelessProperty(networkID,
+                                                                  'use_global_dns')))
         
         self.txt_dns_1.set_text(self.format_entry(networkID, "dns1"))
         self.txt_dns_2.set_text(self.format_entry(networkID, "dns2"))
         self.txt_dns_3.set_text(self.format_entry(networkID, "dns3"))
         
         self.reset_static_checkboxes()
-        self.chkbox_encryption.set_active(wireless.GetWirelessProperty(networkID,
-                                                                       'encryption'))
-        self.chkbox_global_settings.set_active(wireless.GetWirelessProperty(networkID,
-                                                             'use_settings_globally'))
+        self.chkbox_encryption.set_active(bool(wireless.GetWirelessProperty(networkID,
+                                                                       'encryption')))
+        self.chkbox_global_settings.set_active(bool(wireless.GetWirelessProperty(networkID,
+                                                             'use_settings_globally')))
 
             
         activeID = -1  # Set the menu to this item when we are done
@@ -628,7 +628,7 @@ class WiredNetworkEntry(NetworkEntry):
         try:
             sudo_prog = misc.choose_sudo_prog()
             msg = "You must enter your password to configure scripts"
-            if sudo_prog.endswith("gksu"):
+            if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
                 msg_flag = "-m"
             else:
                 msg_flag = "--caption"
@@ -636,7 +636,7 @@ class WiredNetworkEntry(NetworkEntry):
                                 profile, "wired"])
         except misc.WicdError:
             error("Could not find a graphical sudo program." + \
-                  "  Script editor could no be launched.")
+                  "  Script editor could not be launched.")
 
     def check_enable(self):
         """ Disable objects if the profile list is empty. """
@@ -870,8 +870,10 @@ class WirelessNetworkEntry(NetworkEntry):
         
     def update_connect_button(self, state, apbssid):
         """ Update the connection/disconnect button for this entry. """
-        if state == misc.WIRELESS and apbssid == \
-           wireless.GetWirelessProperty(self.networkID, "bssid"):
+        if not apbssid:
+            apbssid = wireless.GetApBssid()
+        if state == misc.WIRELESS and \
+           apbssid == wireless.GetWirelessProperty(self.networkID, "bssid"):
             self.disconnect_button.show()
             self.connect_button.hide()
         else:
@@ -908,7 +910,7 @@ class WirelessNetworkEntry(NetworkEntry):
         try:
             sudo_prog = misc.choose_sudo_prog()
             msg = "You must enter your password to configure scripts"
-            if sudo_prog.endswith("gksu"):
+            if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
                 msg_flag = "-m"
             else:
                 msg_flag = "--caption"

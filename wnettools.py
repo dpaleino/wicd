@@ -80,6 +80,10 @@ SIOCGIWAP = 0x8B15
 def _sanitize_string(string):
     blacklist = [';', '`', '$', '!', '*', '|', '>', '<']
     new_string = []
+    
+    if not string:
+        return string
+  
     for c in string:
         if c in blacklist:
             new_string.append("\\" + c)

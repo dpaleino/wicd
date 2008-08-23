@@ -1,0 +1,161 @@
+.\" Written by Robby Workman <rworkman@slackware.com>
+.TH WICD 8 "June 2008" "wicd-1.5.0"
+.SH NAME
+.B Wicd
+\- Wired and Wireless Network Connection Manager
+
+.SH THEORY OF OPERATION
+
+Wicd is designed to give the user as much control over behavior of network
+connections as possible.  Every network, both wired and wireless, has its
+own profile with its own configuration options and connection behavior.
+Wicd will try to automatically connect only to networks the user specifies
+it should try, with a preference first to a wired network, then to wireless.
+
+For wired connections, users have many options for determining what network
+settings to use.  Wicd allows creation of an unlimited number of wired
+profiles, each of which has its own unique settings.  The user can choose to
+automatically connect to a selected default profile, choose a profile from a
+pop-up window every time wicd connects, or have wicd automatically choose the
+last profile used to manually connect.
+
+For wireless connections, users can select any number of wireless networks
+to automatically connect; wicd will choose the one with the highest signal
+strength to try to connect.
+
+If the user chooses, wicd will try to automatically reconnect when it detects
+that a connection is lost.  If the last known connection state is wired, wicd
+will first try to reconnect to the wired network, and if it is not available,
+wicd will try any available wireless networks which have automatic connection
+enabled.  If the last known connection state is wireless, wicd will first try
+to reconnect to the previously connected network (even if that network does
+not have automatic connection enabled), and should that fail, it will try both
+a wired connection and any available wireless networks which have automatic
+connection enabled.
+
+Wicd uses built-in linux wireless-tools, such as ifconfig and iwconfig, to
+get and configure network info.  There is some flexibility in its use of DHCP,
+providing support for dhclient, dhcpcd, and pump.  Wicd uses wpa_supplicant
+to handle all wireless encryption settings, and uses a template-based system
+to create the configuration files used by wpa_supplicant.  These templates
+can be edited, and new templates can be created by the user and imported into
+wicd, allowing connection to networks with uncommon encryption settings.
+
+.SH STRUCTURE
+
+Wicd has two major parts: the daemon, which runs with root privileges; and the
+user interface, which runs with normal user privileges.  The two parts run as
+separate processes and make use of D-Bus to communicate.
+
+The daemon is responsible for making and configuring connections, reading and
+writing configuration files and logs, and monitoring the connection status.
+The daemon's job is split between two processes: wicd-daemon.py and monitor.py.
+All the connection status monitoring, as well as the auto-reconnection logic,
+takes place in monitor.py.  Everthing else is done by wicd-daemon.py.
+
+The user interface (stored in wicd-client), which is made up of a tray 
+icon, a main GUI window, and its child dialogs, gets configuration and network
+info from the daemon either by querying it using the methods in the daemon's 
+dbus interface or by receiving signals emitted from the daemon over D-Bus.  
+Any configuration changes made in the user interface are passed back to the
+daemon, which actually applies the changes and writes them to configuration
+files.
+
+Since the user interface just queries for connection and configuration info
+from the daemon, it is possible to run wicd without the GUI at all.  Also,
+the daemon is started by wicd's init script during system startup (before any
+user logs in), making it possible to use wicd with "headless" machines.
+
+.SH USAGE HINTS
+
+.B Choosing Alternate Tools
+.br
+Wicd supports several alternatives regarding the networking tools on linux.
+In the "External Programs" tab of the Preferences menu, you can choose your
+preferred DHCP client, link detection tool, and routing tool if the defaults
+aren't suitable for your particular distribution or system.
+
+.B Custom Scripts
+.br
+If you need to run any custom commands before or after connecting to or 
+disconnecting from a network, Wicd supports this; however, you will need to
+have a graphical sudo helper installed (currently supported are kdesu, gksu,
+and ktsuss).
+.br
+If you do not have a graphical sudo helper installed, you still have the
+ability to use custom scripts, but you will have to set them up manually.
+See wicd-wired-settings.conf(5) and/or wicd-wireless-settings.conf(5) for
+more information on how to do so.
+
+.B Automatically Connecting to Networks
+.br
+Wicd uses the BSSID to recognize a particular network (and thus to decide
+whether it should automatically connect to it).  If you are on a network 
+that has many different access points which all have the same ESSID 
+(many universities have such networks), there is an option in the "Advanced
+Settings" to "Use these settings for all networks sharing this essid."
+With this option enabled, Wicd will autoconnect to that network, regardless
+of which node it sees.
+
+
+.SH FILES
+
+.B /etc/wicd/manager-settings.conf
+.br
+This file contains global settings for Wicd.
+.br
+See this file's own man page for more information about it.
+
+.B /etc/wicd/wired-settings.conf
+.br
+This file contains settings related to the wired interface.
+.br
+See this file's own man page for more information about it.
+
+.B /etc/wicd/wireless-settings.conf
+.br
+This file contains settings related to the wireless interface.
+.br
+See this file's own man page for more information about it.
+
+.B /etc/wicd/encryption/templates/
+.br
+This directory contains various templates for encrypted (WEP, WPA, etcetera)
+connections.  If none of them fit your needs, you may create your own and
+add it to this directory.  If you do this, please contact the authors
+(see below) of Wicd.
+
+.B /var/lib/wicd/configurations/
+.br
+This directory contains individual configuration files for each encrypted
+network you set up in Wicd.
+
+.B /var/log/wicd/
+.br
+This directory contains logfiles of Wicd's activity.  Please refer to the
+log if you are having connection or other problems.
+
+.SH "SEE ALSO"
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wired-settings.conf (5),
+.BR wicd-wireless-settings.conf (5),
+.BR ifconfig (8),
+.BR iwconfig (8),
+.BR wpa_supplicant (8),
+.BR route (8),
+.BR ip (8),
+.BR mii-tool (8),
+.BR ethtool (8),
+.BR dhclient (8),
+.BR dhcpcd (8),
+.BR pump (8).
+
+
+.SH WICD AUTHORS
+Adam Blackburn <compwiz18@gmail.com>
+.br
+Dan O'Reilly <oreilldf@gmail.com>
+
+.SH MANPAGE AUTHOR
+Robby Workman <rworkman@slackware.com>
+

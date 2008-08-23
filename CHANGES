@@ -1,0 +1,35 @@
+1.5.0
+ * Added support for pump and dhcpcd
+ * Added wep-hex, wep-passphrase, eap-tls, and wep-shared encryption templates
+ * Autoconnect falls back to wireless if wired connection fails for any reason
+ * Fixed a memory leak
+ * Added ability to put interfaces up/down via the GUI
+ * Reduced number of external program calls for improved memory usage
+ * Added support for using one set of settings for all networks with an ESSID
+ * Made debugging output less spammy and more helpful
+ * Made GUI more responsive
+ * Added README and INSTALL
+ * Added setup.py install script
+ * Improved automatic reconnection
+ * Added option to disable tray animations
+ * Added distro-specific init scripts when installed from source
+ * Added PID file that is created on daemon start and destroyed on SIGTERM
+ * Allow resizing of Preference window and main window
+ * Added support for getting interface names from /proc/net/wireless
+ * Added a Disconnect button
+ * Added MAC address to network information that is always visible
+ * Requires root permissions to edit pre/post/disconnection scripts
+ * Daemon process is now renamed "wicd" and GUI is renamed "wicd-client"
+ * Added support for kdesu and ktsuss as well as gksudo
+ * Added ability to restart and print usage to init file
+ * Renamed desktop file "wicd.desktop"
+ * Change directory structure to be FHS compliant and customizable
+ * Added desktop file for autostarting
+ * Rewrote init file for Debian from /etc/init.d/skeleton
+ * Added manpages for the configuration files and daemon
+ * Added INSTALL, LICENSE, AUTHORS, README, and CHANGELOG
+ * Created new SVG icon and updated PNG icons accordingly
+ * Added --no-poll option to daemon which prevents polling of data
+ * Fixed various permissions issues
+ * Added wired-default profile for automatic DHCP on ethernet by default
+ * Changed log file permissions to 0600

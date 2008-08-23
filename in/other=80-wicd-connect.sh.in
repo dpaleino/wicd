@@ -1,0 +1,4 @@
+#!/bin/sh
+# Bring wifi network interface back up.
+
+%LIB%autoconnect.py

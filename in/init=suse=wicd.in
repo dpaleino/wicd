@@ -1,0 +1,50 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:       wicd-daemon
+# Required-Start: dbus
+# Default-Start:  3 4 5
+# Default-Stop:
+# Description: wicd, a wired and wireless connection manager.
+### END INIT INFO
+
+WICD_BIN=%SBIN%wicd
+test -x $WICD_BIN || exit 5
+
+. /etc/rc.status
+rc_reset
+
+case "$1" in
+        start)
+                checkproc $WICD_BIN
+                if [ $? = 0 ]; then
+                        echo -n "wicd already running"
+                        rc_status -v
+                        rc_exit
+                fi
+                echo -n "Starting wicd"
+                startproc $WICD_BIN
+                rc_status -v
+                ;;
+        stop)
+                echo -n "Shutting down wicd"
+                killproc -TERM $WICD_BIN
+                rc_status -v
+                ;;
+        restart)
+                $0 stop
+                $0 start
+                rc_status
+                ;;
+        status)
+                echo -n "Checking for wicd: "
+                checkproc $WICD_BIN
+                rc_status -v
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|status|restart}"
+                exit 1
+                ;;
+esac
+
+

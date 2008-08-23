@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# /etc/init.d/wicd
+# Start/stop/restart the Wicd daemon
+# Modified the Slackware default init script for use
+# where the distro is not detected.
+
+# This is defined in /usr/lib/python2.5/site-packages/wicd/wpath.py
+PIDFILE="%PIDFILE%"
+
+# Define start and stop functions
+
+wicd_start() {
+  if [ -e $PIDFILE ]; then
+    echo "Wicd appears to already be running."
+    echo "If this is not the case, then remove "
+    echo "$PIDFILE and try again..."
+    exit 1
+  else
+    echo "Starting wicd daemon..."
+    %SBIN%wicd 2>/dev/null 1>&2
+  fi
+}
+
+wicd_stop() {
+  echo "Stopping wicd daemon..."
+  if [ -e $PIDFILE ]; then
+    kill $(cat $PIDFILE) 2>/dev/null
+    rm -f $PIDFILE 2>/dev/null
+  else
+    killall wicd-client 2>/dev/null
+  fi
+}
+
+# See how we were called and take appropriate action	
+
+case $1 in
+  start)
+    wicd_start
+   ;;
+  stop)
+    wicd_stop
+   ;;
+  restart)
+    wicd_stop
+    wicd_start
+   ;;
+  *)
+    echo "Usage: $0 {start|stop|restart}"
+    exit 1
+   ;;
+esac
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Put wifi interface down
+%LIB%suspend.py

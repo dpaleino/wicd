@@ -1,0 +1,75 @@
+.\" Written by Robby Workman <rworkman@slackware.com>
+.TH WICD-WIRED-SETTINGS.CONF 5 "June 2008" "wicd-1.5.0"
+.SH NAME
+wicd-wired-settings.conf \- controls Wicd's wired network settings
+
+.SH DESCRIPTION
+
+This file contains configuration information for wired interfaces in Wicd.
+.br
+This file is located at %ETC%wired-settings.conf
+
+
+.SH SETTINGS
+
+.TP
+.BI "default = " <0|1>
+This option decides whether to use this profile as the default.
+0 = do not use this profile as default.
+.br
+1 = use this profile as default.
+.TP
+.BI "beforescript = " <None|arbitrary_script>
+This defines a script to run before Wicd brings up the connection.
+The script should be a Bourne-compatible script and should be executable.
+.br
+IMPORTANT - scripts should ONLY be writable by root and located in a
+directory that is only writable by root.
+.TP
+.BI "afterscript = " <None|arbitrary_script>
+This defines a script to run after Wicd brings up the connection.
+The script should be a Bourne-compatible script and should be executable.
+.br
+IMPORTANT - scripts should ONLY be writable by root and located in a
+directory that is only writable by root.
+.TP
+.BI "disconnectscript = " <None|arbitrary_script>
+This defines a script to run when Wicd disconnects the interface.
+The script should be a Bourne-compatible script and should be executable.
+.br
+IMPORTANT - scripts should ONLY be writable by root and located in a
+directory that is only writable by root.
+.TP
+.BI "ip = " <None|ip_address>
+Use this option if you have a static ip address for your system.
+.TP
+.BI "netmask = " <None|network mask>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "broadcast = " <None|broadcast_address>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "gateway = " <None|gateway_address>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "use_static_dns = " <True|False>
+True = use static DNS servers instead of accepting what the dhcp server supplies.
+.TP
+.BI "use_global_dns = " <True|False>
+True = use the global DNS servers provided in wicd-manager-settings.conf(5).
+This option is only appropriate if "use_static_dns = True"
+.TP
+.BI "dns1 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+.TP
+.BI "dns2 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+.TP
+.BI "dns3 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+
+.SH "SEE ALSO"
+.BR wicd (8),
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wireless-settings.conf (5).
+

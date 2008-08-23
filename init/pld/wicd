@@ -1,0 +1,88 @@
+#!/bin/sh
+#
+# wicd	wicd wireless connection daemon
+#
+# chkconfig:	345 99 01
+#
+# description:	wicd wireless connection daemon
+#
+# processname:	wicd
+# config:
+# pidfile: /var/run/wicd.pid
+#
+# $Id: template.init 9689 2008-03-27 16:15:39Z patrys $
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+
+# Get service config - may override defaults
+# [ -f /etc/sysconfig/wicd ] && . /etc/sysconfig/wicd
+
+WICD_BIN=/usr/sbin/wicd
+
+start() {
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/wicd ]; then
+		msg_starting wicd
+		daemon $WICD_BIN
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/wicd
+	else
+		msg_already_running wicd
+	fi
+}
+
+stop() {
+	if [ -f /var/lock/subsys/wicd ]; then
+		# Stop daemons.
+		msg_stopping wicd
+		# killproc wicd
+		killproc --pidfile /var/run/wicd.pid wicd -TERM
+		rm -f /var/lock/subsys/wicd
+	else
+		msg_not_running wicd
+	fi
+}
+
+
+condrestart() {
+	if [ -f /var/lock/subsys/wicd ]; then
+		stop
+		start
+	else
+		msg_not_running wicd
+		RETVAL=$1
+	fi
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+# use this one if program doesn't support reloading without restart
+  force-reload)
+	condrestart 7
+	;;
+  status)
+	status wicd
+	RETVAL=$?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL

@@ -1,0 +1,127 @@
+.\" Written by Robby Workman <rworkman@slackware.com>
+.TH WICD-WIRELESS-SETTINGS.CONF 5 "June 2008" "wicd-1.5.0"
+.SH NAME
+wicd-wired-settings.conf \- controls Wicd's wireless network settings
+
+.SH DESCRIPTION
+
+This file contains configuration information for wireless interfaces in Wicd.
+.br
+This file is located at %ETC%wireless-settings.conf
+
+
+.SH SETTINGS
+
+.TP
+.BI "bssid = " <BSSID_of_network>
+This value can be found using iwconfig(8).
+.TP
+.BI "essid = " <ESSID_of_network>
+This value can be found using iwconfig(8).
+.TP
+.BI "hidden = " <True|False>
+This option notes whether the network's ESSID is broadcast or not.
+.TP
+.BI "channel = " <integer_value>
+Valid channels are dependent upon country.
+.br
+This value can be found using iwconfig(8).
+.TP
+.BI "mode = " <Master|Ad-hoc>
+.br
+This value can be found using iwconfig(8).
+.TP
+.BI "enctype = " <encryption_template>
+This can take the value of any encryption template shown in %ENCRYPTION%.
+.TP
+.BI "encryption_method = "WEP|WPA|WPA2>
+This value can be found using iwconfig(8).
+.TP
+.BI "key = " <plain_text_key>
+Be sure this file is readable only by root.
+.TP
+.BI "automatic = " <True|False>
+This option determines whether Wicd should automatically connect to this 
+network.
+.TP
+.BI "ip = " <None|ip_address>
+Use this option if you have a static ip address for your system.
+.TP
+.BI "netmask = " <None|network mask>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "broadcast = " <None|broadcast_address>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "gateway = " <None|gateway_address>
+This setting is only appropriate if a static ip address is configured above.
+.TP
+.BI "use_static_dns = " <True|False>
+True = use static DNS servers instead of accepting what the dhcp server supplies.
+.TP
+.BI "use_global_dns = " <True|False>
+True = use the global DNS servers provided in wicd-manager-settings.conf(5).
+.br
+This option is only appropriate if "use_static_dns = True"
+.TP
+.BI "dns1 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+.TP
+.BI "dns2 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+.TP
+.BI "dns3 = " <None|ip_address>
+Static DNS address if "use_static_dns = True" and "use_global_dns = False"
+.TP
+.BI "use_settings_globally = " <0|1>
+Wicd keeps track of whether to autoconnect to networks based on bssid.
+This ensures that you don't accidentally connect to another network that is
+not yours but happens to have the same essid - for example, there are a lot
+of commercial routers in use with "linksys" as the essid.
+.br
+0 = Do not use settings globally
+.br
+1 = Use settings globally
+.TP
+.BI "has_profile = " <True|False>
+This parameter is used internally by Wicd and has no effect as far as the 
+user is concerned.
+.TP
+.BI "beforescript = " <None|arbitrary_script>
+This defines a script to run before Wicd brings up the connection.
+.br
+IMPORTANT - scripts should ONLY be writable by root and should be located 
+in a directory that is writable by only root.
+.TP
+.BI "afterscript = " <None|arbitrary_script>
+This defines a script to run after Wicd brings up the connection.
+.br
+IMPORTANT - scripts should ONLY be writable by root and located 
+in a directory that is writable by only root.
+.TP
+.BI "disconnectscript = " <None|arbitrary_script>
+This defines a script to run when Wicd disconnects the interface.
+.br
+IMPORTANT - scripts should ONLY be writable by root and located 
+in a directory that is writable by only root.
+
+
+
+.SH OTHER
+The "use_settings_globally" option determines how an individual network's
+configuration stanza starts.  If the option is "0" (do not use settings
+globally), then the stanza's top line will be the bssid of the access
+point (in this format):  
+.br
+[00:15:3E:87:D3:68]
+.br
+If the "option is set to "1" (use settings globally), then the first line
+of the stanza will be in this format: 
+.br
+[essid:UA Public Wireless Network]
+
+.SH "SEE ALSO"
+.BR wicd (8),
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wired-settings.conf (5).
+

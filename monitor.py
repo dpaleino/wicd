@@ -290,7 +290,7 @@ def main():
     """
     monitor = ConnectionStatus()
     gobject.timeout_add(2000, monitor.update_connection_status)
-    gobject.timeout_add(120000, monitor.rescan_networks)
+    #gobject.timeout_add(120000, monitor.rescan_networks)
     
     mainloop = gobject.MainLoop()
     mainloop.run()

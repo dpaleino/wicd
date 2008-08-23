@@ -435,11 +435,10 @@ class NetworkEntry(gtk.HBox):
         WirelessNetworkEntry classes.
         
         """
-        global daemon, wired, wireless, config, vpn_session
+        global daemon, wired, wireless, config
         daemon = dbus_ifaces["daemon"]
         wired = dbus_ifaces["wired"]
         wireless = dbus_ifaces["wireless"]
-        vpn_session = dbus_ifaces["vpn_session"]
         config = dbus_ifaces["config"]
         gtk.HBox.__init__(self, False, 2)
         self.expander = gtk.Expander()

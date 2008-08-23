@@ -460,6 +460,7 @@ def get_language_list_tray():
     language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
     language['connecting'] = _('Connecting')
     language['wired'] = _('Wired Network')
+    language['scanning'] = _('Scanning')
     
     return language
 

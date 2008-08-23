@@ -134,10 +134,7 @@ class ConnectionWizard(dbus.service.Object):
         print "setting wired interface %s" % (str(interface))
         self.wired.wired_interface = interface
         self.wifi.wired_interface = interface
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings","wired_interface", interface)
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "wired_interface", interface)
 
     @dbus.service.method('org.wicd.daemon')
     def SetWirelessInterface(self, interface):
@@ -145,59 +142,42 @@ class ConnectionWizard(dbus.service.Object):
         print "setting wireless interface %s" % (str(interface))
         self.wifi.wireless_interface = interface
         self.wired.wireless_interface = interface
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings","wireless_interface", interface)
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
+        self.set_option("Settings", "wireless_interface", interface)
 
     @dbus.service.method('org.wicd.daemon')
     def SetWPADriver(self, driver):
         """ Sets the wpa driver the wpa_supplicant will use. """
         print "setting wpa driver", str(driver)
         self.wifi.wpa_driver = driver
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings","wpa_driver",driver)
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
+        self.set_option("Settings", "wpa_driver", driver)
 
     @dbus.service.method('org.wicd.daemon')
     def SetUseGlobalDNS(self, use):
         """ Sets a boolean which determines if global DNS is enabled. """
         print 'setting use global dns to', use
         use = misc.to_bool(use)
-        print 'setting use global dns to boolean', use
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "use_global_dns", use)
+        self.set_option("Settings", "use_global_dns", use)
         self.use_global_dns = use
         self.wifi.use_global_dns = use
         self.wired.use_global_dns = use
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
 
     @dbus.service.method('org.wicd.daemon')
     def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None):
         """ Sets the global dns addresses. """
         print "setting global dns"
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "global_dns_1", misc.noneToString(dns1))
+        self.set_option("Settings", "global_dns_1", misc.noneToString(dns1))
         self.dns1 = dns1
         self.wifi.global_dns_1 = dns1
         self.wired.global_dns_1 = dns1
-        config.set("Settings", "global_dns_2", misc.noneToString(dns2))
+        self.set_option("Settings", "global_dns_2", misc.noneToString(dns2))
         self.dns2 = dns2
         self.wifi.global_dns_2 = dns2
         self.wired.global_dns_2 = dns2
-        config.set("Settings", "global_dns_3", misc.noneToString(dns3))
+        self.set_option("Settings", "global_dns_3", misc.noneToString(dns3))
         self.dns3 = dns3
         self.wifi.global_dns_3 = dns3
         self.wired.global_dns_3 = dns3
         print 'global dns servers are', dns1, dns2, dns3
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
 
     @dbus.service.method('org.wicd.daemon')
     def GetUseGlobalDNS(self):
@@ -222,11 +202,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetDebugMode(self, debug):
         """ Sets if debugging mode is on or off. """
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "debug_mode", debug)
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
+        self.set_option("Settings", "debug_mode", debug)
         self.debug_mode = misc.to_bool(debug)
         self.wifi.debug = self.debug_mode
         self.wired.debug = self.debug_mode
@@ -257,11 +233,7 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetSignalDisplayType(self, value):
         """ Sets the signal display type and writes it the wicd config file. """
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "signal_display_type", value)
-        configfile = open(self.app_conf, "w")
-        config.write(configfile)
+        self.set_option("Settings", "signal_display_type", value)
         self.signal_display_type = int(value)
 
     @dbus.service.method('org.wicd.daemon')
@@ -385,10 +357,7 @@ class ConnectionWizard(dbus.service.Object):
         
         """
         print 'setting automatically reconnect when connection drops'
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "auto_reconnect", misc.to_bool(value))
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "auto_reconnect", misc.to_bool(value))
         self.auto_reconnect = misc.to_bool(value)
 
     @dbus.service.method('org.wicd.daemon')
@@ -536,10 +505,7 @@ class ConnectionWizard(dbus.service.Object):
         self.dhcp_client = int(client)
         self.wifi.dhcp_client = int(client)
         self.wired.dhcp_client = int(client)
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "dhcp_client", client)
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "dhcp_client", client)
 
     @dbus.service.method('org.wicd.daemon')
     def GetLinkDetectionTool(self):
@@ -550,10 +516,7 @@ class ConnectionWizard(dbus.service.Object):
     def SetLinkDetectionTool(self, link_tool):
         self.link_detect_tool = int(link_tool)
         self.wired.link_tool = int(link_tool)
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "link_detect_tool", link_tool)
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "link_detect_tool", link_tool)
 
     @dbus.service.method('org.wicd.daemon')
     def GetFlushTool(self):
@@ -564,10 +527,7 @@ class ConnectionWizard(dbus.service.Object):
         self.flush_tool = int(flush_tool)
         self.wired.flush_tool = int(flush_tool)
         self.wifi.flush_tool = int(flush_tool)
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "flush_tool", flush_tool)
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "flush_tool", flush_tool)
     
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
@@ -823,10 +783,7 @@ class ConnectionWizard(dbus.service.Object):
         # 1 = default profile
         # 2 = show list
         # 3 = last used profile
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings","wired_connect_mode", int(method))
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings","wired_connect_mode", int(method))
         self.wired_connect_mode = int(method)
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -841,6 +798,16 @@ class ConnectionWizard(dbus.service.Object):
             return self.wired.connecting_thread.GetStatus()
         else:
             return False
+        
+    @dbus.service.method('org.wicd.daemon.wired')
+    def DetectWiredInterface(self):
+        """ Returns an automatically detected wireless interface. """
+        iface = self.wired.DetectWiredInterface()
+        if iface:
+            print 'automatically detected wired interface ' + str(iface)
+        else:
+            print "Couldn't detect a wired interface."
+        return str(iface)
 
     @dbus.service.method('org.wicd.daemon.wired')
     def SetWiredProperty(self, property, value):
@@ -883,11 +850,8 @@ class ConnectionWizard(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def SetAlwaysShowWiredInterface(self, value):
         """ Sets always_show_wired_interface to the given value. """
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        config.set("Settings", "always_show_wired_interface", 
-                   misc.to_bool(value))
-        config.write(open(self.app_conf, "w"))
+        self.set_option("Settings", "always_show_wired_interface", 
+                        misc.to_bool(value))
         self.always_show_wired_interface = misc.to_bool(value)
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -1224,19 +1188,10 @@ class ConnectionWizard(dbus.service.Object):
             default_height = 590
             width_str = "pref_width"
             height_str = "pref_height"
-        
 
-        config = ConfigParser.ConfigParser()
-        config.read(self.app_conf)
-        if config.has_section("Settings"):
-            if config.has_option("Settings", width_str):
-                width = config.get("Settings", width_str)
-            else:
-                width = default_width
-            if config.has_option("Settings", height_str):
-                height = config.get("Settings", height_str)
-            else:
-                height = default_height
+        width = self.get_option("Settings", width_str, default_width)
+        height = self.get_option("Settings", height_str, default_height)
+        
         size = []
         size.append(int(width))
         size.append(int(height))
@@ -1257,6 +1212,14 @@ class ConnectionWizard(dbus.service.Object):
         if self.debug_mode:
             print ''.join([text, " ", str(value)])
         return value
+    
+    def set_option(self, section, option, value):
+        """ Sets the given option to the given value. """
+        config = ConfigParser.ConfigParser()
+        config.read(self.app_conf)
+        config.set(section, option, value)
+        configfile = open(self.app_conf, "w")
+        config.write(configfile)
 
     def get_option(self, section, option, default=None):
         """ Method for returning an option from manager-settings.conf. 
@@ -1285,106 +1248,54 @@ class ConnectionWizard(dbus.service.Object):
         values into memory.
         
         """
-        if os.path.isfile(self.app_conf):
-            iface = self.DetectWirelessInterface()
-            if not iface:
-                if self.debug_mode:
-                    print "Failed to detect wireless interface, defaulting " + \
-                    "to wlan0, unless a config entry already exists."
-                iface = "wlan0"
-            self.SetWirelessInterface(self.get_option("Settings",
-                                                      "wireless_interface",
-                                                      default=iface))
-            self.SetWiredInterface(self.get_option("Settings",
-                                                   "wired_interface",
-                                                   default="eth0"))
-            self.SetWPADriver(self.get_option("Settings", "wpa_driver",
-                                              default="wext"))
-            self.SetAlwaysShowWiredInterface(self.get_option("Settings",
-                                                  "always_show_wired_interface",
-                                                  default=False))
-            self.SetUseGlobalDNS(self.get_option("Settings", "use_global_dns",
-                                                 default=False))
-            dns1 = self.get_option("Settings", "global_dns_1", default='None')
-            dns2 = self.get_option("Settings", "global_dns_2", default='None')
-            dns3 = self.get_option("Settings", "global_dns_3", default='None')
-            self.SetGlobalDNS(dns1, dns2, dns3)
-            self.SetAutoReconnect(self.get_option("Settings", "auto_reconnect",
-                                                  default=False))
-            self.SetDebugMode(self.get_option("Settings", "debug_mode",
+        iface = self.DetectWirelessInterface()
+        if not iface: iface = 'wlan0'
+        self.SetWirelessInterface(self.get_option("Settings", 
+                                                  "wireless_interface",
+                                                  default=iface))
+        
+        iface = self.DetectWiredInterface()
+        if not iface: iface = 'eth0'
+        self.SetWiredInterface(self.get_option("Settings", "wired_interface",
+                                               default=iface))
+        
+        self.SetWPADriver(self.get_option("Settings", "wpa_driver",
+                                          default="wext"))
+        self.SetAlwaysShowWiredInterface(self.get_option("Settings",
+                                              "always_show_wired_interface",
                                               default=False))
+        self.SetUseGlobalDNS(self.get_option("Settings", "use_global_dns",
+                                             default=False))
+        dns1 = self.get_option("Settings", "global_dns_1", default='None')
+        dns2 = self.get_option("Settings", "global_dns_2", default='None')
+        dns3 = self.get_option("Settings", "global_dns_3", default='None')
+        self.SetGlobalDNS(dns1, dns2, dns3)
+        self.SetAutoReconnect(self.get_option("Settings", "auto_reconnect",
+                                              default=True))
+        self.SetDebugMode(self.get_option("Settings", "debug_mode",
+                                          default=False))
 
-            self.SetWiredAutoConnectMethod(self.get_option("Settings",
-                                                           "wired_connect_mode",
-                                                           default=1))
-            self.SetSignalDisplayType(self.get_option("Settings",
-                                                      "signal_display_type",
-                                                      default=0))
-            self.SetDHCPClient(self.get_option("Settings", "dhcp_client",
-                                               default=0))
-            self.SetLinkDetectionTool(self.get_option("Settings",
-                                                      "link_detect_tool",
-                                                      default=0))
-            self.SetFlushTool(self.get_option("Settings", "flush_tool",
-                                              default=0))
-        else:
-            # Write some defaults maybe?
-            print "Configuration file not found, creating, adding defaults..."
-            config = ConfigParser.ConfigParser()
-            config.read(self.app_conf)
-            config.add_section("Settings")
-            config.set("Settings", "wireless_interface", "wlan0")
-            config.set("Settings", "wired_interface", "eth0")
-            config.set("Settings", "always_show_wired_interface", "False")
-            config.set("Settings", "auto_reconnect", "False")
-            config.set("Settings", "debug_mode", "False")
-            config.set("Settings", "wired_connect_mode", "1")
-            config.set("Settings", "signal_display_type", "0")
-            config.set("Settings", "dhcp_client", "0")
-            config.set("Settings", "link_detect_tool", "0")
-            config.set("Settings", "flush_tool", "0")
-            config.set("Settings", "dns1", "None")
-            config.set("Settings", "dns2", "None")
-            config.set("Settings", "dns3", "None")
-            iface = self.DetectWirelessInterface()
-            if iface is not None:
-                config.set("Settings", "wireless_interface", iface)
-            else:
-                print "Couldn't detect a wireless interface, using wlan0..."
-                config.set("Settings", "wireless_interface", "wlan0")
-            config.set("Settings", "wpa_driver", "wext")
-            config.write(open(self.app_conf, "w"))
-            self.SetWirelessInterface(config.get("Settings",
-                                                 "wireless_interface"))
-            self.SetWiredInterface(config.get("Settings",
-                                              "wired_interface"))
-            self.SetWPADriver(config.get("Settings",
-                                         "wpa_driver"))
-            self.SetDHCPClient(config.get("Settings", "dhcp_client"))
-            self.SetLinkDetectionTool(config.get("Settings", 
-                                                 "link_detect_tool"))
-            self.SetFlushTool(config.get("Settings", "flush_tool"))
-            self.SetAlwaysShowWiredInterface(False)
-            self.SetAutoReconnect(False)
-            self.SetDebugMode(False)
-            self.SetWiredAutoConnectMethod(1)
-            self.SetSignalDisplayType(0)
-            self.SetUseGlobalDNS(False)
-            self.SetGlobalDNS(None, None, None)
+        self.SetWiredAutoConnectMethod(self.get_option("Settings",
+                                                       "wired_connect_mode",
+                                                       default=1))
+        self.SetSignalDisplayType(self.get_option("Settings",
+                                                  "signal_display_type",
+                                                  default=0))
+        self.SetDHCPClient(self.get_option("Settings", "dhcp_client",
+                                           default=0))
+        self.SetLinkDetectionTool(self.get_option("Settings",
+                                                  "link_detect_tool",
+                                                  default=0))
+        self.SetFlushTool(self.get_option("Settings", "flush_tool", default=0))
 
         if os.path.isfile(self.wireless_conf):
             print "Wireless configuration file found..."
-            # Don't do anything since it is there
-            pass
         else:
-            # We don't need to put anything in it, so just make it
             print "Wireless configuration file not found, creating..."
             open(self.wireless_conf, "w").close()
 
         if os.path.isfile(self.wired_conf):
             print "Wired configuration file found..."
-            # Don't do anything since it is there
-            pass
         else:
             print "Wired configuration file not found, creating a default..."
             # Create the file and a default profile
@@ -1404,15 +1315,16 @@ class ConnectionWizard(dbus.service.Object):
         os.chown(self.wired_conf, 0, 0)
 
         print "Using wireless interface..." + self.GetWirelessInterface()
+        print "Using wired interface..." + self.GetWiredInterface()
                 
 
 def usage():
     print """
-wicd 1.5.0
+wicd 1.6.0
 wireless (and wired) connection daemon.
 
 Arguments:
-\t-s\t--no-scan\tDon't auto-scan/auto-connect.
+\t-a\t--no-autoconnect\tDon't auto-scan/auto-connect.
 \t-f\t--no-daemon\tDon't daemonize (run in foreground).
 \t-e\t--no-stderr\tDon't redirect stderr.
 \t-n\t--no-poll\tDon't monitor network status.

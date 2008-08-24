@@ -80,10 +80,10 @@ SIOCGIWAP = 0x8B15
 def _sanitize_string(string):
     blacklist = [';', '`', '$', '!', '*', '|', '>', '<']
     new_string = []
-    
+
     if not string:
         return string
-  
+
     for c in string:
         if c in blacklist:
             new_string.append("\\" + c)
@@ -272,8 +272,6 @@ class Interface(object):
             else:
                 client = "pump"
             return client
-        
-        print 'checking dhcp...'
         
         if self.DHCP_CLIENT:
             dhcp_client = get_client_name(self.DHCP_CLIENT)

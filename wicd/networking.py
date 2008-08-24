@@ -800,6 +800,13 @@ class Wired(Controller):
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
+    
+    def DetectWiredInterface(self):
+        """ Attempts to automatically detect a wired interface. """
+        try:
+            return wnettools.GetWiredInterfaces()[0]
+        except IndexError:
+            return None
 
     def GetIP(self, fast=False):
         """ Get the IP of the interface.

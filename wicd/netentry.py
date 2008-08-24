@@ -407,7 +407,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         if ID == -1:
             self.combo_encryption.set_active(0)
             ID = 0
-            
+
         opts = methods[ID][2]
         for x in opts:
             box = None
@@ -417,9 +417,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 box = LabelEntry(opts[x][0].replace('_',' '))
             box.set_auto_hidden(True)
             self.vbox_encrypt_info.pack_start(box)
-            #add the data to any array, so that the information
-            #can be easily accessed by giving the name of the wanted
-            #data
+            # Add the data to any array, so that the information
+            # can be easily accessed by giving the name of the wanted
+            # data.
             self.encryption_info[opts[x][1]] = box.entry
 
             box.entry.set_text(noneToBlankString(

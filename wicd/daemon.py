@@ -1402,7 +1402,6 @@ def main(argv):
         sys.exit(2)
         
     no_poll = False
-    scan_interval = "120000"
     for o, a in opts:
         if o in ('-h', '--help'):
             usage()
@@ -1437,8 +1436,7 @@ def main(argv):
 
     gobject.threads_init()
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py", 
-                                                    scan_interval], 
+        (child_pid, x, x, x) = gobject.spawn_async([wpath.bin + "monitor.py"], 
                                        flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
         signal.signal(signal.SIGTERM, sigterm_caught)
     

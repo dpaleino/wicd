@@ -1393,9 +1393,9 @@ def main(argv):
     auto_scan = True
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'fenoahi:',
+        opts, args = getopt.getopt(sys.argv[1:], 'fenoah:',
                 ['help', 'no-daemon', 'no-poll', 'no-stderr', 'no-stdout',
-                 'no-autoconnect', 'scan-interval'])
+                 'no-autoconnect'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -1416,8 +1416,6 @@ def main(argv):
             auto_scan = False
         if o in ('-n', '--no-poll'):
             no_poll = True
-        if o in ('i', '--scan-interval'):
-            scan_interval = a
 
     if do_daemonize: daemonize()
       

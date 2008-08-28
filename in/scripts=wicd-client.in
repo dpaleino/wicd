@@ -1,2 +1,2 @@
 #!/bin/bash
-%LIB%wicd-client.py $@
+exec %LIB%wicd-client.py $@

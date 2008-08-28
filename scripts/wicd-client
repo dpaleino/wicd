@@ -1,2 +1,2 @@
 #!/bin/bash
-/usr/lib/wicd/wicd-client.py $@
+exec /usr/lib/wicd/wicd-client.py $@

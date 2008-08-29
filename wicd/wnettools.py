@@ -548,10 +548,11 @@ class Interface(object):
         gw -- gateway of the default route in dotted quad form
 
         """
+	if not self.iface: return
         if not misc.IsValidIP(gw):
             print 'WARNING: Invalid gateway found.  Aborting!'
             return False
-        cmd = 'route add default gw ' + gw
+        cmd = 'route add default gw %s dev %s' % (gw, self.iface)
         if self.verbose: print cmd
         misc.Run(cmd)
 

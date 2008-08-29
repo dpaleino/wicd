@@ -22,6 +22,7 @@ import locale
 import gettext
 import sys
 from subprocess import Popen, STDOUT, PIPE
+from copy import copy
 import subprocess
 import commands
 
@@ -76,7 +77,11 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         err = None
         fds = False
 
-    f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds)
+    tmpenv = copy(os.environ)
+    tmpenv["LC_ALL"] = "C"
+    tmpenv["LANG"] = "C"
+    f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds,
+              env=tmpenv)
     
     if return_pipe:
         return f.stdout

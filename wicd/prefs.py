@@ -28,7 +28,6 @@ import gobject
 import pango
 
 from wicd import misc
-from wicd import gui
 from wicd.misc import checkboxTextboxToggle, noneToBlankString
 
 daemon = None
@@ -36,6 +35,14 @@ wireless = None
 wired = None
 
 language = misc.get_language_list_gui()
+
+def alert(parent, message): 
+    """ Shows an alert dialog """
+    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
+                               gtk.BUTTONS_OK)
+    dialog.set_markup(message)
+    dialog.run()
+    dialog.destroy()
 
 class PreferencesDialog(object):
     def __init__(self, wTree, dbus):
@@ -229,7 +236,7 @@ class PreferencesDialog(object):
             wired.SetWiredAutoConnectMethod(1)
             
         if self.backends[self.backendcombo.get_active()] != daemon.GetSavedBackend():
-            gui.alert(self.dialog, language["backend_alert"])
+            alert(self.dialog, language["backend_alert"])
         daemon.SetBackend(self.backends[self.backendcombo.get_active()])
             
         # External Programs Tab

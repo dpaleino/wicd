@@ -15,8 +15,9 @@ current = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 # These paths are replaced when setup.py configure is run
 
-# All of these paths *MUST* end in a /
-# except the python one, of course as it is an executable
+# All directory paths *MUST* end in a /
+
+# DIRECTORIES
 
 lib = '/usr/lib/wicd/'
 share = '/usr/share/wicd/'
@@ -26,14 +27,12 @@ encryption = '/etc/wicd/encryption/templates/'
 bin = '/usr/bin/'
 networks = '/var/lib/wicd/configurations/'
 log = '/var/log/wicd/'
-backends = '/usr/lib/wicd/backends/'
-
-# other, less useful entries
 resume = '/etc/acpi/resume.d/'
 suspend = '/etc/acpi/suspend.d/'
 sbin = '/usr/sbin/'
 dbus = '/etc/dbus-1/system.d/'
 desktop = '/usr/share/applications/'
+backends= '/usr/lib/wicd/backends/'
 translations = '/usr/share/locale/'
 icons = '/usr/share/icons/hicolor/'
 autostart = '/etc/xdg/autostart/'
@@ -42,6 +41,9 @@ docdir = '/usr/share/doc/wicd/'
 mandir = '/usr/share/man/'
 kdedir = '/usr/share/autostart/'
 
+# FILES
+
+# python begins the file section
 python = '/usr/bin/python'
 pidfile = '/var/run/wicd/wicd.pid'
 # stores something like other/wicd
@@ -49,6 +51,9 @@ pidfile = '/var/run/wicd/wicd.pid'
 initfile = 'init/debian/wicd'
 # stores only the file name, i.e. wicd
 initfilename = 'wicd'
+
+# BOOLEANS
+
 no_install_init = False
 no_install_man = False
 no_install_kde = False

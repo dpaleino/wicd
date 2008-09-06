@@ -38,8 +38,8 @@ from wicd import misc
 from wicd import wpath
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
-from wicd.prefs import PreferencesDialog
 from wicd.dbusmanager import DBusManager
+from wicd.prefs import PreferencesDialog
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -84,18 +84,9 @@ def setup_dbus(dbus_man=None):
     wired = dbus_ifaces['wired']
     return True
     
-    
 def error(parent, message): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
-    
-def alert(parent, message): 
-    """ Shows an error dialog """
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
     dialog.run()

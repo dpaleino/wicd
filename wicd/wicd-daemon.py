@@ -63,6 +63,8 @@ if __name__ == '__main__':
     
 misc.RenameProcess("wicd")
 
+wireless_conf = wpath.etc + "wireless-settings.conf"
+wired_conf = wpath.etc + "wired-settings.conf"
 
 class WicdDaemon(dbus.service.Object):
     def __init__(self, bus_name, object_path="/org/wicd/daemon",
@@ -1414,7 +1416,7 @@ def main(argv):
     # Open the DBUS session
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
-    daemon = WicdDaemon(wicd_bus, auto_connect=auto_scan)
+    daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
 
     gobject.threads_init()
     if not no_poll:

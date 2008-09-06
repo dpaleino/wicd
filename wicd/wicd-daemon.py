@@ -286,7 +286,7 @@ class WicdDaemon(dbus.service.Object):
         if fresh:
             self.wireless_bus.Scan()
         if self.wired_bus.CheckPluggedIn():
-            self.wired_bus._wired_autoconnect()
+            self._wired_autoconnect()
         else:
             self.wireless_bus._wireless_autoconnect()
 
@@ -554,6 +554,58 @@ class WicdDaemon(dbus.service.Object):
         size.append(int(width))
         size.append(int(height))
         return size
+    
+    def _wired_autoconnect(self):
+        """ Attempts to autoconnect to a wired network. """
+        if self.GetWiredAutoConnectMethod() == 3 and \
+           not self.GetNeedWiredProfileChooser():
+            # attempt to smartly connect to a wired network
+            # by using various wireless networks detected
+            # and by using plugged in USB devices
+            print self.LastScan
+        if self.GetWiredAutoConnectMethod() == 2 and \
+           not self.GetNeedWiredProfileChooser():
+            self.LaunchChooser()
+            return True
+        
+        # Default Profile.
+        elif self.GetWiredAutoConnectMethod() == 1:
+            network = self.GetDefaultWiredNetwork()
+            if not network:
+                print "Couldn't find a default wired connection," + \
+                      " wired autoconnect failed."
+                self.wireless_bus._wireless_autoconnect()
+                return
+
+        # Last-Used.
+        else:
+            network = self.GetLastUsedWiredNetwork()
+            if not network:
+                print "no previous wired profile available, wired " + \
+                      "autoconnect failed."
+                self.wireless_bus._wireless_autoconnect()
+                return
+
+        self.ReadWiredNetworkProfile(network)
+        self.ConnectWired()
+        print "Attempting to autoconnect with wired interface..."
+        self.auto_connecting = True
+        time.sleep(1.5)
+        gobject.timeout_add(3000, self._monitor_wired_autoconnect)
+        return True
+
+    def _monitor_wired_autoconnect(self):
+        wiredb = self.wired_bus
+        if wiredb.CheckIfWiredConnecting():
+            return True
+        elif wiredb.GetWiredIP():
+            self.auto_connecting = False
+            return False
+        elif not self.wireless_bus.CheckIfWirelessConnecting():
+            self.wireless_bus._wireless_autoconnect()
+            return False
+        self.auto_connecting = False
+        return False
     
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
@@ -1242,55 +1294,7 @@ class WiredDaemon(dbus.service.Object):
     def GetWiredProfileList(self):
         """ Returns a list of all wired profiles in wired-settings.conf. """
         return self.config.sections()
-    
-    def _wired_autoconnect(self):
-        """ Attempts to autoconnect to a wired network. """
-        if self.GetWiredAutoConnectMethod() == 3 and \
-           not self.GetNeedWiredProfileChooser():
-            # attempt to smartly connect to a wired network
-            # by using various wireless networks detected
-            # and by using plugged in USB devices
-            print self.LastScan
-        if self.GetWiredAutoConnectMethod() == 2 and \
-           not self.GetNeedWiredProfileChooser():
-            self.LaunchChooser()
-            return
-        
-        # Default Profile.
-        elif self.GetWiredAutoConnectMethod() == 1:
-            network = self.GetDefaultWiredNetwork()
-            if not network:
-                print "Couldn't find a default wired connection," + \
-                      " wired autoconnect failed."
-                self._wireless_autoconnect()
-                return
 
-        # Last-Used.
-        else:
-            network = self.GetLastUsedWiredNetwork()
-            if not network:
-                print "no previous wired profile available, wired " + \
-                      "autoconnect failed."
-                self._wireless_autoconnect()
-                return
-
-        self.ReadWiredNetworkProfile(network)
-        self.ConnectWired()
-        print "Attempting to autoconnect with wired interface..."
-        self.auto_connecting = True
-        time.sleep(1.5)
-        gobject.timeout_add(3000, self._monitor_wired_autoconnect)
-
-    def _monitor_wired_autoconnect(self):
-        if self.CheckIfWiredConnecting():
-            return True
-        elif self.GetWiredIP():
-            self.auto_connecting = False
-            return False
-        elif not self.CheckIfWirelessConnecting():
-            self._wireless_autoconnect()
-        self.auto_connecting = False
-        return False
 
 def usage():
     print """

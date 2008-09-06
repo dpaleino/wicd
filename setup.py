@@ -247,7 +247,11 @@ class get_translations(Command):
             #msgfmt --output-file=$iden/LC_MESSAGES/wicd.mo po/$iden.po
             lang_identifier = open(pofile,'r').readlines()[1].strip()[2:]
             shutil.move(pofile, lang_identifier+'.po')
-            print 'Got',lang_identifier
+            print 'Got',lang_identifier% sudo wicd -foe
+Traceback (most recent call last):
+  File "/usr/lib/wicd/wicd-daemon.py", line 59, in <module>
+    from wicd.configmanager import ConfigManager
+ImportError: No module named configmanager
             os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
             os.system('msgfmt --output-file=translations/'+lang_identifier+'/LC_MESSAGES/wicd.mo '+lang_identifier+'.po')
             os.remove(lang_identifier+'.po')
@@ -359,7 +363,7 @@ connect at startup to any preferred network within range.
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend'],
+      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 'wicd.configmanager'],
       data_files=data
       )
 ##print "Running post-install configuration..."

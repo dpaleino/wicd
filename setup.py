@@ -247,11 +247,7 @@ class get_translations(Command):
             #msgfmt --output-file=$iden/LC_MESSAGES/wicd.mo po/$iden.po
             lang_identifier = open(pofile,'r').readlines()[1].strip()[2:]
             shutil.move(pofile, lang_identifier+'.po')
-            print 'Got',lang_identifier% sudo wicd -foe
-Traceback (most recent call last):
-  File "/usr/lib/wicd/wicd-daemon.py", line 59, in <module>
-    from wicd.configmanager import ConfigManager
-ImportError: No module named configmanager
+            print 'Got',lang_identifier
             os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
             os.system('msgfmt --output-file=translations/'+lang_identifier+'/LC_MESSAGES/wicd.mo '+lang_identifier+'.po')
             os.remove(lang_identifier+'.po')

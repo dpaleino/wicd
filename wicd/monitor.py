@@ -41,9 +41,14 @@ misc.RenameProcess("wicd-monitor")
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
-proxy_obj = dbus.SystemBus().get_object('org.wicd.daemon', '/org/wicd/daemon')
+bus = dbus.SystemBus()
+proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+
+proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon/wired')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
+
+proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon/wireless')
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 
 class ConnectionStatus(object):
@@ -61,9 +66,6 @@ class ConnectionStatus(object):
         self.reconnect_tries = 0
         self.last_reconnect_time = time.time()
         self.signal_changed = False
-        
-        # This determines if we use ioctl or external programs
-        self.fast = True
         self.iwconfig = ""
 
     def check_for_wired_connection(self, wired_ip):
@@ -74,7 +76,7 @@ class ConnectionStatus(object):
 
         """
         
-        if wired_ip and wired.CheckPluggedIn(self.fast):
+        if wired_ip and wired.CheckPluggedIn():
             # Only change the interface if it's not already set for wired
             if not self.still_wired:
                 daemon.SetCurrentInterface(daemon.GetWiredInterface())
@@ -96,26 +98,15 @@ class ConnectionStatus(object):
         # Make sure we have an IP before we do anything else.
         if wireless_ip is None:
             return False
-        
-        if self.fast:
-            self.iwconfig = ''
-        else:
+
+        if daemon.NeedsExternalCalls():
             self.iwconfig = wireless.GetIwconfig()
+        else:
+            self.iwconfig = ''
         # Reset this, just in case.
         self.tried_reconnect = False
         
-        # Try getting signal strength, and default to 0 
-        # if something goes wrong.
-        try:
-            if daemon.GetSignalDisplayType() == 0:
-                wifi_signal = int(wireless.GetCurrentSignalStrength(self.iwconfig, 
-                                                                    self.fast))
-            else:
-                wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig,
-                                                                 self.fast))
-        except:
-            wifi_signal = 0
-
+        wifi_signal = self._get_printable_sig_strength()
         if wifi_signal == 0:
             # If we have no signal, increment connection loss counter.
             # If we haven't gotten any signal 4 runs in a row (12 seconds),
@@ -123,6 +114,7 @@ class ConnectionStatus(object):
             self.connection_lost_counter += 1
             print self.connection_lost_counter
             if self.connection_lost_counter >= 4:
+                wireless.DisconnectWireless()
                 self.connection_lost_counter = 0
                 return False
         else:  # If we have a signal, reset the counter
@@ -131,8 +123,7 @@ class ConnectionStatus(object):
         # Only update if the signal strength has changed because doing I/O
         # calls is expensive, and the icon flickers.
         if (wifi_signal != self.last_strength or
-            self.network != wireless.GetCurrentNetwork(self.iwconfig,
-                                                       self.fast)):
+            self.network != wireless.GetCurrentNetwork(self.iwconfig)):
             self.last_strength = wifi_signal
             self.signal_changed = True
             daemon.SetCurrentInterface(daemon.GetWirelessInterface())    
@@ -159,15 +150,14 @@ class ConnectionStatus(object):
 
             # Determine what our current state is.
             # Check for wired.
-            wired_ip = wired.GetWiredIP(self.fast)
+            wired_ip = wired.GetWiredIP("")
             wired_found = self.check_for_wired_connection(wired_ip)
             if wired_found:
                 self.update_state(misc.WIRED, wired_ip=wired_ip)
                 return True
 
             # Check for wireless
-            wifi_ip = wireless.GetWirelessIP(self.fast)
-            #self.iwconfig = wireless.GetIwconfig()
+            wifi_ip = wireless.GetWirelessIP("")
             self.signal_changed = False
             wireless_found = self.check_for_wireless_connection(wifi_ip)
             if wireless_found:
@@ -194,7 +184,6 @@ class ConnectionStatus(object):
         """ Set the current connection state. """
         # Set our connection state/info.
         iwconfig = self.iwconfig
-        fast = self.fast
         if state == misc.NOT_CONNECTED:
             info = [""]
         elif state == misc.SUSPENDED:
@@ -203,12 +192,12 @@ class ConnectionStatus(object):
             if wired.CheckIfWiredConnecting():
                 info = ["wired"]
             else:
-                info = ["wireless", wireless.GetCurrentNetwork(iwconfig, fast)]
+                info = ["wireless", wireless.GetCurrentNetwork(iwconfig)]
         elif state == misc.WIRELESS:
             self.reconnect_tries = 0
-            info = [wifi_ip, wireless.GetCurrentNetwork(iwconfig, fast),
-                    str(wireless.GetPrintableSignalStrength(iwconfig, fast)),
-                    str(wireless.GetCurrentNetworkID(iwconfig, fast))]
+            info = [wifi_ip, wireless.GetCurrentNetwork(iwconfig),
+                    str(self._get_printable_sig_strength()),
+                    str(wireless.GetCurrentNetworkID(iwconfig))]
         elif state == misc.WIRED:
             self.reconnect_tries = 0
             info = [wired_ip]
@@ -223,6 +212,18 @@ class ConnectionStatus(object):
             daemon.EmitStatusChanged(state, info)
         self.last_state = state
         return True
+    
+    def _get_printable_sig_strength(self):
+        """ Get the correct signal strength format. """
+        try:
+            if daemon.GetSignalDisplayType() == 0:
+                wifi_signal = int(wireless.GetCurrentSignalStrength(self.iwconfig))
+            else:
+                wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
+        except TypeError:
+            wifi_signal = 0        
+            
+        return wifi_signal
 
     def auto_reconnect(self, from_wireless=None):
         """ Automatically reconnects to a network if needed.
@@ -250,7 +251,7 @@ class ConnectionStatus(object):
             
             # If we just lost a wireless connection, try to connect to that
             # network again.  Otherwise just call Autoconnect.
-            cur_net_id = wireless.GetCurrentNetworkID(self.iwconfig, self.fast)
+            cur_net_id = wireless.GetCurrentNetworkID(self.iwconfig)
             if from_wireless and cur_net_id > -1:
                 print 'Trying to reconnect to last used wireless ' + \
                        'network'
@@ -278,7 +279,6 @@ def reply_handle():
 def err_handle(error):
     """ Just a dummy function needed for asynchronous dbus calls. """
     pass
-    
         
 def main():
     """ Starts the connection monitor. 
@@ -289,8 +289,7 @@ def main():
     
     """
     monitor = ConnectionStatus()
-    gobject.timeout_add(2000, monitor.update_connection_status)
-    #gobject.timeout_add(120000, monitor.rescan_networks)
+    gobject.timeout_add(2500, monitor.update_connection_status)
     
     mainloop = gobject.MainLoop()
     mainloop.run()

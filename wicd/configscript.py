@@ -58,7 +58,6 @@ except Exception:
 
 wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
 wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-config = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
 
 wireless_conf = wpath.etc + 'wireless-settings.conf'
 wired_conf = wpath.etc + 'wired-settings.conf'
@@ -132,8 +131,8 @@ def write_scripts(network, network_type, script_info):
         con.set(network, "afterscript", script_info["post_entry"])
         con.set(network, "disconnectscript", script_info["disconnect_entry"])
         con.write(open(wired_conf, "w"))
-        config.ReadWiredNetworkProfile(network)
-        config.SaveWiredNetworkProfile(network)
+        wired.ReadWiredNetworkProfile(network)
+        wired.SaveWiredNetworkProfile(network)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
@@ -143,8 +142,8 @@ def write_scripts(network, network_type, script_info):
         con.set(bssid, "afterscript", script_info["post_entry"])
         con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
         con.write(open(wireless_conf, "w"))
-        config.ReadWirelessNetworkProfile(int(network))
-        config.SaveWirelessNetworkProfile(int(network))
+        wireless.ReadWirelessNetworkProfile(int(network))
+        wireless.SaveWirelessNetworkProfile(int(network))
 
 def main (argv):
     """ Runs the script configuration dialog. """
@@ -157,7 +156,7 @@ def main (argv):
     
     script_info = get_script_info(network, network_type)
     
-    gladefile = wpath.etc + "wicd.glade"
+    gladefile = wpath.share + "wicd.glade"
     wTree = gtk.glade.XML(gladefile)
     dialog = wTree.get_widget("configure_script_dialog")
     wTree.get_widget("pre_label").set_label(language['before_script'] + ":")

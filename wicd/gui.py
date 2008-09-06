@@ -34,9 +34,9 @@ import gtk.glade
 from dbus import DBusException
 from dbus import version as dbus_version
 
-import wicd.misc
-import wicd.wpath
-from wicd.misc import noneToString, noneToBlankString, stringToBoolean, checkboxTextboxToggle
+from wicd import misc
+from wicd import wpath
+from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
 from wicd.dbusmanager import DBusManager
@@ -56,12 +56,11 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
-proxy_obj, daemon, wireless, wired, bus, config = [None for x in
-                                                           range(0, 6)]
+proxy_obj, daemon, wireless, wired, bus = [None for x in range(0, 5)]
 language = misc.get_language_list_gui()
 
 def setup_dbus(dbus_man=None):
-    global bus, daemon, wireless, wired, config, dbus_manager
+    global bus, daemon, wireless, wired, dbus_manager
     if dbus_man:
         dbus_manager = dbus_man
     else:
@@ -83,13 +82,20 @@ def setup_dbus(dbus_man=None):
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
-    config = dbus_ifaces['config']
     return True
     
     
 def error(parent, message): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
+                               gtk.BUTTONS_OK)
+    dialog.set_markup(message)
+    dialog.run()
+    dialog.destroy()
+    
+def alert(parent, message): 
+    """ Shows an error dialog """
+    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
     dialog.run()
@@ -202,7 +208,7 @@ class WiredProfileChooser:
         response = dialog.run()
         if response == 1:
             print 'reading profile ', wired_profiles.get_active_text()
-            config.ReadWiredNetworkProfile(wired_profiles.get_active_text())
+            wired.ReadWiredNetworkProfile(wired_profiles.get_active_text())
             wired.ConnectWired()
         else:
             if stoppopcheckbox.get_active():
@@ -217,10 +223,10 @@ class appGui(object):
         if not standalone:
             setup_dbus(dbus_man)
 
-        gladefile = "data/wicd.glade"
+        gladefile = wpath.share + "wicd.glade"
         self.wTree = gtk.glade.XML(gladefile)
 
-        dic = { "refresh_clicked" : self.refresh_networks, 
+        dic = { "refresh_clicked" : self.refresh_clicked, 
                 "quit_clicked" : self.exit, 
                 "disconnect_clicked" : self.disconnect_all,
                 "main_exit" : self.exit, 
@@ -258,7 +264,6 @@ class appGui(object):
         self.standalone = standalone
         self.wpadrivercombo = None
         self.connecting = False
-        self.fast = True  # Use ioctl instead of external program calls
         self.prev_state = None
         self.refresh_networks(fresh=False)
         
@@ -274,7 +279,7 @@ class appGui(object):
         else:
             self.wTree.get_widget("iface_menu_enable_wired").hide()
 
-        size = config.ReadWindowSize("main")
+        size = daemon.ReadWindowSize("main")
         width = size[0]
         height = size[1]
         if width > -1 and height > -1:
@@ -449,7 +454,7 @@ class appGui(object):
         if not self.is_visible:
             return True
 
-        fast = self.fast
+        fast = not daemon.NeedsExternalCalls()
         wired_connecting = wired.CheckIfWiredConnecting()
         wireless_connecting = wireless.CheckIfWirelessConnecting()
         self.connecting = wired_connecting or wireless_connecting
@@ -467,7 +472,7 @@ class appGui(object):
                     iwconfig = wireless.GetIwconfig()
                 else:
                     iwconfig = ''
-                self.set_status(wireless.GetCurrentNetwork(iwconfig, fast) + ': ' +
+                self.set_status(wireless.GetCurrentNetwork(iwconfig) + ': ' +
                        language[str(wireless.CheckWirelessConnectingMessage())])
             if wired_connecting:
                 self.set_status(language['wired_network'] + ': ' + 
@@ -484,14 +489,13 @@ class appGui(object):
                 self.status_bar.remove(1, self.statusID)
 
             # Determine connection status.
-            if self.check_for_wired(wired.GetWiredIP(fast)):
+            if self.check_for_wired(wired.GetWiredIP("")):
                 return True
             if not fast:
                 iwconfig = wireless.GetIwconfig()
             else:
                 iwconfig = ''
-            if self.check_for_wireless(iwconfig,
-                                       wireless.GetWirelessIP(fast)):
+            if self.check_for_wireless(iwconfig, wireless.GetWirelessIP("")):
                 return True
             self.set_status(language['not_connected'])
             return True
@@ -510,9 +514,10 @@ class appGui(object):
     
     def check_for_wired(self, wired_ip):
         """ Determine if wired is active, and if yes, set the status. """
-        if wired_ip and wired.CheckPluggedIn(self.fast):
-            self.set_status(language['connected_to_wired'].replace('$A',
-                                                                   wired_ip))
+        if wired_ip and wired.CheckPluggedIn():
+            self.set_status(
+                language['connected_to_wired'].replace('$A',wired_ip)
+            )
             return True
         else:
             return False
@@ -522,15 +527,15 @@ class appGui(object):
         if not wireless_ip:
             return False
         
-        network = wireless.GetCurrentNetwork(iwconfig, self.fast)
+        network = wireless.GetCurrentNetwork(iwconfig)
         if not network:
             return False
     
         network = str(network)
         if daemon.GetSignalDisplayType() == 0:
-            strength = wireless.GetCurrentSignalStrength(iwconfig, self.fast)
+            strength = wireless.GetCurrentSignalStrength(iwconfig)
         else:
-            strength = wireless.GetCurrentDBMStrength(iwconfig, self.fast)
+            strength = wireless.GetCurrentDBMStrength(iwconfig)
 
         if strength is None:
             return False
@@ -549,15 +554,19 @@ class appGui(object):
     def dbus_scan_finished(self):
         """ Calls for a non-fresh update of the gui window.
         
-        This method is called after the daemon runs an automatic
-        rescan.
+        This method is called after a wireless scan is completed.
         
         """
         if not self.connecting:
             self.refresh_networks(fresh=False)
             
     def dbus_scan_started(self):
+        """ Called when a wireless scan starts. """
         self.network_list.set_sensitive(False)
+        
+    def refresh_clicked(self, widget=None):
+        def dummy(x=None):pass
+        wireless.Scan(reply_handler=dummy, error_handler=dummy)
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
         """ Refreshes the network list.
@@ -579,7 +588,7 @@ class appGui(object):
             z.destroy()
             del z
 
-        if wired.CheckPluggedIn(self.fast) or wired.GetAlwaysShowWiredInterface():
+        if wired.CheckPluggedIn() or daemon.GetAlwaysShowWiredInterface():
             printLine = True  # In this case we print a separator.
             wirednet = WiredNetworkEntry(dbus_manager.get_dbus_ifaces())
             self.network_list.pack_start(wirednet, False, False)
@@ -691,7 +700,7 @@ class appGui(object):
             entry.set_net_prop("dns1", '')
             entry.set_net_prop("dns2", '')
             entry.set_net_prop("dns3", '')
-        config.SaveWiredNetworkProfile(entry.prof_name)
+        wired.SaveWiredNetworkProfile(entry.prof_name)
         return True
             
     def save_wireless_settings(self, networkid, entry, netent):
@@ -758,9 +767,9 @@ class appGui(object):
             entry.set_net_prop('use_settings_globally', True)
         else:
             entry.set_net_prop('use_settings_globally', False)
-            config.RemoveGlobalEssidEntry(networkid)
+            wireless.RemoveGlobalEssidEntry(networkid)
             
-        config.SaveWirelessNetworkProfile(networkid)
+        wireless.SaveWirelessNetworkProfile(networkid)
         return True
 
     def edit_advanced(self, widget, event, ttype, networkid, networkentry):
@@ -864,7 +873,7 @@ class appGui(object):
         """
         self.window.hide()
         [width, height] = self.window.get_size()
-        config.WriteWindowSize(width, height, "main")
+        daemon.WriteWindowSize(width, height, "main")
 
         if self.standalone:
             self.window.destroy()
@@ -895,9 +904,9 @@ if __name__ == '__main__':
     setup_dbus()
     app = appGui(standalone=True)
     bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
-                            'org.wicd.daemon')
+                            'org.wicd.daemon.wireless')
     bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
-                            'org.wicd.daemon')
+                            'org.wicd.daemon.wireless')
     bus.add_signal_receiver(app.update_connect_buttons, 'StatusChanged',
-                           'org.wicd.daemon')
+                            'org.wicd.daemon')
     gtk.main()

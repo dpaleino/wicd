@@ -42,13 +42,14 @@ import gobject
 import getopt
 import os
 import pango
+import time
 from dbus import DBusException
 from dbus import version as dbus_version
 
 # Wicd specific imports
-import wicd.wpath as wpath
-import wicd.misc as misc
-import wicd.gui as gui
+from wicd import wpath
+from wicd import misc
+from wicd import gui
 from wicd.dbusmanager import DBusManager
 
 # Import egg.trayicon if we're using an older gtk version
@@ -78,7 +79,6 @@ daemon = None
 wireless = None
 wired = None
 wired = None
-config = None
 
 language = misc.get_language_list_tray()
 
@@ -203,7 +203,7 @@ class TrayIcon:
             if self.animate:
                 prefix = self.get_bandwidth_state()
             else:
-                prefix = ''
+                prefix = 'idle-'
             if daemon.GetSignalDisplayType() == 0:
                 if wireless_signal > 75:
                     signal_img = "high-signal"
@@ -298,7 +298,7 @@ class TrayIcon:
             return (active, max_gain, last_bytes)
 
 
-    class TrayIconGUI:
+    class TrayIconGUI(object):
         """ Base Tray Icon UI class.
         
         Implements methods and variables used by both egg/StatusIcon
@@ -336,16 +336,24 @@ class TrayIcon:
                                                                   props.parent)
             self.gui_win = None
             self.current_icon_path = None
-            self.dbus_available = True
             self.use_tray = use_tray
-
+            self._is_scanning = False
+            net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
+            net_menuitem.connect("activate", self.on_net_menu_activate)
+            
+        def tray_scan_started(self):
+            """ Callback for when a wireless scan is started. """
+            self._is_scanning = True
+            self.init_network_menu()
+            
+        def tray_scan_ended(self):
+            """ Callback for when a wireless scan finishes. """
+            self._is_scanning = False
+            self.populate_network_menu()
+                
         def on_activate(self, data=None):
             """ Opens the wicd GUI. """
-            try:
-                self.toggle_wicd_gui()
-            except dbus.DBusException:
-                self.dbus_available = False
-                gui.error(None, "Could not connect to wicd daemon.  Unable to load GUI")
+            self.toggle_wicd_gui()
 
         def on_quit(self, widget=None):
             """ Closes the tray icon. """
@@ -361,8 +369,8 @@ class TrayIcon:
             dialog.run()
             dialog.destroy()
         
-        def _add_item_to_menu(self, net_menu, lbl, type_, 
-                              n_id, is_connecting, is_active):
+        def _add_item_to_menu(self, net_menu, lbl, type_, n_id, is_connecting, 
+                              is_active):
             """ Add an item to the network list submenu. """
             def network_selected(widget, net_type, net_id):
                 """ Callback method for a menu item selection. """
@@ -423,6 +431,29 @@ class TrayIcon:
                     signal_img = 'signal-25.png'
             return wpath.images + signal_img
             
+        def on_net_menu_activate(self, item):
+            """ Trigger a background scan to populate the network menu. 
+            
+            Called when the network submenu is moused over.  We
+            sleep briefly, clear pending gtk events, and if
+            we're still being moused over we trigger a scan.
+            This is to prevent scans when the user is just
+            mousing past the menu to select another menu item.
+            
+            """
+            def dummy(x=None): pass
+            
+            if self._is_scanning:
+                return True
+            
+            self.init_network_menu()
+            time.sleep(.4)
+            while gtk.events_pending():
+                gtk.main_iteration()
+            if item.state != gtk.STATE_PRELIGHT:
+                return True
+            wireless.Scan(reply_handler=dummy, error_handler=dummy)
+        
         def populate_network_menu(self, data=None):
             """ Populates the network list submenu. """
             def get_prop(net_id, prop):
@@ -436,14 +467,14 @@ class TrayIcon:
             num_networks = wireless.GetNumberOfNetworks()
             [status, info] = daemon.GetConnectionStatus()
                 
-            if wired.GetAlwaysShowWiredInterface() or \
-               wired.CheckPluggedIn(True):
+            if daemon.GetAlwaysShowWiredInterface() or \
+               wired.CheckPluggedIn():
                 if status == misc.WIRED:
                     is_active = True
                 else:
                     is_active = False
-                self._add_item_to_menu(submenu, "Wired Network", "__wired__",
-                                       0, is_connecting, is_active)
+                self._add_item_to_menu(submenu, "Wired Network", "__wired__", 0,
+                                       is_connecting, is_active)
                 sep = gtk.SeparatorMenuItem()
                 submenu.append(sep)
                 sep.show()
@@ -457,10 +488,16 @@ class TrayIcon:
                         is_active = False
                     self._add_item_to_menu(submenu, essid, "wifi", x,
                                            is_connecting, is_active)
+            else:
+                no_nets_item = gtk.MenuItem(language['no_wireless_networks_found'])
+                no_nets_item.set_sensitive(False)
+                no_nets_item.show()
+                submenu.append(no_nets_item)
                     
             net_menuitem.show()
         
         def init_network_menu(self):
+            """ Set the right-click menu for to the scanning state. """
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             submenu = net_menuitem.get_submenu()
             self._clear_menu(submenu)
@@ -469,10 +506,10 @@ class TrayIcon:
             loading_item.set_sensitive(False)
             loading_item.show()
             submenu.append(loading_item)
-            #net_menuitem.set_submenu(net_menu)
             net_menuitem.show()
             
         def _clear_menu(self, menu):
+            """ Clear the right-click menu. """
             for item in menu.get_children():
                 menu.remove(item)
                 item.destroy()
@@ -483,11 +520,11 @@ class TrayIcon:
                 self.gui_win = gui.appGui(dbus_manager)
                 bus = dbus_manager.get_bus()
                 bus.add_signal_receiver(self.gui_win.dbus_scan_finished,
-                                        'SendEndScanSignal',
-                                        'org.wicd.daemon')
+                                        'SendEndScanSignal', 
+                                        'org.wicd.daemon.wireless')
                 bus.add_signal_receiver(self.gui_win.dbus_scan_started,
                                         'SendStartScanSignal',
-                                        'org.wicd.daemon')
+                                        'org.wicd.daemon.wireless')
                 bus.add_signal_receiver(self.gui_win.update_connect_buttons,
                                         'StatusChanged', 'org.wicd.daemon')
             elif not self.gui_win.is_visible:
@@ -530,7 +567,7 @@ class TrayIcon:
             if event.button == 1:
                 self.toggle_wicd_gui()
             elif event.button == 3:
-                self.populate_network_menu()
+                self.init_network_menu()
                 self.menu.popup(None, None, None, event.button, event.time)
 
         def set_from_file(self, val=None):
@@ -574,8 +611,6 @@ class TrayIcon:
         def on_popup_menu(self, status, button, timestamp):
             """ Opens the right click menu for the tray icon. """
             self.init_network_menu()
-            wireless.Scan(reply_handler=self.populate_network_menu,
-                          error_handler=lambda x: x)
             self.menu.popup(None, None, None, button, timestamp)
 
         def set_from_file(self, path = None):
@@ -599,7 +634,7 @@ Arguments:
 """
     
 def setup_dbus():
-    global bus, daemon, wireless, wired, config, dbus_manager
+    global bus, daemon, wireless, wired, dbus_manager
     
     dbus_manager = DBusManager()
     try:
@@ -617,7 +652,6 @@ def setup_dbus():
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
-    config = dbus_ifaces['config']
     return True
 
 def main(argv):
@@ -674,23 +708,13 @@ def main(argv):
                             'LaunchChooser', 'org.wicd.daemon')
     bus.add_signal_receiver(tray_icon.icon_info.update_tray_icon,
                             'StatusChanged', 'org.wicd.daemon')
+    bus.add_signal_receiver(tray_icon.tr.tray_scan_ended, 'SendEndScanSignal',
+                            'org.wicd.daemon.wireless')
+    bus.add_signal_receiver(tray_icon.tr.tray_scan_started,
+                            'SendStartScanSignal', 'org.wicd.daemon.wireless')
     print 'Done.'
-    
-    while 1:
-        mainloop = gobject.MainLoop()
-        try:
-            mainloop.run()
-        except DBusException:
-            print 'Warning.  Caught a D-Bus exception!  Connection to daemon lost.'
-            print 'Trying to reconnect...'
-            sleep(10)
-            try:
-                setup_dbus()
-            except:
-                pass
-            
-        
-        
+    mainloop = gobject.MainLoop()
+    mainloop.run()
 
 
 if __name__ == '__main__':

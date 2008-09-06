@@ -21,12 +21,12 @@ import os
 import locale
 import gettext
 import sys
-from subprocess import Popen, STDOUT, PIPE
-from copy import copy
+from subprocess import Popen, STDOUT, PIPE, call
 import subprocess
 import commands
 
-import wicd.wpath as wpath
+# wicd imports
+import wpath
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -76,8 +76,8 @@ def Run(cmd, include_stderr=False, return_pipe=False):
     else:
         err = None
         fds = False
-
-    tmpenv = copy(os.environ)
+    
+    tmpenv = os.environ.copy()
     tmpenv["LC_ALL"] = "C"
     tmpenv["LANG"] = "C"
     f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds,
@@ -89,11 +89,15 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         return f.communicate()[0]
     
 def LaunchAndWait(cmd):
-    """ Launches the given program with the given arguments, then blocks. """
-    subprocess.call(cmd)
+    """ Launches the given program with the given arguments, then blocks.
+
+    cmd : A list contained the program name and its arguments.
+    
+    """
+    call(cmd)
 
 def IsValidIP(ip):
-    """ Make sure an entered IP is valid """
+    """ Make sure an entered IP is valid. """
     if ip != None:
         if ip.count('.') == 3:
             ipNumbers = ip.split('.')
@@ -167,7 +171,7 @@ def ParseEncryption(network):
     and creating a config file for it
 
     """
-    enctemplate = open("encryption/templates/" + network["enctype"])
+    enctemplate = open(wpath.encryption + network["enctype"])
     template = enctemplate.readlines()
     # Set these to nothing so that we can hold them outside the loop
     z = "ap_scan=1\n"
@@ -206,7 +210,7 @@ def LoadEncryptionMethods():
     
     encryptionTypes = []
     try:
-        enctypes = open("encryption/templates/active","r").readlines()
+        enctypes = open(wpath.encryption + "active","r").readlines()
     except IOError, e:
         print "Fatal Error: template index file is missing."
         raise IOError(e)
@@ -215,7 +219,7 @@ def LoadEncryptionMethods():
     for x in enctypes:
         x = x.strip()
         try:
-            f = open("encryption/templates/" + x, "r")
+            f = open(wpath.encryption + x, "r")
         except IOError:
             print 'Failed to load encryption type ' + str(x)
             continue
@@ -424,6 +428,8 @@ def get_language_list_gui():
     language["dhcp_client"] = _("DHCP Client")
     language["wired_detect"] = _("Wired Link Detection")
     language["route_flush"] = _("Route Table Flushing")
+    language["backend"] = _("Backend")
+    language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
     
     language['0'] = _('0')
     language['1'] = _('1')
@@ -467,7 +473,7 @@ def get_language_list_tray():
     language['connecting'] = _('Connecting')
     language['wired'] = _('Wired Network')
     language['scanning'] = _('Scanning')
-    
+    language['no_wireless_networks_found'] = _('No wireless networks found.')
     return language
 
 def noneToBlankString(text):

@@ -42,18 +42,33 @@ class WiredConnectThread() -- Connection thread for wired
 #
 
 import re
+import time
 import threading
 import thread
-import time
 
-import wicd.misc as misc
-import wicd.wnettools as wnettools
-import wicd.wpath as wpath
+# wicd imports 
+import misc
+import wpath
+from backend import BackendManager
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
+BACKEND = None
+BACKEND_MGR = BackendManager()
 
+def get_backend_list():
+    if not BACKEND_MGR:
+        return [""]
+    else:
+        return BACKEND_MGR.get_available_backends()
+    
+def get_current_backend():
+    if not BACKEND_MGR:
+        return None
+    else:
+        return BACKEND_MGR.get_current_backend()
+    
 class Controller(object):
     """ Parent class for the different interface types. """
     def __init__(self):
@@ -66,6 +81,7 @@ class Controller(object):
         self._dhcp_client = None
         self._flush_tool = None
         self._debug = None
+        self._backend = None
         self.connecting_thread = None
         self.before_script = None
         self.after_script = None
@@ -73,6 +89,7 @@ class Controller(object):
         self.driver = None
         self.wiface = None
         self.liface = None
+        self.backend_manager = BackendManager()
         
     def set_wireless_iface(self, value):
         self._wireless_interface = value
@@ -127,6 +144,21 @@ class Controller(object):
     debug = property(get_debug, set_debug)
     flush_tool = property(get_flush_tool, set_flush_tool)
     dhcp_client = property(get_dhcp_client, set_dhcp_client)
+    
+    def LoadBackend(self, backend_name):
+        """ Load the given networking backend. """
+        global BACKEND
+        if backend_name == self._backend:
+            return
+        self._backend = BACKEND_MGR.load_backend(backend_name)
+        BACKEND = self._backend
+        
+    def NeedsExternalCalls(self):
+        """ Returns true if the loaded backend needs external calls. """
+        if self._backend:
+            return self._backend.NeedsExternalCalls()
+        else:
+            return True
 
 
 class ConnectThread(threading.Thread):
@@ -169,7 +201,7 @@ class ConnectThread(threading.Thread):
         self.before_script = before_script
         self.after_script = after_script
         self.disconnect_script = disconnect_script
-        self.should_die = False
+        self._should_die = False
         self.abort_reason = ""
 
         self.global_dns_1 = gdns1
@@ -183,6 +215,15 @@ class ConnectThread(threading.Thread):
         self.debug = debug
         
         self.SetStatus('interface_down')
+        
+    def get_should_die(self):
+        return self._should_die
+    
+    def set_should_die(self, val):
+        self.lock.acquire()
+        self._should_die = val
+    
+    should_die = property(should_die, get_should_die, set_should_die)
 
 
     def SetStatus(self, status):
@@ -286,14 +327,15 @@ class ConnectThread(threading.Thread):
         
         """
         if self.network.get('use_global_dns'):
-            wnettools.SetDNS(misc.Noneify(self.global_dns_1),
+            BACKEND.SetDNS(misc.Noneify(self.global_dns_1),
                              misc.Noneify(self.global_dns_2), 
                              misc.Noneify(self.global_dns_3))
         elif self.network.get('use_static_dns') and (self.network.get('dns1') or
                     self.network.get('dns2') or self.network.get('dns3')):
             self.SetStatus('setting_static_dns')
-            wnettools.SetDNS(self.network.get('dns1'), self.network.get('dns2'),
-                             self.network.get('dns3'))
+            BACKEND.SetDNS(self.network.get('dns1'),
+                                 self.network.get('dns2'),
+                                 self.network.get('dns3'))
 
     def connect_aborted(self, reason):
         """ Sets the thread status to aborted in a thread-safe way.
@@ -325,13 +367,18 @@ class ConnectThread(threading.Thread):
         """ Stop and running DHCP clients, as well as wpa_supplicant. """
         print 'Stopping wpa_supplicant and any DHCP clients'
         iface.StopWPA()
-        wnettools.StopDHCP()
+        BACKEND.StopDHCP()
         
     def abort_if_needed(self):
         """ Abort the thread is it has been requested. """
-        if self.should_die:
-            self.connect_aborted('aborted')
-            thread.exit()
+        self.lock.acquire()
+        try:
+            if self._should_die:
+                self.connect_aborted('aborted')
+                self.lock.release()
+                thread.exit()
+        finally:
+            self.lock.release()
             
     def put_iface_up(self, iface):
         """ Bring up given interface. """
@@ -347,8 +394,6 @@ class Wireless(Controller):
         """ Initialize the class. """
         Controller.__init__(self)
         self._wpa_driver = None
-        self.wiface = wnettools.WirelessInterface(self.wireless_interface,
-                                                  self.debug, self.wpa_driver)
         
     def set_wpa_driver(self, value):
         self._wpa_driver = value
@@ -359,13 +404,11 @@ class Wireless(Controller):
     
     wpa_driver = property(get_wpa_driver, set_wpa_driver)
     
-                
-    #def LoadInterfaces(self, dhcp_client, flush_tool):
-    #    """ Load the wnettools controls for the wired/wireless interfaces. """
-    #    #self.wiface = wnettools.WirelessInterface(self.wireless_interface,
-    #    #                                          self.debug, self.wpa_driver)
-    #    self.dhcp_client = dhcp_client
-    #    self.flush_tool = flush_tool
+    def LoadBackend(self, backend):
+        Controller.LoadBackend(self, backend)
+        if self._backend:
+            self.wiface = self._backend.WirelessInterface(self.wireless_interface,
+                                                    self.debug, self.wpa_driver)
 
     def Scan(self, essid=None):
         """ Scan for available wireless networks.
@@ -431,43 +474,43 @@ class Wireless(Controller):
         self.connecting_thread.start()
         return True
 
-    def GetSignalStrength(self, iwconfig=None, fast=False):
+    def GetSignalStrength(self, iwconfig=""):
         """ Get signal strength of the current network.
 
         Returns:
         The current signal strength.
 
         """
-        return self.wiface.GetSignalStrength(iwconfig, fast)
+        return self.wiface.GetSignalStrength(iwconfig)
 
-    def GetDBMStrength(self, iwconfig=None, fast=False):
+    def GetDBMStrength(self, iwconfig=""):
         """ Get the dBm signal strength of the current network.
 
         Returns:
         The current dBm signal strength.
 
         """
-        return self.wiface.GetDBMStrength(iwconfig, fast)
+        return self.wiface.GetDBMStrength(iwconfig)
 
-    def GetCurrentNetwork(self, iwconfig=None, fast=False):
+    def GetCurrentNetwork(self, iwconfig=""):
         """ Get current network name.
 
         Returns:
         The name of the currently connected network.
 
         """
-        return self.wiface.GetCurrentNetwork(iwconfig, fast)
+        return self.wiface.GetCurrentNetwork(iwconfig)
 
-    def GetIP(self, fast=False):
+    def GetIP(self, ifconfig=""):
         """ Get the IP of the interface.
 
         Returns:
         The IP address of the interface in dotted notation.
 
         """
-        return self.wiface.GetIP(fast)
+        return self.wiface.GetIP(ifconfig)
     
-    def GetBSSID(self, fast=True):
+    def GetBSSID(self):
         """ Get the BSSID of the current access point. 
         
         Returns:
@@ -475,7 +518,7 @@ class Wireless(Controller):
         None the BSSID can't be found.
         
         """
-        return self.wiface.GetBSSID(fast)
+        return self.wiface.GetBSSID()
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
@@ -507,7 +550,7 @@ class Wireless(Controller):
         wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Killing dhclient and wpa_supplicant'
-        wnettools.StopDHCP()
+        BACKEND.StopDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()
@@ -556,7 +599,7 @@ class Wireless(Controller):
         The first available wireless interface.
 
         """
-        return wnettools.GetWirelessInterfaces()
+        return BACKEND.GetWirelessInterfaces()
 
     def GetKillSwitchStatus(self):
         """ Get the current status of the Killswitch. 
@@ -645,7 +688,6 @@ class WirelessConnectThread(ConnectThread):
         wiface = self.wiface
         liface = self.liface
         self.is_connecting = True
-        self.is_fast = True
         
         # Run pre-connection script.
         self.abort_if_needed()
@@ -684,8 +726,7 @@ class WirelessConnectThread(ConnectThread):
         # Validate Authentication.
         if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
-            if not wiface.ValidateAuthentication(time.time(), 
-                                                 fast=self.is_fast):
+            if not wiface.ValidateAuthentication(time.time()):
                 self.abort_connection('bad_pass')
         self.abort_if_needed()
 
@@ -702,7 +743,7 @@ class WirelessConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + str(wiface.GetIP(fast=self.is_fast))
+            print "IP Address is: " + str(wiface.GetIP())
         self.is_connecting = False
     
     def generate_psk_and_authenticate(self, wiface):
@@ -756,7 +797,6 @@ class Wired(Controller):
         Controller.__init__(self)
         self.wpa_driver = None
         self._link_detect = None
-        self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
         
     def set_link_detect(self, value):
         self._link_detect = value
@@ -766,22 +806,22 @@ class Wired(Controller):
     def get_link_detect(self): return self._link_detect
     
     link_detect = property(get_link_detect, set_link_detect)
-        
-    #def LoadInterfaces(self, dhcp_client, link_tool, flush_tool):
-    #    """ Load the wnettools controls for the wired/wireless interfaces. """
-    #    #self.liface = wnettools.WiredInterface(self.wired_interface, self.debug)
-    #    self.dhcp_client = dhcp_client
-    #    self.link_detect = link_tool
-    #    self.flush_tool = flush_tool
+    
+    def LoadBackend(self, backend):
+        """ Load the backend up. """
+        Controller.LoadBackend(self, backend)
+        if self._backend:
+            self.liface = self._backend.WiredInterface(self.wired_interface,
+                                                       self.debug)
 
-    def CheckPluggedIn(self, fast=False):
+    def CheckPluggedIn(self):
         """ Check whether the wired connection is plugged in.
 
         Returns:
         The status of the physical connection link.
 
         """
-        return self.liface.GetPluggedIn(fast)
+        return self.liface.GetPluggedIn()
 
     def Connect(self, network, debug=False):
         """ Spawn a connection thread to connect to the network.
@@ -804,18 +844,18 @@ class Wired(Controller):
     def DetectWiredInterface(self):
         """ Attempts to automatically detect a wired interface. """
         try:
-            return wnettools.GetWiredInterfaces()[0]
+            return BACKEND.GetWiredInterfaces()[0]
         except IndexError:
             return None
 
-    def GetIP(self, fast=False):
+    def GetIP(self, ifconfig=""):
         """ Get the IP of the interface.
 
         Returns:
         The IP address of the interface in dotted notation.
 
         """
-        return self.liface.GetIP(fast)
+        return self.liface.GetIP(ifconfig)
 
     def Disconnect(self):
         """ Disconnect from the network. """
@@ -903,8 +943,6 @@ class WiredConnectThread(ConnectThread):
         liface = self.liface
 
         self.is_connecting = True
-        #TODO pass is_fast in.
-        self.is_fast = True
 
         # Run pre-connection script.
         self.abort_if_needed()
@@ -936,5 +974,5 @@ class WiredConnectThread(ConnectThread):
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
-            print "IP Address is: " + str(liface.GetIP(fast=self.is_fast))
+            print "IP Address is: " + str(liface.GetIP())
         self.is_connecting = False

@@ -27,23 +27,22 @@ import gtk
 import gobject
 import pango
 
-import wicd.misc
+from wicd import misc
+from wicd import gui
 from wicd.misc import checkboxTextboxToggle, noneToBlankString
 
 daemon = None
 wireless = None
 wired = None
-config = None
 
 language = misc.get_language_list_gui()
 
 class PreferencesDialog(object):
     def __init__(self, wTree, dbus):
-        global daemon, wireless, wired, config
+        global daemon, wireless, wired
         daemon = dbus['daemon']
         wireless = dbus['wireless']
         wired = dbus['wired']
-        config = dbus['config']
         self.wTree = wTree
         self.prep_settings_diag()
         self.build_preferences_diag()
@@ -68,7 +67,7 @@ class PreferencesDialog(object):
         
         self.dialog = self.wTree.get_widget("pref_dialog")
         self.dialog.set_title(language['preferences'])
-        size = config.ReadWindowSize("pref")
+        size = daemon.ReadWindowSize("pref")
         width = size[0]
         height = size[1]
         if width > -1 and height > -1:
@@ -76,7 +75,7 @@ class PreferencesDialog(object):
             
         self.wiredcheckbox = setup_label("pref_always_check",
                                          'wired_always_on')
-        self.wiredcheckbox.set_active(wired.GetAlwaysShowWiredInterface())
+        self.wiredcheckbox.set_active(daemon.GetAlwaysShowWiredInterface())
         self.reconnectcheckbox = setup_label("pref_auto_check",
                                              'auto_reconnect')
         self.reconnectcheckbox.set_active(daemon.GetAutoReconnect())
@@ -180,6 +179,25 @@ class PreferencesDialog(object):
             self.dns1Entry.set_sensitive(False)
             self.dns2Entry.set_sensitive(False)
             self.dns3Entry.set_sensitive(False)
+            
+        # Load backend combobox
+        self.backendcombo = build_combobox("pref_backend_combobox")
+        self.backends = daemon.GetBackendList()
+        # "" is included as a hack for DBus limitations, so we remove it.
+        self.backends.remove("")
+        found = False
+        cur_backend = daemon.GetSavedBackend()
+        for i, x in enumerate(self.backends):
+            if x == cur_backend:
+                found = True
+                backend_index = i
+            self.backendcombo.remove_text(i)
+            self.backendcombo.append_text(x)
+
+        if found:
+            self.backendcombo.set_active(backend_index)
+        else:
+            self.backendcombo.set_active(0)
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         
@@ -199,16 +217,20 @@ class PreferencesDialog(object):
         daemon.SetWirelessInterface(self.entryWirelessInterface.get_text())
         daemon.SetWiredInterface(self.entryWiredInterface.get_text())
         daemon.SetWPADriver(self.wpadrivers[self.wpadrivercombo.get_active()])
-        wired.SetAlwaysShowWiredInterface(self.wiredcheckbox.get_active())
+        daemon.SetAlwaysShowWiredInterface(self.wiredcheckbox.get_active())
         daemon.SetAutoReconnect(self.reconnectcheckbox.get_active())
         daemon.SetDebugMode(self.debugmodecheckbox.get_active())
-        daemon.SetSignalDisplayType(self.displaytypecheckbox.get_active())
+        wireless.SetSignalDisplayType(self.displaytypecheckbox.get_active())
         if self.showlistradiobutton.get_active():
             wired.SetWiredAutoConnectMethod(2)
         elif self.lastusedradiobutton.get_active():
             wired.SetWiredAutoConnectMethod(3)
         else:
             wired.SetWiredAutoConnectMethod(1)
+            
+        if self.backends[self.backendcombo.get_active()] != daemon.GetSavedBackend():
+            gui.alert(self.dialog, language["backend_alert"])
+        daemon.SetBackend(self.backends[self.backendcombo.get_active()])
             
         # External Programs Tab
         if self.dhcpautoradio.get_active():
@@ -238,7 +260,7 @@ class PreferencesDialog(object):
         daemon.SetFlushTool(flush_tool)
 
         [width, height] = self.dialog.get_size()
-        config.WriteWindowSize(width, height, "pref")
+        daemon.WriteWindowSize(width, height, "pref")
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
@@ -252,6 +274,7 @@ class PreferencesDialog(object):
         self.wTree.get_widget("dhcp_client_label").set_label(language["dhcp_client"])
         self.wTree.get_widget("wired_detect_label").set_label(language["wired_detect"])
         self.wTree.get_widget("route_flush_label").set_label(language["route_flush"])
+        self.wTree.get_widget("pref_backend_label").set_label(language["backend"] + ":")
         
         entryWiredAutoMethod = self.wTree.get_widget("pref_wired_auto_label")
         entryWiredAutoMethod.set_label('Wired Autoconnect Setting:')

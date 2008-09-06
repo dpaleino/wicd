@@ -23,6 +23,8 @@ import sys
 import os
 import time
 
+import wicd.wpath as wpath
+
 class SizeError(IOError):
     pass
 
@@ -89,6 +91,8 @@ class ManagedLog(object):
 
     """
     def __init__(self, name, maxsize=360000, maxsave=3):
+        if not os.path.exists(os.path.dirname(name)):
+            os.makedirs(os.path.dirname(name))
         self._lf = LogFile(name, "a", maxsize)
         self.maxsave = maxsave
 

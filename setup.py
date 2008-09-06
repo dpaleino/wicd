@@ -48,6 +48,7 @@ class configure(Command):
         ('encryption=', None, 'set the encryption template directory'),
         ('bin=', None, 'set the bin directory'),
         ('sbin=', None, 'set the sbin directory'),
+        ('backends=', None, 'set the backend storage directory'),
         ('networks=', None, 'set the encryption configuration directory'),
         ('log=', None, 'set the log directory'),
         ('resume=', None, 'set the directory the resume from suspend script is stored in'),
@@ -92,6 +93,7 @@ class configure(Command):
         self.encryption = self.etc + 'encryption/templates/'
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
+        self.backends = self.lib + 'backends'
         self.networks = '/var/lib/wicd/configurations/'
         self.log = '/var/log/wicd/'
         self.resume = '/etc/acpi/resume.d/'
@@ -299,8 +301,9 @@ try:
     (wpath.sbin,  ['scripts/wicd', ]),  
     (wpath.share, ['data/wicd.glade', ]),
     (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py', 'wicd/suspend.py', 'wicd/autoconnect.py']), #'wicd/wicd-gui.py', 
+    (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
-    ( wpath.docdir, [ 'AUTHORS', 'README' ]),
+    (wpath.docdir, [ 'AUTHORS', 'README' ])
     ]
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
@@ -356,7 +359,7 @@ connect at startup to any preferred network within range.
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.encryption', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile'],
+      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend'],
       data_files=data
       )
 ##print "Running post-install configuration..."

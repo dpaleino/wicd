@@ -63,6 +63,12 @@ def get_backend_list():
     else:
         return BACKEND_MGR.get_available_backends()
     
+def get_backend_update_interval():
+    if not BACKEND_MGR:
+        return 4
+    else:
+        return BACKEND_MGR.UPDATE_INTERVAL
+    
 def get_current_backend():
     if not BACKEND_MGR:
         return None

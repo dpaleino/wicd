@@ -289,10 +289,7 @@ def main():
     
     """
     monitor = ConnectionStatus()
-    if daemon.GetCurrentBackend() == "ioctl":
-        to_time = 3
-    else:
-        to_time = 4
+    to_time = daemon.GetBackendUpdateInterval()
     try:
         gobject.timeout_add_seconds(to_time, monitor.update_connection_status)
     except:

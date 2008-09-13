@@ -1,19 +1,26 @@
 #!/bin/sh
-#stop daemon!
-/etc/init.d/wicd stop
 
-#remove because we changed stuff
-update-rc.d -f wicd remove
+# Stop daemon
+if [ -f /etc/init.d/wicd ]; then
+  /etc/init.d/wicd stop
+fi
+  
+# Remove Wicd from the boot sequence
+if which update-rc.d &>/dev/null ; then
+  update-rc.d -f wicd remove
+fi
 
-#remove pyc files that screw things up sometimes
-#there shouldn't be any there, but it never hurts to check
-#they may exist if you are upgrading wicd
-rm -rf /opt/wicd/*.pyc
+# Remove pyc files 
+# They may exist if you are upgrading Wicd
+rm -f /opt/wicd/*.pyc
 
-#add us to the startup
-#add us to 80 because sometimes dbus starts
-#later then 20, so that causes problems
-update-rc.d wicd start 80 2 3 4 5 . stop 20 0 1 6 .
+# Add Wicd to the startup sequence
+# 80 to make sure that dbus is running when Wicd starts
+if which update-rc.d &>/dev/null ; then
+  update-rc.d wicd start 80 2 3 4 5 . stop 20 0 1 6 .
+fi
 
-#start the daemon
-/etc/init.d/wicd start
+# Start the daemon
+if [ -f /etc/init.d/wicd ]; then
+  /etc/init.d/wicd start
+fi

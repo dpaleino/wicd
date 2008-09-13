@@ -193,6 +193,11 @@ class WicdDaemon(dbus.service.Object):
         """ Returns the currently loaded backend. """
         return networking.get_current_backend()
     
+    @dbus.server.method('org.wicd.daemon')
+    def GetBackendUpdateInterval('org.wicd.daemon'):
+        """ Returns status update interval for the loaded backend. """
+        return networking.get_backend_update_interval()
+    
     @dbus.service.method('org.wicd.daemon')
     def GetSavedBackend(self):
         """ Returns the backend saved to disk. """

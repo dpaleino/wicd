@@ -7,9 +7,8 @@ Manages and loads the pluggable backends for wicd.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
-#   Copyright (C) 2007 Byron Hillis
+#   Copyright (C) 2008 Adam Blackburn
+#   Copyright (C) 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -44,7 +43,7 @@ class BackendManager(object):
                 be_file.endswith(".py"))
     
     def get_current_backend(self):
-        if self.__loaded_backend and not self.__loaded_backend is None:
+        if self.__loaded_backend:
             return self.__loaded_backend.NAME
         else:
             return None
@@ -68,7 +67,9 @@ class BackendManager(object):
         """
         def fail(backend_name, reason):
             print "Failed to load backend %s: %s" % (backend_name, reason)
-            
+            return True
+
+        failed = False 
         print 'trying to load backend %s' % backend_name
         backend_path = os.path.join(self.backend_dir,
                                     'be-' + backend_name + '.py')
@@ -80,15 +81,17 @@ class BackendManager(object):
             return None
         
         if not backend.NAME:
-            fail(backend_name, 'Missing NAME declaration.')
-            return None
-        
+            failed = fail(backend_name, 'Missing NAME attribute.')
+        if not backend.UPDATE_INTERVAL:
+            failed = fail(backend_name, "Missing UPDATE_INTERVAL attribute.")
+        if not backend.NeedsExternalCalls:
+            failed = fail(backend_name, "Missing NeedsExternalCalls method.")
         if not backend.WiredInterface:
-            fail(backend_name, "Missing WiredInterface class")
-            return None
-        
+            failed = fail(backend_name, "Missing WiredInterface class.")
         if not backend.WirelessInterface:
-            fail(backend_name, "Missing WirelessInterface class")
+            failed = fail(backend_name, "Missing WirelessInterface class.")
+        
+        if failed:
             return None
 
         self.__loaded_backend = backend

@@ -14,9 +14,8 @@ class WirelessInterface() -- Control a wireless network interface.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
-#   Copyright (C) 2007 Byron Hillis
+#   Copyright (C) 2008 Adam Blackburn
+#   Copyright (C) 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -41,6 +40,7 @@ import time
 
 
 NAME = "external"
+UPDATE_INTERVAL = 4
 DESCRIPTION = """External app (slow) backend
 
 This backend uses external program calls like ifconfig and

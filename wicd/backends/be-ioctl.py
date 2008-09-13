@@ -15,9 +15,8 @@ class WirelessInterface() -- Control a wireless network interface.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
-#   Copyright (C) 2007 Byron Hillis
+#   Copyright (C) 2008 Adam Blackburn
+#   Copyright (C) 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -49,6 +48,7 @@ import array
 
 
 NAME = "ioctl"
+UPDATE_INTERVAL = 3
 DESCRIPTION = """IOCTL (fast) backend
 
 This backend uses IOCTL calls and python libraries to query

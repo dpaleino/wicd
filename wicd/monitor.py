@@ -290,7 +290,7 @@ def main():
     """
     monitor = ConnectionStatus()
     if daemon.GetCurrentBackend() == "ioctl":
-        to_time = 2.5
+        to_time = 3
     else:
         to_time = 4
     try:

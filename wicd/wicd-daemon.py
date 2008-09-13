@@ -591,7 +591,10 @@ class WicdDaemon(dbus.service.Object):
         print "Attempting to autoconnect with wired interface..."
         self.auto_connecting = True
         time.sleep(1.5)
-        gobject.timeout_add(3000, self._monitor_wired_autoconnect)
+        try:
+            gobject.timeout_add_seconds(3, self._monitor_wired_autoconnect)
+        except:
+            gobject.timeout_add(3000, self._monitor_wired_autoconnect)
         return True
 
     def _monitor_wired_autoconnect(self):
@@ -1025,7 +1028,7 @@ class WirelessDaemon(dbus.service.Object):
         
     def _wireless_autoconnect(self):
         """ Attempts to autoconnect to a wireless network. """
-        print "No wired connection present, attempting to autoconnect" + \
+        print "No wired connection present, attempting to autoconnect " + \
               "to wireless network"
         if self.wifi.wireless_interface is None:
             print 'Autoconnect failed because wireless interface returned None'

@@ -289,7 +289,14 @@ def main():
     
     """
     monitor = ConnectionStatus()
-    gobject.timeout_add(2500, monitor.update_connection_status)
+    if daemon.GetCurrentBackend() == "ioctl":
+        to_time = 2.5
+    else:
+        to_time = 4
+    try:
+        gobject.timeout_add_seconds(to_time, monitor.update_connection_status)
+    except:
+        gobject.timeout_add(to_time * 1000, monitor.update_connection_status)
     
     mainloop = gobject.MainLoop()
     mainloop.run()

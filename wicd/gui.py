@@ -56,7 +56,7 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
-proxy_obj, daemon, wireless, wired, bus = [None for x in range(0, 5)]
+proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
 
 def setup_dbus(dbus_man=None):
@@ -84,9 +84,18 @@ def setup_dbus(dbus_man=None):
     wired = dbus_ifaces['wired']
     return True
     
+    
 def error(parent, message): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
+                               gtk.BUTTONS_OK)
+    dialog.set_markup(message)
+    dialog.run()
+    dialog.destroy()
+    
+def alert(parent, message): 
+    """ Shows an error dialog """
+    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
     dialog.run()

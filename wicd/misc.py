@@ -1,8 +1,8 @@
 """ Misc - miscellaneous functions for wicd """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -109,7 +109,7 @@ def IsValidIP(ip):
 
 def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
-    daemonloc = wpath.bin + 'launchdaemon.sh'
+    daemonloc = wpath.sbin + 'wicd'
     sudo_prog = choose_sudo_prog()
     if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
         msg = '--message'
@@ -275,8 +275,7 @@ def get_gettext():
     """ Set up gettext for translations. """
     # Borrowed from an excellent post on how to do this at
     # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
-    local_path = os.path.realpath(os.path.dirname(sys.argv[0])) + \
-                 '/translations'
+    local_path = wpath.translations
     langs = []
     lc, encoding = locale.getdefaultlocale()
     if (lc):
@@ -349,6 +348,13 @@ def choose_sudo_prog():
             return path
     
     raise WicdError("Couldn't find graphical sudo program.")
+
+def find_path(cmd):
+    paths = os.getenv("PATH", default=["/usr/bin", "/usr/local/bin"]).split(':')
+    for path in paths:
+        if os.access(os.path.join(path, cmd), os.F_OK):
+            return os.path.join(path, cmd)
+    return None
 
 def get_language_list_gui():
     """ Returns a dict of translatable strings used by the GUI.

@@ -284,8 +284,7 @@ def main():
     """ Starts the connection monitor. 
     
     Starts a ConnectionStatus instance, sets the status to update
-    every two seconds, and sets a wireless scan to be called every
-    two minutes.
+    an amount of time determined by the active backend.
     
     """
     monitor = ConnectionStatus()

@@ -55,6 +55,7 @@ else:
 from wicd import wpath
 from wicd import networking
 from wicd import misc
+from wicd.misc import noneToBlankString
 from wicd.logfile import ManagedStdio
 from wicd.configmanager import ConfigManager
 
@@ -131,8 +132,8 @@ class WicdDaemon(dbus.service.Object):
     def SetWiredInterface(self, interface):
         """ Sets the wired interface for the daemon to use. """
         print "setting wired interface %s" % (str(interface))
-        self.wired.wired_interface = interface
-        self.wifi.wired_interface = interface
+        self.wired.wired_interface = noneToBlankString(interface)
+        self.wifi.wired_interface = noneToBlankString(interface)
         self.config.set("Settings", "wired_interface", interface, True)
 
     @dbus.service.method('org.wicd.daemon')
@@ -193,8 +194,8 @@ class WicdDaemon(dbus.service.Object):
         """ Returns the currently loaded backend. """
         return networking.get_current_backend()
     
-    @dbus.server.method('org.wicd.daemon')
-    def GetBackendUpdateInterval('org.wicd.daemon'):
+    @dbus.service.method('org.wicd.daemon')
+    def GetBackendUpdateInterval(self):
         """ Returns status update interval for the loaded backend. """
         return networking.get_backend_update_interval()
     

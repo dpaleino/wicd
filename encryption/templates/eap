@@ -12,8 +12,8 @@ network={
 	group=CCMP TKIP
 	key-mgmt=WPA-EAP
 	eap=FAST
-	identity=$_USERNAME
-	password=$_PASSWORD
+	identity="$_USERNAME"
+	password="$_PASSWORD"
 	phase1="fast_provisioning=1"
 	pac-file="$_PAC_FILE"
 }

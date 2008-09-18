@@ -34,6 +34,9 @@ class DBusManager(object):
         """ Returns a dict of dbus interfaces. """
         return self._dbus_ifaces
     
+    def get_interface(self, iface):
+        return self._dbus_ifaces[iface]
+    
     def get_bus(self):
         """ Returns the loaded SystemBus. """
         return self._bus

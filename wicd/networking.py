@@ -18,9 +18,9 @@ class WiredConnectThread() -- Connection thread for wired
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
-#   Copyright (C) 2007 Byron Hillis
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -58,22 +58,22 @@ BACKEND = None
 BACKEND_MGR = BackendManager()
 
 def get_backend_list():
-    if not BACKEND_MGR:
-        return [""]
-    else:
+    if BACKEND_MGR:
         return BACKEND_MGR.get_available_backends()
+    else:
+        return [""]
     
 def get_backend_update_interval():
-    if not BACKEND_MGR:
-        return 4
+    if BACKEND_MGR:
+        return BACKEND_MGR.get_update_interval()
     else:
-        return BACKEND_MGR.UPDATE_INTERVAL
+        return 4 # seconds, this should never happen though.
     
 def get_current_backend():
-    if not BACKEND_MGR:
-        return None
-    else:
+    if BACKEND_MGR:
         return BACKEND_MGR.get_current_backend()
+    else:
+        return None
     
 class Controller(object):
     """ Parent class for the different interface types. """
@@ -776,14 +776,15 @@ class WirelessConnectThread(ConnectThread):
             self.SetStatus('generating_psk')
 
             print 'Generating psk...'
-            key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
-                                     re.I | re.M  | re.S)
-            self.network['psk'] = misc.RunRegex(key_pattern,
-                                misc.Run(''.join(['wpa_passphrase "',
-                                         self.network['essid'], '" "', 
-                                         _sanitize(self.network['key']), '"'])))
+            wpa_pass_path = misc.find_path('wpa_passphrase')
+            if wpa_pass_path:
+                key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
+                                         re.I | re.M  | re.S)
+                cmd = ''.join([wpa_pass_path, ' "', self.network['essid'], 
+                               '" "', _sanitize(self.network['key']), '"'])
+                self.network['psk'] = misc.RunRegex(key_pattern, misc.Run(cmd))
             
-            if not self.network['psk']:
+            if not self.network.get('psk'):
                 self.network['psk'] = self.network['key']
                 print 'WARNING: PSK generation failed!  Falling back to ' + \
                       'wireless key.\nPlease report this error to the wicd ' + \

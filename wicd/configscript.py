@@ -30,11 +30,11 @@ import sys
 import os
 import gtk
 import ConfigParser
-import dbus
 import gtk.glade
 
-import wicd.wpath as wpath
-import wicd.misc as misc
+from wicd import wpath
+from wicd import misc
+from wicd import dbusmanager
 
 _ = misc.get_gettext()
 
@@ -44,20 +44,11 @@ language['before_script'] = _("Pre-connection Script")
 language['after_script'] = _("Post-connection Script")
 language['disconnect_script'] = _("Disconnection Script")
 
-bus = dbus.SystemBus()
+dbus = dbusmanager.DBusManager()
+dbus.connect_to_dbus()
 
-# Connect to the daemon
-try:
-    print 'Attempting to connect tray to daemon...'
-    proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    print 'Success.'
-except Exception:
-    print 'Daemon not running...'
-    misc.PromptToStartDaemon()
-    sys.exit(1)
-
-wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
-wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
+wireless = dbus.get_interface("wireless")
+wired = dbus.get_interface("wired")
 
 wireless_conf = wpath.etc + 'wireless-settings.conf'
 wired_conf = wpath.etc + 'wired-settings.conf'

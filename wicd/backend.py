@@ -55,6 +55,12 @@ class BackendManager(object):
             if self._valid_backend_file(os.path.join(self.backend_dir, f)):
                 be_list.append(f[3:-3])
         return be_list
+    
+    def get_update_interval(self):
+        if self.__loaded_backend:
+            return self.__loaded_backend.UPDATE_INTERVAL
+        else:
+            return None
         
     def load_backend(self, backend_name):
         """ Load and return a backend module. 

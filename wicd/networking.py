@@ -227,9 +227,12 @@ class ConnectThread(threading.Thread):
     
     def set_should_die(self, val):
         self.lock.acquire()
-        self._should_die = val
+        try:
+            self._should_die = val
+        finally:
+            self.lock.release()
     
-    should_die = property(should_die, get_should_die, set_should_die)
+    should_die = property(get_should_die, set_should_die)
 
 
     def SetStatus(self, status):
@@ -352,7 +355,7 @@ class ConnectThread(threading.Thread):
         """
         if self.abort_reason:
             reason = self.abort_reason
-        self.SetStatus(reason)
+        self.connecting_message = reason
         self.is_aborted = True
         self.abort_msg = reason
         self.is_connecting = False
@@ -381,7 +384,6 @@ class ConnectThread(threading.Thread):
         try:
             if self._should_die:
                 self.connect_aborted('aborted')
-                self.lock.release()
                 thread.exit()
         finally:
             self.lock.release()

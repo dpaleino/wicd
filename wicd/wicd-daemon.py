@@ -140,8 +140,8 @@ class WicdDaemon(dbus.service.Object):
     def SetWirelessInterface(self, interface):
         """ Sets the wireless interface the daemon will use. """
         print "setting wireless interface %s" % (str(interface))
-        self.wifi.wireless_interface = interface
-        self.wired.wireless_interface = interface
+        self.wifi.wireless_interface = noneToBlankString(interface)
+        self.wired.wireless_interface = noneToBlankString(interface)
         self.config.set("Settings", "wireless_interface", interface, True)
 
     @dbus.service.method('org.wicd.daemon')

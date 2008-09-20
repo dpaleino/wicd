@@ -93,7 +93,7 @@ def LaunchAndWait(cmd):
     cmd : A list contained the program name and its arguments.
     
     """
-    call(cmd)
+    call(cmd, shell=True)
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid. """
@@ -133,7 +133,7 @@ def WriteLine(my_file, text):
 
 def ExecuteScript(script):
     """ Execute a command and send its output to the bit bucket. """
-    call("%s > /dev/null 2>&1" % script)
+    call("%s > /dev/null 2>&1" % script, shell=True)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """

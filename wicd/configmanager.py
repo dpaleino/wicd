@@ -85,7 +85,7 @@ class ConfigManager(ConfigParser):
         # Try to intelligently handle the type of the return value.
         try:
             ret = int(ret)
-        except ValueError, TypeError:
+        except (ValueError, TypeError):
             ret = stringToNone(ret)
         return ret
     

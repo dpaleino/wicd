@@ -167,22 +167,24 @@ class PreferencesDialog(object):
         # Set up global DNS stuff
         self.useGlobalDNSCheckbox = setup_label("pref_global_check",
                                                 'use_global_dns')
-        
+        self.searchDomEntry = self.wTree.get_widget("pref_search_dom_entry")
         self.dns1Entry = self.wTree.get_widget("pref_dns1_entry")
         self.dns2Entry = self.wTree.get_widget("pref_dns2_entry")
         self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")
 
         self.useGlobalDNSCheckbox.connect("toggled", checkboxTextboxToggle,
                                           (self.dns1Entry, self.dns2Entry,
-                                           self.dns3Entry))
+                                           self.dns3Entry, self.searchDomEntry))
 
         dns_addresses = daemon.GetGlobalDNSAddresses()
         self.useGlobalDNSCheckbox.set_active(daemon.GetUseGlobalDNS())
         self.dns1Entry.set_text(noneToBlankString(dns_addresses[0]))
         self.dns2Entry.set_text(noneToBlankString(dns_addresses[1]))
         self.dns3Entry.set_text(noneToBlankString(dns_addresses[2]))
+        self.searchDomEntry.set_text(noneToBlankString(dns_addresses[3]))
 
         if not daemon.GetUseGlobalDNS():
+            self.searchDomEntry.set_sensitive(False)
             self.dns1Entry.set_sensitive(False)
             self.dns2Entry.set_sensitive(False)
             self.dns3Entry.set_sensitive(False)
@@ -220,7 +222,7 @@ class PreferencesDialog(object):
     def save_results(self):
         daemon.SetUseGlobalDNS(self.useGlobalDNSCheckbox.get_active())
         daemon.SetGlobalDNS(self.dns1Entry.get_text(), self.dns2Entry.get_text(),
-                            self.dns3Entry.get_text())
+                            self.dns3Entry.get_text(), self.searchDomEntry.get_text())
         daemon.SetWirelessInterface(self.entryWirelessInterface.get_text())
         daemon.SetWiredInterface(self.entryWiredInterface.get_text())
         daemon.SetWPADriver(self.wpadrivers[self.wpadrivercombo.get_active()])
@@ -290,9 +292,10 @@ class PreferencesDialog(object):
         atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, 50))
         entryWiredAutoMethod.set_attributes(atrlist)
         
-        self.set_label("pref_dns1_label", language['dns'] + ' ' + language['1'])
-        self.set_label("pref_dns2_label", language['dns'] + ' ' + language['2'])
-        self.set_label("pref_dns3_label", language['dns'] + ' ' + language['3'])
-        self.set_label("pref_wifi_label", language['wireless_interface'] + ':')
-        self.set_label("pref_wired_label", language['wired_interface'] + ':')
-        self.set_label("pref_driver_label", language['wpa_supplicant_driver'] + ':')
+        self.set_label("pref_dns1_label", "%s %s" % (language['dns'], language['1']))
+        self.set_label("pref_dns2_label", "%s %s" % (language['dns'], language['2']))
+        self.set_label("pref_dns3_label", "%s %s" % (language['dns'], language['3']))
+        self.set_label("pref_search_dom_label", "%s:" % language['search_domain'])
+        self.set_label("pref_wifi_label", "%s:" % language['wireless_interface'])
+        self.set_label("pref_wired_label", "%s:" % language['wired_interface'])
+        self.set_label("pref_driver_label", "%s:" % language['wpa_supplicant_driver'])

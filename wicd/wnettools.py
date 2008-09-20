@@ -32,7 +32,6 @@ class WirelessInterface() -- Control a wireless network interface.
 #
 
 import os
-import time
 import re
 
 import wpath
@@ -42,20 +41,26 @@ RALINK_DRIVER = 'ralink legacy'
 
 
 def _sanitize_string(string):
+    """ Makes sure a string is safe to use. 
+    
+    Escapes characters that can be used for doing bad stuff
+    at the terminal.
+    
+    """
     blacklist = [';', '`', '$', '!', '*', '|', '>', '<']
     new_string = []
     
     if not string:
         return string
   
-    for c in string:
-        if c in blacklist:
-            new_string.append("\\" + c)
+    for char in string:
+        if char in blacklist:
+            new_string.append("\\" + char)
         else:
-            new_string.append(c)
+            new_string.append(char)
     return ''.join(new_string)
 
-def SetDNS(dns1=None, dns2=None, dns3=None):
+def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
     """ Set the DNS of the system to the specified DNS servers.
 
     Opens up resolv.conf and writes in the nameservers.
@@ -67,6 +72,8 @@ def SetDNS(dns1=None, dns2=None, dns3=None):
 
     """
     resolv = open("/etc/resolv.conf", "w")
+    if search_dom:
+        resolv.write('search %s\n' % _sanitize_string(search_dom))
     for dns in [dns1, dns2, dns3]:
         if dns:
             if misc.IsValidIP(dns):
@@ -117,12 +124,14 @@ def GetWirelessInterfaces():
     return bool(ifnames) and ifnames[0] or None
 
 def GetWiredInterfaces():
+    """ Returns a list of wired interfaces on the system. """
     basedir = '/sys/class/net/'
     return [iface for iface in os.listdir(basedir) if not 'wireless' 
             in os.listdir(basedir + iface) and 
             open(basedir + iface + "/type").readlines()[0].strip() == "1"]
 
 def NeedsExternalCalls():
+    """ Returns True if the backend needs to use an external program. """
     print ("NeedsExternalCalls: returning default of True.  You should " +
           "implement this yourself.")
     return True
@@ -180,7 +189,7 @@ class BaseInterface(object):
             if os.access("%s%s" % (path, client), os.F_OK):
                 return "%s%s" % (path, client)
         if self.verbose:
-            "WARNING: No path found for %s"  % (client)
+            print "WARNING: No path found for %s"  % (client)
         return None
         
     def _client_found(self, client):
@@ -508,7 +517,6 @@ class BaseInterface(object):
 
         """
         print 'Implement this in a derived class!'
-        pass
     
     def IsUp(self):
         """ Determines if the interface is up.
@@ -518,7 +526,6 @@ class BaseInterface(object):
         
         """
         print 'Implement this in a derived class!'
-        pass
 
 
 class BaseWiredInterface(BaseInterface):
@@ -545,7 +552,6 @@ class BaseWiredInterface(BaseInterface):
         
         """
         print 'Implement this in a derived class!'
-        pass
 
 
 class BaseWirelessInterface(BaseInterface):
@@ -661,6 +667,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         lines = ralink_info
+        wep_pattern = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
         for x in lines:  # Iterate through all networks found
             info = x.split()
             # Make sure we read in a valid entry
@@ -786,7 +793,6 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         print 'Implement this in a derived class!'
-        pass
 
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.
@@ -848,7 +854,6 @@ class BaseWirelessInterface(BaseInterface):
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
         print 'Implement this in a derived class!'
-        pass
 
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
@@ -858,7 +863,6 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         print 'Implement this in a derived class!'
-        pass
     
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
@@ -868,7 +872,6 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         print 'Implement this in a derived class!'
-        pass
 
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
@@ -878,5 +881,4 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         print 'Implement this in a derived class!'
-        pass
 

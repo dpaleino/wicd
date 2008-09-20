@@ -673,8 +673,7 @@ class appGui(object):
             
         return True
     
-    def save_wired_settings(self, entry):
-        """ Saved wired network settings. """
+    def _save_gen_settings(self, entry):
         if entry.chkbox_static_ip.get_active():
             entry.set_net_prop("ip", noneToString(entry.txt_ip.get_text()))
             entry.set_net_prop("netmask", noneToString(entry.txt_netmask.get_text()))
@@ -688,6 +687,7 @@ class appGui(object):
            not entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
             entry.set_net_prop('use_global_dns', False)
+            entry.set_net_prop("search_domain", noneToString(entry.txt_search_dom.get_text()))
             entry.set_net_prop("dns1", noneToString(entry.txt_dns_1.get_text()))
             entry.set_net_prop("dns2", noneToString(entry.txt_dns_2.get_text()))
             entry.set_net_prop("dns3", noneToString(entry.txt_dns_3.get_text()))
@@ -697,9 +697,15 @@ class appGui(object):
             entry.set_net_prop('use_global_dns', True)
         else:
             entry.set_net_prop('use_static_dns', False)
+            entry.set_net_prop('use_global_dns', False)
+            entry.set_net_prop("search_domain", '')
             entry.set_net_prop("dns1", '')
             entry.set_net_prop("dns2", '')
             entry.set_net_prop("dns3", '')
+    
+    def save_wired_settings(self, entry):
+        """ Saved wired network settings. """
+        self._save_gen_settings(entry)
         wired.SaveWiredNetworkProfile(entry.prof_name)
         return True
             
@@ -711,8 +717,7 @@ class appGui(object):
             encryption_info = entry.encryption_info
             encrypt_methods = misc.LoadEncryptionMethods()
             entry.set_net_prop("enctype",
-                               encrypt_methods[entry.combo_encryption.
-                                               get_active()][1])
+                               encrypt_methods[entry.combo_encryption.get_active()][1])
             for x in encryption_info:
                 if encryption_info[x].get_text() == "":
                     error(self.window, language['encrypt_info_missing'])
@@ -728,40 +733,9 @@ class appGui(object):
                                                                   "encryption"))
             print "no encryption specified..."
             entry.set_net_prop("enctype", "None")
-            
+        self._save_gen_settings(entry)
         entry.set_net_prop("automatic",
                            noneToString(netent.chkbox_autoconnect.get_active()))
-        # Save IP info
-        if entry.chkbox_static_ip.get_active():
-            entry.set_net_prop("ip", noneToString(entry.txt_ip.get_text()))
-            entry.set_net_prop("netmask",
-                               noneToString(entry.txt_netmask.get_text()))
-            entry.set_net_prop("gateway",
-                               noneToString(entry.txt_gateway.get_text()))
-        else:
-            # Blank the values
-            entry.set_net_prop("ip", '')
-            entry.set_net_prop("netmask", '')
-            entry.set_net_prop("gateway", '')
-        
-        # Save DNS info
-        if entry.chkbox_static_dns.get_active() and \
-           not entry.chkbox_global_dns.get_active():
-            entry.set_net_prop('use_static_dns', True)
-            entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop('dns1', noneToString(entry.txt_dns_1.get_text()))
-            entry.set_net_prop('dns2', noneToString(entry.txt_dns_2.get_text()))
-            entry.set_net_prop('dns3', noneToString(entry.txt_dns_3.get_text()))
-        elif entry.chkbox_static_dns.get_active() and \
-             entry.chkbox_global_dns.get_active():
-            entry.set_net_prop('use_static_dns', True)
-            entry.set_net_prop('use_global_dns', True)
-        else:
-            entry.set_net_prop('use_static_dns', False) 
-            entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop('dns1', '')
-            entry.set_net_prop('dns2', '')
-            entry.set_net_prop('dns3', '')
             
         if entry.chkbox_global_settings.get_active():
             entry.set_net_prop('use_settings_globally', True)

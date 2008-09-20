@@ -26,6 +26,7 @@ A module for storing wicd's dbus interfaces.
 import dbus
 
 class DBusManager(object):
+    """ Manages the DBus objects used by wicd. """
     def __init__(self):
         self._bus = dbus.SystemBus()
         self._dbus_ifaces = {}  
@@ -35,6 +36,7 @@ class DBusManager(object):
         return self._dbus_ifaces
     
     def get_interface(self, iface):
+        """ Returns a DBus Interface. """
         return self._dbus_ifaces[iface]
     
     def get_bus(self):

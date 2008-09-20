@@ -22,7 +22,6 @@ import locale
 import gettext
 import sys
 from subprocess import Popen, STDOUT, PIPE, call
-import subprocess
 import commands
 
 # wicd imports
@@ -291,12 +290,11 @@ def get_gettext():
 
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
-    try: # This may never fail, but let's be safe
-        encoding = locale.getpreferredencoding()
+    encoding = locale.getpreferredencoding()
+    try:
+        ret = x.decode(encoding, 'replace').encode('utf-8')
     except:
-        # Just guess utf-8 if it fails.
-        encoding = 'utf-8'
-    ret = x.decode(encoding, 'replace').encode('utf-8')
+        ret = x.decode('utf-8', 'replace').encode('utf-8')
     return ret
     
 def RenameProcess(new_name):
@@ -328,7 +326,6 @@ def detect_desktop_environment():
                 desktop_environment = 'xfce'
         except (OSError, RuntimeError):
             pass
-    
     return desktop_environment
 
 def choose_sudo_prog():
@@ -436,6 +433,7 @@ def get_language_list_gui():
     language["route_flush"] = _("Route Table Flushing")
     language["backend"] = _("Backend")
     language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
+    language['search_domain'] = _("Search Domain")
     
     language['0'] = _('0')
     language['1'] = _('1')
@@ -505,6 +503,5 @@ def stringToBoolean(text):
     return text
 
 def checkboxTextboxToggle(checkbox, textboxes):
-    # Really bad practice, but checkbox == self
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())

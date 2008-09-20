@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Aug 23 23:56:47 2008 -->
+<!--Generated with glade3 3.4.5 on Sat Sep 20 13:28:27 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window1">
     <property name="width_request">450</property>
@@ -549,6 +549,39 @@
                           </packing>
                         </child>
                         <child>
+                          <widget class="GtkHBox" id="hbox1">
+                            <property name="visible">True</property>
+                            <child>
+                              <widget class="GtkLabel" id="pref_search_dom_label">
+                                <property name="width_request">170</property>
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Search Domain</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkEntry" id="pref_search_dom_entry">
+                                <property name="width_request">200</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
                           <widget class="GtkHBox" id="hbox12">
                             <property name="visible">True</property>
                             <child>
@@ -579,7 +612,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -613,7 +646,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                         <child>
@@ -646,7 +679,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">5</property>
+                            <property name="position">6</property>
                           </packing>
                         </child>
                         <child>
@@ -661,7 +694,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">6</property>
+                            <property name="position">7</property>
                           </packing>
                         </child>
                         <child>
@@ -676,7 +709,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">7</property>
+                            <property name="position">8</property>
                           </packing>
                         </child>
                         <child>
@@ -691,7 +724,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">8</property>
+                            <property name="position">9</property>
                           </packing>
                         </child>
                         <child>
@@ -702,7 +735,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">9</property>
+                            <property name="position">10</property>
                           </packing>
                         </child>
                         <child>
@@ -714,7 +747,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
-                            <property name="position">10</property>
+                            <property name="position">11</property>
                           </packing>
                         </child>
                         <child>
@@ -729,7 +762,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">11</property>
+                            <property name="position">12</property>
                           </packing>
                         </child>
                         <child>
@@ -745,7 +778,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">12</property>
+                            <property name="position">13</property>
                           </packing>
                         </child>
                         <child>
@@ -761,7 +794,7 @@
                           </widget>
                           <packing>
                             <property name="expand">False</property>
-                            <property name="position">13</property>
+                            <property name="position">14</property>
                           </packing>
                         </child>
                       </widget>

@@ -114,6 +114,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.txt_ip.entry.connect('focus-out-event', self.set_defaults)
         self.txt_netmask = LabelEntry(language['netmask'])
         self.txt_gateway = LabelEntry(language['gateway'])
+        self.txt_search_dom = LabelEntry(language['search_domain'])
         self.txt_dns_1 = LabelEntry(language['dns'] + ' ' + language['1'])
         self.txt_dns_2 = LabelEntry(language['dns'] + ' ' + language['2'])
         self.txt_dns_3 = LabelEntry(language['dns'] + ' ' + language['3'])
@@ -129,6 +130,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.vbox.pack_start(self.txt_netmask, fill=False, expand=False)
         self.vbox.pack_start(self.txt_gateway, fill=False, expand=False)
         self.vbox.pack_start(self.hbox_dns, fill=False, expand=False)
+        self.vbox.pack_start(self.txt_search_dom, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_1, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_2, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_3, fill=False, expand=False)
@@ -166,10 +168,10 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.chkbox_static_dns.set_sensitive(False)
         else:
             self.chkbox_static_ip.set_active(False)
-            self.chkbox_static_dns.set_active(False)
             self.chkbox_static_dns.set_sensitive(True)
 
-        if stringToNone(self.txt_dns_1.get_text()):
+        if stringToNone(self.txt_dns_1.get_text()) or \
+           self.chkbox_global_dns.get_active():
             self.chkbox_static_dns.set_active(True)
         else:
             self.chkbox_static_dns.set_active(False)
@@ -198,30 +200,30 @@ class AdvancedSettingsDialog(gtk.Dialog):
         """ Toggle entries and checkboxes based on the static dns checkbox. """
         # Should disable the static DNS boxes
         if self.chkbox_static_ip.get_active():
-            self.chkbox_static_dns.set_active(self.chkbox_static_ip.
-                                                            get_active())
+            self.chkbox_static_dns.set_active(True)
             self.chkbox_static_dns.set_sensitive(False)
 
         self.chkbox_global_dns.set_sensitive(self.chkbox_static_dns.
                                                             get_active())
+        
+        l = [self.txt_dns_1, self.txt_dns_2, self.txt_dns_3, 
+             self.txt_search_dom]
         if self.chkbox_static_dns.get_active():
             # If global dns is on, don't use local dns
-            self.txt_dns_1.set_sensitive(not self.chkbox_global_dns.get_active())
-            self.txt_dns_2.set_sensitive(not self.chkbox_global_dns.get_active())
-            self.txt_dns_3.set_sensitive(not self.chkbox_global_dns.get_active())
+            for w in l:
+                w.set_sensitive(not self.chkbox_global_dns.get_active())
         else:
-            self.txt_dns_1.set_sensitive(False)
-            self.txt_dns_2.set_sensitive(False)
-            self.txt_dns_3.set_sensitive(False)
+            for w in l:
+                w.set_sensitive(False)
             self.chkbox_global_dns.set_active(False)
 
     def toggle_global_dns_checkbox(self, widget=None):
         """ Set the DNS entries' sensitivity based on the Global checkbox. """
         if daemon.GetUseGlobalDNS() and self.chkbox_static_dns.get_active():
-            self.txt_dns_1.set_sensitive(not self.chkbox_global_dns.get_active())
-            self.txt_dns_2.set_sensitive(not self.chkbox_global_dns.get_active())
-            self.txt_dns_3.set_sensitive(not self.chkbox_global_dns.get_active())
-            
+            for w in [self.txt_dns_1, self.txt_dns_2, 
+                      self.txt_dns_3, self.txt_search_dom]:
+                w.set_sensitive(not self.chkbox_global_dns.get_active())
+                
     def destroy_called(self, *args):
         """ Clean up everything. 
         
@@ -261,6 +263,8 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.txt_dns_1.set_text(self.format_entry("dns1"))
         self.txt_dns_2.set_text(self.format_entry("dns2"))
         self.txt_dns_3.set_text(self.format_entry("dns3"))
+        self.txt_search_dom.set_text(self.format_entry("search_domain"))
+        self.chkbox_global_dns.set_active(bool(wired.GetWiredPropery("use_global_dns")))
         self.reset_static_checkboxes()
 
     def format_entry(self, label):
@@ -361,10 +365,13 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
         self.chkbox_global_dns.set_active(bool(wireless.GetWirelessProperty(networkID,
                                                                   'use_global_dns')))
+        self.chkbox_static_dns.set_active(bool(wireless.GetWirelessProperty(networkID,
+                                                                  'use_static_dns')))
         
         self.txt_dns_1.set_text(self.format_entry(networkID, "dns1"))
         self.txt_dns_2.set_text(self.format_entry(networkID, "dns2"))
         self.txt_dns_3.set_text(self.format_entry(networkID, "dns3"))
+        self.txt_search_dom.set_text(self.format_entry(networkID, "search_domain"))
         
         self.reset_static_checkboxes()
         self.chkbox_encryption.set_active(bool(wireless.GetWirelessProperty(networkID,

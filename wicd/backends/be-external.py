@@ -34,8 +34,6 @@ import wicd.misc as misc
 import wicd.wnettools as wnettools
 
 import re
-import os
-import wicd.wpath as wpath
 import time
 
 
@@ -77,22 +75,22 @@ auth_pattern        = re.compile('.*wpa_state=(.*?)\n', re.I | re.M  | re.S)
 RALINK_DRIVER = 'ralink legacy'
 
 
-def SetDNS(dns1=None, dns2=None, dns3=None):
-    return wnettools.SetDNS(dns1, dns2, dns3)
+def SetDNS(*args, **kargs):
+    return wnettools.SetDNS(*args, **kargs)
 
-def GetDefaultGateway():
-    return wnettools.GetDefaultGateway()
+def GetDefaultGateway(*args, **kargs):
+    return wnettools.GetDefaultGateway(*args, **kargs)
 
-def StopDHCP():
-    return wnettools.StopDHCP()
+def StopDHCP(*args, **kargs):
+    return wnettools.StopDHCP(*args, **kargs)
 
-def GetWirelessInterfaces():
-    return wnettools.GetWirelessInterfaces()
+def GetWirelessInterfaces(*args, **kargs):
+    return wnettools.GetWirelessInterfaces(*args, **kargs)
 
-def GetWiredInterfaces():
-    return wnettools.GetWiredInterfaces()
+def GetWiredInterfaces(*args, **kargs):
+    return wnettools.GetWiredInterfaces(*args, **kargs)
 
-def NeedsExternalCalls():
+def NeedsExternalCalls(*args, **kargs):
     return True
 
 

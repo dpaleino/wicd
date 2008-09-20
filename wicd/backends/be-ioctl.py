@@ -82,20 +82,20 @@ SIOCGMIIPHY = 0x8947
 SIOCETHTOOL = 0x8946
 SIOCGIFFLAGS = 0x8913
 
-def SetDNS(dns1=None, dns2=None, dns3=None):
-    return wnettools.SetDNS(dns1, dns2, dns3)
+def SetDNS(*args, **kargs):
+    return wnettools.SetDNS(*args, **kargs)
 
-def GetDefaultGateway():
-    return wnettools.GetDefaultGateway()
+def GetDefaultGateway(*args, **kargs):
+    return wnettools.GetDefaultGateway(*args, **kargs)
 
-def StopDHCP():
-    return wnettools.StopDHCP()
+def StopDHCP(*args, **kargs):
+    return wnettools.StopDHCP(*args, **kargs)
 
-def GetWirelessInterfaces():
-    return wnettools.GetWirelessInterfaces()
+def GetWirelessInterfaces(*args, **kargs):
+    return wnettools.GetWirelessInterfaces(*args, **kargs)
 
-def GetWiredInterfaces():
-    return wnettools.GetWiredInterfaces()
+def GetWiredInterfaces(*args, **kargs):
+    return wnettools.GetWiredInterfaces(*args, **kargs)
 
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.
@@ -120,7 +120,7 @@ def get_iw_ioctl_result(iface, call):
         return None
     return buff.tostring()
 
-def NeedsExternalCalls():
+def NeedsExternalCalls(*args, **kargs):
     return False
 
 
@@ -516,7 +516,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         """
         if not self.iface: return -100
-        buff = misc.get_irwange_ioctl_result(self.iface, SIOCGIWSTATS)
+        buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         if not buff:
             return None
 

@@ -38,7 +38,6 @@ import os
 import sys
 import time
 import getopt
-import ConfigParser
 import signal
 
 # DBUS
@@ -162,7 +161,7 @@ class WicdDaemon(dbus.service.Object):
         self.wired.use_global_dns = use
 
     @dbus.service.method('org.wicd.daemon')
-    def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None):
+    def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None, search_dom=None):
         """ Sets the global dns addresses. """
         print "setting global dns"
         self.config.set("Settings", "global_dns_1", misc.noneToString(dns1), True)
@@ -177,7 +176,12 @@ class WicdDaemon(dbus.service.Object):
         self.dns3 = dns3
         self.wifi.global_dns_3 = dns3
         self.wired.global_dns_3 = dns3
+        self.config.set("Settings", "global_search_dom", misc.noneToString(search_dom), True)
+        self.search_dom = search_dom
+        self.wifi.global_search_dom = search_dom
+        self.wired.global_search_dom = search_dom
         print 'global dns servers are', dns1, dns2, dns3
+        print 'search domain is %s' % search_dom
         
     @dbus.service.method('org.wicd.daemon')
     def SetBackend(self, backend):
@@ -320,7 +324,7 @@ class WicdDaemon(dbus.service.Object):
     def GetGlobalDNSAddresses(self):
         """ Returns the global dns addresses. """
         return (misc.noneToString(self.dns1), misc.noneToString(self.dns2),
-                misc.noneToString(self.dns3))
+                misc.noneToString(self.dns3), misc.noneToString(self.search_dom))
 
     @dbus.service.method('org.wicd.daemon')
     def CheckIfConnecting(self):
@@ -563,20 +567,21 @@ class WicdDaemon(dbus.service.Object):
     
     def _wired_autoconnect(self):
         """ Attempts to autoconnect to a wired network. """
-        if self.GetWiredAutoConnectMethod() == 3 and \
+        wiredb = self.wired_bus
+        if wiredb.GetWiredAutoConnectMethod() == 3 and \
            not self.GetNeedWiredProfileChooser():
             # attempt to smartly connect to a wired network
             # by using various wireless networks detected
             # and by using plugged in USB devices
             print self.LastScan
-        if self.GetWiredAutoConnectMethod() == 2 and \
+        if wiredb.GetWiredAutoConnectMethod() == 2 and \
            not self.GetNeedWiredProfileChooser():
             self.LaunchChooser()
             return True
         
         # Default Profile.
-        elif self.GetWiredAutoConnectMethod() == 1:
-            network = self.GetDefaultWiredNetwork()
+        elif wiredb.GetWiredAutoConnectMethod() == 1:
+            network = wiredb.GetDefaultWiredNetwork()
             if not network:
                 print "Couldn't find a default wired connection," + \
                       " wired autoconnect failed."
@@ -585,15 +590,15 @@ class WicdDaemon(dbus.service.Object):
 
         # Last-Used.
         else:
-            network = self.GetLastUsedWiredNetwork()
+            network = wiredb.GetLastUsedWiredNetwork()
             if not network:
                 print "no previous wired profile available, wired " + \
                       "autoconnect failed."
                 self.wireless_bus._wireless_autoconnect()
                 return
 
-        self.ReadWiredNetworkProfile(network)
-        self.ConnectWired()
+        wiredb.ReadWiredNetworkProfile(network)
+        wiredb.ConnectWired()
         print "Attempting to autoconnect with wired interface..."
         self.auto_connecting = True
         time.sleep(1.5)
@@ -675,7 +680,8 @@ class WicdDaemon(dbus.service.Object):
         dns1 = app_conf.get("Settings", "global_dns_1", default='None')
         dns2 = app_conf.get("Settings", "global_dns_2", default='None')
         dns3 = app_conf.get("Settings", "global_dns_3", default='None')
-        self.SetGlobalDNS(dns1, dns2, dns3)
+        search_dom = app_conf.get("Settings", "global_search_dom", default='None')
+        self.SetGlobalDNS(dns1, dns2, dns3, search_dom)
         self.SetAutoReconnect(app_conf.get("Settings", "auto_reconnect",
                                            default=True))
         self.SetDebugMode(app_conf.get("Settings", "debug_mode", default=False))
@@ -1370,6 +1376,7 @@ def daemonize():
     # stdin always from /dev/null
     sys.stdin = open('/dev/null', 'r')
 
+child_pid = None
 
 def main(argv):
     """ The main daemon program.

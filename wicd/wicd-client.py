@@ -634,7 +634,7 @@ Arguments:
 """
     
 def setup_dbus():
-    global bus, daemon, wireless, wired, dbus_manager
+    global daemon, wireless, wired, dbus_manager
     
     dbus_manager = DBusManager()
     try:

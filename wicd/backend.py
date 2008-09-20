@@ -31,6 +31,7 @@ import wicd.wpath as wpath
 
 
 class BackendManager(object):
+    """ Manages, validates, and loads wicd backends. """
     def __init__(self):
         """ Initialize the backend manager. """
         self.backend_dir = wpath.backends
@@ -57,6 +58,7 @@ class BackendManager(object):
         return be_list
     
     def get_update_interval(self):
+        """ Returns how often in seconds the wicd monitor should update. """
         if self.__loaded_backend:
             return self.__loaded_backend.UPDATE_INTERVAL
         else:

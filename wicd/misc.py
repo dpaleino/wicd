@@ -276,7 +276,11 @@ def get_gettext():
     # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
     local_path = wpath.translations
     langs = []
-    lc, encoding = locale.getdefaultlocale()
+    try:
+        lc, encoding = locale.getdefaultlocale()
+    except ValueError, e:
+        print str(e)
+        print "Default locale unavailable, falling back to en_US"
     if (lc):
         langs = [lc]
     osLanguage = os.environ.get('LANGUAGE', None)

@@ -264,7 +264,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.txt_dns_2.set_text(self.format_entry("dns2"))
         self.txt_dns_3.set_text(self.format_entry("dns3"))
         self.txt_search_dom.set_text(self.format_entry("search_domain"))
-        self.chkbox_global_dns.set_active(bool(wired.GetWiredPropery("use_global_dns")))
+        self.chkbox_global_dns.set_active(bool(wired.GetWiredProperty("use_global_dns")))
         self.reset_static_checkboxes()
 
     def format_entry(self, label):
@@ -678,7 +678,7 @@ class WiredNetworkEntry(NetworkEntry):
                 return False
         if profile_name != "":
             self.profile_help.hide()
-            wired.CreateWiredNetworkProfile(profile_name)
+            wired.CreateWiredNetworkProfile(profile_name, False)
             self.combo_profile_names.prepend_text(profile_name)
             self.combo_profile_names.set_active(0)
             self.advanced_dialog.prof_name = profile_name

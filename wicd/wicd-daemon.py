@@ -73,7 +73,8 @@ class WicdDaemon(dbus.service.Object):
                                      object_path=object_path)
         self.wifi = networking.Wireless()
         self.wired = networking.Wired()
-        self.config = ConfigManager(wpath.etc + "manager-settings.conf")
+        self.config = ConfigManager(os.path.join(wpath.etc,
+                                                 "manager-settings.conf"))
         self.wired_bus= WiredDaemon(bus_name, wired=self.wired, wifi=self.wifi)
         self.wireless_bus = WirelessDaemon(bus_name, wired=self.wired, 
                                            wifi=self.wifi)
@@ -97,9 +98,6 @@ class WicdDaemon(dbus.service.Object):
         # need a fresh scan, just feed them the old one.  A fresh scan
         # can be done by calling Scan(fresh=True).
         self.LastScan = ''
-
-        # Make a variable that will hold the wired network profile
-        self.WiredNetwork = {}
 
         # Kind of hackish way to set correct wnettools interfaces.
         self.wifi.liface = self.wired.liface
@@ -448,6 +446,21 @@ class WicdDaemon(dbus.service.Object):
     def GetAlwaysShowWiredInterface(self):
         """ Returns always_show_wired_interface """
         return bool(self.always_show_wired_interface)
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetWiredAutoConnectMethod(self, method):
+        """ Sets which method to use to autoconnect to wired networks. """
+        # 1 = default profile
+        # 2 = show list
+        # 3 = last used profile
+        self.config.set("Settings","wired_connect_mode", int(method), True)
+        self.wired_connect_mode = int(method)
+        self.wired_bus.connect_mode = int(method)
+
+    @dbus.service.method('org.wicd.daemon')
+    def GetWiredAutoConnectMethod(self):
+        """ Returns the wired autoconnect method. """
+        return int(self.wired_connect_mode)
         
     @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
@@ -568,19 +581,19 @@ class WicdDaemon(dbus.service.Object):
     def _wired_autoconnect(self):
         """ Attempts to autoconnect to a wired network. """
         wiredb = self.wired_bus
-        if wiredb.GetWiredAutoConnectMethod() == 3 and \
+        if self.GetWiredAutoConnectMethod() == 3 and \
            not self.GetNeedWiredProfileChooser():
             # attempt to smartly connect to a wired network
             # by using various wireless networks detected
             # and by using plugged in USB devices
             print self.LastScan
-        if wiredb.GetWiredAutoConnectMethod() == 2 and \
+        if self.GetWiredAutoConnectMethod() == 2 and \
            not self.GetNeedWiredProfileChooser():
             self.LaunchChooser()
             return True
         
         # Default Profile.
-        elif wiredb.GetWiredAutoConnectMethod() == 1:
+        elif self.GetWiredAutoConnectMethod() == 1:
             network = wiredb.GetDefaultWiredNetwork()
             if not network:
                 print "Couldn't find a default wired connection," + \
@@ -685,7 +698,7 @@ class WicdDaemon(dbus.service.Object):
         self.SetAutoReconnect(app_conf.get("Settings", "auto_reconnect",
                                            default=True))
         self.SetDebugMode(app_conf.get("Settings", "debug_mode", default=False))
-        b_wired.SetWiredAutoConnectMethod(app_conf.get("Settings",
+        self.SetWiredAutoConnectMethod(app_conf.get("Settings",
                                                        "wired_connect_mode",
                                                        default=1))
         self.SetSignalDisplayType(app_conf.get("Settings", 
@@ -739,7 +752,8 @@ class WirelessDaemon(dbus.service.Object):
         self.wifi = wifi
         self.debug_mode = debug
         self.forced_disconnect = False
-        self.config = ConfigManager(wpath.etc + "wireless-settings.conf")
+        self.config = ConfigManager(os.path.join(wpath.etc, 
+                                                 "wireless-settings.conf"))
         
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetHiddenNetworkESSID(self, essid):
@@ -797,7 +811,10 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetWirelessProperty(self, networkid, property):
         """ Retrieves wireless property from the network specified """
-        value = self.LastScan[networkid].get(property)
+        try:
+            value = self.LastScan[networkid].get(property)
+        except IndexError:
+            return ""
         try:
             value = misc.to_unicode(value)
         except:
@@ -1070,7 +1087,9 @@ class WiredDaemon(dbus.service.Object):
         self.wifi = wifi
         self.debug_mode = debug
         self.forced_disconnect = False
-        self.config = ConfigManager(wpath.etc + "wired-settings")
+        self.WiredNetwork = {}
+        self.config = ConfigManager(os.path.join(wpath.etc,
+                                                 "wired-settings.conf"))
         
     @dbus.service.method('org.wicd.daemon.wired')
     def GetWiredIP(self, ifconfig=""):
@@ -1085,20 +1104,6 @@ class WiredDaemon(dbus.service.Object):
             return self.wired.connecting_thread.is_connecting
         else:
             return False
-
-    @dbus.service.method('org.wicd.daemon.wired')
-    def SetWiredAutoConnectMethod(self, method):
-        """ Sets which method to use to autoconnect to wired networks. """
-        # 1 = default profile
-        # 2 = show list
-        # 3 = last used profile
-        self.config.set("Settings","wired_connect_mode", int(method), True)
-        self.wired_connect_mode = int(method)
-
-    @dbus.service.method('org.wicd.daemon.wired')
-    def GetWiredAutoConnectMethod(self):
-        """ Returns the wired autoconnect method. """
-        return int(self.wired_connect_mode)
 
     @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
@@ -1302,13 +1307,16 @@ class WiredDaemon(dbus.service.Object):
             self.WiredNetwork = profile
             return "100: Loaded Profile"
         else:
-            self.WiredNetwork = None
+            self.WiredNetwork = {}
             return "500: Profile Not Found"
 
     @dbus.service.method('org.wicd.daemon.wired')
     def GetWiredProfileList(self):
         """ Returns a list of all wired profiles in wired-settings.conf. """
-        return self.config.sections()
+        sections = self.config.sections()
+        if not sections:
+            sections = [""]
+        return sections
 
 
 def usage():

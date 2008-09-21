@@ -130,11 +130,12 @@ class PreferencesDialog(object):
         flush_method = daemon.GetFlushTool()
         flush_list[flush_method].set_active(True)
         
-        if wired.GetWiredAutoConnectMethod() == 1:
+        auto_conn_meth = daemon.GetWiredAutoConnectMethod()
+        if auto_conn_meth == 1:
             self.usedefaultradiobutton.set_active(True)
-        elif wired.GetWiredAutoConnectMethod() == 2:
+        elif auto_conn_meth == 2:
             self.showlistradiobutton.set_active(True)
-        elif wired.GetWiredAutoConnectMethod() == 3:
+        elif auto_conn_meth == 3:
             self.lastusedradiobutton.set_active(True)
         
         self.entryWirelessInterface = self.wTree.get_widget("pref_wifi_entry")
@@ -231,11 +232,11 @@ class PreferencesDialog(object):
         daemon.SetDebugMode(self.debugmodecheckbox.get_active())
         daemon.SetSignalDisplayType(self.displaytypecheckbox.get_active())
         if self.showlistradiobutton.get_active():
-            wired.SetWiredAutoConnectMethod(2)
+            daemon.SetWiredAutoConnectMethod(2)
         elif self.lastusedradiobutton.get_active():
-            wired.SetWiredAutoConnectMethod(3)
+            daemon.SetWiredAutoConnectMethod(3)
         else:
-            wired.SetWiredAutoConnectMethod(1)
+            daemon.SetWiredAutoConnectMethod(1)
             
         if self.backends[self.backendcombo.get_active()] != daemon.GetSavedBackend():
             alert(self.dialog, language["backend_alert"])

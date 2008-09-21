@@ -504,7 +504,7 @@ def stringToBoolean(text):
         return True
     if text in ("False", "0"):
         return False
-    return text
+    return bool(text)
 
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:

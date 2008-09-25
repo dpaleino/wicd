@@ -450,7 +450,12 @@ class appGui(object):
         return True
 
     def update_statusbar(self):
-        """ Updates the status bar. """
+        """ Updates the status bar
+        
+        Queries the daemon for network connection information and
+        updates the GUI status bar based on the results.
+        
+        """
         if not self.is_visible:
             return True
 
@@ -501,7 +506,12 @@ class appGui(object):
             return True
     
     def update_connect_buttons(self, state=None, x=None, force_check=False):
-        """ Updates the connect/disconnect buttons for each network entry. """
+        """ Updates the connect/disconnect buttons for each network entry.
+
+        If force_check is given, update the buttons even if the
+        current network state is the same as the previous.
+        
+        """
         if not state:
             state, x = daemon.GetConnectionStatus()
         
@@ -565,6 +575,7 @@ class appGui(object):
         self.network_list.set_sensitive(False)
         
     def refresh_clicked(self, widget=None):
+        """ Kick off an asynchronous wireless scan. """
         def dummy(x=None):pass
         wireless.Scan(reply_handler=dummy, error_handler=dummy)
 
@@ -674,6 +685,7 @@ class appGui(object):
         return True
     
     def _save_gen_settings(self, entry):
+        """ Save settings common to wired and wireless settings dialogs. """
         if entry.chkbox_static_ip.get_active():
             entry.set_net_prop("ip", noneToString(entry.txt_ip.get_text()))
             entry.set_net_prop("netmask", noneToString(entry.txt_netmask.get_text()))
@@ -704,7 +716,7 @@ class appGui(object):
             entry.set_net_prop("dns3", '')
     
     def save_wired_settings(self, entry):
-        """ Saved wired network settings. """
+        """ Save wired network settings. """
         self._save_gen_settings(entry)
         wired.SaveWiredNetworkProfile(entry.prof_name)
         return True

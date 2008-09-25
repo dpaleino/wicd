@@ -102,17 +102,15 @@ class Controller(object):
         self._wireless_interface = value
         if self.wiface:
             self.wiface.SetInterface(value)
-            
-    def get_wireless_iface(self):
-        return self._wireless_interface
-        
+    def get_wireless_iface(self): return self._wireless_interface
+    wireless_interface = property(get_wireless_iface, set_wireless_iface)    
+    
     def set_wired_iface(self, value):
         self._wired_interface = value
         if self.liface:
-            self.liface.SetInterface(value)
-            
-    def get_wired_iface(self):
-        return self._wired_interface
+            self.liface.SetInterface(value)            
+    def get_wired_iface(self): return self._wired_interface
+    wired_interface = property(get_wired_iface, set_wired_iface)
     
     def set_debug(self, value):
         self._debug = value
@@ -120,9 +118,8 @@ class Controller(object):
             self.wiface.SetDebugMode(value)
         if self.liface:
             self.liface.SetDebugMode(value)
-            
-    def get_debug(self):
-        return self._debug
+    def get_debug(self): return self._debug
+    debug = property(get_debug, set_debug)
     
     def set_dhcp_client(self, value):
         self._dhcp_client = value
@@ -132,9 +129,8 @@ class Controller(object):
         if self.liface:
             self.liface.DHCP_CLIENT = value    
             self.liface.CheckDHCP()
-
-    def get_dhcp_client(self):
-        return self._dhcp_client
+    def get_dhcp_client(self): return self._dhcp_client
+    dhcp_client = property(get_dhcp_client, set_dhcp_client)
     
     def set_flush_tool(self, value):
         self._flush_tool = value
@@ -142,15 +138,8 @@ class Controller(object):
             self.wiface.flush_tool = value
         if self.liface:
             self.liface.flush_tool = value
-            
-    def get_flush_tool(self):
-        return self._flush_tool
-        
-    wireless_interface = property(get_wireless_iface, set_wireless_iface)
-    wired_interface = property(get_wired_iface, set_wired_iface)
-    debug = property(get_debug, set_debug)
+    def get_flush_tool(self): return self._flush_tool
     flush_tool = property(get_flush_tool, set_flush_tool)
-    dhcp_client = property(get_dhcp_client, set_dhcp_client)
     
     def LoadBackend(self, backend_name):
         """ Load the given networking backend. """
@@ -225,18 +214,14 @@ class ConnectThread(threading.Thread):
         
         self.SetStatus('interface_down')
         
-    def get_should_die(self):
-        return self._should_die
-    
     def set_should_die(self, val):
         self.lock.acquire()
         try:
             self._should_die = val
         finally:
             self.lock.release()
-    
+    def get_should_die(self): return self._should_die
     should_die = property(get_should_die, set_should_die)
-
 
     def SetStatus(self, status):
         """ Set the threads current status message in a thread-safe way.
@@ -418,6 +403,12 @@ class Wireless(Controller):
     wpa_driver = property(get_wpa_driver, set_wpa_driver)
     
     def LoadBackend(self, backend):
+        """ Load a given backend. 
+
+        Load up a backend into the backend manager and associate with
+        the networking interface.
+        
+        """
         Controller.LoadBackend(self, backend)
         if self._backend:
             self.wiface = self._backend.WirelessInterface(self.wireless_interface,
@@ -816,9 +807,7 @@ class Wired(Controller):
         self._link_detect = value
         if self.liface:
             self.liface.link_detect = value
-        
     def get_link_detect(self): return self._link_detect
-    
     link_detect = property(get_link_detect, set_link_detect)
     
     def LoadBackend(self, backend):

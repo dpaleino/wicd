@@ -83,18 +83,23 @@ SIOCETHTOOL = 0x8946
 SIOCGIFFLAGS = 0x8913
 
 def SetDNS(*args, **kargs):
+    """ Call the wnettools SetDNS method. """
     return wnettools.SetDNS(*args, **kargs)
 
 def GetDefaultGateway(*args, **kargs):
+    """ Call the wnettools GetDefaultGateway method. """
     return wnettools.GetDefaultGateway(*args, **kargs)
 
 def StopDHCP(*args, **kargs):
+    """ Call the wnettools StopDHCP method. """
     return wnettools.StopDHCP(*args, **kargs)
 
 def GetWirelessInterfaces(*args, **kargs):
+    """ Call the wnettools GetWirelessInterfaces method. """
     return wnettools.GetWirelessInterfaces(*args, **kargs)
 
 def GetWiredInterfaces(*args, **kargs):
+    """ Call the wnettools GetWiredInterfaces method. """
     return wnettools.GetWiredInterfaces(*args, **kargs)
 
 def get_iw_ioctl_result(iface, call):
@@ -121,6 +126,7 @@ def get_iw_ioctl_result(iface, call):
     return buff.tostring()
 
 def NeedsExternalCalls(*args, **kargs):
+    """ Return False, since this backend doesn't use any external apps. """
     return False
 
 
@@ -535,4 +541,3 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             return None
 
         return buff.strip('\x00')
-

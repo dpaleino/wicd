@@ -302,6 +302,7 @@ def to_unicode(x):
     return ret
     
 def RenameProcess(new_name):
+    """ Renames the process calling the function to the given name. """
     if sys.platform != 'linux2':
         print 'Unsupported platform'
         return False
@@ -318,6 +319,12 @@ def RenameProcess(new_name):
         return False
     
 def detect_desktop_environment():
+    """ Try to determine which desktop environment is in use. 
+    
+    Choose between kde, gnome, or xfce based on environment
+    variables and a call to xprop.
+    
+    """
     desktop_environment = 'generic'
     if os.environ.get('KDE_FULL_SESSION') == 'true':
         desktop_environment = 'kde'
@@ -333,6 +340,7 @@ def detect_desktop_environment():
     return desktop_environment
 
 def choose_sudo_prog():
+    """ Try to intelligently decide which graphical sudo program to use. """
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
     
@@ -351,6 +359,13 @@ def choose_sudo_prog():
     raise WicdError("Couldn't find graphical sudo program.")
 
 def find_path(cmd):
+    """ Try to find a full path for a given file name. 
+    
+    Search the all the paths in the environment variable PATH for
+    the given file name, or return None if a full path for
+    the file can not be found.
+    
+    """
     paths = os.getenv("PATH", default=["/usr/bin", "/usr/local/bin"]).split(':')
     for path in paths:
         if os.access(os.path.join(path, cmd), os.F_OK):
@@ -360,7 +375,7 @@ def find_path(cmd):
 def get_language_list_gui():
     """ Returns a dict of translatable strings used by the GUI.
     
-    translations are done at http://wicd.net/translator. Please 
+    Translations are done at http://wicd.net/translator. Please 
     translate if you can.
     
     """
@@ -472,6 +487,12 @@ def get_language_list_gui():
     return language
 
 def get_language_list_tray():
+    """ Returns a dict of translatable strings used by the tray icon.
+    
+    Translations are done at http://wicd.net/translator. Please 
+    translate if you can.
+    
+    """
     _ = get_gettext()
     language = {}
     language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')

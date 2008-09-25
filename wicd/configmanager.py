@@ -43,12 +43,16 @@ class ConfigManager(ConfigParser):
         return self.config_file
     
     def get_config(self):
+        """ Returns the path to the loaded config file. """
         return self.config_file
         
     def set_option(self, section, option, value, save=False):
         """ Wrapper around ConfigParser.set
 
         Adds the option to write the config file change right away.
+        Also forces all the values being written to type str, and
+        adds the section the option should be written to if it
+        doesn't exist already.
         
         """
         if not self.has_section(section):
@@ -59,6 +63,7 @@ class ConfigManager(ConfigParser):
             self.write()
 
     def set(self, *args, **kargs):
+        """ Calls the set_option method. """
         self.set_option(*args, **kargs)
         
     def get_option(self, section, option, default=None):
@@ -90,13 +95,21 @@ class ConfigManager(ConfigParser):
         return ret
     
     def get(self, *args, **kargs):
+        """ Calls the get_option method """
         return self.get_option(*args, **kargs)
     
     def write(self):
+        """ Writes the loaded config file to disk. """
         configfile = open(self.config_file, 'w')
         ConfigParser.write(self, configfile)
         configfile.close()
         
     def remove_section(self,section):
+        """ Wrapper around the ConfigParser.remove_section() method.
+        
+        This method only calls the ConfigParser.remove_section() method
+        if the section actually exists.
+        
+        """
         if self.has_section(section):
             ConfigParser.remove_section(self, section)

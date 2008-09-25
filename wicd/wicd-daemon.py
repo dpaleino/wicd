@@ -67,8 +67,16 @@ wireless_conf = wpath.etc + "wireless-settings.conf"
 wired_conf = wpath.etc + "wired-settings.conf"
 
 class WicdDaemon(dbus.service.Object):
+    """ The main wicd daemon class.
+    
+    This class mostly contains exported DBus methods that are not
+    associated directly with either wired or wireless actions.  There
+    are a few exceptions to this, due to architectural limitations.
+    
+    """
     def __init__(self, bus_name, object_path="/org/wicd/daemon",
                  auto_connect=True):
+        """ Initializes the daemon DBus object. """
         dbus.service.Object.__init__(self, bus_name=bus_name, 
                                      object_path=object_path)
         self.wifi = networking.Wireless()
@@ -425,7 +433,7 @@ class WicdDaemon(dbus.service.Object):
         the wicd.py is not exited properly while the GUI is open.  We should
         probably implement some kind of pid system to do it properly.
         
-        ANOTHER NOTE: This isn't implemented yet!
+        ANOTHER NOTE: This isn't used by anything yet!
         
         """
         return bool(self.gui_open)
@@ -491,6 +499,12 @@ class WicdDaemon(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon', out_signature='(uas)')
     def GetConnectionStatus(self):
+        """ Returns the current connection state in list form. 
+        
+        See SetConnectionStatus for more information about the
+        data structure being returned.
+        
+        """
         return [self.connection_state, self.connection_info]
 
     @dbus.service.method('org.wicd.daemon')
@@ -505,10 +519,20 @@ class WicdDaemon(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon')
     def GetDHCPClient(self):
+        """ Returns the current DHCP client constant.
+        
+        See misc.py for a definition of the constants.
+        
+        """
         return self.dhcp_client
     
     @dbus.service.method('org.wicd.daemon')
     def SetDHCPClient(self, client):
+        """ Sets the DHCP client constant.
+        
+        See misc.py for a definition of the constants.
+        
+        """
         print "Setting dhcp client to %i" % (int(client))
         self.dhcp_client = int(client)
         self.wifi.dhcp_client = int(client)
@@ -517,20 +541,38 @@ class WicdDaemon(dbus.service.Object):
 
     @dbus.service.method('org.wicd.daemon')
     def GetLinkDetectionTool(self):
+        """ Returns the current link detection tool constant. """
         return self.link_detect_tool
 
     @dbus.service.method('org.wicd.daemon')
     def SetLinkDetectionTool(self, link_tool):
+        """ Sets the link detection tool. 
+        
+        Sets the value of the tool wicd should use to detect if a
+        cable is plugged in.  If using a backend that doesn't use
+        an external call to get this information (such as ioctl)
+        it will instead use the ioctls provided by the specified
+        tool to query for link status.
+        
+        """
         self.link_detect_tool = int(link_tool)
         self.wired.link_tool = int(link_tool)
         self.config.set("Settings", "link_detect_tool", link_tool, True)
 
     @dbus.service.method('org.wicd.daemon')
     def GetFlushTool(self):
+        """ Returns the current flush tool constant. """
         return self.flush_tool
 
     @dbus.service.method('org.wicd.daemon')
     def SetFlushTool(self, flush_tool):
+        """ Sets the flush tool.
+        
+        Sets the value of the tool wicd should use to flush routing tables.
+        The value is associated with a particular tool, as specified in
+        misc.py
+        
+        """
         self.flush_tool = int(flush_tool)
         self.wired.flush_tool = int(flush_tool)
         self.wifi.flush_tool = int(flush_tool)
@@ -538,7 +580,13 @@ class WicdDaemon(dbus.service.Object):
         
     @dbus.service.method('org.wicd.daemon')
     def WriteWindowSize(self, width, height, win_name):
-        """Write the desired default window size"""
+        """ Write the desired default window size.
+        
+        win_name should be either 'main' or 'pref', and specifies
+        whether the size being given applies to the main GUI window
+        or the preferences dialog window.
+        
+        """
         if win_name == "main":
             height_str = "window_height"
             width_str = "window_width"
@@ -622,6 +670,13 @@ class WicdDaemon(dbus.service.Object):
         return True
 
     def _monitor_wired_autoconnect(self):
+        """ Monitor a wired auto-connection attempt.
+
+        Helper method called on a timer that monitors a wired
+        connection attempt and makes decisions about what to
+        do next based on the result.
+        
+        """
         wiredb = self.wired_bus
         if wiredb.CheckIfWiredConnecting():
             return True
@@ -642,6 +697,7 @@ class WicdDaemon(dbus.service.Object):
         
     @dbus.service.method('org.wicd.daemon', in_signature='uav')
     def EmitStatusChanged(self, state, info):
+        """ Calls the StatusChanged signal method. """
         self.StatusChanged(state, info)
 
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='uav')
@@ -649,12 +705,13 @@ class WicdDaemon(dbus.service.Object):
         """ Emits a "status changed" dbus signal.
         
         This D-Bus signal is emitted when the connection status changes.
+        This signal can be hooked to monitor the network state.
         
         """
         pass
     
     def __printReturn(self, text, value):
-        """prints the specified text and value, then returns the value"""
+        """ Prints the specified text and value, then returns the value. """
         if self.debug_mode:
             print ''.join([text, " ", str(value)])
         return value
@@ -744,7 +801,9 @@ class WicdDaemon(dbus.service.Object):
 ##############################
  
 class WirelessDaemon(dbus.service.Object):
+    """ DBus interface for wireless connection operations. """
     def __init__(self, bus_name, wired=None, wifi=None, debug=False):
+        """ Intitialize the wireless DBus interface. """
         dbus.service.Object.__init__(self, bus_name=bus_name,
                                      object_path='/org/wicd/daemon/wireless')
         self.hidden_essid = None
@@ -963,17 +1022,16 @@ class WirelessDaemon(dbus.service.Object):
             print bssid_key
         
         if self.config.get(essid_key, 'use_settings_globally'):
-            return self._read_wireless_profile(cur_network, essid_key)
+            section = essid_key
         elif self.config.has_section(bssid_key):
-            return self._read_wireless_profile(cur_network, bssid_key)
+            section = bssid_key
         else:
             cur_network["has_profile"] = False
             return "500: Profile Not Found"
         
-    def _read_wireless_profile(self, cur_network, section):
         cur_network["has_profile"] = True
 
-        # Read the essid because we be needing to name those hidden
+        # Read the essid because we need to name those hidden
         # wireless networks now - but only read it if it is hidden.
         if cur_network["hidden"]:
             cur_network["essid"] = misc.Noneify(self.config.get(section, 
@@ -1080,7 +1138,9 @@ class WirelessDaemon(dbus.service.Object):
 ###########################
         
 class WiredDaemon(dbus.service.Object):
+    """ DBus interface for wired connection operations. """
     def __init__(self, bus_name, wired=None, wifi=None, debug=False):
+        """ Intitialize the wireless DBus interface. """
         dbus.service.Object.__init__(self, bus_name=bus_name,
                                      object_path="/org/wicd/daemon/wired")
         self.wired = wired

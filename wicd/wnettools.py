@@ -881,4 +881,3 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         print 'Implement this in a derived class!'
-

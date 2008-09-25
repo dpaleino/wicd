@@ -2,7 +2,8 @@
 
 """ Wicd Preferences Dialog.
 
-Displays the main settings dialog window for wicd.
+Displays the main settings dialog window for wicd and
+handles recieving/sendings the settings from/to the daemon.
 
 """
 
@@ -45,6 +46,7 @@ def alert(parent, message):
     dialog.destroy()
 
 class PreferencesDialog(object):
+    """ Class for handling the wicd preferences dialog window. """
     def __init__(self, wTree, dbus):
         global daemon, wireless, wired
         daemon = dbus['daemon']
@@ -55,6 +57,7 @@ class PreferencesDialog(object):
         self.build_preferences_diag()
         
     def build_preferences_diag(self):
+        """ Builds the preferences dialog window. """
         def build_combobox(lbl):
             """ Sets up a ComboBox using the given widget name. """
             liststore = gtk.ListStore(gobject.TYPE_STRING)
@@ -67,6 +70,7 @@ class PreferencesDialog(object):
             return combobox
         
         def setup_label(name, lbl=""):
+            """ Sets up a label for the given widget name. """
             widget = self.wTree.get_widget(name)
             if lbl:
                 widget.set_label(language[lbl])
@@ -212,15 +216,19 @@ class PreferencesDialog(object):
         self.wTree.get_widget("notebook2").set_current_page(0)
         
     def run(self):
+        """ Runs the preferences dialog window. """
         return self.dialog.run()
     
     def hide(self):
+        """ Hides the preferences dialog window. """
         self.dialog.hide()
         
     def show_all(self):
+        """ Shows the preferences dialog window. """
         self.show_all()
     
     def save_results(self):
+        """ Pushes the selected settings to the daemon. """
         daemon.SetUseGlobalDNS(self.useGlobalDNSCheckbox.get_active())
         daemon.SetGlobalDNS(self.dns1Entry.get_text(), self.dns2Entry.get_text(),
                             self.dns3Entry.get_text(), self.searchDomEntry.get_text())

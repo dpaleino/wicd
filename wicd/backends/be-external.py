@@ -76,28 +76,34 @@ RALINK_DRIVER = 'ralink legacy'
 
 
 def SetDNS(*args, **kargs):
+    """ Call the wnettools SetDNS method. """
     return wnettools.SetDNS(*args, **kargs)
 
 def GetDefaultGateway(*args, **kargs):
+    """ Call the wnettools GetDefaultGateway method. """
     return wnettools.GetDefaultGateway(*args, **kargs)
 
 def StopDHCP(*args, **kargs):
+    """ Call the wnettools StopDHCP method. """
     return wnettools.StopDHCP(*args, **kargs)
 
 def GetWirelessInterfaces(*args, **kargs):
+    """ Call the wnettools GetWirelessInterfaces method. """
     return wnettools.GetWirelessInterfaces(*args, **kargs)
 
 def GetWiredInterfaces(*args, **kargs):
+    """ Call the wnettools GetWiredInterfaces method. """
     return wnettools.GetWiredInterfaces(*args, **kargs)
 
 def NeedsExternalCalls(*args, **kargs):
+    """ Return True, since this backend using iwconfig/ifconfig. """
     return True
 
 
 class Interface(wnettools.BaseInterface):
     """ Control a network interface. """
     def __init__(self, iface, verbose=False):
-        """ Initialise the object.
+        """ Initialize the object.
 
         Keyword arguments:
         iface -- the name of the interface

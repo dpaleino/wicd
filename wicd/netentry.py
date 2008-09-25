@@ -813,6 +813,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.wifides = self.connect("destroy", self.destroy_called)
         
     def _escape(self, val):
+        """ Escapes special characters so they're displayed correctly. """
         return val.replace("&", "&amp;").replace("<", "&lt;").\
                replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
         
@@ -930,7 +931,7 @@ class WirelessNetworkEntry(NetworkEntry):
                 misc.LaunchAndWait([sudo_prog, msg_flag, msg,
                                     wpath.lib + "configscript.py", 
                                     str(self.networkID), "wireless"])
-            except IOError:
+            except misc.WicdError:
                 error(None, "Could not find a graphical sudo program." + \
                       "  Script editor could no be launched.")
         else:

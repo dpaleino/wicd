@@ -44,6 +44,7 @@ class BackendManager(object):
                 be_file.endswith(".py"))
     
     def get_current_backend(self):
+        """ Returns the name of the loaded backend. """
         if self.__loaded_backend:
             return self.__loaded_backend.NAME
         else:
@@ -105,4 +106,3 @@ class BackendManager(object):
         self.__loaded_backend = backend
         print 'successfully loaded backend %s' % backend_name
         return backend
-        

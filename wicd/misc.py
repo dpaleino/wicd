@@ -453,6 +453,7 @@ def get_language_list_gui():
     language["backend"] = _("Backend")
     language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
     language['search_domain'] = _("Search Domain")
+    language['scripts_need_pass'] = _('You must enter your password to configure scripts')
     
     language['0'] = _('0')
     language['1'] = _('1')

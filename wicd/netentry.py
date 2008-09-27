@@ -636,19 +636,20 @@ class WiredNetworkEntry(NetworkEntry):
         if os.getuid() != 0:
             try:
                 sudo_prog = misc.choose_sudo_prog()
-                msg = "You must enter your password to configure scripts"
+                msg = msg = "'%s'" % language["scripts_need_pass"]
                 if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
                     msg_flag = "-m"
                 else:
                     msg_flag = "--caption"
-                misc.LaunchAndWait([sudo_prog, msg_flag, msg, 
-                                    wpath.lib + "configscript.py", profile,
-                                    "wired"])
+                misc.LaunchAndWait(' '.join([sudo_prog, msg_flag, msg, 
+                                    os.path.join(wpath.lib, "configscript.py"), 
+                                    profile, "wired"]))
             except misc.WicdError:
                 error(None, "Could not find a graphical sudo program." + \
                       "  Script editor could not be launched.")
         else:
-            misc.LaunchAndWait([wpath.lib + "configscript.py", profile, "wired"])
+            misc.LaunchAndWait(' '.join([os.path.join(wpath.lib, "configscript.py"), 
+                                        profile, "wired"]))
 
     def check_enable(self):
         """ Disable objects if the profile list is empty. """
@@ -923,20 +924,20 @@ class WirelessNetworkEntry(NetworkEntry):
         if os.getuid() != 0:
             try:
                 sudo_prog = misc.choose_sudo_prog()
-                msg = "You must enter your password to configure scripts"
+                msg = "'%s'" % language["scripts_need_pass"]
                 if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
                     msg_flag = "-m"
                 else:
                     msg_flag = "--caption"
-                misc.LaunchAndWait([sudo_prog, msg_flag, msg,
-                                    wpath.lib + "configscript.py", 
-                                    str(self.networkID), "wireless"])
+                misc.LaunchAndWait(' '.join([sudo_prog, msg_flag, msg,
+                                    os.path.join(wpath.lib, "configscript.py"), 
+                                    str(self.networkID), "wireless"]))
             except misc.WicdError:
                 error(None, "Could not find a graphical sudo program." + \
                       "  Script editor could no be launched.")
         else:
-            misc.LaunchAndWait(["./configscript.py", str(self.networkID),
-                               "wireless"])
+            misc.LaunchAndWait(' '.join([os.path.join(wpath.lib, "configscript.py"), 
+                                        str(self.networkID), "wireless"]))
 
     def update_autoconnect(self, widget=None):
         """ Called when the autoconnect checkbox is toggled. """

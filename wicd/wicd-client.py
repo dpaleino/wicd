@@ -52,14 +52,17 @@ from wicd import misc
 from wicd import gui
 from wicd.dbusmanager import DBusManager
 
+ICON_AVAIL = True
 # Import egg.trayicon if we're using an older gtk version
 if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
+    class Dummy(object): pass
+    gtk.StatusIcon = Dummy
     try:
         import egg.trayicon
         USE_EGG = True
     except ImportError:
-        print 'Unable to load wicd.py: Missing egg.trayicon module.'
-        sys.exit(1)
+        print 'Unable to load tray icon: Missing egg.trayicon module.'
+        ICON_AVAIL = False
 else:
     USE_EGG = False
 
@@ -96,7 +99,7 @@ class NetworkMenuItem(gtk.ImageMenuItem):
         self.label.show()
         
 
-class TrayIcon:
+class TrayIcon(object):
     """ Base Tray Icon class.
     
     Base Class for implementing a tray icon to display network status.
@@ -110,7 +113,7 @@ class TrayIcon:
         self.icon_info = self.TrayConnectionInfo(self.tr, use_tray, animate)
         
 
-    class TrayConnectionInfo:
+    class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
         def __init__(self, tr, use_tray=True, animate=True):
             """ Initialize variables needed for the icon status methods. """
@@ -613,7 +616,7 @@ class TrayIcon:
             self.init_network_menu()
             self.menu.popup(None, None, None, button, timestamp)
 
-        def set_from_file(self, path = None):
+        def set_from_file(self, path=None):
             """ Sets a new tray icon picture. """
             if not self.use_tray: return
             if path != self.current_icon_path:
@@ -687,7 +690,7 @@ def main(argv):
     print 'Loading...'
     setup_dbus()
 
-    if not use_tray:
+    if not use_tray or not ICON_AVAIL:
         the_gui = gui.appGui()
         the_gui.standalone = True
         mainloop = gobject.MainLoop()

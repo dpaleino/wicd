@@ -1,0 +1,62 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PYVERS=$(shell pyversions -r debian/control)
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	for python in $(PYVERS); do \
+		$(MAKE) build PYTHON=$$python ; \
+	done
+	touch build-stamp
+
+clean:
+	dh_testdir
+	for python in $(PYVERS); do \
+		$(MAKE) clean PYTHON=$$python ; \
+	done
+	dh_clean build-stamp
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	for python in $(PYVERS); do \
+		$(MAKE) install PYTHON=$$python DESTDIR=$(CURDIR)/debian/python-wpactrl ; \
+	done
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs -a
+	dh_installexamples -a
+	dh_installchangelogs -a
+	dh_pycentral -a
+	dh_strip -a
+	dh_compress -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary
+
+VERSION := $(shell dpkg-parsechangelog | sed -n 's/^Version:\s*\([0-9]\+:\)\?\([^\s-]\+\).*/\2/p')
+TARBALL := $(CURDIR)/../python-wpactrl-$(VERSION).tar.gz
+ORIGTGZ := $(CURDIR)/../tarballs/python-wpactrl_$(VERSION).orig.tar.gz
+DIRTREE := $(shell basename $(CURDIR))
+upstream-release:
+	$(RM) $(TARBALL) $(ORIGTGZ)
+	cp $(CURDIR)/debian/changelog $(CURDIR)/CHANGELOG
+	tar -czf $(TARBALL) --exclude='.svn' --exclude='debian' -C $(CURDIR)/../ $(DIRTREE)
+	install -D -m 0644 $(TARBALL) $(ORIGTGZ)
+	$(RM) $(CURDIR)/CHANGELOG

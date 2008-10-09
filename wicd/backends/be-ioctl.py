@@ -287,9 +287,14 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         """
         if not self.scan_iface:
-            self.scan_iface = iwscan.WirelessInterface(self.iface)
+            try:
+                self.scan_iface = iwscan.WirelessInterface(self.iface)
+            except (iwscan.error, e):
+                print "GetNetworks caught an exception: %s" %s
+                return []
+                
         results = self.scan_iface.Scan()
-        return [self._parse_ap(cell) for cell in results]
+        return filter(None, [self._parse_ap(cell) for cell in results])
     
     def _parse_ap(self, cell):
         """ Parse a single cell from the python-iwscan list. """
@@ -305,16 +310,18 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             ap['hidden'] = True
         else:
             ap['hidden'] = False
-            
-        ap["channel"] = True and cell["channel"] or \
-                        self._FreqToChannel(cell["frequency"])
+        
+        if cell["channel"]:
+            ap["channel"] = True
+        else:
+            ap["channel"] = self._FreqToChannel(cell["frequency"])
         
         ap["bssid"] = cell["bssid"]
         ap["mode"] = cell["mode"]
         
         if cell["enc"]:
             ap["encryption"] = True
-            if cell["ie"]:
+            if cell["ie"] and cell["ie"].get('type'):
                 if "WPA2" in cell['ie']['type'].upper():
                     ap['encryption_method'] = 'WPA2'
                 elif "WPA" in cell['ie']['type'].upper():
@@ -383,8 +390,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             
         wpa = wpactrl.WPACtrl(socket)
         
-        MAX_TIME = 15
+        MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
+        disconnected_time = 0
         while (time.time() - auth_time) < MAX_TIME:
             status = wpa.request("STATUS").split("\n")
             if self.verbose:
@@ -398,11 +406,14 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             result = result
             if result.endswith("COMPLETED"):
                 return True
-            elif result.endswith("DISCONNECTED") and \
-                 (time.time() - auth_time) > MAX_DISCONNECTED_TIME:
-                # Force a rescan to get wpa_supplicant moving again.
-                wpa.request("SCAN")
-                MAX_TIME += 5
+            elif result.endswith("DISCONNECTED"):
+                disconnected_time += 1
+                if disconnected_time > MAX_DISCONNECTED_TIME:
+                    # Force a rescan to get wpa_supplicant moving again.
+                    wpa.request("SCAN")
+                    MAX_TIME += 5
+            else:
+                disconnected_time = 0
             time.sleep(1)
 
         print 'wpa_supplicant authentication may have failed.'

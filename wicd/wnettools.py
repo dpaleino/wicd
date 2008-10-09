@@ -33,6 +33,7 @@ class WirelessInterface() -- Control a wireless network interface.
 
 import os
 import re
+from string import maketrans, translate, punctuation
 
 import wpath
 import misc
@@ -40,25 +41,21 @@ import misc
 RALINK_DRIVER = 'ralink legacy'
 
 
+blacklist_strict = punctuation.replace("-", "") + " "
+blacklist_norm = ";`$!*|><&\\"
+blank_trans = maketrans("", "")
+
 def _sanitize_string(string):
-    """ Makes sure a string is safe to use. 
-    
-    Escapes characters that can be used for doing bad stuff
-    at the terminal.
-    
-    """
-    blacklist = [';', '`', '$', '!', '*', '|', '>', '<']
-    new_string = []
-    
-    if not string:
+    if string:
+        return translate(str(string), blank_trans, blacklist_norm)
+    else:
         return string
-  
-    for char in string:
-        if char in blacklist:
-            new_string.append("\\" + char)
-        else:
-            new_string.append(char)
-    return ''.join(new_string)
+
+def _sanitize_string_strict(string):
+    if string:
+        return translate(str(string), blank_trans, blacklist_strict)
+    else:
+        return string
 
 def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
     """ Set the DNS of the system to the specified DNS servers.
@@ -73,7 +70,7 @@ def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
     """
     resolv = open("/etc/resolv.conf", "w")
     if search_dom:
-        resolv.write('search %s\n' % _sanitize_string(search_dom))
+        resolv.write('search %s\n' % search_dom)
     for dns in [dns1, dns2, dns3]:
         if dns:
             if misc.IsValidIP(dns):
@@ -147,7 +144,7 @@ class BaseInterface(object):
         verbose -- whether to print every command run
 
         """
-        self.iface = _sanitize_string(iface)
+        self.iface = _sanitize_string_strict(iface)
         self.verbose = verbose
         self.DHCP_CLIENT = None
         self.DHCP_CMD = None
@@ -169,7 +166,7 @@ class BaseInterface(object):
         iface -- the name of the interface.
         
         """
-        self.iface = _sanitize_string(str(iface))
+        self.iface = _sanitize_string_strict(str(iface))
         
     def _find_client_path(self, client):
         """ Determines the full path for the given program.
@@ -191,21 +188,6 @@ class BaseInterface(object):
         if self.verbose:
             print "WARNING: No path found for %s"  % (client)
         return None
-        
-    def _client_found(self, client):
-        """ Searches for the existence of the given program in PATH.
-        
-        Uses "which" to determine if a given program exists in PATH.
-        
-        Returns:
-        True if the program exists, False otherwise.
-        
-        """
-        client = _sanitize_string(client)
-        output = misc.Run("which " + client)
-        if output and not ("no " + client) in output:
-            return True
-        return False
 
     def CheckDHCP(self):
         """ Check for a valid DHCP client. 
@@ -570,7 +552,7 @@ class BaseWirelessInterface(BaseInterface):
         
     def SetWpaDriver(self, driver):
         """ Sets the wpa_driver. """
-        self.wpa_driver = _sanitize_string(driver)
+        self.wpa_driver = _sanitize_string_strict(driver)
 
     def SetEssid(self, essid):
         """ Set the essid of the wireless interface.
@@ -579,8 +561,7 @@ class BaseWirelessInterface(BaseInterface):
         essid -- essid to set the interface to
 
         """
-        essid = _sanitize_string(essid)
-        cmd = 'iwconfig %s essid "%s"' % (self.iface, essid)
+        cmd = 'iwconfig %s essid %s' % (self.iface, essid)
         if self.verbose: print cmd
         misc.Run(cmd)
 
@@ -703,7 +684,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not self.iface: return False
-        mode = _sanitize_string(mode)
+        mode = _sanitize_string_strict(mode)
         if mode.lower() == 'master':
             mode = 'managed'
         cmd = 'iwconfig %s mode %s' % (self.iface, mode)
@@ -734,7 +715,6 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not self.iface: return False
-        key = _sanitize_string(key)
         cmd = 'iwconfig %s key %s' % (self.iface, key)
         if self.verbose: print cmd
         misc.Run(cmd)
@@ -756,6 +736,20 @@ class BaseWirelessInterface(BaseInterface):
             cmd = ''.join([cmd, ' ap ', bssid])
         if self.verbose: print cmd
         misc.Run(cmd)
+        
+    def GeneratePSK(self, network):
+        """ Generate a PSK using wpa_passphrase. 
+
+        Keyword arguments:
+        network -- dictionary containing network info
+        
+        """
+        wpa_pass_path = misc.find_path('wpa_passphrase')
+        if not wpa_pass_path: return None
+        key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
+                                 re.I | re.M  | re.S)
+        cmd = ' '.join([wpa_pass_path, network['essid'], network['key']])
+        return misc.RunRegex(key_pattern, misc.Run(cmd))
 
     def Authenticate(self, network):
         """ Authenticate with the specified wireless network.
@@ -768,9 +762,9 @@ class BaseWirelessInterface(BaseInterface):
         if self.wpa_driver == RALINK_DRIVER:
             self._AuthenticateRalinkLegacy(network)
         else:
-            cmd = ''.join(['wpa_supplicant -B -i ', self.iface, ' -c "',
+            cmd = ''.join(['wpa_supplicant -B -i ', self.iface, ' -c ',
                        wpath.networks, network['bssid'].replace(':','').lower(),
-                       '" -D ', self.wpa_driver])
+                       ' -D ', self.wpa_driver])
             if self.verbose: print cmd
             misc.Run(cmd)
 

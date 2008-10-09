@@ -284,8 +284,14 @@ class appGui(object):
         height = size[1]
         if width > -1 and height > -1:
             self.window.resize(int(width), int(height))
+        else:
+            self.dialog.resize(gtk.gdk.screen_width() / 3, 
+                               gtk.gdk.screen_height() / 2)
 
-        gobject.timeout_add(400, self.update_statusbar)
+        try:
+            gobject.timeout_add_seconds(1, self.update_statusbar)
+        except:
+            gobject.timeout_add(1000, self.update_statusbar)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
@@ -813,6 +819,7 @@ class appGui(object):
         if nettype == "wireless":
             if not self.check_encryption_valid(networkid,
                                                networkentry.advanced_dialog):
+                self.edit_advanced(None, None, nettype, networkid, networkentry)
                 return False
             wireless.ConnectWireless(networkid)
         elif nettype == "wired":
@@ -877,12 +884,11 @@ class appGui(object):
         and refresh the network list.
         
         """
-        self.window.show()
+        self.window.present()
         self.wait_for_events()
         self.is_visible = True
         daemon.SetGUIOpen(True)
         self.wait_for_events(0.1)
-        self.window.grab_focus()
         gobject.idle_add(self.refresh_networks)
 
 

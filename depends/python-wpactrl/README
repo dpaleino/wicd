@@ -1,0 +1,31 @@
+python-wpactrl
+--------------
+A Python extension for wpa_supplicant/hostapd control interface access
+
+Description
+-----------
+wpactrl defines a single class, WPACtrl, that must be instantiated
+with the pathname of a UNIX domain socket control interface of a
+wpa_supplicant/hostapd daemon.
+
+Once a WPACtrl object has been instantiated, it may call several
+helper methods to interact with the wpa_supplicant/hostapd daemon.
+If an error occurs, a wpactrl.error exception is raised.
+
+The destructor of a WPACtrl instance closes the connection to the
+control interface socket.
+
+Recommendations for the use of wpa_supplicant/hostapd control
+interface access in external programs are at:
+    <http://w1.fi/wpa_supplicant/devel/ctrl_iface_page.html>
+
+Installation
+------------
+make
+make install
+
+Two Makefile variables may be specified on the command line; PYTHON and
+DESTDIR.
+
+PYTHON  - Python executable that should be called (eg. python2.5)
+DESTDIR - Alternative root destination directory

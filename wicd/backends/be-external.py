@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: UTF-8 -*-
 
 """ Network interface control tools for wicd.
 
@@ -253,7 +254,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         cmd = 'iwlist ' + self.iface + ' scan'
         if self.verbose: print cmd
         results = misc.Run(cmd)
-
+        
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time.
         # The spaces around '   Cell ' are to minimize the chance that someone
@@ -297,7 +298,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
         try:
             ap['essid'] = misc.to_unicode(ap['essid'])
-        except (UnicodeDecodeError, UnicodeEncodeError):
+        except UnicodeDecodeError, UnicodeEncodeError:
             print 'Unicode problem with current network essid, ignoring!!'
             return None
         if ap['essid'] in ['<hidden>', ""]:
@@ -385,8 +386,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         if self.wpa_driver == RALINK_DRIVER or not self.WPA_CLI_FOUND:
             return True
 
-        MAX_TIME = 15
+        MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
+        disconnected_time = 0
         while (time.time() - auth_time) < MAX_TIME:
             cmd = 'wpa_cli -i ' + self.iface + ' status'
             output = misc.Run(cmd)
@@ -398,11 +400,15 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                 return False
             if result == "COMPLETED":
                 return True
-            elif result == "DISCONNECTED" and \
-                 (time.time() - auth_time) > MAX_DISCONNECTED_TIME:
-                # Force a rescan to get wpa_supplicant moving again.
-                self._ForceSupplicantScan()
-                MAX_TIME += 5
+            elif result == "DISCONNECTED":
+                disconnected_time += 1
+                if disconnected_time > MAX_DISCONNECTED_TIME:
+                    disconnected_time = 0
+                    # Force a rescan to get wpa_supplicant moving again.
+                    self._ForceSupplicantScan()
+                    MAX_TIME += 5
+            else:
+                disconnected_time = 0
             time.sleep(1)
 
         print 'wpa_supplicant authentication may have failed.'

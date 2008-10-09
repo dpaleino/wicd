@@ -1,0 +1,15 @@
+Files: *
+Copyright: (c) 2008 Kel Modderman <kel@otaku42.de>
+License: GPL-2
+
+Files: wpactrl.c
+Copyright: (c) 2008 Kel Modderman <kel@otaku42.de>
+           (c) 2006 Jeremy Moles <jeremy@emperorlinux.com>
+License: GPL-2
+
+Files: wpa_ctrl.*
+Copyright: (c) 2004-2007, Jouni Malinen <j@w1.fi>
+License: GPL-2 | BSD
+
+On Debian GNU/Linux systems, the complete text of the GNU Lesser General
+Public License can be found in `/usr/share/common-licenses/GPL-2'.

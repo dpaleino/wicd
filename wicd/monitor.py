@@ -149,6 +149,12 @@ class ConnectionStatus(object):
                 return True
 
             # Determine what our current state is.
+            # Are we currently connecting?
+            if daemon.CheckIfConnecting():
+                state = misc.CONNECTING
+                self.update_state(state)
+                return True
+                
             # Check for wired.
             wired_ip = wired.GetWiredIP("")
             wired_found = self.check_for_wired_connection(wired_ip)
@@ -164,21 +170,16 @@ class ConnectionStatus(object):
                 self.update_state(misc.WIRELESS, wifi_ip=wifi_ip)
                 return True
                 
-            # Are we currently connecting?
-            if daemon.CheckIfConnecting():
-                state = misc.CONNECTING
-            else:  # No connection at all.
-                state = misc.NOT_CONNECTED
-                if self.last_state == misc.WIRELESS:
-                    from_wireless = True
-                else:
-                    from_wireless = False
+            state = misc.NOT_CONNECTED
+            if self.last_state == misc.WIRELESS:
+                from_wireless = True
+            else:
+                from_wireless = False
                 self.auto_reconnect(from_wireless)
             self.update_state(state)
         except dbus.exceptions.DBusException, e:
             print 'Ignoring DBus Error: ' + str(e)
-        finally:
-            return True
+        return True
 
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
@@ -238,7 +239,7 @@ class ConnectionStatus(object):
         
         # Some checks to keep reconnect retries from going crazy.
         if self.reconnect_tries > 2 and \
-           time.time() - self.last_reconnect_time < 30:
+           time.time() - self.last_reconnect_time < 90:
             return
 
         self.reconnecting = True

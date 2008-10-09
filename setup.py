@@ -16,6 +16,7 @@
 #
 
 from distutils.core import setup, Command
+from distutils.extension import Extension
 import os
 import shutil
 import sys
@@ -341,6 +342,12 @@ except:
 python setup.py configure has not yet been run.'''
 
 
+wpactrl_ext = Extension(name = 'wpactrl', sources = ['depends/python-wpactrl/wpa_ctrl.c', 'depends/python-wpactrl/wpactrl.c'],
+                extra_compile_args = ["-fno-strict-aliasing"])
+
+iwscan_ext = Extension(name      = 'iwscan',
+                libraries = ['iw'],
+                sources   = ['depends/python-iwscan/pyiwscan.c'])
     
 setup(cmdclass={'configure' : configure, 'get_translations' : get_translations, 'uninstall' : uninstall},
       name="Wicd",
@@ -359,7 +366,7 @@ connect at startup to any preferred network within range.
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 'wicd.configmanager'],
+      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 'wicd.configmanager'], ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )
 ##print "Running post-install configuration..."

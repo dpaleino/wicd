@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sat Sep 20 13:28:27 2008 -->
+<!--Generated with glade3 3.4.5 on Mon Oct  6 22:39:07 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window1">
     <property name="width_request">450</property>
@@ -30,10 +30,6 @@
                 <property name="stock_id">gtk-network</property>
                 <property name="menu">menu1</property>
               </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">False</property>
-              </packing>
             </child>
             <child>
               <widget class="GtkToolButton" id="disconnect_button">
@@ -44,7 +40,7 @@
                 <signal name="clicked" handler="disconnect_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -55,7 +51,7 @@
                 <signal name="clicked" handler="refresh_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -66,7 +62,7 @@
                 <signal name="clicked" handler="preferences_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -77,7 +73,7 @@
                 <signal name="clicked" handler="about_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
             <child>
@@ -89,7 +85,7 @@
                 <signal name="clicked" handler="quit_clicked"/>
               </widget>
               <packing>
-                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
               </packing>
             </child>
           </widget>
@@ -448,7 +444,7 @@
   <widget class="GtkDialog" id="pref_dialog">
     <property name="title" translatable="yes">Preferences</property>
     <property name="default_width">125</property>
-    <property name="default_height">590</property>
+    <property name="default_height">560</property>
     <property name="icon">.</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <child internal-child="vbox">

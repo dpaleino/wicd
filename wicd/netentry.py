@@ -534,7 +534,8 @@ class WiredNetworkEntry(NetworkEntry):
         # Center the picture and pad it a bit
         self.image.set_alignment(.5, 0)
         self.image.set_size_request(60, -1)
-        self.image.set_from_icon_name("network-wired", 6)
+        #self.image.set_from_icon_name("network-wired", 6)
+        self.image.set_from_file(wpath.images + "wired.png")
         self.image.show()
         self.expander.show()
         self.connect_button.show()
@@ -754,8 +755,9 @@ class WirelessNetworkEntry(NetworkEntry):
         self.image.set_padding(0, 0)
         self.image.set_alignment(.5, 0)
         self.image.set_size_request(60, -1)
-        self.image.set_from_icon_name("network-wired", 6)
-        self.essid = wireless.GetWirelessProperty(networkID, "essid")
+        #self.image.set_from_icon_name("network-wired", 6)
+        self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
+                                                                    "essid"))
         print "ESSID : " + self.essid
         # Make the combo box.
         self.lbl_strength = GreyLabel()
@@ -815,8 +817,11 @@ class WirelessNetworkEntry(NetworkEntry):
         
     def _escape(self, val):
         """ Escapes special characters so they're displayed correctly. """
+        #try:
         return val.replace("&", "&amp;").replace("<", "&lt;").\
-               replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
+                   replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
+        #except ValueError:
+        #    return val
         
     def destroy_called(self, *args):
         """ Clean up everything. 

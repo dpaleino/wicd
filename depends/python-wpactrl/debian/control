@@ -1,0 +1,23 @@
+Source: python-wpactrl
+Section: python
+Priority: optional
+Build-Depends: debhelper (>= 6), python-all-dev (>= 2.3.5-11), python (>= 2.4), python-central (>= 0.5.6)
+Maintainer: Kel Modderman <kel@otaku42.de>
+XS-Python-Version: >=2.4
+Standards-Version: 3.7.3
+Vcs-Svn: http://svn.projects.otaku42.de/python-wpactrl/trunk/
+Vcs-Browser: http://projects.otaku42.de/browser/python-wpactrl/trunk/
+
+Package: python-wpactrl
+Architecture: any
+Depends: ${python:Depends}, ${shlibs:Depends}
+Suggests: wpasupplicant, hostapd
+Provides: ${python:Provides}
+XB-Python-Version: ${python:Versions}
+Description: A Python extension for wpa_supplicant/hostapd control interface access
+ wpa_supplicant/hostapd implements a control interface that can be used by
+ external programs to control the operations of the wpa_supplicant/hostapd
+ daemon and to get status information and event notifications. The WPACtrl
+ class provided by python-wpactrl allows Python programs to use helper
+ functions to connect with the UNIX domain socket form of control interface
+ and communicate with a wpa_supplicant/hostapd daemon.

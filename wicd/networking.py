@@ -252,7 +252,7 @@ class ConnectThread(threading.Thread):
         return message
     
     def reset_ip_addresses(self, wiface, liface):
-        """ Resets the IP addresse for both wired/wireless interfaces.
+        """ Resets the IP addresses for both wired/wireless interfaces.
         
         Sets a false ip so that when we set the real one, the correct
         routing entry is created.
@@ -753,34 +753,18 @@ class WirelessConnectThread(ConnectThread):
     def generate_psk_and_authenticate(self, wiface):
         """ Generates a PSK and authenticates if necessary. 
         
-        Generates a PSK using wpa_passphrase, and starts the authentication
-        process if encryption is on.
+        Generates a PSK, and starts the authentication process
+        if encryption is on.
         
         """
-        def _sanitize(key):
-            """ Escapes characters wpa_supplicant doesn't handle properly. """
-            new_key = []
-            blacklist = ["$", "`", "\""]
-            for c in key:
-                if c in blacklist:
-                    new_key.append("\\" + c)
-                else:
-                    new_key.append(c)
-            return ''.join(new_key)
-        
         # Check to see if we need to generate a PSK (only for non-ralink
         # cards).
-        if self.network.get('key'):
+        if self.debug:
+            print "enctype is %s" % self.network.get('enctype')
+        if self.network.get('key') and 'wpa' in self.network.get('enctype'):
             self.SetStatus('generating_psk')
-
             print 'Generating psk...'
-            wpa_pass_path = misc.find_path('wpa_passphrase')
-            if wpa_pass_path:
-                key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
-                                         re.I | re.M  | re.S)
-                cmd = ''.join([wpa_pass_path, ' "', self.network['essid'], 
-                               '" "', _sanitize(self.network['key']), '"'])
-                self.network['psk'] = misc.RunRegex(key_pattern, misc.Run(cmd))
+            self.network['psk'] = self.wiface.GeneratePSK(self.network)
             
             if not self.network.get('psk'):
                 self.network['psk'] = self.network['key']

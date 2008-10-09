@@ -108,14 +108,19 @@ class WicdDaemon(dbus.service.Object):
         self.LastScan = ''
 
         # Kind of hackish way to set correct wnettools interfaces.
+        #TODO remove the need for this.
         self.wifi.liface = self.wired.liface
         self.wired.wiface = self.wifi.wiface
 
         # Scan since we just got started
         if auto_connect:
-            print "autoconnecting...", str(self.GetWirelessInterface())
-            self.AutoConnect(True)
+            print "autoconnecting if needed...", str(self.GetWirelessInterface())
+            if not self.auto_reconnect:
+                self.AutoConnect(True)
+            else:
+                self.wireless_bus.Scan()
         else:
+            print 'scan start'
             self.wireless_bus.Scan()
             self.SetForcedDisconnect(True)
             print "--no-autoconnect detected, not autoconnecting..."
@@ -285,6 +290,8 @@ class WicdDaemon(dbus.service.Object):
         self.suspended = val
         if self.suspended:
             self.Disconnect()
+        else:
+            self.forced_disconnect = False
 
     @dbus.service.method('org.wicd.daemon')
     def GetSuspend(self):
@@ -1505,10 +1512,10 @@ def main(argv):
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
-
     gobject.threads_init()
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async([wpath.lib + "monitor.py"], 
+        (child_pid, x, x, x) = gobject.spawn_async(["/usr/bin/python", "-O", 
+                                                    wpath.lib + "monitor.py"], 
                                        flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
         signal.signal(signal.SIGTERM, sigterm_caught)
     

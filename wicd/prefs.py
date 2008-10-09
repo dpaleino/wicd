@@ -83,6 +83,9 @@ class PreferencesDialog(object):
         height = size[1]
         if width > -1 and height > -1:
             self.dialog.resize(int(width), int(height))
+        else:
+            self.dialog.resize(gtk.gdk.screen_width() / 3, 
+                               gtk.gdk.screen_height() / 2)
             
         self.wiredcheckbox = setup_label("pref_always_check",
                                          'wired_always_on')

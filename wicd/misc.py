@@ -69,6 +69,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
     """
 
     cmd = to_unicode(str(cmd))
+    cmd = cmd.split()
     if include_stderr:
         err = STDOUT
         fds = True
@@ -79,7 +80,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
     tmpenv = os.environ.copy()
     tmpenv["LC_ALL"] = "C"
     tmpenv["LANG"] = "C"
-    f = Popen(cmd, shell=True, stdout=PIPE, stderr=err, close_fds=fds,
+    f = Popen(cmd, shell=False, stdout=PIPE, stderr=err, close_fds=fds, cwd='/',
               env=tmpenv)
     
     if return_pipe:
@@ -294,6 +295,9 @@ def get_gettext():
 
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
+    # If this is a unicode string, encode it and return
+    if type(x) == unicode:
+        return x.encode('utf-8')
     encoding = locale.getpreferredencoding()
     try:
         ret = x.decode(encoding, 'replace').encode('utf-8')
@@ -316,6 +320,7 @@ def RenameProcess(new_name):
         libc.prctl(15, new_name, 0, 0, 0)
         return True
     except:
+        print "rename failed"
         return False
     
 def detect_desktop_environment():

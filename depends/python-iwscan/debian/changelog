@@ -1,0 +1,89 @@
+python-iwscan (0.7.0-2) unstable; urgency=low
+
+  * Read more closely the debian python packaging guide, and embrace the
+    pycentral pragma. Remove debian/pycompat and adjust debian/control and
+    debian/rules accordingly.
+
+ -- Kel Modderman <kel@otaku42.de>  Tue, 08 Apr 2008 00:20:57 +1000
+
+python-iwscan (0.7.0-1) unstable; urgency=low
+
+  * Add an upstream-release: target to debian/rules, make this a non-native
+    package.
+  * Run code through uncristify, cleanup other coding style stuff.
+
+ -- Kel Modderman <kel@otaku42.de>  Wed, 02 Apr 2008 19:24:41 +1000
+
+python-iwscan (0.6.1) unstable; urgency=low
+
+  * Minor cleanups of iwlist.py example.
+  * No need to use struct keyword for iwreq.
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 27 Mar 2008 23:56:30 +1000
+
+python-iwscan (0.6.0) unstable; urgency=low
+
+  * Add enum_devices() method to iwscan, to discover wireless interfaces and
+    return them in a list.
+  * Adjust iwlist example to show iwscan.enum_devices().
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 27 Mar 2008 23:28:02 +1000
+
+python-iwscan (0.5.1) unstable; urgency=low
+
+  * Remove the custom element, its not very useful, nor is it handled properly
+    in the absence of event stream management.
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 27 Mar 2008 02:04:12 +1000
+
+python-iwscan (0.5.0) unstable; urgency=low
+
+  * Look up cypher and key-mgmt strings from a struct adapted from iwlist.c.
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 27 Mar 2008 01:41:26 +1000
+
+python-iwscan (0.4.1) unstable; urgency=low
+
+  * Cleanup the example iwlist.py output to be _very_ similar to iwlist.
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 27 Mar 2008 00:27:28 +1000
+
+python-iwscan (0.4.0) unstable; urgency=low
+
+  * More cleanup, arrange key elements in in same order as they're processed.
+  * Process the custom iw element.
+  * Keep a 'qual' key, so a common index can be used to sort results.
+  * Put signal et. al. stats into 'stats' key.
+  * Update iwlist.py example.
+
+ -- Kel Modderman <kel@otaku42.de>  Wed, 26 Mar 2008 22:36:53 +1000
+
+python-iwscan (0.3.1) unstable; urgency=low
+
+  * Cleanup iwlist.py example.
+
+ -- Kel Modderman <kel@otaku42.de>  Wed, 26 Mar 2008 21:22:13 +1000
+
+python-iwscan (0.3.0) unstable; urgency=low
+
+  * Use iwlib to format frequency, bitrate and quality.
+  * Increase scan timeout to 15s, as per current iwlist.c.
+  * Change 'ap' key to 'bssid'.
+  * Add iwlist.py script, an iwlist emulator, install it as an example.
+
+ -- Kel Modderman <kel@otaku42.de>  Wed, 26 Mar 2008 21:10:06 +1000
+
+python-iwscan (0.2.0) unstable; urgency=low
+
+  * Rename extension to 'iwscan' from 'pyiwscan'.
+  * Return a dict for the 'wpa' key a cells scan results, it will contain wpa
+    type and version, a list of authentication suites, a list of pairwaise
+    ciphers and the group cipher.
+
+ -- Kel Modderman <kel@otaku42.de>  Wed, 26 Mar 2008 15:02:14 +1000
+
+python-iwscan (0.1.0) unstable; urgency=low
+
+  * Initial release.
+
+ -- Kel Modderman <kel@otaku42.de>  Thu, 13 Mar 2008 12:21:15 +1000

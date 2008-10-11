@@ -1,3 +1,3 @@
 #!/bin/bash
 
-exec %LIB%wicd-daemon.py $@
+exec python -O %LIB%wicd-daemon.py $@

@@ -22,7 +22,7 @@ import locale
 import gettext
 import sys
 from subprocess import Popen, STDOUT, PIPE, call
-import commands
+from commands import getoutput
 
 # wicd imports
 import wpath
@@ -337,7 +337,7 @@ def detect_desktop_environment():
         desktop_environment = 'gnome'
     else:
         try:
-            info = commands.getoutput('xprop -root _DT_SAVE_MODE')
+            info = getoutput('xprop -root _DT_SAVE_MODE')
             if ' = "xfce4"' in info:
                 desktop_environment = 'xfce'
         except (OSError, RuntimeError):
@@ -356,7 +356,7 @@ def choose_sudo_prog():
     else:
         paths = []
         for p in env_path:
-            paths.extend([p + '/gksu', p + '/ktsuss'])
+            paths.extend([p + '/gksudo', p + "/gksu", p + '/ktsuss'])
     for path in paths:
         if os.access(path, os.F_OK):
             return path
@@ -489,6 +489,7 @@ def get_language_list_gui():
     language['aborted'] = _('Connection Cancelled')
     language['bad_pass'] = _('Connection Failed: Bad password')
     language['done'] = _('Done connecting...')
+    language['scanning'] = _('Scanning')
     
     return language
 

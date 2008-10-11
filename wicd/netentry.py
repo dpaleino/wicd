@@ -232,6 +232,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         
         """
         for obj in vars(self):
+            obj = self.__dict__[obj]
             if hasattr(obj, "destroy"):
                 obj.destroy()
             if hasattr(obj, "__del__"):
@@ -280,6 +281,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         """
         self.disconnect(self.des)
         for obj in vars(self):
+            obj = self.__dict__[obj]
             if hasattr(obj, "destroy"):
                 obj.destroy()
             if hasattr(obj, "__del__"):
@@ -342,6 +344,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         """
         self.disconnect(self.des)
         for obj in vars(self):
+            obj = self.__dict__[obj]
             if hasattr(obj, "destroy"):
                 obj.destroy()
             if hasattr(obj, "__del__"):
@@ -510,6 +513,7 @@ class NetworkEntry(gtk.HBox):
         
         """
         for obj in vars(self):
+            obj = self.__dict__[obj]
             try: obj.destroy()
             except: pass
             if hasattr(obj, '__del__'):
@@ -517,6 +521,7 @@ class NetworkEntry(gtk.HBox):
             else:
                 del obj
         for obj in vars(super(NetworkEntry, self)):
+            obj = self.__dict__[obj]
             try: obj.destroy()
             except: pass
             if hasattr(obj, '__del__'):
@@ -621,6 +626,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.advanced_dialog.destroy_called()
         del self.advanced_dialog
         for obj in vars(self):
+            obj = self.__dict__[obj]
             if hasattr(obj, "destroy"):
                 obj.destroy()
             if hasattr(obj, '__del__'):
@@ -834,6 +840,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.advanced_dialog.destroy_called()
         del self.advanced_dialog
         for obj in vars(self):
+            obj = self.__dict__[obj]
             if hasattr(obj, "destroy"):
                 obj.destroy()
                 

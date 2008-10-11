@@ -691,8 +691,7 @@ def main(argv):
     setup_dbus()
 
     if not use_tray or not ICON_AVAIL:
-        the_gui = gui.appGui()
-        the_gui.standalone = True
+        the_gui = gui.appGui(dbus_man=dbus_manager, standalone=True)
         mainloop = gobject.MainLoop()
         mainloop.run()
         sys.exit(0)

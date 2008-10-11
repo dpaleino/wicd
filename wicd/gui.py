@@ -100,6 +100,8 @@ def alert(parent, message):
     dialog.set_markup(message)
     dialog.run()
     dialog.destroy()
+    
+def dummy(x=None):pass
 
 ########################################
 ##### GTK EXTENSION CLASSES
@@ -220,8 +222,15 @@ class appGui(object):
     """ The main wicd GUI class. """
     def __init__(self, dbus_man=None, standalone=False):
         """ Initializes everything needed for the GUI. """
-        if not standalone:
+        if dbus_man:
             setup_dbus(dbus_man)
+        if standalone:
+            bus.add_signal_receiver(self.dbus_scan_finished, 'SendEndScanSignal',
+                            'org.wicd.daemon.wireless')
+            bus.add_signal_receiver(self.dbus_scan_started, 'SendStartScanSignal',
+                            'org.wicd.daemon.wireless')
+            bus.add_signal_receiver(self.update_connect_buttons, 'StatusChanged',
+                            'org.wicd.daemon')
 
         gladefile = wpath.share + "wicd.glade"
         self.wTree = gtk.glade.XML(gladefile)
@@ -235,10 +244,7 @@ class appGui(object):
                 "preferences_clicked" : self.settings_dialog,
                 "about_clicked" : self.about_dialog,
                 "create_adhoc_network_button_button" : self.create_adhoc_network,
-                "on_iface_menu_enable_wireless" : self.on_enable_wireless,
-                "on_iface_menu_disable_wireless" : self.on_disable_wireless,
-                "on_iface_menu_enable_wired" : self.on_enable_wired,
-                "on_iface_menu_disable_wired" : self.on_disable_wired,}
+                }
         self.wTree.signal_autoconnect(dic)
 
         # Set some strings in the GUI - they may be translated
@@ -265,19 +271,13 @@ class appGui(object):
         self.wpadrivercombo = None
         self.connecting = False
         self.prev_state = None
-        self.refresh_networks(fresh=False)
-        
+        label = gtk.Label("%s..." % language['scanning'])
+        self.network_list.pack_start(label)
+        label.show()
+        self.network_list.set_sensitive(False)
+        self.wait_for_events(0.2)
         self.window.connect('delete_event', self.exit)
         self.window.connect('key-release-event', self.key_event)
-        
-        if not wireless.IsWirelessUp():
-            self.wTree.get_widget("iface_menu_disable_wireless").hide()
-        else:
-            self.wTree.get_widget("iface_menu_enable_wireless").hide()
-        if not wired.IsWiredUp():
-            self.wTree.get_widget("iface_menu_disable_wired").hide()
-        else:
-            self.wTree.get_widget("iface_menu_enable_wired").hide()
 
         size = daemon.ReadWindowSize("main")
         width = size[0]
@@ -285,13 +285,14 @@ class appGui(object):
         if width > -1 and height > -1:
             self.window.resize(int(width), int(height))
         else:
-            self.dialog.resize(gtk.gdk.screen_width() / 3, 
+            self.window.resize(gtk.gdk.screen_width() / 3, 
                                gtk.gdk.screen_height() / 2)
 
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:
             gobject.timeout_add(1000, self.update_statusbar)
+        self.refresh_clicked()
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
@@ -388,50 +389,6 @@ class appGui(object):
             self.refresh_networks(None, True, answer)
         else:
             dialog.destroy()
-    
-    def on_enable_wireless(self, widget):
-        """ Called when the Enable Wireless Interface button is clicked. """
-        success = wireless.EnableWirelessInterface()
-        if success:
-            enable_item = self.wTree.get_widget("iface_menu_enable_wireless")
-            disable_item = self.wTree.get_widget("iface_menu_disable_wireless")
-            enable_item.hide()
-            disable_item.show()
-        else:
-            error(self.window, "Failed to enable wireless interface.")
-
-    def on_disable_wireless(self, widget):
-        """ Called when the Disable Wireless Interface button is clicked. """
-        success = wireless.DisableWirelessInterface()
-        if success:
-            enable_item = self.wTree.get_widget("iface_menu_enable_wireless")
-            disable_item = self.wTree.get_widget("iface_menu_disable_wireless")
-            enable_item.show()
-            disable_item.hide()
-        else:
-            error(self.window, "Failed to disable wireless interface.")
-
-    def on_enable_wired(self, widget):
-        """ Called when the Enable Wired Interface button is clicked. """
-        success = wired.EnableWiredInterface()
-        if success:
-            enable_item = self.wTree.get_widget("iface_menu_enable_wired")
-            disable_item = self.wTree.get_widget("iface_menu_disable_wired")
-            enable_item.hide()
-            disable_item.show()
-        else:
-            error(self.window, "Failed to enable wired interface.")
-
-    def on_disable_wired(self, widget):
-        """ Called when the Disable Wired Interface button is clicked. """
-        success = wired.DisableWiredInterface()
-        if success:
-            enable_item = self.wTree.get_widget("iface_menu_enable_wired")
-            disable_item = self.wTree.get_widget("iface_menu_disable_wired")
-            enable_item.show()
-            disable_item.hide()
-        else:
-            error(self.window, "Failed to disable wired interface.")
 
     def cancel_connect(self, widget):
         """ Alerts the daemon to cancel the connection process. """
@@ -582,7 +539,6 @@ class appGui(object):
         
     def refresh_clicked(self, widget=None):
         """ Kick off an asynchronous wireless scan. """
-        def dummy(x=None):pass
         wireless.Scan(reply_handler=dummy, error_handler=dummy)
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
@@ -889,16 +845,11 @@ class appGui(object):
         self.is_visible = True
         daemon.SetGUIOpen(True)
         self.wait_for_events(0.1)
-        gobject.idle_add(self.refresh_networks)
+        gobject.idle_add(self.refresh_clicked)
 
 
 if __name__ == '__main__':
     setup_dbus()
     app = appGui(standalone=True)
-    bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
-                            'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
-                            'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(app.update_connect_buttons, 'StatusChanged',
-                            'org.wicd.daemon')
-    gtk.main()
+    mainloop = gobject.MainLoop()
+    mainloop.run()

@@ -558,7 +558,7 @@ class TrayIcon(object):
             self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
             self.pic = gtk.Image()
             self.tooltip.set_tip(self.eb, "Initializing wicd...")
-            self.pic.set_from_file("images/no-signal.png")
+            self.pic.set_from_file(wpath.images + "no-signal.png")
 
             self.eb.connect('button_press_event', self.tray_clicked)
             self.eb.add(self.pic)

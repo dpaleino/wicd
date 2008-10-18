@@ -67,9 +67,9 @@ def Run(cmd, include_stderr=False, return_pipe=False):
                   one output string from the command.
 
     """
-
-    cmd = to_unicode(str(cmd))
-    cmd = cmd.split()
+    if type(cmd) is not list:
+        cmd = to_unicode(str(cmd))
+        cmd = cmd.split()
     if include_stderr:
         err = STDOUT
         fds = True

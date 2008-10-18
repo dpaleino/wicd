@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Oct  6 22:39:07 2008 -->
+<!--Generated with glade3 3.4.5 on Sun Oct 12 01:15:35 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window1">
     <property name="width_request">450</property>
@@ -9,7 +9,6 @@
     <property name="title" translatable="yes">Wicd Manager</property>
     <property name="window_position">GTK_WIN_POS_CENTER</property>
     <property name="default_width">550</property>
-    <property name="icon">wicd.png</property>
     <property name="gravity">GDK_GRAVITY_CENTER</property>
     <signal name="destroy" handler="exit"/>
     <signal name="delete_event" handler="exit"/>
@@ -23,12 +22,131 @@
             <property name="icon_size">GTK_ICON_SIZE_MENU</property>
             <property name="icon_size_set">True</property>
             <child>
-              <widget class="GtkMenuToolButton" id="network_menu">
+              <widget class="GtkToolItem" id="menubar">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is_important">True</property>
-                <property name="stock_id">gtk-network</property>
-                <property name="menu">menu1</property>
+                <child>
+                  <widget class="GtkMenuBar" id="menubar1">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkImageMenuItem" id="network_menu">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">gtk-network</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <child>
+                          <widget class="GtkMenu" id="menu1">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="attach_widget">network_menu</property>
+                            <child>
+                              <widget class="GtkImageMenuItem" id="create_adhoc_network_button">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">Create Ad-Hoc Network</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="create_adhoc_network_button_button"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="menu-item-image2">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-add</property>
+                                    <property name="icon_size">1</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkMenuItem" id="iface_menu_button">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Enable/Disable Interfaces</property>
+                                <property name="use_underline">True</property>
+                                <child>
+                                  <widget class="GtkMenu" id="iface_menu">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <child>
+                                      <widget class="GtkImageMenuItem" id="iface_menu_enable_wired">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Enable Wired Interface</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="on_iface_menu_enable_wired"/>
+                                        <child internal-child="image">
+                                          <widget class="GtkImage" id="menu-item-image5">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-yes</property>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkImageMenuItem" id="iface_menu_enable_wireless">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Enable Wireless Interface</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="on_iface_menu_enable_wireless"/>
+                                        <child internal-child="image">
+                                          <widget class="GtkImage" id="menu-item-image6">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-yes</property>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkImageMenuItem" id="iface_menu_disable_wired">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Disable Wired Interface</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="on_iface_menu_disable_wired"/>
+                                        <child internal-child="image">
+                                          <widget class="GtkImage" id="menu-item-image7">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-stop</property>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkImageMenuItem" id="iface_menu_disable_wireless">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Disable Wireless Interface</property>
+                                        <property name="use_underline">True</property>
+                                        <signal name="activate" handler="on_iface_menu_disable_wireless"/>
+                                        <child internal-child="image">
+                                          <widget class="GtkImage" id="menu-item-image8">
+                                            <property name="visible">True</property>
+                                            <property name="stock">gtk-stop</property>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                    </child>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkImageMenuItem" id="connect_button">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">Hidden Network</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="connect_clicked"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="menu-item-image1">
+                                    <property name="visible">True</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="icon_name">network-wireless</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                  </widget>
+                </child>
               </widget>
             </child>
             <child>
@@ -36,6 +154,8 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="is_important">True</property>
+                <property name="label" translatable="yes">_Disconnect All</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-disconnect</property>
                 <signal name="clicked" handler="disconnect_clicked"/>
               </widget>
@@ -47,6 +167,8 @@
               <widget class="GtkToolButton" id="refresh_button">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
+                <property name="label" translatable="yes">_Refresh</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
                 <signal name="clicked" handler="refresh_clicked"/>
               </widget>
@@ -58,6 +180,8 @@
               <widget class="GtkToolButton" id="preferences_button">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
+                <property name="label" translatable="yes">_Preferences</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-preferences</property>
                 <signal name="clicked" handler="preferences_clicked"/>
               </widget>
@@ -69,6 +193,8 @@
               <widget class="GtkToolButton" id="about_button">
                 <property name="visible">True</property>
                 <property name="is_important">True</property>
+                <property name="label" translatable="yes">_About</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-about</property>
                 <signal name="clicked" handler="about_clicked"/>
               </widget>
@@ -81,6 +207,8 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON1_MOTION_MASK | GDK_BUTTON2_MOTION_MASK | GDK_BUTTON3_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK | GDK_FOCUS_CHANGE_MASK | GDK_STRUCTURE_MASK | GDK_PROPERTY_CHANGE_MASK | GDK_VISIBILITY_NOTIFY_MASK | GDK_PROXIMITY_IN_MASK | GDK_PROXIMITY_OUT_MASK | GDK_SUBSTRUCTURE_MASK | GDK_SCROLL_MASK</property>
                 <property name="is_important">True</property>
+                <property name="label" translatable="yes">_Quit</property>
+                <property name="use_underline">True</property>
                 <property name="stock_id">gtk-quit</property>
                 <signal name="clicked" handler="quit_clicked"/>
               </widget>
@@ -175,111 +303,6 @@
             <property name="expand">False</property>
             <property name="position">4</property>
           </packing>
-        </child>
-      </widget>
-    </child>
-  </widget>
-  <widget class="GtkMenu" id="menu1">
-    <property name="visible">True</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <child>
-      <widget class="GtkImageMenuItem" id="connect_button">
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">Hidden Network</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="connect_clicked"/>
-        <child internal-child="image">
-          <widget class="GtkImage" id="menu-item-image1">
-            <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="icon_name">network-wireless</property>
-          </widget>
-        </child>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkImageMenuItem" id="create_adhoc_network_button">
-        <property name="visible">True</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="label" translatable="yes">Create Ad-Hoc Network</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="create_adhoc_network_button_button"/>
-        <child internal-child="image">
-          <widget class="GtkImage" id="menu-item-image2">
-            <property name="visible">True</property>
-            <property name="stock">gtk-add</property>
-            <property name="icon_size">1</property>
-          </widget>
-        </child>
-      </widget>
-    </child>
-    <child>
-      <widget class="GtkMenuItem" id="iface_menu_button">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">Enable/Disable Interfaces</property>
-        <property name="use_underline">True</property>
-        <child>
-          <widget class="GtkMenu" id="iface_menu">
-            <property name="visible">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <child>
-              <widget class="GtkImageMenuItem" id="iface_menu_enable_wired">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Enable Wired Interface</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="on_iface_menu_enable_wired"/>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image6">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-yes</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="iface_menu_enable_wireless">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Enable Wireless Interface</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="on_iface_menu_enable_wireless"/>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image5">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-yes</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="iface_menu_disable_wired">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Disable Wired Interface</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="on_iface_menu_disable_wired"/>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image7">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-stop</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkImageMenuItem" id="iface_menu_disable_wireless">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">Disable Wireless Interface</property>
-                <property name="use_underline">True</property>
-                <signal name="activate" handler="on_iface_menu_disable_wireless"/>
-                <child internal-child="image">
-                  <widget class="GtkImage" id="menu-item-image8">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-stop</property>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-          </widget>
         </child>
       </widget>
     </child>

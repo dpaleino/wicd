@@ -258,11 +258,12 @@ class appGui(object):
         self.network_list = self.wTree.get_widget("network_list_vbox")
         self.status_area = self.wTree.get_widget("connecting_hbox")
         self.status_bar = self.wTree.get_widget("statusbar")
+        menu = self.wTree.get_widget("menu1")
 
         self.status_area.hide_all()
 
-        if os.path.exists(wpath.etc + "wicd.png"):
-            self.window.set_icon_from_file(wpath.etc + "wicd.png")
+        if os.path.exists(wpath.images + "wicd.png"):
+            self.window.set_icon_from_file(wpath.images + "wicd.png")
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True
@@ -825,7 +826,6 @@ class appGui(object):
         daemon.WriteWindowSize(width, height, "main")
 
         if self.standalone:
-            self.window.destroy()
             sys.exit(0)
 
         self.is_visible = False

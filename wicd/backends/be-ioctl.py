@@ -306,7 +306,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             return None
         
         if ap['essid'] in [ "", '<hidden>']:
-            ap['essid'] = 'Hidden'
+            ap['essid'] = '<hidden>'
             ap['hidden'] = True
         else:
             ap['hidden'] = False

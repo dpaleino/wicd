@@ -1025,8 +1025,6 @@ class WirelessDaemon(dbus.service.Object):
         cur_network = self.LastScan[id]
         essid_key = "essid:" + cur_network["essid"]
         bssid_key = cur_network["bssid"]
-        if self.debug_mode:
-            print bssid_key
         
         if self.config.get(essid_key, 'use_settings_globally'):
             section = essid_key
@@ -1041,8 +1039,9 @@ class WirelessDaemon(dbus.service.Object):
         # Read the essid because we need to name those hidden
         # wireless networks now - but only read it if it is hidden.
         if cur_network["hidden"]:
-            cur_network["essid"] = misc.Noneify(self.config.get(section, 
-                                                                "essid"))
+            cur_network["essid"] = config.get(section, x)
+            if cur_network["essid"] in ["", "Hidden", "<hidden>"]:
+                cur_network["essid"] = "<hidden>"
         for x in self.config.options(section):
             if not cur_network.has_key(x) or x.endswith("script"):
                 cur_network[x] = misc.Noneify(self.config.get(section, x))

@@ -35,6 +35,8 @@ import wicd.misc as misc
 import wicd.wnettools as wnettools
 
 import re
+import os
+import os.path
 import time
 
 
@@ -51,7 +53,7 @@ more stable for some set ups.
 
 # Compile the regex patterns that will be used to search the output of iwlist
 # scan for info these are well tested, should work on most cards
-essid_pattern       = re.compile('.*ESSID:"(.*?)"\n', re.I | re.M  | re.S)
+essid_pattern       = re.compile('.*ESSID:(.*?)\n', re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n', re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)', re.I | re.M  | re.S)
 strength_pattern    = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', re.I | re.M  | re.S)
@@ -131,11 +133,23 @@ class Interface(wnettools.BaseInterface):
     
     def IsUp(self, ifconfig=None):
         """ Determines if the interface is up.
-        
+
         Returns:
         True if the interface is up, False otherwise.
-        
+
         """
+        if not self.iface: return False
+        flags_file = '/sys/class/net/%s/flags' % self.iface
+        try:
+            flags = open(flags_file, "r").read().strip()
+        except IOError:
+            print "Could not open %s, using ifconfig to determine status" % flags_file
+            return self._slow_is_up(ifconfig)
+        return bool(int(flags, 16) & 1)
+        
+        
+    def _slow_is_up(self, ifconfig=None):
+        """ Determine if an interface is up using ifconfig. """
         if not ifconfig:
             cmd = "ifconfig " + self.iface
             if self.verbose: print cmd
@@ -145,11 +159,9 @@ class Interface(wnettools.BaseInterface):
         lines = output.split('\n')
         if len(lines) < 5:
             return False
-        
         for line in lines[1:4]:
             if line.strip().startswith('UP'):
-                return True
-            
+                return True   
         return False
 
 
@@ -168,24 +180,49 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
 
     def GetPluggedIn(self):
         """ Get the current physical connection state.
-        
+
         The method will first attempt to use ethtool do determine
         physical connection state.  Should ethtool fail to run properly,
         mii-tool will be used instead.
-        
+
         Returns:
         True if a link is detected, False otherwise.
-        
+
         """
         if not self.iface:
             return False
+        # check for link using /sys/class/net/iface/carrier
+        # is usually more accurate
+        sys_device = '/sys/class/net/%s/' % self.iface
+        carrier_path = sys_device + 'carrier'
+        if not self.IsUp():
+            MAX_TRIES = 3
+            tries = 0
+            self.Up()
+            while True:
+                tries += 1
+                time.sleep(2)
+                if self.IsUp() or tries > MAX_TRIES: break
+      
+        if os.path.exists(carrier_path):
+            carrier = open(carrier_path, 'r')
+            try:
+                link = carrier.read().strip()
+                link = int(link)
+                if link == 1:
+                    return True
+                elif link == 0:
+                    return False
+            except (IOError, ValueError, TypeError):
+                print 'Error checking link using /sys/class/net/%s/carrier' % self.iface
+                
         if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
             return self._eth_get_plugged_in()
         elif self.MIITOOL_FOUND:
             return self._mii_get_plugged_in()
         else:
-            print 'Error: No way of checking for a wired connection. Make \
-                   sure that either mii-tool or ethtool is installed.'
+            print 'Error: No way of checking for a wired connection. Make ' + \
+                   'sure that either mii-tool or ethtool is installed.'
             return False
 
     def _eth_get_plugged_in(self):
@@ -254,7 +291,6 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         cmd = 'iwlist ' + self.iface + ' scan'
         if self.verbose: print cmd
         results = misc.Run(cmd)
-        
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time.
         # The spaces around '   Cell ' are to minimize the chance that someone
@@ -293,17 +329,17 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         """
         ap = {}
-        # ESSID - Switch '<hidden>' to 'Hidden' to remove
-        # brackets that can mix up formatting.
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
+        if ap['essid']:
+            ap['essid'] = ap['essid'].strip('"')
         try:
             ap['essid'] = misc.to_unicode(ap['essid'])
         except UnicodeDecodeError, UnicodeEncodeError:
             print 'Unicode problem with current network essid, ignoring!!'
             return None
         if ap['essid'] in ['<hidden>', ""]:
-            ap['essid'] = 'Hidden'
             ap['hidden'] = True
+            ap['essid'] = "<hidden>"
         else:
             ap['hidden'] = False
 

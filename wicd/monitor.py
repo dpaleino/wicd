@@ -24,32 +24,24 @@ when appropriate.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import dbus
 import gobject
 import time
-if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
-    import dbus.glib
-else:
-    from dbus.mainloop.glib import DBusGMainLoop
-    DBusGMainLoop(set_as_default=True)
 
-import wicd.wpath as wpath
-import wicd.misc as misc
+from wicd import wpath
+from wicd import misc
+from wicd import dbusmanager
 
 misc.RenameProcess("wicd-monitor")
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
-
-bus = dbus.SystemBus()
-proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-
-proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon/wired')
-wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-
-proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon/wireless')
-wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
+    
+dbusmanager.connect_to_dbus()
+dbus_dict = dbusmanager.get_dbus_ifaces()
+daemon = dbus_dict["daemon"]
+wired = dbus_dict["wired"]
+wireless = dbus_dict["wireless"]
+bus = dbusmanager.get_bus()
 
 class ConnectionStatus(object):
     """ Class for monitoring the computer's connection status. """
@@ -120,8 +112,6 @@ class ConnectionStatus(object):
         else:  # If we have a signal, reset the counter
             self.connection_lost_counter = 0
 
-        # Only update if the signal strength has changed because doing I/O
-        # calls is expensive, and the icon flickers.
         if (wifi_signal != self.last_strength or
             self.network != wireless.GetCurrentNetwork(self.iwconfig)):
             self.last_strength = wifi_signal

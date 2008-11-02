@@ -2,7 +2,7 @@
 
 """ Suspends the wicd daemon.
 
-Sets a flag in the daemon that will stop it from monitoring networkg status.
+Sets a flag in the daemon that will stop it from monitoring network status.
 Used for when a laptop enters hibernation/suspension.
 
 """

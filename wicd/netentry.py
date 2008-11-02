@@ -225,20 +225,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
                 w.set_sensitive(not self.chkbox_global_dns.get_active())
                 
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            if hasattr(obj, "destroy"):
-                obj.destroy()
-            if hasattr(obj, "__del__"):
-                obj.__del__()
-            else:
-                del obj
+        """ Clean up everything. """
         super(AdvancedSettingsDialog, self).destroy()
         self.destroy()
         del self
@@ -273,21 +260,8 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         return noneToBlankString(wired.GetWiredProperty(label))
     
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
+        """ Clean up everything. """
         self.disconnect(self.des)
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            if hasattr(obj, "destroy"):
-                obj.destroy()
-            if hasattr(obj, "__del__"):
-                obj.__del__()
-            else:
-                del obj
         super(WiredSettingsDialog, self).destroy_called()
         self.destroy()
         del self
@@ -336,21 +310,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.des = self.connect("destroy", self.destroy_called)
 
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
+        """ Clean up everything. """
         self.disconnect(self.des)
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            if hasattr(obj, "destroy"):
-                obj.destroy()
-            if hasattr(obj, "__del__"):
-                obj.__del__()
-            else:
-                del obj
         super(WirelessSettingsDialog, self).destroy_called()
         self.destroy()
         del self
@@ -506,30 +467,10 @@ class NetworkEntry(gtk.HBox):
         self.expander.add(aligner)
     
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            try: obj.destroy()
-            except: pass
-            if hasattr(obj, '__del__'):
-                obj.__del__()
-            else:
-                del obj
-        for obj in vars(super(NetworkEntry, self)):
-            obj = self.__dict__[obj]
-            try: obj.destroy()
-            except: pass
-            if hasattr(obj, '__del__'):
-                obj.__del__()
-            else:
-                del obj
+        """ Clean up everything. """
         super(NetworkEntry, self).destroy()
         self.destroy()
+        del self
         
 
 class WiredNetworkEntry(NetworkEntry):
@@ -616,23 +557,10 @@ class WiredNetworkEntry(NetworkEntry):
         self.wireddis = self.connect("destroy", self.destroy_called)
         
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
+        """ Clean up everything. """
         self.disconnect(self.wireddis)
         self.advanced_dialog.destroy_called()
         del self.advanced_dialog
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            if hasattr(obj, "destroy"):
-                obj.destroy()
-            if hasattr(obj, '__del__'):
-                obj.__del__()
-            else:
-                del obj
         super(WiredNetworkEntry, self).destroy_called()
         self.destroy()
         del self
@@ -640,28 +568,20 @@ class WiredNetworkEntry(NetworkEntry):
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         profile = self.combo_profile_names.get_active_text()
+        cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
-            try:
-                sudo_prog = misc.choose_sudo_prog()
-                msg = msg = "'%s'" % language["scripts_need_pass"]
-                if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
-                    msg_flag = "-m"
-                else:
-                    msg_flag = "--caption"
-                misc.LaunchAndWait(' '.join([sudo_prog, msg_flag, msg, 
-                                    os.path.join(wpath.lib, "configscript.py"), 
-                                    profile, "wired"]))
-            except misc.WicdError:
-                error(None, "Could not find a graphical sudo program." + \
-                      "  Script editor could not be launched.")
+            cmdbase = misc.get_sudo_cmd()
+            if not cmdbase:
+                error(None, language["no_sudo_prog"]) 
+                return
+            cmdbase.extend(cmdend)
         else:
-            misc.LaunchAndWait(' '.join([os.path.join(wpath.lib, "configscript.py"), 
-                                        profile, "wired"]))
+            misc.LaunchAndWait(cmdend)
 
     def check_enable(self):
         """ Disable objects if the profile list is empty. """
         profile_list = wired.GetWiredProfileList()
-        if profile_list == None:
+        if not profile_list:
             self.button_delete.set_sensitive(False)
             self.connect_button.set_sensitive(False)
             self.advanced_button.set_sensitive(False)
@@ -823,31 +743,14 @@ class WirelessNetworkEntry(NetworkEntry):
         
     def _escape(self, val):
         """ Escapes special characters so they're displayed correctly. """
-        #try:
         return val.replace("&", "&amp;").replace("<", "&lt;").\
                    replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
-        #except ValueError:
-        #    return val
         
     def destroy_called(self, *args):
-        """ Clean up everything. 
-        
-        This might look excessive, but it was the only way to prevent
-        memory leakage.
-        
-        """
+        """ Clean up everything. """
         self.disconnect(self.wifides)
         self.advanced_dialog.destroy_called()
         del self.advanced_dialog
-        for obj in vars(self):
-            obj = self.__dict__[obj]
-            if hasattr(obj, "destroy"):
-                obj.destroy()
-                
-            if hasattr(obj, '__del__'):
-                obj.__del__()
-            else:
-                del obj
         super(WirelessNetworkEntry, self).destroy_called()
         self.destroy()
         del self
@@ -933,23 +836,16 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
+        cmdend = [os.path.join(wpath.lib, "configscript.py"), 
+                                str(self.networkID), "wireless"]
         if os.getuid() != 0:
-            try:
-                sudo_prog = misc.choose_sudo_prog()
-                msg = "'%s'" % language["scripts_need_pass"]
-                if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
-                    msg_flag = "-m"
-                else:
-                    msg_flag = "--caption"
-                misc.LaunchAndWait(' '.join([sudo_prog, msg_flag, msg,
-                                    os.path.join(wpath.lib, "configscript.py"), 
-                                    str(self.networkID), "wireless"]))
-            except misc.WicdError:
-                error(None, "Could not find a graphical sudo program." + \
-                      "  Script editor could no be launched.")
+            cmdbase = misc.get_sudo_cmd()
+            if not cmdbase:
+                error(None, language["no_sudo_prog"]) 
+                return
+            cmdbase.extend(cmdend)
         else:
-            misc.LaunchAndWait(' '.join([os.path.join(wpath.lib, "configscript.py"), 
-                                        str(self.networkID), "wireless"]))
+            misc.LaunchAndWait(cmdend)
 
     def update_autoconnect(self, widget=None):
         """ Called when the autoconnect checkbox is toggled. """

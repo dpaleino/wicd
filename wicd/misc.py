@@ -21,6 +21,7 @@ import os
 import locale
 import gettext
 import sys
+from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
 
@@ -94,7 +95,7 @@ def LaunchAndWait(cmd):
     cmd : A list contained the program name and its arguments.
     
     """
-    call(cmd, shell=True)
+    call(cmd, shell=False)
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid. """
@@ -111,7 +112,7 @@ def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.sbin + 'wicd'
     sudo_prog = choose_sudo_prog()
-    if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
+    if "gksu" in sudo_prog or "ktsuss" in sudo_prog:
         msg = '--message'
     else:
         msg = '--caption'
@@ -344,6 +345,16 @@ def detect_desktop_environment():
             pass
     return desktop_environment
 
+def get_sudo_cmd(msg):
+    """ Returns a graphical sudo command for generic use. """
+    sudo_prog = misc.choose_sudo_prog()
+    if not sudo_prog: return None
+    if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
+        msg_flag = "-m"
+    else:
+        msg_flag = "--caption"
+    misc.LaunchAndWait([sudo_prog, msg_flag, msg])
+
 def choose_sudo_prog():
     """ Try to intelligently decide which graphical sudo program to use. """
     desktop_env = detect_desktop_environment()
@@ -361,7 +372,7 @@ def choose_sudo_prog():
         if os.access(path, os.F_OK):
             return path
     
-    raise WicdError("Couldn't find graphical sudo program.")
+    return None
 
 def find_path(cmd):
     """ Try to find a full path for a given file name. 
@@ -459,6 +470,8 @@ def get_language_list_gui():
     language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
     language['search_domain'] = _("Search Domain")
     language['scripts_need_pass'] = _('You must enter your password to configure scripts')
+    language['no_sudo_prog'] = _("Could not find a graphical sudo program.  The script editor could not be launched." +
+                                 "You'll have to edit scripts directly your configuration file.")
     
     language['0'] = _('0')
     language['1'] = _('1')
@@ -490,6 +503,9 @@ def get_language_list_gui():
     language['bad_pass'] = _('Connection Failed: Bad password')
     language['done'] = _('Done connecting...')
     language['scanning'] = _('Scanning')
+    language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
+                                    "This typically means there was a problem starting the daemon." + \
+                                    "Check the wicd log for more info")
     
     return language
 
@@ -510,6 +526,10 @@ def get_language_list_tray():
     language['wired'] = _('Wired Network')
     language['scanning'] = _('Scanning')
     language['no_wireless_networks_found'] = _('No wireless networks found.')
+    language['daemon_unavailable'] = _("The wicd daemon is unavailable, so your request cannot be completed")
+    language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
+                                        "This typically means there was a problem starting the daemon." + \
+                                        "Check the wicd log for more info")
     return language
 
 def noneToBlankString(text):
@@ -537,3 +557,17 @@ def stringToBoolean(text):
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())
+        
+def threaded(f):
+    """ A decorator that will make any function run in a new thread. """
+
+    def wrapper(*args, **kwargs):
+        t = Thread(target=f, args=args, kwargs=kwargs)
+        t.setDaemon(True)
+        t.start()
+
+    wrapper.__name__ = f.__name__
+    wrapper.__dict__ = f.__dict__
+    wrapper.__doc__ = f.__doc__
+
+    return wrapper

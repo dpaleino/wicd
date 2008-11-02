@@ -111,6 +111,8 @@ class WicdDaemon(dbus.service.Object):
         #TODO remove the need for this.
         self.wifi.liface = self.wired.liface
         self.wired.wiface = self.wifi.wiface
+        
+        signal.signal(signal.SIGTERM, self.DaemonClosing)
 
         # Scan since we just got started
         if auto_connect:
@@ -199,10 +201,11 @@ class WicdDaemon(dbus.service.Object):
         """ Sets a new backend. """
         print "setting backend to %s" % backend
         self.config.set("Settings", "backend", backend, True)
-        if self.GetCurrentBackend():
-            return
-        self.wifi.LoadBackend(backend)
-        self.wired.LoadBackend(backend)
+        if backend != self.GetCurrentBackend():
+            self.suspended = True
+            self.wifi.LoadBackend(backend)
+            self.wired.LoadBackend(backend)
+            self.SetSuspend(False)
         
     @dbus.service.method('org.wicd.daemon')
     def GetCurrentBackend(self):
@@ -702,6 +705,11 @@ class WicdDaemon(dbus.service.Object):
         print 'calling wired profile chooser'
         self.SetNeedWiredProfileChooser(True)
         
+    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
+    def DaemonClosing(self):
+        """ Emits a signal indicating the daemon will be closing. """
+        pass
+        
     @dbus.service.method('org.wicd.daemon', in_signature='uav')
     def EmitStatusChanged(self, state, info):
         """ Calls the StatusChanged signal method. """
@@ -826,6 +834,7 @@ class WirelessDaemon(dbus.service.Object):
         """ Sets the ESSID of a hidden network for use with Scan(). """
         self.hidden_essid = str(misc.Noneify(essid))
 
+    
     @dbus.service.method('org.wicd.daemon.wireless')
     def Scan(self):
         """ Scan for wireless networks.
@@ -837,7 +846,10 @@ class WirelessDaemon(dbus.service.Object):
         if self.debug_mode:
             print 'scanning start'
         self.SendStartScanSignal()
-        time.sleep(.2)
+        self._Scan()
+    
+    @misc.threaded
+    def _Scan(self):
         scan = self.wifi.Scan(str(self.hidden_essid))
         self.LastScan = scan
         if self.debug_mode:
@@ -1520,12 +1532,17 @@ def main(argv):
     
     # Enter the main loop
     mainloop = gobject.MainLoop()
-    mainloop.run()
+    try:
+        mainloop.run()
+    except KeyboardInterrupt:
+        pass
+    daemon.DaemonClosing()
+    sigterm_caught()
 
-def sigterm_caught(sig, frame):
+def sigterm_caught(sig=None, frame=None):
     """ Called when a SIGTERM is caught, kills monitor.py before exiting. """
     global child_pid
-    print 'SIGTERM caught, killing wicd-monitor...'
+    print 'Daemon going down, killing wicd-monitor...'
     os.kill(child_pid, signal.SIGTERM)
     print 'Removing PID file...'
     if os.path.exists(wpath.pidfile):
@@ -1536,7 +1553,7 @@ def sigterm_caught(sig, frame):
 
 if __name__ == '__main__':
     if os.getuid() != 0:
-        print ("Root priviledges are required for the daemon to run properly." +
+        print ("Root privileges are required for the daemon to run properly." +
                "  Exiting.")
         sys.exit(1)
     main(sys.argv)

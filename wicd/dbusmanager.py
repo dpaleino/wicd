@@ -2,7 +2,7 @@
 
 """ The wicd DBus Manager.
 
-A module for storing wicd's dbus interfaces.
+A module for managing wicd's dbus interfaces.
 
 """
 
@@ -24,6 +24,31 @@ A module for storing wicd's dbus interfaces.
 #
 
 import dbus
+if getattr(dbus, "version", (0, 0, 0)) < (0, 80, 0):
+    import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
+    
+DBUS_MANAGER = None
+    
+def get_dbus_ifaces():
+    return DBUS_MANAGER.get_dbus_ifaces()
+
+def get_interface(iface):
+    return DBUS_MANAGER.get_interface(iface)
+
+def get_bus():
+    return DBUS_MANAGER.get_bus()
+
+def set_mainloop():
+    return DBUS_MANAGER.connect_to_mainloop()
+
+def connect_to_dbus():
+    return DBUS_MANAGER.connect_to_dbus()
+
+def threads_init():
+    dbus.mainloop.glib.threads_init()
 
 class DBusManager(object):
     """ Manages the DBus objects used by wicd. """
@@ -43,6 +68,9 @@ class DBusManager(object):
         """ Returns the loaded SystemBus. """
         return self._bus
     
+    def set_mainloop(self, loop):
+        dbus.set_default_main_loop(loop)
+    
     def connect_to_dbus(self):
         """ Connects to wicd's dbus interfaces and loads them into a dict. """
         proxy_obj = self._bus.get_object("org.wicd.daemon", '/org/wicd/daemon')
@@ -57,4 +85,6 @@ class DBusManager(object):
         wired = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
         
         self._dbus_ifaces = {"daemon" : daemon, "wireless" : wireless,
-                             "wired" : wired} 
+                             "wired" : wired}
+        
+DBUS_MANAGER = DBusManager()

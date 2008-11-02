@@ -129,9 +129,7 @@ def GetWiredInterfaces():
 
 def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
-    print ("NeedsExternalCalls: returning default of True.  You should " +
-          "implement this yourself.")
-    return True
+    raise NotImplementedError
 
 
 class BaseInterface(object):
@@ -498,7 +496,7 @@ class BaseInterface(object):
         The IP address of the interface in dotted quad form.
 
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
     
     def IsUp(self):
         """ Determines if the interface is up.
@@ -507,7 +505,7 @@ class BaseInterface(object):
         True if the interface is up, False otherwise.
         
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
 
 
 class BaseWiredInterface(BaseInterface):
@@ -533,7 +531,7 @@ class BaseWiredInterface(BaseInterface):
         True if a link is detected, False otherwise.
         
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
 
 
 class BaseWirelessInterface(BaseInterface):
@@ -623,14 +621,16 @@ class BaseWirelessInterface(BaseInterface):
         return ret
 
     def _GetRalinkInfo(self):
-        """ Get a network info dict used for ralink drivers
-
+        """ Get a network info list used for ralink drivers
+    
         Calls iwpriv <wireless interface> get_site_survey, which
         on some ralink cards will return encryption and signal
         strength info for wireless networks in the area.
-
+    
         """
         iwpriv = misc.Run('iwpriv ' + self.iface + ' get_site_survey')
+        if self.verbose:
+            print iwpriv
         lines = iwpriv.splitlines()[2:]
         aps = {}
         patt = re.compile("((?:[0-9A-Z]{2}:){5}[0-9A-Z]{2})")
@@ -638,6 +638,8 @@ class BaseWirelessInterface(BaseInterface):
             ap = {}
             info = x.split("   ")
             info = filter(None, [x.strip() for x in info])
+            if len(info) < 5:
+                continue
             if re.match(patt, info[2].upper()):
                 bssid = info[2].upper()
                 offset = -1
@@ -647,17 +649,30 @@ class BaseWirelessInterface(BaseInterface):
             else:  # Invalid
                 print 'Invalid iwpriv line.  Skipping it.'
                 continue
+            ap['nettype'] = info[-1]
             ap['strength'] = info[1]
-            if info[5 + offset] == 'WEP' or info[4 + offset] == 'WEP':
+            if info[4 + offset] == 'WEP':
                 ap['encryption_method'] = 'WEP'
+                ap['enctype'] = 'WEP'
+                ap['keyname'] = 'Key1'
+                ap['authmode'] = info[5 + offset]
             elif info[5 + offset] in ['WPA-PSK', 'WPA']:
                 ap['encryption_method'] = 'WPA'
+                ap['authmode'] = "WPAPSK"
+                ap['keyname'] = "WPAPSK"
+                ap['enctype'] = info[4 + offset]
             elif info[5 + offset] == 'WPA2-PSK':
                 ap['encryption_method'] = 'WPA2'
+                ap['authmode'] ="WPA2PSK"
+                ap['keyname'] = "WPA2PSK"
+                ap['enctype'] = info[4 + offset]
+            elif info[4 + offset] == "NONE":
+                ap['encryption_method'] = None
             else:
                 print "Unknown AuthMode, can't assign encryption_method!"
                 ap['encryption_method'] = 'Unknown'
             aps[bssid] = ap
+        if self.verbose: print str(aps)
         return aps
 
     def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
@@ -776,24 +791,8 @@ class BaseWirelessInterface(BaseInterface):
             misc.Run(cmd)
 
     def ValidateAuthentication(self, auth_time):
-        """ Validate WPA authentication.
-
-            Validate that the wpa_supplicant authentication
-            process was successful.
-
-            NOTE: It's possible this could return False,
-            though in reality wpa_supplicant just isn't
-            finished yet.
-            
-            Keyword arguments:
-            auth_time -- The time at which authentication began.
-            
-            Returns:
-            True if wpa_supplicant authenticated succesfully,
-            False otherwise.
-
-        """
-        print 'Implement this in a derived class!'
+        """ Validate WPA authentication. """
+        raise NotImplementedError
 
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.
@@ -806,55 +805,38 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if network.get('key') != None:
-            lines = self._GetRalinkInfo()
-            for x in lines:
-                info = x.split()
-                if len(info) < 5:
-                    break
-                if info[2] == network.get('essid'):
-                    if info[5] == 'WEP' or (info[5] == 'OPEN' and \
-                                            info[4] == 'WEP'):
-                        print 'Setting up WEP'
-                        cmd = ''.join(['iwconfig ', self.iface, ' key ',
-                                      network.get('key')])
-                        if self.verbose: print cmd
-                        misc.Run(cmd)
-                    else:
-                        if info[5] == 'SHARED' and info[4] == 'WEP':
-                            print 'Setting up WEP'
-                            auth_mode = 'SHARED'
-                            key_name = 'Key1'
-                        elif info[5] == 'WPA-PSK':
-                            print 'Setting up WPA-PSK'
-                            auth_mode = 'WPAPSK'
-                            key_name = 'WPAPSK'
-                        elif info[5] == 'WPA2-PSK':
-                            print 'Setting up WPA2-PSK'
-                            auth_mode = 'WPA2PSK'
-                            key_name = 'WPAPSK'
-                        else:
-                            print 'Unknown AuthMode, can\'t complete ' + \
-                            'connection process!'
-                            return
-
-                        cmd_list = []
-                        cmd_list.append('NetworkType=' + info[6])
-                        cmd_list.append('AuthMode=' + auth_mode)
-                        cmd_list.append('EncrypType=' + info[4])
-                        cmd_list.append('SSID=' + info[2])
-                        cmd_list.append(key_name + '=' + network.get('key'))
-                        if info[5] == 'SHARED' and info[4] == 'WEP':
-                            cmd_list.append('DefaultKeyID=1')
-                        cmd_list.append('SSID=' + info[2])
-
-                        for cmd in cmd_list:
-                            cmd = 'iwpriv ' + self.iface + ' ' + cmd
-                            if self.verbose: print cmd
-                            misc.Run(cmd)
+            try:
+                info = self._GetRalinkInfo()[network.get('bssid')]
+            except KeyError:
+                print "Could not find current network in iwpriv " + \
+                      "get_site_survey results.  Cannot authenticate."
+                return
+            
+            if info['enctype'] == "WEP" and info['authtype'] == 'OPEN':
+                print 'Setting up WEP'
+                cmd = ''.join(['iwconfig ', self.iface, ' key ',
+                              network.get('key')])
+                if self.verbose: print cmd
+                misc.Run(cmd)
+            else:
+                cmd_list = []
+                cmd_list.append('NetworkType=' + info['nettype'])
+                cmd_list.append('AuthMode=' + info['authmode'])
+                cmd_list.append('EncrypType=' + info['enctype'])
+                cmd_list.append('SSID=' + info['essid'])
+                cmd_list.append(info['keyname'] + '=' + network.get('key'))
+                if info['nettype'] == 'SHARED' and info['enctype'] == 'WEP':
+                    cmd_list.append('DefaultKeyID=1')
+                cmd_list.append('SSID=' + info['essid'])
+    
+                for cmd in cmd_list:
+                    cmd = 'iwpriv ' + self.iface + ' ' + cmd
+                    if self.verbose: print cmd
+                    misc.Run(cmd)
 
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
 
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
@@ -863,7 +845,7 @@ class BaseWirelessInterface(BaseInterface):
         The signal strength.
 
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
     
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
@@ -872,7 +854,7 @@ class BaseWirelessInterface(BaseInterface):
         The dBm signal strength.
 
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError
 
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
@@ -881,4 +863,4 @@ class BaseWirelessInterface(BaseInterface):
         The current network essid.
 
         """
-        print 'Implement this in a derived class!'
+        raise NotImplementedError

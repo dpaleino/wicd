@@ -248,9 +248,7 @@ class PreferencesDialog(object):
             daemon.SetWiredAutoConnectMethod(3)
         else:
             daemon.SetWiredAutoConnectMethod(1)
-            
-        if self.backends[self.backendcombo.get_active()] != daemon.GetSavedBackend():
-            alert(self.dialog, language["backend_alert"])
+
         daemon.SetBackend(self.backends[self.backendcombo.get_active()])
             
         # External Programs Tab

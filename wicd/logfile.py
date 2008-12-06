@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 #
 #    Copyright (C) 1999-2006  Keith Dart <keith@kdart.com>
 #    Copyright (C) 2008       Dan O'Reilly <oreilldf@gmail.com>
@@ -14,6 +15,7 @@
 #    Lesser General Public License for more details.
 
 """
+
 Managing logfile rotation. A ManagedLog object is a file-like object that
 rotates itself when a maximum size is reached.
 
@@ -30,8 +32,11 @@ class SizeError(IOError):
 
 class LogFile(file):
     """LogFile(name, [mode="w"], [maxsize=360000])
-    Opens a new file object. After writing <maxsize> bytes a SizeError will be
-    raised.  """
+    
+    Opens a new file object. After writing <maxsize> bytes a SizeError
+    will be raised.
+    
+    """
     def __init__(self, name, mode="a", maxsize=360000):
         super(LogFile, self).__init__(name, mode)
         self.maxsize = maxsize
@@ -79,13 +84,17 @@ class LogFile(file):
         return rotate(self)
 
     def note(self, text):
-        """Writes a specially formated note text to the file.The note starts
-with the string '\\n#*=' so you can easily filter them. """
+        """Writes a specially formated note text to the file.
+        
+        The note starts with the string '\\n#*=' so you can easily filter them.
+        
+        """
         self.write("\n#*===== %s =====\n" % (text,))
 
 
 class ManagedLog(object):
     """ManagedLog(name, [maxsize=360000], [maxsave=9])
+    
     A ManagedLog instance is a persistent log object. Write data with the
     write() method. The log size and rotation is handled automatically.
 

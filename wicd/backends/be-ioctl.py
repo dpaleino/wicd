@@ -394,7 +394,12 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         MAX_DISCONNECTED_TIME = 3
         disconnected_time = 0
         while (time.time() - auth_time) < MAX_TIME:
-            status = wpa.request("STATUS").split("\n")
+            try:
+                status = wpa.request("STATUS").split("\n")
+            except:
+                print "wpa_supplicant status query failed."
+                return False
+            
             if self.verbose:
                 print 'wpa_supplicant ctrl_interface status query is %s' % str(status)
                 

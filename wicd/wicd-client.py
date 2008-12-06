@@ -52,18 +52,15 @@ from wicd import gui
 from wicd import dbusmanager
 
 ICON_AVAIL = True
+USE_EGG = False
 # Import egg.trayicon if we're using an older gtk version
-if not (gtk.gtk_version[0] >= 2 and gtk.gtk_version[1] >= 10):
-    class Dummy(object): pass
-    gtk.StatusIcon = Dummy
+if not hasattr(gtk, "StatusIcon"):
     try:
         import egg.trayicon
         USE_EGG = True
     except ImportError:
         print 'Unable to load tray icon: Missing egg.trayicon module.'
         ICON_AVAIL = False
-else:
-    USE_EGG = False
 
 misc.RenameProcess("wicd-client")
 
@@ -534,91 +531,93 @@ class TrayIcon(object):
                 return True
     
 
-    class EggTrayIconGUI(TrayIconGUI):
-        """ Tray Icon for gtk < 2.10.
-        
-        Uses the deprecated egg.trayicon module to implement the tray icon.
-        Since it relies on a deprecated module, this class is only used
-        for machines running versions of GTK < 2.10.
-        
-        """
-        def __init__(self, use_tray=True):
-            """Initializes the tray icon"""
-            TrayIcon.TrayIconGUI.__init__(self, use_tray)
-            self.use_tray = use_tray
-            if not use_tray: 
-                self.toggle_wicd_gui()
-                return
-
-            self.tooltip = gtk.Tooltips()
-            self.eb = gtk.EventBox()
-            self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
-            self.pic = gtk.Image()
-            self.tooltip.set_tip(self.eb, "Initializing wicd...")
-            self.pic.set_from_file(wpath.images + "no-signal.png")
-
-            self.eb.connect('button_press_event', self.tray_clicked)
-            self.eb.add(self.pic)
-            self.tray.add(self.eb)
-            self.tray.show_all()
-
-        def tray_clicked(self, widget, event):
-            """ Handles tray mouse click events. """
-            if event.button == 1:
-                self.toggle_wicd_gui()
-            elif event.button == 3:
-                self.init_network_menu()
-                self.menu.popup(None, None, None, event.button, event.time)
-
-        def set_from_file(self, val=None):
-            """ Calls set_from_file on the gtk.Image for the tray icon. """
-            if not self.use_tray: return
-            self.pic.set_from_file(val)
-
-        def set_tooltip(self, val):
-            """ Set the tooltip for this tray icon.
+    if USE_EGG:
+        class EggTrayIconGUI(TrayIconGUI):
+            """ Tray Icon for gtk < 2.10.
             
-            Sets the tooltip for the gtk.ToolTips associated with this
-            tray icon.
-
+            Uses the deprecated egg.trayicon module to implement the tray icon.
+            Since it relies on a deprecated module, this class is only used
+            for machines running versions of GTK < 2.10.
+            
             """
-            if not self.use_tray: return
-            self.tooltip.set_tip(self.eb, val)
+            def __init__(self, use_tray=True):
+                """Initializes the tray icon"""
+                TrayIcon.TrayIconGUI.__init__(self, use_tray)
+                self.use_tray = use_tray
+                if not use_tray: 
+                    self.toggle_wicd_gui()
+                    return
+
+                self.tooltip = gtk.Tooltips()
+                self.eb = gtk.EventBox()
+                self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
+                self.pic = gtk.Image()
+                self.tooltip.set_tip(self.eb, "Initializing wicd...")
+                self.pic.set_from_file(wpath.images + "no-signal.png")
+
+                self.eb.connect('button_press_event', self.tray_clicked)
+                self.eb.add(self.pic)
+                self.tray.add(self.eb)
+                self.tray.show_all()
+
+            def tray_clicked(self, widget, event):
+                """ Handles tray mouse click events. """
+                if event.button == 1:
+                    self.toggle_wicd_gui()
+                elif event.button == 3:
+                    self.init_network_menu()
+                    self.menu.popup(None, None, None, event.button, event.time)
+
+            def set_from_file(self, val=None):
+                """ Calls set_from_file on the gtk.Image for the tray icon. """
+                if not self.use_tray: return
+                self.pic.set_from_file(val)
+
+            def set_tooltip(self, val):
+                """ Set the tooltip for this tray icon.
+                
+                Sets the tooltip for the gtk.ToolTips associated with this
+                tray icon.
+
+                """
+                if not self.use_tray: return
+                self.tooltip.set_tip(self.eb, val)
 
 
-    class StatusTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
-        """ Class for creating the wicd tray icon on gtk > 2.10.
-        
-        Uses gtk.StatusIcon to implement a tray icon.
-        
-        """
-        def __init__(self, use_tray=True):
-            TrayIcon.TrayIconGUI.__init__(self, use_tray)
-            self.use_tray = use_tray
-            if not use_tray: 
-                self.toggle_wicd_gui()
-                return
+    if hasattr(gtk, "StatusIcon"):
+        class StatusTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
+            """ Class for creating the wicd tray icon on gtk > 2.10.
+            
+            Uses gtk.StatusIcon to implement a tray icon.
+            
+            """
+            def __init__(self, use_tray=True):
+                TrayIcon.TrayIconGUI.__init__(self, use_tray)
+                self.use_tray = use_tray
+                if not use_tray: 
+                    self.toggle_wicd_gui()
+                    return
 
-            gtk.StatusIcon.__init__(self)
+                gtk.StatusIcon.__init__(self)
 
-            self.current_icon_path = ''
-            self.set_visible(True)
-            self.connect('activate', self.on_activate)
-            self.connect('popup-menu', self.on_popup_menu)
-            self.set_from_file(wpath.images + "no-signal.png")
-            self.set_tooltip("Initializing wicd...")
+                self.current_icon_path = ''
+                self.set_visible(True)
+                self.connect('activate', self.on_activate)
+                self.connect('popup-menu', self.on_popup_menu)
+                self.set_from_file(wpath.images + "no-signal.png")
+                self.set_tooltip("Initializing wicd...")
 
-        def on_popup_menu(self, status, button, timestamp):
-            """ Opens the right click menu for the tray icon. """
-            self.init_network_menu()
-            self.menu.popup(None, None, None, button, timestamp)
+            def on_popup_menu(self, status, button, timestamp):
+                """ Opens the right click menu for the tray icon. """
+                self.init_network_menu()
+                self.menu.popup(None, None, None, button, timestamp)
 
-        def set_from_file(self, path=None):
-            """ Sets a new tray icon picture. """
-            if not self.use_tray: return
-            if path != self.current_icon_path:
-                self.current_icon_path = path
-                gtk.StatusIcon.set_from_file(self, path)
+            def set_from_file(self, path=None):
+                """ Sets a new tray icon picture. """
+                if not self.use_tray: return
+                if path != self.current_icon_path:
+                    self.current_icon_path = path
+                    gtk.StatusIcon.set_from_file(self, path)
 
 
 def usage():

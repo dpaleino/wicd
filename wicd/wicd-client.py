@@ -102,6 +102,12 @@ class TrayIcon(object):
             self.tr = self.StatusTrayIconGUI(use_tray)
         self.icon_info = self.TrayConnectionInfo(self.tr, use_tray, animate)
         
+    def is_embedded(self):
+        if USE_EGG:
+            raise NotImplementedError
+        else:
+            return self.tr.is_embedded()
+        
 
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """

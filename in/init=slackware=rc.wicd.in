@@ -17,6 +17,10 @@ wicd_start() {
   else
     echo "Starting wicd daemon..."
     wicd 2>/dev/null 1>&2
+    # Activate the pm-utils sleep hook
+    if [ ! -x %PMUTILS%55wicd ]; then
+      chmod +x %PMUTILS%55wicd
+    fi
   fi
 }
 
@@ -28,6 +32,11 @@ wicd_stop() {
   else
     pkill -f python.*wicd-daemon.py 2>/dev/null
   fi
+  # Deactivate the pm-utils sleep hook
+  if [ -x %PMUTILS%55wicd ]; then
+    chmod -x %PMUTILS%55wicd
+  fi
+
 }
 
 # See how we were called and take appropriate action	
@@ -48,4 +57,5 @@ case $1 in
     exit 1
    ;;
 esac
+
 

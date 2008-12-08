@@ -53,7 +53,7 @@ more stable for some set ups.
 
 # Compile the regex patterns that will be used to search the output of iwlist
 # scan for info these are well tested, should work on most cards
-essid_pattern       = re.compile('.*ESSID:(.*?)\n', re.I | re.M  | re.S)
+essid_pattern       = re.compile('.*ESSID:"?(.*?)"?\s*\n', re.I | re.M  | re.S)
 ap_mac_pattern      = re.compile('.*Address: (.*?)\n', re.I | re.M  | re.S)
 channel_pattern     = re.compile('.*Channel:? ?(\d\d?)', re.I | re.M  | re.S)
 strength_pattern    = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', re.I | re.M  | re.S)
@@ -330,11 +330,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         """
         ap = {}
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
-        if ap['essid']:
-            ap['essid'] = ap['essid'].strip('"')
         try:
             ap['essid'] = misc.to_unicode(ap['essid'])
-        except UnicodeDecodeError, UnicodeEncodeError:
+        except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
         if ap['essid'] in ['<hidden>', ""]:
@@ -494,8 +492,12 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         [(strength, max_strength)] = strength_pattern.findall(output)
         if max_strength and strength:
-            return 100 * int(strength) // int(max_strength)
-        
+            if int(max_strength) != 0:
+                return 100 * int(strength) // int(max_strength)
+            else:
+                # Prevent a divide by zero error.
+                ap['quality'] = int(strength)
+
         if strength is None:
             strength = misc.RunRegex(altstrength_pattern, output)
         

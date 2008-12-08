@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# pm-utils hook to handle suspend/resume properly for wicd
+
+. "${PM_FUNCTIONS}" || . "${FUNCTIONS}"
+
+wicd_suspend()
+{
+    # Put wifi interface down
+    %LIB%suspend.py
+}
+
+wicd_resume()
+{
+    # Bring wifi interface back up
+    %LIB%autoconnect.py
+}
+
+case "$1" in
+    hibernate|suspend)
+        wicd_suspend
+        ;;
+    thaw|resume)
+        wicd_resume
+        ;;
+    *) exit $NA
+        ;;
+esac
+

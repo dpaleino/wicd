@@ -22,6 +22,7 @@ import shutil
 import sys
 
 # Be sure to keep this updated!
+# VERSIONNUMBER
 VERSION_NUM = '1.6.0'
 
 class configure(Command):
@@ -54,6 +55,7 @@ class configure(Command):
         ('log=', None, 'set the log directory'),
         ('resume=', None, 'set the directory the resume from suspend script is stored in'),
         ('suspend=', None, 'set the directory the  suspend script is stored in'),
+        ('pmutils=', None, 'set the directory the  pm-utils hooks are stored in'),
         ('dbus=', None, 'set the directory the dbus config file is stored in'),
         ('desktop=', None, 'set the directory the .desktop file is stored in'),
         ('icons=', None, "set the base directory for the .desktop file's icons"),
@@ -80,8 +82,8 @@ class configure(Command):
         ('no-install-man', None, 'do not install the man file'),
         ('no-install-kde', None, 'do not install the kde autostart file'),
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
-        ('no-install-install', None, 'do not install the INSTALL file'),
-        ('no-install-license', None, 'do not install the LICENSE file')
+        ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
+        ('no-install-docs', None, 'do not install the auxiliary documentation')
         ]
         
 
@@ -99,6 +101,7 @@ class configure(Command):
         self.log = '/var/log/wicd/'
         self.resume = '/etc/acpi/resume.d/'
         self.suspend = '/etc/acpi/suspend.d/'
+        self.pmutils = '/usr/lib/pm-utils/sleep.d/'
         self.dbus = '/etc/dbus-1/system.d/'
         self.desktop = '/usr/share/applications/'
         self.translations = '/usr/share/locale/'
@@ -111,8 +114,8 @@ class configure(Command):
         self.no_install_man = False
         self.no_install_kde = False
         self.no_install_acpi = False
-        self.no_install_install = False
-        self.no_install_license = False
+        self.no_install_pmutils = False
+        self.no_install_docs = False
 
         # figure out what the default init file
         # location should be on several different distros
@@ -137,7 +140,7 @@ class configure(Command):
             self.initfile = 'init/debian/wicd'
         elif os.access('/etc/arch-release', os.F_OK):
             self.init = '/etc/rc.d/'
-            self.init = 'init/arch/wicd'
+            self.initfile = 'init/arch/wicd'
         elif os.access('/etc/slackware-version', os.F_OK) or \
              os.access('/etc/slamd64-version', os.F_OK):
             self.init = '/etc/rc.d/'
@@ -283,6 +286,7 @@ try:
     (wpath.dbus, ['other/wicd.conf']),
     (wpath.desktop, ['other/wicd.desktop']),
     (wpath.log, []), 
+    (wpath.etc, []),
     (wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-client.svg']),
     (wpath.icons + '192x192/apps/', ['icons/192px/wicd-client.png']),
     (wpath.icons + '128x128/apps/', ['icons/128px/wicd-client.png']),
@@ -304,16 +308,13 @@ try:
     (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py', 'wicd/suspend.py', 'wicd/autoconnect.py']), #'wicd/wicd-gui.py', 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
-    (wpath.docdir, [ 'AUTHORS', 'README' ])
     ]
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'
     data.append (( piddir, [] ))
-    if not wpath.no_install_install:
-        data.append(( wpath.docdir, [ 'INSTALL' ] ))
-    if not wpath.no_install_license:
-        data.append(( wpath.docdir, [ 'LICENSE' ] ))
+    if not wpath.no_install_docs:
+        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README' ]))
     if not wpath.no_install_kde:
         data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
     if not wpath.no_install_init:
@@ -323,9 +324,12 @@ try:
         data.append(( wpath.mandir + 'man5/', [ 'man/wicd-manager-settings.conf.5' ]))
         data.append(( wpath.mandir + 'man5/', [ 'man/wicd-wired-settings.conf.5' ]))
         data.append(( wpath.mandir + 'man5/', [ 'man/wicd-wireless-settings.conf.5' ]))
+        data.append(( wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
     if not wpath.no_install_acpi:
         data.append(( wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append(( wpath.suspend, ['other/50-wicd-suspend.sh' ]))
+    if not wpath.no_install_pmutils:
+        data.append(( wpath.pmutils, ['other/55wicd' ]))
     print 'Creating pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):

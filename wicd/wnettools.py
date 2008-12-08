@@ -64,8 +64,8 @@ def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
 
     Keyword arguments:
     dns1 -- IP address of DNS server 1
-    dns2 -- IP address of DNS server 1
-    dns3 -- IP address of DNS server 1
+    dns2 -- IP address of DNS server 2
+    dns3 -- IP address of DNS server 3
 
     """
     resolv = open("/etc/resolv.conf", "w")
@@ -823,15 +823,14 @@ class BaseWirelessInterface(BaseInterface):
                 cmd_list.append('NetworkType=' + info['nettype'])
                 cmd_list.append('AuthMode=' + info['authmode'])
                 cmd_list.append('EncrypType=' + info['enctype'])
-                cmd_list.append('SSID=' + info['essid'])
-                cmd_list.append(info['keyname'] + '=' + network.get('key'))
+                cmd_list.append('SSID="%s"' % network['essid'])
+                cmd_list.append('%s="%s"' % (network['keyname'], network['key']))
                 if info['nettype'] == 'SHARED' and info['enctype'] == 'WEP':
                     cmd_list.append('DefaultKeyID=1')
-                cmd_list.append('SSID=' + info['essid'])
     
                 for cmd in cmd_list:
-                    cmd = 'iwpriv ' + self.iface + ' ' + cmd
-                    if self.verbose: print cmd
+                    cmd = ['iwpriv', self.iface, 'set', cmd]
+                    if self.verbose: print ' '.join(cmd)
                     misc.Run(cmd)
 
     def GetBSSID(self, iwconfig=None):

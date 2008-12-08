@@ -862,7 +862,7 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetIwconfig(self):
         """ Calls and returns the output of iwconfig"""
-        return self.wifi.GetIwconfig()
+        return misc.to_unicode(self.wifi.GetIwconfig())
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetNumberOfNetworks(self):
@@ -1506,12 +1506,16 @@ def main(argv):
       
     if redirect_stderr or redirect_stdout:
         logpath = os.path.join(wpath.log, 'wicd.log')
+        if not os.path.exists(wpath.log):
+            os.makedirs(wpath.log)
+            os.chmod(wpath.log, 755)
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:
                 os.chmod(logpath, 0600)
             except:
                 print 'unable to chmod log file to 0600'
+
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output
 

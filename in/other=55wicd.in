@@ -6,24 +6,26 @@
 
 wicd_suspend()
 {
-    # Put wifi interface down
-    %LIB%suspend.py
+	# Put wifi interface down
+	%LIB%suspend.py 2>/dev/null
+	return $NA
 }
 
 wicd_resume()
 {
-    # Bring wifi interface back up
-    %LIB%autoconnect.py
+	# Bring wifi interface back up
+	%LIB%autoconnect.py 2>/dev/null
+	return $NA
 }
 
 case "$1" in
-    hibernate|suspend)
-        wicd_suspend
-        ;;
-    thaw|resume)
-        wicd_resume
-        ;;
-    *) exit $NA
-        ;;
+	hibernate|suspend)
+		wicd_suspend
+		;;
+	thaw|resume)
+		wicd_resume
+		;;
+	*) exit $NA
+		;;
 esac
 

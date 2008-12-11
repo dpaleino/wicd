@@ -30,6 +30,7 @@ log = '/var/log/wicd/'
 resume = '/etc/acpi/resume.d/'
 suspend = '/etc/acpi/suspend.d/'
 sbin = '/usr/sbin/'
+pmutils = '/usr/lib/pm-utils/sleep.d/'
 dbus = '/etc/dbus-1/system.d/'
 desktop = '/usr/share/applications/'
 backends= '/usr/lib/wicd/backends/'
@@ -53,7 +54,7 @@ initfile = 'init/debian/wicd'
 initfilename = 'wicd'
 
 # BOOLEANS
-
+no_install_pmutils = False
 no_install_init = False
 no_install_man = False
 no_install_kde = False

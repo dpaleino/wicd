@@ -30,6 +30,7 @@ log = '%LOG%'
 resume = '%RESUME%'
 suspend = '%SUSPEND%'
 sbin = '%SBIN%'
+pmutils = '%PMUTILS%'
 dbus = '%DBUS%'
 desktop = '%DESKTOP%'
 backends= '%BACKENDS%'
@@ -53,7 +54,7 @@ initfile = '%INITFILE%'
 initfilename = '%INITFILENAME%'
 
 # BOOLEANS
-
+no_install_pmutils = %NO_INSTALL_PMUTILS%
 no_install_init = %NO_INSTALL_INIT%
 no_install_man = %NO_INSTALL_MAN%
 no_install_kde = %NO_INSTALL_KDE%

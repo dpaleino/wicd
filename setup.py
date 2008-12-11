@@ -341,7 +341,8 @@ try:
             print short_language,
             data.append((wpath.translations + short_language + '/LC_MESSAGES/', ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
     print
-except:
+except Exception, e:
+    print str(e)
     print '''Error setting up data array. This is normal if 
 python setup.py configure has not yet been run.'''
 

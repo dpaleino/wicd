@@ -241,7 +241,7 @@ class PreferencesDialog(object):
         daemon.SetAlwaysShowWiredInterface(self.wiredcheckbox.get_active())
         daemon.SetAutoReconnect(self.reconnectcheckbox.get_active())
         daemon.SetDebugMode(self.debugmodecheckbox.get_active())
-        daemon.SetSignalDisplayType(self.displaytypecheckbox.get_active())
+        daemon.SetSignalDisplayType(int(self.displaytypecheckbox.get_active()))
         if self.showlistradiobutton.get_active():
             daemon.SetWiredAutoConnectMethod(2)
         elif self.lastusedradiobutton.get_active():

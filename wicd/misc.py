@@ -21,6 +21,7 @@ import os
 import locale
 import gettext
 import sys
+import re
 from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
@@ -347,13 +348,13 @@ def detect_desktop_environment():
 
 def get_sudo_cmd(msg):
     """ Returns a graphical sudo command for generic use. """
-    sudo_prog = misc.choose_sudo_prog()
+    sudo_prog = choose_sudo_prog()
     if not sudo_prog: return None
-    if sudo_prog.endswith("gksu") or sudo_prog.endswith("ktsuss"):
+    if re.search("(ktsuss|gksu|gksudo)$", sudo_prog):
         msg_flag = "-m"
     else:
         msg_flag = "--caption"
-    misc.LaunchAndWait([sudo_prog, msg_flag, msg])
+    return [sudo_prog, msg_flag, msg]
 
 def choose_sudo_prog():
     """ Try to intelligently decide which graphical sudo program to use. """

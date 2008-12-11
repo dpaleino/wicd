@@ -58,8 +58,7 @@ no_install_init = %NO_INSTALL_INIT%
 no_install_man = %NO_INSTALL_MAN%
 no_install_kde = %NO_INSTALL_KDE%
 no_install_acpi = %NO_INSTALL_ACPI%
-no_install_install = %NO_INSTALL_INSTALL%
-no_install_license = %NO_INSTALL_LICENSE%
+no_install_docs = %NO_INSTALL_DOCS%
 
 def chdir(file):
     """Change directory to the location of the specified file.

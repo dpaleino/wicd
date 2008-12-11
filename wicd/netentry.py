@@ -570,11 +570,12 @@ class WiredNetworkEntry(NetworkEntry):
         profile = self.combo_profile_names.get_active_text()
         cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd()
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
             if not cmdbase:
                 error(None, language["no_sudo_prog"]) 
                 return
             cmdbase.extend(cmdend)
+            misc.LaunchAndWait(cmdbase)
         else:
             misc.LaunchAndWait(cmdend)
 
@@ -839,11 +840,12 @@ class WirelessNetworkEntry(NetworkEntry):
         cmdend = [os.path.join(wpath.lib, "configscript.py"), 
                                 str(self.networkID), "wireless"]
         if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd()
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
             if not cmdbase:
                 error(None, language["no_sudo_prog"]) 
                 return
             cmdbase.extend(cmdend)
+            misc.LaunchAndWait(cmdbase)
         else:
             misc.LaunchAndWait(cmdend)
 

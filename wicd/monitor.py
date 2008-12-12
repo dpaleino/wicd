@@ -27,6 +27,8 @@ when appropriate.
 import gobject
 import time
 
+from dbus import DBusException
+
 from wicd import wpath
 from wicd import misc
 from wicd import dbusmanager
@@ -167,7 +169,7 @@ class ConnectionStatus(object):
                 from_wireless = False
                 self.auto_reconnect(from_wireless)
             self.update_state(state)
-        except dbus.exceptions.DBusException, e:
+        except DBusException, e:
             print 'Ignoring DBus Error: ' + str(e)
         return True
 

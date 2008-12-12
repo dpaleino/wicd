@@ -20,6 +20,7 @@ from distutils.extension import Extension
 import os
 import shutil
 import sys
+import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
@@ -160,6 +161,22 @@ class configure(Command):
                   'If you have specified --init and --initfile, configure will continue.  ' + \
                   'Please report this warning, along with the name of your ' + \
                   'distribution, to the wicd developers.'
+
+        # Decide whether to override the pm-utils file locations
+        try:
+            pmtemp = subprocess.Popen("pkg-config" + " --variable=pm_sleephooks pm-utils", shell=True, stdout=subprocess.PIPE
+);
+        except:
+            len(pmtemp.stdout) == 0;
+            self.pmutils = pmtemp.stdout.readline().strip();
+
+        # Decide whether to override the kde autostart path
+        try:
+            kdetemp = subprocess.Popen("kde-config" + " --prefix", shell=True, stdout=subprocess.PIPE);
+        except:
+            len(kdetemp.stdout) == 0;
+            self.kdedir = kdetemp.stdout.readline().strip();
+
         self.python = '/usr/bin/python'
         self.pidfile = '/var/run/wicd/wicd.pid'
         self.initfilename = os.path.basename(self.initfile)

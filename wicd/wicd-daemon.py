@@ -1066,7 +1066,8 @@ class WirelessDaemon(dbus.service.Object):
     def SaveWirelessNetworkProfile(self, id):
         """ Writes a wireless profile to disk. """
         def write_script_ent(prof, script):
-            self.config.set(prof, script, None)
+            if not self.config.has_option(prof, script):
+                self.config.set(prof, script, None)
 
         cur_network = self.LastScan[id]
         bssid_key = cur_network["bssid"]
@@ -1088,12 +1089,12 @@ class WirelessDaemon(dbus.service.Object):
         
         write_script_ent(bssid_key, "beforescript")
         write_script_ent(bssid_key, "afterscript")
-        write_script_ent(bssid_key, "disconnect")
+        write_script_ent(bssid_key, "disconnectscript")
         
         if cur_network["use_settings_globally"]:
             write_script_ent(essid_key, "beforescript")
             write_script_ent(essid_key, "afterscript")
-            write_script_ent(essid_key, "disconnect")
+            write_script_ent(essid_key, "disconnectscript")
             
         self.config.write()
 
@@ -1120,7 +1121,12 @@ class WirelessDaemon(dbus.service.Object):
         """ Removes the global entry for the networkid provided. """
         essid_key = "essid:" + str(self.LastScan[networkid])
         self.config.remove_section(essid_key)
-            
+        
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def ReloadConfig(self):
+        """ Reloads the active config file. """
+        self.config.reload()
+    
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendStartScanSignal(self):
         """ Emits a signal announcing a scan has started. """
@@ -1395,6 +1401,11 @@ class WiredDaemon(dbus.service.Object):
         if not sections:
             sections = [""]
         return sections
+    
+    @dbus.service.method('org.wicd.daemon.wired')
+    def ReloadConfig(self):
+        """ Reloads the active config file. """
+        self.config.reload()
 
 
 def usage():

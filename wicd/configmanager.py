@@ -113,3 +113,6 @@ class ConfigManager(ConfigParser):
         """
         if self.has_section(section):
             ConfigParser.remove_section(self, section)
+            
+    def reload(self):
+        self.read(self.config_file)

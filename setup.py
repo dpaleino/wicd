@@ -162,20 +162,33 @@ class configure(Command):
                   'Please report this warning, along with the name of your ' + \
                   'distribution, to the wicd developers.'
 
-        # Decide whether to override the pm-utils file locations
+        # Try to get the pm-utils sleep hooks directory from pkg-config and
+        # the kde prefix from kde-config
+        # Don't run these in a shell because it's not needed and because shell 
+        # swallows the OSError we would get if {pkg,kde}-config do not exist
+        # If we don't get anything from *-config, or it didn't run properly, 
+        # or the path is not a proper absolute path, raise an error
         try:
-            pmtemp = subprocess.Popen("pkg-config" + " --variable=pm_sleephooks pm-utils", shell=True, stdout=subprocess.PIPE
-);
-        except:
-            len(pmtemp.stdout) == 0;
-            self.pmutils = pmtemp.stdout.readline().strip();
+            pmtemp = subprocess.Popen(["pkg-config","--variable=pm_sleephooks","pm-utils"], stdout=subprocess.PIPE)
+            returncode = pmtemp.wait() # let it finish, and get the exit code
+            pmutils_candidate = pmtemp.stdout.readline().strip() # read stdout
+            if len(pmutils_candidate) == 0 or returncode != 0 or not os.path.isabs(pmutils_candidate):
+                raise ValueError
+            else:
+               self.pmutils = pmutils_candidate
+        except (OSError, ValueError):
+            pass # use our default
 
-        # Decide whether to override the kde autostart path
         try:
-            kdetemp = subprocess.Popen("kde-config" + " --prefix", shell=True, stdout=subprocess.PIPE);
-        except:
-            len(kdetemp.stdout) == 0;
-            self.kdedir = kdetemp.stdout.readline().strip();
+            kdetemp = subprocess.Popen(["kde-config","--prefix"], stdout=subprocess.PIPE)
+            returncode = kdetemp.wait() # let it finish, and get the exit code
+            kdedir_candidate = kdetemp.stdout.readline().strip() # read stdout
+            if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
+                raise ValueError
+            else:
+               self.kdedir = kdedir_candidate
+        except (OSError, ValueError):
+            pass # use our default
 
         self.python = '/usr/bin/python'
         self.pidfile = '/var/run/wicd/wicd.pid'

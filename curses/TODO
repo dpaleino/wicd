@@ -1,12 +1,14 @@
 Things to do (in no particular order):
 
-*   Integrate a glib mainloop into the UI so that it can be aware of whether
-    we're connecting or not by some means.
 *   Implement the ability to connect/disconnect to/from stuff.
     Yeah, I know that it's important...
 *   Make a settings dialog
     * Implement something that resembles a combo box in urwid
 *   Make a network config dialog
+*   Make an about dialog
+*   Implement a keyhandler function for the overall frame
+    * Make keystrokes customizable
+*   Make color schemes customizable
 
 Oh, and most importantly:
 

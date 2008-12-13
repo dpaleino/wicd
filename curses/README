@@ -1,4 +1,4 @@
-This is a CURSES-based client for wicd.  It is designed to imitate wicd-client
+This is a curses-based client for wicd.  It is designed to imitate wicd-client
 as much as can be done with a console-based interface.  It is written using the
 Urwid (http://excess.org/urwid) toolkit, and thus requires it.
 
@@ -10,4 +10,10 @@ connected to anything or not, and that is updated in real time.  It does not
 actually connect you to anything yet.  I'll get on that when I have more free
 time than I do now (which will be soon).
 
-~ ampsaltis
+Other important things:
+
+F5: refresh wireless networks
+F8: quit 
+
+
+~nacl

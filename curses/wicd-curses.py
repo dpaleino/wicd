@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" wicd-curses -- a (cursed-based) console interface to wicd
+""" wicd-curses -- a (curses-based) console interface to wicd
 
 Provides the a console UI for wicd, so that people with broken X servers can
 at least get a network connection.  Or for those who don't like using X.  :-)
@@ -44,13 +44,9 @@ import dbus.service
 # It took me a while to figure out that I have to use this.
 import gobject
 
-# Other stuff
+# Other important wicd-related stuff
 import wicd.misc as misc
 #import sys
-
-# Both of these are not currently used, until I can best resolve how to use them
-#import functions
-#from functions import language #,Functions
 
 # Translations for the text that people will see... as of yet.  This code is
 # already found in the gui.py file
@@ -216,6 +212,8 @@ class appGUI():
         # And I can't use it yet b/c of that blasted glib mainloop
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
 
+        #self.update_ct = 0
+        
         txt = urwid.Text("Wicd Curses Interface",align='right')
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
@@ -224,7 +222,6 @@ class appGUI():
         self.update_netlist()
         #walker = urwid.SimpleListWalker(gen_network_list())
 
-        #thePile = urwid.Pile(walker)
         footer = urwid.AttrWrap(urwid.Text("Something will go here... eventually!"),'important')
         # Pop takes a number!
         #walker.pop(1)
@@ -246,7 +243,9 @@ class appGUI():
         netElems = gen_network_list()
         self.netList = NetList(netElems)
 
+    # Update the footer/status bar
     def update_status(self):
+        #self.update_ct += 1
         if check_for_wired(wired.GetWiredIP(),self.set_status):
             return True
         elif check_for_wireless(wireless.GetIwconfig(),
@@ -256,58 +255,77 @@ class appGUI():
             self.set_status(language['not_connected'])
             return True
 
+    # Set the status text, called by the update_status method
     def set_status(self,text):
         self.frame.set_footer(urwid.AttrWrap(urwid.Text(text),'important'))
 
     # Yeah, I'm copying code.  Anything wrong with that?
-    #def dbus_scan_finished(self):
-    #    #if not self.connecting:
-    #        #self.refresh_networks(fresh=False)
-    #    self.unlock_screen()
+    def dbus_scan_finished(self):
+        # I'm pretty sure that I'll need this later.
+        #if not self.connecting:
+            #self.refresh_networks(fresh=False)
+        self.unlock_screen()
 
     # Same, same, same, same, same, same
-    #def dbus_scan_started(self):
-    #    self.lock_screen()
+    def dbus_scan_started(self):
+        self.lock_screen()
 
     # Run the bleeding thing.
     # Calls the main loop.  This is how the thing should be started, at least
     # until I decide to change it, whenever that is.
     def main(self):
-        misc.RenameProcess('urwicd')
+        misc.RenameProcess('wicd-curses')
         self.ui = urwid.curses_display.Screen()
+        # Color scheme
+        # Other potential color schemes can be found at:
+        # http://excess.org/urwid/wiki/RecommendedPalette
         self.ui.register_palette([
             ('body','light gray','black'),
-            ('selected','dark blue','light gray'),
+            ('selected','dark magenta','light gray'),
             ('header','light blue','black'),
             ('important','light red','black')])
+        # This is a wrapper around a function that calls another a function that is a
+        # wrapper around a infinite loop.  Fun.
         self.ui.run_wrapper(self.run)
 
     # Main program loop
     def run(self):
-        size = self.ui.get_cols_rows()
+        self.size = self.ui.get_cols_rows()
 
-        # This doesn't do what I need it to do!
-        # What I will have to do is... (unless I totally misunderstand glib)
-        # 1. Stick all this loop into another function (probably update_ui)
-        # 2. Make a glib MainLoop object somewhere in this file 
-        # 3. Connect the DBus Main Loop to that main loop
-        # 4. Throw update_ui into gobject.timeout()
-        # 5. Pray.  :-)
-        while True:
-            self.update_status()
-            canvas = self.frame.render( (size) )
-            self.ui.draw_screen((size),canvas)
-            keys = self.ui.get_input()
-            if "f8" in keys:
-                break
-            for k in keys:
-                if k == "window resize":
-                    size = self.ui.get_cols_rows()
-                    continue
-                self.frame.keypress( size, k )
+        # This actually makes some things easier to do, amusingly enough
+        self.loop = gobject.MainLoop()
+        # Update what the interface looks like every 0.5 ms
+        gobject.timeout_add(0.5,self.update_ui)
+        # Update the connection status on the bottom every 0.5 s
+        gobject.timeout_add(500,self.update_status)
+        # Terminate the loop if the UI is terminated.
+        gobject.idle_add(self.stop_loop)
+        self.loop.run()
 
-# Mostly borrowed from gui.py, but also with the standard "need daemon first"
-# check
+    # Redraw the screen
+    def update_ui(self):
+        #self.update_status()
+        canvas = self.frame.render( (self.size) )
+        self.ui.draw_screen((self.size),canvas)
+        keys = self.ui.get_input()
+        # Should make a keyhandler method, but this will do until I get around to
+        # that stage
+        if "f8" in keys:
+            return False
+        if "f5" in keys:
+            wireless.Scan()
+        for k in keys:
+            if k == "window resize":
+                self.size = self.ui.get_cols_rows()
+                continue
+            self.frame.keypress( self.size, k )
+        return True
+
+    # Terminate the loop, used as the glib mainloop's idle function
+    def stop_loop(self):
+        self.loop.quit()
+
+# Mostly borrowed from gui.py, but also with the "need daemon first" check
 def setup_dbus():
     global proxy_obj, daemon, wireless, wired, config, dbus_ifaces
     try:
@@ -329,11 +347,10 @@ setup_dbus()
 if __name__ == '__main__':
     app = appGUI()
 
-    # This stuff doesn't work yet.  I have to stick a gobject mainloop in to get
-    # it to work... It'll be done soon enough
-    #bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
-    #                        'org.wicd.daemon')
-    #bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
-    #                        'org.wicd.daemon')
+    # Connect signals and whatnot to UI screen control functions
+    bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
+                            'org.wicd.daemon')
+    bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
+                            'org.wicd.daemon')
 
     app.main()

@@ -1,0 +1,13 @@
+This is a CURSES-based client for wicd.  It is designed to imitate wicd-client
+as much as can be done with a console-based interface.  It is written using the
+Urwid (http://excess.org/urwid) toolkit, and thus requires it.
+
+That's all there is to it, really.  It's not going to install itself until I 
+work on it more and figure out how to use distutils.
+
+Right now, it only lists current available networks, and whether you are
+connected to anything or not, and that is updated in real time.  It does not 
+actually connect you to anything yet.  I'll get on that when I have more free
+time than I do now (which will be soon).
+
+~ ampsaltis

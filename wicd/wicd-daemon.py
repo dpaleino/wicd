@@ -294,7 +294,7 @@ class WicdDaemon(dbus.service.Object):
         if self.suspended:
             self.Disconnect()
         else:
-            self.forced_disconnect = False
+            self.SetForcedDisconnect(False)
 
     @dbus.service.method('org.wicd.daemon')
     def GetSuspend(self):

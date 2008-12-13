@@ -231,7 +231,7 @@ class ConnectionStatus(object):
         
         # Some checks to keep reconnect retries from going crazy.
         if self.reconnect_tries > 2 and \
-           time.time() - self.last_reconnect_time < 300:
+           (time.time() - self.last_reconnect_time) < 300:
             return
 
         self.reconnecting = True

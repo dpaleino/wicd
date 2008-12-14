@@ -66,7 +66,7 @@ class ConfigManager(RawConfigParser):
         """ Calls the set_option method. """
         self.set_option(*args, **kargs)
         
-    def get_option(self, section, option, default=None):
+    def get_option(self, section, option, default="__None__"):
         """ Wrapper around ConfigParser.get. 
         
         Automatically adds any missing sections, adds the ability
@@ -82,10 +82,13 @@ class ConfigManager(RawConfigParser):
             if default:
                 print ''.join(['found ', option, ' in configuration ', ret])
         else:
-            print ''.join(['did not find ', option,
+            if default != "__None__":
+                print ''.join(['did not find ', option,
                            ' in configuration, setting default ', str(default)])
-            self.set(section, option, str(default), save=True)
-            ret = default
+                self.set(section, option, str(default), save=True)
+                ret = default
+            else:
+                ret = None
             
         # Try to intelligently handle the type of the return value.
         try:

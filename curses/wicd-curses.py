@@ -57,7 +57,6 @@ language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
 language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
 language['not_connected'] = _('Not connected')
 
-# I might not need this... but I'm not sure so much yet.
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
 else:
@@ -112,35 +111,72 @@ def gen_network_list():
     #theList = [urwid.Text(gen_list_header())]
     theList = []
     
+    # Pick which strength measure to use based on what the daemon says
+    if daemon.GetSignalDisplayType() == 0:
+        strenstr = 'quality'
+        gap = 3
+    else:
+        strenstr = 'strength'
+        gap = 5
+
     id = 0
     for profile in config.GetWiredProfileList():
         if id == 0:
             #theList.append(urwid.Text("Wired Network(s):"))
             theList.append(ListElem("Wired Network(s):"))
-        theList.append(NetElem('%3s%*s' % (id, 33+len(profile),profile)))
-        ++id
+        theString = '%4s%*s' % (id, 32+len(profile),profile)
+        #### THIS IS wired.blah() in experimental
+        #print config.GetLastUsedWiredNetwork()
+        # Tag if no wireless IP present, and wired one is
+        if wireless.GetWirelessIP() == None and wired.GetWiredIP() != None:
+            theString = '>'+theString[1:]
+
+        theList.append(NetElem(theString,id ))
+        id+=1
     for network_id in range(0, wireless.GetNumberOfNetworks()):
         if network_id == 0:
             theList.append(ListElem("Wireless Network(s):"))
-        elem = '%3s %3s%%  %17s  %3s    %s' % ( network_id,
-            wireless.GetWirelessProperty(network_id, 'quality'),
+        
+        theString = '%4s %*s  %17s  %3s    %s' % ( network_id,
+            gap,daemon.FormatSignalForPrinting(
+                str(wireless.GetWirelessProperty(network_id, strenstr))),
             wireless.GetWirelessProperty(network_id, 'bssid'),
             wireless.GetWirelessProperty(network_id, 'channel'),
             wireless.GetWirelessProperty(network_id, 'essid'))
-        theList.append(NetElem(elem))
+        # This returns -1 if no ID is found, so we I could put this outside of this
+        # loop.  I'll do that soon.
+        if wireless.GetCurrentNetworkID( wireless.GetIwconfig() ) == network_id:
+            theString = '>'+theString[1:]
+        theList.append(NetElem(theString,network_id))
     return theList
 
-# Widget representing an individual network element
-# This will be more complicated later, once I know the rest of it works
-class NetElem(urwid.WidgetWrap):
-    """Defines a selectable element, either a wireless or wired network profile,
-    in a NetList
-    """
+class ListElem(urwid.WidgetWrap):
+    """ Defines a (generic) non-selectable element that hangs out in a NetList"""
     def __init__(self, theText):
         self.label = urwid.AttrWrap(urwid.Text(theText),None)
         w = self.label
         self.__super.__init__(w)
+        #self.update_w()
+    def selectable(self):
+        return False
+
+    def update_w(self):
+        pass
+
+    # Don't handle any keys in the superclass
+    def keypress(self, size, key):
+        return key
+
+# Widget representing an individual network
+# This will be more complicated later, once I know the rest of it works
+class NetElem(ListElem):
+    """Defines a selectable element, either a wireless or wired network profile,
+    in a NetList
+    """
+    def __init__(self, theText,theId):
         self.selected = False
+        self.id = theId
+        self.__super.__init__(theText)
         self.update_w()
    
     # Make the thing selectable.
@@ -161,15 +197,6 @@ class NetElem(urwid.WidgetWrap):
     def keypress(self, size, key):
         return key
 
-# Hackish.  Designed to make my problems go away until I get around to cleaning
-# this thing up.  NetElem should be a subclass of ListElem.  It'll make more
-# sense later, once I start cleaning up some of the code...
-class ListElem(NetElem):
-    """ Defines a non-selectable element that happens to be hanging out in a 
-    NetList
-    """
-    def selectable(self):
-        return False
 
 # Class representing the list of networks that appears in the middle.
 # Just a listbox with some special features
@@ -182,7 +209,7 @@ class NetList(urwid.WidgetWrap):
         w = self.lbox
         self.__super.__init__(w)
         #self.selected = False
-        # The first element in the list is to be selected first, since that one
+        # The 1th element in the list is to be selected first, since that one
         # is a header
         elems[1].selected = True
         elems[1].update_w()
@@ -190,15 +217,18 @@ class NetList(urwid.WidgetWrap):
         
     # Pick the selected-ness of the app
     def update_selected(self,is_selected):
-        (elem, num) = self.w.get_focus()
+        (elem, num) = self._w.get_focus()
         elem.selected = is_selected
         elem.update_w()
 
     # Updates the selected element, moves the focused element, and then selects
-    # that one, then updates its selection status
+    # that one, then updates its selection status.
+    # TODO: Pressing "Enter" would disconnect you from your current network, and
+    # connect you to the selected one
     def keypress(self, size, key):
+        #if key == 'down' or key == 'up':
         self.update_selected(False)
-        self.w.keypress(size,key)
+        self._w.keypress(size,key)
         (widget, num) = self.lbox.get_focus()
         widget.selected = True
         self.update_selected(True)

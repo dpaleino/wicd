@@ -9,6 +9,7 @@ Things to do (in no particular order):
 *   Implement a keyhandler function for the overall frame
     * Make keystrokes customizable
 *   Make color schemes customizable
+*   Add code to restore the screen if _anything_ bad happens
 
 Oh, and most importantly:
 

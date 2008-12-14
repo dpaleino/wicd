@@ -20,25 +20,23 @@
 import dbus
 import time
 import gobject
+import sys
 from dbus.mainloop.glib import DBusGMainLoop
 
 DBusGMainLoop(set_as_default=True)
 bus = dbus.SystemBus()
 proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
 daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+loop = gobject.MainLoop()
 
-def reply_handle():
-    loop.quit()
-def error_handle(e):
+
+def handler(*args):
     loop.quit()
 
 print daemon.Hello()
 time.sleep(3)
 daemon.SetSuspend(False)
 if not daemon.CheckIfConnecting():
-    print daemon.AutoConnect(True, reply_handler=reply_handle,
-                             error_handler=error_handle)
     daemon.SetForcedDisconnect(False)
-    
-loop = gobject.MainLoop()
-loop.run()
+    daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)
+

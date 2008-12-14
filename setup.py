@@ -186,7 +186,7 @@ class configure(Command):
             if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
                 raise ValueError
             else:
-               self.kdedir = kdedir_candidate
+               self.kdedir = kdedir_candidate + '/share/autostart'
         except (OSError, ValueError):
             pass # use our default
 

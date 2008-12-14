@@ -1540,10 +1540,11 @@ def main(argv):
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     gobject.threads_init()
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async(["/usr/bin/python", "-O", 
-                                                    wpath.lib + "monitor.py"], 
-                                       flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
-        signal.signal(signal.SIGTERM, sigterm_caught)
+        (child_pid, x, x, x) = gobject.spawn_async(
+            [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")], 
+            flags=gobject.SPAWN_CHILD_INHERITS_STDIN
+        )
+    signal.signal(signal.SIGTERM, sigterm_caught)
     
     # Enter the main loop
     mainloop = gobject.MainLoop()
@@ -1557,8 +1558,9 @@ def main(argv):
 def sigterm_caught(sig=None, frame=None):
     """ Called when a SIGTERM is caught, kills monitor.py before exiting. """
     global child_pid
-    print 'Daemon going down, killing wicd-monitor...'
-    os.kill(child_pid, signal.SIGTERM)
+    if child_pid:
+        print 'Daemon going down, killing wicd-monitor...'
+        os.kill(child_pid, signal.SIGTERM)
     print 'Removing PID file...'
     if os.path.exists(wpath.pidfile):
         os.remove(wpath.pidfile)

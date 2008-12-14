@@ -53,20 +53,24 @@ except:
 proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
 
-def setup_dbus():
+def setup_dbus(force=True):
     global bus, daemon, wireless, wired
     
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
-        print "Can't connect to the daemon, trying to start it automatically..."
-        misc.PromptToStartDaemon()
-        try:
-            dbusmanager.connect_to_dbus()
-        except DBusException:
-            error(None, "Could not connect to wicd's D-Bus interface.  " +
-                  "Make sure the daemon is started.")
-            sys.exit(1)
+        if force:
+            print "Can't connect to the daemon, trying to start it automatically..."
+            misc.PromptToStartDaemon()
+            try:
+                dbusmanager.connect_to_dbus()
+            except DBusException:
+                error(None, "Could not connect to wicd's D-Bus interface.  " +
+                      "Check the wicd log for error messages.")
+                return False
+        else:  
+            return False
+            
                 
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
@@ -75,6 +79,16 @@ def setup_dbus():
     wired = dbus_ifaces['wired']
     
     return True
+
+@misc.threaded
+def handle_no_dbus():
+    print "Wicd daemon is shutting down!"
+    error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+    while True:
+        time.sleep(10)
+        print "Trying to reconnect.."
+        if not setup_dbus(force=False):
+            print "Failed to reconnect to the daemon."
       
 def error(parent, message): 
     """ Shows an error dialog """
@@ -277,7 +291,9 @@ class appGui(object):
                         'org.wicd.daemon.wireless')
         bus.add_signal_receiver(self.update_connect_buttons, 'StatusChanged',
                         'org.wicd.daemon')
-        bus.add_signal_receiver(setup_dbus, "DaemonClosing", "org.wicd.daemon")
+        if standalone:
+            bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
+                                    "org.wicd.daemon")
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:

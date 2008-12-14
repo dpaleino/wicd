@@ -59,7 +59,7 @@ if not hasattr(gtk, "StatusIcon"):
         import egg.trayicon
         USE_EGG = True
     except ImportError:
-        print 'Unable to load tray icon: Missing egg.trayicon module.'
+        print 'Unable to load tray icon: Missing both egg.trayicon and gtk.StatusIcon modules.'
         ICON_AVAIL = False
 
 misc.RenameProcess("wicd-client")
@@ -125,7 +125,10 @@ class TrayIcon(object):
             self.max_snd_gain = 10000
             self.max_rcv_gain = 10000
             self.animate = animate
-            self.update_tray_icon()
+            if DBUS_AVAIL:
+                self.update_tray_icon()
+            else:
+                handle_no_dbus()
 
         def wired_profile_chooser(self):
             """ Launch the wired profile chooser. """
@@ -349,15 +352,6 @@ class TrayIcon(object):
             """ Callback for when a wireless scan finishes. """
             self._is_scanning = False
             self.populate_network_menu()
-            
-        def dbus_lost(self):
-            """ Callback for when the daemon is going down. """
-            global DBUS_AVAIL
-            print "The daemon is going down!!"
-            DBUS_AVAIL = False
-            time.sleep(1)
-            while not setup_dbus():
-                time.sleep(20)
                 
         def on_activate(self, data=None):
             """ Opens the wicd GUI. """
@@ -638,25 +632,48 @@ Arguments:
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
 """
     
-def setup_dbus():
-    global daemon, wireless, wired, DBUS_AVAIL
+def setup_dbus(force=True):
+    global bus, daemon, wireless, wired, DBUS_AVAIL
     
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
-        print "Can't connect to the daemon, trying to start it automatically..."
-        misc.PromptToStartDaemon()
-        try:
-            dbusmanager.connect_to_dbus()
-        except DBusException:
-            gui.error(None, language['cannot_start_daemon'])
-            sys.exit(1)
+        if force:
+            print "Can't connect to the daemon, trying to start it automatically..."
+            misc.PromptToStartDaemon()
+            try:
+                dbusmanager.connect_to_dbus()
+            except DBusException:
+                gui.error(None, "Could not connect to wicd's D-Bus interface.  " +
+                      "Check the wicd log for error messages.")
+                return False
+        else:  
+            return False
+                
+    bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
     DBUS_AVAIL = True
+    
     return True
+
+@misc.threaded
+def handle_no_dbus():
+    global DBUS_AVAIL
+    print "Wicd daemon is shutting down!"
+    gui.error(None, "The wicd daemon has shut down, the UI will not function " +
+              "properly until it is restarted.")
+    while True:
+        time.sleep(10)
+        print "Trying to reconnect.."
+        if not setup_dbus(force=False):
+            print "Failed to reconnect to the daemon."
+        else:
+            gui.setup_dbus(force=False)
+            DBUS_AVAIL = True
+            return True
 
 def main(argv):
     """ The main frontend program.
@@ -702,7 +719,7 @@ def main(argv):
 
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).
-    if daemon.GetNeedWiredProfileChooser():
+    if DBUS_AVAIL and daemon.GetNeedWiredProfileChooser():
         daemon.SetNeedWiredProfileChooser(False)
         tray_icon.icon_info.wired_profile_chooser()
         
@@ -715,8 +732,7 @@ def main(argv):
                             'org.wicd.daemon.wireless')
     bus.add_signal_receiver(tray_icon.tr.tray_scan_started,
                             'SendStartScanSignal', 'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(tray_icon.tr.dbus_lost,
-                            "DaemonClosing", 'org.wicd.daemon')
+    bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 'org.wicd.daemon')
     print 'Done.'
     mainloop = gobject.MainLoop()
     mainloop.run()

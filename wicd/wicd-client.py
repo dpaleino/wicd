@@ -129,6 +129,7 @@ class TrayIcon(object):
                 self.update_tray_icon()
             else:
                 handle_no_dbus()
+                self.set_not_connected_state()
 
         def wired_profile_chooser(self):
             """ Launch the wired profile chooser. """
@@ -138,7 +139,7 @@ class TrayIcon(object):
         def set_wired_state(self, info):
             """ Sets the icon info for a wired state. """
             wired_ip = info[0]
-            self.tr.set_from_file(wpath.images + "wired.png")
+            self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
             self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
                                                                      wired_ip))
             
@@ -168,12 +169,14 @@ class TrayIcon(object):
                 cur_network = info[1]
             self.tr.set_tooltip(language['connecting'] + " to " + 
                                 cur_network + "...")
-            self.tr.set_from_file(wpath.images + "no-signal.png")  
+            self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
             
-        def set_not_connected_state(self, info):
+        def set_not_connected_state(self, info=None):
             """ Set the icon info for the not connected state. """
             self.tr.set_from_file(wpath.images + "no-signal.png")
-            if wireless.GetKillSwitchEnabled():
+            if not DBUS_AVAIL:
+                status = language['no_daemon_tooltip']
+            elif wireless.GetKillSwitchEnabled():
                 status = (language['not_connected'] + " (" + 
                          language['killswitch_enabled'] + ")")
             else:
@@ -182,7 +185,7 @@ class TrayIcon(object):
 
         def update_tray_icon(self, state=None, info=None):
             """ Updates the tray icon and current connection status. """
-            if not self.use_tray: return False
+            if not self.use_tray or not DBUS_AVAIL: return False
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
@@ -345,11 +348,13 @@ class TrayIcon(object):
             
         def tray_scan_started(self):
             """ Callback for when a wireless scan is started. """
+            if not DBUS_AVAIL: return
             self._is_scanning = True
             self.init_network_menu()
             
         def tray_scan_ended(self):
             """ Callback for when a wireless scan finishes. """
+            if not DBUS_AVAIL: return
             self._is_scanning = False
             self.populate_network_menu()
                 
@@ -468,6 +473,9 @@ class TrayIcon(object):
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             submenu = net_menuitem.get_submenu()
             self._clear_menu(submenu)
+            if not DBUS_AVAIL:
+                net_menuitem.show()
+                return
 
             is_connecting = daemon.CheckIfConnecting()
             num_networks = wireless.GetNumberOfNetworks()
@@ -659,21 +667,29 @@ def setup_dbus(force=True):
     
     return True
 
-@misc.threaded
 def handle_no_dbus():
     global DBUS_AVAIL
+    DBUS_AVAIL = False
+    gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
     gui.error(None, "The wicd daemon has shut down, the UI will not function " +
               "properly until it is restarted.")
+    _wait_for_dbus()
+    return False
+
+@misc.threaded
+def _wait_for_dbus():
+    global DBUS_AVAIL
     while True:
         time.sleep(10)
         print "Trying to reconnect.."
         if not setup_dbus(force=False):
             print "Failed to reconnect to the daemon."
         else:
+            print "Successfully reconnected to the daemon."
             gui.setup_dbus(force=False)
             DBUS_AVAIL = True
-            return True
+            return
 
 def main(argv):
     """ The main frontend program.
@@ -732,7 +748,8 @@ def main(argv):
                             'org.wicd.daemon.wireless')
     bus.add_signal_receiver(tray_icon.tr.tray_scan_started,
                             'SendStartScanSignal', 'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 'org.wicd.daemon')
+    bus.add_signal_receiver(lambda: handle_no_dbus() or tray_icon.icon_info.set_not_connected_state(), 
+                            "DaemonClosing", 'org.wicd.daemon')
     print 'Done.'
     mainloop = gobject.MainLoop()
     mainloop.run()

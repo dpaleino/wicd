@@ -52,10 +52,10 @@ except:
 
 proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
+DBUS_AVAIL = False
 
 def setup_dbus(force=True):
-    global bus, daemon, wireless, wired
-    
+    global bus, daemon, wireless, wired, DBUS_AVAIL
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
@@ -70,25 +70,36 @@ def setup_dbus(force=True):
                 return False
         else:  
             return False
-            
-                
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
+    DBUS_AVAIL = True
     
     return True
 
-@misc.threaded
-def handle_no_dbus():
+def handle_no_dbus(from_tray=False):
+    global DBUS_AVAIL
+    DBUS_AVAIL = False
+    if from_tray: return False
     print "Wicd daemon is shutting down!"
     error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+    _wait_for_dbus()
+    return False
+
+@misc.threaded
+def _wait_for_dbus():
+    global DBUS_AVAIL
     while True:
         time.sleep(10)
         print "Trying to reconnect.."
         if not setup_dbus(force=False):
             print "Failed to reconnect to the daemon."
+        else:
+            print "Successfully reconnected to the daemon."
+            DBUS_AVAIL = True
+            return
       
 def error(parent, message): 
     """ Shows an error dialog """
@@ -481,6 +492,7 @@ class appGui(object):
         current network state is the same as the previous.
         
         """
+        if not DBUS_AVAIL: return
         if not state:
             state, x = daemon.GetConnectionStatus()
         
@@ -536,15 +548,18 @@ class appGui(object):
         This method is called after a wireless scan is completed.
         
         """
+        if not DBUS_AVAIL: return
         if not self.connecting:
             gobject.idle_add(self.refresh_networks, None, False, None)
             
     def dbus_scan_started(self):
         """ Called when a wireless scan starts. """
+        if not DBUS_AVAIL: return
         self.network_list.set_sensitive(False)
     
     def refresh_clicked(self, widget=None):
         """ Kick off an asynchronous wireless scan. """
+        if not DBUS_AVAIL: return
         self.refreshing = True
         wireless.Scan(reply_handler=None, error_handler=None)
 

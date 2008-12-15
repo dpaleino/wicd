@@ -9,7 +9,8 @@ Things to do (in no particular order):
 *   Implement a keyhandler function for the overall frame
     * Make keystrokes customizable
 *   Make color schemes customizable
-*   Add code to restore the screen if _anything_ bad happens
+*   Add code to restore the terminal if _anything_ bad happens.  I have an idea about
+    how to do it.  Ask me about it if you know some Python.
 
 Oh, and most importantly:
 

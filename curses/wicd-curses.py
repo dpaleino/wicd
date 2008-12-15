@@ -3,7 +3,7 @@
 """ wicd-curses -- a (curses-based) console interface to wicd
 
 Provides the a console UI for wicd, so that people with broken X servers can
-at least get a network connection.  Or for those who don't like using X.  :-)
+at least get a network connection.  Or those who don't like using X.  :-)
 
 """
 
@@ -30,7 +30,7 @@ at least get a network connection.  Or for those who don't like using X.  :-)
     This is probably due to the fact that I did not really know what I was doing
     when I started writing this.  It works, so I guess that's all that matters.
 
-    Comments, criticisms, patches all welcome!
+    Comments, criticisms, patches, bug reports all welcome!
 """
 
 # UI stuff
@@ -128,10 +128,11 @@ def gen_network_list():
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
         # Tag if no wireless IP present, and wired one is
-        if wireless.GetWirelessIP() == None and wired.GetWiredIP() != None:
+        is_active = wireless.GetWirelessIP() == None and wired.GetWiredIP() != None
+        if is_active:
             theString = '>'+theString[1:]
 
-        theList.append(NetElem(theString,id ))
+        theList.append(NetElem(theString,id,is_active))
         id+=1
     for network_id in range(0, wireless.GetNumberOfNetworks()):
         if network_id == 0:
@@ -145,9 +146,10 @@ def gen_network_list():
             wireless.GetWirelessProperty(network_id, 'essid'))
         # This returns -1 if no ID is found, so we I could put this outside of this
         # loop.  I'll do that soon.
-        if wireless.GetCurrentNetworkID( wireless.GetIwconfig() ) == network_id:
+        is_active = wireless.GetPrintableSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
+        if is_active:
             theString = '>'+theString[1:]
-        theList.append(NetElem(theString,network_id))
+        theList.append(NetElem(theString,network_id,is_active))
     return theList
 
 class ListElem(urwid.WidgetWrap):
@@ -173,10 +175,18 @@ class NetElem(ListElem):
     """Defines a selectable element, either a wireless or wired network profile,
     in a NetList
     """
-    def __init__(self, theText,theId):
-        self.selected = False
+    def __init__(self, theText,theId,is_active):
+        self.is_selected = False
         self.id = theId
         self.__super.__init__(theText)
+        
+        # Color the text differently if we are connected to that network
+        self.body     = 'body'
+        self.selected = 'selected'
+        if is_active:
+            self.body     = 'connected'
+            self.selected = 'connected_sel'
+
         self.update_w()
    
     # Make the thing selectable.
@@ -186,12 +196,12 @@ class NetElem(ListElem):
     # Update the widget.
     # Called by NetList below pretty often
     def update_w(self):
-        if self.selected:
-            self._w.attr = 'selected'
-            self._w.focus_attr = 'selected'
+        if self.is_selected:
+            self._w.attr = self.selected
+            self._w.focus_attr = self.selected
         else:
-            self._w.attr = 'body'
-            self._w.focus_attr = 'body'
+            self._w.attr = self.body
+            self._w.focus_attr = self.body
 
     # Don't handle any keys... yet
     def keypress(self, size, key):
@@ -211,14 +221,14 @@ class NetList(urwid.WidgetWrap):
         #self.selected = False
         # The 1th element in the list is to be selected first, since that one
         # is a header
-        elems[1].selected = True
+        elems[1].is_selected = True
         elems[1].update_w()
         #widget.update_w()
         
     # Pick the selected-ness of the app
     def update_selected(self,is_selected):
         (elem, num) = self._w.get_focus()
-        elem.selected = is_selected
+        elem.is_selected = is_selected
         elem.update_w()
 
     # Updates the selected element, moves the focused element, and then selects
@@ -229,8 +239,8 @@ class NetList(urwid.WidgetWrap):
         #if key == 'down' or key == 'up':
         self.update_selected(False)
         self._w.keypress(size,key)
-        (widget, num) = self.lbox.get_focus()
-        widget.selected = True
+        #(widget, num) = self.lbox.get_focus()
+        #widget.is_selected = True
         self.update_selected(True)
 
 # The Whole Shebang
@@ -239,17 +249,17 @@ class appGUI():
     def __init__(self):
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
-        # And I can't use it yet b/c of that blasted glib mainloop
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
 
-        #self.update_ct = 0
-        
+        #self.update_ct = 0 
         txt = urwid.Text("Wicd Curses Interface",align='right')
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
 
         header = urwid.AttrWrap(txt, 'header')
-        self.update_netlist()
+        #self.update_netlist()
+        netElems = gen_network_list()
+        self.netList = NetList(netElems)
         #walker = urwid.SimpleListWalker(gen_network_list())
 
         footer = urwid.AttrWrap(urwid.Text("Something will go here... eventually!"),'important')
@@ -258,6 +268,7 @@ class appGUI():
         #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','selected')
         self.frame = urwid.Frame(self.netList, header=header,footer=footer)
         #self.frame = urwid.Frame(self.screen_locker, header=header,footer=footer)
+        self.prev_state = False
         self.update_status()
 
     # Does what it says it does
@@ -265,13 +276,22 @@ class appGUI():
         self.frame.set_body(self.screen_locker)
 
     def unlock_screen(self):
-        self.update_netlist()
+        self.update_netlist(force_check=True)
         self.frame.set_body(self.netList)
 
     # Be clunky until I get to a later stage of development.
-    def update_netlist(self):
-        netElems = gen_network_list()
-        self.netList = NetList(netElems)
+    # Update the list of networks.  Usually called by DBus.
+    # TODO: Preserve current focus when updating the list.
+    def update_netlist(self,state=None, x=None, force_check=False):
+        """ Updates the overall network list."""
+        if not state:
+            state, x = daemon.GetConnectionStatus()
+        if self.prev_state != state or force_check:
+            netElems = gen_network_list()
+            self.netList = NetList(netElems)
+            self.frame.set_body(self.netList)
+            
+        self.prev_state = state
 
     # Update the footer/status bar
     def update_status(self):
@@ -291,10 +311,14 @@ class appGUI():
 
     # Yeah, I'm copying code.  Anything wrong with that?
     def dbus_scan_finished(self):
-        # I'm pretty sure that I'll need this later.
-        #if not self.connecting:
-            #self.refresh_networks(fresh=False)
-        self.unlock_screen()
+            # I'm pretty sure that I'll need this later.
+            #if not self.connecting:
+                #self.refresh_networks(fresh=False)
+            self.unlock_screen()
+            # I'm hoping that this will resolve Adam's problem with the screen lock
+            # remaining onscreen until a key is pressed.  It goes away perfectly well
+            # here.
+            self.update_ui()
 
     # Same, same, same, same, same, same
     def dbus_scan_started(self):
@@ -306,14 +330,16 @@ class appGUI():
     def main(self):
         misc.RenameProcess('wicd-curses')
         self.ui = urwid.curses_display.Screen()
-        # Color scheme
+        # Color scheme.
         # Other potential color schemes can be found at:
         # http://excess.org/urwid/wiki/RecommendedPalette
         self.ui.register_palette([
             ('body','light gray','black'),
             ('selected','dark magenta','light gray'),
             ('header','light blue','black'),
-            ('important','light red','black')])
+            ('important','light red','black'),
+            ('connected','dark green','black'),
+            ('connected_sel','black','dark green')])
         # This is a wrapper around a function that calls another a function that is a
         # wrapper around a infinite loop.  Fun.
         self.ui.run_wrapper(self.run)
@@ -325,14 +351,25 @@ class appGUI():
         # This actually makes some things easier to do, amusingly enough
         self.loop = gobject.MainLoop()
         # Update what the interface looks like every 0.5 ms
+        # Apparently this is deprecated.  May have to change this.
         gobject.timeout_add(0.5,self.update_ui)
-        # Update the connection status on the bottom every 0.5 s
-        gobject.timeout_add(500,self.update_status)
+        # Update the connection status on the bottom every 2 s
+        gobject.timeout_add(2000,self.update_status)
         # Terminate the loop if the UI is terminated.
         gobject.idle_add(self.stop_loop)
         self.loop.run()
 
     # Redraw the screen
+    # There exists a problem with this where any exceptions that occur (especially of
+    # the DBus variety) will get spread out on the top of the screen, or not displayed
+    # at all.  Urwid and the glib main loop don't mix all too well.  I may need to
+    # consult the Urwid maintainer about this.
+    #
+    # I  believe that I have a fix for this.  It just involves wrapping every single
+    # function that might throw an exception with a try-except block, using a function
+    # wrapper.  I have tested it, and it seems to work, but I'll save it until I can
+    # evaluate what I need to wrap.  Probably a vast majority of stuff, until I am sure
+    # that this is stable.
     def update_ui(self):
         #self.update_status()
         canvas = self.frame.render( (self.size) )
@@ -382,5 +419,6 @@ if __name__ == '__main__':
                             'org.wicd.daemon')
     bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
                             'org.wicd.daemon')
-
+    bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
+                            'org.wicd.daemon')
     app.main()

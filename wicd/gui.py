@@ -240,7 +240,7 @@ class appGui(object):
         """ Initializes everything needed for the GUI. """
         setup_dbus()
 
-        gladefile = wpath.share + "wicd.glade"
+        gladefile = os.path.join(wpath.share, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
         self.window = self.wTree.get_widget("window1")
         size = daemon.ReadWindowSize("main")
@@ -257,10 +257,10 @@ class appGui(object):
                 "disconnect_clicked" : self.disconnect_all,
                 "main_exit" : self.exit, 
                 "cancel_clicked" : self.cancel_connect,
-                "connect_clicked" : self.connect_hidden,
+                "hidden_clicked" : self.connect_hidden,
                 "preferences_clicked" : self.settings_dialog,
                 "about_clicked" : self.about_dialog,
-                "create_adhoc_network_button_button" : self.create_adhoc_network,
+                "create_adhoc_clicked" : self.create_adhoc_network,
                 }
         self.wTree.signal_autoconnect(dic)
 
@@ -278,8 +278,8 @@ class appGui(object):
 
         self.status_area.hide_all()
 
-        if os.path.exists(wpath.images + "wicd.png"):
-            self.window.set_icon_from_file(wpath.images + "wicd.png")
+        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
+            self.window.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True

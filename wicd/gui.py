@@ -52,29 +52,54 @@ except:
 
 proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
+DBUS_AVAIL = False
 
-def setup_dbus():
-    global bus, daemon, wireless, wired
-    
+def setup_dbus(force=True):
+    global bus, daemon, wireless, wired, DBUS_AVAIL
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
-        print "Can't connect to the daemon, trying to start it automatically..."
-        misc.PromptToStartDaemon()
-        try:
-            dbusmanager.connect_to_dbus()
-        except DBusException:
-            error(None, "Could not connect to wicd's D-Bus interface.  " +
-                  "Make sure the daemon is started.")
-            sys.exit(1)
-                
+        if force:
+            print "Can't connect to the daemon, trying to start it automatically..."
+            misc.PromptToStartDaemon()
+            try:
+                dbusmanager.connect_to_dbus()
+            except DBusException:
+                error(None, "Could not connect to wicd's D-Bus interface.  " +
+                      "Check the wicd log for error messages.")
+                return False
+        else:  
+            return False
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
+    DBUS_AVAIL = True
     
     return True
+
+def handle_no_dbus(from_tray=False):
+    global DBUS_AVAIL
+    DBUS_AVAIL = False
+    if from_tray: return False
+    print "Wicd daemon is shutting down!"
+    error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+    _wait_for_dbus()
+    return False
+
+@misc.threaded
+def _wait_for_dbus():
+    global DBUS_AVAIL
+    while True:
+        time.sleep(10)
+        print "Trying to reconnect.."
+        if not setup_dbus(force=False):
+            print "Failed to reconnect to the daemon."
+        else:
+            print "Successfully reconnected to the daemon."
+            DBUS_AVAIL = True
+            return
       
 def error(parent, message): 
     """ Shows an error dialog """
@@ -215,7 +240,7 @@ class appGui(object):
         """ Initializes everything needed for the GUI. """
         setup_dbus()
 
-        gladefile = wpath.share + "wicd.glade"
+        gladefile = os.path.join(wpath.share, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
         self.window = self.wTree.get_widget("window1")
         size = daemon.ReadWindowSize("main")
@@ -232,10 +257,10 @@ class appGui(object):
                 "disconnect_clicked" : self.disconnect_all,
                 "main_exit" : self.exit, 
                 "cancel_clicked" : self.cancel_connect,
-                "connect_clicked" : self.connect_hidden,
+                "hidden_clicked" : self.connect_hidden,
                 "preferences_clicked" : self.settings_dialog,
                 "about_clicked" : self.about_dialog,
-                "create_adhoc_network_button_button" : self.create_adhoc_network,
+                "create_adhoc_clicked" : self.create_adhoc_network,
                 }
         self.wTree.signal_autoconnect(dic)
 
@@ -253,8 +278,8 @@ class appGui(object):
 
         self.status_area.hide_all()
 
-        if os.path.exists(wpath.images + "wicd.png"):
-            self.window.set_icon_from_file(wpath.images + "wicd.png")
+        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
+            self.window.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True
@@ -277,7 +302,9 @@ class appGui(object):
                         'org.wicd.daemon.wireless')
         bus.add_signal_receiver(self.update_connect_buttons, 'StatusChanged',
                         'org.wicd.daemon')
-        bus.add_signal_receiver(setup_dbus, "DaemonClosing", "org.wicd.daemon")
+        if standalone:
+            bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
+                                    "org.wicd.daemon")
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:
@@ -465,6 +492,7 @@ class appGui(object):
         current network state is the same as the previous.
         
         """
+        if not DBUS_AVAIL: return
         if not state:
             state, x = daemon.GetConnectionStatus()
         
@@ -520,15 +548,18 @@ class appGui(object):
         This method is called after a wireless scan is completed.
         
         """
+        if not DBUS_AVAIL: return
         if not self.connecting:
             gobject.idle_add(self.refresh_networks, None, False, None)
             
     def dbus_scan_started(self):
         """ Called when a wireless scan starts. """
+        if not DBUS_AVAIL: return
         self.network_list.set_sensitive(False)
     
     def refresh_clicked(self, widget=None):
         """ Kick off an asynchronous wireless scan. """
+        if not DBUS_AVAIL: return
         self.refreshing = True
         wireless.Scan(reply_handler=None, error_handler=None)
 

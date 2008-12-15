@@ -29,6 +29,7 @@ import gobject
 import pango
 
 from wicd import misc
+from wicd import wpath
 from wicd.misc import checkboxTextboxToggle, noneToBlankString
 
 daemon = None
@@ -78,6 +79,8 @@ class PreferencesDialog(object):
         
         self.dialog = self.wTree.get_widget("pref_dialog")
         self.dialog.set_title(language['preferences'])
+        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
+            self.dialog.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
         size = daemon.ReadWindowSize("pref")
         width = size[0]
         height = size[1]

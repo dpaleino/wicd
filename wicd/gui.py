@@ -89,12 +89,14 @@ def handle_no_dbus(from_tray=False):
 
 def error(parent, message, block=True): 
     """ Shows an error dialog """
+    def delete_event(dialog, id):
+        dialog.destroy()
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
     if not block:
         dialog.present()
-        dialog.connect("response", lambda *args: dialog.destroy())
+        dialog.connect("response", delete_event)
     else:
         dialog.run()
         dialog.destroy()

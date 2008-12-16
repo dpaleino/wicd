@@ -673,8 +673,7 @@ def handle_no_dbus():
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    gui.error(None, "The wicd daemon has shut down, the UI will not function " +
-              "properly until it is restarted.")
+    gui.error(None, language['lost_dbus'], block=False)
     return False
 
 def main(argv):

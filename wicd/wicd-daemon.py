@@ -1571,7 +1571,10 @@ def sigterm_caught(sig=None, frame=None):
     global child_pid
     if child_pid:
         print 'Daemon going down, killing wicd-monitor...'
-        os.kill(child_pid, signal.SIGTERM)
+        try:
+            os.kill(child_pid, signal.SIGTERM)
+        except OSError:
+            pass
     print 'Removing PID file...'
     if os.path.exists(wpath.pidfile):
         os.remove(wpath.pidfile)

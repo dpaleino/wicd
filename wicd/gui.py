@@ -84,24 +84,28 @@ def handle_no_dbus(from_tray=False):
     DBUS_AVAIL = False
     if from_tray: return False
     print "Wicd daemon is shutting down!"
-    error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+    error(None, language['lost_dbus'], block=False)
     return False
-      
-def error(parent, message): 
+
+def error(parent, message, block=True): 
     """ Shows an error dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
+    if not block:
+        dialog.present()
+        dialog.connect("response", lambda *args: dialog.destroy())
+    else:
+        dialog.run()
+        dialog.destroy()
     
 def alert(parent, message): 
-    """ Shows an error dialog """
+    """ Shows an warning dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
+    dialog.present()
+    dialog.connect("response", lambda *args: dialog.destroy())
     
 def dummy(x=None):pass
 

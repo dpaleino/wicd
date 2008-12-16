@@ -511,6 +511,7 @@ def get_language_list_gui():
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
                                     "This typically means there was a problem starting the daemon." + \
                                     "Check the wicd log for more info")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     
     return language
 
@@ -536,6 +537,7 @@ def get_language_list_tray():
                                         "This typically means there was a problem starting the daemon." + \
                                         "Check the wicd log for more info")
     language['no_daemon_tooltip'] = _("Wicd daemon unreachable")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     return language
 
 def noneToBlankString(text):

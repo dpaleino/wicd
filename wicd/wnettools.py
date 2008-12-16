@@ -131,6 +131,16 @@ def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
     raise NotImplementedError
 
+    
+def IsValidWpaSuppDriver(driver):
+    """ Returns True if given string is a valid wpa_supplicant driver. """
+    output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iwlan9",
+                       "-c/etc/zzzzzzzz.confzzz"])
+    if re.match("Unsupported driver", output):
+        return False
+    else:
+        return True
+
 
 class BaseInterface(object):
     """ Control a network interface. """

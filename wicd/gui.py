@@ -85,21 +85,7 @@ def handle_no_dbus(from_tray=False):
     if from_tray: return False
     print "Wicd daemon is shutting down!"
     error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
-    _wait_for_dbus()
     return False
-
-@misc.threaded
-def _wait_for_dbus():
-    global DBUS_AVAIL
-    while True:
-        time.sleep(10)
-        print "Trying to reconnect.."
-        if not setup_dbus(force=False):
-            print "Failed to reconnect to the daemon."
-        else:
-            print "Successfully reconnected to the daemon."
-            DBUS_AVAIL = True
-            return
       
 def error(parent, message): 
     """ Shows an error dialog """
@@ -284,6 +270,7 @@ class appGui(object):
         self.first_dialog_load = True
         self.is_visible = True
         self.pulse_active = False
+        self.pref = None
         self.standalone = standalone
         self.wpadrivercombo = None
         self.connecting = False
@@ -305,6 +292,8 @@ class appGui(object):
         if standalone:
             bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
                                     "org.wicd.daemon")
+            bus.add_signal_receiver(lambda: setup_dbus(force=False), 
+                                    "DaemonStarting", "org.wicd.daemon")
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:
@@ -384,10 +373,14 @@ class appGui(object):
     
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
-        pref = PreferencesDialog(self.wTree, dbusmanager.get_dbus_ifaces())
-        if pref.run() == 1:
-            pref.save_results()
-        pref.hide()
+        if not self.pref:
+            self.pref = PreferencesDialog(self.wTree,
+                                          dbusmanager.get_dbus_ifaces())
+        else:
+            self.pref.load_preferences_diag()
+        if self.pref.run() == 1:
+            self.pref.save_results()
+        self.pref.hide()
 
     def connect_hidden(self, widget):
         """ Prompts the user for a hidden network, then scans for it. """

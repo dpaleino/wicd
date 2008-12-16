@@ -113,7 +113,8 @@ class WicdDaemon(dbus.service.Object):
         self.wired.wiface = self.wifi.wiface
         
         signal.signal(signal.SIGTERM, self.DaemonClosing)
-
+        self.DaemonStarting()
+        
         # Scan since we just got started
         if auto_connect:
             print "autoconnecting if needed...", str(self.GetWirelessInterface())
@@ -705,6 +706,11 @@ class WicdDaemon(dbus.service.Object):
         print 'calling wired profile chooser'
         self.SetNeedWiredProfileChooser(True)
         
+    @dbus.service.signal(dbus_interface="org.wicd.daemon", signature='')
+    def DaemonStarting(self):
+        """ Emits a signa indicating the daemon is starting. """
+        pass
+        
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def DaemonClosing(self):
         """ Emits a signal indicating the daemon will be closing. """
@@ -1121,6 +1127,11 @@ class WirelessDaemon(dbus.service.Object):
         """ Removes the global entry for the networkid provided. """
         essid_key = "essid:" + str(self.LastScan[networkid])
         self.config.remove_section(essid_key)
+        
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetWpaSupplicantDrivers(self, drivers):
+        """ Returns all valid wpa_supplicant drivers in a given list. """
+        return self.wifi.GetWpaSupplicantDrivers(drivers)
         
     @dbus.service.method('org.wicd.daemon.wireless')
     def ReloadConfig(self):

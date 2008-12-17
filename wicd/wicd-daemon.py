@@ -113,7 +113,8 @@ class WicdDaemon(dbus.service.Object):
         self.wired.wiface = self.wifi.wiface
         
         signal.signal(signal.SIGTERM, self.DaemonClosing)
-
+        self.DaemonStarting()
+        
         # Scan since we just got started
         if auto_connect:
             print "autoconnecting if needed...", str(self.GetWirelessInterface())
@@ -705,6 +706,11 @@ class WicdDaemon(dbus.service.Object):
         print 'calling wired profile chooser'
         self.SetNeedWiredProfileChooser(True)
         
+    @dbus.service.signal(dbus_interface="org.wicd.daemon", signature='')
+    def DaemonStarting(self):
+        """ Emits a signa indicating the daemon is starting. """
+        pass
+        
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def DaemonClosing(self):
         """ Emits a signal indicating the daemon will be closing. """
@@ -1066,7 +1072,8 @@ class WirelessDaemon(dbus.service.Object):
     def SaveWirelessNetworkProfile(self, id):
         """ Writes a wireless profile to disk. """
         def write_script_ent(prof, script):
-            self.config.set(prof, script, None)
+            if not self.config.has_option(prof, script):
+                self.config.set(prof, script, None)
 
         cur_network = self.LastScan[id]
         bssid_key = cur_network["bssid"]
@@ -1088,12 +1095,12 @@ class WirelessDaemon(dbus.service.Object):
         
         write_script_ent(bssid_key, "beforescript")
         write_script_ent(bssid_key, "afterscript")
-        write_script_ent(bssid_key, "disconnect")
+        write_script_ent(bssid_key, "disconnectscript")
         
         if cur_network["use_settings_globally"]:
             write_script_ent(essid_key, "beforescript")
             write_script_ent(essid_key, "afterscript")
-            write_script_ent(essid_key, "disconnect")
+            write_script_ent(essid_key, "disconnectscript")
             
         self.config.write()
 
@@ -1120,7 +1127,17 @@ class WirelessDaemon(dbus.service.Object):
         """ Removes the global entry for the networkid provided. """
         essid_key = "essid:" + str(self.LastScan[networkid])
         self.config.remove_section(essid_key)
-            
+        
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetWpaSupplicantDrivers(self, drivers):
+        """ Returns all valid wpa_supplicant drivers in a given list. """
+        return self.wifi.GetWpaSupplicantDrivers(drivers)
+        
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def ReloadConfig(self):
+        """ Reloads the active config file. """
+        self.config.reload()
+    
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendStartScanSignal(self):
         """ Emits a signal announcing a scan has started. """
@@ -1395,6 +1412,11 @@ class WiredDaemon(dbus.service.Object):
         if not sections:
             sections = [""]
         return sections
+    
+    @dbus.service.method('org.wicd.daemon.wired')
+    def ReloadConfig(self):
+        """ Reloads the active config file. """
+        self.config.reload()
 
 
 def usage():
@@ -1529,10 +1551,11 @@ def main(argv):
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     gobject.threads_init()
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async(["/usr/bin/python", "-O", 
-                                                    wpath.lib + "monitor.py"], 
-                                       flags=gobject.SPAWN_CHILD_INHERITS_STDIN)
-        signal.signal(signal.SIGTERM, sigterm_caught)
+        (child_pid, x, x, x) = gobject.spawn_async(
+            [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")], 
+            flags=gobject.SPAWN_CHILD_INHERITS_STDIN
+        )
+    signal.signal(signal.SIGTERM, sigterm_caught)
     
     # Enter the main loop
     mainloop = gobject.MainLoop()
@@ -1546,8 +1569,12 @@ def main(argv):
 def sigterm_caught(sig=None, frame=None):
     """ Called when a SIGTERM is caught, kills monitor.py before exiting. """
     global child_pid
-    print 'Daemon going down, killing wicd-monitor...'
-    os.kill(child_pid, signal.SIGTERM)
+    if child_pid:
+        print 'Daemon going down, killing wicd-monitor...'
+        try:
+            os.kill(child_pid, signal.SIGTERM)
+        except OSError:
+            pass
     print 'Removing PID file...'
     if os.path.exists(wpath.pidfile):
         os.remove(wpath.pidfile)

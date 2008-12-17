@@ -69,7 +69,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
                   one output string from the command.
 
     """
-    if type(cmd) is not list:
+    if not isinstance(cmd, list):
         cmd = to_unicode(str(cmd))
         cmd = cmd.split()
     if include_stderr:
@@ -82,8 +82,12 @@ def Run(cmd, include_stderr=False, return_pipe=False):
     tmpenv = os.environ.copy()
     tmpenv["LC_ALL"] = "C"
     tmpenv["LANG"] = "C"
-    f = Popen(cmd, shell=False, stdout=PIPE, stderr=err, close_fds=fds, cwd='/',
-              env=tmpenv)
+    try:
+        f = Popen(cmd, shell=False, stdout=PIPE, stderr=err, close_fds=fds,
+                  cwd='/', env=tmpenv)
+    except OSError, e:
+        print "Running command %s failed: %s" % (str(cmd), str(e))
+        return ""
     
     if return_pipe:
         return f.stdout
@@ -383,7 +387,7 @@ def find_path(cmd):
     the file can not be found.
     
     """
-    paths = os.getenv("PATH", default=["/usr/bin", "/usr/local/bin"]).split(':')
+    paths = os.getenv("PATH", default="/usr/bin:/usr/local/bin").split(':')
     for path in paths:
         if os.access(os.path.join(path, cmd), os.F_OK):
             return os.path.join(path, cmd)
@@ -507,6 +511,7 @@ def get_language_list_gui():
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
                                     "This typically means there was a problem starting the daemon." + \
                                     "Check the wicd log for more info")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     
     return language
 
@@ -531,6 +536,8 @@ def get_language_list_tray():
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
                                         "This typically means there was a problem starting the daemon." + \
                                         "Check the wicd log for more info")
+    language['no_daemon_tooltip'] = _("Wicd daemon unreachable")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     return language
 
 def noneToBlankString(text):

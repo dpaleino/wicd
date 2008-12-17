@@ -122,6 +122,7 @@ def write_scripts(network, network_type, script_info):
         con.set(network, "afterscript", script_info["post_entry"])
         con.set(network, "disconnectscript", script_info["disconnect_entry"])
         con.write(open(wired_conf, "w"))
+        wired.ReloadConfig()
         wired.ReadWiredNetworkProfile(network)
         wired.SaveWiredNetworkProfile(network)
     else:
@@ -133,8 +134,10 @@ def write_scripts(network, network_type, script_info):
         con.set(bssid, "afterscript", script_info["post_entry"])
         con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
         con.write(open(wireless_conf, "w"))
+        wireless.ReloadConfig()
         wireless.ReadWirelessNetworkProfile(int(network))
         wireless.SaveWirelessNetworkProfile(int(network))
+
 
 def main (argv):
     """ Runs the script configuration dialog. """

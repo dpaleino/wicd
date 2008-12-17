@@ -24,15 +24,15 @@ reusable for other purposes as well.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from ConfigParser import ConfigParser
+from ConfigParser import RawConfigParser
 
 from wicd.misc import stringToNone
 
 
-class ConfigManager(ConfigParser):
+class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
     def __init__(self, path):
-        ConfigParser.__init__(self)
+        RawConfigParser.__init__(self)
         self.config_file = path
         self.read(path)
         
@@ -58,7 +58,7 @@ class ConfigManager(ConfigParser):
         if not self.has_section(section):
             self.add_section(section)
             
-        ConfigParser.set(self, section, str(option), str(value))
+        RawConfigParser.set(self, section, str(option), str(value))
         if save:
             self.write()
 
@@ -66,7 +66,7 @@ class ConfigManager(ConfigParser):
         """ Calls the set_option method. """
         self.set_option(*args, **kargs)
         
-    def get_option(self, section, option, default=None):
+    def get_option(self, section, option, default="__None__"):
         """ Wrapper around ConfigParser.get. 
         
         Automatically adds any missing sections, adds the ability
@@ -78,14 +78,17 @@ class ConfigManager(ConfigParser):
             self.add_section(section)
     
         if self.has_option(section, option):
-            ret = ConfigParser.get(self, section, option)
+            ret = RawConfigParser.get(self, section, option)
             if default:
                 print ''.join(['found ', option, ' in configuration ', ret])
         else:
-            print ''.join(['did not find ', option,
+            if default != "__None__":
+                print ''.join(['did not find ', option,
                            ' in configuration, setting default ', str(default)])
-            self.set(section, option, str(default), save=True)
-            ret = default
+                self.set(section, option, str(default), save=True)
+                ret = default
+            else:
+                ret = None
             
         # Try to intelligently handle the type of the return value.
         try:
@@ -101,7 +104,7 @@ class ConfigManager(ConfigParser):
     def write(self):
         """ Writes the loaded config file to disk. """
         configfile = open(self.config_file, 'w')
-        ConfigParser.write(self, configfile)
+        RawConfigParser.write(self, configfile)
         configfile.close()
         
     def remove_section(self,section):
@@ -112,4 +115,7 @@ class ConfigManager(ConfigParser):
         
         """
         if self.has_section(section):
-            ConfigParser.remove_section(self, section)
+            RawConfigParser.remove_section(self, section)
+            
+    def reload(self):
+        self.read(self.config_file)

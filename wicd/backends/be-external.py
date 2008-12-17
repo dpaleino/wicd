@@ -98,6 +98,10 @@ def GetWiredInterfaces(*args, **kargs):
     """ Call the wnettools GetWiredInterfaces method. """
     return wnettools.GetWiredInterfaces(*args, **kargs)
 
+def IsValidWpaSuppDriver(*args, **kargs):
+    """ Call the wnettools IsValidWpaSuppDrive method. """
+    return wnettools.IsValidWpaSuppDriver(*args, **kargs)
+
 def NeedsExternalCalls(*args, **kargs):
     """ Return True, since this backend using iwconfig/ifconfig. """
     return True

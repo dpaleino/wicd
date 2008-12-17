@@ -528,6 +528,11 @@ class Wireless(Controller):
         """ Get the out of iwconfig. """
         return self.wiface.GetIwconfig()
     
+    def GetWpaSupplicantDrivers(self, drivers):
+        """ Returns all valid wpa_supplicant drivers in a list. """
+        return [driver for driver in drivers if 
+                BACKEND.IsValidWpaSuppDriver(driver)]
+    
     def IsUp(self):
         """ Calls the IsUp method for the wireless interface.
         

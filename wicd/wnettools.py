@@ -131,6 +131,16 @@ def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
     raise NotImplementedError
 
+    
+def IsValidWpaSuppDriver(driver):
+    """ Returns True if given string is a valid wpa_supplicant driver. """
+    output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iwlan9",
+                       "-c/etc/zzzzzzzz.confzzz"])
+    if re.match("Unsupported driver", output):
+        return False
+    else:
+        return True
+
 
 class BaseInterface(object):
     """ Control a network interface. """
@@ -752,7 +762,7 @@ class BaseWirelessInterface(BaseInterface):
         """
         if not self.iface: return False
         cmd = ['iwconfig', self.iface, 'essid', essid]
-        if channel:
+        if channel and str(channel).isdigit():
             cmd.extend(['channel', str(channel)])
         if bssid:
             cmd.extend(['ap', bssid])
@@ -770,7 +780,8 @@ class BaseWirelessInterface(BaseInterface):
         if not wpa_pass_path: return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
-        cmd = ' '.join([wpa_pass_path, network['essid'], network['key']])
+        cmd = [wpa_pass_path, network['essid'], network['key']]
+        if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 
     def Authenticate(self, network):
@@ -784,9 +795,10 @@ class BaseWirelessInterface(BaseInterface):
         if self.wpa_driver == RALINK_DRIVER:
             self._AuthenticateRalinkLegacy(network)
         else:
-            cmd = ''.join(['wpa_supplicant -B -i ', self.iface, ' -c ',
-                       wpath.networks, network['bssid'].replace(':','').lower(),
-                       ' -D ', self.wpa_driver])
+            cmd = ['wpa_supplicant', '-B', '-i', self.iface, '-c',
+                   os.path.join(wpath.networks, 
+                                network['bssid'].replace(':', '').lower()),
+                   '-D', self.wpa_driver]
             if self.verbose: print cmd
             misc.Run(cmd)
 

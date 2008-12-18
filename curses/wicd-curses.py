@@ -69,6 +69,8 @@ else:
 # program exits.
 # I also may have been a bit overkill about using this too, I guess I'll find that out
 # soon enough.
+# I learned about this from this example:
+# http://blog.lutzky.net/2007/09/16/exception-handling-decorators-and-python/
 class wrap_exceptions:
     def __call__(self, f):
         def wrap_exceptions(*args, **kargs):
@@ -97,6 +99,28 @@ class wrap_exceptions:
                 raise
 
         return wrap_exceptions
+
+# My savior.  :-)
+# Although I could have made this myself pretty easily, just want to give credit where
+# its due.
+# http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
+class SelText(urwid.Text):
+    """
+    A selectable text widget. See urwid.Text.
+    """
+
+    def selectable(self):
+        """
+        Make widget selectable.
+        """
+        return True
+
+
+    def keypress(self, size, key):
+        """
+        Don't handle any keys.
+        """
+        return key
 
 # Look familiar?  These two functions are clones of functions found in wicd's
 # gui.py file, except that now set_status is a function passed to them.
@@ -161,7 +185,7 @@ def gen_network_list():
     for profile in config.GetWiredProfileList():
         if id == 0:
             #theList.append(urwid.Text("Wired Network(s):"))
-            theList.append(ListElem("Wired Network(s):"))
+            theList.append(urwid.Text(('body',"Wired Network(s):") ) )
         theString = '%4s%*s' % (id, 32+len(profile),profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
@@ -169,12 +193,13 @@ def gen_network_list():
         is_active = wireless.GetWirelessIP() == None and wired.GetWiredIP() != None
         if is_active:
             theString = '>'+theString[1:]
-
-        theList.append(NetElem(theString,id,is_active))
+            theList.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
+        else:
+            theList.append(urwid.AttrWrap(SelText(theString),'body','focus'))
         id+=1
     for network_id in range(0, wireless.GetNumberOfNetworks()):
         if network_id == 0:
-            theList.append(ListElem("Wireless Network(s):"))
+            theList.append(urwid.Text(('body', "Wireless Network(s):")) )
         
         theString = '%4s %*s  %17s  %3s    %s' % ( network_id,
             gap,daemon.FormatSignalForPrinting(
@@ -187,100 +212,11 @@ def gen_network_list():
         is_active = wireless.GetPrintableSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
         if is_active:
             theString = '>'+theString[1:]
-        theList.append(NetElem(theString,network_id,is_active))
-    return theList
-
-class ListElem(urwid.WidgetWrap):
-    """ Defines a (generic) non-selectable element that hangs out in a NetList"""
-    def __init__(self, theText):
-        self.label = urwid.AttrWrap(urwid.Text(theText),None)
-        w = self.label
-        self.__super.__init__(w)
-        #self.update_w()
-    def selectable(self):
-        return False
-
-    def update_w(self):
-        pass
-
-    # Don't handle any keys in the superclass
-    def keypress(self, size, key):
-        return key
-
-# Widget representing an individual network
-# This will be more complicated later, once I know the rest of it works
-class NetElem(ListElem):
-    """Defines a selectable element, either a wireless or wired network profile,
-    in a NetList
-    """
-    def __init__(self, theText,theId,is_active):
-        self.is_selected = False
-        self.id = theId
-        self.__super.__init__(theText)
-        
-        # Color the text differently if we are connected to that network
-        self.body     = 'body'
-        self.selected = 'selected'
-        if is_active:
-            self.body     = 'connected'
-            self.selected = 'connected_sel'
-
-        self.update_w()
-   
-    # Make the thing selectable.
-    def selectable(self):
-        return True
-
-    # Update the widget.
-    # Called by NetList below pretty often
-    def update_w(self):
-        if self.is_selected:
-            self._w.attr = self.selected
-            self._w.focus_attr = self.selected
+            theList.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
         else:
-            self._w.attr = self.body
-            self._w.focus_attr = self.body
-
-    # Don't handle any keys... yet
-    def keypress(self, size, key):
-        return key
-
-
-# Class representing the list of networks that appears in the middle.
-# Just a listbox with some special features
-class NetList(urwid.WidgetWrap):
-    """  The list of elements that sits in the middle of the screen most of the
-    time.
-    """
-    def __init__(self, elems):
-        self.lbox = urwid.AttrWrap(urwid.ListBox(elems),'body')
-        w = self.lbox
-        self.__super.__init__(w)
-        #self.selected = False
-        # The 1th element in the list is to be selected first, since that one
-        # is a header
-        elems[1].is_selected = True
-        elems[1].update_w()
-        #widget.update_w()
-        
-    # Pick the selected-ness of the app
-    def update_selected(self,is_selected):
-        (elem, num) = self._w.get_focus()
-        elem.is_selected = is_selected
-        elem.update_w()
-
-    # Updates the selected element, moves the focused element, and then selects
-    # that one, then updates its selection status.
-    # TODO: Pressing "Enter" would disconnect you from your current network, and
-    # connect you to the selected one
-    #@wrap_exceptions()
-    def keypress(self, size, key):
-        #if key == 'down' or key == 'up':
-        self.update_selected(False)
-        self._w.keypress(size,key)
-        #(widget, num) = self.lbox.get_focus()
-        #widget.is_selected = True
-        self.update_selected(True)
+            theList.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+        #theList.append(SelText(theString))
+    return theList
 
 # The Whole Shebang
 class appGUI():
@@ -299,15 +235,17 @@ class appGUI():
         header = urwid.AttrWrap(txt, 'header')
         #self.update_netlist()
         netElems = gen_network_list()
-        self.netList = NetList(netElems)
+        #self.netList = urwi/RecommendedPalette
+        netList = urwid.ListBox(netElems)
         #walker = urwid.SimpleListWalker(gen_network_list())
-
+        self.netList = urwid.ListBox(gen_network_list())
         footer = urwid.AttrWrap(urwid.Text("Something will go here... eventually!"),'important')
         # Pop takes a number!
         #walker.pop(1)
-        #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','selected')
+        #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','focus')
         self.frame = urwid.Frame(self.netList, header=header,footer=footer)
         #self.frame = urwid.Frame(self.screen_locker, header=header,footer=footer)
+        self.frame.set_focus('body')
         self.prev_state = False
         self.update_status()
 
@@ -318,7 +256,7 @@ class appGUI():
     def unlock_screen(self):
         self.update_netlist(force_check=True)
         self.frame.set_body(self.netList)
-        # I'm hoping that this will get rid of Adam's problem with the NetList not
+        # I'm hoping that this will get rid of Adam's problem with the ListBox not
         # redisplaying itself immediately upon completion.
         self.update_ui()
 
@@ -332,7 +270,7 @@ class appGUI():
             state, x = daemon.GetConnectionStatus()
         if self.prev_state != state or force_check:
             netElems = gen_network_list()
-            self.netList = NetList(netElems)
+            self.netList = urwid.ListBox(netElems)
             self.frame.set_body(self.netList)
             
         self.prev_state = state
@@ -352,6 +290,8 @@ class appGUI():
 
     # Set the status text, called by the update_status method
     def set_status(self,text):
+        #wid,pos = self.frame.body.get_focus()
+        #text = text +' '+ str(pos)
         self.frame.set_footer(urwid.AttrWrap(urwid.Text(text),'important'))
 
     # Yeah, I'm copying code.  Anything wrong with that?
@@ -375,19 +315,21 @@ class appGUI():
     # Calls the main loop.  This is how the thing should be started, at least
     # until I decide to change it, whenever that is.
     def main(self):
-        global ui
+        # We are _not_ python.
         misc.RenameProcess('wicd-curses')
+
+        global ui
         ui = urwid.curses_display.Screen()
         # Color scheme.
         # Other potential color schemes can be found at:
         # http://excess.org/urwid/wiki/RecommendedPalette
         ui.register_palette([
             ('body','light gray','black'),
-            ('selected','dark magenta','light gray'),
+            ('focus','dark magenta','light gray'),
             ('header','light blue','black'),
             ('important','light red','black'),
             ('connected','dark green','black'),
-            ('connected_sel','black','dark green')])
+            ('connected focus','black','dark green')])
         # This is a wrapper around a function that calls another a function that is a
         # wrapper around a infinite loop.  Fun.
         ui.run_wrapper(self.run)
@@ -402,7 +344,7 @@ class appGUI():
         # Update what the interface looks like every 0.5 ms
         # Apparently this is use (with fractional seconds) is deprecated.  May have to
         # change this.
-        redraw_tag = gobject.timeout_add(0.5,self.update_ui)
+        redraw_tag = gobject.timeout_add(1,self.update_ui)
         # Update the connection status on the bottom every 2 s
         gobject.timeout_add(2000,self.update_status)
         # Terminate the loop if the UI is terminated.
@@ -415,11 +357,13 @@ class appGUI():
     # at all.  Urwid and the glib main loop don't mix all too well.  I may need to
     # consult the Urwid maintainer about this.
     #
-    # The implementation of this solution  
+    # The implementation of this solution is active in this program, and it appears to
+    # be functioning well.
     @wrap_exceptions()
     def update_ui(self):
         #self.update_status()
-        canvas = self.frame.render( (self.size) )
+        canvas = self.frame.render( (self.size),True )
+        ###  GRRRRRRRRRRRRRRRRRRRRR             ^^^^
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
         # Should make a keyhandler method, but this will do until I get around to
@@ -457,8 +401,9 @@ def setup_dbus():
 
 bus = dbus.SystemBus()
 setup_dbus()
-# Main entry point
+# Main entry point.  Probably going to be moved soon.
 if __name__ == '__main__':
+    
     app = appGUI()
 
     # Connect signals and whatnot to UI screen control functions

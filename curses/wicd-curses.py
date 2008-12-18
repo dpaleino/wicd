@@ -320,7 +320,7 @@ class appGUI():
         self.frame.set_body(self.netList)
         # I'm hoping that this will get rid of Adam's problem with the NetList not
         # redisplaying itself immediately upon completion.
-        update_ui()
+        self.update_ui()
 
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.

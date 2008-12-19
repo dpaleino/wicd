@@ -70,8 +70,8 @@ else:
 ########################################
 # A hack to get any errors that pop out of the program to appear ***AFTER*** the
 # program exits.
-# I also may have been a bit overkill about using this too, I guess I'll find that 
-# out soon enough.
+# I also may have been a bit overkill about using this too, I guess I'll find
+# that out soon enough.
 # I learned about this from this example:
 # http://blog.lutzky.net/2007/09/16/exception-handling-decorators-and-python/
 class wrap_exceptions:
@@ -109,6 +109,7 @@ class wrap_exceptions:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
 class SelText(urwid.Text):
     """A selectable text widget. See urwid.Text."""
+
     def selectable(self):
         """Make widget selectable."""
         return True
@@ -168,10 +169,10 @@ def gen_list_header():
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
 # DBUS interfaces do.  ^_^
-# Whatever calls this needs to be exception-wrapped
+# Whatever calls this must be exception-wrapped if it is run if the UI is up
 def gen_network_list():
     #theList = [urwid.Text(gen_list_header())]
-    theList = []
+    #theList = []
     
     # Pick which strength measure to use based on what the daemon says
     if daemon.GetSignalDisplayType() == 0:
@@ -182,10 +183,11 @@ def gen_network_list():
         gap = 5
 
     id = 0
+    wiredL = []
     for profile in config.GetWiredProfileList():
-        if id == 0:
+        #if id == 0:
             #theList.append(urwid.Text("Wired Network(s):"))
-            theList.append(urwid.Text(('body',"Wired Network(s):") ) )
+            #wired.append(urwid.Text(('body',"Wired Network(s):") ) )
         theString = '%4s%*s' % (id, 32+len(profile),profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
@@ -193,13 +195,15 @@ def gen_network_list():
         is_active = wireless.GetWirelessIP() == None and wired.GetWiredIP() != None
         if is_active:
             theString = '>'+theString[1:]
-            theList.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
+            wiredL.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
         else:
-            theList.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+            wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
         id+=1
+
+    wlessL = []
     for network_id in range(0, wireless.GetNumberOfNetworks()):
-        if network_id == 0:
-            theList.append(urwid.Text(('body', "Wireless Network(s):")) )
+        #if network_id == 0:
+            #wireless.append(urwid.Text(('body', "Wireless Network(s):")) )
         
         theString = '%4s %*s  %17s  %3s    %s' % ( network_id,
             gap,daemon.FormatSignalForPrinting(
@@ -212,11 +216,12 @@ def gen_network_list():
         is_active = wireless.GetPrintableSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
         if is_active:
             theString = '>'+theString[1:]
-            theList.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
+            wlessL.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
         else:
-            theList.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+            wlessL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
         #theList.append(SelText(theString))
-    return theList
+    return (wiredL,wlessL)
+
 
 ########################################
 ##### APPLICATION INTERFACE CLASS
@@ -230,22 +235,32 @@ class appGUI():
         # for networks.  :-)
         # Will need a translation sooner or later
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
+        self.TITLE = 'Wicd Curses Interface'
 
         #self.update_ct = 0 
-        self.TITLE = 'Wicd Curses Interface'
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
 
         header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
-        #self.update_netlist()
-        #self.netList = urwi/RecommendedPalette
+        self.wiredH=urwid.Filler(urwid.Text("Wired Networks"))
+        self.wlessH=urwid.Filler(urwid.Text("Wireless Networks"))
+
+        wiredL,wlessL = gen_network_list()
+        self.wiredLB = urwid.ListBox(wiredL)
+        self.wlessLB = urwid.ListBox(wlessL)
+        #spam = SelText('spam')
+        #spamL = [ urwid.AttrWrap( w, None, 'focus' ) for w in [spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam] ]
+        self.thePile = urwid.Pile([('fixed',1,self.wiredH),
+                                   ('fixed',1,self.wiredLB),
+                                   ('fixed',1,self.wlessH),
+                                              self.wlessLB] )
+        #self.netList = urwid.ListBox(wlessL)
         #walker = urwid.SimpleListWalker(gen_network_list())
-        self.netList = urwid.ListBox(gen_network_list())
-        footer = urwid.AttrWrap(urwid.Text("Something will go here... eventually!"),'important')
+        footer = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
         # Pop takes a number!
         #walker.pop(1)
         #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','focus')
-        self.frame = urwid.Frame(self.netList, header=header,footer=footer)
+        self.frame = urwid.Frame(self.thePile, header=header,footer=footer)
         #self.frame = urwid.Frame(self.screen_locker, header=header,footer=footer)
         self.frame.set_focus('body')
         self.prev_state = False
@@ -257,7 +272,7 @@ class appGUI():
 
     def unlock_screen(self):
         self.update_netlist(force_check=True)
-        self.frame.set_body(self.netList)
+        self.frame.set_body(self.thePile)
         # I'm hoping that this will get rid of Adam's problem with the ListBox not
         # redisplaying itself immediately upon completion.
         self.update_ui()
@@ -271,10 +286,10 @@ class appGUI():
         if not state:
             state, x = daemon.GetConnectionStatus()
         if self.prev_state != state or force_check:
-            netElems = gen_network_list()
-            self.netList = urwid.ListBox(netElems)
-            self.frame.set_body(self.netList)
-            
+                wiredL,wlessL = gen_network_list()
+                self.wiredLB.body = urwid.SimpleListWalker(wiredL)
+                self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+                
         self.prev_state = state
 
     # Update the footer/status bar
@@ -386,7 +401,7 @@ def run():
     # Update what the interface looks like every 0.5 ms
     # Apparently this is use (with fractional seconds) is deprecated.  May have to
     # change this.
-    redraw_tag = gobject.timeout_add(1,app.update_ui)
+    redraw_tag = gobject.timeout_add(0.5,app.update_ui)
     # Update the connection status on the bottom every 2 s
     gobject.timeout_add(2000,app.update_status)
     # Terminate the loop if the UI is terminated.

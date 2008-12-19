@@ -65,10 +65,13 @@ else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
 
+########################################
+##### SUPPORT CLASSES
+########################################
 # A hack to get any errors that pop out of the program to appear ***AFTER*** the
 # program exits.
-# I also may have been a bit overkill about using this too, I guess I'll find that out
-# soon enough.
+# I also may have been a bit overkill about using this too, I guess I'll find that 
+# out soon enough.
 # I learned about this from this example:
 # http://blog.lutzky.net/2007/09/16/exception-handling-decorators-and-python/
 class wrap_exceptions:
@@ -105,22 +108,19 @@ class wrap_exceptions:
 # its due.
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
 class SelText(urwid.Text):
-    """
-    A selectable text widget. See urwid.Text.
-    """
-
+    """A selectable text widget. See urwid.Text."""
     def selectable(self):
-        """
-        Make widget selectable.
-        """
+        """Make widget selectable."""
         return True
 
 
     def keypress(self, size, key):
-        """
-        Don't handle any keys.
-        """
+        """Don't handle any keys."""
         return key
+
+########################################
+##### SUPPORT FUNCTIONS
+########################################
 
 # Look familiar?  These two functions are clones of functions found in wicd's
 # gui.py file, except that now set_status is a function passed to them.
@@ -168,7 +168,7 @@ def gen_list_header():
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
 # DBUS interfaces do.  ^_^
-@wrap_exceptions()
+# Whatever calls this needs to be exception-wrapped
 def gen_network_list():
     #theList = [urwid.Text(gen_list_header())]
     theList = []
@@ -218,25 +218,27 @@ def gen_network_list():
         #theList.append(SelText(theString))
     return theList
 
+########################################
+##### APPLICATION INTERFACE CLASS
+########################################
 # The Whole Shebang
 class appGUI():
     """The UI itself, all glory belongs to it!"""
     def __init__(self):
+        self.size = ui.get_cols_rows()
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
         # Will need a translation sooner or later
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
 
         #self.update_ct = 0 
-        txt = urwid.Text("Wicd Curses Interface",align='right')
+        self.TITLE = 'Wicd Curses Interface'
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
 
-        header = urwid.AttrWrap(txt, 'header')
+        header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
         #self.update_netlist()
-        netElems = gen_network_list()
         #self.netList = urwi/RecommendedPalette
-        netList = urwid.ListBox(netElems)
         #walker = urwid.SimpleListWalker(gen_network_list())
         self.netList = urwid.ListBox(gen_network_list())
         footer = urwid.AttrWrap(urwid.Text("Something will go here... eventually!"),'important')
@@ -311,46 +313,6 @@ class appGUI():
     def dbus_scan_started(self):
         self.lock_screen()
 
-    # Run the bleeding thing.
-    # Calls the main loop.  This is how the thing should be started, at least
-    # until I decide to change it, whenever that is.
-    def main(self):
-        # We are _not_ python.
-        misc.RenameProcess('wicd-curses')
-
-        global ui
-        ui = urwid.curses_display.Screen()
-        # Color scheme.
-        # Other potential color schemes can be found at:
-        # http://excess.org/urwid/wiki/RecommendedPalette
-        ui.register_palette([
-            ('body','light gray','black'),
-            ('focus','dark magenta','light gray'),
-            ('header','light blue','black'),
-            ('important','light red','black'),
-            ('connected','dark green','black'),
-            ('connected focus','black','dark green')])
-        # This is a wrapper around a function that calls another a function that is a
-        # wrapper around a infinite loop.  Fun.
-        ui.run_wrapper(self.run)
-
-    # Main program loop
-    def run(self):
-        global loop,redraw_tag
-        self.size = ui.get_cols_rows()
-
-        # This actually makes some things easier to do, amusingly enough
-        loop = gobject.MainLoop()
-        # Update what the interface looks like every 0.5 ms
-        # Apparently this is use (with fractional seconds) is deprecated.  May have to
-        # change this.
-        redraw_tag = gobject.timeout_add(1,self.update_ui)
-        # Update the connection status on the bottom every 2 s
-        gobject.timeout_add(2000,self.update_status)
-        # Terminate the loop if the UI is terminated.
-        gobject.idle_add(self.stop_loop)
-        loop.run()
-
     # Redraw the screen
     # There exists a problem with this where any exceptions that occur (especially of
     # the DBus variety) will get spread out on the top of the screen, or not displayed
@@ -363,7 +325,7 @@ class appGUI():
     def update_ui(self):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
-        ###  GRRRRRRRRRRRRRRRRRRRRR             ^^^^
+        ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
         # Should make a keyhandler method, but this will do until I get around to
@@ -383,6 +345,55 @@ class appGUI():
     def stop_loop(self):
         loop.quit()
 
+########################################
+##### INITIALIZATION FUNCTIONS
+########################################
+
+def main():
+    global ui
+
+    # We are _not_ python.
+    misc.RenameProcess('wicd-curses')
+
+    ui = urwid.curses_display.Screen()
+    # Color scheme.
+    # Other potential color schemes can be found at:
+    # http://excess.org/urwid/wiki/RecommendedPalette
+    ui.register_palette([
+        ('body','light gray','black'),
+        ('focus','dark magenta','light gray'),
+        ('header','light blue','black'),
+        ('important','light red','black'),
+        ('connected','dark green','black'),
+        ('connected focus','black','dark green')])
+    # This is a wrapper around a function that calls another a function that is a
+    # wrapper around a infinite loop.  Fun.
+    ui.run_wrapper(run)
+
+def run():
+    global loop,redraw_tag
+
+    app = appGUI()
+
+    # Connect signals and whatnot to UI screen control functions
+    bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
+                            'org.wicd.daemon')
+    bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
+                            'org.wicd.daemon')
+    #bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
+    #                        'org.wicd.daemon')
+    loop = gobject.MainLoop()
+    # Update what the interface looks like every 0.5 ms
+    # Apparently this is use (with fractional seconds) is deprecated.  May have to
+    # change this.
+    redraw_tag = gobject.timeout_add(1,app.update_ui)
+    # Update the connection status on the bottom every 2 s
+    gobject.timeout_add(2000,app.update_status)
+    # Terminate the loop if the UI is terminated.
+    gobject.idle_add(app.stop_loop)
+    loop.run()
+
+
 # Mostly borrowed from gui.py, but also with the "need daemon first" check
 def setup_dbus():
     global proxy_obj, daemon, wireless, wired, config, dbus_ifaces
@@ -401,16 +412,9 @@ def setup_dbus():
 
 bus = dbus.SystemBus()
 setup_dbus()
-# Main entry point.  Probably going to be moved soon.
-if __name__ == '__main__':
-    
-    app = appGUI()
 
-    # Connect signals and whatnot to UI screen control functions
-    bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
-                            'org.wicd.daemon')
-    bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
-                            'org.wicd.daemon')
-    bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
-                            'org.wicd.daemon')
-    app.main()
+########################################
+##### MAIN ENTRY POINT
+########################################
+if __name__ == '__main__':
+   main() 

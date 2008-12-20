@@ -33,6 +33,10 @@ at least get a network connection.  Or those who don't like using X.  :-)
     Comments, criticisms, patches, bug reports all welcome!
 """
 
+##### NOTICE: THIS DOES NOT WORK WITH THE EXPERIMENTAL BRANCH, DESPITE THE FACT
+#####         THAT THIS FILE COMES WITH A FULL COPY OF THE EXPERIMENTAL BRANCH!
+#####         I WILL PROBABLY BE REMEDYING THIS SOMETIME IN JANUARY.
+
 # UI stuff
 #import urwid.raw_display
 import urwid.curses_display
@@ -50,20 +54,130 @@ import wicd.misc as misc
 # Internal Python stuff
 import sys
 
-# Translations for the text that people will see... as of yet.  This code is
-# already found in the gui.py file
-# IN EXPERIMENTAL, THIS IS ALL IN wicd.misc
-_ = misc.get_gettext()
-language = {}
-language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
-language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
-language['not_connected'] = _('Not connected')
-
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
 else:
     from dbus.mainloop.glib import DBusGMainLoop
     DBusGMainLoop(set_as_default=True)
+
+# Translations for the text that people will see.  This code is
+# already found in the gui.py file
+# IN EXPERIMENTAL, THIS IS ALL IN wicd.misc
+# (Yeah... um... all 102 of them ^_^)
+_ = misc.get_gettext()
+language = {}
+language['connect'] = _("Connect")
+language['ip'] = _("IP")
+language['netmask'] = _("Netmask")
+language['gateway'] = _('Gateway')
+language['dns'] = _('DNS')
+language['use_static_ip'] = _('Use Static IPs')
+language['use_static_dns'] = _('Use Static DNS')
+language['use_encryption'] = _('Use Encryption')
+language['advanced_settings'] = _('Advanced Settings')
+language['wired_network'] = _('Wired Network')
+language['wired_network_instructions'] = _('To connect to a wired network,'
+' you must create a network profile. To create a network profile, type a'
+' name that describes this network, and press Add.')
+language['automatic_connect'] = _('Automatically connect to this network')
+language['secured'] = _('Secured')
+language['unsecured'] = _('Unsecured')
+language['channel'] = _('Channel')
+language['preferences'] = _('Preferences')
+language['wpa_supplicant_driver'] = _('WPA Supplicant Driver')
+language['wireless_interface'] = _('Wireless Interface')
+language['wired_interface'] = _('Wired Interface')
+language['hidden_network'] = _('Hidden Network')
+language['hidden_network_essid'] = _('Hidden Network ESSID')
+language['connected_to_wireless'] = _('Connected to $A at $B (IP: $C)')
+language['connected_to_wired'] = _('Connected to wired network (IP: $A)')
+language['not_connected'] = _('Not connected')
+language['no_wireless_networks_found'] = _('No wireless networks found.')
+language['killswitch_enabled'] = _('Wireless Kill Switch Enabled')
+language['key'] = _('Key')
+language['username'] = _('Username')
+language['password'] = _('Password')
+language['anonymous_identity'] = _('Anonymous Identity')
+language['identity'] = _('Identity')
+language['authentication'] = _('Authentication')
+language['path_to_pac_file'] = _('Path to PAC File')
+language['select_a_network'] = _('Choose from the networks below:')
+language['connecting'] = _('Connecting...')
+language['wired_always_on'] = _('Always show wired interface')
+language['auto_reconnect'] = _('Automatically reconnect on connection loss')
+language['create_adhoc_network'] = _('Create an Ad-Hoc Network')
+language['essid'] = _('ESSID')
+language['use_wep_encryption'] = _('Use Encryption (WEP only)')
+language['before_script'] = _('Run script before connect')
+language['after_script'] = _('Run script after connect')
+language['disconnect_script'] = _('Run disconnect script')
+language['script_settings'] = _('Scripts')
+language['use_ics'] = _('Activate Internet Connection Sharing')
+language['madwifi_for_adhoc'] = _('Check if using madwifi/atheros drivers')
+language['default_wired'] = _('Use as default profile (overwrites any previous default)')
+language['use_debug_mode'] = _('Enable debug mode')
+language['use_global_dns'] = _('Use global DNS servers')
+language['use_default_profile'] = _('Use default profile on wired autoconnect')
+language['show_wired_list'] = _('Prompt for profile on wired autoconnect')
+language['use_last_used_profile'] = _('Use last used profile on wired autoconnect')
+language['choose_wired_profile'] = _('Select or create a wired profile to connect with')
+language['wired_network_found'] = _('Wired connection detected')
+language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
+language['display_type_dialog'] = _('Use dBm to measure signal strength')
+language['scripts'] = _('Scripts')
+language['invalid_address'] = _('Invalid address in $A entry.')
+language['global_settings'] = _('Use these settings for all networks sharing this essid')
+language['encrypt_info_missing'] = _('Required encryption information is missing.')
+language['enable_encryption'] = _('This network requires encryption to be enabled.')
+language['wicd_auto_config'] = _('Automatic (recommended)')
+language["gen_settings"] = _("General Settings")
+language["ext_programs"] = _("External Programs")
+language["dhcp_client"] = _("DHCP Client")
+language["wired_detect"] = _("Wired Link Detection")
+language["route_flush"] = _("Route Table Flushing")
+language["backend"] = _("Backend")
+language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
+language['search_domain'] = _("Search Domain")
+language['scripts_need_pass'] = _('You must enter your password to configure scripts')
+language['no_sudo_prog'] = _("Could not find a graphical sudo program.  The script editor could not be launched." +
+                             "You'll have to edit scripts directly your configuration file.")
+
+language['0'] = _('0')
+language['1'] = _('1')
+language['2'] = _('2')
+language['3'] = _('3')
+language['4'] = _('4')
+language['5'] = _('5')
+language['6'] = _('6')
+language['7'] = _('7')
+language['8'] = _('8')
+language['9'] = _('9')
+
+language['interface_down'] = _('Putting interface down...')
+language['resetting_ip_address'] = _('Resetting IP address...')
+language['interface_up'] = _('Putting interface up...')
+language['setting_encryption_info'] = _('Setting encryption info')
+language['removing_old_connection'] = _('Removing old connection...')
+language['generating_psk'] = _('Generating PSK...')
+language['generating_wpa_config'] = _('Generating WPA configuration file...')
+language['flushing_routing_table'] = _('Flushing the routing table...')
+language['configuring_interface'] = _('Configuring wireless interface...')
+language['validating_authentication'] = _('Validating authentication...')
+language['setting_broadcast_address'] = _('Setting broadcast address...')
+language['setting_static_dns'] = _('Setting static DNS servers...')
+language['setting_static_ip'] = _('Setting static IP addresses...')
+language['running_dhcp'] = _('Obtaining IP address...')
+language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
+language['aborted'] = _('Connection Cancelled')
+language['bad_pass'] = _('Connection Failed: Bad password')
+language['done'] = _('Done connecting...')
+language['scanning'] = _('Scanning')
+language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
+                                "This typically means there was a problem starting the daemon." + \
+                                "Check the wicd log for more info")
+language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+
+# Whew. Now on to more interesting stuff: 
 
 ########################################
 ##### SUPPORT CLASSES
@@ -86,18 +200,22 @@ class wrap_exceptions:
                 print "Terminated by user."
                 raise
             except :
-                # Remove update_ui from the event queue
-                gobject.source_remove(redraw_tag)
-                # Quit the loop
-                loop.quit()
-                # Zap the screen
-                ui.stop()
-                # Print out standard notification:
-                print "EXCEPTION!"
-                print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
-                # Flush the buffer so that the notification is always above the
-                # backtrace
-                sys.stdout.flush()
+                # If the UI isn't inactive (redraw_tag wouldn't normally be
+                # set), then don't try to stop it, just gracefully die.
+                if redraw_tag != -1:
+                    # Remove update_ui from the event queue
+                    gobject.source_remove(redraw_tag)
+                    # Quit the loop
+                    loop.quit()
+                    # Zap the screen
+                    ui.stop()
+                    # Print out standard notification:
+                    print "EXCEPTION!"
+                    print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
+                    print redraw_tag
+                    # Flush the buffer so that the notification is always above the
+                    # backtrace
+                    sys.stdout.flush()
                 # Raise the exception
                 raise
 
@@ -163,6 +281,8 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 
 # Self explanitory, and not used until I can get some list sort function
 # working...
+# Also defunct.
+# Current list header is STR,ESSID,ENCRYPT,BSSID,TYPE,CHANNEL
 def gen_list_header():
     return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
 
@@ -188,14 +308,15 @@ def gen_network_list():
         #if id == 0:
             #theList.append(urwid.Text("Wired Network(s):"))
             #wired.append(urwid.Text(('body',"Wired Network(s):") ) )
-        theString = '%4s%*s' % (id, 32+len(profile),profile)
+        theString = '%4s   %25s' % (id, profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
         # Tag if no wireless IP present, and wired one is
         is_active = wireless.GetWirelessIP() == None and wired.GetWiredIP() != None
         if is_active:
             theString = '>'+theString[1:]
-            wiredL.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
+            wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
+                'connected focus'))
         else:
             wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
         id+=1
@@ -204,15 +325,19 @@ def gen_network_list():
     for network_id in range(0, wireless.GetNumberOfNetworks()):
         #if network_id == 0:
             #wireless.append(urwid.Text(('body', "Wireless Network(s):")) )
-        
-        theString = '%4s %*s  %17s  %3s    %s' % ( network_id,
-            gap,daemon.FormatSignalForPrinting(
+
+        # ?: in python
+        encryption = wireless.GetWirelessProperty(network_id, 'encryption_method') if wireless.GetWirelessProperty(network_id, 'encryption') else 'Unsecured'
+        theString = '  %*s  %25s %9s %17s %6s: %s' % ( gap,
+            daemon.FormatSignalForPrinting(
                 str(wireless.GetWirelessProperty(network_id, strenstr))),
+            wireless.GetWirelessProperty(network_id, 'essid'),
+            #wireless.GetWirelessProperty(network_id, 'encryption_method'),
+            encryption,
             wireless.GetWirelessProperty(network_id, 'bssid'),
-            wireless.GetWirelessProperty(network_id, 'channel'),
-            wireless.GetWirelessProperty(network_id, 'essid'))
-        # This returns -1 if no ID is found, so we I could put this outside of this
-        # loop.  I'll do that soon.
+            wireless.GetWirelessProperty(network_id, 'mode'), # Master, Ad-Hoc
+            wireless.GetWirelessProperty(network_id, 'channel')
+            )
         is_active = wireless.GetPrintableSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
         if is_active:
             theString = '>'+theString[1:]
@@ -237,42 +362,59 @@ class appGUI():
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
         self.TITLE = 'Wicd Curses Interface'
 
-        #self.update_ct = 0 
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
 
         header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
-        self.wiredH=urwid.Filler(urwid.Text("Wired Networks"))
-        self.wlessH=urwid.Filler(urwid.Text("Wireless Networks"))
+        self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
+        self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
         wiredL,wlessL = gen_network_list()
         self.wiredLB = urwid.ListBox(wiredL)
         self.wlessLB = urwid.ListBox(wlessL)
+        # Stuff I used to simulate large lists
         #spam = SelText('spam')
-        #spamL = [ urwid.AttrWrap( w, None, 'focus' ) for w in [spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam] ]
+        #spamL = [ urwid.AttrWrap( w, None, 'focus' ) for w in [spam,spam,spam,
+        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
+        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
+        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
+        #          spam,spam,spam,spam] ]
+        #self.spamLB = urwid.ListBox(spamL)
         self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                    ('fixed',1,self.wiredLB),
                                    ('fixed',1,self.wlessH),
                                               self.wlessLB] )
         #self.netList = urwid.ListBox(wlessL)
         #walker = urwid.SimpleListWalker(gen_network_list())
-        footer = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
+        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
+        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
+        self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
         #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','focus')
-        self.frame = urwid.Frame(self.thePile, header=header,footer=footer)
+        self.frame = urwid.Frame(self.thePile,
+                                 header=header,
+                                 footer=urwid.BoxAdapter(self.footerList,2))
         #self.frame = urwid.Frame(self.screen_locker, header=header,footer=footer)
         self.frame.set_focus('body')
-        self.prev_state = False
+        # Booleans gallore!
+        self.prev_state    = False
+        self.connecting    = False
+        self.screen_locked = False
+        self.connecting    = False
+
         self.update_status()
+
 
     # Does what it says it does
     def lock_screen(self):
         self.frame.set_body(self.screen_locker)
+        self.screen_locked = True
 
     def unlock_screen(self):
         self.update_netlist(force_check=True)
         self.frame.set_body(self.thePile)
+        self.screen_locked = False
         # I'm hoping that this will get rid of Adam's problem with the ListBox not
         # redisplaying itself immediately upon completion.
         self.update_ui()
@@ -295,24 +437,70 @@ class appGUI():
     # Update the footer/status bar
     @wrap_exceptions()
     def update_status(self):
-        #self.update_ct += 1
-        if check_for_wired(wired.GetWiredIP(),self.set_status):
-            return True
-        elif check_for_wireless(wireless.GetIwconfig(),
-                                wireless.GetWirelessIP(), self.set_status):
+        wired_connecting = wired.CheckIfWiredConnecting()
+        wireless_connecting = wireless.CheckIfWirelessConnecting()
+        self.connecting = wired_connecting or wireless_connecting
+        
+        # IN EXPERIMENTAL
+        #fast = not daemon.NeedsExternalCalls()
+        if self.connecting:
+            #self.lock_screen()
+            #if self.statusID:
+            #    gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+            if wireless_connecting:
+                #if not fast:
+                iwconfig = wireless.GetIwconfig()
+                #else:
+                #    iwconfig = ''
+                # set_status is rigged to return false when it is not
+                # connecting to anything, so this should work.
+                gobject.idle_add(self.set_status, wireless.GetCurrentNetwork(iwconfig) +
+                        ': ' +
+                        language[str(wireless.CheckWirelessConnectingMessage())],
+                        True )
+            if wired_connecting:
+                gobject.idle_add(self.set_status, language['wired_network'] +
+                        ': ' +
+                        language[str(wired.CheckWiredConnectingMessage())],
+                        True)
             return True
         else:
-            self.set_status(language['not_connected'])
-            return True
+            if check_for_wired(wired.GetWiredIP(),self.set_status):
+                return True
+            elif check_for_wireless(wireless.GetIwconfig(),
+                                    wireless.GetWirelessIP(), self.set_status):
+                return True
+            else:
+                self.set_status(language['not_connected'])
+                return True
 
     # Set the status text, called by the update_status method
-    def set_status(self,text):
-        #wid,pos = self.frame.body.get_focus()
-        #text = text +' '+ str(pos)
-        self.frame.set_footer(urwid.AttrWrap(urwid.Text(text),'important'))
+    # from_idle : a check to see if we are being called directly from the
+    # mainloop
+    def set_status(self,text,from_idle=False):
+        # If we are being called as the result of trying to connect to
+        # something return False immediately.
+        if from_idle and not self.connecting:
+            return False
+        self.footer2 = urwid.AttrWrap(urwid.Text(text),'important')
+        self.frame.set_footer(urwid.BoxAdapter(
+            urwid.ListBox([self.footer1,self.footer2]),2))
+        return True
+
+    # Make sure the screen is still working by providing a pretty counter.
+    # Not necessary in the end, but I will be using footer1 for stuff in
+    # the long run.
+    incr = 0
+    def idle_incr(self):
+        theText = ""
+        if self.connecting:
+            theText = "-- Connecting -- Press ESC to cancel"
+        self.footer1 = urwid.Text(str(self.incr) + ' '+theText)
+        self.incr+=1
+        return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
-    @wrap_exceptions()
+    #@wrap_exceptions()
     def dbus_scan_finished(self):
             # I'm pretty sure that I'll need this later.
             #if not self.connecting:
@@ -324,7 +512,7 @@ class appGUI():
             self.update_ui()
 
     # Same, same, same, same, same, same
-    @wrap_exceptions()
+    #@wrap_exceptions()
     def dbus_scan_started(self):
         self.lock_screen()
 
@@ -345,10 +533,25 @@ class appGUI():
         keys = ui.get_input()
         # Should make a keyhandler method, but this will do until I get around to
         # that stage
-        if "f8" in keys:
+        if "f8" in keys or 'Q' in keys:
+            loop.quit()
             return False
         if "f5" in keys:
             wireless.Scan()
+        if "enter" in keys:
+            # Should be a function of the labels, I think.
+            self.call_connect()
+        if "D" in keys:
+            # Disconnect from all networks.
+            daemon.Disconnect()
+            self.update_netlist()
+        if "esc" in keys:
+            # Force disconnect here if connection in progress
+            if self.connecting:
+                daemon.CancelConnect()
+                # Prevents automatic reconnecting if that option is enabled
+                daemon.SetForcedDisconnect(True)
+            pass
         for k in keys:
             if k == "window resize":
                 self.size = ui.get_cols_rows()
@@ -359,6 +562,35 @@ class appGUI():
     # Terminate the loop, used as the glib mainloop's idle function
     def stop_loop(self):
         loop.quit()
+
+    # Bring back memories, anyone?
+    def call_connect(self):
+        wid = self.thePile.get_focus()
+        if wid is self.wiredLB:
+            wid2,pos = self.wiredLB.get_focus()
+            self.connect(self,'wired',pos)
+            #return "Wired network %i" % pos
+        if wid is self.wlessLB:
+            #self.footer1 = urwid.Text("Wireless!")
+            wid2,pos = self.wlessLB.get_focus()
+            self.connect(self,'wireless',pos)
+        else:
+            return "Failure!"
+
+    def connect(self, event, nettype, networkid):
+        """ Initiates the connection process in the daemon. """
+        if nettype == "wireless":
+            # I need to do something that is similar to this in this UI, but
+            # I don't have an "advanced settings" dialog yet.
+            #if not self.check_encryption_valid(networkid,
+            #                                   networkentry.advanced_dialog):
+            #    self.edit_advanced(None, None, nettype, networkid, networkentry)
+            #    return False
+            wireless.ConnectWireless(networkid)
+        elif nettype == "wired":
+            wired.ConnectWired()
+        self.update_status()
+
 
 ########################################
 ##### INITIALIZATION FUNCTIONS
@@ -388,6 +620,7 @@ def main():
 def run():
     global loop,redraw_tag
 
+    redraw_tag = -1
     app = appGUI()
 
     # Connect signals and whatnot to UI screen control functions
@@ -395,17 +628,17 @@ def run():
                             'org.wicd.daemon')
     bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
                             'org.wicd.daemon')
-    #bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
-    #                        'org.wicd.daemon')
+    # I've left this commented out many times.
+    bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
+                            'org.wicd.daemon')
     loop = gobject.MainLoop()
-    # Update what the interface looks like every 0.5 ms
-    # Apparently this is use (with fractional seconds) is deprecated.  May have to
-    # change this.
-    redraw_tag = gobject.timeout_add(0.5,app.update_ui)
-    # Update the connection status on the bottom every 2 s
-    gobject.timeout_add(2000,app.update_status)
-    # Terminate the loop if the UI is terminated.
-    gobject.idle_add(app.stop_loop)
+    # Update what the interface looks like as an idle function
+    redraw_tag = gobject.idle_add(app.update_ui)
+    # Update the connection status on the bottom every 1.5 s.
+    gobject.timeout_add(1500,app.update_status)
+    gobject.idle_add(app.idle_incr)
+    # DEFUNCT: Terminate the loop if the UI is terminated.
+    #gobject.idle_add(app.stop_loop)
     loop.run()
 
 

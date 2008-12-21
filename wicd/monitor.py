@@ -146,6 +146,8 @@ class ConnectionStatus(object):
                 state = misc.CONNECTING
                 self.update_state(state)
                 return True
+            
+            daemon.SendConnectResultsIfAvail()
                 
             # Check for wired.
             wired_ip = wired.GetWiredIP("")

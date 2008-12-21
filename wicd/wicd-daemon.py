@@ -83,8 +83,9 @@ class WicdDaemon(dbus.service.Object):
         self.wired = networking.Wired()
         self.config = ConfigManager(os.path.join(wpath.etc,
                                                  "manager-settings.conf"))
-        self.wired_bus= WiredDaemon(bus_name, wired=self.wired, wifi=self.wifi)
-        self.wireless_bus = WirelessDaemon(bus_name, wired=self.wired, 
+        self.wired_bus= WiredDaemon(bus_name, self, wired=self.wired,
+                                    wifi=self.wifi)
+        self.wireless_bus = WirelessDaemon(bus_name, self, wired=self.wired, 
                                            wifi=self.wifi)
         self.forced_disconnect = False
         self.need_profile_chooser = False
@@ -321,8 +322,6 @@ class WicdDaemon(dbus.service.Object):
     def GetAutoReconnect(self):
         """ Returns the value of self.auto_reconnect. See SetAutoReconnect. """
         do = bool(self.auto_reconnect)
-        return self.__printReturn('returning automatically reconnect when ' \
-                                   + 'connection drops', do)
 
     @dbus.service.method('org.wicd.daemon')
     def SetAutoReconnect(self, value):
@@ -358,9 +357,12 @@ class WicdDaemon(dbus.service.Object):
         print 'canceling connection attempt'
         if self.wifi.connecting_thread:
             self.wifi.connecting_thread.should_die = True
+            self.wifi.StopDHCP()
+            self.wifi.StopWPA()
         if self.wired.connecting_thread:
             self.wired.connecting_thread.should_die = True
-        misc.Run("killall dhclient dhclient3 wpa_supplicant")
+            self.wired.StopDHCP()
+        #misc.Run("killall dhclient pump dhcpcd-bin dhclient3 wpa_supplicant")
     
     @dbus.service.method('org.wicd.daemon')
     def GetCurrentInterface(self):
@@ -699,7 +701,33 @@ class WicdDaemon(dbus.service.Object):
             return False
         self.auto_connecting = False
         return False
+        
+    @dbus.service.method("org.wicd.daemon")
+    def ConnectResultsAvailable(self):
+        if ((self.wired.connecting_thread and self.wired.connecting_thread.connect_result) or 
+            (self.wifi.connecting_thread and self.wifi.connecting_thread.connect_result)):
+            return True
+        else:
+            return False
+        
+    @dbus.service.method("org.wicd.daemon")
+    def SendConnectResultsIfAvail(self):
+        if self.ConnectResultsAvailable():
+            self.SendConnectResult()
     
+    @dbus.service.method("org.wicd.daemon")
+    def SendConnectResult(self):
+        if self.wired.connecting_thread and self.wired.connecting_thread.connect_result:
+            self.ConnectResultsSent(self.wired.connecting_thread.connect_result)
+            self.wired.connecting_thread.connect_result = ""
+        elif self.wifi.connecting_thread and self.wifi.connecting_thread.connect_result:
+            self.ConnectResultsSent(self.wifi.connecting_thread.connect_result)
+            self.wifi.connecting_thread.connect_result = ""
+    
+    @dbus.service.signal(dbus_interface="org.wicd.daemon",signature='s')
+    def ConnectResultsSent(self, result):
+        print "Sending connectiong attempt result %s" % result
+        
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
         """ Emits the wired profile chooser dbus signal. """
@@ -730,12 +758,6 @@ class WicdDaemon(dbus.service.Object):
         
         """
         pass
-    
-    def __printReturn(self, text, value):
-        """ Prints the specified text and value, then returns the value. """
-        if self.debug_mode:
-            print ''.join([text, " ", str(value)])
-        return value
     
     def ReadConfig(self):
         """ Reads the manager-settings.conf file.
@@ -823,11 +845,12 @@ class WicdDaemon(dbus.service.Object):
  
 class WirelessDaemon(dbus.service.Object):
     """ DBus interface for wireless connection operations. """
-    def __init__(self, bus_name, wired=None, wifi=None, debug=False):
+    def __init__(self, bus_name, daemon, wired=None, wifi=None, debug=False):
         """ Intitialize the wireless DBus interface. """
         dbus.service.Object.__init__(self, bus_name=bus_name,
                                      object_path='/org/wicd/daemon/wireless')
         self.hidden_essid = None
+        self.daemon = daemon
         self.wired = wired
         self.wifi = wifi
         self.debug_mode = debug
@@ -1012,7 +1035,7 @@ class WirelessDaemon(dbus.service.Object):
         self.wifi.disconnect_script = self.GetWirelessProperty(id,
                                                             'disconnectscript')
         print 'Connecting to wireless network ' + self.LastScan[id]['essid']
-        return self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)
+        conthread = self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CheckIfWirelessConnecting(self):
@@ -1174,10 +1197,11 @@ class WirelessDaemon(dbus.service.Object):
         
 class WiredDaemon(dbus.service.Object):
     """ DBus interface for wired connection operations. """
-    def __init__(self, bus_name, wired=None, wifi=None, debug=False):
+    def __init__(self, bus_name, daemon, wired=None, wifi=None, debug=False):
         """ Intitialize the wireless DBus interface. """
         dbus.service.Object.__init__(self, bus_name=bus_name,
                                      object_path="/org/wicd/daemon/wired")
+        self.daemon = daemon
         self.wired = wired
         self.wifi = wifi
         self.debug_mode = debug
@@ -1587,4 +1611,5 @@ if __name__ == '__main__':
         print ("Root privileges are required for the daemon to run properly." +
                "  Exiting.")
         sys.exit(1)
+    gobject.threads_init()
     main(sys.argv)

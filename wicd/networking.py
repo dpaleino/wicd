@@ -57,6 +57,22 @@ if __name__ == '__main__':
 BACKEND = None
 BACKEND_MGR = BackendManager()
 
+def abortable(func):
+    """ Mark a method in a ConnectionThread as abortable. 
+    
+    This decorator runs a check that will abort the connection thread
+    if necessary before running a given method.
+    
+    """
+    def wrapper(self, *__args, **__kargs):
+        self.abort_if_needed()
+        return func(self, *__args, **__kargs)
+    
+    wrapper.__name__ = func.__name__
+    wrapper.__dict__ = func.__dict__
+    wrapper.__doc__ = func.__doc__
+    return wrapper
+
 def get_backend_list():
     if BACKEND_MGR:
         return BACKEND_MGR.get_available_backends()
@@ -96,6 +112,7 @@ class Controller(object):
         self.driver = None
         self.wiface = None
         self.liface = None
+        self.iface = None
         self.backend_manager = BackendManager()
         
     def set_wireless_iface(self, value):
@@ -155,6 +172,9 @@ class Controller(object):
             return self._backend.NeedsExternalCalls()
         else:
             return True
+        
+    def StopDHCP(self):
+        return self.iface.StopDHCP()
 
 
 class ConnectThread(threading.Thread):
@@ -194,12 +214,13 @@ class ConnectThread(threading.Thread):
         self.wired_interface = wired
         self.is_connecting = False
         self.is_aborted = False
-        self.abort_msg = None
+        self.connect_result = None
         self.before_script = before_script
         self.after_script = after_script
         self.disconnect_script = disconnect_script
         self._should_die = False
         self.abort_reason = ""
+        self.connect_result = ""
 
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
@@ -251,6 +272,7 @@ class ConnectThread(threading.Thread):
             self.lock.release()
         return message
     
+    @abortable
     def reset_ip_addresses(self, wiface, liface):
         """ Resets the IP addresses for both wired/wireless interfaces.
         
@@ -262,13 +284,15 @@ class ConnectThread(threading.Thread):
         self.SetStatus('resetting_ip_address')
         wiface.SetAddress('0.0.0.0')
         liface.SetAddress('0.0.0.0')
-        
+    
+    @abortable
     def put_iface_down(self, iface):
         """ Puts the given interface down. """
         print 'Putting interface down'
         self.SetStatus('interface_down')
         iface.Down()
         
+    @abortable
     def run_script_if_needed(self, script, msg):
         """ Execute a given script if needed.
         
@@ -280,21 +304,24 @@ class ConnectThread(threading.Thread):
         if script:
             print 'Executing %s script' % (msg)
             misc.ExecuteScript(script)
-            
+        
+    @abortable
     def flush_routes(self, wiface, liface):
         """ Flush the routes for both wired/wireless interfaces. """
         self.SetStatus('flushing_routing_table')
         print 'Flushing the routing table...'
         wiface.FlushRoutes()
         liface.FlushRoutes()
-
+        
+    @abortable
     def set_broadcast_address(self, iface):
         """ Set the broadcast address for the given interface. """
         if not self.network.get('broadcast') == None:
             self.SetStatus('setting_broadcast_address')
             print 'Setting the broadcast address...' + self.network['broadcast']
             iface.SetAddress(broadcast=self.network['broadcast'])
-            
+        
+    @abortable            
     def set_ip_address(self, iface):
         """ Set the IP address for the given interface. 
         
@@ -315,7 +342,8 @@ class ConnectThread(threading.Thread):
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
                 self.abort_connection(dhcp_status)
                 return
-            
+        
+    @abortable            
     def set_dns_addresses(self):
         """ Set the DNS address(es).
 
@@ -336,6 +364,20 @@ class ConnectThread(threading.Thread):
                                  self.network.get('dns3'),
                                  self.network.get('search_domain'))
 
+    @abortable        
+    def release_dhcp_clients(self, wiface, liface):
+        """ Release all running dhcp clients. """
+        print "Releasing DHCP leases..."
+        wiface.ReleaseDHCP()
+        liface.ReleaseDHCP()
+        
+    @abortable        
+    def stop_dhcp_clients(self, iface):
+        """ Stop and running DHCP clients, as well as wpa_supplicant. """
+        print 'Stopping wpa_supplicant and any DHCP clients'
+        iface.StopWPA()
+        BACKEND.StopDHCP()
+        
     def connect_aborted(self, reason):
         """ Sets the thread status to aborted in a thread-safe way.
         
@@ -347,7 +389,7 @@ class ConnectThread(threading.Thread):
             reason = self.abort_reason
         self.connecting_message = reason
         self.is_aborted = True
-        self.abort_msg = reason
+        self.connect_result = reason
         self.is_connecting = False
         print 'exiting connection thread'
         
@@ -355,18 +397,6 @@ class ConnectThread(threading.Thread):
         """ Schedule a connection abortion for the given reason. """
         self.abort_reason = reason
         self.should_die = True
-        
-    def release_dhcp_clients(self, wiface, liface):
-        """ Release all running dhcp clients. """
-        print "Releasing DHCP leases..."
-        wiface.ReleaseDHCP()
-        liface.ReleaseDHCP()
-        
-    def stop_dhcp_clients(self, iface):
-        """ Stop and running DHCP clients, as well as wpa_supplicant. """
-        print 'Stopping wpa_supplicant and any DHCP clients'
-        iface.StopWPA()
-        BACKEND.StopDHCP()
         
     def abort_if_needed(self):
         """ Abort the thread is it has been requested. """
@@ -377,7 +407,8 @@ class ConnectThread(threading.Thread):
                 thread.exit()
         finally:
             self.lock.release()
-            
+        
+    @abortable            
     def put_iface_up(self, iface):
         """ Bring up given interface. """
         print 'Putting interface up...'
@@ -397,11 +428,15 @@ class Wireless(Controller):
         self._wpa_driver = value
         if self.wiface:
             self.SetWPADriver(value)
-    
     def get_wpa_driver(self): return self._wpa_driver
-    
     wpa_driver = property(get_wpa_driver, set_wpa_driver)
     
+    def set_iface(self, value):
+        self.wiface = value
+    def get_iface(self):
+        return self.wiface
+    iface = property(get_iface, set_iface)
+        
     def LoadBackend(self, backend):
         """ Load a given backend. 
 
@@ -541,6 +576,9 @@ class Wireless(Controller):
         
         """
         return self.wiface.IsUp()
+    
+    def StopWPA(self):
+        return self.wiface.StopWPA()
 
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key,
             enc_used, ics):
@@ -632,6 +670,7 @@ class Wireless(Controller):
             misc.ExecuteScript(self.disconnect_script)
 
         wiface.ReleaseDHCP()
+        wiface.StopWPA()
         wiface.SetAddress('0.0.0.0')
         wiface.Down()
         wiface.Up()
@@ -699,17 +738,13 @@ class WirelessConnectThread(ConnectThread):
         self.is_connecting = True
         
         # Run pre-connection script.
-        self.abort_if_needed()
         self.run_script_if_needed(self.before_script, 'pre-connection')
-        self.abort_if_needed()
         
         # Take down interface and clean up previous connections.
         self.put_iface_down(wiface)
-        self.abort_if_needed()
         self.release_dhcp_clients(wiface, liface)
         self.reset_ip_addresses(wiface, liface)
         self.stop_dhcp_clients(wiface)
-        self.abort_if_needed()
         self.flush_routes(wiface, liface)
 
         # Generate PSK and authenticate if needed.
@@ -717,10 +752,8 @@ class WirelessConnectThread(ConnectThread):
             self.generate_psk_and_authenticate(wiface)
 
         # Put interface up.
-        self.abort_if_needed()
         self.SetStatus('configuring_interface')
         self.put_iface_up(wiface)
-        self.abort_if_needed()
         
         # Associate.
         wiface.SetMode(self.network['mode'])
@@ -737,24 +770,23 @@ class WirelessConnectThread(ConnectThread):
             self.SetStatus('validating_authentication')
             if not wiface.ValidateAuthentication(time.time()):
                 self.abort_connection('bad_pass')
-        self.abort_if_needed()
 
         # Set up gateway, IP address, and DNS servers.
         self.set_broadcast_address(wiface)
-        self.abort_if_needed()
         self.set_ip_address(wiface)
         self.set_dns_addresses()
         
         # Run post-connection script.
-        self.abort_if_needed()
         self.run_script_if_needed(self.after_script, 'post-connection')
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
         if self.debug:
             print "IP Address is: " + str(wiface.GetIP())
+        self.connect_result = "Success"
         self.is_connecting = False
-    
+        
+    @abortable    
     def generate_psk_and_authenticate(self, wiface):
         """ Generates a PSK and authenticates if necessary. 
         
@@ -799,6 +831,12 @@ class Wired(Controller):
     def get_link_detect(self): return self._link_detect
     link_detect = property(get_link_detect, set_link_detect)
     
+    def set_iface(self, value):
+        self.liface = value
+    def get_iface(self):
+        return self.liface
+    iface = property(get_iface, set_iface)
+    
     def LoadBackend(self, backend):
         """ Load the backend up. """
         Controller.LoadBackend(self, backend)
@@ -831,7 +869,7 @@ class Wired(Controller):
             self.wiface, self.liface, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
-        return True
+        return self.connecting_thread
     
     def DetectWiredInterface(self):
         """ Attempts to automatically detect a wired interface. """
@@ -937,28 +975,22 @@ class WiredConnectThread(ConnectThread):
         self.is_connecting = True
 
         # Run pre-connection script.
-        self.abort_if_needed()
         self.run_script_if_needed(self.before_script, 'pre-connection')
-        self.abort_if_needed()
         
         # Take down interface and clean up previous connections.
         self.put_iface_down(liface)
         self.release_dhcp_clients(wiface, liface)
         self.reset_ip_addresses(wiface, liface)
         self.stop_dhcp_clients(wiface)
-        self.abort_if_needed()
         self.flush_routes(wiface, liface)
         
         # Bring up interface.
         self.put_iface_up(liface)
-        self.abort_if_needed()
         
         # Set gateway, IP adresses, and DNS servers.
         self.set_broadcast_address(liface)
-        self.abort_if_needed()
         self.set_ip_address(liface)
         self.set_dns_addresses()
-        self.abort_if_needed()
         
         # Run post-connection script.
         self.run_script_if_needed(self.after_script, 'post-connection')
@@ -967,4 +999,6 @@ class WiredConnectThread(ConnectThread):
         print 'Connecting thread exiting.'
         if self.debug:
             print "IP Address is: " + str(liface.GetIP())
+        
+        self.connect_result = "Success"
         self.is_connecting = False

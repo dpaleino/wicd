@@ -309,8 +309,8 @@ class appGui(object):
         self.refresh_clicked()
         
     def handle_connection_results(self, results):
-        if results != "Success" and self.is_visible:
-            error(self.window, results, block=False)
+        if results not in ['Success', 'aborted'] and self.is_visible:
+            error(self.window, language[results], block=False)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """

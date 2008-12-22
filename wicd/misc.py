@@ -504,8 +504,9 @@ def get_language_list_gui():
     language['setting_static_ip'] = _('Setting static IP addresses...')
     language['running_dhcp'] = _('Obtaining IP address...')
     language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
+    language['no_dhcp_offers'] = _('Connection Failed: No DHCP offers received.')
     language['aborted'] = _('Connection Cancelled')
-    language['bad_pass'] = _('Connection Failed: Bad password')
+    language['bad_pass'] = _('Connection Failed: Could not authenticate (bad password?)')
     language['done'] = _('Done connecting...')
     language['scanning'] = _('Scanning')
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \

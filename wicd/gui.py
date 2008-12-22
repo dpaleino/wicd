@@ -295,17 +295,23 @@ class appGui(object):
                         'org.wicd.daemon.wireless')
         bus.add_signal_receiver(self.update_connect_buttons, 'StatusChanged',
                         'org.wicd.daemon')
+        bus.add_signal_receiver(self.handle_connection_results,
+                                'ConnectResultsSent', 'org.wicd.daemon')
+        bus.add_signal_receiver(lambda: setup_dbus(force=False), 
+                                "DaemonStarting", "org.wicd.daemon")
         if standalone:
             bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
                                     "org.wicd.daemon")
-            bus.add_signal_receiver(lambda: setup_dbus(force=False), 
-                                    "DaemonStarting", "org.wicd.daemon")
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:
             gobject.timeout_add(1000, self.update_statusbar)
             
         self.refresh_clicked()
+        
+    def handle_connection_results(self, results):
+        if results not in ['Success', 'aborted'] and self.is_visible:
+            error(self.window, language[results], block=False)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """

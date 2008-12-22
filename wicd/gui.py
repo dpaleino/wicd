@@ -84,38 +84,30 @@ def handle_no_dbus(from_tray=False):
     DBUS_AVAIL = False
     if from_tray: return False
     print "Wicd daemon is shutting down!"
-    error(None, "The wicd daemon has shut down, the UI will not function properly until it is restarted.")
-    _wait_for_dbus()
+    error(None, language['lost_dbus'], block=False)
     return False
 
-@misc.threaded
-def _wait_for_dbus():
-    global DBUS_AVAIL
-    while True:
-        time.sleep(10)
-        print "Trying to reconnect.."
-        if not setup_dbus(force=False):
-            print "Failed to reconnect to the daemon."
-        else:
-            print "Successfully reconnected to the daemon."
-            DBUS_AVAIL = True
-            return
-      
-def error(parent, message): 
+def error(parent, message, block=True): 
     """ Shows an error dialog """
+    def delete_event(dialog, id):
+        dialog.destroy()
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
+    if not block:
+        dialog.present()
+        dialog.connect("response", delete_event)
+    else:
+        dialog.run()
+        dialog.destroy()
     
 def alert(parent, message): 
-    """ Shows an error dialog """
+    """ Shows an warning dialog """
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
+    dialog.present()
+    dialog.connect("response", lambda *args: dialog.destroy())
     
 def dummy(x=None):pass
 
@@ -284,6 +276,7 @@ class appGui(object):
         self.first_dialog_load = True
         self.is_visible = True
         self.pulse_active = False
+        self.pref = None
         self.standalone = standalone
         self.wpadrivercombo = None
         self.connecting = False
@@ -302,6 +295,10 @@ class appGui(object):
                         'org.wicd.daemon.wireless')
         bus.add_signal_receiver(self.update_connect_buttons, 'StatusChanged',
                         'org.wicd.daemon')
+        bus.add_signal_receiver(self.handle_connection_results,
+                                'ConnectResultsSent', 'org.wicd.daemon')
+        bus.add_signal_receiver(lambda: setup_dbus(force=False), 
+                                "DaemonStarting", "org.wicd.daemon")
         if standalone:
             bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
                                     "org.wicd.daemon")
@@ -311,6 +308,10 @@ class appGui(object):
             gobject.timeout_add(1000, self.update_statusbar)
             
         self.refresh_clicked()
+        
+    def handle_connection_results(self, results):
+        if results not in ['Success', 'aborted'] and self.is_visible:
+            error(self.window, language[results], block=False)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
@@ -384,10 +385,14 @@ class appGui(object):
     
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
-        pref = PreferencesDialog(self.wTree, dbusmanager.get_dbus_ifaces())
-        if pref.run() == 1:
-            pref.save_results()
-        pref.hide()
+        if not self.pref:
+            self.pref = PreferencesDialog(self.wTree,
+                                          dbusmanager.get_dbus_ifaces())
+        else:
+            self.pref.load_preferences_diag()
+        if self.pref.run() == 1:
+            self.pref.save_results()
+        self.pref.hide()
 
     def connect_hidden(self, widget):
         """ Prompts the user for a hidden network, then scans for it. """

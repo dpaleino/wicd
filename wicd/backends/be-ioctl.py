@@ -102,6 +102,10 @@ def GetWiredInterfaces(*args, **kargs):
     """ Call the wnettools GetWiredInterfaces method. """
     return wnettools.GetWiredInterfaces(*args, **kargs)
 
+def IsValidWpaSuppDriver(*args, **kargs):
+    """ Call the wnettools IsValidWpaSuppDrive method. """
+    return wnettools.IsValidWpaSuppDriver(*args, **kargs)
+
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.
     

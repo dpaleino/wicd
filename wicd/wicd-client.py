@@ -642,7 +642,7 @@ Arguments:
     
 def setup_dbus(force=True):
     global bus, daemon, wireless, wired, DBUS_AVAIL
-    
+    print "Connecting to daemon..."
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
@@ -653,7 +653,7 @@ def setup_dbus(force=True):
                 dbusmanager.connect_to_dbus()
             except DBusException:
                 gui.error(None, "Could not connect to wicd's D-Bus interface.  " +
-                      "Check the wicd log for error messages.")
+                          "Check the wicd log for error messages.")
                 return False
         else:  
             return False
@@ -664,6 +664,7 @@ def setup_dbus(force=True):
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
     DBUS_AVAIL = True
+    print "Connected."
     
     return True
 
@@ -672,24 +673,8 @@ def handle_no_dbus():
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    gui.error(None, "The wicd daemon has shut down, the UI will not function " +
-              "properly until it is restarted.")
-    _wait_for_dbus()
+    gui.error(None, language['lost_dbus'], block=False)
     return False
-
-@misc.threaded
-def _wait_for_dbus():
-    global DBUS_AVAIL
-    while True:
-        time.sleep(10)
-        print "Trying to reconnect.."
-        if not setup_dbus(force=False):
-            print "Failed to reconnect to the daemon."
-        else:
-            print "Successfully reconnected to the daemon."
-            gui.setup_dbus(force=False)
-            DBUS_AVAIL = True
-            return
 
 def main(argv):
     """ The main frontend program.
@@ -750,7 +735,9 @@ def main(argv):
                             'SendStartScanSignal', 'org.wicd.daemon.wireless')
     bus.add_signal_receiver(lambda: handle_no_dbus() or tray_icon.icon_info.set_not_connected_state(), 
                             "DaemonClosing", 'org.wicd.daemon')
-    print 'Done.'
+    bus.add_signal_receiver(lambda: setup_dbus(force=False), "DaemonStarting",
+                            "org.wicd.daemon")
+    print 'Done loading.'
     mainloop = gobject.MainLoop()
     mainloop.run()
 

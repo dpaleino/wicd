@@ -504,13 +504,15 @@ def get_language_list_gui():
     language['setting_static_ip'] = _('Setting static IP addresses...')
     language['running_dhcp'] = _('Obtaining IP address...')
     language['dhcp_failed'] = _('Connection Failed: Unable to Get IP Address')
+    language['no_dhcp_offers'] = _('Connection Failed: No DHCP offers received.')
     language['aborted'] = _('Connection Cancelled')
-    language['bad_pass'] = _('Connection Failed: Bad password')
+    language['bad_pass'] = _('Connection Failed: Could not authenticate (bad password?)')
     language['done'] = _('Done connecting...')
     language['scanning'] = _('Scanning')
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
                                     "This typically means there was a problem starting the daemon." + \
                                     "Check the wicd log for more info")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     
     return language
 
@@ -536,6 +538,7 @@ def get_language_list_tray():
                                         "This typically means there was a problem starting the daemon." + \
                                         "Check the wicd log for more info")
     language['no_daemon_tooltip'] = _("Wicd daemon unreachable")
+    language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     return language
 
 def noneToBlankString(text):

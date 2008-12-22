@@ -297,10 +297,11 @@ class appGui(object):
                         'org.wicd.daemon')
         bus.add_signal_receiver(self.handle_connection_results,
                                 'ConnectResultsSent', 'org.wicd.daemon')
-        bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
-                                "org.wicd.daemon")
         bus.add_signal_receiver(lambda: setup_dbus(force=False), 
                                 "DaemonStarting", "org.wicd.daemon")
+        if standalone:
+            bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
+                                    "org.wicd.daemon")
         try:
             gobject.timeout_add_seconds(1, self.update_statusbar)
         except:

@@ -391,9 +391,8 @@ class ConnectThread(threading.Thread):
         
     @abortable        
     def stop_dhcp_clients(self, iface):
-        """ Stop and running DHCP clients, as well as wpa_supplicant. """
-        print 'Stopping wpa_supplicant and any DHCP clients'
-        iface.StopWPA()
+        """ Stop and running DHCP clients. """
+        print 'Stopping DHCP clients'
         BACKEND.StopDHCP()
         
     def connect_aborted(self, reason):
@@ -710,6 +709,7 @@ class WirelessConnectThread(ConnectThread):
         self.release_dhcp_clients(wiface)
         self.reset_ip_addresses(wiface)
         self.stop_dhcp_clients(wiface)
+        self.stop_wpa(wiface)
         self.flush_routes(wiface)
 
         # Generate PSK and authenticate if needed.
@@ -751,6 +751,12 @@ class WirelessConnectThread(ConnectThread):
             print "IP Address is: " + str(wiface.GetIP())
         self.connect_result = "Success"
         self.is_connecting = False
+        
+    @abortable
+    def stop_wpa(self, wiface):
+        """ Stops wpa_supplicant. """
+        print 'Stopping wpa_supplicant'
+        wiface.StopWPA()
         
     @abortable    
     def generate_psk_and_authenticate(self, wiface):
@@ -860,7 +866,7 @@ class WiredConnectThread(ConnectThread):
     to the specified network.
 
     """
-    def __init__(self, network, wireless, before_script, after_script, 
+    def __init__(self, network, wired, before_script, after_script, 
                  disconnect_script, gdns1, gdns2, gdns3, gsearch_dom, liface, 
                  debug=False):
         """ Initialise the thread with network information.

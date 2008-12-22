@@ -312,7 +312,7 @@ class WicdDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def GetAutoReconnect(self):
         """ Returns the value of self.auto_reconnect. See SetAutoReconnect. """
-        do = bool(self.auto_reconnect)
+        return bool(self.auto_reconnect)
 
     @dbus.service.method('org.wicd.daemon')
     def SetAutoReconnect(self, value):

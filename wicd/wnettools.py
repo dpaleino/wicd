@@ -41,7 +41,7 @@ import misc
 RALINK_DRIVER = 'ralink legacy'
 
 
-blacklist_strict = punctuation.replace("-", "") + " "
+blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 

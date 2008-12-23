@@ -94,21 +94,10 @@ class PreferencesDialog(object):
         self.entryWirelessInterface.set_text(daemon.GetWirelessInterface())
         self.entryWiredInterface.set_text(daemon.GetWiredInterface())
 
-        found = False
         def_driver = daemon.GetWPADriver()
-        for i, x in enumerate(self.wpadrivers):
-            if x == def_driver: #and not found:
-                found = True
-                user_driver_index = i
-            self.wpadrivercombo.remove_text(i)
-            self.wpadrivercombo.append_text(x)
-
-        # Set the active choice here.  Doing it before all the items are
-        # added the combobox causes the choice to be reset.
-        if found:
-            self.wpadrivercombo.set_active(user_driver_index)
-        else:
-            # Use wext as default, since normally it is the correct driver.
+        try:
+            self.wpadrivercombo.set_active(self.wpadrivers.index(def_driver))
+        except ValueError:
             self.wpadrivercombo.set_active(0)
 
         self.useGlobalDNSCheckbox.connect("toggled", checkboxTextboxToggle,
@@ -128,22 +117,12 @@ class PreferencesDialog(object):
             self.dns2Entry.set_sensitive(False)
             self.dns3Entry.set_sensitive(False)
             
-        # Load backend combobox
-        self.backends = daemon.GetBackendList()
-        # "" is included as a hack for DBus limitations, so we remove it.
-        self.backends.remove("")
-        found = False
         cur_backend = daemon.GetSavedBackend()
-        for i, x in enumerate(self.backends):
-            if x == cur_backend:
-                found = True
-                backend_index = i
-            self.backendcombo.remove_text(i)
-            self.backendcombo.append_text(x)
-
-        if found:
-            self.backendcombo.set_active(backend_index)
-        else:
+        self.backendcombo.set_active(0)
+        
+        try:
+            self.backendcombo.set_active(self.backends.index(cur_backend))
+        except ValueError:
             self.backendcombo.set_active(0)
         
         self.wTree.get_widget("notebook2").set_current_page(0)
@@ -315,6 +294,9 @@ class PreferencesDialog(object):
                            "ndiswrapper", "ipw"]
         self.wpadrivers = wireless.GetWpaSupplicantDrivers(self.wpadrivers)
         self.wpadrivers.append("ralink_legacy")
+        
+        for x in self.wpadrivers:
+            self.wpadrivercombo.append_text(x)
 
         self.entryWirelessInterface = self.wTree.get_widget("pref_wifi_entry")
         self.entryWiredInterface = self.wTree.get_widget("pref_wired_entry")
@@ -328,3 +310,12 @@ class PreferencesDialog(object):
         self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")
         
         self.backendcombo = build_combobox("pref_backend_combobox")
+        # Load backend combobox
+        self.backends = daemon.GetBackendList()
+        # "" is included as a hack for DBus limitations, so we remove it.
+        self.backends.remove("")
+        
+        cur_backend = daemon.GetSavedBackend()
+        for x in self.backends:
+            self.backendcombo.append_text(x)
+            

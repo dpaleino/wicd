@@ -1,7 +1,7 @@
-name = WPA 1/2 (Passphrase)
+name = WPA 1/2 (Preshared Key)
 author = Adam Blackburn
 version = 1
-require key *Key
+require apsk *Preshared_Key
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={
@@ -11,5 +11,5 @@ network={
        key_mgmt=WPA-PSK
        pairwise=CCMP TKIP
        group=CCMP TKIP
-       psk=$_PSK
+       psk="$_APSK"
 }

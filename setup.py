@@ -333,7 +333,7 @@ try:
         piddir += '/'
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
-        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README' ]))
+        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES' ]))
     if not wpath.no_install_kde:
         data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
     if not wpath.no_install_init:

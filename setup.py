@@ -63,6 +63,7 @@ class configure(Command):
         ('pidfile=', None, 'set the pid file'),
         ('initfile=', None, 'set the init file to use'),
         ('initfilename=', None, "set the name of the init file (don't use)"),
+        ('wicdgroup=', None, "set the name of the group used for wicd"),
 
         # Configure switches
         ('no-install-init', None, "do not install the init file"),
@@ -179,6 +180,7 @@ class configure(Command):
         self.python = '/usr/bin/python'
         self.pidfile = '/var/run/wicd/wicd.pid'
         self.initfilename = os.path.basename(self.initfile)
+        self.wicdgroup = 'users'
 
 
     def finalize_options(self):

@@ -32,8 +32,7 @@
         </policy>
 
 	<!-- This Unix group will have permission to use Wicd's gui -->
-	<!-- TODO: fix this in ./in/wicd.conf.in and setup.py -->
-        <policy group="somegroup">
+        <policy group="%WICDGROUP%">
                 <allow send_interface="org.freedesktop.DBus.Introspectable"/>
                 <allow send_destination="org.wicd.daemon"/>
                 <allow send_interface="org.wicd.daemon"/>

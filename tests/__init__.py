@@ -1,4 +1,3 @@
-
 def run_tests():
     import unittest
     test_suite = unittest.TestSuite()

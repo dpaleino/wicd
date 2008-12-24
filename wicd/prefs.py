@@ -71,6 +71,7 @@ class PreferencesDialog(object):
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
                      self.pumpradio]
         dhcp_method = daemon.GetDHCPClient()
+        print 'DHCP method is %s' % daemon.GetDHCPClient()
         dhcp_list[dhcp_method].set_active(True)
         
         wired_link_list = [self.linkautoradio, self.ethtoolradio,
@@ -94,21 +95,10 @@ class PreferencesDialog(object):
         self.entryWirelessInterface.set_text(daemon.GetWirelessInterface())
         self.entryWiredInterface.set_text(daemon.GetWiredInterface())
 
-        found = False
         def_driver = daemon.GetWPADriver()
-        for i, x in enumerate(self.wpadrivers):
-            if x == def_driver: #and not found:
-                found = True
-                user_driver_index = i
-            self.wpadrivercombo.remove_text(i)
-            self.wpadrivercombo.append_text(x)
-
-        # Set the active choice here.  Doing it before all the items are
-        # added the combobox causes the choice to be reset.
-        if found:
-            self.wpadrivercombo.set_active(user_driver_index)
-        else:
-            # Use wext as default, since normally it is the correct driver.
+        try:
+            self.wpadrivercombo.set_active(self.wpadrivers.index(def_driver))
+        except ValueError:
             self.wpadrivercombo.set_active(0)
 
         self.useGlobalDNSCheckbox.connect("toggled", checkboxTextboxToggle,
@@ -128,22 +118,12 @@ class PreferencesDialog(object):
             self.dns2Entry.set_sensitive(False)
             self.dns3Entry.set_sensitive(False)
             
-        # Load backend combobox
-        self.backends = daemon.GetBackendList()
-        # "" is included as a hack for DBus limitations, so we remove it.
-        self.backends.remove("")
-        found = False
         cur_backend = daemon.GetSavedBackend()
-        for i, x in enumerate(self.backends):
-            if x == cur_backend:
-                found = True
-                backend_index = i
-            self.backendcombo.remove_text(i)
-            self.backendcombo.append_text(x)
-
-        if found:
-            self.backendcombo.set_active(backend_index)
-        else:
+        self.backendcombo.set_active(0)
+        
+        try:
+            self.backendcombo.set_active(self.backends.index(cur_backend))
+        except ValueError:
             self.backendcombo.set_active(0)
         
         self.wTree.get_widget("notebook2").set_current_page(0)
@@ -234,32 +214,34 @@ class PreferencesDialog(object):
         def setup_label(name, lbl=""):
             """ Sets up a label for the given widget name. """
             widget = self.wTree.get_widget(name)
-            if lbl:
-                widget.set_label(language[lbl])
+            # if lbl:
+            #     widget.set_label(language[lbl])
+            if widget is None:
+                raise ValueError('widget %s does not exist' % name)
             return widget
         
         # External Programs tab
-        self.wTree.get_widget("gen_settings_label").set_label(language["gen_settings"])
-        self.wTree.get_widget("ext_prog_label").set_label(language["ext_programs"])
-        self.wTree.get_widget("dhcp_client_label").set_label(language["dhcp_client"])
-        self.wTree.get_widget("wired_detect_label").set_label(language["wired_detect"])
-        self.wTree.get_widget("route_flush_label").set_label(language["route_flush"])
-        self.wTree.get_widget("pref_backend_label").set_label(language["backend"] + ":")
+        # self.wTree.get_widget("gen_settings_label").set_label(language["gen_settings"])
+        # self.wTree.get_widget("ext_prog_label").set_label(language["ext_programs"])
+        # self.wTree.get_widget("dhcp_client_label").set_label(language["dhcp_client"])
+        # self.wTree.get_widget("wired_detect_label").set_label(language["wired_detect"])
+        # self.wTree.get_widget("route_flush_label").set_label(language["route_flush"])
+        # self.wTree.get_widget("pref_backend_label").set_label(language["backend"] + ":")
         
-        entryWiredAutoMethod = self.wTree.get_widget("pref_wired_auto_label")
-        entryWiredAutoMethod.set_label('Wired Autoconnect Setting:')
-        entryWiredAutoMethod.set_alignment(0, 0)
-        atrlist = pango.AttrList()
-        atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, 50))
-        entryWiredAutoMethod.set_attributes(atrlist)
+        # entryWiredAutoMethod = self.wTree.get_widget("pref_wired_auto_label")
+        # entryWiredAutoMethod.set_label('Wired Autoconnect Setting:')
+        # entryWiredAutoMethod.set_alignment(0, 0)
+        # atrlist = pango.AttrList()
+        # atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, 50))
+        # entryWiredAutoMethod.set_attributes(atrlist)
         
-        self.set_label("pref_dns1_label", "%s %s" % (language['dns'], language['1']))
-        self.set_label("pref_dns2_label", "%s %s" % (language['dns'], language['2']))
-        self.set_label("pref_dns3_label", "%s %s" % (language['dns'], language['3']))
-        self.set_label("pref_search_dom_label", "%s:" % language['search_domain'])
-        self.set_label("pref_wifi_label", "%s:" % language['wireless_interface'])
-        self.set_label("pref_wired_label", "%s:" % language['wired_interface'])
-        self.set_label("pref_driver_label", "%s:" % language['wpa_supplicant_driver'])
+        # self.set_label("pref_dns1_label", "%s %s" % (language['dns'], language['1']))
+        # self.set_label("pref_dns2_label", "%s %s" % (language['dns'], language['2']))
+        # self.set_label("pref_dns3_label", "%s %s" % (language['dns'], language['3']))
+        # self.set_label("pref_search_dom_label", "%s:" % language['search_domain'])
+        # self.set_label("pref_wifi_label", "%s:" % language['wireless_interface'])
+        # self.set_label("pref_wired_label", "%s:" % language['wired_interface'])
+        # self.set_label("pref_driver_label", "%s:" % language['wpa_supplicant_driver'])
         
         self.dialog = self.wTree.get_widget("pref_dialog")
         self.dialog.set_title(language['preferences'])
@@ -315,6 +297,9 @@ class PreferencesDialog(object):
                            "ndiswrapper", "ipw"]
         self.wpadrivers = wireless.GetWpaSupplicantDrivers(self.wpadrivers)
         self.wpadrivers.append("ralink_legacy")
+        
+        for x in self.wpadrivers:
+            self.wpadrivercombo.append_text(x)
 
         self.entryWirelessInterface = self.wTree.get_widget("pref_wifi_entry")
         self.entryWiredInterface = self.wTree.get_widget("pref_wired_entry")
@@ -328,3 +313,12 @@ class PreferencesDialog(object):
         self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")
         
         self.backendcombo = build_combobox("pref_backend_combobox")
+        # Load backend combobox
+        self.backends = daemon.GetBackendList()
+        # "" is included as a hack for DBus limitations, so we remove it.
+        self.backends.remove("")
+        
+        cur_backend = daemon.GetSavedBackend()
+        for x in self.backends:
+            self.backendcombo.append_text(x)
+            

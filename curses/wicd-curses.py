@@ -33,9 +33,8 @@ at least get a network connection.  Or those who don't like using X.  :-)
     Comments, criticisms, patches, bug reports all welcome!
 """
 
-##### NOTICE: THIS DOES NOT WORK WITH THE EXPERIMENTAL BRANCH, DESPITE THE FACT
-#####         THAT THIS FILE COMES WITH A FULL COPY OF THE EXPERIMENTAL BRANCH!
-#####         I WILL PROBABLY BE REMEDYING THIS SOMETIME IN JANUARY.
+##### NOTICE: THIS ONLY WORKS WITH THE SOURCE IN WICD 1.6 AS FOUND IN THE BZR
+#####         REPOSITORIES!
 
 # UI stuff
 #import urwid.raw_display
@@ -50,6 +49,7 @@ import gobject
 
 # Other important wicd-related stuff
 import wicd.misc as misc
+from wicd import dbusmanager
 
 # Internal Python stuff
 import sys
@@ -197,7 +197,7 @@ class wrap_exceptions:
                 gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
-                print "Terminated by user."
+                print "\nTerminated by user."
                 raise
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
@@ -210,7 +210,7 @@ class wrap_exceptions:
                     # Zap the screen
                     ui.stop()
                     # Print out standard notification:
-                    print "EXCEPTION!"
+                    print "\nEXCEPTION!"
                     print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
                     print redraw_tag
                     # Flush the buffer so that the notification is always above the
@@ -291,9 +291,6 @@ def gen_list_header():
 # DBUS interfaces do.  ^_^
 # Whatever calls this must be exception-wrapped if it is run if the UI is up
 def gen_network_list():
-    #theList = [urwid.Text(gen_list_header())]
-    #theList = []
-    
     # Pick which strength measure to use based on what the daemon says
     if daemon.GetSignalDisplayType() == 0:
         strenstr = 'quality'
@@ -304,15 +301,12 @@ def gen_network_list():
 
     id = 0
     wiredL = []
-    for profile in config.GetWiredProfileList():
-        #if id == 0:
-            #theList.append(urwid.Text("Wired Network(s):"))
-            #wired.append(urwid.Text(('body',"Wired Network(s):") ) )
+    for profile in wired.GetWiredProfileList():
         theString = '%4s   %25s' % (id, profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
         # Tag if no wireless IP present, and wired one is
-        is_active = wireless.GetWirelessIP() == None and wired.GetWiredIP() != None
+        is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
         if is_active:
             theString = '>'+theString[1:]
             wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
@@ -323,9 +317,6 @@ def gen_network_list():
 
     wlessL = []
     for network_id in range(0, wireless.GetNumberOfNetworks()):
-        #if network_id == 0:
-            #wireless.append(urwid.Text(('body', "Wireless Network(s):")) )
-
         # ?: in python
         encryption = wireless.GetWirelessProperty(network_id, 'encryption_method') if wireless.GetWirelessProperty(network_id, 'encryption') else 'Unsecured'
         theString = '  %*s  %25s %9s %17s %6s: %s' % ( gap,
@@ -338,13 +329,12 @@ def gen_network_list():
             wireless.GetWirelessProperty(network_id, 'mode'), # Master, Ad-Hoc
             wireless.GetWirelessProperty(network_id, 'channel')
             )
-        is_active = wireless.GetPrintableSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
+        is_active = wireless.GetCurrentSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
         if is_active:
             theString = '>'+theString[1:]
             wlessL.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
         else:
             wlessL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
-        #theList.append(SelText(theString))
     return (wiredL,wlessL)
 
 
@@ -384,19 +374,16 @@ class appGUI():
                                    ('fixed',1,self.wiredLB),
                                    ('fixed',1,self.wlessH),
                                               self.wlessLB] )
-        #self.netList = urwid.ListBox(wlessL)
-        #walker = urwid.SimpleListWalker(gen_network_list())
         self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
         self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
-        #self.listbox = urwid.AttrWrap(urwid.ListBox(netList),'body','focus')
         self.frame = urwid.Frame(self.thePile,
                                  header=header,
                                  footer=urwid.BoxAdapter(self.footerList,2))
-        #self.frame = urwid.Frame(self.screen_locker, header=header,footer=footer)
         self.frame.set_focus('body')
+
         # Booleans gallore!
         self.prev_state    = False
         self.connecting    = False
@@ -441,17 +428,16 @@ class appGUI():
         wireless_connecting = wireless.CheckIfWirelessConnecting()
         self.connecting = wired_connecting or wireless_connecting
         
-        # IN EXPERIMENTAL
-        #fast = not daemon.NeedsExternalCalls()
+        fast = not daemon.NeedsExternalCalls()
         if self.connecting:
             #self.lock_screen()
             #if self.statusID:
             #    gobject.idle_add(self.status_bar.remove, 1, self.statusID)
             if wireless_connecting:
-                #if not fast:
-                iwconfig = wireless.GetIwconfig()
-                #else:
-                #    iwconfig = ''
+                if not fast:
+                    iwconfig = wireless.GetIwconfig()
+                else:
+                    iwconfig = ''
                 # set_status is rigged to return false when it is not
                 # connecting to anything, so this should work.
                 gobject.idle_add(self.set_status, wireless.GetCurrentNetwork(iwconfig) +
@@ -465,10 +451,14 @@ class appGUI():
                         True)
             return True
         else:
-            if check_for_wired(wired.GetWiredIP(),self.set_status):
+            if check_for_wired(wired.GetWiredIP(''),self.set_status):
                 return True
-            elif check_for_wireless(wireless.GetIwconfig(),
-                                    wireless.GetWirelessIP(), self.set_status):
+            if not fast:
+                iwconfig = wireless.GetIwconfig()
+            else:
+                iwconfig = ''
+            if check_for_wireless(iwconfig, wireless.GetWirelessIP(""),
+                    self.set_status):
                 return True
             else:
                 self.set_status(language['not_connected'])
@@ -479,7 +469,7 @@ class appGUI():
     # mainloop
     def set_status(self,text,from_idle=False):
         # If we are being called as the result of trying to connect to
-        # something return False immediately.
+        # something, return False immediately.
         if from_idle and not self.connecting:
             return False
         self.footer2 = urwid.AttrWrap(urwid.Text(text),'important')
@@ -489,7 +479,7 @@ class appGUI():
 
     # Make sure the screen is still working by providing a pretty counter.
     # Not necessary in the end, but I will be using footer1 for stuff in
-    # the long run.
+    # the long run, so I might as well put something there.
     incr = 0
     def idle_incr(self):
         theText = ""
@@ -517,13 +507,6 @@ class appGUI():
         self.lock_screen()
 
     # Redraw the screen
-    # There exists a problem with this where any exceptions that occur (especially of
-    # the DBus variety) will get spread out on the top of the screen, or not displayed
-    # at all.  Urwid and the glib main loop don't mix all too well.  I may need to
-    # consult the Urwid maintainer about this.
-    #
-    # The implementation of this solution is active in this program, and it appears to
-    # be functioning well.
     @wrap_exceptions()
     def update_ui(self):
         #self.update_status()
@@ -551,7 +534,6 @@ class appGUI():
                 daemon.CancelConnect()
                 # Prevents automatic reconnecting if that option is enabled
                 daemon.SetForcedDisconnect(True)
-            pass
         for k in keys:
             if k == "window resize":
                 self.size = ui.get_cols_rows()
@@ -612,7 +594,11 @@ def main():
         ('header','light blue','black'),
         ('important','light red','black'),
         ('connected','dark green','black'),
-        ('connected focus','black','dark green')])
+        ('connected focus','black','dark green'),
+        # I'll be needing these soon, so I'll leave them here for now.
+        ('editcp', 'light gray', 'black', 'standout'),
+        ('editbx', 'light gray', 'dark blue'),
+        ('editfc', 'white','dark blue', 'bold') ])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)
@@ -625,9 +611,9 @@ def run():
 
     # Connect signals and whatnot to UI screen control functions
     bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
-                            'org.wicd.daemon')
+                            'org.wicd.daemon.wireless')
     bus.add_signal_receiver(app.dbus_scan_started, 'SendStartScanSignal',
-                            'org.wicd.daemon')
+                            'org.wicd.daemon.wireless')
     # I've left this commented out many times.
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
@@ -641,22 +627,26 @@ def run():
     #gobject.idle_add(app.stop_loop)
     loop.run()
 
-
-# Mostly borrowed from gui.py, but also with the "need daemon first" check
-def setup_dbus():
-    global proxy_obj, daemon, wireless, wired, config, dbus_ifaces
+# Mostly borrowed from gui.py
+def setup_dbus(force=True):
+    global bus, daemon, wireless, wired, DBUS_AVAIL
     try:
-    	proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    except dbus.DBusException:
-    	print 'Error: Could not connect to the daemon. Please make sure it is running.'
-    	sys.exit(3)
-    daemon   = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-    wireless = dbus.Interface(proxy_obj, 'org.wicd.daemon.wireless')
-    wired    = dbus.Interface(proxy_obj, 'org.wicd.daemon.wired')
-    config   = dbus.Interface(proxy_obj, 'org.wicd.daemon.config')
-
-    dbus_ifaces = {"daemon" : daemon, "wireless" : wireless, "wired" : wired, 
-                   "config" : config}
+        dbusmanager.connect_to_dbus()
+    except DBusException:
+        # I may need to be a little more verbose here.
+        # Suggestions as to what should go here
+        print "Can't connect to the daemon.  Are you sure it is running?"
+        print "Please check the wicd log for error messages."
+        raise
+        # return False # <- Will need soon.
+    bus = dbusmanager.get_bus()
+    dbus_ifaces = dbusmanager.get_dbus_ifaces()
+    daemon = dbus_ifaces['daemon']
+    wireless = dbus_ifaces['wireless']
+    wired = dbus_ifaces['wired']
+    DBUS_AVAIL = True
+    
+    return True
 
 bus = dbus.SystemBus()
 setup_dbus()
@@ -665,4 +655,7 @@ setup_dbus()
 ##### MAIN ENTRY POINT
 ########################################
 if __name__ == '__main__':
-   main() 
+    main()
+    # Make sure that the terminal does not try to overwrite the last line of
+    # the program, so that everything looks pretty.
+    print ""

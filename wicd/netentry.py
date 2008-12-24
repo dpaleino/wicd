@@ -19,7 +19,7 @@ import gtk
 import os
 
 import misc
-from misc import noneToString, stringToNone, noneToBlankString, stringToBoolean
+from misc import noneToString, stringToNone, noneToBlankString, to_bool
 import wpath
 
 language = misc.get_language_list_gui()
@@ -526,7 +526,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.script_button.connect("button-press-event", self.edit_scripts)
         
         # Toggle the default profile checkbox to the correct state.
-        if stringToBoolean(wired.GetWiredProperty("default")):
+        if to_bool(wired.GetWiredProperty("default")):
             self.chkbox_default_profile.set_active(True)
         else:
             self.chkbox_default_profile.set_active(False)
@@ -666,7 +666,7 @@ class WiredNetworkEntry(NetworkEntry):
             self.advanced_dialog.prof_name = profile_name
 
             is_default = wired.GetWiredProperty("default")
-            self.chkbox_default_profile.set_active(stringToBoolean(is_default))
+            self.chkbox_default_profile.set_active(to_bool(is_default))
 
     def format_entry(self, label):
         """ Help method for fetching/formatting wired properties. """
@@ -728,7 +728,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
         self.vbox_top.pack_start(self.hbox_status, True, True)
 
-        if stringToBoolean(self.format_entry(networkID, "automatic")):
+        if to_bool(self.format_entry(networkID, "automatic")):
             self.chkbox_autoconnect.set_active(True)
         else:
             self.chkbox_autoconnect.set_active(False)

@@ -302,13 +302,22 @@ def get_gettext():
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
     # If this is a unicode string, encode it and return
-    if type(x) == unicode:
+    if type(x) not in [unicode, str]:
+        return x
+    if isinstance(x, unicode):
         return x.encode('utf-8')
     encoding = locale.getpreferredencoding()
     try:
-        ret = x.decode(encoding, 'replace').encode('utf-8')
-    except:
-        ret = x.decode('utf-8', 'replace').encode('utf-8')
+        ret = x.decode(encoding).encode('utf-8')
+    except UnicodeError:
+        try:
+            ret = x.decode('utf-8').encode('utf-8')
+        except UnicodeError:
+            try:
+                ret = x.decode('latin-1').encode('utf-8')
+            except UnicodeError:
+                ret = x.decode('utf-8', 'replace').encode('utf-8')
+            
     return ret
     
 def RenameProcess(new_name):
@@ -509,8 +518,8 @@ def get_language_list_gui():
     language['bad_pass'] = _('Connection Failed: Could not authenticate (bad password?)')
     language['done'] = _('Done connecting...')
     language['scanning'] = _('Scanning')
-    language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface." + \
-                                    "This typically means there was a problem starting the daemon." + \
+    language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface.  " + \
+                                    "This typically means there was a problem starting the daemon.  " + \
                                     "Check the wicd log for more info")
     language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     
@@ -554,14 +563,6 @@ def stringToNone(text):
         return None
     else:
         return str(text)
-
-def stringToBoolean(text):
-    """ Turns a string representation of a bool to a boolean if needed. """
-    if text in ("True", "1"):
-        return True
-    if text in ("False", "0"):
-        return False
-    return bool(text)
 
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:

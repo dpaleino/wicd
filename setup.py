@@ -238,7 +238,24 @@ class configure(Command):
                 item_out.close()
                 item_in.close()
                 shutil.copymode(original_name, final_name)
+
+class test(Command):
+    description = "run Wicd's unit tests"
+	
+    user_options = []
+	
+    def initialize_options(self):
+        pass
         
+    def finalize_options(self):
+        pass
+        
+    def run(self):
+        print "importing tests"
+        import tests
+        print 'running tests'
+        tests.run_tests()
+
 class get_translations(Command):
     description = "download the translations from the online translator"
          
@@ -349,7 +366,7 @@ try:
         data.append(( wpath.suspend, ['other/50-wicd-suspend.sh' ]))
     if not wpath.no_install_pmutils:
         data.append(( wpath.pmutils, ['other/55wicd' ]))
-    print 'Creating pid path', os.path.basename(wpath.pidfile)
+    print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):
         if not language.startswith('.'):
@@ -373,7 +390,7 @@ iwscan_ext = Extension(name      = 'iwscan',
                 libraries = ['iw'],
                 sources   = ['depends/python-iwscan/pyiwscan.c'])
     
-setup(cmdclass={'configure' : configure, 'get_translations' : get_translations, 'uninstall' : uninstall},
+setup(cmdclass={'configure' : configure, 'get_translations' : get_translations, 'uninstall' : uninstall, 'test' : test},
       name="Wicd",
       version=VERSION_NUM,
       description="A wireless and wired network manager",

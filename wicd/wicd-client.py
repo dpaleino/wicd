@@ -364,7 +364,8 @@ class TrayIcon(object):
             if DBUS_AVAIL:
                 self.toggle_wicd_gui()
             else:
-                gui.error(None, language["daemon_unavailable"])
+                # gui.error(None, language["daemon_unavailable"])
+                pass
 
         def on_quit(self, widget=None):
             """ Closes the tray icon. """

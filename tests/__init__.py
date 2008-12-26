@@ -1,4 +1,3 @@
-
 def run_tests():
     import unittest
     test_suite = unittest.TestSuite()
@@ -6,4 +5,7 @@ def run_tests():
     import testwnettools
     test_suite.addTest(testwnettools.suite())
 
-    unittest.TextTestRunner(verbosity=5).run(test_suite)
+    import testmisc
+    test_suite.addTest(testmisc.suite())
+
+    unittest.TextTestRunner(verbosity=2).run(test_suite)

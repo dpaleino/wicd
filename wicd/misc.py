@@ -564,14 +564,6 @@ def stringToNone(text):
     else:
         return str(text)
 
-def stringToBoolean(text):
-    """ Turns a string representation of a bool to a boolean if needed. """
-    if text in ("True", "1"):
-        return True
-    if text in ("False", "0"):
-        return False
-    return bool(text)
-
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())

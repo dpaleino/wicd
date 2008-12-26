@@ -11,10 +11,16 @@ connect you to networks now.  Configuring them is something soon to come soon.
 
 Controls:
 
-F5:      refresh wireless networks
+F5     : refresh wireless networks
 F8 or Q: quit 
 D      : disconnect from active network
 ESC    : if connecting to a network, stop doing so
 ENTER  : Attempt connection to selected network
+P      : Display preferences dialog
+
+IN DIALOGS:
+ESC or Q: Quit dialog without saving information (if present)
+
+
 
 ~nacl

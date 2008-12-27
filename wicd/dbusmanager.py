@@ -42,13 +42,14 @@ def get_bus():
     return DBUS_MANAGER.get_bus()
 
 def set_mainloop():
-    return DBUS_MANAGER.connect_to_mainloop()
+    return DBUS_MANAGER.set_mainloop()
 
 def connect_to_dbus():
     return DBUS_MANAGER.connect_to_dbus()
 
 def threads_init():
     dbus.mainloop.glib.threads_init()
+
 
 class DBusManager(object):
     """ Manages the DBus objects used by wicd. """
@@ -58,10 +59,12 @@ class DBusManager(object):
     
     def get_dbus_ifaces(self):
         """ Returns a dict of dbus interfaces. """
+        if not self._dbus_ifaces: connect_to_dbus()
         return self._dbus_ifaces
     
     def get_interface(self, iface):
         """ Returns a DBus Interface. """
+        if not self._dbus_ifaces: connect_to_dbus()
         return self._dbus_ifaces[iface]
     
     def get_bus(self):

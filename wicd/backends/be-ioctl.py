@@ -48,8 +48,8 @@ import array
 
 
 NAME = "ioctl"
-UPDATE_INTERVAL = 3
-DESCRIPTION = """IOCTL (fast) backend
+UPDATE_INTERVAL = 4
+DESCRIPTION = """IOCTL (new) backend
 
 This backend uses IOCTL calls and python libraries to query
 network information whenever possible.  This makes it fast,

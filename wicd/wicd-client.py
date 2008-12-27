@@ -107,7 +107,7 @@ class TrayIcon(object):
             raise NotImplementedError
         else:
             return self.tr.is_embedded()
-        
+    
 
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
@@ -230,7 +230,7 @@ class TrayIcon(object):
 
             img_file = ''.join([wpath.images, prefix, signal_img, lock, ".png"])
             self.tr.set_from_file(img_file)
-            
+        
         def get_bandwidth_state(self):
             """ Determines what network activity state we are in. """
             transmitting = False
@@ -640,7 +640,7 @@ Arguments:
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
 """
-    
+
 def setup_dbus(force=True):
     global bus, daemon, wireless, wired, DBUS_AVAIL
     print "Connecting to daemon..."

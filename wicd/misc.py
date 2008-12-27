@@ -53,6 +53,7 @@ class WicdError(Exception):
     pass
     
 
+__LANG = None
 def Run(cmd, include_stderr=False, return_pipe=False):
     """ Run a command.
 
@@ -69,6 +70,7 @@ def Run(cmd, include_stderr=False, return_pipe=False):
                   one output string from the command.
 
     """
+    global __LANG
     if not isinstance(cmd, list):
         cmd = to_unicode(str(cmd))
         cmd = cmd.split()
@@ -79,20 +81,34 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         err = None
         fds = False
     
+    # We need to make sure that the results of the command we run
+    # are in English, so we set up a temporary environment.
+    if not __LANG:
+        __LANG = get_good_lang()
     tmpenv = os.environ.copy()
-    tmpenv["LC_ALL"] = "C"
-    tmpenv["LANG"] = "C"
+    tmpenv["LC_ALL"] = __LANG
+    tmpenv["LANG"] = __LANG
+    
     try:
         f = Popen(cmd, shell=False, stdout=PIPE, stderr=err, close_fds=fds,
                   cwd='/', env=tmpenv)
     except OSError, e:
         print "Running command %s failed: %s" % (str(cmd), str(e))
         return ""
+        
     
     if return_pipe:
         return f.stdout
     else:
         return f.communicate()[0]
+    
+def get_good_lang():
+    """ Check if en_US.utf8 is an available locale, if not use C. """
+    output = Popen(["locale", "-a"], shell=False, stdout=PIPE).communicate()[0]
+    if "en_US.utf8" in output:
+        return "en_US.utf8"
+    else:
+        return "C"
     
 def LaunchAndWait(cmd):
     """ Launches the given program with the given arguments, then blocks.

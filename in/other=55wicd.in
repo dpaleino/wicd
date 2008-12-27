@@ -7,15 +7,13 @@
 wicd_suspend()
 {
 	# Put wifi interface down
-	%LIB%suspend.py 2>/dev/null
-	return $NA
+	%LIB%suspend.py 2>/dev/null || return $NA
 }
 
 wicd_resume()
 {
 	# Bring wifi interface back up
-	%LIB%autoconnect.py 2>/dev/null
-	return $NA
+	%LIB%autoconnect.py 2>/dev/null || return $NA
 }
 
 case "$1" in

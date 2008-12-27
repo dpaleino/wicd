@@ -1,7 +1,7 @@
 Things to do (in no particular order):
 
-*   Make a settings dialog
-    * Implement something that resembles a combo box in urwid
+*   Make a settings dialog -- Finish the backend.  The frontend is pretty much
+    done.
 *   Make a network config dialog
 *   Make an about dialog
 *   Implement a keyhandler function for the overall frame
@@ -9,6 +9,7 @@ Things to do (in no particular order):
 *   Make color schemes customizable
 *   Integrate this with the my local copy of the experimental branch
 *   Give some indication of activity during the connection process
+*   Make a man page for the UI.
 
 Oh, and most importantly:
 

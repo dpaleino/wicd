@@ -55,6 +55,7 @@ from wicd import dbusmanager
 import sys
 
 # Curses UIs for other stuff
+from curses_misc import SelText
 import prefs_curses
 from prefs_curses import PrefOverlay
 
@@ -108,22 +109,6 @@ class wrap_exceptions:
                 raise
 
         return wrap_exceptions
-
-# My savior.  :-)
-# Although I could have made this myself pretty easily, just want to give credit where
-# its due.
-# http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
-class SelText(urwid.Text):
-    """A selectable text widget. See urwid.Text."""
-
-    def selectable(self):
-        """Make widget selectable."""
-        return True
-
-
-    def keypress(self, size, key):
-        """Don't handle any keys."""
-        return key
 
 ########################################
 ##### SUPPORT FUNCTIONS
@@ -430,7 +415,7 @@ class appGUI():
                 # Prevents automatic reconnecting if that option is enabled
                 daemon.SetForcedDisconnect(True)
         if "P" in keys:
-            dialog = PrefOverlay(self.frame,(0,1)) 
+            dialog = PrefOverlay(self.frame,(0,1),ui) 
             dialog.run(ui,self.size,self.frame)
         for k in keys:
             if k == "window resize":
@@ -486,17 +471,20 @@ def main():
     # Color scheme.
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
+    # Note: the current palette below is optimized for the linux console.
+    # For example, this will look like crap on a default-colored XTerm.
+    # NB: To find current terminal background use variable COLORFGBG
     ui.register_palette([
-        ('body','light gray','black'),
+        ('body','light gray','default'),
         ('focus','dark magenta','light gray'),
-        ('header','light blue','black'),
-        ('important','light red','black'),
-        ('connected','dark green','black'),
-        ('connected focus','black','dark green'),
-        # I'll be needing these soon, so I'll leave them here for now.
-        ('editcp', 'light gray', 'black', 'standout'),
+        ('header','light blue','default'),
+        ('important','light red','default'),
+        ('connected','dark green','default'),
+        ('connected focus','default','dark green'),
+        ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
-        ('editfc', 'white','dark blue', 'bold') ])
+        ('editfc', 'white','dark blue', 'bold'),
+        ('tab active','dark green','light gray')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)

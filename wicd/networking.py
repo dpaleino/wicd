@@ -780,7 +780,7 @@ class WirelessConnectThread(ConnectThread):
         # cards).
         if self.debug:
             print "enctype is %s" % self.network.get('enctype')
-        if self.network.get('key') and 'wpa' in self.network.get('enctype'):
+        if self.network.get('key') and 'wpa' in str(self.network.get('enctype')):
             self.SetStatus('generating_psk')
             print 'Generating psk...'
             self.network['psk'] = wiface.GeneratePSK(self.network)

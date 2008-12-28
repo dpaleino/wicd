@@ -53,9 +53,10 @@ from wicd import dbusmanager
 
 # Internal Python stuff
 import sys
+from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText
+from curses_misc import SelText,ComboText
 import prefs_curses
 from prefs_curses import PrefOverlay
 
@@ -106,6 +107,7 @@ class wrap_exceptions:
                     # backtrace
                     sys.stdout.flush()
                 # Raise the exception
+                #sleep(2)
                 raise
 
         return wrap_exceptions
@@ -182,10 +184,12 @@ def gen_network_list():
         is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
         if is_active:
             theString = '>'+theString[1:]
-            wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
-                'connected focus'))
-        else:
-            wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+            
+            #wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
+            #    'connected focus'))
+        #else:
+        #    wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+        wiredL.append(theString)
         id+=1
 
     wlessL = []
@@ -232,8 +236,21 @@ class appGUI():
         self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
         self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
+        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
+        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
+        self.footerList = urwid.ListBox([self.footer1,self.footer2])
+        # Pop takes a number!
+        #walker.pop(1)
+        nothingness = urwid.Filler(urwid.Text('Hello, world!'))
+        self.frame = urwid.Frame(nothingness,
+                                 header=header,
+                                 footer=urwid.BoxAdapter(self.footerList,2))
+        self.frame.set_focus('body')
+
+        # Miiiiiiiiiiight be changing this back to something like how it was 
+        # originally
         wiredL,wlessL = gen_network_list()
-        self.wiredLB = urwid.ListBox(wiredL)
+        self.wiredCB = urwid.Filler(ComboText('',wiredL,self.frame,ui,3,use_enter=False))
         self.wlessLB = urwid.ListBox(wlessL)
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
@@ -244,19 +261,11 @@ class appGUI():
         #          spam,spam,spam,spam] ]
         #self.spamLB = urwid.ListBox(spamL)
         self.thePile = urwid.Pile([('fixed',1,self.wiredH),
-                                   ('fixed',1,self.wiredLB),
+                                   ('fixed',1,self.wiredCB),
                                    ('fixed',1,self.wlessH),
                                               self.wlessLB] )
-        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
-        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
-        self.footerList = urwid.ListBox([self.footer1,self.footer2])
-        # Pop takes a number!
-        #walker.pop(1)
-        self.frame = urwid.Frame(self.thePile,
-                                 header=header,
-                                 footer=urwid.BoxAdapter(self.footerList,2))
-        self.frame.set_focus('body')
 
+        self.frame.set_body(self.thePile)
         # Booleans gallore!
         self.prev_state    = False
         self.connecting    = False
@@ -290,9 +299,10 @@ class appGUI():
         if not state:
             state, x = daemon.GetConnectionStatus()
         if self.prev_state != state or force_check:
-                wiredL,wlessL = gen_network_list()
-                self.wiredLB.body = urwid.SimpleListWalker(wiredL)
-                self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+            wiredL,wlessL = gen_network_list()
+            self.wiredCB = urwid.Filler(ComboText('',wiredL,self.frame,ui,3,
+                use_enter=False))
+            self.wlessLB.body = urwid.SimpleListWalker(wlessL)
                 
         self.prev_state = state
 
@@ -410,10 +420,9 @@ class appGUI():
             self.update_netlist()
         if "esc" in keys:
             # Force disconnect here if connection in progress
-            if self.connecting:
-                daemon.CancelConnect()
-                # Prevents automatic reconnecting if that option is enabled
-                daemon.SetForcedDisconnect(True)
+            daemon.CancelConnect()
+            # Prevents automatic reconnecting if that option is enabled
+            daemon.SetForcedDisconnect(True)
         if "P" in keys:
             dialog = PrefOverlay(self.frame,(0,1),ui) 
             dialog.run(ui,self.size,self.frame)
@@ -422,18 +431,23 @@ class appGUI():
                 self.size = ui.get_cols_rows()
                 continue
             self.frame.keypress( self.size, k )
-        return True
 
-    # Terminate the loop, used as the glib mainloop's idle function
-    def stop_loop(self):
-        loop.quit()
+        if " " in keys:
+            # I can't really tell if this works ^_^.
+            if self.thePile.get_focus() == self.wiredCB:
+                wid,pos = self.wiredCB.get_body().get_selected()
+                text,attr = wid.get_text()
+                wired.ReadWiredNetworkProfile(text)
+
+        return True
 
     # Bring back memories, anyone?
     def call_connect(self):
         wid = self.thePile.get_focus()
-        if wid is self.wiredLB:
-            wid2,pos = self.wiredLB.get_focus()
-            self.connect(self,'wired',pos)
+        if wid is self.wiredCB:
+            #wid2,pos = self.wiredCB.get_focus()
+            # Apparently, connect() doesn't care about the networkid
+            self.connect(self,'wired',0)
             #return "Wired network %i" % pos
         if wid is self.wlessLB:
             #self.footer1 = urwid.Text("Wireless!")
@@ -472,7 +486,7 @@ def main():
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
     # Note: the current palette below is optimized for the linux console.
-    # For example, this will look like crap on a default-colored XTerm.
+    # For example, this looks particularly bad on a default-colored XTerm.
     # NB: To find current terminal background use variable COLORFGBG
     ui.register_palette([
         ('body','light gray','default'),

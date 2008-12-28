@@ -72,16 +72,42 @@ class ToggleEdit(urwid.WidgetWrap):
     def keypress(self,size,key):
         return self._w.keypress(size,key)
 
-# Would seem to complicate things a little bit, but could be very useful. ^_^
-# Not used yet.  Will be used very shortly, as a superclass of some future
-# overlays
+# Tabbed interface
 class TabColumns(urwid.WidgetWrap):
-    def __init__(self):
-        pass 
+    """
+    titles_dict = dictionary of tab_contents (a SelText) : tab_widget (box)
+    attr = normal attributes
+    attrsel = attribute when active
+    """
+    def __init__(self,tab_str,tab_wid,title,attr=('body','focus'),attrsel='tab active',
+            attrtitle='header'):
+        #title_wid = urwid.Text((attrtitle,title),align='right')
+        column_list = []
+        for w in tab_str:
+            text,trash = w.get_text()
+            column_list.append(('fixed',len(text),w))
+        column_list.append(urwid.Text((attrtitle,title),align='right'))
+
+        self.tab_map = dict(zip(tab_str,tab_wid))
+        self.active_tab = tab_str[0]
+        self.columns = urwid.Columns(column_list,dividechars=1)
+        walker   = urwid.SimpleListWalker([self.columns,tab_wid[0]])
+        self.listbox = urwid.ListBox(walker)
+        self.__super.__init__(self.listbox)
+        
     def selectable(self):
         return True
     def keypress(self,size,key):
-        pass
+        self._w.keypress(size,key)
+        (wid,pos) = self.listbox.get_focus()
+        if wid is self.columns:
+            lw = self.listbox.body
+            lw.pop(1)
+            self.active_tab.set_attr('body')
+            self.columns.get_focus().set_attr('tab active')
+            self.active_tab = self.columns.get_focus()
+            lw.append(self.tab_map[self.columns.get_focus()])
+            self.listbox.body = lw
 
 # A "combo box" of SelTexts
 # I based this off of the code found here:
@@ -106,7 +132,7 @@ class ComboText(urwid.WidgetWrap):
             for entry in list:
                 if len(entry) > width:
                     width = len(entry)
-            content = [urwid.AttrWrap(SelText(" " + w), attr[0], attr[1])
+            content = [urwid.AttrWrap(SelText(w), attr[0], attr[1])
                        for w in list]
             self._listbox = urwid.ListBox(content)
 
@@ -141,9 +167,11 @@ class ComboText(urwid.WidgetWrap):
 
         #def get_size(self):
 
-    def __init__(self,label,list,body,ui,row = 0,show_first=0,attr=('body','focus')):
+    def __init__(self,label,list,body,ui,row = 0,show_first=0,attr=('body','focus'),
+            use_enter=True):
         """
-        label     : bit of text that preceeds the combobox
+        label     : bit of text that preceeds the combobox.  If it is "", then 
+                    ignore it
         list      : stuff to include in the combobox
         body      : parent widget
         ui        : the screen
@@ -154,23 +182,35 @@ class ComboText(urwid.WidgetWrap):
         self.label = urwid.Text(label)
         str,trash =  self.label.get_text()
 
-        self.cbox  = urwid.AttrWrap(SelText(list[show_first]),attr[0],attr[1])
-        self.overlay =  self.ComboSpace(list,body,ui,show_first,pos=(len(str)+1,row))
+        self.cbox  = urwid.AttrWrap(SelText([list[show_first]+'    vvv']),attr[0],attr[1])
         # Unicode will kill me sooner or later.  ^_^
-        w = urwid.Columns([('fixed',len(str),self.label),self.cbox,('fixed',3,urwid.Text("vvv"))],dividechars=1)
+        if label != '':
+            w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
+            self.overlay = self.ComboSpace(list,body,ui,show_first,pos=(len(str)+1,row))
+        else:
+            w = urwid.Columns([self.cbox])
+            self.overlay = self.ComboSpace(list,body,ui,show_first,pos=(0,row))
         self.__super.__init__(w)
 
         # We need this to control the keypress
         self.body = body
         self.ui = ui
+        self.use_enter = use_enter
     # If we press space or enter, be a combo box!
     def keypress(self,size,key):
-        if key == ' ' or key == 'enter':
+        activate = key == ' '
+        if self.use_enter:
+            activate = activate or key == 'enter'
+        if activate:
             retval = self.overlay.show(self.ui,self.body)
             if retval != None:
-                self.cbox.set_w(SelText(retval))
+                self.cbox.set_w(SelText(retval+'    vvv'))
         return self._w.keypress(size,key)
 
     # Most obvious thing ever.  :-)
     def selectable(self):
         return True
+
+    # Return a tuple of (widget,position)
+    def get_selected(self):
+        return self.overlay._listbox.get_focus()

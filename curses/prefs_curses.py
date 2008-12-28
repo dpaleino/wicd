@@ -20,7 +20,7 @@
 import urwid
 
 from wicd import misc
-from curses_misc import SelText,ToggleEdit,ComboText
+from curses_misc import SelText,ToggleEdit,ComboText,TabColumns
 
 # Will work for now, I guess.
 language = misc.get_language_list_gui()
@@ -28,9 +28,11 @@ language = misc.get_language_list_gui()
 class PrefOverlay(urwid.WidgetWrap):
     def __init__(self,body,pos,ui):
         self.ui = ui
-        # We are on a VT100, I presume.
-        width = 80
-        height = 20
+
+        width,height =  ui.get_cols_rows()
+        height -= 3
+        #width = 80
+        #height = 20
         # Stuff that goes at the top
         header0_t = language["gen_settings"]
         header1_t = language["ext_programs"]
@@ -205,48 +207,53 @@ class PrefOverlay(urwid.WidgetWrap):
                                    self.auto_reconn_cat,
                                    self.auto_reconn])
 
+
+        headerList = [self.header0,self.header1,self.header2]
+        pileList = [generalPile,externalPile,advancedPile]
         self.tab_map = {self.header0 : generalPile,
                         self.header1 : externalPile,
                         self.header2 : advancedPile}
-        self.active_tab = self.header0
+        #self.active_tab = self.header0
 
-        self.columns = urwid.Columns([('fixed',len(header0_t),self.header0),
-                                      ('fixed',len(header1_t),self.header1),
-                                      ('fixed',len(header2_t),self.header2),
-                                      urwid.Text(('header',title),align='right')],
-                                      dividechars=1)
+        #self.columns = urwid.Columns([('fixed',len(header0_t),self.header0),
+        #                              ('fixed',len(header1_t),self.header1),
+        #                              ('fixed',len(header2_t),self.header2),
+        #                              urwid.Text(('header',title),align='right')],
+        #                              dividechars=1)
         
-        content = [self.columns,generalPile]
+        #content = [self.columns,generalPile]
         #self._label = urwid.AttrWrap(SelText(titles),attr[0],attr[1])
-        self.walker   = urwid.SimpleListWalker(content)
-        self._listbox = urwid.ListBox(self.walker)
+        #self.walker   = urwid.SimpleListWalker(content)
+        #self.listbox = urwid.ListBox(self.walker)
         #self._linebox = urwid.LineBox(self._listbox)
-        overlay = urwid.Overlay(self._listbox, body, ('fixed left', pos[0]),
+        self.tabs = TabColumns(headerList,pileList,'Preferences')
+        overlay = urwid.Overlay(self.tabs, body, ('fixed left', pos[0]),
                                 width + 2, ('fixed top', pos[1]), height)
         self.__super.__init__(overlay)
         
-
-
     def global_dns_trigger(self,check_box,new_state,user_data=None):
         for w in self.search_dom,self.dns1,self.dns2,self.dns3:
             w.set_sensitive(new_state)
     # Normal keypress, but if we are at the top, then be "tabbish" instead
-    def keypress(self,size,ui):
-        self._w.keypress(size,ui)
-        (wid,pos) = self._listbox.get_focus()
-        if wid is self.columns:
-            lw = self._listbox.body
-            lw.pop(1)
-            self.active_tab.set_attr('body')
-            self.columns.get_focus().set_attr('tab active')
-            self.active_tab = self.columns.get_focus()
-            lw.append(self.tab_map[self.columns.get_focus()])
-            self._listbox.body = lw
+    #def keypress(self,size,ui):
+    #    self._w.keypress(size,ui)
+    #    (wid,pos) = self._listbox.get_focus()
+    #    if wid is self.columns:
+    #        lw = self.listbox.body
+    #        lw.pop(1)
+    #        self.active_tab.set_attr('body')
+    #        self.columns.get_focus().set_attr('tab active')
+    #        self.active_tab = self.columns.get_focus()
+    #        lw.append(self.tab_map[self.columns.get_focus()])
+    #        self.listbox.body = lw
             
 #@wrap_exceptions()
+    # Put the widget into an overlay, and run!
     def run(self,ui, dim, display):
-        
-        global app
+        # If we are small, "tabbify" the interface
+
+        # Else, pile it together
+
         #dialog = TabbedOverlay(["Foo", "Bar", "Quit"],
         #                       ('body', 'focus'), (1, 1), display)
 

@@ -29,6 +29,10 @@ import os
 
 import wicd.wpath as wpath
 
+def fail(backend_name, reason):
+    print "Failed to load backend %s: %s" % (backend_name, reason)
+    return True
+
 
 class BackendManager(object):
     """ Manages, validates, and loads wicd backends. """
@@ -39,7 +43,7 @@ class BackendManager(object):
         
     def _valid_backend_file(self, be_file):
         """ Make sure the backend file is valid. """
-        return (os.access(be_file, os.F_OK) and 
+        return (os.path.exists(be_file) and 
                 os.path.basename(be_file).startswith("be-") and
                 be_file.endswith(".py"))
     
@@ -65,30 +69,30 @@ class BackendManager(object):
         else:
             return None
         
-    def load_backend(self, backend_name):
-        """ Load and return a backend module. 
-        
-        Given a backend name be-foo, attempt to load a python module
-        in the backends directory called be-foo.py.  The module must
-        include a certain set of classes and variables to be considered
-        valid.
-        
-        """
-        def fail(backend_name, reason):
-            print "Failed to load backend %s: %s" % (backend_name, reason)
-            return True
-
-        failed = False 
+    def get_backend_description(self, backend_name):
+        """ Loads a backend and returns its description. """
+        backend = self._load_backend(backend_name)
+        if backend and backend.DESCRIPTION:
+            return backend.DESCRIPTION
+        else:
+            return "No backend data available"
+    
+    def _load_backend(self, backend_name):
+        """ Imports a backend and returns the loaded module. """
         print 'trying to load backend %s' % backend_name
         backend_path = os.path.join(self.backend_dir,
                                     'be-' + backend_name + '.py')
         if self._valid_backend_file(backend_path):
             sys.path.insert(0, self.backend_dir)
             backend = __import__('be-' + backend_name)
+            return backend
         else:
             fail(backend_name, 'Invalid backend file.')
             return None
         
+    def _validate_backend(self, backend):
+        """ Ensures that a backend module is valid. """
+        failed = False
         if not backend.NAME:
             failed = fail(backend_name, 'Missing NAME attribute.')
         if not backend.UPDATE_INTERVAL:
@@ -99,7 +103,21 @@ class BackendManager(object):
             failed = fail(backend_name, "Missing WiredInterface class.")
         if not backend.WirelessInterface:
             failed = fail(backend_name, "Missing WirelessInterface class.")
+        return failed
+    
+    def load_backend(self, backend_name):
+        """ Load and return a backend module. 
         
+        Given a backend name be-foo, attempt to load a python module
+        in the backends directory called be-foo.py.  The module must
+        include a certain set of classes and variables to be considered
+        valid.
+        
+        """
+        backend = self._load_backend(backend_name)
+        if not backend : return None
+        
+        failed = self._validate_backend(backend)
         if failed:
             return None
 

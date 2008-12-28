@@ -211,6 +211,16 @@ class WicdDaemon(dbus.service.Object):
         return networking.get_backend_update_interval()
     
     @dbus.service.method('org.wicd.daemon')
+    def GetBackendDescription(self, backend_name):
+        """ Returns the description of the given backend. """
+        return networking.get_backend_description(backend_name)
+    
+    @dbus.service.method('org.wicd.daemon')
+    def GetBackendDescriptionDict(self):
+        """ Returns a dict of all backend names mapped to their description. """
+        return networking.get_backend_description_dict()
+    
+    @dbus.service.method('org.wicd.daemon')
     def GetSavedBackend(self):
         """ Returns the backend saved to disk. """
         return self.config.get("Settings", "backend")
@@ -720,6 +730,10 @@ class WicdDaemon(dbus.service.Object):
     def ConnectResultsSent(self, result):
         print "Sending connection attempt result %s" % result
         
+    @dbus.service.signal(dbus_interface="org.wicd.daemon", signature='')
+    def UpdateState(self):
+        pass
+       
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def LaunchChooser(self):
         """ Emits the wired profile chooser dbus signal. """
@@ -1326,8 +1340,7 @@ class WiredDaemon(dbus.service.Object):
             return False
 
         for option in ["ip", "broadcast", "netmask","gateway", "dns1", "dns2",
-                       "dns3", "beforescript", "afterscript",
-                       "disconnectscript"]:
+                       "dns3", "beforescript", "afterscript", "disconnectscript"]:
             self.config.set(profilename, option, None)
         self.config.set(profilename, "default", default)
         self.config.write()

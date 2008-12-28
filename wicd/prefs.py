@@ -56,7 +56,6 @@ class PreferencesDialog(object):
         wireless = dbus['wireless']
         wired = dbus['wired']
         self.wTree = wTree
-        self.wpadrivers = None
         self.prep_settings_diag()
         self.load_preferences_diag()
         
@@ -119,8 +118,6 @@ class PreferencesDialog(object):
             self.dns3Entry.set_sensitive(False)
             
         cur_backend = daemon.GetSavedBackend()
-        self.backendcombo.set_active(0)
-        
         try:
             self.backendcombo.set_active(self.backends.index(cur_backend))
         except ValueError:
@@ -313,8 +310,10 @@ class PreferencesDialog(object):
         self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")
         
         self.backendcombo = build_combobox("pref_backend_combobox")
+        self.backendcombo.connect("changed", self.be_combo_changed)
         # Load backend combobox
         self.backends = daemon.GetBackendList()
+        self.be_descriptions = daemon.GetBackendDescriptionDict()
         # "" is included as a hack for DBus limitations, so we remove it.
         self.backends.remove("")
         
@@ -322,3 +321,8 @@ class PreferencesDialog(object):
         for x in self.backends:
             self.backendcombo.append_text(x)
             
+    def be_combo_changed(self, combo):
+        """ Update the description label for the given backend. """
+        self.backendcombo.set_tooltip_text(
+            self.be_descriptions[combo.get_active_text()]
+        )

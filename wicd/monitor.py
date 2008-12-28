@@ -45,6 +45,8 @@ wired = dbus_dict["wired"]
 wireless = dbus_dict["wireless"]
 bus = dbusmanager.get_bus()
 
+monitor = to_time = update_callback = None
+
 class ConnectionStatus(object):
     """ Class for monitoring the computer's connection status. """
     def __init__(self):
@@ -61,6 +63,10 @@ class ConnectionStatus(object):
         self.last_reconnect_time = time.time()
         self.signal_changed = False
         self.iwconfig = ""
+        
+        bus = dbusmanager.get_bus()
+        bus.add_signal_receiver(self._force_update_connection_status, 
+                                "UpdateState", "org.wicd.daemon")
 
     def check_for_wired_connection(self, wired_ip):
         """ Checks for an active wired connection.
@@ -163,7 +169,7 @@ class ConnectionStatus(object):
             if wireless_found:
                 self.update_state(misc.WIRELESS, wifi_ip=wifi_ip)
                 return True
-                
+        
             state = misc.NOT_CONNECTED
             if self.last_state == misc.WIRELESS:
                 from_wireless = True
@@ -174,6 +180,12 @@ class ConnectionStatus(object):
         except DBusException, e:
             print 'Ignoring DBus Error: ' + str(e)
         return True
+    
+    def _force_update_connection_status(self):
+        global update_callback
+        gobject.source_remove(update_callback)
+        self.update_connection_status()
+        add_poll_callback()
 
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
@@ -274,7 +286,17 @@ def reply_handle():
 def err_handle(error):
     """ Just a dummy function needed for asynchronous dbus calls. """
     pass
-        
+
+def add_poll_callback():
+    global monitor, to_time, update_callback
+
+    try:
+        update_callback = gobject.timeout_add_seconds(to_time, 
+                                               monitor.update_connection_status)
+    except:
+        update_callback = gobject.timeout_add(to_time * 1000, 
+                                               monitor.update_connection_status)        
+    
 def main():
     """ Starts the connection monitor. 
     
@@ -282,15 +304,14 @@ def main():
     an amount of time determined by the active backend.
     
     """
+    global monitor, to_time
+    
     monitor = ConnectionStatus()
     to_time = daemon.GetBackendUpdateInterval()
-    try:
-        gobject.timeout_add_seconds(to_time, monitor.update_connection_status)
-    except:
-        gobject.timeout_add(to_time * 1000, monitor.update_connection_status)
-    
+    add_poll_callback()
     mainloop = gobject.MainLoop()
     mainloop.run()
+
 
 if __name__ == '__main__':
     main()

@@ -402,7 +402,7 @@ class BaseInterface(object):
                 pump_success = False
                 pump_complete = True
             print line
-            
+    
         return self._check_dhcp_result(pump_success)
 
     def _parse_dhcpcd(self, pipe):

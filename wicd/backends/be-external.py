@@ -41,13 +41,13 @@ import time
 
 
 NAME = "external"
-UPDATE_INTERVAL = 4
-DESCRIPTION = """External app (slow) backend
+UPDATE_INTERVAL = 5
+DESCRIPTION = """External app (original) backend
 
 This backend uses external program calls like ifconfig and
 iwconfig to query network information.  This makes it a bit
 slower and more CPU intensive than the ioctl backend, but
-it doesn't require any thirdy party libraries and may be
+it doesn't require any third party libraries and may be
 more stable for some set ups.
 """
 
@@ -119,7 +119,7 @@ class Interface(wnettools.BaseInterface):
         """
         wnettools.BaseInterface.__init__(self, iface, verbose)
         self.Check()
-        
+    
     def GetIP(self, ifconfig=""):
         """ Get the IP address of the interface.
 

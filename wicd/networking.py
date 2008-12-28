@@ -74,6 +74,7 @@ def abortable(func):
     return wrapper
 
 def get_backend_list():
+    """ Returns a list of available backends. """
     if BACKEND_MGR:
         return BACKEND_MGR.get_available_backends()
     else:
@@ -83,13 +84,23 @@ def get_backend_update_interval():
     if BACKEND_MGR:
         return BACKEND_MGR.get_update_interval()
     else:
-        return 4 # seconds, this should never happen though.
+        return 5  # Seconds, this should never happen though.
     
 def get_current_backend():
     if BACKEND_MGR:
         return BACKEND_MGR.get_current_backend()
     else:
         return None
+    
+def get_backend_description(backend_name):
+    return BACKEND_MGR.get_backend_description(backend_name)
+
+def get_backend_description_dict():
+    d = {}
+    for be in get_backend_list():
+        if be:
+            d[be] = get_backend_description(be)
+    return d
     
 class Controller(object):
     """ Parent class for the different interface types. """
@@ -598,7 +609,6 @@ class Wireless(Controller):
         enctype -- unused
         key -- key of the ad-hoc network
         enc_used -- encrytion enabled on ad-hoc network
-        ics -- enable internet connection sharing
 
         """
         wiface = self.wiface

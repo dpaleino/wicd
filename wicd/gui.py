@@ -318,7 +318,7 @@ class appGui(object):
         print "Starting the Ad-Hoc Network Creation Process..."
         dialog = gtk.Dialog(title = language['create_adhoc_network'],
                             flags = gtk.DIALOG_MODAL,
-                            buttons=(gtk.STOCK_OK, 1, gtk.STOCK_CANCEL, 2))
+                            buttons=(gtk.STOCK_CANCEL, 2, gtk.STOCK_OK, 1))
         dialog.set_has_separator(False)
         dialog.set_size_request(400, -1)
         self.chkbox_use_encryption = gtk.CheckButton(language['use_wep_encryption'])

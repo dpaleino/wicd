@@ -349,15 +349,25 @@ class appGUI():
                 self.set_status(language['not_connected'])
                 return True
 
-    # Set the status text, called by the update_status method
-    # from_idle : a check to see if we are being called directly from the
-    # mainloop
+
+    # Cheap little indicator stating that we are actually connecting
+    twirl = ['|','/','-','\\']
     def set_status(self,text,from_idle=False):
+        # Set the status text, usually called by the update_status method
+        # from_idle : a check to see if we are being called directly from the
+        # mainloop
         # If we are being called as the result of trying to connect to
-        # something, return False immediately.
+        # something, and we aren't connecting to something, return False
+        # immediately.
         if from_idle and not self.connecting:
             return False
-        self.footer2 = urwid.AttrWrap(urwid.Text(text),'important')
+        toAppend = ''
+        # If we are connecting and being called from the idle function, spin
+        # the wheel.
+        if from_idle and self.connecting:
+            # This is probably the wrong way to do this, but ir works for now.
+            toAppend=self.twirl[self.incr % 4]
+        self.footer2 = urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important')
         self.frame.set_footer(urwid.BoxAdapter(
             urwid.ListBox([self.footer1,self.footer2]),2))
         return True
@@ -433,11 +443,13 @@ class appGUI():
             self.frame.keypress( self.size, k )
 
         if " " in keys:
-            # I can't really tell if this works ^_^.
-            if self.thePile.get_focus() == self.wiredCB:
+                self.set_status('space pressed on wiredCB!')
                 wid,pos = self.wiredCB.get_body().get_selected()
                 text,attr = wid.get_text()
                 wired.ReadWiredNetworkProfile(text)
+                # Make sure our internal reference to the combobox matches the
+                # one found in the pile.
+                self.wiredCB = self.thePile.get_focus()
 
         return True
 
@@ -449,12 +461,13 @@ class appGUI():
             # Apparently, connect() doesn't care about the networkid
             self.connect(self,'wired',0)
             #return "Wired network %i" % pos
-        if wid is self.wlessLB:
+        elif wid is self.wlessLB:
             #self.footer1 = urwid.Text("Wireless!")
             wid2,pos = self.wlessLB.get_focus()
             self.connect(self,'wireless',pos)
         else:
-            return "Failure!"
+            self.set_status("call_connect() failed!  This is definitely a bug!")
+            #return "Failure!"
 
     def connect(self, event, nettype, networkid):
         """ Initiates the connection process in the daemon. """

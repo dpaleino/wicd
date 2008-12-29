@@ -104,7 +104,7 @@ class WicdDaemon(dbus.service.Object):
         # This will speed up the scanning process - if a client doesn't 
         # need a fresh scan, just feed them the old one.  A fresh scan
         # can be done by calling Scan(fresh=True).
-        self.LastScan = ''
+        self.LastScan = []
         
         signal.signal(signal.SIGTERM, self.DaemonClosing)
         self.DaemonStarting()

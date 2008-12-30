@@ -738,7 +738,7 @@ class appGui(object):
         self._save_gen_settings(entry)
         entry.set_net_prop("automatic",
                            noneToString(netent.chkbox_autoconnect.get_active()))
-            
+        
         if entry.chkbox_global_settings.get_active():
             entry.set_net_prop('use_settings_globally', True)
         else:

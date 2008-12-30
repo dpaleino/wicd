@@ -1456,7 +1456,7 @@ Arguments:
 \t-n\t--no-poll\tDon't monitor network status.
 \t-o\t--no-stdout\tDon't redirect stdout.
 \t-h\t--help\t\tPrint this help.
-""" % wpath.version
+""" % (wpath.version + ' (bzr-r%s)' % wpath.revision)
 
 def daemonize():
     """ Disconnect from the controlling terminal.

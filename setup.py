@@ -24,7 +24,7 @@ import sys
 # Be sure to keep this updated!
 # VERSIONNUMBER
 VERSION_NUM = '1.6.0'
-REVISON_NUM = 'unknown'
+REVISION_NUM = 'unknown'
 
 try:
     if not os.exists('vcsinfo.py'):

@@ -42,8 +42,8 @@ import urwid.curses_display
 import urwid
 
 # DBus communication stuff
-import dbus
-import dbus.service
+from dbus import DBusException
+from dbus import version as dbus_version
 # It took me a while to figure out that I have to use this.
 import gobject
 
@@ -58,13 +58,7 @@ from time import sleep
 # Curses UIs for other stuff
 from curses_misc import SelText,ComboText
 import prefs_curses
-from prefs_curses import PrefOverlay
-
-if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
-    import dbus.glib
-else:
-    from dbus.mainloop.glib import DBusGMainLoop
-    DBusGMainLoop(set_as_default=True)
+from prefs_curses import PrefsDialog
 
 language = misc.get_language_list_gui()
 # Whew. Now on to more interesting stuff: 
@@ -430,12 +424,15 @@ class appGUI():
             self.update_netlist()
         if "esc" in keys:
             # Force disconnect here if connection in progress
-            daemon.CancelConnect()
-            # Prevents automatic reconnecting if that option is enabled
-            daemon.SetForcedDisconnect(True)
+            if self.connecting:
+                daemon.CancelConnect()
+                # Prevents automatic reconnecting if that option is enabled
+                daemon.SetForcedDisconnect(True)
         if "P" in keys:
-            dialog = PrefOverlay(self.frame,(0,1),ui) 
+            dialog = PrefsDialog(self.frame,(0,1),ui,
+                    dbusmanager.get_dbus_ifaces()) 
             dialog.run(ui,self.size,self.frame)
+            dialog.store_results()
         for k in keys:
             if k == "window resize":
                 self.size = ui.get_cols_rows()

@@ -18,16 +18,26 @@
 #       MA 02110-1301, USA.
 
 import urwid
+import urwid.curses_display
 
 from wicd import misc
+from wicd import dbusmanager
 from curses_misc import SelText,ToggleEdit,ComboText,TabColumns
 
+daemon = None
+wireless = None
+wired = None
 # Will work for now, I guess.
 language = misc.get_language_list_gui()
 
-class PrefOverlay(urwid.WidgetWrap):
-    def __init__(self,body,pos,ui):
+class PrefsDialog(urwid.WidgetWrap):
+    def __init__(self,body,pos,ui,dbus=None):
+        global daemon, wireless, wired
         self.ui = ui
+
+        daemon = dbus['daemon']
+        wireless = dbus['wireless']
+        wired = dbus['wired']
 
         width,height =  ui.get_cols_rows()
         height -= 3
@@ -117,32 +127,32 @@ class PrefOverlay(urwid.WidgetWrap):
         
         self.global_dns_cat = urwid.Text(global_dns_cat_t)
         global_dns_state = False
-        self.global_dns  = urwid.CheckBox(global_dns_t,global_dns_state,
+        self.global_dns_checkb  = urwid.CheckBox(global_dns_t,global_dns_state,
                 on_state_change=self.global_dns_trigger)
         self.search_dom  = ToggleEdit(search_dom_t,global_dns_state)
         self.dns1        = ToggleEdit(dns1_t,global_dns_state)
         self.dns2        = ToggleEdit(dns2_t,global_dns_state)
         self.dns3        = ToggleEdit(dns3_t,global_dns_state)
 
-        self.always_show_wired = urwid.CheckBox(always_show_wired_t)
+        self.always_show_wired_checkb = urwid.CheckBox(always_show_wired_t)
 
         wired_auto_l  = []
         self.wired_auto_cat = urwid.Text(wired_auto_cat_t)
         self.wired_auto_1 =   urwid.RadioButton(wired_auto_l,wired_auto_1_t)
         self.wired_auto_2 =   urwid.RadioButton(wired_auto_l,wired_auto_2_t)
         self.wired_auto_3 =   urwid.RadioButton(wired_auto_l,wired_auto_3_t)
-        generalPile = urwid.Pile([self.net_cat,
-                                  self.wless_iface,#self._blank,
-                                  self.wired_iface,
-                                  self.always_show_wired,self._blank,
-                                  self.global_dns_cat,
-                                  self.global_dns,#self._blank,
-                                  self.search_dom,
-                                  self.dns1,self.dns2,self.dns3,self._blank,
-                                  self.wired_auto_cat,
-                                  self.wired_auto_1,
-                                  self.wired_auto_2,
-                                  self.wired_auto_3
+        generalLB = urwid.ListBox([self.net_cat,
+                                   self.wless_iface,#self._blank,
+                                   self.wired_iface,
+                                   self.always_show_wired_checkb,self._blank,
+                                   self.global_dns_cat,
+                                   self.global_dns_checkb,#self._blank,
+                                   self.search_dom,
+                                   self.dns1,self.dns2,self.dns3,self._blank,
+                                   self.wired_auto_cat,
+                                   self.wired_auto_1,
+                                   self.wired_auto_2,
+                                   self.wired_auto_3
                                   ])
 
         #### External Programs tab
@@ -168,15 +178,15 @@ class PrefOverlay(urwid.WidgetWrap):
         self.route1         = urwid.RadioButton(route_l,route1_t)
         self.route2         = urwid.RadioButton(route_l,route2_t)
 
-        externalPile = urwid.Pile([self.dhcp_header,
-                                   self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
-                                   self._blank,
-                                   self.wired_detect_header,
-                                   self.wired0,self.wired1,self.wired2,
-                                   self._blank,
-                                   self.route_table_header,
-                                   self.route0,self.route1,self.route2
-                                  ])
+        externalLB = urwid.ListBox([self.dhcp_header,
+                                    self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
+                                    self._blank,
+                                    self.wired_detect_header,
+                                    self.wired0,self.wired1,self.wired2,
+                                    self._blank,
+                                    self.route_table_header,
+                                    self.route0,self.route1,self.route2
+                                   ])
 
 
         #### Advanced settings
@@ -187,32 +197,44 @@ class PrefOverlay(urwid.WidgetWrap):
         self.backend_cat  = urwid.Text(backend_cat_t)
         self.backend_cbox = ComboText(backend_t,backend_list,self,ui,8)
         
-        self.debug_cat    = urwid.Text(debug_cat_t)
-        self.debug_mode   = urwid.CheckBox(debug_mode_t)
+        self.debug_cat           = urwid.Text(debug_cat_t)
+        self.debug_mode_checkb   = urwid.CheckBox(debug_mode_t)
 
-        self.wless_cat    = urwid.Text(wless_cat_t)
-        self.use_dbm      = urwid.CheckBox(use_dbm_t)
+        self.wless_cat      = urwid.Text(wless_cat_t)
+        self.use_dbm_checkb = urwid.CheckBox(use_dbm_t)
 
-        self.auto_reconn_cat = urwid.Text(auto_reconn_cat_t)
-        self.auto_reconn     = urwid.CheckBox(auto_reconn_t)
+        self.auto_reconn_cat    = urwid.Text(auto_reconn_cat_t)
+        self.auto_reconn_checkb = urwid.CheckBox(auto_reconn_t)
 
-        advancedPile = urwid.Pile([self.wpa_cat,
-                                   self.wpa_cbox,self.wpa_warn,self._blank,
-                                   self.backend_cat,
-                                   self.backend_cbox,self._blank,
-                                   self.debug_cat,
-                                   self.debug_mode, self._blank,
-                                   self.wless_cat,
-                                   self.use_dbm, self._blank,
-                                   self.auto_reconn_cat,
-                                   self.auto_reconn])
+        advancedLB = urwid.ListBox([self.wpa_cat,
+                                    self.wpa_cbox,self.wpa_warn,self._blank,
+                                    self.backend_cat,
+                                    self.backend_cbox,self._blank,
+                                    self.debug_cat,
+                                    self.debug_mode_checkb, self._blank,
+                                    self.wless_cat,
+                                    self.use_dbm_checkb, self._blank,
+                                    self.auto_reconn_cat,
+                                    self.auto_reconn_checkb])
 
 
         headerList = [self.header0,self.header1,self.header2]
-        pileList = [generalPile,externalPile,advancedPile]
-        self.tab_map = {self.header0 : generalPile,
-                        self.header1 : externalPile,
-                        self.header2 : advancedPile}
+        lbList = [generalLB,externalLB,advancedLB]
+        self.tab_map = {self.header0 : generalLB,
+                        self.header1 : externalLB,
+                        self.header2 : advancedLB}
+        self.load_settings()
+
+        # Now for the buttons:
+
+        ok_t = 'OK'
+        cancel_t = 'Cancel'
+        
+        ok_button = urwid.AttrWrap(urwid.Button('OK'),'body','focus')
+        cancel_button = urwid.AttrWrap(urwid.Button('Cancel'),'body','focus')
+
+
+        self.button_cols = urwid.Columns([ok_button,cancel_button])
         #self.active_tab = self.header0
 
         #self.columns = urwid.Columns([('fixed',len(header0_t),self.header0),
@@ -226,11 +248,21 @@ class PrefOverlay(urwid.WidgetWrap):
         #self.walker   = urwid.SimpleListWalker(content)
         #self.listbox = urwid.ListBox(self.walker)
         #self._linebox = urwid.LineBox(self._listbox)
-        self.tabs = TabColumns(headerList,pileList,'Preferences')
-        overlay = urwid.Overlay(self.tabs, body, ('fixed left', pos[0]),
-                                width + 2, ('fixed top', pos[1]), height)
-        self.__super.__init__(overlay)
+        self.tabs = TabColumns(headerList,lbList,'Preferences',self.button_cols)
+        #overlay = urwid.Overlay(self.tabs, body, ('fixed left', pos[0]),
+        #                        width, ('fixed top', pos[1]), height)
+        self.__super.__init__(self.tabs)
         
+    def load_settings(self):
+        self.always_show_wired_checkb.set_state(
+                daemon.GetAlwaysShowWiredInterface())
+        self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
+        self.debug_mode_checkb.set_state(daemon.GetDebugMode())
+        self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
+
+    def store_results(self):
+        daemon.SetAlwaysShowWiredInterface(self.always_show_wired_checkb.get_state())
+
     def global_dns_trigger(self,check_box,new_state,user_data=None):
         for w in self.search_dom,self.dns1,self.dns2,self.dns3:
             w.set_sensitive(new_state)
@@ -250,9 +282,12 @@ class PrefOverlay(urwid.WidgetWrap):
 #@wrap_exceptions()
     # Put the widget into an overlay, and run!
     def run(self,ui, dim, display):
+        width,height = ui.get_cols_rows()
         # If we are small, "tabbify" the interface
 
         # Else, pile it together
+        overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
+                                , ('fixed top',1), height-3)
 
         #dialog = TabbedOverlay(["Foo", "Bar", "Quit"],
         #                       ('body', 'focus'), (1, 1), display)
@@ -261,7 +296,7 @@ class PrefOverlay(urwid.WidgetWrap):
         keys = True
         while True:
             if keys:
-                ui.draw_screen(dim, self.render(dim, True))
+                ui.draw_screen(dim, overlay.render(dim, True))
             keys = ui.get_input()
 
             if "window resize" in keys:
@@ -271,20 +306,45 @@ class PrefOverlay(urwid.WidgetWrap):
 
             for k in keys:
                 #Send key to underlying widget:
-                self.keypress(dim, k)
+                overlay.keypress(dim, k)
 
-            #if program_menu.selected == "Quit":
-            #        return
-            
-            #if program_menu.selected == "Foo":
-                #Do something
-            #    return
+def run():
+    dialog = PrefsDialog(None,(0,0),ui,dbusmanager.get_dbus_ifaces())
+    keys = True
+    dim = ui.get_cols_rows()
+    while True:
+        if keys:
+            ui.draw_screen(dim, dialog.render(dim, True))
+        keys = ui.get_input()
 
-            #if program_menu.selected == "Bar":
-                #Do something
-                #return
+        if "window resize" in keys:
+            dim = ui.get_cols_rows()
+        if "esc" in keys or 'Q' in keys:
+            return
 
-#@wrap_exceptions()
-#def run_dialog(ui,dim,display,dialog):
-#    pass
-    #Event loop:
+        for k in keys:
+            #Send key to underlying widget:
+            dialog.keypress(dim, k)
+
+if __name__=='__main__':
+    try:
+        dbusmanager.connect_to_dbus()
+    except DBusException:
+        # I may need to be a little more verbose here.
+        # Suggestions as to what should go here
+        print "Can't connect to the daemon.  Are you sure it is running?"
+        print "Please check the wicd log for error messages."
+        raise
+    ui = urwid.curses_display.Screen()
+    ui.register_palette([
+        ('body','light gray','default'),
+        ('focus','dark magenta','light gray'),
+        ('header','light blue','default'),
+        ('important','light red','default'),
+        ('connected','dark green','default'),
+        ('connected focus','default','dark green'),
+        ('editcp', 'default', 'default', 'standout'),
+        ('editbx', 'light gray', 'dark blue'),
+        ('editfc', 'white','dark blue', 'bold'),
+        ('tab active','dark green','light gray')])
+    ui.run_wrapper(run)

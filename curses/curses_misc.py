@@ -79,8 +79,9 @@ class TabColumns(urwid.WidgetWrap):
     attr = normal attributes
     attrsel = attribute when active
     """
-    def __init__(self,tab_str,tab_wid,title,attr=('body','focus'),attrsel='tab active',
-            attrtitle='header'):
+    def __init__(self,tab_str,tab_wid,title,bottom_part,attr=('body','focus'),
+            attrsel='tab active', attrtitle='header'):
+        self.bottom_part = bottom_part
         #title_wid = urwid.Text((attrtitle,title),align='right')
         column_list = []
         for w in tab_str:
@@ -91,23 +92,38 @@ class TabColumns(urwid.WidgetWrap):
         self.tab_map = dict(zip(tab_str,tab_wid))
         self.active_tab = tab_str[0]
         self.columns = urwid.Columns(column_list,dividechars=1)
-        walker   = urwid.SimpleListWalker([self.columns,tab_wid[0]])
-        self.listbox = urwid.ListBox(walker)
-        self.__super.__init__(self.listbox)
+        #walker   = urwid.SimpleListWalker([self.columns,tab_wid[0]])
+        #self.listbox = urwid.ListBox(walker)
+        self.gen_pile(tab_wid[0],True)
+        self.frame = urwid.Frame(self.pile)
+        self.__super.__init__(self.frame)
         
+    # Make the pile in the middle
+    def gen_pile(self,lbox,firstrun=False):
+        self.pile = urwid.Pile([
+            ('fixed',1,urwid.Filler(self.columns,'top')),
+            urwid.Filler(lbox,'top',height=('relative',99)),
+            ('fixed',1,urwid.Filler(self.bottom_part,'bottom'))
+            ])
+        if not firstrun:
+            self.frame.set_body(self.pile)
+            self.set_w(self.frame)
+
     def selectable(self):
         return True
+
     def keypress(self,size,key):
         self._w.keypress(size,key)
-        (wid,pos) = self.listbox.get_focus()
-        if wid is self.columns:
-            lw = self.listbox.body
-            lw.pop(1)
+        wid = self.pile.get_focus().get_body()
+        if wid == self.columns:
+        #    lw = self.listbox.body
+        #    lw.pop(1)
             self.active_tab.set_attr('body')
             self.columns.get_focus().set_attr('tab active')
             self.active_tab = self.columns.get_focus()
-            lw.append(self.tab_map[self.columns.get_focus()])
-            self.listbox.body = lw
+            self.gen_pile(self.tab_map[self.active_tab])
+        return key
+        #    self.listbox.body = lw
 
 # A "combo box" of SelTexts
 # I based this off of the code found here:
@@ -182,7 +198,8 @@ class ComboText(urwid.WidgetWrap):
         self.label = urwid.Text(label)
         str,trash =  self.label.get_text()
 
-        self.cbox  = urwid.AttrWrap(SelText([list[show_first]+'    vvv']),attr[0],attr[1])
+        self.cbox  = urwid.AttrWrap(SelText([list[show_first]+'    vvv']),
+                attr[0],attr[1])
         # Unicode will kill me sooner or later.  ^_^
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)

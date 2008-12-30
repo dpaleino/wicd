@@ -24,6 +24,18 @@ import sys
 # Be sure to keep this updated!
 # VERSIONNUMBER
 VERSION_NUM = '1.6.0'
+REVISON_NUM = 'unknown'
+
+try:
+    if not os.exists('vcsinfo.py'):
+        try:
+            os.system('bzr version-info --python > vcsinfo.py')
+        except:
+            pass
+    import vcsinfo
+    REVISION_NUM = vcsinfo.version_info['revno']
+except:
+    print 'failed to find revision number'
 
 class configure(Command):
     description = "configure the paths that Wicd will be installed to"
@@ -214,7 +226,9 @@ class configure(Command):
                     for item, value in values:
                         line = line.replace('%' + str(item.upper().replace('-','_')) + '%', str(value))
 
+                    # other things to replace that aren't arguments
                     line = line.replace('%VERSION%', str(VERSION_NUM))
+                    line = line.replace('%REVNO%', str(REVISION_NUM))
                         
                     item_out.write(line)
                 

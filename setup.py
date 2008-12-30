@@ -213,6 +213,8 @@ class configure(Command):
                 for line in item_in.readlines():
                     for item, value in values:
                         line = line.replace('%' + str(item.upper().replace('-','_')) + '%', str(value))
+
+                    line = line.replace('%VERSION%', str(VERSION_NUM))
                         
                     item_out.write(line)
                 

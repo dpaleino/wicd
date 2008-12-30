@@ -17,6 +17,8 @@ current = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 # All directory paths *MUST* end in a /
 
+version = '1.6.0'
+
 # DIRECTORIES
 
 lib = '/usr/lib/wicd/'

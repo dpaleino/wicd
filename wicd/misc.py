@@ -498,10 +498,12 @@ def get_language_list_gui():
     language["route_flush"] = _("Route Table Flushing")
     language["backend"] = _("Backend")
     language["backend_alert"] = _("Changes to your backend won't occur until the daemon is restarted.")
-    language['search_domain'] = _("Search Domain")
+    language['dns_domain'] = _("DNS domain")
+    language['search_domain'] = _("Search domain")
+    language['global_dns_not_enabled'] = _("Global DNS has not been enabled in general preferences.")
     language['scripts_need_pass'] = _('You must enter your password to configure scripts')
     language['no_sudo_prog'] = _("Could not find a graphical sudo program.  The script editor could not be launched." +
-                                 "You'll have to edit scripts directly your configuration file.")
+                                 "  You'll have to edit scripts directly your configuration file.")
     
     language['0'] = _('0')
     language['1'] = _('1')

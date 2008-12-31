@@ -102,17 +102,20 @@ class PreferencesDialog(object):
 
         self.useGlobalDNSCheckbox.connect("toggled", checkboxTextboxToggle,
                                           (self.dns1Entry, self.dns2Entry,
-                                           self.dns3Entry, self.searchDomEntry))
+                                           self.dns3Entry, self.dnsDomEntry, 
+                                           self.searchDomEntry))
 
         dns_addresses = daemon.GetGlobalDNSAddresses()
         self.useGlobalDNSCheckbox.set_active(daemon.GetUseGlobalDNS())
         self.dns1Entry.set_text(noneToBlankString(dns_addresses[0]))
         self.dns2Entry.set_text(noneToBlankString(dns_addresses[1]))
         self.dns3Entry.set_text(noneToBlankString(dns_addresses[2]))
-        self.searchDomEntry.set_text(noneToBlankString(dns_addresses[3]))
+        self.dnsDomEntry.set_text(noneToBlankString(dns_addresses[3]))
+        self.searchDomEntry.set_text(noneToBlankString(dns_addresses[4]))
 
         if not daemon.GetUseGlobalDNS():
             self.searchDomEntry.set_sensitive(False)
+            self.dnsDomEntry.set_sensitive(False)
             self.dns1Entry.set_sensitive(False)
             self.dns2Entry.set_sensitive(False)
             self.dns3Entry.set_sensitive(False)
@@ -144,7 +147,8 @@ class PreferencesDialog(object):
         """ Pushes the selected settings to the daemon. """
         daemon.SetUseGlobalDNS(self.useGlobalDNSCheckbox.get_active())
         daemon.SetGlobalDNS(self.dns1Entry.get_text(), self.dns2Entry.get_text(),
-                            self.dns3Entry.get_text(), self.searchDomEntry.get_text())
+                            self.dns3Entry.get_text(), self.dnsDomEntry.get_text(),
+                            self.searchDomEntry.get_text())
         daemon.SetWirelessInterface(self.entryWirelessInterface.get_text())
         daemon.SetWiredInterface(self.entryWiredInterface.get_text())
         daemon.SetWPADriver(self.wpadrivers[self.wpadrivercombo.get_active()])
@@ -305,6 +309,7 @@ class PreferencesDialog(object):
         self.useGlobalDNSCheckbox = setup_label("pref_global_check",
                                                 'use_global_dns')
         self.searchDomEntry = self.wTree.get_widget("pref_search_dom_entry")
+        self.dnsDomEntry = self.wTree.get_widget("pref_dns_dom_entry")
         self.dns1Entry = self.wTree.get_widget("pref_dns1_entry")
         self.dns2Entry = self.wTree.get_widget("pref_dns2_entry")
         self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")

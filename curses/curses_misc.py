@@ -63,8 +63,11 @@ class ToggleEdit(urwid.WidgetWrap):
             self._w.set_attr('editbx')
         else:
             self._w.set_attr('body')
+
+    def set_edit_text(self,text):
+        self._w.set_edit_text(text)
     
-    # If we aren't sensitive, don't be selectab;e
+    # If we aren't sensitive, don't be selectable
     def selectable(self):
         return self.sensitive
 
@@ -125,10 +128,16 @@ class TabColumns(urwid.WidgetWrap):
         return key
         #    self.listbox.body = lw
 
+
+### Combo box code begins here
+
+class ComboBoxException(Exception):
+    pass
+
 # A "combo box" of SelTexts
 # I based this off of the code found here:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
-class ComboText(urwid.WidgetWrap):
+class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
     class ComboSpace(urwid.WidgetWrap):
         """The actual menu-like space that comes down from the ComboText"""
@@ -183,8 +192,7 @@ class ComboText(urwid.WidgetWrap):
 
         #def get_size(self):
 
-    def __init__(self,label,list,body,ui,row = 0,show_first=0,attr=('body','focus'),
-            use_enter=True):
+    def __init__(self,label='',list=[],attr=('body','focus'),use_enter=True,show_first=0):
         """
         label     : bit of text that preceeds the combobox.  If it is "", then 
                     ignore it
@@ -194,31 +202,60 @@ class ComboText(urwid.WidgetWrap):
         row       : where this object is to be found onscreen
         show_first: index of the element in the list to pick first
         """
-
+        
         self.label = urwid.Text(label)
+        self.attr = attr
+        self.list = list
         str,trash =  self.label.get_text()
 
-        self.cbox  = urwid.AttrWrap(SelText([list[show_first]+'    vvv']),
-                attr[0],attr[1])
+        self.overlay = None
+
+        self.cbox  = urwid.AttrWrap(SelText('    vvv'),attr[0],attr[1])
         # Unicode will kill me sooner or later.  ^_^
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
-            self.overlay = self.ComboSpace(list,body,ui,show_first,pos=(len(str)+1,row))
         else:
             w = urwid.Columns([self.cbox])
-            self.overlay = self.ComboSpace(list,body,ui,show_first,pos=(0,row))
         self.__super.__init__(w)
 
-        # We need this to control the keypress
+        # We need this to pick our keypresses
+        self.use_enter = use_enter
+
+        # Set the focus at the beginning to 0
+        self.show_first = show_first
+
+    def set_list(self,list):
+        self.list = list
+
+    def set_show_first(self,show_first):
+        self.show_first = show_first
+
+    def build_combobox(self,body,ui,row,show_first=0):
+        str,trash =  self.label.get_text()
+        self.cbox  = urwid.AttrWrap(SelText([self.list[show_first]+'    vvv']),
+                self.attr[0],self.attr[1])
+        if str != '':
+            w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
+            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+                    pos=(len(str)+1,row))
+        else:
+            w = urwid.Columns([self.cbox])
+            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+                    pos=(0,row))
+
+        self.set_w(w)
         self.body = body
         self.ui = ui
-        self.use_enter = use_enter
+
     # If we press space or enter, be a combo box!
     def keypress(self,size,key):
         activate = key == ' '
         if self.use_enter:
             activate = activate or key == 'enter'
         if activate:
+            # Die if the user didn't prepare the combobox overlay
+            if self.overlay == None:
+                raise ComboBoxException('ComboBox must be built before use!')
             retval = self.overlay.show(self.ui,self.body)
             if retval != None:
                 self.cbox.set_w(SelText(retval+'    vvv'))

@@ -22,7 +22,7 @@ import urwid.curses_display
 
 from wicd import misc
 from wicd import dbusmanager
-from curses_misc import SelText,ToggleEdit,ComboText,TabColumns
+from curses_misc import SelText,ToggleEdit,ComboBox,TabColumns
 
 daemon = None
 wireless = None
@@ -33,7 +33,6 @@ language = misc.get_language_list_gui()
 class PrefsDialog(urwid.WidgetWrap):
     def __init__(self,body,pos,ui,dbus=None):
         global daemon, wireless, wired
-        self.ui = ui
 
         daemon = dbus['daemon']
         wireless = dbus['wireless']
@@ -91,9 +90,9 @@ class PrefsDialog(urwid.WidgetWrap):
         wired1_t              = 'ethtool'
         wired2_t              = 'mii-tool'
 
-        route_table_header_t = ('header',language["route_flush"])
-        route1_t           = 'ip'
-        route2_t           = 'route'
+        flush_header_t = ('header',language["route_flush"])
+        flush1_t           = 'ip'
+        flush2_t           = 'route'
  
         #### Advanced Settings
         #wpa_t=('editcp',language['wpa_supplicant_driver']+':')
@@ -122,10 +121,12 @@ class PrefsDialog(urwid.WidgetWrap):
 
         # General Settings
         self.net_cat     = urwid.Text(net_cat_t)
-        self.wired_iface = urwid.AttrWrap(urwid.Edit(wired_t),'editbx','editfc')
-        self.wless_iface = urwid.AttrWrap(urwid.Edit(wless_t),'editbx','editfc')
+        self.wired_edit = urwid.AttrWrap(urwid.Edit(wired_t),'editbx','editfc')
+        self.wless_edit = urwid.AttrWrap(urwid.Edit(wless_t),'editbx','editfc')
         
         self.global_dns_cat = urwid.Text(global_dns_cat_t)
+        # Default the global DNS settings to off.  They will be reenabled later
+        # if so required.
         global_dns_state = False
         self.global_dns_checkb  = urwid.CheckBox(global_dns_t,global_dns_state,
                 on_state_change=self.global_dns_trigger)
@@ -142,8 +143,8 @@ class PrefsDialog(urwid.WidgetWrap):
         self.wired_auto_2 =   urwid.RadioButton(wired_auto_l,wired_auto_2_t)
         self.wired_auto_3 =   urwid.RadioButton(wired_auto_l,wired_auto_3_t)
         generalLB = urwid.ListBox([self.net_cat,
-                                   self.wless_iface,#self._blank,
-                                   self.wired_iface,
+                                   self.wless_edit,#self._blank,
+                                   self.wired_edit,
                                    self.always_show_wired_checkb,self._blank,
                                    self.global_dns_cat,
                                    self.global_dns_checkb,#self._blank,
@@ -159,24 +160,24 @@ class PrefsDialog(urwid.WidgetWrap):
         automatic_t = language['wicd_auto_config']
 
         self.dhcp_header = urwid.Text(dhcp_header_t)
-        dhcp_l = []
+        self.dhcp_l = []
         # Automatic
-        self.dhcp0  = urwid.RadioButton(dhcp_l,automatic_t)
-        self.dhcp1  = urwid.RadioButton(dhcp_l,dhcp1_t)
-        self.dhcp2  = urwid.RadioButton(dhcp_l,dhcp2_t)
-        self.dhcp3  = urwid.RadioButton(dhcp_l,dhcp3_t)
+        self.dhcp0  = urwid.RadioButton(self.dhcp_l,automatic_t)
+        self.dhcp1  = urwid.RadioButton(self.dhcp_l,dhcp1_t)
+        self.dhcp2  = urwid.RadioButton(self.dhcp_l,dhcp2_t)
+        self.dhcp3  = urwid.RadioButton(self.dhcp_l,dhcp3_t)
 
-        wired_l = []
+        self.wired_l = []
         self.wired_detect_header = urwid.Text(wired_detect_header_t)
-        self.wired0         = urwid.RadioButton(wired_l,automatic_t)
-        self.wired1         = urwid.RadioButton(wired_l,wired1_t)
-        self.wired2         = urwid.RadioButton(wired_l,wired2_t)
+        self.wired0         = urwid.RadioButton(self.wired_l,automatic_t)
+        self.wired1         = urwid.RadioButton(self.wired_l,wired1_t)
+        self.wired2         = urwid.RadioButton(self.wired_l,wired2_t)
 
-        route_l = []
-        self.route_table_header  = urwid.Text(route_table_header_t)
-        self.route0         = urwid.RadioButton(route_l,automatic_t)
-        self.route1         = urwid.RadioButton(route_l,route1_t)
-        self.route2         = urwid.RadioButton(route_l,route2_t)
+        self.flush_l = []
+        self.flush_header   = urwid.Text(flush_header_t)
+        self.flush0         = urwid.RadioButton(self.flush_l,automatic_t)
+        self.flush1         = urwid.RadioButton(self.flush_l,flush1_t)
+        self.flush2         = urwid.RadioButton(self.flush_l,flush2_t)
 
         externalLB = urwid.ListBox([self.dhcp_header,
                                     self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
@@ -184,18 +185,18 @@ class PrefsDialog(urwid.WidgetWrap):
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,
                                     self._blank,
-                                    self.route_table_header,
-                                    self.route0,self.route1,self.route2
+                                    self.flush_header,
+                                    self.flush0,self.flush1,self.flush2
                                    ])
 
 
         #### Advanced settings
         self.wpa_cat      = urwid.Text(wpa_cat_t)
-        self.wpa_cbox     = ComboText(wpa_t,wpa_list,self,ui,4)
+        self.wpa_cbox     = ComboBox(wpa_t)
         self.wpa_warn     = urwid.Text(wpa_warn_t)
         
         self.backend_cat  = urwid.Text(backend_cat_t)
-        self.backend_cbox = ComboText(backend_t,backend_list,self,ui,8)
+        self.backend_cbox = ComboBox(backend_t)
         
         self.debug_cat           = urwid.Text(debug_cat_t)
         self.debug_mode_checkb   = urwid.CheckBox(debug_mode_t)
@@ -223,7 +224,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.tab_map = {self.header0 : generalLB,
                         self.header1 : externalLB,
                         self.header2 : advancedLB}
-        self.load_settings()
+        #self.load_settings()
 
         # Now for the buttons:
 
@@ -266,6 +267,11 @@ class PrefsDialog(urwid.WidgetWrap):
     def global_dns_trigger(self,check_box,new_state,user_data=None):
         for w in self.search_dom,self.dns1,self.dns2,self.dns3:
             w.set_sensitive(new_state)
+
+    def ready_comboboxes(self,ui,body):
+        self.wpa_cbox.build_combobox(body,ui,4)
+        self.backend_cbox.build_combobox(body,ui,8)
+
     # Normal keypress, but if we are at the top, then be "tabbish" instead
     #def keypress(self,size,ui):
     #    self._w.keypress(size,ui)
@@ -283,16 +289,16 @@ class PrefsDialog(urwid.WidgetWrap):
     # Put the widget into an overlay, and run!
     def run(self,ui, dim, display):
         width,height = ui.get_cols_rows()
+        self.load_settings()
+        # TODO: The below, if things go 'well'
         # If we are small, "tabbify" the interface
-
         # Else, pile it together
+
         overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
+        # Will need once we actually get the comboboxes filled with stuff
+        #self.ready_comboboxes(ui,overlay)
 
-        #dialog = TabbedOverlay(["Foo", "Bar", "Quit"],
-        #                       ('body', 'focus'), (1, 1), display)
-
-        #dialog = PrefOverlay(display,(0,1))
         keys = True
         while True:
             if keys:
@@ -308,10 +314,13 @@ class PrefsDialog(urwid.WidgetWrap):
                 #Send key to underlying widget:
                 overlay.keypress(dim, k)
 
-def run():
+def run_it():
     dialog = PrefsDialog(None,(0,0),ui,dbusmanager.get_dbus_ifaces())
     keys = True
     dim = ui.get_cols_rows()
+    dialog.load_settings()
+    # Will need once we actually get the comboboxes filled with stuff
+    #self.ready_comboboxes(ui,overlay)
     while True:
         if keys:
             ui.draw_screen(dim, dialog.render(dim, True))
@@ -347,4 +356,4 @@ if __name__=='__main__':
         ('editbx', 'light gray', 'dark blue'),
         ('editfc', 'white','dark blue', 'bold'),
         ('tab active','dark green','light gray')])
-    ui.run_wrapper(run)
+    ui.run_wrapper(run_it)

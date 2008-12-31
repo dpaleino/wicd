@@ -56,7 +56,7 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboText
+from curses_misc import SelText,ComboBox
 import prefs_curses
 from prefs_curses import PrefsDialog
 
@@ -230,21 +230,8 @@ class appGUI():
         self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
         self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
-        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
-        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
-        self.footerList = urwid.ListBox([self.footer1,self.footer2])
-        # Pop takes a number!
-        #walker.pop(1)
-        nothingness = urwid.Filler(urwid.Text('Hello, world!'))
-        self.frame = urwid.Frame(nothingness,
-                                 header=header,
-                                 footer=urwid.BoxAdapter(self.footerList,2))
-        self.frame.set_focus('body')
-
-        # Miiiiiiiiiiight be changing this back to something like how it was 
-        # originally
         wiredL,wlessL = gen_network_list()
-        self.wiredCB = urwid.Filler(ComboText('',wiredL,self.frame,ui,3,use_enter=False))
+        self.wiredCB = urwid.Filler(ComboBox(list=wiredL,use_enter=False))
         self.wlessLB = urwid.ListBox(wlessL)
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
@@ -259,6 +246,17 @@ class appGUI():
                                    ('fixed',1,self.wlessH),
                                               self.wlessLB] )
 
+        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
+        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
+        self.footerList = urwid.ListBox([self.footer1,self.footer2])
+        # Pop takes a number!
+        #walker.pop(1)
+        nothingness = urwid.Filler(urwid.Text('Hello, world!'))
+        self.frame = urwid.Frame(self.thePile,
+                                 header=header,
+                                 footer=urwid.BoxAdapter(self.footerList,2))
+        self.wiredCB.get_body().build_combobox(self.frame,ui,3)
+
         self.frame.set_body(self.thePile)
         # Booleans gallore!
         self.prev_state    = False
@@ -269,7 +267,6 @@ class appGUI():
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
-
 
     # Does what it says it does
     def lock_screen(self):
@@ -294,8 +291,10 @@ class appGUI():
             state, x = daemon.GetConnectionStatus()
         if self.prev_state != state or force_check:
             wiredL,wlessL = gen_network_list()
-            self.wiredCB = urwid.Filler(ComboText('',wiredL,self.frame,ui,3,
-                use_enter=False))
+            #self.wiredCB = urwid.Filler(ComboBox(wiredL,self.frame,ui,3,
+            #    use_enter=False))
+            self.wiredCB.get_body().set_list(wiredL)
+            self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             self.wlessLB.body = urwid.SimpleListWalker(wlessL)
                 
         self.prev_state = state
@@ -440,7 +439,7 @@ class appGUI():
             self.frame.keypress( self.size, k )
 
         if " " in keys:
-                self.set_status('space pressed on wiredCB!')
+                #self.set_status('space pressed on wiredCB!')
                 wid,pos = self.wiredCB.get_body().get_selected()
                 text,attr = wid.get_text()
                 wired.ReadWiredNetworkProfile(text)

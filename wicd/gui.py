@@ -303,9 +303,9 @@ class appGui(object):
             bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
                                     "org.wicd.daemon")
         try:
-            gobject.timeout_add_seconds(1, self.update_statusbar)
+            gobject.timeout_add_seconds(2, self.update_statusbar)
         except:
-            gobject.timeout_add(1000, self.update_statusbar)
+            gobject.timeout_add(2000, self.update_statusbar)
             
         self.refresh_clicked()
         
@@ -689,6 +689,7 @@ class appGui(object):
            not entry.chkbox_global_dns.get_active():
             entry.set_net_prop('use_static_dns', True)
             entry.set_net_prop('use_global_dns', False)
+            entry.set_net_prop('dns_domain', noneToString(entry.txt_domain.get_text()))
             entry.set_net_prop("search_domain", noneToString(entry.txt_search_dom.get_text()))
             entry.set_net_prop("dns1", noneToString(entry.txt_dns_1.get_text()))
             entry.set_net_prop("dns2", noneToString(entry.txt_dns_2.get_text()))
@@ -700,6 +701,7 @@ class appGui(object):
         else:
             entry.set_net_prop('use_static_dns', False)
             entry.set_net_prop('use_global_dns', False)
+            entry.set_net_prop('dns_domain', '')
             entry.set_net_prop("search_domain", '')
             entry.set_net_prop("dns1", '')
             entry.set_net_prop("dns2", '')

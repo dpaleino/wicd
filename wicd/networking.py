@@ -109,6 +109,7 @@ class Controller(object):
         self.global_dns_1 = None
         self.global_dns_2 = None
         self.global_dns_3 = None
+        self.global_dns_dom = None
         self.global_search_dom = None
         self._dhcp_client = None
         self._flush_tool = None
@@ -226,7 +227,7 @@ class ConnectThread(threading.Thread):
     lock = thread.allocate_lock()
 
     def __init__(self, network, interface_name, before_script, after_script, 
-                 disconnect_script, gdns1, gdns2, gdns3, gsearch_dom, 
+                 disconnect_script, gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, 
                  iface, debug):
         """ Initialise the required object variables and the thread.
 
@@ -258,6 +259,7 @@ class ConnectThread(threading.Thread):
         self.global_dns_1 = gdns1
         self.global_dns_2 = gdns2
         self.global_dns_3 = gdns3
+        self.global_dns_dom = gdns_dom
         self.global_search_dom = gsearch_dom
         
         self.iface = iface
@@ -383,16 +385,18 @@ class ConnectThread(threading.Thread):
         """
         if self.network.get('use_global_dns'):
             BACKEND.SetDNS(misc.Noneify(self.global_dns_1),
-                             misc.Noneify(self.global_dns_2), 
-                             misc.Noneify(self.global_dns_3),
-                             misc.Noneify(self.global_search_dom))
+                           misc.Noneify(self.global_dns_2), 
+                           misc.Noneify(self.global_dns_3),
+                           misc.Noneify(self.global_dns_dom),
+                           misc.Noneify(self.global_search_dom))
         elif self.network.get('use_static_dns') and (self.network.get('dns1') or
                     self.network.get('dns2') or self.network.get('dns3')):
             self.SetStatus('setting_static_dns')
             BACKEND.SetDNS(self.network.get('dns1'),
-                                 self.network.get('dns2'),
-                                 self.network.get('dns3'),
-                                 self.network.get('search_domain'))
+                           self.network.get('dns2'),
+                           self.network.get('dns3'),
+                           self.network.get('dns_domain'),
+                           self.network.get('search_domain'))
 
     @abortable        
     def release_dhcp_clients(self, iface):
@@ -543,8 +547,8 @@ class Wireless(Controller):
         self.connecting_thread = WirelessConnectThread(network,
             self.wireless_interface, self.wpa_driver, self.before_script,
             self.after_script, self.disconnect_script, self.global_dns_1,
-            self.global_dns_2, self.global_dns_3, self.global_search_dom,
-            self.wiface, debug)
+            self.global_dns_2, self.global_dns_3, self.global_dns_dom,
+            self.global_search_dom, self.wiface, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -673,7 +677,7 @@ class WirelessConnectThread(ConnectThread):
 
     def __init__(self, network, wireless, wpa_driver, before_script,
                  after_script, disconnect_script, gdns1, gdns2, gdns3, 
-                 gsearch_dom, wiface, debug=False):
+                 gdns_dom, gsearch_dom, wiface, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -690,7 +694,7 @@ class WirelessConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wireless, before_script, 
                                after_script, disconnect_script, gdns1, gdns2, 
-                               gdns3, gsearch_dom, wiface, debug)
+                               gdns3, gdns_dom, gsearch_dom, wiface, debug)
         self.wpa_driver = wpa_driver
 
 
@@ -856,7 +860,8 @@ class Wired(Controller):
         self.connecting_thread = WiredConnectThread(network,
             self.wired_interface, self.before_script, self.after_script,
             self.disconnect_script, self.global_dns_1, self.global_dns_2, 
-            self.global_dns_3, self.global_search_dom, self.liface, debug)
+            self.global_dns_3, self.global_dns_dom, self.global_search_dom, 
+            self.liface, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return self.connecting_thread
@@ -877,8 +882,8 @@ class WiredConnectThread(ConnectThread):
 
     """
     def __init__(self, network, wired, before_script, after_script, 
-                 disconnect_script, gdns1, gdns2, gdns3, gsearch_dom, liface, 
-                 debug=False):
+                 disconnect_script, gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, 
+                 liface, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -895,7 +900,7 @@ class WiredConnectThread(ConnectThread):
         """
         ConnectThread.__init__(self, network, wired, before_script, 
                                after_script, disconnect_script, gdns1, gdns2, 
-                               gdns3, gsearch_dom, liface, debug)
+                               gdns3, gdns_dom, gsearch_dom, liface, debug)
 
     def run(self):
         """ The main function of the connection thread.

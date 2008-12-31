@@ -166,27 +166,35 @@ class WicdDaemon(dbus.service.Object):
         self.wired.use_global_dns = use
 
     @dbus.service.method('org.wicd.daemon')
-    def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None, search_dom=None):
+    def SetGlobalDNS(self, dns1=None, dns2=None, dns3=None,
+                     dns_dom =None, search_dom=None):
         """ Sets the global dns addresses. """
         print "setting global dns"
-        self.config.set("Settings", "global_dns_1", misc.noneToString(dns1), True)
+        self.config.set("Settings", "global_dns_1", misc.noneToString(dns1))
         self.dns1 = dns1
         self.wifi.global_dns_1 = dns1
         self.wired.global_dns_1 = dns1
-        self.config.set("Settings", "global_dns_2", misc.noneToString(dns2), True)
+        self.config.set("Settings", "global_dns_2", misc.noneToString(dns2))
         self.dns2 = dns2
         self.wifi.global_dns_2 = dns2
         self.wired.global_dns_2 = dns2
-        self.config.set("Settings", "global_dns_3", misc.noneToString(dns3), True)
+        self.config.set("Settings", "global_dns_3", misc.noneToString(dns3))
         self.dns3 = dns3
         self.wifi.global_dns_3 = dns3
         self.wired.global_dns_3 = dns3
-        self.config.set("Settings", "global_search_dom", misc.noneToString(search_dom), True)
+        self.config.set("Settings", "global_dns_dom", misc.noneToString(dns_dom))
+        self.dns_dom = dns_dom
+        self.wifi.dns_dom = dns_dom
+        self.wired.dns_dom = dns_dom
+        self.config.set("Settings", "global_search_dom", misc.noneToString(search_dom))
         self.search_dom = search_dom
         self.wifi.global_search_dom = search_dom
         self.wired.global_search_dom = search_dom
         print 'global dns servers are', dns1, dns2, dns3
+        print 'domain is %s' % dns_dom
         print 'search domain is %s' % search_dom
+        self.config.write()
+        
         
     @dbus.service.method('org.wicd.daemon')
     def SetBackend(self, backend):
@@ -340,7 +348,8 @@ class WicdDaemon(dbus.service.Object):
     def GetGlobalDNSAddresses(self):
         """ Returns the global dns addresses. """
         return (misc.noneToString(self.dns1), misc.noneToString(self.dns2),
-                misc.noneToString(self.dns3), misc.noneToString(self.search_dom))
+                misc.noneToString(self.dns3), misc.noneToString(self.dns_dom),
+                misc.noneToString(self.search_dom))
 
     @dbus.service.method('org.wicd.daemon')
     def CheckIfConnecting(self):
@@ -798,8 +807,9 @@ class WicdDaemon(dbus.service.Object):
         dns1 = app_conf.get("Settings", "global_dns_1", default='None')
         dns2 = app_conf.get("Settings", "global_dns_2", default='None')
         dns3 = app_conf.get("Settings", "global_dns_3", default='None')
+        dns_dom =app_conf.get("Settings", "global_dns_dom", default='None')
         search_dom = app_conf.get("Settings", "global_search_dom", default='None')
-        self.SetGlobalDNS(dns1, dns2, dns3, search_dom)
+        self.SetGlobalDNS(dns1, dns2, dns3, dns_dom, search_dom)
         self.SetAutoReconnect(app_conf.get("Settings", "auto_reconnect",
                                            default=True))
         self.SetDebugMode(app_conf.get("Settings", "debug_mode", default=False))

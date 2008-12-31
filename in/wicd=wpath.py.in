@@ -17,6 +17,9 @@ current = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 # All directory paths *MUST* end in a /
 
+version = '%VERSION%'
+revision = '%REVNO%'
+
 # DIRECTORIES
 
 lib = '%LIB%'

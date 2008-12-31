@@ -1,5 +1,5 @@
 .\" Written by Robby Workman <rworkman@slackware.com>
-.TH WICD-MANAGER-SETTINGS.CONF 5 "June 2008" "wicd-1.5.0"
+.TH WICD-MANAGER-SETTINGS.CONF 5 "June 2008" "wicd-%VERSION%"
 .SH NAME
 wicd-manager-settings.conf \- contains settings that control Wicd's behavior
 

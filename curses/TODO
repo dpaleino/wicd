@@ -1,8 +1,6 @@
 Things to do (in no particular order):
 
-*   Make a settings dialog -- Finish the backend.  The frontend is pretty much
-    done.
-*   Make a network config dialog
+*   Make a network config dialog for both wireless and wired interfaces
 *   Make an about dialog
 *   Implement a keyhandler function for the overall frame
     * Make keystrokes customizable

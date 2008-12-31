@@ -241,11 +241,15 @@ class appGUI():
         #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
         #          spam,spam,spam,spam] ]
         #self.spamLB = urwid.ListBox(spamL)
-        self.thePile = urwid.Pile([('fixed',1,self.wiredH),
-                                   ('fixed',1,self.wiredCB),
-                                   ('fixed',1,self.wlessH),
-                                              self.wlessLB] )
 
+        # Choose whether to show the wired part of the interface.
+        if daemon.GetAlwaysShowWiredInterface():
+            self.thePile = urwid.Pile([('fixed',1,self.wiredH),
+                                       ('fixed',1,self.wiredCB),
+                                       ('fixed',1,self.wlessH),
+                                                  self.wlessLB] )
+        else:
+            self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
         self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
         self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
@@ -263,7 +267,7 @@ class appGUI():
         self.connecting    = False
         self.screen_locked = False
         self.connecting    = False
-
+        self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
@@ -296,7 +300,18 @@ class appGUI():
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             self.wlessLB.body = urwid.SimpleListWalker(wlessL)
-                
+            # If the "Always Show Wired" part of the interface changes, change
+            # along with it.
+            if daemon.GetAlwaysShowWiredInterface() != self.always_show_wired:
+                if daemon.GetAlwaysShowWiredInterface():
+                    self.thePile = urwid.Pile([('fixed',1,self.wiredH),
+                                               ('fixed',1,self.wiredCB),
+                                               ('fixed',1,self.wlessH),
+                                                          self.wlessLB] )
+                else:
+                    self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
+                self.frame.body = self.thePile
+                self.always_show_wired = not self.always_show_wired
         self.prev_state = state
 
     # Update the footer/status bar
@@ -430,8 +445,10 @@ class appGUI():
         if "P" in keys:
             dialog = PrefsDialog(self.frame,(0,1),ui,
                     dbusmanager.get_dbus_ifaces()) 
-            dialog.run(ui,self.size,self.frame)
-            dialog.store_results()
+            # There is some lag in using the buttons.  Not my fault.
+            if dialog.run(ui,self.size,self.frame):
+                dialog.save_results()
+            self.update_ui()
         for k in keys:
             if k == "window resize":
                 self.size = ui.get_cols_rows()

@@ -67,6 +67,9 @@ class ToggleEdit(urwid.WidgetWrap):
     def set_edit_text(self,text):
         self._w.set_edit_text(text)
     
+    def get_edit_text(self):
+        return self._w.get_edit_text()
+
     # If we aren't sensitive, don't be selectable
     def selectable(self):
         return self.sensitive
@@ -75,7 +78,7 @@ class ToggleEdit(urwid.WidgetWrap):
     def keypress(self,size,key):
         return self._w.keypress(size,key)
 
-# Tabbed interface
+# Tabbed interface, mostly for use in the Preferences Dialog
 class TabColumns(urwid.WidgetWrap):
     """
     titles_dict = dictionary of tab_contents (a SelText) : tab_widget (box)
@@ -265,6 +268,7 @@ class ComboBox(urwid.WidgetWrap):
     def selectable(self):
         return True
 
-    # Return a tuple of (widget,position)
+    # Return the index of the selected element
     def get_selected(self):
-        return self.overlay._listbox.get_focus()
+        wid,pos = self.overlay._listbox.get_focus()
+        return pos

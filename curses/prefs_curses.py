@@ -43,6 +43,7 @@ class PrefsDialog(urwid.WidgetWrap):
         #width = 80
         #height = 20
         # Stuff that goes at the top
+
         header0_t = language["gen_settings"]
         header1_t = language["ext_programs"]
         header2_t = language["advanced_settings"]
@@ -52,7 +53,7 @@ class PrefsDialog(urwid.WidgetWrap):
         title   = language['preferences']
 
         # Blank line
-        self._blank = urwid.Text('')
+        _blank = urwid.Text('')
 
         ####
         #### Text in the widgets
@@ -137,19 +138,19 @@ class PrefsDialog(urwid.WidgetWrap):
 
         self.always_show_wired_checkb = urwid.CheckBox(always_show_wired_t)
 
-        wired_auto_l  = []
+        self.wired_auto_l  = []
         self.wired_auto_cat = urwid.Text(wired_auto_cat_t)
-        self.wired_auto_1 =   urwid.RadioButton(wired_auto_l,wired_auto_1_t)
-        self.wired_auto_2 =   urwid.RadioButton(wired_auto_l,wired_auto_2_t)
-        self.wired_auto_3 =   urwid.RadioButton(wired_auto_l,wired_auto_3_t)
+        self.wired_auto_1 =   urwid.RadioButton(self.wired_auto_l,wired_auto_1_t)
+        self.wired_auto_2 =   urwid.RadioButton(self.wired_auto_l,wired_auto_2_t)
+        self.wired_auto_3 =   urwid.RadioButton(self.wired_auto_l,wired_auto_3_t)
         generalLB = urwid.ListBox([self.net_cat,
-                                   self.wless_edit,#self._blank,
+                                   self.wless_edit,#_blank,
                                    self.wired_edit,
-                                   self.always_show_wired_checkb,self._blank,
+                                   self.always_show_wired_checkb,_blank,
                                    self.global_dns_cat,
-                                   self.global_dns_checkb,#self._blank,
+                                   self.global_dns_checkb,#_blank,
                                    self.search_dom,
-                                   self.dns1,self.dns2,self.dns3,self._blank,
+                                   self.dns1,self.dns2,self.dns3,_blank,
                                    self.wired_auto_cat,
                                    self.wired_auto_1,
                                    self.wired_auto_2,
@@ -181,10 +182,10 @@ class PrefsDialog(urwid.WidgetWrap):
 
         externalLB = urwid.ListBox([self.dhcp_header,
                                     self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
-                                    self._blank,
+                                    _blank,
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,
-                                    self._blank,
+                                    _blank,
                                     self.flush_header,
                                     self.flush0,self.flush1,self.flush2
                                    ])
@@ -208,13 +209,13 @@ class PrefsDialog(urwid.WidgetWrap):
         self.auto_reconn_checkb = urwid.CheckBox(auto_reconn_t)
 
         advancedLB = urwid.ListBox([self.wpa_cat,
-                                    self.wpa_cbox,self.wpa_warn,self._blank,
+                                    self.wpa_cbox,self.wpa_warn,_blank,
                                     self.backend_cat,
-                                    self.backend_cbox,self._blank,
+                                    self.backend_cbox,_blank,
                                     self.debug_cat,
-                                    self.debug_mode_checkb, self._blank,
+                                    self.debug_mode_checkb, _blank,
                                     self.wless_cat,
-                                    self.use_dbm_checkb, self._blank,
+                                    self.use_dbm_checkb, _blank,
                                     self.auto_reconn_cat,
                                     self.auto_reconn_checkb])
 
@@ -227,15 +228,17 @@ class PrefsDialog(urwid.WidgetWrap):
         #self.load_settings()
 
         # Now for the buttons:
-
         ok_t = 'OK'
         cancel_t = 'Cancel'
         
-        ok_button = urwid.AttrWrap(urwid.Button('OK'),'body','focus')
-        cancel_button = urwid.AttrWrap(urwid.Button('Cancel'),'body','focus')
+        ok_button = urwid.AttrWrap(urwid.Button('OK',self.ok_callback),'body','focus')
+        cancel_button = urwid.AttrWrap(urwid.Button('Cancel',self.cancel_callback),'body','focus')
+        # Variables set by the buttons' callback functions
+        self.CANCEL_PRESSED = False
+        self.OK_PRESSED = False
 
 
-        self.button_cols = urwid.Columns([ok_button,cancel_button])
+        self.button_cols = urwid.Columns([ok_button,cancel_button],dividechars=1)
         #self.active_tab = self.header0
 
         #self.columns = urwid.Columns([('fixed',len(header0_t),self.header0),
@@ -255,37 +258,130 @@ class PrefsDialog(urwid.WidgetWrap):
         self.__super.__init__(self.tabs)
         
     def load_settings(self):
+        ### General Settings
+        # Urwid does not like dbus.Strings as text markups
+        wless_iface = unicode(daemon.GetWirelessInterface())
+        wired_iface = unicode(daemon.GetWiredInterface())
+        self.wless_edit.set_edit_text(wless_iface)
+        self.wired_edit.set_edit_text(wired_iface)
+
         self.always_show_wired_checkb.set_state(
                 daemon.GetAlwaysShowWiredInterface())
-        self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
+
+        # DNS
+        self.global_dns_checkb.set_state(daemon.GetUseGlobalDNS())
+        theDNS = daemon.GetGlobalDNSAddresses()
+
+        i = 0
+        for w in self.dns1,self.dns2,self.dns3,self.search_dom :
+            w.set_edit_text(misc.noneToBlankString(theDNS[i]))
+            i+=1
+
+        # Wired Automatic Connection
+        self.wired_auto_l[daemon.GetWiredAutoConnectMethod()-1]
+        
+        ### External Programs
+        dhcp_method = daemon.GetDHCPClient()
+        self.dhcp_l[dhcp_method].set_state(True)
+        
+        wired_link_method = daemon.GetLinkDetectionTool()
+        self.wired_l[wired_link_method].set_state(True)
+
+        flush_method = daemon.GetFlushTool()
+        self.flush_l[flush_method].set_state(True)
+
+        ### Advanced settings
+        # wpa_supplicant janx
+        self.wpadrivers = ["wext", "hostap", "madwifi", "atmel",
+                           "ndiswrapper", "ipw"]
+        self.wpadrivers = wireless.GetWpaSupplicantDrivers(self.wpadrivers)
+        self.wpadrivers.append("ralink_legacy")
+        # Same as above with the dbus.String
+        self.thedrivers = [unicode(w) for w in self.wpadrivers]
+        self.wpa_cbox.set_list(self.thedrivers)
+        
+        # Pick where to begin first:
+        def_driver = daemon.GetWPADriver()
+        try:
+            self.wpa_cbox.set_show_first(self.wpadrivers.index(def_driver))
+        except ValueError:
+            pass # It defaults to 0 anyway
+
+        self.backends = daemon.GetBackendList()
+        # Remove the blank string b/c of some dbus mess
+        self.backends.remove('')
+        self.thebackends= [unicode(w) for w in self.backends]
+        self.backend_cbox.set_list(self.thebackends) 
+
+        # Three last checkboxes
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
+        self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
 
-    def store_results(self):
+    def save_results(self):
+        """ Pushes the selected settings to the daemon.
+            This exact order is found in prefs.py"""
+        daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())
+        daemon.SetGlobalDNS(self.dns1.get_edit_text(), self.dns2.get_edit_text(),
+                            self.dns3.get_edit_text(), self.search_dom.get_edit_text())
+        daemon.SetWirelessInterface(self.wless_edit.get_edit_text())
+        daemon.SetWiredInterface(self.wired_edit.get_edit_text())
+        daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_selected()])
         daemon.SetAlwaysShowWiredInterface(self.always_show_wired_checkb.get_state())
+        daemon.SetAutoReconnect(self.auto_reconn_checkb.get_state())
+        daemon.SetDebugMode(self.debug_mode_checkb.get_state())
+        daemon.SetSignalDisplayType(int(self.use_dbm_checkb.get_state()))
+        if self.wired_auto_2.get_state():
+            daemon.SetWiredAutoConnectMethod(2)
+        elif self.wired_auto_3.get_state():
+            daemon.SetWiredAutoConnectMethod(3)
+        else:
+            daemon.SetWiredAutoConnectMethod(1)
 
+        daemon.SetBackend(self.backends[self.backend_cbox.get_selected()])
+            
+        # External Programs Tab
+        if self.dhcp0.get_state():
+            dhcp_client = misc.AUTO
+        elif self.dhcp1.get_state():
+            dhcp_client = misc.DHCLIENT
+        elif self.dhcp2.get_state():
+            dhcp_client = misc.DHCPCD
+        else:
+            dhcp_client = misc.PUMP
+        daemon.SetDHCPClient(dhcp_client)
+        
+        if self.wired0.get_state():
+            link_tool = misc.AUTO
+        elif self.wired1.get_state():
+            link_tool = misc.ETHTOOL
+        else:
+            link_tool = misc.MIITOOL
+        daemon.SetLinkDetectionTool(link_tool)
+        
+        if self.flush0.get_state():
+            flush_tool = misc.AUTO
+        elif self.flush1.get_state():
+            flush_tool = misc.IP
+        else:
+            flush_tool = misc.ROUTE
+        daemon.SetFlushTool(flush_tool)
+
+    # DNS CheckBox callback
     def global_dns_trigger(self,check_box,new_state,user_data=None):
         for w in self.search_dom,self.dns1,self.dns2,self.dns3:
             w.set_sensitive(new_state)
+
+    # Button callbacks
+    def ok_callback(self,button_object,user_data=None):
+        self.OK_PRESSED = True
+    def cancel_callback(self,button_object,user_data=None):
+        self.CANCEL_PRESSED = True
 
     def ready_comboboxes(self,ui,body):
         self.wpa_cbox.build_combobox(body,ui,4)
         self.backend_cbox.build_combobox(body,ui,8)
 
-    # Normal keypress, but if we are at the top, then be "tabbish" instead
-    #def keypress(self,size,ui):
-    #    self._w.keypress(size,ui)
-    #    (wid,pos) = self._listbox.get_focus()
-    #    if wid is self.columns:
-    #        lw = self.listbox.body
-    #        lw.pop(1)
-    #        self.active_tab.set_attr('body')
-    #        self.columns.get_focus().set_attr('tab active')
-    #        self.active_tab = self.columns.get_focus()
-    #        lw.append(self.tab_map[self.columns.get_focus()])
-    #        self.listbox.body = lw
-            
-#@wrap_exceptions()
     # Put the widget into an overlay, and run!
     def run(self,ui, dim, display):
         width,height = ui.get_cols_rows()
@@ -296,8 +392,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
         overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
-        # Will need once we actually get the comboboxes filled with stuff
-        #self.ready_comboboxes(ui,overlay)
+        self.ready_comboboxes(ui,overlay)
 
         keys = True
         while True:
@@ -308,19 +403,25 @@ class PrefsDialog(urwid.WidgetWrap):
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
             if "esc" in keys or 'Q' in keys:
-                return
-
+                return False
             for k in keys:
                 #Send key to underlying widget:
                 overlay.keypress(dim, k)
+            if self.CANCEL_PRESSED:
+                return False
+            if self.OK_PRESSED:
+                return True
 
+
+###
+### EXTERNAL ENTRY POINT STUFF
+###
 def run_it():
     dialog = PrefsDialog(None,(0,0),ui,dbusmanager.get_dbus_ifaces())
     keys = True
     dim = ui.get_cols_rows()
     dialog.load_settings()
-    # Will need once we actually get the comboboxes filled with stuff
-    #self.ready_comboboxes(ui,overlay)
+    dialog.ready_comboboxes(ui,dialog)
     while True:
         if keys:
             ui.draw_screen(dim, dialog.render(dim, True))
@@ -329,11 +430,14 @@ def run_it():
         if "window resize" in keys:
             dim = ui.get_cols_rows()
         if "esc" in keys or 'Q' in keys:
-            return
-
+            return False
         for k in keys:
-            #Send key to underlying widget:
             dialog.keypress(dim, k)
+        if dialog.CANCEL_PRESSED:
+            return False
+        if dialog.OK_PRESSED:
+            dialog.save_results()
+            return True
 
 if __name__=='__main__':
     try:

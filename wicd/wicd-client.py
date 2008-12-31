@@ -632,14 +632,14 @@ class TrayIcon(object):
 def usage():
     """ Print usage information. """
     print """
-wicd 1.50
+wicd %s 
 wireless (and wired) connection daemon front-end.
 
 Arguments:
 \t-n\t--no-tray\tRun wicd without the tray icon.
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
-"""
+""" % wpath.version
 
 def setup_dbus(force=True):
     global bus, daemon, wireless, wired, DBUS_AVAIL

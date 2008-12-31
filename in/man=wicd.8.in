@@ -1,5 +1,5 @@
 .\" Written by Robby Workman <rworkman@slackware.com>
-.TH WICD 8 "June 2008" "wicd-1.5.0"
+.TH WICD 8 "June 2008" "wicd-%VERSION%"
 .SH NAME
 .B Wicd
 \- Wired and Wireless Network Connection Manager

@@ -132,8 +132,7 @@ class WicdDaemon(dbus.service.Object):
         anything >= 0. This number is effective starting wicd v1.2.0.
         
         """
-        version = '1.6.0'
-        return version
+        return wpath.version
 
     @dbus.service.method('org.wicd.daemon')
     def SetWiredInterface(self, interface):
@@ -1447,7 +1446,7 @@ class WiredDaemon(dbus.service.Object):
 
 def usage():
     print """
-wicd 1.6.0
+wicd %s 
 wireless (and wired) connection daemon.
 
 Arguments:
@@ -1457,7 +1456,7 @@ Arguments:
 \t-n\t--no-poll\tDon't monitor network status.
 \t-o\t--no-stdout\tDon't redirect stdout.
 \t-h\t--help\t\tPrint this help.
-"""
+""" % (wpath.version + ' (bzr-r%s)' % wpath.revision)
 
 def daemonize():
     """ Disconnect from the controlling terminal.

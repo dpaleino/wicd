@@ -57,7 +57,7 @@ def _sanitize_string_strict(string):
     else:
         return string
 
-def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
+def SetDNS(dns1=None, dns2=None, dns3=None, dns_dom=None, search_dom=None):
     """ Set the DNS of the system to the specified DNS servers.
 
     Opens up resolv.conf and writes in the nameservers.
@@ -66,9 +66,13 @@ def SetDNS(dns1=None, dns2=None, dns3=None, search_dom=None):
     dns1 -- IP address of DNS server 1
     dns2 -- IP address of DNS server 2
     dns3 -- IP address of DNS server 3
+    dns_dom -- DNS domain
+    search_dom -- DNS search domain
 
     """
     resolv = open("/etc/resolv.conf", "w")
+    if dns_dom:
+        resolv.write("domain %s\n" % dns_dom)
     if search_dom:
         resolv.write('search %s\n' % search_dom)
     for dns in [dns1, dns2, dns3]:

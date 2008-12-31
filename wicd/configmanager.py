@@ -26,7 +26,7 @@ reusable for other purposes as well.
 
 from ConfigParser import RawConfigParser
 
-from wicd.misc import stringToNone
+from wicd.misc import stringToNone, Noneify
 
 
 class ConfigManager(RawConfigParser):
@@ -89,12 +89,12 @@ class ConfigManager(RawConfigParser):
                 ret = default
             else:
                 ret = None
-            
+        
         # Try to intelligently handle the type of the return value.
         try:
             ret = int(ret)
         except (ValueError, TypeError):
-            ret = stringToNone(ret)
+            ret = Noneify(ret)
         return ret
     
     def get(self, *args, **kargs):

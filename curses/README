@@ -7,7 +7,8 @@ work on it more and figure out how to use distutils.
 
 Right now, it lists current available networks, and whether you are connected
 to anything or not, all of which is updated in real time.  It will actually 
-connect you to networks now.  Configuring them is a work in progress.
+connect you to networks now.  Global preferences are now configurable from the
+console.  Per-network settings is a work in progress.
 
 Controls:
 

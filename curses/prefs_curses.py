@@ -67,6 +67,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
         global_dns_cat_t = ('header','Global DNS Servers')
         global_dns_t     = ('editcp',language['use_global_dns'])
+        dns_dom_t        = ('editcp','    DNS Domain:   ')
         search_dom_t     = ('editcp','    Search domain:')
         dns1_t           = ('editcp','    DNS server 1: ')
         dns2_t           = ('editcp','    DNS server 2: ')
@@ -132,6 +133,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.global_dns_checkb  = urwid.CheckBox(global_dns_t,global_dns_state,
                 on_state_change=self.global_dns_trigger)
         self.search_dom  = ToggleEdit(search_dom_t,global_dns_state)
+        self.dns_dom     = ToggleEdit(dns_dom_t,global_dns_state)
         self.dns1        = ToggleEdit(dns1_t,global_dns_state)
         self.dns2        = ToggleEdit(dns2_t,global_dns_state)
         self.dns3        = ToggleEdit(dns3_t,global_dns_state)
@@ -149,7 +151,7 @@ class PrefsDialog(urwid.WidgetWrap):
                                    self.always_show_wired_checkb,_blank,
                                    self.global_dns_cat,
                                    self.global_dns_checkb,#_blank,
-                                   self.search_dom,
+                                   self.search_dom,self.dns_dom,
                                    self.dns1,self.dns2,self.dns3,_blank,
                                    self.wired_auto_cat,
                                    self.wired_auto_1,
@@ -273,7 +275,7 @@ class PrefsDialog(urwid.WidgetWrap):
         theDNS = daemon.GetGlobalDNSAddresses()
 
         i = 0
-        for w in self.dns1,self.dns2,self.dns3,self.search_dom :
+        for w in self.dns1,self.dns2,self.dns3,self.dns_dom,self.search_dom :
             w.set_edit_text(misc.noneToBlankString(theDNS[i]))
             i+=1
 
@@ -323,7 +325,8 @@ class PrefsDialog(urwid.WidgetWrap):
             This exact order is found in prefs.py"""
         daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())
         daemon.SetGlobalDNS(self.dns1.get_edit_text(), self.dns2.get_edit_text(),
-                            self.dns3.get_edit_text(), self.search_dom.get_edit_text())
+                            self.dns3.get_edit_text(), self.dns_dom.get_edit_text(),
+                            self.search_dom.get_edit_text())
         daemon.SetWirelessInterface(self.wless_edit.get_edit_text())
         daemon.SetWiredInterface(self.wired_edit.get_edit_text())
         daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_selected()])
@@ -369,7 +372,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
     # DNS CheckBox callback
     def global_dns_trigger(self,check_box,new_state,user_data=None):
-        for w in self.search_dom,self.dns1,self.dns2,self.dns3:
+        for w in self.dns1,self.dns2,self.dns3,self.dns_dom,self.search_dom:
             w.set_sensitive(new_state)
 
     # Button callbacks
@@ -409,7 +412,7 @@ class PrefsDialog(urwid.WidgetWrap):
                 overlay.keypress(dim, k)
             if self.CANCEL_PRESSED:
                 return False
-            if self.OK_PRESSED:
+            if self.OK_PRESSED in keys:
                 return True
 
 

@@ -33,9 +33,6 @@ at least get a network connection.  Or those who don't like using X.  :-)
     Comments, criticisms, patches, bug reports all welcome!
 """
 
-##### NOTICE: THIS ONLY WORKS WITH THE SOURCE IN WICD 1.6 AS FOUND IN THE BZR
-#####         REPOSITORIES!
-
 # UI stuff
 #import urwid.raw_display
 import urwid.curses_display
@@ -56,7 +53,7 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboBox
+from curses_misc import SelText,ComboBox,Dialog
 import prefs_curses
 from prefs_curses import PrefsDialog
 
@@ -208,6 +205,42 @@ def gen_network_list():
             wlessL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
     return (wiredL,wlessL)
 
+def about_dialog(body):
+    # This looks A LOT better when it is actually displayed.  I promise :-).
+    # The ASCII Art "Wicd" was made from the "smslant" font on one of those
+    # online ASCII big text generators.
+    theText = [
+('green',"   ///       \\\\\\"),"       _      ___        __\n",
+('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /\n",
+('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / \n",
+('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  \n",
+('green',"|||  ||"),"(|^|)",('green',"||  |||"),
+"           ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
+
+('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
+('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net \n",
+('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
+('green',"   \\\\\\"),"  |+|  "('green',"///"),"       Adam Blackburn (wicd)\n",
+"     ___|+|___         Dan O'Reilly   (wicd)\n",
+"    |---------|        Andrew Psaltis (this ui)\n",
+"---------------------------------------------------"]
+    about = Dialog(theText,['OK'],('body','body','focus'),55,14,body)
+
+    keys = True
+    dim = ui.get_cols_rows()
+    while True:
+        if keys:
+            ui.draw_screen(dim, about.render(dim, True))
+            
+        keys = ui.get_input()
+        if "window resize" in keys:
+            dim = ui.get_cols_rows()
+        if "esc" in keys:
+            return False
+        for k in keys:
+            about.keypress(dim, k)
+        if about.b_pressed == 'OK':
+            return False
 
 ########################################
 ##### APPLICATION INTERFACE CLASS
@@ -449,6 +482,8 @@ class appGUI():
             if dialog.run(ui,self.size,self.frame):
                 dialog.save_results()
             self.update_ui()
+        if "A" in keys:
+            about_dialog(self.frame)
         for k in keys:
             if k == "window resize":
                 self.size = ui.get_cols_rows()
@@ -524,7 +559,11 @@ def main():
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
         ('editfc', 'white','dark blue', 'bold'),
-        ('tab active','dark green','light gray')])
+        ('tab active','dark green','light gray'),
+        # Simple colors around text
+        ('green','dark green','default'),
+        ('blue','dark blue','default'),
+        ('red','dark red','default')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)

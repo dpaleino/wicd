@@ -18,6 +18,7 @@ D      : disconnect from active network
 ESC    : if connecting to a network, stop doing so
 ENTER  : Attempt connection to selected network
 P      : Display preferences dialog
+A      : Display "About" dialog
 
 IN DIALOGS:
 ESC or Q: Quit dialog without saving information (if present)

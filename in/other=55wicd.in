@@ -2,20 +2,29 @@
 
 # pm-utils hook to handle suspend/resume properly for wicd
 
-. "${PM_FUNCTIONS}" || . "${FUNCTIONS}"
+if [ -r "${PM_FUNCTIONS}" ]; then
+	. "${PM_FUNCTIONS}" 
+elif [ -r "${FUNCTIONS}" ]; then
+	. "${FUNCTIONS}"
+else
+	# pm-utils version is too old, or something else is wrong
+	exit $NA
+fi
+
+RETVAL=0 	# Set this to 0 initially
 
 wicd_suspend()
 {
 	# Put wifi interface down
-	%LIB%suspend.py 2>/dev/null
-	return $NA
+	%LIB%suspend.py 1>/dev/null 2>/dev/null
+	RETVAL=$?
 }
 
 wicd_resume()
 {
 	# Bring wifi interface back up
-	%LIB%autoconnect.py 2>/dev/null
-	return $NA
+	%LIB%autoconnect.py 1>/dev/null 2>/dev/null
+	RETVAL=$?
 }
 
 case "$1" in
@@ -26,6 +35,35 @@ case "$1" in
 		wicd_resume
 		;;
 	*) exit $NA
+		;;
+esac
+
+# We can't return a nonzero exit code (aside from $NA, $DX, and $NX) to
+# to pm-utils or the entire sleep operation will be inhibited, so...
+# No matter what we do, the log prefix and message will conflict a bit.
+case "$RETVAL" in
+	0)
+		exit $RETVAL
+		;;
+	1)
+		# Probably the daemon isn't running if this happens
+		echo "Unable to connect to wicd daemon - is it running?"
+		exit $DX
+		;;
+	2)
+		# This will occur if the daemon encounters an error
+		echo "Wicd daemon was unable to suspend the network."
+		exit $DX
+		;;
+	3)
+		# Will only be returned by autoconnect.py
+		# This should never happen, but just in case...
+		echo "Wicd daemon failed to autoconnect on resume."
+		exit $DX
+		;;
+	*)
+		echo "Unknown exit code."
+		exit $NA
 		;;
 esac
 

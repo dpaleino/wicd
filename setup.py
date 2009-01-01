@@ -20,6 +20,7 @@ from distutils.extension import Extension
 import os
 import shutil
 import sys
+import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
@@ -41,21 +42,9 @@ except Exception, e:
 class configure(Command):
     description = "configure the paths that Wicd will be installed to"
     
-    # lib = '/usr/share/wicd/'
-    # etc = '/etc/wicd/'
-    # images = '/usr/share/pixmaps/wicd/'
-    # encryption = etc + 'encryption/templates/'
-    # bin = current
-    # networks = '/var/lib/wicd/configurations/'
-    # log = '/var/log/wicd/'
-    #
-    # python = '/usr/bin/python'
-     
     user_options = [
-        # these first bunch are DIRECTORIES.
-        # they need to end a slash ("/")
-        # which will automatically be tacked on
-        # in the finalize_options method
+        # The first bunch is DIRECTORIES - they need to end with a slash ("/"),
+        # which will automatically be tacked on in the finalize_options method
         ('lib=', None, 'set the lib directory'),
         ('share=', None, 'set the share directory'),
         ('etc=', None, 'set the etc directory'),
@@ -72,7 +61,6 @@ class configure(Command):
         ('dbus=', None, 'set the directory the dbus config file is stored in'),
         ('desktop=', None, 'set the directory the .desktop file is stored in'),
         ('icons=', None, "set the base directory for the .desktop file's icons"),
-        # ('pixmaps=', None, 'directory for images'),
         ('translations=', None, 'set the directory translations are stored in'),
         ('autostart=', None, 'set the directory that will be autostarted on desktop login'),
         ('init=', None, 'set the directory for the init file'),
@@ -80,17 +68,17 @@ class configure(Command):
         ('mandir=', None, 'set the directory for the man pages'),
         ('kdedir=', None, 'set the kde autostart directory'),
         
-        # anything after here is a FILE.
-        # in other words, a slash ("/") will not automatically
-        # be added to the end of the path.
-        # do NOT remove the python= entry as it signals the beginning
-        # of the file section.
+        # Anything after this is a FILE; in other words, a slash ("/") will 
+        # not automatically be added to the end of the path.
+        # Do NOT remove the python= entry, as it signals the beginning of 
+        # the file section.
         ('python=', None, 'set the path to the Python executable'),
         ('pidfile=', None, 'set the pid file'),
         ('initfile=', None, 'set the init file to use'),
         ('initfilename=', None, "set the name of the init file (don't use)"),
+        ('wicdgroup=', None, "set the name of the group used for wicd"),
 
-        # switches
+        # Configure switches
         ('no-install-init', None, "do not install the init file"),
         ('no-install-man', None, 'do not install the man file'),
         ('no-install-kde', None, 'do not install the kde autostart file'),
@@ -130,8 +118,7 @@ class configure(Command):
         self.no_install_pmutils = False
         self.no_install_docs = False
 
-        # figure out what the default init file
-        # location should be on several different distros
+        # Determine the default init file location on several different distros
         
         self.distro_detect_failed = False
         
@@ -173,9 +160,46 @@ class configure(Command):
                   'If you have specified --init and --initfile, configure will continue.  ' + \
                   'Please report this warning, along with the name of your ' + \
                   'distribution, to the wicd developers.'
+
+        # Try to get the pm-utils sleep hooks directory from pkg-config and
+        # the kde prefix from kde-config
+        # Don't run these in a shell because it's not needed and because shell 
+        # swallows the OSError we would get if {pkg,kde}-config do not exist
+        # If we don't get anything from *-config, or it didn't run properly, 
+        # or the path is not a proper absolute path, raise an error
+        try:
+            pmtemp = subprocess.Popen(["pkg-config","--variable=pm_sleephooks","pm-utils"], stdout=subprocess.PIPE)
+            returncode = pmtemp.wait() # let it finish, and get the exit code
+            pmutils_candidate = pmtemp.stdout.readline().strip() # read stdout
+            if len(pmutils_candidate) == 0 or returncode != 0 or not os.path.isabs(pmutils_candidate):
+                raise ValueError
+            else:
+               self.pmutils = pmutils_candidate
+        except (OSError, ValueError):
+            pass # use our default
+
+        try:
+            kdetemp = subprocess.Popen(["kde-config","--prefix"], stdout=subprocess.PIPE)
+            returncode = kdetemp.wait() # let it finish, and get the exit code
+            kdedir_candidate = kdetemp.stdout.readline().strip() # read stdout
+            if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
+                raise ValueError
+            else:
+               self.kdedir = kdedir_candidate + '/share/autostart'
+        except (OSError, ValueError):
+            # If kde-config isn't present or returns an error, then we can
+            # assume that kde isn't installed on the user's system
+            self.no_install_kde = True
+            # If it turns out that the assumption above is wrong, then we'll
+            # do this instead:
+            #pass # use our default
+
+
         self.python = '/usr/bin/python'
         self.pidfile = '/var/run/wicd/wicd.pid'
         self.initfilename = os.path.basename(self.initfile)
+        self.wicdgroup = 'users'
+
 
     def finalize_options(self):
         if self.distro_detect_failed == True:
@@ -373,7 +397,7 @@ try:
         piddir += '/'
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
-        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README' ]))
+        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES' ]))
     if not wpath.no_install_kde:
         data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
     if not wpath.no_install_init:

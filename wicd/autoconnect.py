@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -21,22 +21,37 @@ import dbus
 import time
 import gobject
 import sys
-from dbus.mainloop.glib import DBusGMainLoop
 
-DBusGMainLoop(set_as_default=True)
-bus = dbus.SystemBus()
-proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
-loop = gobject.MainLoop()
+if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):
+    import dbus.glib
+else:
+    from dbus.mainloop.glib import DBusGMainLoop
+    DBusGMainLoop(set_as_default=True)
 
+try:
+    bus = dbus.SystemBus()
+    proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
+    daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+except Exception, e:
+    print>>sys.stderr, "Exception caught: %s" % str(e)
+    print>>sys.stderr, 'Could not connect to daemon.'
+    sys.exit(1)
 
 def handler(*args):
     loop.quit()
 
-print daemon.Hello()
-time.sleep(3)
-daemon.SetSuspend(False)
-if not daemon.CheckIfConnecting():
-    daemon.SetForcedDisconnect(False)
-    daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)
+def error_handler(*args):
+    print>>sys.stderr, 'Async error autoconnecting.'
+    sys.exit(3)
 
+if __name__ == '__main__':
+    try:
+        time.sleep(3)
+        daemon.SetSuspend(False)
+        if not daemon.CheckIfConnecting():
+            daemon.SetForcedDisconnect(False)
+            daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)
+    except Exception, e:
+        print>>sys.stderr, "Exception caught: %s" % str(e)
+        print>>sys.stderr, 'Error autoconnecting.'
+        sys.exit(2)

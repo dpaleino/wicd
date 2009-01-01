@@ -187,7 +187,12 @@ class configure(Command):
             else:
                self.kdedir = kdedir_candidate + '/share/autostart'
         except (OSError, ValueError):
-            pass # use our default
+            # If kde-config isn't present or returns an error, then we can
+            # assume that kde isn't installed on the user's system
+            self.no_install_kde = True
+            # If it turns out that the assumption above is wrong, then we'll
+            # do this instead:
+            #pass # use our default
 
 
         self.python = '/usr/bin/python'

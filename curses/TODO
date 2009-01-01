@@ -1,0 +1,17 @@
+Things to do (in no particular order):
+
+*   Make a network config dialog for both wireless and wired interfaces
+*   Make an about dialog
+*   Implement a keyhandler function for the overall frame
+    * Make keystrokes customizable
+*   Make color schemes customizable
+*   Integrate this with the my local copy of the experimental branch
+*   Give some indication of activity during the connection process
+*   Make a man page for the UI.
+
+Oh, and most importantly:
+
+*   Tell people how they can quit the app in the app (F8 or Q, until I do all of
+    that stuff) :-)
+
+Anything else?  That's all I can think of now.

@@ -7,7 +7,7 @@ at least get a network connection.  Or those who don't like using X.  :-)
 
 """
 
-#       Copyright (C) 2008 Andrew Psaltis
+#       Copyright (C) 2008-9 Andrew Psaltis
 
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -220,7 +220,7 @@ def about_dialog(body):
 ('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
 ('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net \n",
 ('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
-('green',"   \\\\\\"),"  |+|  "('green',"///"),"       Adam Blackburn (wicd)\n",
+('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
 "     ___|+|___         Dan O'Reilly   (wicd)\n",
 "    |---------|        Andrew Psaltis (this ui)\n",
 "---------------------------------------------------"]

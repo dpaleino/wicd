@@ -412,7 +412,7 @@ class PrefsDialog(urwid.WidgetWrap):
                 overlay.keypress(dim, k)
             if self.CANCEL_PRESSED:
                 return False
-            if self.OK_PRESSED in keys:
+            if self.OK_PRESSED:
                 return True
 
 

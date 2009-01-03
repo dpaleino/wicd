@@ -237,6 +237,39 @@ class AdvancedSettingsDialog(gtk.Dialog):
         super(AdvancedSettingsDialog, self).destroy()
         self.destroy()
         del self
+    
+    def save_settings(self):
+        """ Save settings common to wired and wireless settings dialogs. """
+        if self.chkbox_static_ip.get_active():
+            self.set_net_prop("ip", noneToString(self.txt_ip.get_text()))
+            self.set_net_prop("netmask", noneToString(self.txt_netmask.get_text()))
+            self.set_net_prop("gateway", noneToString(self.txt_gateway.get_text()))
+        else:
+            self.set_net_prop("ip", '')
+            self.set_net_prop("netmask", '')
+            self.set_net_prop("gateway", '')
+
+        if self.chkbox_static_dns.get_active() and \
+           not self.chkbox_global_dns.get_active():
+            self.set_net_prop('use_static_dns', True)
+            self.set_net_prop('use_global_dns', False)
+            self.set_net_prop('dns_domain', noneToString(self.txt_domain.get_text()))
+            self.set_net_prop("search_domain", noneToString(self.txt_search_dom.get_text()))
+            self.set_net_prop("dns1", noneToString(self.txt_dns_1.get_text()))
+            self.set_net_prop("dns2", noneToString(self.txt_dns_2.get_text()))
+            self.set_net_prop("dns3", noneToString(self.txt_dns_3.get_text()))
+        elif self.chkbox_static_dns.get_active() and \
+             self.chkbox_global_dns.get_active():
+            self.set_net_prop('use_static_dns', True)
+            self.set_net_prop('use_global_dns', True)
+        else:
+            self.set_net_prop('use_static_dns', False)
+            self.set_net_prop('use_global_dns', False)
+            self.set_net_prop('dns_domain', '')
+            self.set_net_prop("search_domain", '')
+            self.set_net_prop("dns1", '')
+            self.set_net_prop("dns2", '')
+            self.set_net_prop("dns3", '')
 
         
 class WiredSettingsDialog(AdvancedSettingsDialog):
@@ -263,6 +296,11 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.txt_search_dom.set_text(self.format_entry("search_domain"))
         self.chkbox_global_dns.set_active(bool(wired.GetWiredProperty("use_global_dns")))
         self.reset_static_checkboxes()
+        
+    def save_settings(self):
+        AdvancedSettingsDialog.save_settings(self)
+        wired.SaveWiredNetworkProfile(self.prof_name)
+        return True
 
     def format_entry(self, label):
         """ Helper method to fetch and format wired properties. """
@@ -353,7 +391,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.chkbox_global_settings.set_active(bool(wireless.GetWirelessProperty(networkID,
                                                              'use_settings_globally')))
 
-            
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
         for x, enc_type in enumerate(self.encrypt_types):
@@ -368,6 +405,40 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             self.combo_encryption.set_active(0)
         self.change_encrypt_method()
+        
+    def save_settings(self, networkid):
+        # Check encryption info
+        if self.chkbox_encryption.get_active():
+            print "setting encryption info..."
+            encryption_info = self.encryption_info
+            encrypt_methods = misc.LoadEncryptionMethods()
+            self.set_net_prop("enctype",
+                               encrypt_methods[self.combo_encryption.get_active()][1])
+            for x in encryption_info:
+                if encryption_info[x].get_text() == "":
+                    error(self, language['encrypt_info_missing'])
+                    return False
+                self.set_net_prop(x, noneToString(encryption_info[x].
+                                                   get_text()))
+        elif not self.chkbox_encryption.get_active() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            error(self, language['enable_encryption'])
+            return False
+        else:
+            print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
+                                                                  "encryption"))
+            print "no encryption specified..."
+            self.set_net_prop("enctype", "None")
+        AdvancedSettingsDialog.save_settings(self)
+        
+        if self.chkbox_global_settings.get_active():
+            self.set_net_prop('use_settings_globally', True)
+        else:
+            self.set_net_prop('use_settings_globally', False)
+            wireless.RemoveGlobalEssidEntry(networkid)
+            
+        wireless.SaveWirelessNetworkProfile(networkid)
+        return True
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
@@ -575,6 +646,10 @@ class WiredNetworkEntry(NetworkEntry):
         self.destroy()
         del self
         
+    def save_wired_settings(self):
+        """ Save wired network settings. """
+        return self.advanced_dialog.save_settings()
+        
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         profile = self.combo_profile_names.get_active_text()
@@ -756,6 +831,10 @@ class WirelessNetworkEntry(NetworkEntry):
         """ Escapes special characters so they're displayed correctly. """
         return val.replace("&", "&amp;").replace("<", "&lt;").\
                    replace(">","&gt;").replace("'", "&apos;").replace('"', "&quot;")
+    
+    def save_wireless_settings(self, networkid):
+        """ Save wireless network settings. """
+        return self.advanced_dialog.save_settings(networkid)
         
     def destroy_called(self, *args):
         """ Clean up everything. """

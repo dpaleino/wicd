@@ -8,8 +8,8 @@ Used for when a laptop enters hibernation/suspension.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007 - 2008 Adam Blackburn
+#   Copyright (C) 2007 - 2008 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -26,13 +26,17 @@ Used for when a laptop enters hibernation/suspension.
 
 import dbus
 import dbus.service
+import sys
 
 try:
     bus = dbus.SystemBus()
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 except Exception, e:
-    print "Exception caught: %s" % str(e)
+    print>>sys.stderr, "Exception caught: %s" % str(e)
+    print>>sys.stderr, 'Could not connect to daemon.'
+    sys.exit(1)
+    
 
 
 if __name__ == '__main__':
@@ -41,5 +45,7 @@ if __name__ == '__main__':
         daemon.SetForcedDisconnect(False)
         daemon.SetSuspend(True)
     except Exception, e:
-        print "Exception caught: %s" % str(e)
-
+        print>>sys.stderr, "Exception caught: %s" % str(e)
+        print>>sys.stderr, 'Error setting suspend.'
+        sys.exit(2)
+        

@@ -120,15 +120,19 @@ class TabColumns(urwid.WidgetWrap):
 
     def keypress(self,size,key):
         self._w.keypress(size,key)
-        wid = self.pile.get_focus().get_body()
-        if wid == self.columns:
-        #    lw = self.listbox.body
-        #    lw.pop(1)
-            self.active_tab.set_attr('body')
-            self.columns.get_focus().set_attr('tab active')
-            self.active_tab = self.columns.get_focus()
-            self.gen_pile(self.tab_map[self.active_tab])
-        return key
+        if key == "meta left" or key == "meta right":
+            self._w.get_body().set_focus(0)
+            self.keypress(size,key[5:])
+        else:
+            wid = self.pile.get_focus().get_body()
+            if wid == self.columns:
+            #    lw = self.listbox.body
+            #    lw.pop(1)
+                self.active_tab.set_attr('body')
+                self.columns.get_focus().set_attr('tab active')
+                self.active_tab = self.columns.get_focus()
+                self.gen_pile(self.tab_map[self.active_tab])
+            return key
         #    self.listbox.body = lw
 
 
@@ -144,7 +148,7 @@ class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
     class ComboSpace(urwid.WidgetWrap):
         """The actual menu-like space that comes down from the ComboText"""
-        def __init__(self,list,body,ui,show_first=0,pos=(0,0),attr=('body','focus')):
+        def __init__(self,list,body,ui,show_first,pos=(0,0),attr=('body','focus')):
             """
             body      : parent widget
             list      : stuff to include in the combobox
@@ -163,6 +167,7 @@ class ComboBox(urwid.WidgetWrap):
             content = [urwid.AttrWrap(SelText(w), attr[0], attr[1])
                        for w in list]
             self._listbox = urwid.ListBox(content)
+            self._listbox.set_focus(show_first)
 
             overlay = urwid.Overlay(self._listbox, body, ('fixed left', pos[0]),
                                     width + 2, ('fixed top', pos[1]), height)
@@ -233,9 +238,9 @@ class ComboBox(urwid.WidgetWrap):
     def set_show_first(self,show_first):
         self.show_first = show_first
 
-    def build_combobox(self,body,ui,row,show_first=0):
+    def build_combobox(self,body,ui,row):
         str,trash =  self.label.get_text()
-        self.cbox  = urwid.AttrWrap(SelText([self.list[show_first]+'    vvv']),
+        self.cbox  = urwid.AttrWrap(SelText([self.list[self.show_first]+'    vvv']),
                 self.attr[0],self.attr[1])
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
@@ -271,7 +276,7 @@ class ComboBox(urwid.WidgetWrap):
     # Return the index of the selected element
     def get_selected(self):
         wid,pos = self.overlay._listbox.get_focus()
-        return pos
+        return (wid,pos)
 
 
 # Almost completely ripped from rbreu_filechooser.py:

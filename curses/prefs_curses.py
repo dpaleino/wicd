@@ -79,6 +79,9 @@ class PrefsDialog(urwid.WidgetWrap):
         wired_auto_2_t = language['show_wired_list']
         wired_auto_3_t = language['use_last_used_profile']
 
+        auto_reconn_cat_t = ('header','Automatic Reconnection')
+        auto_reconn_t = 'Automatically reconnect on connection loss'
+
         #### External Programs
         automatic_t = language['wicd_auto_config']
 
@@ -113,8 +116,6 @@ class PrefsDialog(urwid.WidgetWrap):
         wless_cat_t = ('header','Wireless Interface')
         use_dbm_t = language['display_type_dialog']
         
-        auto_reconn_cat_t = ('header','Automatic Reconnect')
-        auto_reconn_t = 'Automatically reconnect on connection loss'
 
 
         ####
@@ -145,6 +146,9 @@ class PrefsDialog(urwid.WidgetWrap):
         self.wired_auto_1 =   urwid.RadioButton(self.wired_auto_l,wired_auto_1_t)
         self.wired_auto_2 =   urwid.RadioButton(self.wired_auto_l,wired_auto_2_t)
         self.wired_auto_3 =   urwid.RadioButton(self.wired_auto_l,wired_auto_3_t)
+
+        self.auto_reconn_cat    = urwid.Text(auto_reconn_cat_t)
+        self.auto_reconn_checkb = urwid.CheckBox(auto_reconn_t)
         generalLB = urwid.ListBox([self.net_cat,
                                    self.wless_edit,#_blank,
                                    self.wired_edit,
@@ -156,7 +160,9 @@ class PrefsDialog(urwid.WidgetWrap):
                                    self.wired_auto_cat,
                                    self.wired_auto_1,
                                    self.wired_auto_2,
-                                   self.wired_auto_3
+                                   self.wired_auto_3, _blank,
+                                   self.auto_reconn_cat,
+                                   self.auto_reconn_checkb
                                   ])
 
         #### External Programs tab
@@ -207,8 +213,6 @@ class PrefsDialog(urwid.WidgetWrap):
         self.wless_cat      = urwid.Text(wless_cat_t)
         self.use_dbm_checkb = urwid.CheckBox(use_dbm_t)
 
-        self.auto_reconn_cat    = urwid.Text(auto_reconn_cat_t)
-        self.auto_reconn_checkb = urwid.CheckBox(auto_reconn_t)
 
         advancedLB = urwid.ListBox([self.wpa_cat,
                                     self.wpa_cbox,self.wpa_warn,_blank,
@@ -217,9 +221,8 @@ class PrefsDialog(urwid.WidgetWrap):
                                     self.debug_cat,
                                     self.debug_mode_checkb, _blank,
                                     self.wless_cat,
-                                    self.use_dbm_checkb, _blank,
-                                    self.auto_reconn_cat,
-                                    self.auto_reconn_checkb])
+                                    self.use_dbm_checkb, _blank
+                                    ])
 
 
         headerList = [self.header0,self.header1,self.header2]
@@ -260,6 +263,10 @@ class PrefsDialog(urwid.WidgetWrap):
         self.__super.__init__(self.tabs)
         
     def load_settings(self):
+        # Reset the buttons
+        self.CANCEL_PRESSED = False
+        self.OK_PRESSED = False
+
         ### General Settings
         # Urwid does not like dbus.Strings as text markups
         wless_iface = unicode(daemon.GetWirelessInterface())
@@ -282,6 +289,8 @@ class PrefsDialog(urwid.WidgetWrap):
         # Wired Automatic Connection
         self.wired_auto_l[daemon.GetWiredAutoConnectMethod()-1]
         
+        self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
+
         ### External Programs
         dhcp_method = daemon.GetDHCPClient()
         self.dhcp_l[dhcp_method].set_state(True)
@@ -314,11 +323,15 @@ class PrefsDialog(urwid.WidgetWrap):
         self.backends.remove('')
         self.thebackends= [unicode(w) for w in self.backends]
         self.backend_cbox.set_list(self.thebackends) 
+        cur_backend = daemon.GetSavedBackend()
+        try:
+            self.backend_cbox.set_show_first(self.thebackends.index(cur_backend))
+        except ValueError:
+            self.backend_cbox.set_show_first(0)
 
-        # Three last checkboxes
+        # Two last checkboxes
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
-        self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
 
     def save_results(self):
         """ Pushes the selected settings to the daemon.
@@ -329,7 +342,7 @@ class PrefsDialog(urwid.WidgetWrap):
                             self.search_dom.get_edit_text())
         daemon.SetWirelessInterface(self.wless_edit.get_edit_text())
         daemon.SetWiredInterface(self.wired_edit.get_edit_text())
-        daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_selected()])
+        daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_selected()[1]])
         daemon.SetAlwaysShowWiredInterface(self.always_show_wired_checkb.get_state())
         daemon.SetAutoReconnect(self.auto_reconn_checkb.get_state())
         daemon.SetDebugMode(self.debug_mode_checkb.get_state())
@@ -341,7 +354,7 @@ class PrefsDialog(urwid.WidgetWrap):
         else:
             daemon.SetWiredAutoConnectMethod(1)
 
-        daemon.SetBackend(self.backends[self.backend_cbox.get_selected()])
+        daemon.SetBackend(self.backends[self.backend_cbox.get_selected()[1]])
             
         # External Programs Tab
         if self.dhcp0.get_state():
@@ -410,9 +423,10 @@ class PrefsDialog(urwid.WidgetWrap):
             for k in keys:
                 #Send key to underlying widget:
                 overlay.keypress(dim, k)
+            # Check if buttons are pressed.
             if self.CANCEL_PRESSED:
                 return False
-            if self.OK_PRESSED in keys:
+            if self.OK_PRESSED or 'meta enter' in keys:
                 return True
 
 

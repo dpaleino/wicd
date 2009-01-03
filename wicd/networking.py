@@ -411,12 +411,7 @@ class ConnectThread(threading.Thread):
         BACKEND.StopDHCP()
         
     def connect_aborted(self, reason):
-        """ Sets the thread status to aborted in a thread-safe way.
-        
-        Sets the status to aborted, and also delays returning for
-        a few seconds to make sure the message is readable
-        
-        """
+        """ Sets the thread status to aborted. """
         if self.abort_reason:
             reason = self.abort_reason
         self.connecting_message = reason

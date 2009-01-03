@@ -579,8 +579,8 @@ class appGui(object):
         
         """
         if fresh:
-            # Even if it is None, it can still be passed.
-            wireless.SetHiddenNetworkESSID(noneToString(hidden))
+            if hidden:
+                wireless.SetHiddenNetworkESSID(noneToString(hidden))
             self.refresh_clicked()
             return
         print "refreshing..."
@@ -665,89 +665,13 @@ class appGui(object):
 
         # Now save the settings.
         if nettype == "wireless":
-            if not self.save_wireless_settings(networkid, entry, networkentry):
+            if not networkentry.save_wireless_settings(networkid):
                 return False
 
         elif nettype == "wired":
-            if not self.save_wired_settings(entry):
+            if not networkentry.save_wired_settings():
                 return False
             
-        return True
-    
-    def _save_gen_settings(self, entry):
-        """ Save settings common to wired and wireless settings dialogs. """
-        if entry.chkbox_static_ip.get_active():
-            entry.set_net_prop("ip", noneToString(entry.txt_ip.get_text()))
-            entry.set_net_prop("netmask", noneToString(entry.txt_netmask.get_text()))
-            entry.set_net_prop("gateway", noneToString(entry.txt_gateway.get_text()))
-        else:
-            entry.set_net_prop("ip", '')
-            entry.set_net_prop("netmask", '')
-            entry.set_net_prop("gateway", '')
-
-        if entry.chkbox_static_dns.get_active() and \
-           not entry.chkbox_global_dns.get_active():
-            entry.set_net_prop('use_static_dns', True)
-            entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop('dns_domain', noneToString(entry.txt_domain.get_text()))
-            entry.set_net_prop("search_domain", noneToString(entry.txt_search_dom.get_text()))
-            entry.set_net_prop("dns1", noneToString(entry.txt_dns_1.get_text()))
-            entry.set_net_prop("dns2", noneToString(entry.txt_dns_2.get_text()))
-            entry.set_net_prop("dns3", noneToString(entry.txt_dns_3.get_text()))
-        elif entry.chkbox_static_dns.get_active() and \
-             entry.chkbox_global_dns.get_active():
-            entry.set_net_prop('use_static_dns', True)
-            entry.set_net_prop('use_global_dns', True)
-        else:
-            entry.set_net_prop('use_static_dns', False)
-            entry.set_net_prop('use_global_dns', False)
-            entry.set_net_prop('dns_domain', '')
-            entry.set_net_prop("search_domain", '')
-            entry.set_net_prop("dns1", '')
-            entry.set_net_prop("dns2", '')
-            entry.set_net_prop("dns3", '')
-    
-    def save_wired_settings(self, entry):
-        """ Save wired network settings. """
-        self._save_gen_settings(entry)
-        wired.SaveWiredNetworkProfile(entry.prof_name)
-        return True
-            
-    def save_wireless_settings(self, networkid, entry, netent):
-        """ Save wireless network settings. """
-        # Check encryption info
-        if entry.chkbox_encryption.get_active():
-            print "setting encryption info..."
-            encryption_info = entry.encryption_info
-            encrypt_methods = misc.LoadEncryptionMethods()
-            entry.set_net_prop("enctype",
-                               encrypt_methods[entry.combo_encryption.get_active()][1])
-            for x in encryption_info:
-                if encryption_info[x].get_text() == "":
-                    error(self.window, language['encrypt_info_missing'])
-                    return False
-                entry.set_net_prop(x, noneToString(encryption_info[x].
-                                                   get_text()))
-        elif not entry.chkbox_encryption.get_active() and \
-             wireless.GetWirelessProperty(networkid, "encryption"):
-            error(self.window, language['enable_encryption'])
-            return False
-        else:
-            print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
-                                                                  "encryption"))
-            print "no encryption specified..."
-            entry.set_net_prop("enctype", "None")
-        self._save_gen_settings(entry)
-        entry.set_net_prop("automatic",
-                           noneToString(netent.chkbox_autoconnect.get_active()))
-        
-        if entry.chkbox_global_settings.get_active():
-            entry.set_net_prop('use_settings_globally', True)
-        else:
-            entry.set_net_prop('use_settings_globally', False)
-            wireless.RemoveGlobalEssidEntry(networkid)
-            
-        wireless.SaveWirelessNetworkProfile(networkid)
         return True
 
     def edit_advanced(self, widget, event, ttype, networkid, networkentry):

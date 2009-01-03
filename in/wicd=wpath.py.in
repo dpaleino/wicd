@@ -55,6 +55,7 @@ pidfile = '%PIDFILE%'
 initfile = '%INITFILE%'
 # stores only the file name, i.e. wicd
 initfilename = '%INITFILENAME%'
+wicd_group = '%WICDGROUP%'
 
 # BOOLEANS
 no_install_pmutils = %NO_INSTALL_PMUTILS%

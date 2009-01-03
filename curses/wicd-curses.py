@@ -185,24 +185,10 @@ def gen_network_list():
 
     wlessL = []
     for network_id in range(0, wireless.GetNumberOfNetworks()):
-        # ?: in python
-        encryption = wireless.GetWirelessProperty(network_id, 'encryption_method') if wireless.GetWirelessProperty(network_id, 'encryption') else 'Unsecured'
-        theString = '  %*s  %25s %9s %17s %6s: %s' % ( gap,
-            daemon.FormatSignalForPrinting(
-                str(wireless.GetWirelessProperty(network_id, strenstr))),
-            wireless.GetWirelessProperty(network_id, 'essid'),
-            #wireless.GetWirelessProperty(network_id, 'encryption_method'),
-            encryption,
-            wireless.GetWirelessProperty(network_id, 'bssid'),
-            wireless.GetWirelessProperty(network_id, 'mode'), # Master, Ad-Hoc
-            wireless.GetWirelessProperty(network_id, 'channel')
-            )
         is_active = wireless.GetCurrentSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
-        if is_active:
-            theString = '>'+theString[1:]
-            wlessL.append(urwid.AttrWrap(SelText(theString),'connected','connected focus'))
-        else:
-            wlessL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+
+        label = NetLabel(network_id,is_active)
+        wlessL.append(label)
     return (wiredL,wlessL)
 
 def about_dialog(body):
@@ -215,7 +201,7 @@ def about_dialog(body):
 ('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / \n",
 ('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  \n",
 ('green',"|||  ||"),"(|^|)",('green',"||  |||"),
-"           ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
+"         ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
 
 ('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
 ('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net \n",
@@ -242,6 +228,50 @@ def about_dialog(body):
         if about.b_pressed == 'OK':
             return False
 
+class NetLabel(urwid.WidgetWrap):
+    def __init__(self, id, is_active):
+    # Pick which strength measure to use based on what the daemon says
+        if daemon.GetSignalDisplayType() == 0:
+            strenstr = 'quality'
+            gap = 3
+        else:
+            strenstr = 'strength'
+            gap = 5
+        self.id = id
+        # All of that network property stuff
+        self.stren = daemon.FormatSignalForPrinting(
+                str(wireless.GetWirelessProperty(id, strenstr)))
+        self.essid = wireless.GetWirelessProperty(id, 'essid')
+        self.bssid = wireless.GetWirelessProperty(id, 'bssid')
+        self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else 'Unsecured'
+        self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
+        self.channel = wireless.GetWirelessProperty(id, 'channel')
+        theString = '  %*s  %25s %9s %17s %6s: %s' % (gap,
+                self.stren,self.essid,self.encrypt,self.bssid,self.mode,self.channel)
+        if is_active:
+            theString = '>'+theString[1:]
+            w = urwid.AttrWrap(SelText(theString),'connected','connected focus')
+        else:
+            w = urwid.AttrWrap(SelText(theString),'body','focus')
+
+        self.__super.__init__(w)
+    def selectable(self):
+        return True
+    def keypress(self,size,key):
+        self._w.keypress(size,key)
+        if key == 'C':
+            # Configure the network
+            pass
+        elif key == 'S':
+            # Configure scripts
+            pass
+        elif key == 'enter':
+            self.connect()
+        return key
+    def connect(self):
+        # This should work.
+        wireless.ConnectWireless(self.id)
+        
 ########################################
 ##### APPLICATION INTERFACE CLASS
 ########################################
@@ -299,8 +329,10 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
-        self.connecting    = False
         self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
+
+        self.pref = None
+
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
@@ -406,7 +438,7 @@ class appGUI():
         # If we are connecting and being called from the idle function, spin
         # the wheel.
         if from_idle and self.connecting:
-            # This is probably the wrong way to do this, but ir works for now.
+            # This is probably the wrong way to do this, but it works for now.
             toAppend=self.twirl[self.incr % 4]
         self.footer2 = urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important')
         self.frame.set_footer(urwid.BoxAdapter(
@@ -463,6 +495,7 @@ class appGUI():
         if "f5" in keys:
             wireless.Scan()
         if "enter" in keys:
+            # TODO: Make this totally go away by superclassing ComboBox
             # Should be a function of the labels, I think.
             self.call_connect()
         if "D" in keys:
@@ -476,11 +509,11 @@ class appGUI():
                 # Prevents automatic reconnecting if that option is enabled
                 daemon.SetForcedDisconnect(True)
         if "P" in keys:
-            dialog = PrefsDialog(self.frame,(0,1),ui,
-                    dbusmanager.get_dbus_ifaces()) 
-            # There is some lag in using the buttons.  Not my fault.
-            if dialog.run(ui,self.size,self.frame):
-                dialog.save_results()
+            if not self.pref:
+                self.pref = PrefsDialog(self.frame,(0,1),ui,
+                        dbusmanager.get_dbus_ifaces()) 
+            if self.pref.run(ui,self.size,self.frame):
+                self.pref.save_results()
             self.update_ui()
         if "A" in keys:
             about_dialog(self.frame)
@@ -491,13 +524,15 @@ class appGUI():
             self.frame.keypress( self.size, k )
 
         if " " in keys:
-                #self.set_status('space pressed on wiredCB!')
-                wid,pos = self.wiredCB.get_body().get_selected()
-                text,attr = wid.get_text()
-                wired.ReadWiredNetworkProfile(text)
-                # Make sure our internal reference to the combobox matches the
-                # one found in the pile.
-                self.wiredCB = self.thePile.get_focus()
+                focus = self.thePile.get_focus()
+                if focus == self.wiredCB:
+                    #self.set_status('space pressed on wiredCB!')
+                    wid,pos = self.wiredCB.get_body().get_selected()
+                    text,attr = wid.get_text()
+                    wired.ReadWiredNetworkProfile(text)
+                    # Make sure our internal reference to the combobox matches the
+                    # one found in the pile.
+                    #self.wiredCB = self.thePile.get_focus()
 
         return True
 
@@ -510,9 +545,8 @@ class appGUI():
             self.connect(self,'wired',0)
             #return "Wired network %i" % pos
         elif wid is self.wlessLB:
-            #self.footer1 = urwid.Text("Wireless!")
-            wid2,pos = self.wlessLB.get_focus()
-            self.connect(self,'wireless',pos)
+            # Do nothing
+            pass
         else:
             self.set_status("call_connect() failed!  This is definitely a bug!")
             #return "Failure!"
@@ -602,7 +636,7 @@ def setup_dbus(force=True):
         # Suggestions as to what should go here
         print "Can't connect to the daemon.  Are you sure it is running?"
         print "Please check the wicd log for error messages."
-        raise
+        #raise
         # return False # <- Will need soon.
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()

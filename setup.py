@@ -84,7 +84,8 @@ class configure(Command):
         ('no-install-kde', None, 'do not install the kde autostart file'),
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
-        ('no-install-docs', None, 'do not install the auxiliary documentation')
+        ('no-install-docs', None, 'do not install the auxiliary documentation'),
+        ('no-install-ncurses', None, 'do not install the ncurses client')
         ]
         
 
@@ -117,6 +118,7 @@ class configure(Command):
         self.no_install_acpi = False
         self.no_install_pmutils = False
         self.no_install_docs = False
+        self.no_install_ncurses = False
 
         # Determine the default init file location on several different distros
         
@@ -392,6 +394,11 @@ try:
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
     ]
+    if not wpath.no_install_ncurses:
+        data.append(( wpath.lib, ['curses/curses_misc.py']))
+        data.append(( wpath.lib, ['curses/prefs_curses.py']))
+        data.append(( wpath.lib, ['curses/wicd-curses.py']))
+        data.append(( wpath.bin, ['scripts/wicd-curses'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'

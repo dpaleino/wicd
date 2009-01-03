@@ -1,0 +1,28 @@
+This is a curses-based client for wicd.  It is designed to imitate wicd-client
+as much as can be done with a console-based interface.  It is written using the
+Urwid (http://excess.org/urwid) toolkit, and thus requires it.
+
+That's all there is to it, really.  It's not going to install itself until I 
+work on it more and figure out how to use distutils.
+
+Right now, it lists current available networks, and whether you are connected
+to anything or not, all of which is updated in real time.  It will actually 
+connect you to networks now.  Global preferences are now configurable from the
+console.  Per-network settings is a work in progress.
+
+Controls:
+
+F5     : refresh wireless networks
+F8 or Q: quit 
+D      : disconnect from active network
+ESC    : if connecting to a network, stop doing so
+ENTER  : Attempt connection to selected network
+P      : Display preferences dialog
+A      : Display "About" dialog
+
+IN DIALOGS:
+ESC or Q: Quit dialog without saving information (if present)
+
+
+
+~NaCl

@@ -399,6 +399,7 @@ try:
         data.append(( wpath.lib, ['curses/prefs_curses.py']))
         data.append(( wpath.lib, ['curses/wicd-curses.py']))
         data.append(( wpath.bin, ['scripts/wicd-curses'])) 
+        data.append(( wpath.mandir + 'man8', ['man/wicd-curses.8'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'

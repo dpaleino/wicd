@@ -49,10 +49,10 @@ These are not used yet.
 Reminder that your network configuration files are not here ;-)
 .TP 
 .I %LIB%keymap.py
-Tenative location of the system keymap
+Tentative location of the system keymap
 .TP
 .I %LIB%colors.py
-Tenative location of the system color schemes
+Tentative location of the system color schemes
 .TP
 .I ~/.wicd/keymap.py
 Custom keybindings.  Also where you can (later) disable the mouse.

@@ -167,23 +167,25 @@ def gen_network_list():
 
     id = 0
     wiredL = []
+    is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
+    # This one makes a list of strings to put in a combo box.
     for profile in wired.GetWiredProfileList():
         theString = '%4s   %25s' % (id, profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
         # Tag if no wireless IP present, and wired one is
-        is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
-        if is_active:
-            theString = '>'+theString[1:]
+        #if is_active:
+        #    theString = '>'+theString[1:]
             
             #wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
             #    'connected focus'))
         #else:
-        #    wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+            #wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
         wiredL.append(theString)
         id+=1
 
     wlessL = []
+    # This one makes a list of NetLabels
     for network_id in range(0, wireless.GetNumberOfNetworks()):
         is_active = wireless.GetCurrentSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
 
@@ -228,6 +230,11 @@ def about_dialog(body):
         if about.b_pressed == 'OK':
             return False
 
+########################################
+##### URWID SUPPORT CLASSES
+########################################
+
+# Wireless network label
 class NetLabel(urwid.WidgetWrap):
     def __init__(self, id, is_active):
     # Pick which strength measure to use based on what the daemon says
@@ -272,6 +279,50 @@ class NetLabel(urwid.WidgetWrap):
         # This should work.
         wireless.ConnectWireless(self.id)
         
+class WiredComboBox(ComboBox):
+    """
+    list : the list of wired network profiles.  The rest is self-explanitory.
+    """
+    def init(self,list):
+        self.theList = list
+        id = 0
+        wiredL = []
+        is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
+        for profile in list:
+            theString = '%4s   %25s' % (id, profile)
+            #### THIS IS wired.blah() in experimental
+            #print config.GetLastUsedWiredNetwork()
+            # Tag if no wireless IP present, and wired one is
+            if is_active:
+                theString = '>'+theString[1:]
+                
+                #wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
+                #    'connected focus'))
+            #else:
+            #    wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
+            wiredL.append(theString)
+            id+=1
+        self.__super.__init__(list=wiredL,use_enter=False)
+        self.set_show_first(theList.index(wired.GetDefaultWiredProfile()))
+
+    def keypress(self,size,key):
+        self.__super.keypress(size,key)
+        if key == 'C':
+            # Configure the network
+            pass
+        elif key == 'S':
+            # Configure scripts
+            pass
+        elif key == 'enter':
+            self.connect()
+        return key
+
+    def connect(self):
+        wired.ConnectWired()
+    def get_selected_profile(self):
+        """Get the selected wired profile"""
+        return self.theList[self._w.get_selected()[1]]
+
 ########################################
 ##### APPLICATION INTERFACE CLASS
 ########################################
@@ -294,7 +345,7 @@ class appGUI():
         self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
         wiredL,wlessL = gen_network_list()
-        self.wiredCB = urwid.Filler(ComboBox(list=wiredL,use_enter=False))
+        self.wiredCB = urwid.Filler(WiredComboBox(list=wiredL))
         self.wlessLB = urwid.ListBox(wlessL)
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
@@ -305,8 +356,9 @@ class appGUI():
         #          spam,spam,spam,spam] ]
         #self.spamLB = urwid.ListBox(spamL)
 
-        # Choose whether to show the wired part of the interface.
-        if daemon.GetAlwaysShowWiredInterface():
+        # Choose whether to show the wired part of the interface, if a cable
+        # is plugged in, or the 
+        if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
             self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                        ('fixed',1,self.wiredCB),
                                        ('fixed',1,self.wlessH),
@@ -329,7 +381,7 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
-        self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
+        #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
         self.pref = None
 
@@ -365,18 +417,17 @@ class appGUI():
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             self.wlessLB.body = urwid.SimpleListWalker(wlessL)
-            # If the "Always Show Wired" part of the interface changes, change
-            # along with it.
-            if daemon.GetAlwaysShowWiredInterface() != self.always_show_wired:
-                if daemon.GetAlwaysShowWiredInterface():
-                    self.thePile = urwid.Pile([('fixed',1,self.wiredH),
-                                               ('fixed',1,self.wiredCB),
-                                               ('fixed',1,self.wlessH),
-                                                          self.wlessLB] )
-                else:
-                    self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
+
+            if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
+                #if daemon.GetAlwaysShowWiredInterface():
+                self.thePile = urwid.Pile([('fixed',1,self.wiredH),
+                                           ('fixed',1,self.wiredCB),
+                                           ('fixed',1,self.wlessH),
+                                                      self.wlessLB] )
+            else:
+                self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
                 self.frame.body = self.thePile
-                self.always_show_wired = not self.always_show_wired
+                #self.always_show_wired = not self.always_show_wired
         self.prev_state = state
 
     # Update the footer/status bar
@@ -494,10 +545,6 @@ class appGUI():
             return False
         if "f5" in keys:
             wireless.Scan()
-        if "enter" in keys:
-            # TODO: Make this totally go away by superclassing ComboBox
-            # Should be a function of the labels, I think.
-            self.call_connect()
         if "D" in keys:
             # Disconnect from all networks.
             daemon.Disconnect()
@@ -535,36 +582,6 @@ class appGUI():
                     #self.wiredCB = self.thePile.get_focus()
 
         return True
-
-    # Bring back memories, anyone?
-    def call_connect(self):
-        wid = self.thePile.get_focus()
-        if wid is self.wiredCB:
-            #wid2,pos = self.wiredCB.get_focus()
-            # Apparently, connect() doesn't care about the networkid
-            self.connect(self,'wired',0)
-            #return "Wired network %i" % pos
-        elif wid is self.wlessLB:
-            # Do nothing
-            pass
-        else:
-            self.set_status("call_connect() failed!  This is definitely a bug!")
-            #return "Failure!"
-
-    def connect(self, event, nettype, networkid):
-        """ Initiates the connection process in the daemon. """
-        if nettype == "wireless":
-            # I need to do something that is similar to this in this UI, but
-            # I don't have an "advanced settings" dialog yet.
-            #if not self.check_encryption_valid(networkid,
-            #                                   networkentry.advanced_dialog):
-            #    self.edit_advanced(None, None, nettype, networkid, networkentry)
-            #    return False
-            wireless.ConnectWireless(networkid)
-        elif nettype == "wired":
-            wired.ConnectWired()
-        self.update_status()
-
 
 ########################################
 ##### INITIALIZATION FUNCTIONS

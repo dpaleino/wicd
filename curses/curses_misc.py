@@ -123,6 +123,7 @@ class TabColumns(urwid.WidgetWrap):
         if key == "meta left" or key == "meta right":
             self._w.get_body().set_focus(0)
             self.keypress(size,key[5:])
+            self._w.get_body().set_focus(1)
         else:
             wid = self.pile.get_focus().get_body()
             if wid == self.columns:
@@ -147,7 +148,7 @@ class ComboBoxException(Exception):
 class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
     class ComboSpace(urwid.WidgetWrap):
-        """The actual menu-like space that comes down from the ComboText"""
+        """The actual menu-like space that comes down from the ComboBox"""
         def __init__(self,list,body,ui,show_first,pos=(0,0),attr=('body','focus')):
             """
             body      : parent widget

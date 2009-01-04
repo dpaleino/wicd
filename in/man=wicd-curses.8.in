@@ -1,0 +1,77 @@
+.TH WICD-CURSES "8" "January 2009" "wicd-curses" 
+.SH NAME
+.B wicd-curses
+\- curses-based wicd(8) controller
+.SH DESCRIPTION
+wicd-curses is a curses-based network controller that uses the Wired/Wireless Internet Connection Daemon (wicd) to control your network connections. It is suitable to run in terminal multiplexers like screen(1).
+
+It is designed to imitate the GTK-based wicd-client(1) as much as possible, and uses the Urwid (http://excess.org/urwid) console widget library to vastly simplify development.
+
+This man page only documents the current status of wicd-curses.  This may/may not be the most up-to-date document.
+.SH "ARGUMENTS"
+These are not implemented yet.
+.TP
+.BR "\-r" , " \-\-raw\-screen"
+Use Urwid's raw console display, instead of the (faster) curses-based one.  This may be useful if you are experiencing unicode problems.
+.SH CONTROLS
+All of these are case sensitive.
+.TP
+.BR enter
+Connect to selected network
+.TP
+.BR "F8 " or " Q"
+Quit the client.
+.TP
+.BR D
+Disconnect all devices from network connections
+.TP
+.BR ESC
+If connecting to a network, stop doing so
+.TP
+.BR "F5 " or " R"
+Refresh the network list
+.TP
+.BR P
+Bring up the preferences controller
+.PP
+The following are not implemented yet:
+.TP
+.BR C
+Bring up network configuration controller for the selected network
+.TP
+.BR S
+Bring up the script selector for the selected network (requires superuser privileges)
+
+.SH "FILES"
+These are not used yet.
+.TP
+.I ~/.wicd/WHEREAREMYFILES
+Reminder that your network configuration files are not here ;-)
+.TP 
+.I %LIB%keymap.py
+Tenative location of the system keymap
+.TP
+.I %LIB%colors.py
+Tenative location of the system color schemes
+.TP
+.I ~/.wicd/keymap.py
+Custom keybindings.  Also where you can (later) disable the mouse.
+.TP
+.I ~/.wicd/colors.py
+Custom color schemes.
+.SH "SEE ALSO"
+.BR wicd-client (1),
+.BR wicd (8)
+
+.SH BUGS
+Probably lots.  ;-)
+
+If you happen to find one, ask about it on #wicd on freenode, or submit a bug report to http://launchpad.net/wicd, branch experimental-nacl.
+
+.SH WICD-CURSES AUTHOR
+Andrew Psaltis <ampsaltis@gmail.com>
+
+.SH WICD AUTHORS
+Adam Blackburn <compwiz18@gmail.com>
+.br
+Dan O'Reilly <oreilldf@gmail.com>

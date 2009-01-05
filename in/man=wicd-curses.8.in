@@ -34,10 +34,12 @@ Refresh the network list
 .BR P
 Bring up the preferences controller
 .PP
-The following are not implemented yet:
+The following is a work in progress and might not be fully functional as of yet.
 .TP
 .BR C
 Bring up network configuration controller for the selected network
+.PP
+The following is not implemented yet:
 .TP
 .BR S
 Bring up the script selector for the selected network (requires superuser privileges)

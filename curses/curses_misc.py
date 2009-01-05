@@ -40,43 +40,44 @@ class SelText(urwid.Text):
         """Don't handle any keys."""
         return key
 
-class ToggleEdit(urwid.WidgetWrap):
-    """A edit that can be rendered unselectable by somethhing like a checkbox"""
-    def __init__(self, caption='', state=True,
-            attr=('editbx','editfc'),attrnsens='body'):
-        """
-        caption  : the Edit's caption
-        state    : the Edit's current sensitivity
-        attr     : tuple of (attr_no_focus, attr_focus)
-        attrnsens: attr to use when not sensitive
-        """
-        edit = urwid.Edit(caption)
-        curattr = attr[0] if state == True else attrnsens
-        w = urwid.AttrWrap(edit,curattr,attr[1])
-        self.sensitive=state
-        self.__super.__init__(w)
+# This class is annoying.  ^_^
+class DynWrap(urwid.AttrWrap):
+    """
+    Makes an object have mutable selectivity.  Attributes will change like
+    those in an AttrWrap
 
-    # Kinda like the thing in PyGTK
+    w = widget to wrap
+    sensitive = current selectable state
+    attrs = tuple of (attr_sens,attr_not_sens)
+    attrfoc = attributes when in focus, defaults to nothing
+    """
+
+    def __init__(self,w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc'):
+        self.attrs=attrs
+        self._sensitive = sensitive
+        
+        cur_attr = attrs[0] if sensitive else attrs[1]
+
+        self.__super.__init__(w,cur_attr,focus_attr)
+
+    def get_sensitive(self):
+        return self._sensitive
     def set_sensitive(self,state):
-        self.sensitive=state
-        if state:
-            self._w.set_attr('editbx')
+        if state :
+            self.set_attr(self.attrs[0])
         else:
-            self._w.set_attr('body')
+            self.set_attr(self.attrs[1])
+        self._sensitive = state
+    property(get_sensitive,set_sensitive)
 
-    def set_edit_text(self,text):
-        self._w.set_edit_text(text)
-    
-    def get_edit_text(self):
-        return self._w.get_edit_text()
+    def get_attrs(self):
+        return self._attrs
+    def set_attrs(self,attrs):
+        self.attrs = attrs
+    property(get_attrs,set_attrs)
 
-    # If we aren't sensitive, don't be selectable
     def selectable(self):
-        return self.sensitive
-
-    # Do what an edit does with keys 
-    def keypress(self,size,key):
-        return self._w.keypress(size,key)
+        return self._sensitive
 
 # Tabbed interface, mostly for use in the Preferences Dialog
 class TabColumns(urwid.WidgetWrap):

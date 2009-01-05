@@ -2,8 +2,8 @@ This is a curses-based client for wicd.  It is designed to imitate wicd-client
 as much as can be done with a console-based interface.  It is written using the
 Urwid (http://excess.org/urwid) toolkit, and thus requires it.
 
-That's all there is to it, really.  It's not going to install itself until I 
-work on it more and figure out how to use distutils.
+That's all there is to it, really.  It installs unless you disable when you
+call setup.py
 
 Right now, it lists current available networks, and whether you are connected
 to anything or not, all of which is updated in real time.  It will actually 
@@ -18,10 +18,13 @@ D      : disconnect from active network
 ESC    : if connecting to a network, stop doing so
 ENTER  : Attempt connection to selected network
 P      : Display preferences dialog
+C      : Display network configuration for selected network
 A      : Display "About" dialog
 
 IN DIALOGS:
 ESC or Q: Quit dialog without saving information (if present)
+Meta+Left/Right: Change tabs Left/Right
+Meta+Enter : Quit dialog and save information
 
 
 

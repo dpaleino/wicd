@@ -22,7 +22,7 @@ import urwid.curses_display
 
 from wicd import misc
 from wicd import dbusmanager
-from curses_misc import SelText,ToggleEdit,ComboBox,TabColumns
+from curses_misc import SelText,DynWrap,ComboBox,TabColumns
 
 daemon = None
 wireless = None
@@ -133,11 +133,12 @@ class PrefsDialog(urwid.WidgetWrap):
         global_dns_state = False
         self.global_dns_checkb  = urwid.CheckBox(global_dns_t,global_dns_state,
                 on_state_change=self.global_dns_trigger)
-        self.search_dom  = ToggleEdit(search_dom_t,global_dns_state)
-        self.dns_dom     = ToggleEdit(dns_dom_t,global_dns_state)
-        self.dns1        = ToggleEdit(dns1_t,global_dns_state)
-        self.dns2        = ToggleEdit(dns2_t,global_dns_state)
-        self.dns3        = ToggleEdit(dns3_t,global_dns_state)
+        self.search_dom = DynWrap(urwid.Edit(search_dom_t),global_dns_state)
+        self.dns_dom    = DynWrap(urwid.Edit(dns_dom_t),global_dns_state)
+        self.dns1       = DynWrap(urwid.Edit(dns1_t),global_dns_state)
+        self.dns2       = DynWrap(urwid.Edit(dns2_t),global_dns_state)
+        self.dns3       = DynWrap(urwid.Edit(dns3_t),global_dns_state)
+
 
         self.always_show_wired_checkb = urwid.CheckBox(always_show_wired_t)
 

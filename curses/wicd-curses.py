@@ -54,8 +54,8 @@ from time import sleep
 
 # Curses UIs for other stuff
 from curses_misc import SelText,ComboBox,Dialog
-import prefs_curses
 from prefs_curses import PrefsDialog
+from netentry_curses import NetEntryBase
 
 language = misc.get_language_list_gui()
 # Whew. Now on to more interesting stuff: 
@@ -265,16 +265,16 @@ class NetLabel(urwid.WidgetWrap):
     def selectable(self):
         return True
     def keypress(self,size,key):
-        self._w.keypress(size,key)
-        if key == 'C':
-            # Configure the network
-            pass
-        elif key == 'S':
+        return self._w.keypress(size,key)
+        #if key == 'C':
+        #    conf = NetEntryBase(dbusmanager.get_dbus_ifaces())
+        #    conf.run(ui,ui.get_cols_rows(),)
+        #elif key == 'S':
             # Configure scripts
-            pass
-        elif key == 'enter':
-            self.connect()
-        return key
+        #    pass
+        #elif key == 'enter':
+        #    self.connect()
+        #return key
     def connect(self):
         # This should work.
         wireless.ConnectWireless(self.id)
@@ -307,15 +307,15 @@ class WiredComboBox(ComboBox):
 
     def keypress(self,size,key):
         self.__super.keypress(size,key)
-        if key == 'C':
+        #if key == 'C':
             # Configure the network
-            pass
-        elif key == 'S':
+        #    pass
+        #elif key == 'S':
             # Configure scripts
-            pass
-        elif key == 'enter':
-            self.connect()
-        return key
+        #    pass
+        #elif key == 'enter':
+        #    self.connect()
+        #return key
 
     def connect(self):
         wired.ConnectWired()
@@ -345,7 +345,7 @@ class appGUI():
         self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
         wiredL,wlessL = gen_network_list()
-        self.wiredCB = urwid.Filler(WiredComboBox(list=wiredL))
+        self.wiredCB = urwid.Filler(ComboBox(list=wiredL))
         self.wlessLB = urwid.ListBox(wlessL)
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
@@ -549,6 +549,17 @@ class appGUI():
             # Disconnect from all networks.
             daemon.Disconnect()
             self.update_netlist()
+        # Guess what!  I actually need to put this here, else I'll have tons of
+        # references to self.frame lying around. ^_^
+        if "enter" in keys:
+            focus = self.thePile.get_focus()
+            if focus == self.wiredCB:
+                self.connect("wired",0)
+            else:
+                # wless list only other option
+                wid,pos  = self.thePile.get_focus().get_focus()
+                self.connect("wireless",pos)
+
         if "esc" in keys:
             # Force disconnect here if connection in progress
             if self.connecting:
@@ -570,6 +581,10 @@ class appGUI():
                 continue
             self.frame.keypress( self.size, k )
 
+        if "C" in keys:
+            self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
+            self.netentry.run(ui,self.size,self.frame)
+
         if " " in keys:
                 focus = self.thePile.get_focus()
                 if focus == self.wiredCB:
@@ -582,6 +597,18 @@ class appGUI():
                     #self.wiredCB = self.thePile.get_focus()
 
         return True
+    # TODO: Update this to use the networkentry stuff
+    def connect(self, nettype, networkid, networkentry=None):
+        """ Initiates the connection process in the daemon. """
+        if nettype == "wireless":
+            #if not self.check_encryption_valid(networkid,
+            #                                   networkentry.advanced_dialog):
+            #    self.edit_advanced(None, None, nettype, networkid, networkentry)
+            #    return False
+            wireless.ConnectWireless(networkid)
+        elif nettype == "wired":
+            wired.ConnectWired()
+        self.update_status()
 
 ########################################
 ##### INITIALIZATION FUNCTIONS
@@ -610,6 +637,7 @@ def main():
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
         ('editfc', 'white','dark blue', 'bold'),
+        ('editnfc','dark gray','default'),
         ('tab active','dark green','light gray'),
         # Simple colors around text
         ('green','dark green','default'),

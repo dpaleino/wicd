@@ -5,7 +5,7 @@
 wicd-curses.
 """
 
-#       Copyright (C) 2008-9 Andrew Psaltis
+#       Copyright (C) 2008-2009 Andrew Psaltis
 
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class DynWrap(urwid.AttrWrap):
     """
 
     def __init__(self,w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc'):
-        self.attrs=attrs
+        self._attrs=attrs
         self._sensitive = sensitive
         
         cur_attr = attrs[0] if sensitive else attrs[1]
@@ -63,21 +63,77 @@ class DynWrap(urwid.AttrWrap):
     def get_sensitive(self):
         return self._sensitive
     def set_sensitive(self,state):
-        if state :
-            self.set_attr(self.attrs[0])
+        if state:
+            self.set_attr(self._attrs[0])
         else:
-            self.set_attr(self.attrs[1])
+            self.set_attr(self._attrs[1])
         self._sensitive = state
     property(get_sensitive,set_sensitive)
 
     def get_attrs(self):
         return self._attrs
     def set_attrs(self,attrs):
-        self.attrs = attrs
+        self._attrs = attrs
     property(get_attrs,set_attrs)
 
     def selectable(self):
         return self._sensitive
+
+class MaskingEditException(Exception):
+    pass
+
+# Password-style edit
+class MaskingEdit(urwid.Edit):
+    """
+    mask_mode = one of:
+        "always" : everything is a '*' all of the time
+        "on_focus" : everything is a '*' only when not in focus
+        "off" : everything is always unmasked
+    mask_char = the single character that masks all other characters in the field
+    """
+    def __init__(self, caption = "", edit_text = "", multiline = False,
+            align = 'left', wrap = 'space', allow_tab = False,
+            edit_pos = None, layout=None, mask_mode="masked",mask_char='*'):
+        self.mask_mode = mask_mode
+        if len(mask_char) > 1:
+            raise MaskingEditException('Masks of more than one character are not supported!')
+        self.mask_char = mask_char
+        self.__super.__init__(caption,edit_text,multiline,align,wrap,allow_tab,edit_pos,layout)
+
+    def get_mask_mode(self):
+        return self.mask_mode
+    def set_mask_mode(self,mode):
+        self.mask_mode = mode
+
+    def get_masked_text(self):
+        return self.mask_char*len(self.get_edit_text())
+
+    def render(self,(maxcol,), focus=False):
+        """ 
+        Render edit widget and return canvas.  Include cursor when in
+        focus.
+        """
+        # If we aren't masking anything ATM, then act like an Edit.  No problems.
+        if self.mask_mode == "off" or  (self.mask_mode == 'on_focus' and focus == True):
+            canv = self.__super.render((maxcol,),focus)
+            # The cache messes this thing up, because I am totally changing what is
+            # displayed.
+            self._invalidate()
+            return canv
+        # Else, we have a slight mess to deal with...
+
+        self._shift_view_to_cursor = not not focus # force bool
+
+        text, attr = self.get_text()
+        text = text[:len(self.caption)]+self.get_masked_text()
+        trans = self.get_line_translation( maxcol, (text,attr) )
+        canv = urwid.canvas.apply_text_layout(text, attr, trans, maxcol)
+
+        if focus:
+            canv = urwid.CompositeCanvas(canv)
+            canv.cursor = self.get_cursor_coords((maxcol,))
+
+        return canv
 
 # Tabbed interface, mostly for use in the Preferences Dialog
 class TabColumns(urwid.WidgetWrap):
@@ -146,6 +202,9 @@ class ComboBoxException(Exception):
 # A "combo box" of SelTexts
 # I based this off of the code found here:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
+# This is a hack.  It isn't without quirks, but it more or less works.
+# We need to wait for changes in urwid's Canvas controls before we can actually
+# make a real ComboBox.
 class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
     class ComboSpace(urwid.WidgetWrap):
@@ -202,7 +261,7 @@ class ComboBox(urwid.WidgetWrap):
 
         #def get_size(self):
 
-    def __init__(self,label='',list=[],attr=('body','focus'),use_enter=True,show_first=0):
+    def __init__(self,label='',list=[],attrs=('body','editnfc'),focus_attr='focus',use_enter=True,show_first=0):
         """
         label     : bit of text that preceeds the combobox.  If it is "", then 
                     ignore it
@@ -214,13 +273,14 @@ class ComboBox(urwid.WidgetWrap):
         """
         
         self.label = urwid.Text(label)
-        self.attr = attr
+        self.attrs = attrs
+        self.focus_attr = focus_attr
         self.list = list
         str,trash =  self.label.get_text()
 
         self.overlay = None
-
-        self.cbox  = urwid.AttrWrap(SelText('    vvv'),attr[0],attr[1])
+        #w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc')
+        self.cbox  = DynWrap(SelText('    vvv'),attrs=attrs,focus_attr=focus_attr)
         # Unicode will kill me sooner or later.  ^_^
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
@@ -242,8 +302,7 @@ class ComboBox(urwid.WidgetWrap):
 
     def build_combobox(self,body,ui,row):
         str,trash =  self.label.get_text()
-        self.cbox  = urwid.AttrWrap(SelText([self.list[self.show_first]+'    vvv']),
-                self.attr[0],self.attr[1])
+        self.cbox  = DynWrap(SelText([self.list[self.show_first]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
             self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
@@ -273,13 +332,17 @@ class ComboBox(urwid.WidgetWrap):
 
     # Most obvious thing ever.  :-)
     def selectable(self):
-        return True
+        return self.cbox.selectable()
 
     # Return the index of the selected element
     def get_selected(self):
         wid,pos = self.overlay._listbox.get_focus()
         return (wid,pos)
 
+    def get_sensitive(self):
+        return self.cbox.get_sensitive()
+    def set_sensitive(self,state):
+        self.cbox.set_sensitive(state)
 
 # Almost completely ripped from rbreu_filechooser.py:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py

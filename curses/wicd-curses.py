@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-""" wicd-curses -- a (curses-based) console interface to wicd
+""" wicd-curses. (curses/urwid-based) console interface to wicd
 
 Provides the a console UI for wicd, so that people with broken X servers can
-at least get a network connection.  Or those who don't like using X.  :-)
+at least get a network connection.  Or those who don't like using X.  ;-)
 
 """
 
-#       Copyright (C) 2008-9 Andrew Psaltis
+#       Copyright (C) 2008-2009 Andrew Psaltis
 
 #       This program is free software; you can redistribute it and/or modify
 #       it under the terms of the GNU General Public License as published by
@@ -55,10 +55,10 @@ from time import sleep
 # Curses UIs for other stuff
 from curses_misc import SelText,ComboBox,Dialog
 from prefs_curses import PrefsDialog
-from netentry_curses import NetEntryBase
+import netentry_curses
+from netentry_curses import WirelessNetEntry
 
 language = misc.get_language_list_gui()
-# Whew. Now on to more interesting stuff: 
 
 ########################################
 ##### SUPPORT CLASSES
@@ -582,8 +582,17 @@ class appGUI():
             self.frame.keypress( self.size, k )
 
         if "C" in keys:
-            self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
-            self.netentry.run(ui,self.size,self.frame)
+            focus = self.thePile.get_focus()
+            if focus == self.wiredCB:
+                pass
+                #self.connect("wired",0)
+            else:
+                # wless list only other option
+                wid,pos  = self.thePile.get_focus().get_focus()
+                WirelessNetEntry(pos).run(ui,self.size,self.frame)
+                #self.connect("wireless",pos)
+            #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
+            #self.netentry.run(ui,self.size,self.frame)
 
         if " " in keys:
                 focus = self.thePile.get_focus()
@@ -678,7 +687,7 @@ def setup_dbus(force=True):
         dbusmanager.connect_to_dbus()
     except DBusException:
         # I may need to be a little more verbose here.
-        # Suggestions as to what should go here
+        # Suggestions as to what should go here, please?
         print "Can't connect to the daemon.  Are you sure it is running?"
         print "Please check the wicd log for error messages."
         #raise
@@ -690,6 +699,8 @@ def setup_dbus(force=True):
     wired = dbus_ifaces['wired']
     DBUS_AVAIL = True
     
+
+    netentry_curses.dbus_init(dbus_ifaces)
     return True
 
 setup_dbus()

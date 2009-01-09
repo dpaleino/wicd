@@ -497,19 +497,24 @@ class NetworkEntry(gtk.HBox):
         gtk.HBox.__init__(self, False, 2)
         self.image = gtk.Image()
         self.pack_start(self.image, False, False)
+
+        # Create an HBox to hold the buttons
+        self.buttons_hbox = gtk.HBox(False, 3)
+        self.buttons_hbox.set_border_width(5)
         
         # Set up the Connect button
         self.connect_button = gtk.Button(stock=gtk.STOCK_CONNECT)
         self.connect_hbox = gtk.HBox(False, 2)
-        self.connect_hbox.pack_start(self.connect_button, False, False)
+        self.buttons_hbox.pack_start(self.connect_button, False, False)
         self.connect_hbox.show()
         
         # Set up the Disconnect button
         self.disconnect_button = gtk.Button(stock=gtk.STOCK_DISCONNECT)
-        self.connect_hbox.pack_start(self.disconnect_button, False, False)
+        self.buttons_hbox.pack_start(self.disconnect_button, False, False)
 
         # Create a label to hold the name of the entry
         self.name_label = gtk.Label()
+        self.name_label.set_alignment(0, 0.5)
         
         # Set up the VBox that goes in the gtk.Expander
         self.expander_vbox = gtk.VBox(False, 1)
@@ -534,13 +539,11 @@ class NetworkEntry(gtk.HBox):
         self.script_button.set_image(self.script_image)
         self.script_button.set_label(language['scripts'])
         
-        self.settings_hbox = gtk.HBox(False, 3)
-        self.settings_hbox.set_border_width(5)
-        self.settings_hbox.pack_start(self.script_button, False, False)
-        self.settings_hbox.pack_start(self.advanced_button, False, False)
-        
+        self.buttons_hbox.pack_start(self.script_button, False, False)
+        self.buttons_hbox.pack_start(self.advanced_button, False, False)
+
         self.vbox_top = gtk.VBox(False, 0)
-        self.vbox_top.pack_end(self.settings_hbox, False, False)
+        self.vbox_top.pack_end(self.buttons_hbox, False, False)
         
         aligner = gtk.Alignment(xscale=1.0)
         aligner.add(self.vbox_top)
@@ -792,22 +795,18 @@ class WirelessNetworkEntry(NetworkEntry):
                             wireless.GetWirelessProperty(networkID, 
                                                         'encryption_method'))
 
-        self.name_label.set_markup(self._escape(self.essid) + "   " + 
-                                self.lbl_strength.get_label() + "   " +
-                                self.lbl_encryption.get_label() + "   " +
-                                self.lbl_mac.get_label())
+        self.name_label.set_markup(self._escape(self.essid))
 
-        # Pack the network status HBox.
-        self.hbox_status.pack_start(self.lbl_strength, True, True)
-        self.hbox_status.pack_start(self.lbl_encryption, True, True)
-        self.hbox_status.pack_start(self.lbl_mac, True, True)
-        self.hbox_status.pack_start(self.lbl_mode, True, True)
-        self.hbox_status.pack_start(self.lbl_channel, True, True)
+        information_button = gtk.Button(stock=gtk.STOCK_INFO)
+
+        self.buttons_hbox.pack_start(information_button, False, False)
+
+        information_button.connect('clicked', self.show_info_dialog)
 
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
-        self.vbox_top.pack_start(self.hbox_status, True, True)
+        # self.vbox_top.pack_start(self.hbox_status, True, True)
 
         if to_bool(self.format_entry(networkID, "automatic")):
             self.chkbox_autoconnect.set_active(True)
@@ -822,7 +821,25 @@ class WirelessNetworkEntry(NetworkEntry):
         self.show_all()
         self.advanced_dialog = WirelessSettingsDialog(networkID)
         self.wifides = self.connect("destroy", self.destroy_called)
+
+    def show_info_dialog(self, button=None):
+        dialog = gtk.Dialog()
+        vbox = dialog.vbox
         
+        # Pack the network status HBox.
+        vbox.pack_start(self.lbl_strength, True, True)
+        vbox.pack_start(self.lbl_encryption, True, True)
+        vbox.pack_start(self.lbl_mac, True, True)
+        vbox.pack_start(self.lbl_mode, True, True)
+        vbox.pack_start(self.lbl_channel, True, True)
+
+        vbox.show_all()
+
+        dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+
+        dialog.run()
+        dialog.destroy()
+
     def _escape(self, val):
         """ Escapes special characters so they're displayed correctly. """
         return val.replace("&", "&amp;").replace("<", "&lt;").\

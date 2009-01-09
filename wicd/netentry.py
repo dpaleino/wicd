@@ -774,11 +774,11 @@ class WirelessNetworkEntry(NetworkEntry):
                                                                     "essid"))
         print "ESSID : " + self.essid
         # Make the combo box.
-        self.lbl_strength = GreyLabel()
-        self.lbl_encryption = GreyLabel()
-        self.lbl_mac = GreyLabel()
-        self.lbl_channel = GreyLabel()
-        self.lbl_mode = GreyLabel()
+        self.lbl_strength = gtk.Label()
+        self.lbl_encryption = gtk.Label()
+        self.lbl_mac = gtk.Label()
+        self.lbl_channel = gtk.Label()
+        self.lbl_mode = gtk.Label()
         self.hbox_status = gtk.HBox(False, 5)
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
         

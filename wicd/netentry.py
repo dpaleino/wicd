@@ -495,7 +495,6 @@ class NetworkEntry(gtk.HBox):
         wired = dbus_ifaces["wired"]
         wireless = dbus_ifaces["wireless"]
         gtk.HBox.__init__(self, False, 2)
-        self.expander = gtk.Expander()
         self.image = gtk.Image()
         self.pack_start(self.image, False, False)
         
@@ -512,8 +511,6 @@ class NetworkEntry(gtk.HBox):
         # Set up the VBox that goes in the gtk.Expander
         self.expander_vbox = gtk.VBox(False, 1)
         self.expander_vbox.show()
-        self.expander_vbox.pack_start(self.expander)
-        self.expander_vbox.pack_start(self.connect_hbox, False, False)
         self.pack_end(self.expander_vbox)
         
         # Set up the advanced settings button
@@ -545,7 +542,8 @@ class NetworkEntry(gtk.HBox):
         aligner = gtk.Alignment(xscale=1.0)
         aligner.add(self.vbox_top)
         aligner.set_padding(0, 0, 15, 0)
-        self.expander.add(aligner)
+        self.expander_vbox.pack_start(aligner)
+        self.expander_vbox.pack_start(self.connect_hbox, False, False)
     
     def destroy_called(self, *args):
         """ Clean up everything. """
@@ -564,10 +562,8 @@ class WiredNetworkEntry(NetworkEntry):
         #self.image.set_from_icon_name("network-wired", 6)
         self.image.set_from_file(wpath.images + "wired.png")
         self.image.show()
-        self.expander.show()
         self.connect_button.show()
         
-        self.expander.set_label(language['wired_network'])
         #self.reset_static_checkboxes()
         self.is_full_gui = True
         
@@ -628,11 +624,8 @@ class WiredNetworkEntry(NetworkEntry):
             else:
                 self.combo_profile_names.set_active(0)
             print "wired profiles found"
-            self.expander.set_expanded(False)
         else:
             print "no wired profiles found"
-            if not wired.GetAlwaysShowWiredInterface():
-                self.expander.set_expanded(True)
             self.profile_help.show()        
         self.check_enable()
         self.wireddis = self.connect("destroy", self.destroy_called)
@@ -793,13 +786,10 @@ class WirelessNetworkEntry(NetworkEntry):
                             wireless.GetWirelessProperty(networkID, 
                                                         'encryption_method'))
 
-        # The the expander label.
-        self.expander.set_use_markup(True)
-
-        self.expander.set_label(self._escape(self.essid) + "   " + 
-                                self.lbl_strength.get_label() + "   " +
-                                self.lbl_encryption.get_label() + "   " +
-                                self.lbl_mac.get_label())
+        # self.expander.set_label(self._escape(self.essid) + "   " + 
+        #                        self.lbl_strength.get_label() + "   " +
+        #                        self.lbl_encryption.get_label() + "   " +
+        #                        self.lbl_mac.get_label())
 
         # Pack the network status HBox.
         self.hbox_status.pack_start(self.lbl_strength, True, True)

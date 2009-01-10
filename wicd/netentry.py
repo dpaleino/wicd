@@ -41,6 +41,11 @@ class SmallLabel(gtk.Label):
     def __init__(self, text=''):
         gtk.Label.__init__(self, text)
         self.set_size_request(50, -1)
+        
+class LeftAlignedLabel(gtk.Label):
+    def __init__(self, label=None):
+        gtk.Label.__init__(self, label)
+        self.set_alignment(0.0, 0.5)
 
 class LabelEntry(gtk.HBox):
     """ A label on the left with a textbox on the right. """
@@ -126,6 +131,19 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.hbox_dns.pack_start(self.chkbox_static_dns)
         self.hbox_dns.pack_start(self.chkbox_global_dns)
         
+        # Set up the script settings button
+        self.script_button = gtk.Button()
+        script_image = gtk.Image()
+        script_image.set_from_stock(gtk.STOCK_EXECUTE, 4)
+        script_image.set_padding(4, 0)
+        #self.script_button.set_alignment(.5, .5)
+        self.script_button.set_image(script_image)
+        self.script_button.set_label(language['scripts'])
+        
+        self.button_hbox = gtk.HBox(False, 2)
+        self.button_hbox.pack_start(self.script_button, fill=False, expand=False)
+        self.button_hbox.show()
+        
         assert(isinstance(self.vbox, gtk.VBox))
         self.vbox.pack_start(self.chkbox_static_ip, fill=False, expand=False)
         self.vbox.pack_start(self.txt_ip, fill=False, expand=False)
@@ -137,6 +155,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.vbox.pack_start(self.txt_dns_1, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_2, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_3, fill=False, expand=False)
+        self.vbox.pack_end(self.button_hbox, fill=False, expand=False, padding=5)
         
         
         # Connect the events to the actions
@@ -277,11 +296,26 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         """ Build the wired settings dialog. """
         AdvancedSettingsDialog.__init__(self)
         self.des = self.connect("destroy", self.destroy_called)
+        self.script_button.connect("button-press-event", self.edit_scripts)
         self.prof_name = name
         
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
         wired.SetWiredProperty(option, value)
+        
+    def edit_scripts(self, widget=None, event=None):
+        """ Launch the script editting dialog. """
+        profile = self.combo_profile_names.get_active_text()
+        cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
+        if os.getuid() != 0:
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
+            if not cmdbase:
+                error(None, language["no_sudo_prog"]) 
+                return
+            cmdbase.extend(cmdend)
+            misc.LaunchAndWait(cmdbase)
+        else:
+            misc.LaunchAndWait(cmdend)
         
     def set_values(self):
         """ Fill in the Gtk.Entry objects with the correct values. """
@@ -330,6 +364,11 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.combo_encryption.set_sensitive(False)
         self.encrypt_types = misc.LoadEncryptionMethods()
         
+        information_button = gtk.Button(stock=gtk.STOCK_INFO)
+        self.button_hbox.pack_start(information_button, False, False)
+        information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID))
+        information_button.show()
+        
         # Build the encryption menu
         activeID = -1  # Set the menu to this item when we are done
         for x, enc_type in enumerate(self.encrypt_types):
@@ -354,6 +393,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Connect signals.
         self.chkbox_encryption.connect("toggled", self.toggle_encryption)
         self.combo_encryption.connect("changed", self.change_encrypt_method)
+        self.script_button.connect("button-press-event", self.edit_scripts)
         self.des = self.connect("destroy", self.destroy_called)
 
     def destroy_called(self, *args):
@@ -362,6 +402,20 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         super(WirelessSettingsDialog, self).destroy_called()
         self.destroy()
         del self
+        
+    def edit_scripts(self, widget=None, event=None):
+        """ Launch the script editting dialog. """
+        cmdend = [os.path.join(wpath.lib, "configscript.py"), 
+                                str(self.networkID), "wireless"]
+        if os.getuid() != 0:
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
+            if not cmdbase:
+                error(None, language["no_sudo_prog"]) 
+                return
+            cmdbase.extend(cmdend)
+            misc.LaunchAndWait(cmdbase)
+        else:
+            misc.LaunchAndWait(cmdend)
         
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
@@ -479,7 +533,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
             box.entry.set_text(noneToBlankString(
                 wireless.GetWirelessProperty(self.networkID, opts[x][1])))
-        self.vbox_encrypt_info.show_all() 
+        self.vbox_encrypt_info.show_all()
         
         
 class NetworkEntry(gtk.HBox):
@@ -499,18 +553,17 @@ class NetworkEntry(gtk.HBox):
         self.pack_start(self.image, False, False)
 
         # Create an HBox to hold the buttons
-        self.buttons_hbox = gtk.HBox(False, 3)
-        self.buttons_hbox.set_border_width(5)
+        self.buttons_hbox = gtk.HBox(False, 6)
         
         # Set up the Connect button
         self.connect_button = gtk.Button(stock=gtk.STOCK_CONNECT)
         self.connect_hbox = gtk.HBox(False, 2)
-        self.buttons_hbox.pack_start(self.connect_button, False, False)
+        self.connect_hbox.pack_start(self.connect_button, False, False)
         self.connect_hbox.show()
         
         # Set up the Disconnect button
         self.disconnect_button = gtk.Button(stock=gtk.STOCK_DISCONNECT)
-        self.buttons_hbox.pack_start(self.disconnect_button, False, False)
+        self.connect_hbox.pack_start(self.disconnect_button, False, False)
 
         # Create a label to hold the name of the entry
         self.name_label = gtk.Label()
@@ -530,27 +583,18 @@ class NetworkEntry(gtk.HBox):
         self.advanced_button.set_label(language['advanced_settings'])
         self.advanced_button.set_image(self.advanced_image)
         
-        # Set up the script settings button
-        self.script_button = gtk.Button()
-        self.script_image = gtk.Image()
-        self.script_image.set_from_stock(gtk.STOCK_EXECUTE, 4)
-        self.script_image.set_padding(4, 0)
-        self.script_button.set_alignment(.5, .5)
-        self.script_button.set_image(self.script_image)
-        self.script_button.set_label(language['scripts'])
-        
-        self.buttons_hbox.pack_start(self.script_button, False, False)
+        #self.buttons_hbox.pack_start(self.script_button, False, False)
+        self.buttons_hbox.pack_start(self.connect_hbox, False, False)
         self.buttons_hbox.pack_start(self.advanced_button, False, False)
 
         self.vbox_top = gtk.VBox(False, 0)
-        self.vbox_top.pack_end(self.buttons_hbox, False, False)
+        #self.vbox_top.pack_end(self.buttons_hbox, False, False)
+        #self.vbox_top.pack_end(self.connect_hbox, False, False)
         
-        aligner = gtk.Alignment(xscale=1.0)
-        aligner.add(self.vbox_top)
-        aligner.set_padding(0, 0, 15, 0)
+
         self.expander_vbox.pack_start(self.name_label)
-        self.expander_vbox.pack_start(aligner)
-        self.expander_vbox.pack_start(self.connect_hbox, False, False)
+        self.expander_vbox.pack_start(self.vbox_top)
+        self.expander_vbox.pack_start(self.buttons_hbox)
     
     def destroy_called(self, *args):
         """ Clean up everything. """
@@ -651,20 +695,6 @@ class WiredNetworkEntry(NetworkEntry):
     def save_wired_settings(self):
         """ Save wired network settings. """
         return self.advanced_dialog.save_settings()
-        
-    def edit_scripts(self, widget=None, event=None):
-        """ Launch the script editting dialog. """
-        profile = self.combo_profile_names.get_active_text()
-        cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
-        if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
-            if not cmdbase:
-                error(None, language["no_sudo_prog"]) 
-                return
-            cmdbase.extend(cmdend)
-            misc.LaunchAndWait(cmdbase)
-        else:
-            misc.LaunchAndWait(cmdend)
 
     def check_enable(self):
         """ Disable objects if the profile list is empty. """
@@ -767,47 +797,20 @@ class WirelessNetworkEntry(NetworkEntry):
 
         self.networkID = networkID
         self.image.set_padding(0, 0)
-        self.image.set_alignment(.5, 0)
+        self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
+        self.image.show()
         #self.image.set_from_icon_name("network-wired", 6)
         self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
                                                                     "essid"))
+        self.name_label.set_markup(self._escape(self.essid))
         print "ESSID : " + self.essid
-        # Make the combo box.
-        self.lbl_strength = gtk.Label()
-        self.lbl_strength.set_alignment(0, 0.5)
-        self.lbl_encryption = gtk.Label()
-        self.lbl_encryption.set_alignment(0, 0.5)
-        self.lbl_mac = gtk.Label()
-        self.lbl_mac.set_alignment(0, 0.5)
-        self.lbl_channel = gtk.Label()
-        self.lbl_channel.set_alignment(0, 0.5)
-        self.lbl_mode = gtk.Label()
-        self.lbl_mode.set_alignment(0, 0.5)
-        self.hbox_status = gtk.HBox(False, 5)
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
         
-        # Set the values of the network info labels.
         self.set_signal_strength(wireless.GetWirelessProperty(networkID, 
                                                               'quality'),
                                  wireless.GetWirelessProperty(networkID, 
                                                               'strength'))
-        self.set_mac_address(wireless.GetWirelessProperty(networkID, 'bssid'))
-        self.set_mode(wireless.GetWirelessProperty(networkID, 'mode'))
-        self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
-        self.set_encryption(wireless.GetWirelessProperty(networkID,
-                                                         'encryption'),
-                            wireless.GetWirelessProperty(networkID, 
-                                                        'encryption_method'))
-
-        self.name_label.set_markup(self._escape(self.essid))
-
-        information_button = gtk.Button(stock=gtk.STOCK_INFO)
-
-        self.buttons_hbox.pack_start(information_button, False, False)
-
-        information_button.connect('clicked', self.show_info_dialog)
-
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
@@ -819,53 +822,13 @@ class WirelessNetworkEntry(NetworkEntry):
             self.chkbox_autoconnect.set_active(False)
         
         # Connect signals.
-        self.chkbox_autoconnect.connect("toggled", self.update_autoconnect)
-        self.script_button.connect("button-press-event", self.edit_scripts)       
+        self.chkbox_autoconnect.connect("toggled", self.update_autoconnect)      
         
         # Show everything
         self.show_all()
         self.advanced_dialog = WirelessSettingsDialog(networkID)
         self.wifides = self.connect("destroy", self.destroy_called)
-
-    def show_info_dialog(self, button=None):
-        dialog = gtk.Dialog()
-
-        dialog.set_title('Network Information')
-
-        vbox = dialog.vbox
-
-        table = gtk.Table(5, 2)
-        table.set_col_spacings(4)
-        vbox.pack_start(table)
-
-        class LeftAlignedLabel(gtk.Label):
-            def __init__(self, label=None):
-                gtk.Label.__init__(self, label)
-                self.set_alignment(0.0, 0.5)
-        
-        # Pack the network status HBox.
-        table.attach(LeftAlignedLabel('Signal strength'), 0, 1, 0, 1)
-        table.attach(self.lbl_strength, 1, 2, 0, 1)
-
-        table.attach(LeftAlignedLabel('Encryption type'), 0, 1, 1, 2)
-        table.attach(self.lbl_encryption, 1, 2, 1, 2)
-
-        table.attach(LeftAlignedLabel('Access point address'), 0, 1, 2, 3)
-        table.attach(self.lbl_mac, 1, 2, 2, 3)
-
-        table.attach(LeftAlignedLabel('Mode'), 0, 1, 3, 4)
-        table.attach(self.lbl_mode, 1, 2, 3, 4)
-
-        table.attach(LeftAlignedLabel('Channel'), 0, 1, 4, 5)
-        table.attach(self.lbl_channel, 1, 2, 4, 5)
-
-        vbox.show_all()
-
-        dialog.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
-
-        dialog.run()
-        dialog.destroy()
-
+    
     def _escape(self, val):
         """ Escapes special characters so they're displayed correctly. """
         return val.replace("&", "&amp;").replace("<", "&lt;").\
@@ -874,7 +837,14 @@ class WirelessNetworkEntry(NetworkEntry):
     def save_wireless_settings(self, networkid):
         """ Save wireless network settings. """
         return self.advanced_dialog.save_settings(networkid)
-        
+    
+    def update_autoconnect(self, widget=None):
+        """ Called when the autoconnect checkbox is toggled. """
+        wireless.SetWirelessProperty(self.networkID, "automatic",
+                                     noneToString(self.chkbox_autoconnect.
+                                                  get_active()))
+        wireless.SaveWirelessNetworkProperty(self.networkID, "automatic")
+
     def destroy_called(self, *args):
         """ Clean up everything. """
         self.disconnect(self.wifides)
@@ -883,7 +853,19 @@ class WirelessNetworkEntry(NetworkEntry):
         super(WirelessNetworkEntry, self).destroy_called()
         self.destroy()
         del self
-
+        
+    def update_connect_button(self, state, apbssid):
+        """ Update the connection/disconnect button for this entry. """
+        if not apbssid:
+            apbssid = wireless.GetApBssid()
+        if state == misc.WIRELESS and \
+           apbssid == wireless.GetWirelessProperty(self.networkID, "bssid"):
+            self.disconnect_button.show()
+            self.connect_button.hide()
+        else:
+            self.disconnect_button.hide()
+            self.connect_button.show()
+            
     def set_signal_strength(self, strength, dbm_strength):
         """ Set the signal strength displayed in the WirelessNetworkEntry. """
         if strength is not None:
@@ -922,21 +904,113 @@ class WirelessNetworkEntry(NetworkEntry):
                 signal_img = 'signal-25.png'
             ending = "%"
             disp_strength = str(strength)
-
         self.image.set_from_file(wpath.images + signal_img)
-        self.lbl_strength.set_label(disp_strength + ending)
+        self.image.show()
+
+    def format_entry(self, networkid, label):
+        """ Helper method for fetching/formatting wireless properties. """
+        return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
+
         
-    def update_connect_button(self, state, apbssid):
-        """ Update the connection/disconnect button for this entry. """
-        if not apbssid:
-            apbssid = wireless.GetApBssid()
-        if state == misc.WIRELESS and \
-           apbssid == wireless.GetWirelessProperty(self.networkID, "bssid"):
-            self.disconnect_button.show()
-            self.connect_button.hide()
+class WirelessInformationDialog(gtk.Dialog):
+    def __init__(self, networkID):
+        gtk.Dialog.__init__(self)
+        
+        # Make the combo box.
+        self.lbl_strength = gtk.Label()
+        self.lbl_strength.set_alignment(0, 0.5)
+        self.lbl_encryption = gtk.Label()
+        self.lbl_encryption.set_alignment(0, 0.5)
+        self.lbl_mac = gtk.Label()
+        self.lbl_mac.set_alignment(0, 0.5)
+        self.lbl_channel = gtk.Label()
+        self.lbl_channel.set_alignment(0, 0.5)
+        self.lbl_mode = gtk.Label()
+        self.lbl_mode.set_alignment(0, 0.5)
+        self.hbox_status = gtk.HBox(False, 5)
+        
+        # Set the values of the network info labels.
+        self.set_signal_strength(wireless.GetWirelessProperty(networkID, 
+                                                              'quality'),
+                                 wireless.GetWirelessProperty(networkID, 
+                                                              'strength'))
+        self.set_mac_address(wireless.GetWirelessProperty(networkID, 'bssid'))
+        self.set_mode(wireless.GetWirelessProperty(networkID, 'mode'))
+        self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
+        self.set_encryption(wireless.GetWirelessProperty(networkID,
+                                                         'encryption'),
+                            wireless.GetWirelessProperty(networkID, 
+                                                        'encryption_method'))
+        
+        self.set_title('Network Information')
+        vbox = self.vbox
+        self.set_has_separator(False)
+        table = gtk.Table(5, 2)
+        table.set_col_spacings(12) 
+        vbox.pack_start(table)
+        
+        # Pack the network status HBox.
+        table.attach(LeftAlignedLabel('Signal strength'), 0, 1, 0, 1)
+        table.attach(self.lbl_strength, 1, 2, 0, 1)
+
+        table.attach(LeftAlignedLabel('Encryption type'), 0, 1, 1, 2)
+        table.attach(self.lbl_encryption, 1, 2, 1, 2)
+
+        table.attach(LeftAlignedLabel('Access point address'), 0, 1, 2, 3)
+        table.attach(self.lbl_mac, 1, 2, 2, 3)
+
+        table.attach(LeftAlignedLabel('Mode'), 0, 1, 3, 4)
+        table.attach(self.lbl_mode, 1, 2, 3, 4)
+
+        table.attach(LeftAlignedLabel('Channel'), 0, 1, 4, 5)
+        table.attach(self.lbl_channel, 1, 2, 4, 5)
+
+        vbox.show_all()
+
+        self.add_button(gtk.STOCK_CLOSE, gtk.RESPONSE_CLOSE)
+        self.show()
+        self.run()
+        self.destroy()
+        
+    def set_signal_strength(self, strength, dbm_strength):
+        """ Set the signal strength displayed in the WirelessNetworkEntry. """
+        if strength is not None:
+            strength = int(strength)
         else:
-            self.disconnect_button.hide()
-            self.connect_button.show()
+            strength = -1
+        if dbm_strength is not None:
+            dbm_strength = int(dbm_strength)
+        else:
+            dbm_strength = -100
+        display_type = daemon.GetSignalDisplayType()
+        if daemon.GetWPADriver() == 'ralink legacy' or display_type == 1:
+            # Use the -xx dBm signal strength to display a signal icon
+            # I'm not sure how accurately the dBm strength is being
+            # "converted" to strength bars, so suggestions from people
+            # for a better way would be welcome.
+            if dbm_strength >= -60:
+                signal_img = 'signal-100.png'
+            elif dbm_strength >= -70:
+                signal_img = 'signal-75.png'
+            elif dbm_strength >= -80:
+                signal_img = 'signal-50.png'
+            else:
+                signal_img = 'signal-25.png'
+            ending = "dBm"
+            disp_strength = str(dbm_strength)
+        else:
+            # Uses normal link quality, should be fine in most cases
+            if strength > 75:
+                signal_img = 'signal-100.png'
+            elif strength > 50:
+                signal_img = 'signal-75.png'
+            elif strength > 25:
+                signal_img = 'signal-50.png'
+            else:
+                signal_img = 'signal-25.png'
+            ending = "%"
+            disp_strength = str(strength)
+        self.lbl_strength.set_label(disp_strength + ending)
 
     def set_mac_address(self, address):
         """ Set the MAC address for the WirelessNetworkEntry. """
@@ -962,24 +1036,3 @@ class WirelessNetworkEntry(NetworkEntry):
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
-
-    def edit_scripts(self, widget=None, event=None):
-        """ Launch the script editting dialog. """
-        cmdend = [os.path.join(wpath.lib, "configscript.py"), 
-                                str(self.networkID), "wireless"]
-        if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
-            if not cmdbase:
-                error(None, language["no_sudo_prog"]) 
-                return
-            cmdbase.extend(cmdend)
-            misc.LaunchAndWait(cmdbase)
-        else:
-            misc.LaunchAndWait(cmdend)
-
-    def update_autoconnect(self, widget=None):
-        """ Called when the autoconnect checkbox is toggled. """
-        wireless.SetWirelessProperty(self.networkID, "automatic",
-                                     noneToString(self.chkbox_autoconnect.
-                                                                  get_active()))
-        wireless.SaveWirelessNetworkProperty(self.networkID, "automatic")

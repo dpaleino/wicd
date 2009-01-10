@@ -775,10 +775,15 @@ class WirelessNetworkEntry(NetworkEntry):
         print "ESSID : " + self.essid
         # Make the combo box.
         self.lbl_strength = gtk.Label()
+        self.lbl_strength.set_alignment(0, 0.5)
         self.lbl_encryption = gtk.Label()
+        self.lbl_encryption.set_alignment(0, 0.5)
         self.lbl_mac = gtk.Label()
+        self.lbl_mac.set_alignment(0, 0.5)
         self.lbl_channel = gtk.Label()
+        self.lbl_channel.set_alignment(0, 0.5)
         self.lbl_mode = gtk.Label()
+        self.lbl_mode.set_alignment(0, 0.5)
         self.hbox_status = gtk.HBox(False, 5)
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
         
@@ -824,14 +829,35 @@ class WirelessNetworkEntry(NetworkEntry):
 
     def show_info_dialog(self, button=None):
         dialog = gtk.Dialog()
+
+        dialog.set_title('Network Information')
+
         vbox = dialog.vbox
+
+        table = gtk.Table(5, 2)
+        table.set_col_spacings(4)
+        vbox.pack_start(table)
+
+        class LeftAlignedLabel(gtk.Label):
+            def __init__(self, label=None):
+                gtk.Label.__init__(self, label)
+                self.set_alignment(0.0, 0.5)
         
         # Pack the network status HBox.
-        vbox.pack_start(self.lbl_strength, True, True)
-        vbox.pack_start(self.lbl_encryption, True, True)
-        vbox.pack_start(self.lbl_mac, True, True)
-        vbox.pack_start(self.lbl_mode, True, True)
-        vbox.pack_start(self.lbl_channel, True, True)
+        table.attach(LeftAlignedLabel('Signal strength'), 0, 1, 0, 1)
+        table.attach(self.lbl_strength, 1, 2, 0, 1)
+
+        table.attach(LeftAlignedLabel('Encryption type'), 0, 1, 1, 2)
+        table.attach(self.lbl_encryption, 1, 2, 1, 2)
+
+        table.attach(LeftAlignedLabel('Access point address'), 0, 1, 2, 3)
+        table.attach(self.lbl_mac, 1, 2, 2, 3)
+
+        table.attach(LeftAlignedLabel('Mode'), 0, 1, 3, 4)
+        table.attach(self.lbl_mode, 1, 2, 3, 4)
+
+        table.attach(LeftAlignedLabel('Channel'), 0, 1, 4, 5)
+        table.attach(self.lbl_channel, 1, 2, 4, 5)
 
         vbox.show_all()
 

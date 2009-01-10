@@ -499,14 +499,12 @@ class NetworkEntry(gtk.HBox):
         self.pack_start(self.image, False, False)
 
         # Create an HBox to hold the buttons
-        self.buttons_hbox = gtk.HBox(False, 3)
-        self.buttons_hbox.set_border_width(5)
+        self.buttons_hbox = gtk.HBox(False, 6)
+        # self.buttons_hbox.set_border_width(5)
         
         # Set up the Connect button
         self.connect_button = gtk.Button(stock=gtk.STOCK_CONNECT)
-        self.connect_hbox = gtk.HBox(False, 2)
         self.buttons_hbox.pack_start(self.connect_button, False, False)
-        self.connect_hbox.show()
         
         # Set up the Disconnect button
         self.disconnect_button = gtk.Button(stock=gtk.STOCK_DISCONNECT)
@@ -545,12 +543,8 @@ class NetworkEntry(gtk.HBox):
         self.vbox_top = gtk.VBox(False, 0)
         self.vbox_top.pack_end(self.buttons_hbox, False, False)
         
-        aligner = gtk.Alignment(xscale=1.0)
-        aligner.add(self.vbox_top)
-        aligner.set_padding(0, 0, 15, 0)
         self.expander_vbox.pack_start(self.name_label)
-        self.expander_vbox.pack_start(aligner)
-        self.expander_vbox.pack_start(self.connect_hbox, False, False)
+        self.expander_vbox.pack_start(self.vbox_top)
     
     def destroy_called(self, *args):
         """ Clean up everything. """
@@ -767,7 +761,7 @@ class WirelessNetworkEntry(NetworkEntry):
 
         self.networkID = networkID
         self.image.set_padding(0, 0)
-        self.image.set_alignment(.5, 0)
+        self.image.set_alignment(0.5, 0.5)
         self.image.set_size_request(60, -1)
         #self.image.set_from_icon_name("network-wired", 6)
         self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
@@ -833,9 +827,11 @@ class WirelessNetworkEntry(NetworkEntry):
         dialog.set_title('Network Information')
 
         vbox = dialog.vbox
+        dialog.set_has_separator(False)
+        # dialog.set_border_width(12)
 
         table = gtk.Table(5, 2)
-        table.set_col_spacings(4)
+        table.set_col_spacings(12)
         vbox.pack_start(table)
 
         class LeftAlignedLabel(gtk.Label):

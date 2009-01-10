@@ -261,7 +261,7 @@ class ComboBox(urwid.WidgetWrap):
 
         #def get_size(self):
 
-    def __init__(self,label='',list=[],attrs=('body','editnfc'),focus_attr='focus',use_enter=True,show_first=0):
+    def __init__(self,label='',list=[],attrs=('body','editnfc'),focus_attr='focus',use_enter=True,focus=0,callback=None,user_args=None):
         """
         label     : bit of text that preceeds the combobox.  If it is "", then 
                     ignore it
@@ -269,13 +269,16 @@ class ComboBox(urwid.WidgetWrap):
         body      : parent widget
         ui        : the screen
         row       : where this object is to be found onscreen
-        show_first: index of the element in the list to pick first
+        focus     : index of the element in the list to pick first
+        callback  : function that takes (combobox,sel_index,user_args=None)
+        user_args : user_args in the callback
         """
         
         self.label = urwid.Text(label)
         self.attrs = attrs
         self.focus_attr = focus_attr
         self.list = list
+
         str,trash =  self.label.get_text()
 
         self.overlay = None
@@ -290,26 +293,27 @@ class ComboBox(urwid.WidgetWrap):
 
         # We need this to pick our keypresses
         self.use_enter = use_enter
-
-        # Set the focus at the beginning to 0
-        self.show_first = show_first
-
+        # The Focus
+        self.focus = focus
+        # The callback and friends
+        self.callback = callback
+        self.user_args = user_args
     def set_list(self,list):
         self.list = list
 
-    def set_show_first(self,show_first):
-        self.show_first = show_first
+    def set_focus(self,index):
+        self.focus = index
 
     def build_combobox(self,body,ui,row):
         str,trash =  self.label.get_text()
-        self.cbox  = DynWrap(SelText([self.list[self.show_first]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
+        self.cbox  = DynWrap(SelText([self.list[self.focus]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
-            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
                     pos=(len(str)+1,row))
         else:
             w = urwid.Columns([self.cbox])
-            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
                     pos=(0,row))
 
         self.set_w(w)
@@ -328,16 +332,18 @@ class ComboBox(urwid.WidgetWrap):
             retval = self.overlay.show(self.ui,self.body)
             if retval != None:
                 self.cbox.set_w(SelText(retval+'    vvv'))
+                if self.callback != None:
+                    self.callback(self,self.overlay._listbox.get_focus()[1],self.user_args)
         return self._w.keypress(size,key)
 
-    # Most obvious thing ever.  :-)
     def selectable(self):
         return self.cbox.selectable()
 
-    # Return the index of the selected element
-    def get_selected(self):
-        wid,pos = self.overlay._listbox.get_focus()
-        return (wid,pos)
+    def get_focus(self):
+        if self.overlay:
+            return self.overlay._listbox.get_focus()
+        else:
+            return None,self.focus
 
     def get_sensitive(self):
         return self.cbox.get_sensitive()

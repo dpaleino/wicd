@@ -56,7 +56,7 @@ from time import sleep
 from curses_misc import SelText,ComboBox,Dialog
 from prefs_curses import PrefsDialog
 import netentry_curses
-from netentry_curses import WirelessNetEntry
+from netentry_curses import WirelessSettingsDialog
 
 language = misc.get_language_list_gui()
 
@@ -303,7 +303,7 @@ class WiredComboBox(ComboBox):
             wiredL.append(theString)
             id+=1
         self.__super.__init__(list=wiredL,use_enter=False)
-        self.set_show_first(theList.index(wired.GetDefaultWiredProfile()))
+        self.set_focus(theList.index(wired.GetDefaultWiredProfile()))
 
     def keypress(self,size,key):
         self.__super.keypress(size,key)
@@ -503,8 +503,9 @@ class appGUI():
     def idle_incr(self):
         theText = ""
         if self.connecting:
-            theText = "-- Connecting -- Press ESC to cancel"
-        self.footer1 = urwid.Text(str(self.incr) + ' '+theText)
+            theText = "-- Connecting -- Press ESC to cancel "
+        quit_note = "-- Press F8 or Q to quit."
+        self.footer1 = urwid.Text(str(self.incr) + ' '+theText+quit_note)
         self.incr+=1
         return True
 
@@ -585,12 +586,10 @@ class appGUI():
             focus = self.thePile.get_focus()
             if focus == self.wiredCB:
                 pass
-                #self.connect("wired",0)
             else:
-                # wless list only other option
+                # wireless list only other option
                 wid,pos  = self.thePile.get_focus().get_focus()
-                WirelessNetEntry(pos).run(ui,self.size,self.frame)
-                #self.connect("wireless",pos)
+                WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
             #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
             #self.netentry.run(ui,self.size,self.frame)
 

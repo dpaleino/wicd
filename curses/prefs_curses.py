@@ -109,6 +109,7 @@ class PrefsDialog(urwid.WidgetWrap):
         backend_cat_t = ('header',language['backend'])
         backend_t = language['backend']+':'
         backend_list = ['spam','double spam','triple spam','quadruple spam']
+        backend_warn_t = ('important','Changes to the backend (probably) requires a daemon restart')
         
         debug_cat_t = ('header','Debugging')
         debug_mode_t = language['use_debug_mode']
@@ -207,6 +208,7 @@ class PrefsDialog(urwid.WidgetWrap):
         
         self.backend_cat  = urwid.Text(backend_cat_t)
         self.backend_cbox = ComboBox(backend_t)
+        self.backend_warn = urwid.Text(backend_warn_t)
         
         self.debug_cat           = urwid.Text(debug_cat_t)
         self.debug_mode_checkb   = urwid.CheckBox(debug_mode_t)
@@ -218,7 +220,7 @@ class PrefsDialog(urwid.WidgetWrap):
         advancedLB = urwid.ListBox([self.wpa_cat,
                                     self.wpa_cbox,self.wpa_warn,_blank,
                                     self.backend_cat,
-                                    self.backend_cbox,_blank,
+                                    self.backend_cbox,self.backend_warn,_blank,
                                     self.debug_cat,
                                     self.debug_mode_checkb, _blank,
                                     self.wless_cat,
@@ -315,7 +317,7 @@ class PrefsDialog(urwid.WidgetWrap):
         # Pick where to begin first:
         def_driver = daemon.GetWPADriver()
         try:
-            self.wpa_cbox.set_show_first(self.wpadrivers.index(def_driver))
+            self.wpa_cbox.set_focus(self.wpadrivers.index(def_driver))
         except ValueError:
             pass # It defaults to 0 anyway
 
@@ -326,9 +328,9 @@ class PrefsDialog(urwid.WidgetWrap):
         self.backend_cbox.set_list(self.thebackends) 
         cur_backend = daemon.GetSavedBackend()
         try:
-            self.backend_cbox.set_show_first(self.thebackends.index(cur_backend))
+            self.backend_cbox.set_focus(self.thebackends.index(cur_backend))
         except ValueError:
-            self.backend_cbox.set_show_first(0)
+            self.backend_cbox.set_focus(0)
 
         # Two last checkboxes
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())

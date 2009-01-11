@@ -576,12 +576,6 @@ class appGUI():
             self.update_ui()
         if "A" in keys:
             about_dialog(self.frame)
-        for k in keys:
-            if k == "window resize":
-                self.size = ui.get_cols_rows()
-                continue
-            self.frame.keypress( self.size, k )
-
         if "C" in keys:
             focus = self.thePile.get_focus()
             if focus == self.wiredCB:
@@ -592,6 +586,12 @@ class appGUI():
                 WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
             #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
             #self.netentry.run(ui,self.size,self.frame)
+
+        for k in keys:
+            if k == "window resize":
+                self.size = ui.get_cols_rows()
+                continue
+            self.frame.keypress( self.size, k )
 
         if " " in keys:
                 focus = self.thePile.get_focus()

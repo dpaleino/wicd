@@ -345,7 +345,7 @@ class PrefsDialog(urwid.WidgetWrap):
                             self.search_dom.get_edit_text())
         daemon.SetWirelessInterface(self.wless_edit.get_edit_text())
         daemon.SetWiredInterface(self.wired_edit.get_edit_text())
-        daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_selected()[1]])
+        daemon.SetWPADriver(self.wpadrivers[self.wpa_cbox.get_focus()[1]])
         daemon.SetAlwaysShowWiredInterface(self.always_show_wired_checkb.get_state())
         daemon.SetAutoReconnect(self.auto_reconn_checkb.get_state())
         daemon.SetDebugMode(self.debug_mode_checkb.get_state())
@@ -357,7 +357,7 @@ class PrefsDialog(urwid.WidgetWrap):
         else:
             daemon.SetWiredAutoConnectMethod(1)
 
-        daemon.SetBackend(self.backends[self.backend_cbox.get_selected()[1]])
+        daemon.SetBackend(self.backends[self.backend_cbox.get_focus()[1]])
             
         # External Programs Tab
         if self.dhcp0.get_state():

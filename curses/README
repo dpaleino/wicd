@@ -25,6 +25,7 @@ P      : Display preferences dialog
 C      : Display network configuration for selected network (only works for
          wireless at the moment)
 A      : Display "About" dialog
+I      : Raise up the "Scan for hidden networks" dialog
 
 IN DIALOGS (Meta usually is "Alt"):
 ESC or Q: Quit dialog without saving information (if present)

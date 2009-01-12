@@ -22,7 +22,7 @@
 #       MA 02110-1301, USA.
 
 import urwid
-from curses_misc import Dialog,DynWrap,MaskingEdit,ComboBox
+from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
@@ -31,23 +31,9 @@ def error(ui,parent,message):
     #     /\
     #    /!!\
     #   /____\
-    dialog = Dialog([('important','ERROR: '),message],['OK'],('body','body','focus'),40,6,parent)
+    dialog = TextDialog(message,40,6,('important',"ERROR"))
+    return dialog.run(ui,parent)
 
-    keys = True
-    dim = ui.get_cols_rows()
-    while True:
-        if keys:
-            ui.draw_screen(dim, dialog.render(dim, True))
-            
-        keys = ui.get_input()
-        if "window resize" in keys:
-            dim = ui.get_cols_rows()
-        if "esc" in keys:
-            return False
-        for k in keys:
-            dialog.keypress(dim, k)
-        if dialog.b_pressed == 'OK':
-            return False
 
 language = misc.get_language_list_gui()
 
@@ -310,13 +296,13 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                                encrypt_methods[self.encryption_combo.get_focus()[1] ][1])
             for x in encryption_info:
                 if encryption_info[x].get_edit_text() == "":
-                    error(self.ui, self, language['encrypt_info_missing'])
+                    error(self.ui, self.overlay,language['encrypt_info_missing'])
                     return False
                 self.set_net_prop(x, noneToString(encryption_info[x].
                                                    get_edit_text()))
         elif not self.encryption_chkbox.get_state() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
-            error(self.ui, self, language['enable_encryption'])
+            error(self.ui, self.overlay, language['enable_encryption'])
             return False
         else:
             #print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
@@ -372,27 +358,34 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
     def run(self,ui,dim,display):
         self.ui = ui
+        self.parent = display
         width,height = ui.get_cols_rows()
-        overlay = urwid.Overlay(self, display, ('fixed left', 0),width
+        self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
-        self.encryption_combo.build_combobox(overlay,ui,14)
+        self.encryption_combo.build_combobox(self.overlay,ui,14)
         #self.change_encrypt_method()
         #self._w.body.body.append(self.pile_encrypt)
 
         keys = True
         while True:
             if keys:
-                ui.draw_screen(dim, overlay.render(dim, True))
+                ui.draw_screen(dim, self.overlay.render(dim, True))
             keys = ui.get_input()
 
             for k in keys:
                 #Send key to underlying widget:
-                overlay.keypress(dim, k)
+                if urwid.is_mouse_event(k):
+                    event, button, col, row = k
+                    self.overlay.mouse_event( dim,
+                            event, button, col, row,
+                            focus=True)
+                self.overlay.keypress(dim, k)
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
             if "esc" in keys or 'Q' in keys:
                 return False
             if "meta enter" in keys or self.OK_PRESSED:
+                self.OK_PRESSED = False
                 if self.save_settings(self.networkID):
                     return True
             if self.CANCEL_PRESSED:

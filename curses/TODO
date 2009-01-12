@@ -4,7 +4,6 @@ Things to do (in no particular order):
 *   Implement a keyhandler function for the overall frame
     * Make keystrokes customizable
 *   Make color schemes customizable
-*   Implement a "scan for hidden networks" dialog
 *   Implement a "make an ad-hoc network" dialog
 *   Implement a "help" dialog
 *   Perform a mass code cleanup

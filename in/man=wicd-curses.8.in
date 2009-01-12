@@ -33,6 +33,9 @@ Refresh the network list
 .TP
 .BR P
 Bring up the preferences controller
+.TP
+.BR I
+Bring up hidden network scanning dialog
 .PP
 The following is a work in progress and might not be fully functional as of yet.
 .TP
@@ -43,9 +46,6 @@ The following are not implemented yet:
 .TP
 .BR S
 Bring up the script selector for the selected network (requires superuser privileges)
-.TP
-.BR I
-Bring up hidden network scanning dialog
 .TP
 .BR R
 Bring up script selector "dialog."

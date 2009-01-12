@@ -53,10 +53,10 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboBox,Dialog
+from curses_misc import SelText,ComboBox,TextDialog,InputDialog
 from prefs_curses import PrefsDialog
 import netentry_curses
-from netentry_curses import WirelessNetEntry
+from netentry_curses import WirelessSettingsDialog, error
 
 language = misc.get_language_list_gui()
 
@@ -79,6 +79,19 @@ class wrap_exceptions:
                 loop.quit()
                 ui.stop()
                 print "\nTerminated by user."
+                raise
+            except DBusException:
+                gobject.source_remove(redraw_tag)
+                # Quit the loop
+                loop.quit()
+                # Zap the screen
+                ui.stop()
+                print ""
+                print "DBus failiure!"
+                print "This is most likely caused by the wicd daemon stopping"
+                print "while wicd-curses is running."
+                print ""
+                print "Please restart the daemon, and restart wicd-curses."
                 raise
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
@@ -212,23 +225,8 @@ def about_dialog(body):
 "     ___|+|___         Dan O'Reilly   (wicd)\n",
 "    |---------|        Andrew Psaltis (this ui)\n",
 "---------------------------------------------------"]
-    about = Dialog(theText,['OK'],('body','body','focus'),55,14,body)
-
-    keys = True
-    dim = ui.get_cols_rows()
-    while True:
-        if keys:
-            ui.draw_screen(dim, about.render(dim, True))
-            
-        keys = ui.get_input()
-        if "window resize" in keys:
-            dim = ui.get_cols_rows()
-        if "esc" in keys:
-            return False
-        for k in keys:
-            about.keypress(dim, k)
-        if about.b_pressed == 'OK':
-            return False
+    about = TextDialog(theText,55,14)
+    about.run(ui,body)
 
 ########################################
 ##### URWID SUPPORT CLASSES
@@ -303,7 +301,7 @@ class WiredComboBox(ComboBox):
             wiredL.append(theString)
             id+=1
         self.__super.__init__(list=wiredL,use_enter=False)
-        self.set_show_first(theList.index(wired.GetDefaultWiredProfile()))
+        self.set_focus(theList.index(wired.GetDefaultWiredProfile()))
 
     def keypress(self,size,key):
         self.__super.keypress(size,key)
@@ -335,6 +333,7 @@ class appGUI():
         # for networks.  :-)
         # Will need a translation sooner or later
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
+        self.no_wlan = urwid.Filler(urwid.Text(('important',"No wireless networks found."), align='center'))
         self.TITLE = 'Wicd Curses Interface'
 
         #wrap1 = urwid.AttrWrap(txt, 'black')
@@ -344,8 +343,10 @@ class appGUI():
         self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
         self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
 
+        #if wireless.GetNumberOfNetworks() == 0:
+        #    wireless.Scan()
         wiredL,wlessL = gen_network_list()
-        self.wiredCB = urwid.Filler(ComboBox(list=wiredL))
+        self.wiredCB = urwid.Filler(ComboBox(list=wiredL,use_enter=False))
         self.wlessLB = urwid.ListBox(wlessL)
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
@@ -383,6 +384,8 @@ class appGUI():
         self.screen_locked = False
         #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
+        self.focusloc = (1,0)
+        
         self.pref = None
 
         self.update_status()
@@ -395,18 +398,46 @@ class appGUI():
         self.screen_locked = True
 
     def unlock_screen(self):
-        self.update_netlist(force_check=True)
         self.frame.set_body(self.thePile)
         self.screen_locked = False
         # I'm hoping that this will get rid of Adam's problem with the ListBox not
         # redisplaying itself immediately upon completion.
+        self.update_netlist(force_check=True)
         self.update_ui()
+
+    def raise_hidden_network_dialog(self):
+        dialog = InputDialog(('header','Select Hidden Network ESSID'),7,30,'Scan')
+        exitcode,hidden = dialog.run(ui,self.frame)
+        if exitcode != -1:
+            # That dialog will sit there for a while if I don't get rid of it
+            self.update_ui()
+            wireless.SetHiddenNetworkESSID(misc.noneToString(hidden))
+            wireless.Scan()
+        wireless.SetHiddenNetworkESSID("")
+        
+    def update_focusloc(self):
+        # Location of last known focus is remapped to current location.
+        # This might need to be cleaned up later.
+
+        if self.thePile.get_focus() is self.wiredCB: 
+            wlessorwired = 1
+        else :
+            wlessorwired = 3
+        if self.thePile.get_focus() == self.no_wlan:
+            where = 0
+        elif self.thePile.get_focus() == self.wiredCB:
+            where = self.thePile.get_focus().get_body().get_focus()[1]
+        else:
+            where = self.thePile.get_focus().get_focus()[1]
+
+        self.focusloc = (wlessorwired,where)
 
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
     # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
     def update_netlist(self,state=None, x=None, force_check=False):
+        self.update_focusloc()
         """ Updates the overall network list."""
         if not state:
             state, x = daemon.GetConnectionStatus()
@@ -416,17 +447,28 @@ class appGUI():
             #    use_enter=False))
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
-            self.wlessLB.body = urwid.SimpleListWalker(wlessL)
-
+            if len(wlessL) != 0:
+                self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+            else:
+                self.wlessLB.body = urwid.SimpleListWalker([self.no_wlan])
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                            ('fixed',1,self.wiredCB),
                                            ('fixed',1,self.wlessH),
                                                       self.wlessLB] )
+                #self.focusloc = (self.thePile.get_focus(),
+                #    self.thePile.get_focus().get_focus()[1])
+                self.thePile.set_focus(self.focusloc[0])
+                if self.focusloc[0] == 1:
+                    self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
+                else:
+                    self.thePile.get_focus().set_focus(self.focusloc[1])
             else:
                 self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
                 self.frame.body = self.thePile
+                if self.focusloc[0] == self.wlessLB:
+                    self.wlessLB.set_focus(self.focusloc[1])
                 #self.always_show_wired = not self.always_show_wired
         self.prev_state = state
 
@@ -503,27 +545,29 @@ class appGUI():
     def idle_incr(self):
         theText = ""
         if self.connecting:
-            theText = "-- Connecting -- Press ESC to cancel"
-        self.footer1 = urwid.Text(str(self.incr) + ' '+theText)
+            theText = "-- Connecting -- Press ESC to cancel "
+        quit_note = "-- Press F8 or Q to quit."
+        self.footer1 = urwid.Text(str(self.incr) + ' '+theText+quit_note)
         self.incr+=1
         return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
     #@wrap_exceptions()
     def dbus_scan_finished(self):
-            # I'm pretty sure that I'll need this later.
-            #if not self.connecting:
-                #self.refresh_networks(fresh=False)
-            self.unlock_screen()
-            # I'm hoping that this will resolve Adam's problem with the screen lock
-            # remaining onscreen until a key is pressed.  It goes away perfectly well
-            # here.
-            self.update_ui()
+        # I'm pretty sure that I'll need this later.
+        #if not self.connecting:
+        #    gobject.idle_add(self.refresh_networks, None, False, None)
+        self.unlock_screen()
+        # I'm hoping that this will resolve Adam's problem with the screen lock
+        # remaining onscreen until a key is pressed.  It goes away perfectly well
+        # here.
+        self.update_ui()
 
     # Same, same, same, same, same, same
     #@wrap_exceptions()
     def dbus_scan_started(self):
         self.lock_screen()
+        self.update_ui()
 
     # Redraw the screen
     @wrap_exceptions()
@@ -553,7 +597,7 @@ class appGUI():
         # references to self.frame lying around. ^_^
         if "enter" in keys:
             focus = self.thePile.get_focus()
-            if focus == self.wiredCB:
+            if focus is self.wiredCB:
                 self.connect("wired",0)
             else:
                 # wless list only other option
@@ -575,30 +619,35 @@ class appGUI():
             self.update_ui()
         if "A" in keys:
             about_dialog(self.frame)
+        if "C" in keys:
+            focus = self.thePile.get_focus()
+            if focus == self.wiredCB:
+                pass
+            else:
+                # wireless list only other option
+                wid,pos  = self.thePile.get_focus().get_focus()
+                WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
+            #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
+            #self.netentry.run(ui,self.size,self.frame)
+        if "I" in keys:
+            self.raise_hidden_network_dialog()
+
         for k in keys:
+            if urwid.is_mouse_event(k):
+                event, button, col, row = k
+                self.frame.mouse_event( self.size,
+                        event, button, col, row,
+                        focus=True)
             if k == "window resize":
                 self.size = ui.get_cols_rows()
                 continue
             self.frame.keypress( self.size, k )
 
-        if "C" in keys:
-            focus = self.thePile.get_focus()
-            if focus == self.wiredCB:
-                pass
-                #self.connect("wired",0)
-            else:
-                # wless list only other option
-                wid,pos  = self.thePile.get_focus().get_focus()
-                WirelessNetEntry(pos).run(ui,self.size,self.frame)
-                #self.connect("wireless",pos)
-            #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
-            #self.netentry.run(ui,self.size,self.frame)
-
         if " " in keys:
                 focus = self.thePile.get_focus()
                 if focus == self.wiredCB:
                     #self.set_status('space pressed on wiredCB!')
-                    wid,pos = self.wiredCB.get_body().get_selected()
+                    wid,pos = self.wiredCB.get_body().get_focus()
                     text,attr = wid.get_text()
                     wired.ReadWiredNetworkProfile(text)
                     # Make sure our internal reference to the combobox matches the
@@ -630,14 +679,14 @@ def main():
     misc.RenameProcess('wicd-curses')
 
     ui = urwid.curses_display.Screen()
-    # Color scheme.
+    # Default Color scheme.
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
     # Note: the current palette below is optimized for the linux console.
     # For example, this looks particularly bad on a default-colored XTerm.
     # NB: To find current terminal background use variable COLORFGBG
     ui.register_palette([
-        ('body','light gray','default'),
+        ('body','default','default'),
         ('focus','dark magenta','light gray'),
         ('header','light blue','default'),
         ('important','light red','default'),
@@ -659,6 +708,7 @@ def main():
 def run():
     global loop,redraw_tag
 
+    ui.set_mouse_tracking()
     redraw_tag = -1
     app = appGUI()
 

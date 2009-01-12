@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 #   Copyright (C) 2007 - 2008 Adam Blackburn
 #   Copyright (C) 2007 - 2008 Dan O'Reilly
@@ -410,13 +411,13 @@ try:
         data.append(( wpath.lib, ['curses/netentry_curses.py']))
         data.append(( wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
-            data.append(( wpath.mandir + 'man8', ['man/wicd-curses.8'])) 
+            data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
-        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES' ]))
+        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES','other/WHEREAREMYFILES' ]))
     if not wpath.no_install_kde:
         data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
     if not wpath.no_install_init:

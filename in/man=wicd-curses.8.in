@@ -33,17 +33,25 @@ Refresh the network list
 .TP
 .BR P
 Bring up the preferences controller
+.TP
+.BR I
+Bring up hidden network scanning dialog
 .PP
 The following is a work in progress and might not be fully functional as of yet.
 .TP
 .BR C
 Bring up network configuration controller for the selected network
 .PP
-The following is not implemented yet:
+The following are not implemented yet:
 .TP
 .BR S
 Bring up the script selector for the selected network (requires superuser privileges)
-
+.TP
+.BR R
+Bring up script selector "dialog."
+.TP
+.BR H
+Bring up a rather simplistic help dialog.  Of course, it mentions this man page first. :-)
 .SH "FILES"
 These are not used yet.
 .TP

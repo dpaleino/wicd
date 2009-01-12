@@ -261,7 +261,7 @@ class ComboBox(urwid.WidgetWrap):
 
         #def get_size(self):
 
-    def __init__(self,label='',list=[],attrs=('body','editnfc'),focus_attr='focus',use_enter=True,show_first=0):
+    def __init__(self,label='',list=[],attrs=('body','editnfc'),focus_attr='focus',use_enter=True,focus=0,callback=None,user_args=None):
         """
         label     : bit of text that preceeds the combobox.  If it is "", then 
                     ignore it
@@ -269,13 +269,16 @@ class ComboBox(urwid.WidgetWrap):
         body      : parent widget
         ui        : the screen
         row       : where this object is to be found onscreen
-        show_first: index of the element in the list to pick first
+        focus     : index of the element in the list to pick first
+        callback  : function that takes (combobox,sel_index,user_args=None)
+        user_args : user_args in the callback
         """
         
         self.label = urwid.Text(label)
         self.attrs = attrs
         self.focus_attr = focus_attr
         self.list = list
+
         str,trash =  self.label.get_text()
 
         self.overlay = None
@@ -290,26 +293,27 @@ class ComboBox(urwid.WidgetWrap):
 
         # We need this to pick our keypresses
         self.use_enter = use_enter
-
-        # Set the focus at the beginning to 0
-        self.show_first = show_first
-
+        # The Focus
+        self.focus = focus
+        # The callback and friends
+        self.callback = callback
+        self.user_args = user_args
     def set_list(self,list):
         self.list = list
 
-    def set_show_first(self,show_first):
-        self.show_first = show_first
+    def set_focus(self,index):
+        self.focus = index
 
     def build_combobox(self,body,ui,row):
         str,trash =  self.label.get_text()
-        self.cbox  = DynWrap(SelText([self.list[self.show_first]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
+        self.cbox  = DynWrap(SelText([self.list[self.focus]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
-            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
                     pos=(len(str)+1,row))
         else:
             w = urwid.Columns([self.cbox])
-            self.overlay = self.ComboSpace(self.list,body,ui,self.show_first,
+            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
                     pos=(0,row))
 
         self.set_w(w)
@@ -328,89 +332,142 @@ class ComboBox(urwid.WidgetWrap):
             retval = self.overlay.show(self.ui,self.body)
             if retval != None:
                 self.cbox.set_w(SelText(retval+'    vvv'))
+                if self.callback != None:
+                    self.callback(self,self.overlay._listbox.get_focus()[1],self.user_args)
         return self._w.keypress(size,key)
 
-    # Most obvious thing ever.  :-)
     def selectable(self):
         return self.cbox.selectable()
 
-    # Return the index of the selected element
-    def get_selected(self):
-        wid,pos = self.overlay._listbox.get_focus()
-        return (wid,pos)
+    def get_focus(self):
+        if self.overlay:
+            return self.overlay._listbox.get_focus()
+        else:
+            return None,self.focus
 
     def get_sensitive(self):
         return self.cbox.get_sensitive()
     def set_sensitive(self,state):
         self.cbox.set_sensitive(state)
 
-# Almost completely ripped from rbreu_filechooser.py:
-# http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
-class Dialog(urwid.WidgetWrap):
-    """
-    Creates a BoxWidget that displays a message
+# This is a h4x3d copy of some of the code in Ian Ward's dialog.py example.
+class DialogExit(Exception):
+    pass
 
-    Attributes:
-
-    b_pressed -- Contains the label of the last button pressed or None if no
-                 button has been pressed.
-    edit_text -- After a button is pressed, this contains the text the user
-                 has entered in the edit field
-    """
+class Dialog2(urwid.WidgetWrap):
+    def __init__(self, text, height,width, body=None ):
+       self.width = int(width)
+       if width <= 0:
+           self.width = ('relative', 80)
+       self.height = int(height)
+       if height <= 0:
+           self.height = ('relative', 80)
+ 	   
+       self.body = body
+       if body is None:
+           # fill space with nothing
+           body = urwid.Filler(urwid.Divider(),'top')
     
-    b_pressed = None
-    edit_text = None
-
-    _blank = urwid.Text("")
-    _edit_widget = None
-    _mode = None
-
-    def __init__(self, msg, buttons, attr, width, height, body, ):
-        """
-        msg -- content of the message widget, one of:
-                   plain string -- string is displayed
-                   (attr, markup2) -- markup2 is given attribute attr
-                   [markupA, markupB, ... ] -- list items joined together
-        buttons -- a list of strings with the button labels
-        attr -- a tuple (background, button, active_button) of attributes
-        width -- width of the message widget
-        height -- height of the message widget
-        body -- widget displayed beneath the message widget
-        """
-
-        # Text widget containing the message:
-        msg_widget = urwid.Padding(urwid.Text(msg), 'center', width - 4)
-
-        # GridFlow widget containing all the buttons:
-        button_widgets = []
-
-        for button in buttons:
-            button_widgets.append(urwid.AttrWrap(
-                urwid.Button(button, self._action), attr[1], attr[2]))
-
-        button_grid = urwid.GridFlow(button_widgets, 12, 2, 1, 'center')
-
-        # Combine message widget and button widget:
-        widget_list = [msg_widget, self._blank, button_grid]
-        self._combined = urwid.AttrWrap(urwid.Filler(
-            urwid.Pile(widget_list, 2)), attr[0])
-        
-        # This was the real thing I added to this class
-        self._linebox = urwid.LineBox(self._combined)
-        # Place the dialog widget on top of body:
-        # Width and height are increased to accomidate the linebox
-        overlay = urwid.Overlay(self._linebox, body, 'center', width+2,
-                                'middle', height+2)
+       self.frame = urwid.Frame( body, focus_part='footer')
+       if text is not None:
+               self.frame.header = urwid.Pile( [urwid.Text(text),
+                       urwid.Divider()] )
+       w = self.frame
+       self.view = w
        
-        urwid.WidgetWrap.__init__(self, overlay)
+       # pad area around listbox
+       #w = urwid.Padding(w, ('fixed left',2), ('fixed right',2))
+       #w = urwid.Filler(w, ('fixed top',1), ('fixed bottom',1))
+       #w = urwid.AttrWrap(w, 'body')
+    # buttons: tuple of name,exitcode
+    def add_buttons(self, buttons):
+        l = []
+        for name, exitcode in buttons:
+            b = urwid.Button( name, self.button_press )
+            b.exitcode = exitcode
+            b = urwid.AttrWrap( b, 'body','focus' )
+            l.append( b )
+        self.buttons = urwid.GridFlow(l, 10, 3, 1, 'center')
+        self.frame.footer = urwid.Pile( [ urwid.Divider(),
+            self.buttons ], focus_item = 1)
+
+    def button_press(self, button):
+        raise DialogExit(button.exitcode)
+
+    def run(self,ui,parent):
+        ui.set_mouse_tracking()
+        size = ui.get_cols_rows()
+        overlay = urwid.Overlay(urwid.LineBox(self.view), parent, 'center', self.width,
+                                'middle', self.height)
+        try:
+            while True:
+                canvas = overlay.render( size, focus=True )
+                ui.draw_screen( size, canvas )
+                keys = None
+                while not keys:
+                    keys = ui.get_input()
+                for k in keys:
+                    if urwid.is_mouse_event(k):
+                        event, button, col, row = k
+                        overlay.mouse_event( size,
+                                event, button, col, row,
+                                focus=True)
+                    if k == 'window resize':
+                        size = ui.get_cols_rows()
+                    k = self.view.keypress( size, k )
+                    if k == 'esc':
+                        raise DialogExit(-1)
+                    if k:
+                        self.unhandled_key( size, k)
+        except DialogExit, e:
+            return self.on_exit( e.args[0] )
+               
+    def on_exit(self, exitcode):
+        return exitcode, ""
+
+    def unhandled_key(self, size, key):
+        pass
+
+class TextDialog(Dialog2):
+    def __init__(self, text, height, width, header=None):
+        l = []
+        # read the whole file (being slow, not lazy this time)
+        #for line in open(file).readlines():
+        #    l.append( urwid.Text( line.rstrip() ))
+        l = [urwid.Text(text)]
+        body = urwid.ListBox(l)
+        body = urwid.AttrWrap(body, 'body')
+
+        Dialog2.__init__(self, header, height+2, width+2, body)
+        self.add_buttons([('OK',1)])
 
 
-    def _action(self, button):
-        """
-        Function called when a button is pressed.
-        Should not be called manually.
-        """
-        
-        self.b_pressed = button.get_label()
-        if self._edit_widget:
-            self.edit_text = self._edit_widget.get_edit_text()
+    def unhandled_key(self, size, k):
+        if k in ('up','page up','down','page down'):
+            self.frame.set_focus('body')
+            self.view.keypress( size, k )
+            self.frame.set_focus('footer')
+
+class InputDialog(Dialog2):
+    def __init__(self, text, height, width,ok_name='OK'):
+        self.edit = urwid.Edit(wrap='clip')
+        body = urwid.ListBox([self.edit])
+        body = urwid.AttrWrap(body, 'editbx','editfc')
+       
+        Dialog2.__init__(self, text, height, width, body)
+       
+        self.frame.set_focus('body')
+        self.add_buttons([(ok_name,0),('Cancel',-1)])
+       
+    def unhandled_key(self, size, k):
+        if k in ('up','page up'):
+            self.frame.set_focus('body')
+        if k in ('down','page down'):
+            self.frame.set_focus('footer')
+        if k == 'enter':
+            # pass enter to the "ok" button
+            self.frame.set_focus('footer')
+            self.view.keypress( size, k )
+       
+    def on_exit(self, exitcode):
+        return exitcode, self.edit.get_edit_text()

@@ -22,7 +22,7 @@
 #       MA 02110-1301, USA.
 
 import urwid
-from curses_misc import Dialog,DynWrap,MaskingEdit,ComboBox
+from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
@@ -31,23 +31,9 @@ def error(ui,parent,message):
     #     /\
     #    /!!\
     #   /____\
-    dialog = Dialog(message,[OK],('body','body','focus'),40,6)
+    dialog = TextDialog(message,40,6,('important',"ERROR"))
+    return dialog.run(ui,parent)
 
-    keys = True
-    dim = ui.get_cols_rows()
-    while True:
-        if keys:
-            ui.draw_screen(dim, about.render(dim, True))
-            
-        keys = ui.get_input()
-        if "window resize" in keys:
-            dim = ui.get_cols_rows()
-        if "esc" in keys:
-            return False
-        for k in keys:
-            dialog.keypress(dim, k)
-        if dialog.b_pressed == 'OK':
-            return False
 
 language = misc.get_language_list_gui()
 
@@ -61,10 +47,13 @@ def dbus_init(dbus_ifaces):
     wired = dbus_ifaces['wired']
     wireless = dbus_ifaces['wireless']
 
-# Both the wired and the wireless NetEntries some of the same fields.
-# This will be used to produce the individual network settings
-class NetEntryBase(urwid.WidgetWrap):
+# Both the wired and the wireless settings preferences dialogs use some of the
+# same fields.
+# This will be used to produce the individual network settings dialogs way far below
+class AdvancedSettingsDialog(urwid.WidgetWrap):
     def __init__(self):
+        self.ui=None
+
         static_ip_t = language['use_static_ip']
         ip_t        = ('editcp',language['ip']+':     ')
         netmask_t   = ('editcp',language['netmask']+':')
@@ -78,7 +67,7 @@ class NetEntryBase(urwid.WidgetWrap):
         dns2_t           = ('editcp',language['dns']+ ' ' + language['2']+':'+' '*8)
         dns3_t           = ('editcp',language['dns']+ ' ' + language['3']+':'+' '*8)
 
-        cancel_t = 'cancel'
+        cancel_t = 'Cancel'
         ok_t = 'OK'
         
         self.static_ip_cb = urwid.CheckBox(static_ip_t,
@@ -102,6 +91,12 @@ class NetEntryBase(urwid.WidgetWrap):
 
         _blank = urwid.Text('')
 
+        # Buttons.  These need to be added to the list in superclasses.
+        self.OK_PRESSED= False
+        self.CANCEL_PRESSED = False
+        self.ok_button = urwid.AttrWrap(urwid.Button('OK',self.ok_callback),'body','focus')
+        self.cancel_button = urwid.AttrWrap(urwid.Button('Cancel',self.cancel_callback),'body','focus')
+        self.button_cols = urwid.Columns([self.ok_button,self.cancel_button])
         
         walker = urwid.SimpleListWalker([self.static_ip_cb,
                                          self.ip_edit,
@@ -113,11 +108,20 @@ class NetEntryBase(urwid.WidgetWrap):
                                          self.dns1,self.dns2,self.dns3
                                         ])
 
+
+
         self._listbox = urwid.ListBox(walker)
         #self._frame = urwid.Frame(self._listbox)
         self._frame = urwid.Frame(self._listbox)
         self.__super.__init__(self._frame)
     
+
+    # Button callbacks
+    def ok_callback(self,button_object,user_data=None):
+        self.OK_PRESSED = True
+    def cancel_callback(self,button_object,user_data=None):
+        self.CANCEL_PRESSED = True
+
     def static_ip_set_state(self,checkb,new_state,user_data=None):
         for w in [ self.ip_edit,self.netmask_edit,self.gateway_edit ]:
             w.set_sensitive(new_state)
@@ -139,7 +143,7 @@ class NetEntryBase(urwid.WidgetWrap):
     # Code totally yanked from netentry.py
     def save_settings(self):
         """ Save settings common to wired and wireless settings dialogs. """
-        if self.chkbox_static_ip.get_active():
+        if self.static_ip_cb.get_state():
             self.set_net_prop("ip", noneToString(self.ip_edit.get_edit_text()))
             self.set_net_prop("netmask", noneToString(self.netmask_edit.get_edit_text()))
             self.set_net_prop("gateway", noneToString(self.gateway_edit.get_edit_text()))
@@ -148,17 +152,17 @@ class NetEntryBase(urwid.WidgetWrap):
             self.set_net_prop("netmask", '')
             self.set_net_prop("gateway", '')
 
-        if self.chkbox_static_dns.get_active() and \
-           not self.chkbox_global_dns.get_active():
+        if self.static_dns_cb.get_state() and \
+           not self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
-            self.set_net_prop('dns_domain', noneToString(self.txt_domain.get_text()))
-            self.set_net_prop("search_domain", noneToString(self.txt_search_dom.get_text()))
-            self.set_net_prop("dns1", noneToString(self.dns_1.get_text()))
-            self.set_net_prop("dns2", noneToString(self.dns_2.get_text()))
-            self.set_net_prop("dns3", noneToString(self.dns_3.get_text()))
-        elif self.chkbox_static_dns.get_active() and \
-             self.chkbox_global_dns.get_active():
+            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_text()))
+            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_text()))
+            self.set_net_prop("dns1", noneToString(self.dns1.get_text()))
+            self.set_net_prop("dns2", noneToString(self.dns2.get_text()))
+            self.set_net_prop("dns3", noneToString(self.dns3.get_text()))
+        elif self.static_dns_cb.get_state() and \
+             self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', True)
         else:
@@ -198,24 +202,35 @@ class NetEntryBase(urwid.WidgetWrap):
 
 ########################################
 
-class WirelessNetEntry(NetEntryBase):
+class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,networkID):
-        NetEntryBase.__init__(self)
+        global wireless, daemon
+        AdvancedSettingsDialog.__init__(self)
         self.networkID = networkID
         global_settings_t = language['global_settings']
         encryption_t = language['use_encryption']
 
         self.global_settings_chkbox = urwid.CheckBox(global_settings_t)
         self.encryption_chkbox = urwid.CheckBox(encryption_t,on_state_change=self.encryption_toggle)
-        self.encryption_combo = ComboBox()
+        self.encryption_combo = ComboBox(callback=self.combo_on_change)
+        self.pile_encrypt = None
+        # _w is a Frame, _w.body is a ListBox, _w.body.body is the ListWalker :-)
         self._w.body.body.append(self.global_settings_chkbox)
         self._w.body.body.append(self.encryption_chkbox)
         self._w.body.body.append(self.encryption_combo)
+        self._w.body.body.append(self.button_cols)
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
+
+        # Set the frame title so that people will always know what we're dealing with.
+        self._w.header = urwid.Text(('header',">Configuring preferences for wireless network \"%s\"" % wireless.GetWirelessProperty(networkID,'essid')),align='right' )
     
     def encryption_toggle(self,chkbox,new_state,user_data=None):
         self.encryption_combo.set_sensitive(new_state)
+        self.pile_encrypt.set_sensitive(new_state)
+
+    def combo_on_change(self,combobox,new_index,user_data=None):
+        self.change_encrypt_method()
 
     def set_values(self):
         """ Set the various network settings to the right values. """
@@ -238,9 +253,9 @@ class WirelessNetEntry(NetEntryBase):
 
         #self.reset_static_checkboxes()
         self.encryption_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID,
-                                                                       'encryption')))
-        self.global_settings_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID,
-                                                             'use_settings_globally')))
+            'encryption')),do_callback=False)
+        self.global_settings_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID
+            ,'use_settings_globally')))
 
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
@@ -248,14 +263,19 @@ class WirelessNetEntry(NetEntryBase):
             if enc_type[1] == user_enctype:
                 activeID = x
         
-        #self.combo_encryption.set_active(activeID)
-        #if activeID != -1:
-        #    self.chkbox_encryption.set_active(True)
-        #    self.combo_encryption.set_sensitive(True)
-        #    self.vbox_encrypt_info.set_sensitive(True)
-        #else:
-        #    self.combo_encryption.set_active(0)
-        #self.change_encrypt_method()
+        self.encryption_combo.set_focus(activeID)
+        if activeID != -1:
+            self.encryption_chkbox.set_state(True,do_callback=False)
+            self.encryption_combo.set_sensitive(True)
+            #self.lbox_encrypt_info.set_sensitive(True)
+        else:
+            self.encryption_combo.set_focus(0)
+        # Throw the encryption stuff into a list
+        list = []
+        for x, enc_type in enumerate(self.encrypt_types):
+            list.append(enc_type[0])
+        self.encryption_combo.set_list(list)
+        self.change_encrypt_method()
 
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
@@ -265,31 +285,108 @@ class WirelessNetEntry(NetEntryBase):
         """ Helper method for fetching/formatting wireless properties. """
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
 
+    # Ripped from netentry.py
+    def save_settings(self, networkid):
+        # Check encryption info
+        if self.encryption_chkbox.get_state():
+            #print "setting encryption info..."
+            encryption_info = self.encryption_info
+            encrypt_methods = misc.LoadEncryptionMethods()
+            self.set_net_prop("enctype",
+                               encrypt_methods[self.encryption_combo.get_focus()[1] ][1])
+            for x in encryption_info:
+                if encryption_info[x].get_edit_text() == "":
+                    error(self.ui, self.overlay,language['encrypt_info_missing'])
+                    return False
+                self.set_net_prop(x, noneToString(encryption_info[x].
+                                                   get_edit_text()))
+        elif not self.encryption_chkbox.get_state() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            error(self.ui, self.overlay, language['enable_encryption'])
+            return False
+        else:
+            #print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
+            #                                                      "encryption"))
+            #print "no encryption specified..."
+            self.set_net_prop("enctype", "None")
+        AdvancedSettingsDialog.save_settings(self)
+        
+        if self.global_settings_chkbox.get_state():
+            self.set_net_prop('use_settings_globally', True)
+        else:
+            self.set_net_prop('use_settings_globally', False)
+            wireless.RemoveGlobalEssidEntry(networkid)
+            
+        wireless.SaveWirelessNetworkProfile(networkid)
+        return True
+
+    # More or less ripped from netentry.py
+    def change_encrypt_method(self):
+        #self.lbox_encrypt = urwid.ListBox()
+        wid,ID = self.encryption_combo.get_focus()
+        methods = misc.LoadEncryptionMethods()
+        self.encryption_info = {}
+
+        if self._w.body.body.__contains__(self.pile_encrypt):
+            self._w.body.body.pop(self._w.body.body.__len__()-2)
+
+        # If nothing is selected, select the first entry.
+        if ID == -1:
+            self.encryption_combo.set_active(0)
+            ID = 0
+
+        opts = methods[ID][2]
+        theList = []
+        for x in opts:
+            edit = None
+            if language.has_key(opts[x][0]):
+                edit = MaskingEdit(('editcp',language[opts[x][0].lower().replace(' ','_')]+': '),mask_mode='on_focus')
+            else:
+                edit = MaskingEdit(('editcp',opts[x][0].replace('_',' ')+': '),mask_mode='on_focus')
+            theList.append(edit)
+            # Add the data to any array, so that the information
+            # can be easily accessed by giving the name of the wanted
+            # data.
+            self.encryption_info[opts[x][1]] = edit
+
+            edit.set_edit_text(noneToBlankString(
+                wireless.GetWirelessProperty(self.networkID, opts[x][1])))
+
+        self.pile_encrypt = DynWrap(urwid.Pile(theList),attrs=('editbx','editnfc'))
+        self._w.body.body.insert(self._w.body.body.__len__()-1,self.pile_encrypt)
+        #self._w.body.body.append(self.pile_encrypt)
+
     def run(self,ui,dim,display):
+        self.ui = ui
+        self.parent = display
         width,height = ui.get_cols_rows()
-        list = []
-        for x, enc_type in enumerate(self.encrypt_types):
-            list.append(enc_type[0])
-        self.encryption_combo.set_list(list)
-        overlay = urwid.Overlay(self, display, ('fixed left', 0),width
+        self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
-        self.encryption_combo.build_combobox(overlay,ui,14)
+        self.encryption_combo.build_combobox(self.overlay,ui,14)
+        #self.change_encrypt_method()
+        #self._w.body.body.append(self.pile_encrypt)
 
         keys = True
         while True:
             if keys:
-                ui.draw_screen(dim, overlay.render(dim, True))
+                ui.draw_screen(dim, self.overlay.render(dim, True))
             keys = ui.get_input()
 
+            for k in keys:
+                #Send key to underlying widget:
+                if urwid.is_mouse_event(k):
+                    event, button, col, row = k
+                    self.overlay.mouse_event( dim,
+                            event, button, col, row,
+                            focus=True)
+                self.overlay.keypress(dim, k)
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
             if "esc" in keys or 'Q' in keys:
                 return False
-            for k in keys:
-                #Send key to underlying widget:
-                overlay.keypress(dim, k)
-            # Check if buttons are pressed.
-            #if self.CANCEL_PRESSED:
-            #    return False
-            #if self.OK_PRESSED or 'meta enter' in keys:
-            #    return True
+            if "meta enter" in keys or self.OK_PRESSED:
+                self.OK_PRESSED = False
+                if self.save_settings(self.networkID):
+                    return True
+            if self.CANCEL_PRESSED:
+                return False

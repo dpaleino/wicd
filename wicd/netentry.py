@@ -373,8 +373,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         activeID = -1  # Set the menu to this item when we are done
         for x, enc_type in enumerate(self.encrypt_types):
             self.combo_encryption.append_text(enc_type[0])
-            if enc_type[1] == wireless.GetWirelessProperty(networkID,
-                                                           "enctype"):
+            if enc_type[1] == wireless.GetWirelessProperty(networkID, "enctype"):
                 activeID = x
         self.combo_encryption.set_active(activeID)
         if activeID != -1:
@@ -803,7 +802,9 @@ class WirelessNetworkEntry(NetworkEntry):
         #self.image.set_from_icon_name("network-wired", 6)
         self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
                                                                     "essid"))
-        self.name_label.set_markup(self._escape(self.essid))
+        self.lbl_strength = GreyLabel()
+        self.lbl_encryption = GreyLabel()
+        
         print "ESSID : " + self.essid
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
         
@@ -811,6 +812,16 @@ class WirelessNetworkEntry(NetworkEntry):
                                                               'quality'),
                                  wireless.GetWirelessProperty(networkID, 
                                                               'strength'))
+        self.set_encryption(wireless.GetWirelessProperty(networkID, 
+                                                         'encryption'),
+                            wireless.GetWirelessProperty(networkID, 
+ 		                                         'encryption_method')) 
+        self.name_label.set_use_markup(True)
+        self.name_label.set_label("%s   %s   %s" % (self._escape(self.essid),
+                                                    self.lbl_strength.get_label(),
+                                                    self.lbl_encryption.get_label()
+                                                   )
+                                 )
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
@@ -905,7 +916,17 @@ class WirelessNetworkEntry(NetworkEntry):
             ending = "%"
             disp_strength = str(strength)
         self.image.set_from_file(wpath.images + signal_img)
+        self.lbl_strength.set_label(disp_strength + ending)
         self.image.show()
+        
+    def set_encryption(self, on, ttype):
+        """ Set the encryption value for the WirelessNetworkEntry. """
+        if on and ttype:
+            self.lbl_encryption.set_label(str(ttype))
+        if on and not ttype: 
+            self.lbl_encryption.set_label(language['secured'])
+        if not on:
+            self.lbl_encryption.set_label(language['unsecured'])
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
@@ -950,19 +971,19 @@ class WirelessInformationDialog(gtk.Dialog):
         vbox.pack_start(table)
         
         # Pack the network status HBox.
-        table.attach(LeftAlignedLabel('Signal strength'), 0, 1, 0, 1)
+        table.attach(LeftAlignedLabel('Signal strength:'), 0, 1, 0, 1)
         table.attach(self.lbl_strength, 1, 2, 0, 1)
 
-        table.attach(LeftAlignedLabel('Encryption type'), 0, 1, 1, 2)
+        table.attach(LeftAlignedLabel('Encryption type:'), 0, 1, 1, 2)
         table.attach(self.lbl_encryption, 1, 2, 1, 2)
 
-        table.attach(LeftAlignedLabel('Access point address'), 0, 1, 2, 3)
+        table.attach(LeftAlignedLabel('Access point address:'), 0, 1, 2, 3)
         table.attach(self.lbl_mac, 1, 2, 2, 3)
 
-        table.attach(LeftAlignedLabel('Mode'), 0, 1, 3, 4)
+        table.attach(LeftAlignedLabel('Mode:'), 0, 1, 3, 4)
         table.attach(self.lbl_mode, 1, 2, 3, 4)
 
-        table.attach(LeftAlignedLabel('Channel'), 0, 1, 4, 5)
+        table.attach(LeftAlignedLabel('Channel:'), 0, 1, 4, 5)
         table.attach(self.lbl_channel, 1, 2, 4, 5)
 
         vbox.show_all()

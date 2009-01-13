@@ -79,7 +79,7 @@ class wrap_exceptions:
                 loop.quit()
                 ui.stop()
                 print "\nTerminated by user."
-                raise
+                #raise
             except DBusException:
                 gobject.source_remove(redraw_tag)
                 # Quit the loop
@@ -211,22 +211,38 @@ def about_dialog(body):
     # The ASCII Art "Wicd" was made from the "smslant" font on one of those
     # online ASCII big text generators.
     theText = [
-('green',"   ///       \\\\\\"),"       _      ___        __\n",
-('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /\n",
-('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / \n",
-('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  \n",
-('green',"|||  ||"),"(|^|)",('green',"||  |||"),
-"         ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
+[('green',"   ///       \\\\\\"),"       _      ___        __"],
+[('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /"],
+[('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / "],
+[('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  "],
+[('green',"|||  ||"),"(|^|)",('green',"||  |||"),
+"         ($VERSION)       ".replace("$VERSION",daemon.Hello())],
 
-('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
-('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net \n",
-('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
-('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
-"     ___|+|___         Dan O'Reilly   (wicd)\n",
-"    |---------|        Andrew Psaltis (this ui)\n",
-"---------------------------------------------------"]
-    about = TextDialog(theText,55,14)
+[('green',"\\||  \\\\")," |+| ",('green',"//  ||/    ")],
+[('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net"],
+[('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:"],
+[('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)"],
+"     ___|+|___         Dan O'Reilly   (wicd)",
+"    |---------|        Andrew Psaltis (this ui)",
+"-----------------------------------------------------"]
+    about = TextDialog(theText,16,55,header=('header','About Wicd'))
     about.run(ui,body)
+
+def help_dialog(body):
+    theText = [
+"For more detailed help, consult the wicd-curses(8) man page.",
+"", "All controls are case sensitive",
+[('bold','H'),"        Display this help dialog"],
+[('bold','enter'),"            Connect to selected network"],
+[('bold','D'),"                Disconnect from all networks"],
+[('bold','ESC'),"              Stop a network connection in progress"],
+[('bold','F5')," or ", ('bold','R'),"          Refresh network list"],
+[('bold','P'),"                Prefrences dialog"],
+[('bold','I'),"                Scan for hidden networks"],
+[('bold','S'),"                Select scripts"]
+    ]
+    help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
+    help.run(ui,body)
 
 ########################################
 ##### URWID SUPPORT CLASSES
@@ -335,6 +351,8 @@ class appGUI():
         self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
         self.no_wlan = urwid.Filler(urwid.Text(('important',"No wireless networks found."), align='center'))
         self.TITLE = 'Wicd Curses Interface'
+        self.WIRED_IDX = 1
+        self.WLESS_IDX = 3
 
         #wrap1 = urwid.AttrWrap(txt, 'black')
         #fill = urwid.Filler(txt)
@@ -345,9 +363,16 @@ class appGUI():
 
         #if wireless.GetNumberOfNetworks() == 0:
         #    wireless.Scan()
-        wiredL,wlessL = gen_network_list()
+        self.focusloc = (1,0)
+
+        # These are empty to make sure that things go my way.
+        wiredL,wlessL = [],[]# = gen_network_list()
+        self.frame = None
+
         self.wiredCB = urwid.Filler(ComboBox(list=wiredL,use_enter=False))
         self.wlessLB = urwid.ListBox(wlessL)
+        self.update_netlist(force_check=True,firstrun=True)
+        
         # Stuff I used to simulate large lists
         #spam = SelText('spam')
         #spamL = [ urwid.AttrWrap( w, None, 'focus' ) for w in [spam,spam,spam,
@@ -357,15 +382,6 @@ class appGUI():
         #          spam,spam,spam,spam] ]
         #self.spamLB = urwid.ListBox(spamL)
 
-        # Choose whether to show the wired part of the interface, if a cable
-        # is plugged in, or the 
-        if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
-            self.thePile = urwid.Pile([('fixed',1,self.wiredH),
-                                       ('fixed',1,self.wiredCB),
-                                       ('fixed',1,self.wlessH),
-                                                  self.wlessLB] )
-        else:
-            self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
         self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
         self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
@@ -384,7 +400,6 @@ class appGUI():
         self.screen_locked = False
         #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
-        self.focusloc = (1,0)
         
         self.pref = None
 
@@ -400,8 +415,6 @@ class appGUI():
     def unlock_screen(self):
         self.frame.set_body(self.thePile)
         self.screen_locked = False
-        # I'm hoping that this will get rid of Adam's problem with the ListBox not
-        # redisplaying itself immediately upon completion.
         self.update_netlist(force_check=True)
         self.update_ui()
 
@@ -420,9 +433,9 @@ class appGUI():
         # This might need to be cleaned up later.
 
         if self.thePile.get_focus() is self.wiredCB: 
-            wlessorwired = 1
+            wlessorwired = self.WIRED_IDX
         else :
-            wlessorwired = 3
+            wlessorwired = self.WLESS_IDX
         if self.thePile.get_focus() == self.no_wlan:
             where = 0
         elif self.thePile.get_focus() == self.wiredCB:
@@ -436,21 +449,24 @@ class appGUI():
     # Update the list of networks.  Usually called by DBus.
     # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
-    def update_netlist(self,state=None, x=None, force_check=False):
-        self.update_focusloc()
+    def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
+        if not firstrun:
+            self.update_focusloc()
         """ Updates the overall network list."""
         if not state:
             state, x = daemon.GetConnectionStatus()
-        if self.prev_state != state or force_check:
+        if force_check or self.prev_state != state:
             wiredL,wlessL = gen_network_list()
             #self.wiredCB = urwid.Filler(ComboBox(wiredL,self.frame,ui,3,
             #    use_enter=False))
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             if len(wlessL) != 0:
-                self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+                self.wlessLB = urwid.ListBox(wlessL)
+                #self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
-                self.wlessLB.body = urwid.SimpleListWalker([self.no_wlan])
+                self.wlessLB = self.no_wlan
+                #self.wlessLB.body = urwid.SimpleListWalker([self.no_wlan])
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
@@ -460,7 +476,7 @@ class appGUI():
                 #self.focusloc = (self.thePile.get_focus(),
                 #    self.thePile.get_focus().get_focus()[1])
                 self.thePile.set_focus(self.focusloc[0])
-                if self.focusloc[0] == 1:
+                if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
                 else:
                     self.thePile.get_focus().set_focus(self.focusloc[1])
@@ -631,7 +647,8 @@ class appGUI():
             #self.netentry.run(ui,self.size,self.frame)
         if "I" in keys:
             self.raise_hidden_network_dialog()
-
+        if "H" in keys:
+            help_dialog(self.frame)
         for k in keys:
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
@@ -700,7 +717,8 @@ def main():
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),
-        ('red','dark red','default')])
+        ('red','dark red','default'),
+        ('bold','default','default','bold')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)

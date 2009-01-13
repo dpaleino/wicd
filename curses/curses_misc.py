@@ -370,7 +370,7 @@ class Dialog2(urwid.WidgetWrap):
     
        self.frame = urwid.Frame( body, focus_part='footer')
        if text is not None:
-               self.frame.header = urwid.Pile( [urwid.Text(text),
+               self.frame.header = urwid.Pile( [urwid.Text(text,align='right'),
                        urwid.Divider()] )
        w = self.frame
        self.view = w
@@ -428,13 +428,12 @@ class Dialog2(urwid.WidgetWrap):
     def unhandled_key(self, size, key):
         pass
 
+# Simple dialog with text in it and "OK"
 class TextDialog(Dialog2):
-    def __init__(self, text, height, width, header=None):
+    def __init__(self, text, height, width, header=None,align='left'):
         l = []
-        # read the whole file (being slow, not lazy this time)
-        #for line in open(file).readlines():
-        #    l.append( urwid.Text( line.rstrip() ))
-        l = [urwid.Text(text)]
+        for line in text:
+            l.append( urwid.Text( line,align=align))
         body = urwid.ListBox(l)
         body = urwid.AttrWrap(body, 'body')
 

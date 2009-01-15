@@ -804,6 +804,7 @@ class WirelessNetworkEntry(NetworkEntry):
                                                                     "essid"))
         self.lbl_strength = GreyLabel()
         self.lbl_encryption = GreyLabel()
+        self.lbl_channel = GreyLabel()
         
         print "ESSID : " + self.essid
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
@@ -816,11 +817,13 @@ class WirelessNetworkEntry(NetworkEntry):
                                                          'encryption'),
                             wireless.GetWirelessProperty(networkID, 
  		                                         'encryption_method')) 
+        self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
         self.name_label.set_use_markup(True)
-        self.name_label.set_label("%s   %s   %s" % (self._escape(self.essid),
-                                                    self.lbl_strength.get_label(),
-                                                    self.lbl_encryption.get_label()
-                                                   )
+        self.name_label.set_label("%s    %s    %s    %s" % (self._escape(self.essid),
+                                                         self.lbl_strength.get_label(),
+                                                         self.lbl_encryption.get_label(),
+                                                         self.lbl_channel.get_label(),
+                                                        )
                                  )
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
@@ -927,6 +930,10 @@ class WirelessNetworkEntry(NetworkEntry):
             self.lbl_encryption.set_label(language['secured'])
         if not on:
             self.lbl_encryption.set_label(language['unsecured'])
+            
+    def set_channel(self, channel):
+        """ Set the channel value for the WirelessNetworkEntry. """
+        self.lbl_channel.set_label(language['channel'] + ' ' + str(channel))
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """

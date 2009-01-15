@@ -435,7 +435,7 @@ def get_language_list_gui():
     language['use_static_ip'] = _('Use Static IPs')
     language['use_static_dns'] = _('Use Static DNS')
     language['use_encryption'] = _('Use Encryption')
-    language['advanced_settings'] = _('Advanced Settings')
+    language['advanced_settings'] = _('Properties')
     language['wired_network'] = _('Wired Network')
     language['wired_network_instructions'] = _('To connect to a wired network,'
     ' you must create a network profile. To create a network profile, type a'

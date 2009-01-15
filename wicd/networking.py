@@ -45,6 +45,7 @@ import re
 import time
 import threading
 import thread
+import re
 
 # wicd imports 
 import misc
@@ -178,7 +179,10 @@ class Controller(object):
         iface = self.iface
         if self.disconnect_script != None:
             print 'Running wired disconnect script'
-            misc.Run(self.disconnect_script)
+            iwconfig = self.GetIwconfig()
+            misc.ExecuteScript(expand_script_macros(self.disconnect_script, 'disconnection',
+                                                    self.wiface.GetBSSID( iwconfig ),
+                                                    self.wiface.GetCurrentNetwork( iwconfig ) ))
 
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
@@ -212,6 +216,31 @@ class Controller(object):
         """
         return self.iface.Down()
 
+def expand_script_macros(script, msg, bssid, essid):
+    """Expands any supported macros in a script.
+
+    Keyword arguments:
+    script -- the script to execute.
+    msg -- the name of the script, %{script} will be expanded to this.
+    bssid -- the bssid of the network we connect to, defaults to 'wired'.
+    essid -- the essid of the network we connect to, defaults to 'wired'."""
+
+    macro_dict = { 'script' : msg,
+             'bssid' : bssid,
+             'essid' : essid }
+    
+    # Define a replacement function, this is done here so that %{script} will be substituted correctly
+    def repl(match):
+        macro = match.group( 1 ).lower()
+        if macro_dict.has_key( macro ):
+            return macro_dict[macro]
+        print 'Warning: found illegal macro %s in %s script' % (macro, msg)
+        return match.group()
+
+    regex = re.compile( r'%\{([a-zA-Z0-9]+)\}' )
+    expanded = regex.sub( repl, script )
+    print "Expanded '%s' to '%s'" % (script, expanded)
+    return expanded
 
 class ConnectThread(threading.Thread):
     """ A class to perform network connections in a multi-threaded way.
@@ -326,7 +355,7 @@ class ConnectThread(threading.Thread):
         iface.Down()
         
     @abortable
-    def run_script_if_needed(self, script, msg):
+    def run_script_if_needed(self, script, msg, bssid='wired', essid='wired'):
         """ Execute a given script if needed.
         
         Keyword arguments:
@@ -336,7 +365,7 @@ class ConnectThread(threading.Thread):
         """
         if script:
             print 'Executing %s script' % (msg)
-            misc.ExecuteScript(script)
+            misc.ExecuteScript(expand_script_macros(script, msg, bssid, essid))
         
     @abortable
     def flush_routes(self, iface):
@@ -711,7 +740,8 @@ class WirelessConnectThread(ConnectThread):
         self.is_connecting = True
         
         # Run pre-connection script.
-        self.run_script_if_needed(self.before_script, 'pre-connection')
+        self.run_script_if_needed(self.before_script, 'pre-connection', self.network['bssid'], self.network['essid'])
+
         
         # Take down interface and clean up previous connections.
         self.put_iface_down(wiface)
@@ -752,7 +782,7 @@ class WirelessConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
-        self.run_script_if_needed(self.after_script, 'post-connection')
+        self.run_script_if_needed(self.after_script, 'post-connection', self.network['bssid'], self.network['essid'])
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
@@ -916,8 +946,8 @@ class WiredConnectThread(ConnectThread):
         self.is_connecting = True
 
         # Run pre-connection script.
-        self.run_script_if_needed(self.before_script, 'pre-connection')
-        
+        self.run_script_if_needed(self.before_script, 'pre-connection', 'wired', 'wired')
+
         # Take down interface and clean up previous connections.
         self.put_iface_down(liface)
         self.release_dhcp_clients(liface)
@@ -934,7 +964,7 @@ class WiredConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
-        self.run_script_if_needed(self.after_script, 'post-connection')
+        self.run_script_if_needed(self.after_script, 'post-connection', 'wired', 'wired')
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'

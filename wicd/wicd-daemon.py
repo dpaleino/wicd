@@ -632,13 +632,13 @@ class WicdDaemon(dbus.service.Object):
         
         """
         if win_name == "main":
-            default_width = 605
-            default_height = 400
+            default_width = -1
+            default_height = -1
             width_str = "window_width"
             height_str = "window_height"
         else:
-            default_width = 125
-            default_height = 500
+            default_width = -1
+            default_height = -1
             width_str = "pref_width"
             height_str = "pref_height"
 

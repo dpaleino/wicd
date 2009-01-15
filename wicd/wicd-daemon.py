@@ -91,6 +91,7 @@ class WicdDaemon(dbus.service.Object):
         self.vpn_session =  None
         self.gui_open = False
         self.suspended = False
+        self.debug_mode = False
         self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
@@ -421,6 +422,7 @@ class WicdDaemon(dbus.service.Object):
         started.
         
         """
+        if self.debug_mode and value: print "Forced disconnect on"
         self.forced_disconnect = bool(value)
         self.wireless_bus.SetForcedDisconnect(bool(value))
         self.wired_bus.SetForcedDisconnect(bool(value))
@@ -630,13 +632,13 @@ class WicdDaemon(dbus.service.Object):
         
         """
         if win_name == "main":
-            default_width = 605
-            default_height = 400
+            default_width = -1
+            default_height = -1
             width_str = "window_width"
             height_str = "window_height"
         else:
-            default_width = 125
-            default_height = 500
+            default_width = -1
+            default_height = -1
             width_str = "pref_width"
             height_str = "pref_height"
 

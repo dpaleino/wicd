@@ -241,8 +241,10 @@ class appGui(object):
         if width > -1 and height > -1:
             self.window.resize(int(width), int(height))
         else:
-            self.window.resize(gtk.gdk.screen_width() / 3, 
-                               gtk.gdk.screen_height() / 2)
+            width = int(gtk.gdk.screen_width() / 2)
+            if width > 530:
+                width = 530
+            self.window.resize(width, int(gtk.gdk.screen_height() / 1.7))
 
         dic = { "refresh_clicked" : self.refresh_clicked, 
                 "quit_clicked" : self.exit, 

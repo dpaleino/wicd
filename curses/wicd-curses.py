@@ -104,6 +104,7 @@ class wrap_exceptions:
                     # Zap the screen
                     ui.stop()
                     # Print out standard notification:
+
                     print "\nEXCEPTION!"
                     print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
                     print redraw_tag
@@ -400,7 +401,6 @@ class appGUI():
         self.screen_locked = False
         #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
-        
         self.pref = None
 
         self.update_status()
@@ -432,24 +432,24 @@ class appGUI():
         # Location of last known focus is remapped to current location.
         # This might need to be cleaned up later.
 
-        if self.thePile.get_focus() is self.wiredCB: 
+        #self.set_status(str(self.frame.get_body().get_focus())+ ' '+ str(self.wiredCB))
+        if self.thePile.get_focus() == self.wiredCB: 
             wlessorwired = self.WIRED_IDX
-        else :
-            wlessorwired = self.WLESS_IDX
-        if self.thePile.get_focus() == self.no_wlan:
-            where = 0
-        elif self.thePile.get_focus() == self.wiredCB:
             where = self.thePile.get_focus().get_body().get_focus()[1]
-        else:
-            where = self.thePile.get_focus().get_focus()[1]
-
+        else:#self.thePile.get_focus() == self.wlessLB :
+            wlessorwired = self.WLESS_IDX
+            if self.wlessLB == self.no_wlan:
+                where = None
+            else: 
+                where = self.frame.get_body().get_focus().get_focus()[1]
+                #where = self.wlessLB.get_focus()[1]
         self.focusloc = (wlessorwired,where)
-
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
     # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
+        # Run focus-collecting code if we are not running this for the first time
         if not firstrun:
             self.update_focusloc()
         """ Updates the overall network list."""
@@ -462,31 +462,42 @@ class appGUI():
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             if len(wlessL) != 0:
-                self.wlessLB = urwid.ListBox(wlessL)
-                #self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+                if self.wlessLB == self.no_wlan:
+                    self.wlessLB = urwid.ListBox(wlessL)
+                else:
+                    self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
                 self.wlessLB = self.no_wlan
-                #self.wlessLB.body = urwid.SimpleListWalker([self.no_wlan])
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
+                #if firstrun:
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                            ('fixed',1,self.wiredCB),
                                            ('fixed',1,self.wlessH),
                                                       self.wlessLB] )
+                if not firstrun:
+                    self.frame.body = self.thePile
                 #self.focusloc = (self.thePile.get_focus(),
                 #    self.thePile.get_focus().get_focus()[1])
                 self.thePile.set_focus(self.focusloc[0])
                 if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
                 else:
-                    self.thePile.get_focus().set_focus(self.focusloc[1])
+                    if self.wlessLB is not self.no_wlan:
+                        self.thePile.get_focus().set_focus(self.focusloc[1])
+                    else:
+                        self.thePile.set_focus(self.wiredCB)
             else:
                 self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
-                self.frame.body = self.thePile
-                if self.focusloc[0] == self.wlessLB:
-                    self.wlessLB.set_focus(self.focusloc[1])
+                if not firstrun:
+                    self.frame.body = self.thePile
+                #if self.focusloc[0] == self.wlessLB:
+                self.wlessLB.set_focus(self.focusloc[1])
+                #self.thePile.get_focus().set_focus(self.focusloc[1])
                 #self.always_show_wired = not self.always_show_wired
         self.prev_state = state
+        if not firstrun:
+            self.update_ui()
 
     # Update the footer/status bar
     @wrap_exceptions()
@@ -529,6 +540,7 @@ class appGUI():
                 return True
             else:
                 self.set_status(language['not_connected'])
+                self.update_ui()
                 return True
 
 
@@ -542,6 +554,8 @@ class appGUI():
         # something, and we aren't connecting to something, return False
         # immediately.
         if from_idle and not self.connecting:
+            self.update_netlist()
+            self.update_ui()
             return False
         toAppend = ''
         # If we are connecting and being called from the idle function, spin
@@ -558,12 +572,15 @@ class appGUI():
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
     incr = 0
+    @wrap_exceptions()
     def idle_incr(self):
-        theText = ""
+        theText = " "
+        #if self.special != None:
+        #    theText += self.special
         if self.connecting:
-            theText = "-- Connecting -- Press ESC to cancel "
+            theText += "-- Connecting -- Press ESC to cancel "
         quit_note = "-- Press F8 or Q to quit."
-        self.footer1 = urwid.Text(str(self.incr) + ' '+theText+quit_note)
+        self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True
 
@@ -612,8 +629,9 @@ class appGUI():
         # Guess what!  I actually need to put this here, else I'll have tons of
         # references to self.frame lying around. ^_^
         if "enter" in keys:
-            focus = self.thePile.get_focus()
-            if focus is self.wiredCB:
+            focus = self.frame.body.get_focus()
+            if focus == self.wiredCB:
+                self.special = focus
                 self.connect("wired",0)
             else:
                 # wless list only other option

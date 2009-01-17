@@ -318,7 +318,7 @@ def get_gettext():
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
     # If this is a unicode string, encode it and return
-    if type(x) not in [unicode, str]:
+    if not isinstance(x, basestring):
         return x
     if isinstance(x, unicode):
         return x.encode('utf-8')

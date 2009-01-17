@@ -471,17 +471,16 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 if encryption_info[x].get_text() == "":
                     error(self, language['encrypt_info_missing'])
                     return False
-                self.set_net_prop(x, noneToString(encryption_info[x].
-                                                   get_text()))
+                self.set_net_prop(x, noneToString(encryption_info[x].get_text()))
         elif not self.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
             error(self, language['enable_encryption'])
             return False
         else:
-            print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
-                                                                  "encryption"))
             print "no encryption specified..."
             self.set_net_prop("enctype", "None")
+            for x in self.encryption_info:
+                self.set_net_prop(x, "")
         AdvancedSettingsDialog.save_settings(self)
         
         if self.chkbox_global_settings.get_active():

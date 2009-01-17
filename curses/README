@@ -22,11 +22,11 @@ D      : disconnect from all active networks
 ESC    : if connecting to a network, stop doing so
 ENTER  : Attempt connection to selected network
 P      : Display preferences dialog
-C      : Display network configuration for selected network (only works for
-         wireless at the moment)
+C      : Display network configuration for selected network 
 A      : Display "About" dialog
 I      : Raise the "Scan for hidden networks" dialog
 H      : Raise help dialog
+delete : Delete selected wired network profile (from the wired ComboBox)
 
 IN DIALOGS (Meta usually is "Alt"):
 ESC or Q: Quit dialog without saving information (if present)

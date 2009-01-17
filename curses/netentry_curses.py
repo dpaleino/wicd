@@ -136,7 +136,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.global_dns_cb.set_sensitive(new_state)
         # use_global_dns_cb is DynWrapped
         if checkb == self.global_dns_cb.get_w():
-            for w in [ self.dns_dom_edit,self.search_dom_edit,
+            for w in [self.dns_dom_edit,self.search_dom_edit,
                     self.dns1,self.dns2,self.dns3 ]:
                 w.set_sensitive(not new_state)
 
@@ -174,31 +174,93 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
 
+    def prerun(self,ui,dim,display):
+        pass
     def run(self,ui,dim,display):
+        self.ui = ui
+        self.parent = display
         width,height = ui.get_cols_rows()
 
-        overlay = urwid.Overlay(self, display, ('fixed left', 0),width
+        self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
+        self.prerun(ui,dim,display)
         #self.ready_comboboxes(ui,overlay)
 
         keys = True
         while True:
             if keys:
-                ui.draw_screen(dim, overlay.render(dim, True))
+                ui.draw_screen(dim, self.overlay.render(dim, True))
             keys = ui.get_input()
 
+            for k in keys:
+                #Send key to underlying widget:
+                if urwid.is_mouse_event(k):
+                    event, button, col, row = k
+                    self.overlay.mouse_event( dim,
+                            event, button, col, row,
+                            focus=True)
+                self.overlay.keypress(dim, k)
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
             if "esc" in keys or 'Q' in keys:
                 return False
-            for k in keys:
-                #Send key to underlying widget:
-                overlay.keypress(dim, k)
-            # Check if buttons are pressed.
-            #if self.CANCEL_PRESSED:
-            #    return False
-            #if self.OK_PRESSED or 'meta enter' in keys:
-            #    return True
+            if "meta enter" in keys or self.OK_PRESSED:
+                self.OK_PRESSED = False
+                if self.save_settings():
+                    return True
+            if self.CANCEL_PRESSED:
+                return False
+
+class WiredSettingsDialog(AdvancedSettingsDialog):
+    def __init__(self,name):
+        global wired, daemon
+        AdvancedSettingsDialog.__init__(self)
+        self.set_default = urwid.CheckBox(language['default_wired'])
+        #self.cur_default = 
+        # Add widgets to listbox
+        self._w.body.body.append(self.set_default)
+        self._w.body.body.append(self.button_cols)
+        
+        self.prof_name = name
+        self._w.header = urwid.Text( ('header',">Configuring preferences for wired profile \"%s\"" % self.prof_name),align='right' )
+
+        self.set_values()
+    def set_net_prop(self,option,value): 
+        wired.SetWiredProperty(option,value)
+    def set_values(self):
+        self.ip_edit.set_edit_text(self.format_entry("ip"))
+        self.netmask_edit.set_edit_text(self.format_entry("netmask"))
+        self.gateway_edit.set_edit_text(self.format_entry("gateway"))
+
+        self.global_dns_cb.set_state(bool(wired.GetWiredProperty('use_global_dns')))
+        self.static_dns_cb.set_state(bool(wired.GetWiredProperty('use_static_dns')))
+        
+        self.dns1.set_edit_text(self.format_entry( "dns1"))
+        self.dns2.set_edit_text(self.format_entry( "dns2"))
+        self.dns3.set_edit_text(self.format_entry( "dns3"))
+        self.dns_dom_edit.set_edit_text(self.format_entry("dns_domain"))
+        self.search_dom_edit.set_edit_text(self.format_entry("search_domain"))
+
+        self.set_default.set_state(to_bool(wired.GetWiredProperty("default")))
+
+    def save_settings(self):
+        AdvancedSettingsDialog.save_settings(self)
+        if self.set_default.get_state():
+            wired.UnsetWiredDefault()
+        print self.set_default.get_state()
+        if self.set_default.get_state():
+            bool = True
+        else:
+            bool = False
+        wired.SetWiredProperty("default",bool)
+        wired.SaveWiredNetworkProfile(self.prof_name)
+        return True
+
+    def format_entry(self, label):
+        """ Helper method to fetch and format wired properties. """
+        return noneToBlankString(wired.GetWiredProperty(label))
+    def prerun(self,ui,dim,display):
+        pass
 
 ########################################
 
@@ -257,6 +319,13 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.global_settings_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID
             ,'use_settings_globally')))
 
+        # Throw the encryption stuff into a list
+        list = []
+        for x, enc_type in enumerate(self.encrypt_types):
+            list.append(enc_type[0])
+        self.encryption_combo.set_list(list)
+
+        self.change_encrypt_method()
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
         for x, enc_type in enumerate(self.encrypt_types):
@@ -270,12 +339,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             #self.lbox_encrypt_info.set_sensitive(True)
         else:
             self.encryption_combo.set_focus(0)
-        # Throw the encryption stuff into a list
-        list = []
-        for x, enc_type in enumerate(self.encrypt_types):
-            list.append(enc_type[0])
-        self.encryption_combo.set_list(list)
-        self.change_encrypt_method()
 
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
@@ -363,7 +426,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
         self.encryption_combo.build_combobox(self.overlay,ui,14)
-        #self.change_encrypt_method()
+        self.change_encrypt_method()
         #self._w.body.body.append(self.pile_encrypt)
 
         keys = True

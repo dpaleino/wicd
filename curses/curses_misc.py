@@ -295,17 +295,28 @@ class ComboBox(urwid.WidgetWrap):
         self.use_enter = use_enter
         # The Focus
         self.focus = focus
+
         # The callback and friends
         self.callback = callback
         self.user_args = user_args
+
+        # Widget references to simplify some things
+        self.body = None
+        self.ui = None
+        self.row = None
     def set_list(self,list):
         self.list = list
 
     def set_focus(self,index):
         self.focus = index
+        self.cbox.set_w(SelText(self.list[index]+'    vvv'))
 
+    def rebuild_combobox(self):
+        self.build_combobox(self.body,self.ui,self.row)
     def build_combobox(self,body,ui,row):
         str,trash =  self.label.get_text()
+
+
         self.cbox  = DynWrap(SelText([self.list[self.focus]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
@@ -319,6 +330,7 @@ class ComboBox(urwid.WidgetWrap):
         self.set_w(w)
         self.body = body
         self.ui = ui
+        self.row = row
 
     # If we press space or enter, be a combo box!
     def keypress(self,size,key):
@@ -331,7 +343,8 @@ class ComboBox(urwid.WidgetWrap):
                 raise ComboBoxException('ComboBox must be built before use!')
             retval = self.overlay.show(self.ui,self.body)
             if retval != None:
-                self.cbox.set_w(SelText(retval+'    vvv'))
+                self.set_focus(self.list.index(retval))
+                #self.cbox.set_w(SelText(retval+'    vvv'))
                 if self.callback != None:
                     self.callback(self,self.overlay._listbox.get_focus()[1],self.user_args)
         return self._w.keypress(size,key)

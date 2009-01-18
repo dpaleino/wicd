@@ -48,8 +48,8 @@ Bring up network configuration controller for the selected network
 .TP
 .BR delete
 Delete the selected wired network profile (from the wired combo box at the top)
-.PP
-The following are not implemented yet:
+.\".PP
+.\"The following are not implemented yet:
 .TP
 .BR S
 Bring up the script selector for the selected network (requires superuser privileges)

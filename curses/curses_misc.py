@@ -483,3 +483,8 @@ class InputDialog(Dialog2):
        
     def on_exit(self, exitcode):
         return exitcode, self.edit.get_edit_text()
+
+# Pile that has an edit and a label saying that the file at the path specified 
+# does not exist
+#class FileGuessEdit(urwid.WidgetWrap):
+#    def __init__(self,caption='',

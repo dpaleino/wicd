@@ -409,6 +409,7 @@ try:
         data.append(( wpath.lib, ['curses/prefs_curses.py']))
         data.append(( wpath.lib, ['curses/wicd-curses.py']))
         data.append(( wpath.lib, ['curses/netentry_curses.py']))
+        data.append(( wpath.lib, ['curses/configscript_curses.py']))
         data.append(( wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 

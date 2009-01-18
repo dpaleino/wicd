@@ -45,7 +45,8 @@ from dbus import version as dbus_version
 import gobject
 
 # Other important wicd-related stuff
-import wicd.misc as misc
+from wicd import wpath
+from wicd import misc
 from wicd import dbusmanager
 
 # Internal Python stuff
@@ -57,6 +58,10 @@ from curses_misc import SelText,ComboBox,TextDialog,InputDialog
 from prefs_curses import PrefsDialog
 import netentry_curses
 from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog,error
+
+# Stuff about getting the script configurer running
+from grp import getgrgid
+from os import getgroups,system
 
 language = misc.get_language_list_gui()
 
@@ -244,6 +249,36 @@ def help_dialog(body):
     ]
     help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
+
+def run_configscript(netname,nettype):
+    loop.quit()
+    ui.stop()
+    argv = netname + ' ' +nettype
+
+    #cmd = '/usr/lib/configscript_curses.py '+argv
+    cmd = wpath.lib+'configscript_curses.py '+argv
+    # Check whether we can sudo.  Hopefully this is complete
+    glist = []
+    for i in getgroups():
+        glist.append(getgrgid(i)[0])
+    if 'root' in glist:
+        precmd = ''
+        precmdargv = ''
+        postcmd = ''
+    elif 'admin' in glist or 'wheel' in glist:
+        precmd = 'sudo'
+        precmdargv = ''
+        postcmd = ''
+    else:
+        precmd = 'su'
+        precmdargv = ' -c "'
+        postcmd = '"'
+    print "Calling command: " + precmd + precmdargv + cmd + postcmd
+    sys.stdout.flush()
+    system(precmd+precmdargv+cmd+postcmd)
+    raw_input("Press enter!")
+    main()
+
 
 ########################################
 ##### URWID SUPPORT CLASSES
@@ -698,6 +733,16 @@ class appGUI():
             self.raise_hidden_network_dialog()
         if "H" in keys:
             help_dialog(self.frame)
+        if "S" in keys:
+            focus = self.thePile.get_focus()
+            if focus == self.wiredCB:
+                nettype = 'wired'
+                netname = self.wiredCB.get_body().get_selected_profile()
+            else:
+                nettype = 'wireless'
+                netname = str(self.wiredLB.get_focus()[1])
+            run_configscript(netname,nettype)
+            
         for k in keys:
             if urwid.is_mouse_event(k):
                 event, button, col, row = k

@@ -40,6 +40,7 @@ from wicd import dbusmanager
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
+from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -86,92 +87,6 @@ def handle_no_dbus(from_tray=False):
     print "Wicd daemon is shutting down!"
     error(None, language['lost_dbus'], block=False)
     return False
-
-def error(parent, message, block=True): 
-    """ Shows an error dialog """
-    def delete_event(dialog, id):
-        dialog.destroy()
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    if not block:
-        dialog.present()
-        dialog.connect("response", delete_event)
-    else:
-        dialog.run()
-        dialog.destroy()
-    
-def alert(parent, message): 
-    """ Shows an warning dialog """
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    dialog.present()
-    dialog.connect("response", lambda *args: dialog.destroy())
-    
-def dummy(x=None):pass
-
-########################################
-##### GTK EXTENSION CLASSES
-########################################
-
-class SmallLabel(gtk.Label):
-    def __init__(self, text=''):
-        gtk.Label.__init__(self, text)
-        self.set_size_request(50, -1)
-
-class LabelEntry(gtk.HBox):
-    """ A label on the left with a textbox on the right. """
-    def __init__(self,text):
-        gtk.HBox.__init__(self)
-        self.entry = gtk.Entry()
-        self.entry.set_size_request(200, -1)
-        self.label = SmallLabel()
-        self.label.set_text(text)
-        self.label.set_size_request(170, -1)
-        self.pack_start(self.label, fill=False, expand=False)
-        self.pack_start(self.entry, fill=False, expand=False)
-        self.label.show()
-        self.entry.show()
-        self.entry.connect('focus-out-event', self.hide_characters)
-        self.entry.connect('focus-in-event', self.show_characters)
-        self.auto_hide_text = False
-        self.show()
-
-    def set_text(self, text):
-        # For compatibility...
-        self.entry.set_text(text)
-
-    def get_text(self):
-        return self.entry.get_text()
-
-    def set_auto_hidden(self, value):
-        self.entry.set_visibility(False)
-        self.auto_hide_text = value
-
-    def show_characters(self, widget=None, event=None):
-        # When the box has focus, show the characters
-        if self.auto_hide_text and widget:
-            self.entry.set_visibility(True)
-
-    def set_sensitive(self, value):
-        self.entry.set_sensitive(value)
-        self.label.set_sensitive(value)
-
-    def hide_characters(self, widget=None, event=None):
-        # When the box looses focus, hide them
-        if self.auto_hide_text and widget:
-            self.entry.set_visibility(False)
-
-
-class GreyLabel(gtk.Label):
-    """ Creates a grey gtk.Label. """
-    def __init__(self):
-        gtk.Label.__init__(self)
-
-    def set_label(self, text):
-        self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
-        self.set_alignment(0, 0)
 
         
 class WiredProfileChooser:
@@ -291,6 +206,7 @@ class appGui(object):
         self.wait_for_events(0.2)
         self.window.connect('delete_event', self.exit)
         self.window.connect('key-release-event', self.key_event)
+        daemon.SetGUIOpen(True)
         bus.add_signal_receiver(self.dbus_scan_finished, 'SendEndScanSignal',
                         'org.wicd.daemon.wireless')
         bus.add_signal_receiver(self.dbus_scan_started, 'SendStartScanSignal',
@@ -649,18 +565,27 @@ class appGui(object):
         
         # First make sure all the Addresses entered are valid.
         if entry.chkbox_static_ip.get_active():
-            entlist = [ent for ent in [entry.txt_ip, entry.txt_netmask,
-                                     entry.txt_gateway]]
+            req_entlist = [entry.txt_ip, enty.txt_netmask]
+            opt_entlist = [entry.txt_gateway]
                 
         if entry.chkbox_static_dns.get_active() and \
            not entry.chkbox_global_dns.get_active():
-            entlist.append(entry.txt_dns_1)
+            req_entlist.append(entry.txt_dns_1)
             # Only append additional dns entries if they're entered.
             for ent in [entry.txt_dns_2, entry.txt_dns_3]:
                 if ent.get_text() != "":
-                    entlist.append(ent)
-        for lblent in entlist:
+                    opt_entlist.append(ent)
+        
+        # Required entries.
+        for lblent in req_entlist:
             if not misc.IsValidIP(lblent.get_text()):
+                error(self.window, language['invalid_address'].
+                                    replace('$A', lblent.label.get_label()))
+                return False
+        
+        # Optional entries, only check for validity if they're entered.
+        for lblent in opt_entlist:
+            if lblent.get_text() and not misc.IsValidIP(lblent.get_text()):
                 error(self.window, language['invalid_address'].
                                     replace('$A', lblent.label.get_label()))
                 return False

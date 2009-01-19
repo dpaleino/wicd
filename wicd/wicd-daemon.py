@@ -320,6 +320,10 @@ class WicdDaemon(dbus.service.Object):
         fails it tries a wireless connection.
 
         """
+        # We don't want to rescan/connect if the gui is open.
+        if self.gui_open:
+            return
+        
         if fresh:
             self.wireless_bus.Scan()
         if self.wired_bus.CheckPluggedIn():
@@ -401,7 +405,8 @@ class WicdDaemon(dbus.service.Object):
     def ShouldAutoReconnect(self):
         """ Returns True if it's the right time to try autoreconnecting. """
         if self.GetAutoReconnect() and not self.CheckIfConnecting() and \
-           not self.GetForcedDisconnect() and not self.auto_connecting:
+           not self.GetForcedDisconnect() and not self.auto_connecting and \
+           not self.gui_open:
             return True
         else:
             return False

@@ -33,6 +33,7 @@ class WirelessInterface() -- Control a wireless network interface.
 
 import os
 import re
+import random
 from string import maketrans, translate, punctuation
 
 import wpath
@@ -138,8 +139,8 @@ def NeedsExternalCalls():
     
 def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
-    output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iwlan9",
-                       "-c/etc/zzzzzzzz.confzzz"])
+    output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",
+                       "-c/etc/abcd%sdefzz.zconfz" % random.randint(1, 1000)])
     if re.match("Unsupported driver", output):
         return False
     else:
@@ -195,7 +196,7 @@ class BaseInterface(object):
         paths = ['/sbin/', '/usr/sbin/', '/bin/', '/usr/bin/',
                  '/usr/local/sbin/', '/usr/local/bin/']
         for path in paths:
-            if os.access("%s%s" % (path, client), os.F_OK):
+            if os.path.exists("%s%s" % (path, client)):
                 return "%s%s" % (path, client)
         if self.verbose:
             print "WARNING: No path found for %s"  % (client)
@@ -416,7 +417,7 @@ class BaseInterface(object):
         pipe -- stdout pipe to the dhcpcd process.
         
         Returns:
-        'success' if succesful', an error code string otherwise.
+        'success' if succesful, an error code string otherwise.
         
         """
         dhcpcd_complete = False

@@ -87,8 +87,7 @@ class ConfigManager(RawConfigParser):
                                    str(ret)])
         else:
             if default != "__None__":
-                if self.debug:
-                    print 'did not find %s in configuration, setting default %s' % (option, str(default))
+                print 'did not find %s in configuration, setting default %s' % (option, str(default))
                 self.set(section, option, str(default), save=True)
                 ret = default
             else:

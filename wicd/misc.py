@@ -399,7 +399,7 @@ def choose_sudo_prog():
         for p in env_path:
             paths.extend([p + '/gksudo', p + "/gksu", p + '/ktsuss'])
     for path in paths:
-        if os.access(path, os.F_OK):
+        if os.path.exists(path):
             return path
     
     return None
@@ -414,7 +414,7 @@ def find_path(cmd):
     """
     paths = os.getenv("PATH", default="/usr/bin:/usr/local/bin").split(':')
     for path in paths:
-        if os.access(os.path.join(path, cmd), os.F_OK):
+        if os.path.exists(os.path.join(path, cmd)):
             return os.path.join(path, cmd)
     return None
 

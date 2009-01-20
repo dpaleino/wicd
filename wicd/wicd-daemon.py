@@ -91,7 +91,7 @@ class WicdDaemon(dbus.service.Object):
         self.vpn_session =  None
         self.gui_open = False
         self.suspended = False
-        self.debug_mode = False
+        self._debug_mode = False
         self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
@@ -122,6 +122,13 @@ class WicdDaemon(dbus.service.Object):
             self.wireless_bus.Scan()
             self.SetForcedDisconnect(True)
             print "--no-autoconnect detected, not autoconnecting..."
+            
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
             
     @dbus.service.method('org.wicd.daemon')
     def Hello(self):
@@ -874,10 +881,18 @@ class WirelessDaemon(dbus.service.Object):
         self.hidden_essid = None
         self.daemon = daemon
         self.wifi = wifi
-        self.debug_mode = debug
+        self._debug_mode = debug
         self.forced_disconnect = False
         self.config = ConfigManager(os.path.join(wpath.etc, 
-                                                 "wireless-settings.conf"))
+                                                 "wireless-settings.conf"),
+                                    debug=debug)
+        
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
         
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetHiddenNetworkESSID(self, essid):
@@ -1223,11 +1238,19 @@ class WiredDaemon(dbus.service.Object):
                                      object_path="/org/wicd/daemon/wired")
         self.daemon = daemon
         self.wired = wired
-        self.debug_mode = debug
+        self._debug_mode = debug
         self.forced_disconnect = False
         self.WiredNetwork = {}
         self.config = ConfigManager(os.path.join(wpath.etc,
-                                                 "wired-settings.conf"))
+                                                 "wired-settings.conf"), 
+                                    debug=debug)
+
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
         
     @dbus.service.method('org.wicd.daemon.wired')
     def GetWiredIP(self, ifconfig=""):

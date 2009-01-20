@@ -31,10 +31,11 @@ from wicd.misc import stringToNone, Noneify, to_unicode
 
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
-    def __init__(self, path, debug=False):
+    def __init__(self, path, debug=False, mark_whitespace="`'`"):
         RawConfigParser.__init__(self)
         self.config_file = path
         self.debug = debug
+        self.mrk_ws = mark_whitespace
         self.read(path)
         
     def __repr__(self):
@@ -60,6 +61,9 @@ class ConfigManager(RawConfigParser):
             self.add_section(section)
         if isinstance(value, basestring):
             value = to_unicode(value)
+            if value.startswith(' ') or value.endswith(' '):
+                value = "%(ws)s%(value)s%(ws)s" % {"value" : value,
+                                                   "ws" : self.mrk_ws}
         RawConfigParser.set(self, section, str(option), value)
         if save:
             self.write()
@@ -77,10 +81,16 @@ class ConfigManager(RawConfigParser):
         
         """
         if not self.has_section(section):
-            self.add_section(section)
+            if default != "__None__":
+                self.add_section(section)
+            else:
+                return None
     
         if self.has_option(section, option):
             ret = RawConfigParser.get(self, section, option)
+            if (isinstance(ret, basestring) and ret.startswith(self.mrk_ws) 
+                and ret.endswith(self.mrk_ws)):
+                ret = ret[3:-3]
             if default:
                 if self.debug:
                     print ''.join(['found ', option, ' in configuration ', 

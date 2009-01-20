@@ -476,7 +476,8 @@ class BaseInterface(object):
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         if not self.iface: return False
-        cmd = self.DHCP_RELEASE + " " + self.iface + " 2>/dev/null"
+        cmd = self.DHCP_RELEASE + " " + self.iface
+        if self.verbose: print cmd
         misc.Run(cmd)
 
     def FlushRoutes(self):

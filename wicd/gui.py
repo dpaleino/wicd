@@ -561,11 +561,12 @@ class appGui(object):
     def save_settings(self, nettype, networkid, networkentry):
         """ Verifies and saves the settings for the network entry. """
         entry = networkentry.advanced_dialog
-        entlist = []
+        opt_entlist = []
+        req_entlist = []
         
         # First make sure all the Addresses entered are valid.
         if entry.chkbox_static_ip.get_active():
-            req_entlist = [entry.txt_ip, enty.txt_netmask]
+            req_entlist = [entry.txt_ip, entry.txt_netmask]
             opt_entlist = [entry.txt_gateway]
                 
         if entry.chkbox_static_dns.get_active() and \

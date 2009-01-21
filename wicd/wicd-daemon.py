@@ -95,6 +95,7 @@ class WicdDaemon(dbus.service.Object):
         self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
+        self.prefer_wired = False
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
@@ -506,7 +507,23 @@ class WicdDaemon(dbus.service.Object):
     def GetWiredAutoConnectMethod(self):
         """ Returns the wired autoconnect method. """
         return int(self.wired_connect_mode)
+                   
+                   
+    @dbus.service.method('org.wicd.dameon')
+    def GetPreferWiredNetwork(self):
+        """ Returns True if wired network preference is set. 
         
+        If this is True, wicd will switch from a wireless connection
+        to a wired one if an ethernet connection is available.
+        
+        """
+        return self.prefer_wired
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetPreferWiredNetwork(self, value):
+        """ Sets the prefer_wired state. """
+        self.prefer_wired = value
+    
     @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
         """ Sets the connection status.
@@ -837,6 +854,8 @@ class WicdDaemon(dbus.service.Object):
         self.SetLinkDetectionTool(app_conf.get("Settings", "link_detect_tool",
                                                default=0))
         self.SetFlushTool(app_conf.get("Settings", "flush_tool", default=0))
+        self.SetPreferWiredNetwork(app_conf.get("Settings", "prefer_wired", 
+                                                default=False))
         app_conf.write()
 
         if os.path.isfile(wireless_conf):

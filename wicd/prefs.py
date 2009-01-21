@@ -40,14 +40,6 @@ wired = None
 
 language = misc.get_language_list_gui()
 
-def alert(parent, message): 
-    """ Shows an alert dialog """
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
-
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
     def __init__(self, wTree, dbus):

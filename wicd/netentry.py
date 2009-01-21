@@ -19,8 +19,9 @@ import gtk
 import os
 
 import misc
-from misc import noneToString, stringToNone, noneToBlankString, to_bool
 import wpath
+from misc import noneToString, stringToNone, noneToBlankString, to_bool
+from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel
 
 language = misc.get_language_list_gui()
 
@@ -28,78 +29,6 @@ language = misc.get_language_list_gui()
 daemon = None
 wired = None
 wireless = None
-
-def error(parent, message): 
-    """ Shows an error dialog """
-    dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
-                               gtk.BUTTONS_OK)
-    dialog.set_markup(message)
-    dialog.run()
-    dialog.destroy()
-    
-class SmallLabel(gtk.Label):
-    def __init__(self, text=''):
-        gtk.Label.__init__(self, text)
-        self.set_size_request(50, -1)
-        
-class LeftAlignedLabel(gtk.Label):
-    def __init__(self, label=None):
-        gtk.Label.__init__(self, label)
-        self.set_alignment(0.0, 0.5)
-
-class LabelEntry(gtk.HBox):
-    """ A label on the left with a textbox on the right. """
-    def __init__(self, text):
-        gtk.HBox.__init__(self)
-        self.entry = gtk.Entry()
-        self.entry.set_size_request(200, -1)
-        self.label = SmallLabel()
-        self.label.set_text(text)
-        self.label.set_size_request(170, -1)
-        self.pack_start(self.label, fill=False, expand=False)
-        self.pack_start(self.entry, fill=False, expand=False)
-        self.label.show()
-        self.entry.show()
-        self.entry.connect('focus-out-event', self.hide_characters)
-        self.entry.connect('focus-in-event', self.show_characters)
-        self.auto_hide_text = False
-        self.show()
-
-    def set_text(self, text):
-        # For compatibility...
-        self.entry.set_text(text)
-
-    def get_text(self):
-        return self.entry.get_text()
-
-    def set_auto_hidden(self, value):
-        self.entry.set_visibility(False)
-        self.auto_hide_text = value
-
-    def show_characters(self, widget=None, event=None):
-        # When the box has focus, show the characters
-        if self.auto_hide_text and widget:
-            self.entry.set_visibility(True)
-
-    def set_sensitive(self, value):
-        self.entry.set_sensitive(value)
-        self.label.set_sensitive(value)
-
-    def hide_characters(self, widget=None, event=None):
-        # When the box looses focus, hide them
-        if self.auto_hide_text and widget:
-            self.entry.set_visibility(False)
-
-
-class GreyLabel(gtk.Label):
-    """ Creates a grey gtk.Label. """
-    def __init__(self):
-        gtk.Label.__init__(self)
-
-    def set_label(self, text):
-        self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
-        self.set_alignment(0, 0)
-
         
 class AdvancedSettingsDialog(gtk.Dialog):
     def __init__(self):
@@ -651,7 +580,6 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile.connect("toggled",
                                             self.toggle_default_profile)
         self.combo_profile_names.connect("changed", self.change_profile)
-        self.script_button.connect("button-press-event", self.edit_scripts)
         
         # Toggle the default profile checkbox to the correct state.
         if to_bool(wired.GetWiredProperty("default")):
@@ -701,7 +629,6 @@ class WiredNetworkEntry(NetworkEntry):
             self.button_delete.set_sensitive(False)
             self.connect_button.set_sensitive(False)
             self.advanced_button.set_sensitive(False)
-            self.script_button.set_sensitive(False)
             
     def update_connect_button(self, state, apbssid=None):
         """ Update the connection/disconnect button for this entry. """
@@ -730,7 +657,6 @@ class WiredNetworkEntry(NetworkEntry):
                 self.button_delete.set_sensitive(True)
                 self.connect_button.set_sensitive(True)
                 self.advanced_button.set_sensitive(True)
-                self.script_button.set_sensitive(True)
 
     def remove_profile(self, widget):
         """ Remove a profile from the profile list. """
@@ -748,7 +674,6 @@ class WiredNetworkEntry(NetworkEntry):
             if self.is_full_gui:
                 self.button_delete.set_sensitive(False)
                 self.advanced_button.set_sensitive(False)
-                self.script_button.set_sensitive(False)
                 self.connect_button.set_sensitive(False)
         else:
             self.profile_help.hide()

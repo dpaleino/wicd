@@ -43,13 +43,14 @@ import getopt
 import os
 import pango
 import time
-from dbus import DBusException
+import atexit
 
 # Wicd specific imports
 from wicd import wpath
 from wicd import misc
 from wicd import gui
 from wicd import dbusmanager
+from wicd.guiutil import error
 
 ICON_AVAIL = True
 USE_EGG = False
@@ -364,7 +365,7 @@ class TrayIcon(object):
             if DBUS_AVAIL:
                 self.toggle_wicd_gui()
             else:
-                # gui.error(None, language["daemon_unavailable"])
+                # error(None, language["daemon_unavailable"])
                 pass
 
         def on_quit(self, widget=None):
@@ -652,8 +653,8 @@ def setup_dbus(force=True):
             misc.PromptToStartDaemon()
             try:
                 dbusmanager.connect_to_dbus()
-            except DBusException:
-                gui.error(None, "Could not connect to wicd's D-Bus interface.  " +
+            except dbusmanager.DBusException:
+                error(None, "Could not connect to wicd's D-Bus interface.  " +
                           "Check the wicd log for error messages.")
                 return False
         else:  
@@ -669,12 +670,19 @@ def setup_dbus(force=True):
     
     return True
 
+def on_exit():
+    if DBUS_AVAIL:
+        try:
+            daemon.SetGUIOpen(False)
+        except dbusmanager.DBusException:
+            pass
+
 def handle_no_dbus():
     global DBUS_AVAIL
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    gui.error(None, language['lost_dbus'], block=False)
+    error(None, language['lost_dbus'], block=False)
     return False
 
 def main(argv):
@@ -709,7 +717,8 @@ def main(argv):
     
     print 'Loading...'
     setup_dbus()
-
+    atexit.register(on_exit)
+    
     if not use_tray or not ICON_AVAIL:
         the_gui = gui.appGui(standalone=True)
         mainloop = gobject.MainLoop()

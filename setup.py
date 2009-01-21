@@ -126,32 +126,32 @@ class configure(Command):
         self.distro_detect_failed = False
         
         self.initfile = 'init/default/wicd'
-        if os.access('/etc/redhat-release', os.F_OK):
+        if os.path.exists('/etc/redhat-release'):
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/redhat/wicd'
-        elif os.access('/etc/SuSE-release', os.F_OK):
+        elif os.path.exists('/etc/SuSE-release'):
             self.init = '/etc/init.d/'
             self.initfile = 'init/suse/wicd'
-        elif os.access('/etc/fedora-release', os.F_OK):
+        elif os.path.exists('/etc/fedora-release'):
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/redhat/wicd'
-        elif os.access('/etc/gentoo-release', os.F_OK):
+        elif os.path.exists('/etc/gentoo-release'):
             self.init = '/etc/init.d/'
             self.initfile = 'init/gentoo/wicd'
-        elif os.access('/etc/debian_version', os.F_OK):
+        elif os.path.exists('/etc/debian_version'):
             self.init = '/etc/init.d/'
             self.initfile = 'init/debian/wicd'
-        elif os.access('/etc/arch-release', os.F_OK):
+        elif os.path.exists('/etc/arch-release'):
             self.init = '/etc/rc.d/'
             self.initfile = 'init/arch/wicd'
-        elif os.access('/etc/slackware-version', os.F_OK) or \
-             os.access('/etc/slamd64-version', os.F_OK):
+        elif os.path.exists('/etc/slackware-version') or \
+             os.path.exists('/etc/slamd64-version'):
             self.init = '/etc/rc.d/'
             self.initfile = 'init/slackware/rc.wicd'
             self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
             self.mandir = '/usr/man/'
             self.no_install_acpi = True
-        elif os.access('/etc/pld-release', os.F_OK):
+        elif os.path.exists('/etc/pld-release'):
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/pld/wicd'
         else:
@@ -177,7 +177,7 @@ class configure(Command):
             if len(pmutils_candidate) == 0 or returncode != 0 or not os.path.isabs(pmutils_candidate):
                 raise ValueError
             else:
-               self.pmutils = pmutils_candidate
+                self.pmutils = pmutils_candidate
         except (OSError, ValueError):
             pass # use our default
 
@@ -188,7 +188,7 @@ class configure(Command):
             if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
                 raise ValueError
             else:
-               self.kdedir = kdedir_candidate + '/share/autostart'
+                self.kdedir = kdedir_candidate + '/share/autostart'
         except (OSError, ValueError):
             # If kde-config isn't present, we'll check for kde-4.x
             try:
@@ -475,7 +475,10 @@ connect at startup to any preferred network within range.
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 'wicd.configmanager'], ext_modules=[iwscan_ext, wpactrl_ext],
+      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 
+                  'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 
+                  'wicd.configmanager', 'wicd.guiutil'], 
+      ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )
 ##print "Running post-install configuration..."

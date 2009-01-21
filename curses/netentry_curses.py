@@ -22,17 +22,10 @@
 #       MA 02110-1301, USA.
 
 import urwid
-from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox
+from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-def error(ui,parent,message):
-    """Shows an error dialog (or something that resembles one)"""
-    #     /\
-    #    /!!\
-    #   /____\
-    dialog = TextDialog(message,40,6,('important',"ERROR"))
-    return dialog.run(ui,parent)
 
 
 language = misc.get_language_list_gui()

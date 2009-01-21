@@ -26,9 +26,9 @@ C      : Display network configuration for selected network
 A      : Display "About" dialog
 I      : Raise the "Scan for hidden networks" dialog
 H      : Raise help dialog
-S      : Configure scripts (calls an external program, requires superuser
-         privileges
+S      : Provide instructions for configuring scripts
 delete : Delete selected wired network profile (from the wired ComboBox)
+F2     : Rename selected wired network profile (from the wired ComboBox)
 
 IN DIALOGS (Meta usually is "Alt"):
 ESC or Q: Quit dialog without saving information (if present)

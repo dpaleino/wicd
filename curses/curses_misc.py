@@ -24,6 +24,15 @@ wicd-curses.
 
 import urwid
 
+# Uses code that is towards the bottom
+def error(ui,parent,message):
+    """Shows an error dialog (or something that resembles one)"""
+    #     /\
+    #    /!!\
+    #   /____\
+    dialog = TextDialog(message,6,40,('important',"ERROR"))
+    return dialog.run(ui,parent)
+
 # My savior.  :-)
 # Although I could have made this myself pretty easily, just want to give credit where
 # its due.
@@ -301,7 +310,7 @@ class ComboBox(urwid.WidgetWrap):
         self.user_args = user_args
 
         # Widget references to simplify some things
-        self.body = None
+        self.parent = None
         self.ui = None
         self.row = None
     def set_list(self,list):
@@ -310,25 +319,27 @@ class ComboBox(urwid.WidgetWrap):
     def set_focus(self,index):
         self.focus = index
         self.cbox.set_w(SelText(self.list[index]+'    vvv'))
+        if self.overlay:
+            self.overlay._listbox.set_focus(index)
 
     def rebuild_combobox(self):
-        self.build_combobox(self.body,self.ui,self.row)
-    def build_combobox(self,body,ui,row):
+        self.build_combobox(self.parent,self.ui,self.row)
+    def build_combobox(self,parent,ui,row):
         str,trash =  self.label.get_text()
 
 
         self.cbox  = DynWrap(SelText([self.list[self.focus]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
-            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
+            self.overlay = self.ComboSpace(self.list,parent,ui,self.focus,
                     pos=(len(str)+1,row))
         else:
             w = urwid.Columns([self.cbox])
-            self.overlay = self.ComboSpace(self.list,body,ui,self.focus,
+            self.overlay = self.ComboSpace(self.list,parent,ui,self.focus,
                     pos=(0,row))
 
         self.set_w(w)
-        self.body = body
+        self.parent = parent
         self.ui = ui
         self.row = row
 
@@ -341,7 +352,7 @@ class ComboBox(urwid.WidgetWrap):
             # Die if the user didn't prepare the combobox overlay
             if self.overlay == None:
                 raise ComboBoxException('ComboBox must be built before use!')
-            retval = self.overlay.show(self.ui,self.body)
+            retval = self.overlay.show(self.ui,self.parent)
             if retval != None:
                 self.set_focus(self.list.index(retval))
                 #self.cbox.set_w(SelText(retval+'    vvv'))
@@ -444,9 +455,9 @@ class Dialog2(urwid.WidgetWrap):
 # Simple dialog with text in it and "OK"
 class TextDialog(Dialog2):
     def __init__(self, text, height, width, header=None,align='left'):
-        l = []
-        for line in text:
-            l.append( urwid.Text( line,align=align))
+        l = [urwid.Text(text)]
+        #for line in text:
+        #    l.append( urwid.Text( line,align=align))
         body = urwid.ListBox(l)
         body = urwid.AttrWrap(body, 'body')
 
@@ -461,8 +472,8 @@ class TextDialog(Dialog2):
             self.frame.set_focus('footer')
 
 class InputDialog(Dialog2):
-    def __init__(self, text, height, width,ok_name='OK'):
-        self.edit = urwid.Edit(wrap='clip')
+    def __init__(self, text, height, width,ok_name='OK',edit_text=''):
+        self.edit = urwid.Edit(wrap='clip',edit_text=edit_text)
         body = urwid.ListBox([self.edit])
         body = urwid.AttrWrap(body, 'editbx','editfc')
        

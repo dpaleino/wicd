@@ -54,10 +54,10 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboBox,TextDialog,InputDialog
+from curses_misc import SelText,ComboBox,TextDialog,InputDialog,error
 from prefs_curses import PrefsDialog
 import netentry_curses
-from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog,error
+from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog
 
 # Stuff about getting the script configurer running
 from grp import getgrgid
@@ -217,40 +217,59 @@ def about_dialog(body):
     # The ASCII Art "Wicd" was made from the "smslant" font on one of those
     # online ASCII big text generators.
     theText = [
-[('green',"   ///       \\\\\\"),"       _      ___        __"],
-[('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /"],
-[('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / "],
-[('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  "],
-[('green',"|||  ||"),"(|^|)",('green',"||  |||"),
-"         ($VERSION)       ".replace("$VERSION",daemon.Hello())],
+('green',"   ///       \\\\\\"),"       _      ___        __\n",
+('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /\n",
+('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / \n",
+('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  \n",
+('green',"|||  ||"),"(|^|)",('green',"||  |||"),
+"         ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
 
-[('green',"\\||  \\\\")," |+| ",('green',"//  ||/    ")],
-[('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net"],
-[('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:"],
-[('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)"],
-"     ___|+|___         Dan O'Reilly   (wicd)",
-"    |---------|        Andrew Psaltis (this ui)",
+('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
+('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net\n",
+('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
+('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
+"     ___|+|___         Dan O'Reilly   (wicd)\n",
+"    |---------|        Andrew Psaltis (this ui)\n",
 "-----------------------------------------------------"]
     about = TextDialog(theText,16,55,header=('header','About Wicd'))
     about.run(ui,body)
 
 def help_dialog(body):
     theText = [
-"For more detailed help, consult the wicd-curses(8) man page.",
-"", "All controls are case sensitive",
-[('bold','H'),"        Display this help dialog"],
-[('bold','enter'),"            Connect to selected network"],
-[('bold','D'),"                Disconnect from all networks"],
-[('bold','ESC'),"              Stop a network connection in progress"],
-[('bold','F5')," or ", ('bold','R'),"          Refresh network list"],
-[('bold','P'),"                Prefrences dialog"],
-[('bold','I'),"                Scan for hidden networks"],
-[('bold','S'),"                Select scripts"]
+"For more detailed help, consult the wicd-curses(8) man page.\n",
+"\n", "All controls are case sensitive\n",
+('bold','H'),"        Display this help dialog\n",
+('bold','enter'),"            Connect to selected network\n",
+('bold','D'),"                Disconnect from all networks\n",
+('bold','ESC'),"              Stop a network connection in progress\n",
+('bold','F5')," or ", ('bold','R'),"          Refresh network list\n",
+('bold','P'),"                Prefrences dialog\n",
+('bold','I'),"                Scan for hidden networks\n",
+('bold','S'),"                Select scripts\n"
     ]
     help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
 
-def run_configscript(netname,nettype):
+def run_configscript(parent,netname,nettype):
+    configfile = wpath.etc+netname+'-settings.conf'
+    header = 'profile' if nettype == 'wired' else 'BSSID'
+    profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
+            netname,'bssid')
+    
+    theText = [ 
+            """To avoid various complications, wicd-curses does not support directly editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "%s" config file, and look for the section labeled by the %s in question.  In this case, this is:
+
+[%s]
+
+Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.
+
+Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.""" % (configfile,header,profname)]
+    dialog = TextDialog(theText,16,80)
+    dialog.run(ui,parent)
+    # This code works with many distributions, but not all of them.  So, to
+    # limit complications, it has been deactivated.  If you want to run it,
+    # be my guest.  Be sure to deactivate the above stuff first.
+    """
     loop.quit()
     ui.stop()
     argv = netname + ' ' +nettype
@@ -265,7 +284,7 @@ def run_configscript(netname,nettype):
         precmd = ''
         precmdargv = ''
         postcmd = ''
-    elif 'admin' in glist or 'wheel' in glist:
+    elif 'admin' in glist or 'wheel' in glist or 'sudo' in glist:
         precmd = 'sudo'
         precmdargv = ''
         postcmd = ''
@@ -278,7 +297,7 @@ def run_configscript(netname,nettype):
     system(precmd+precmdargv+cmd+postcmd)
     raw_input("Press enter!")
     main()
-
+    """
 
 ########################################
 ##### URWID SUPPORT CLASSES
@@ -369,25 +388,47 @@ class WiredComboBox(ComboBox):
         if self.theList != []:
             wired.ReadWiredNetworkProfile(self.get_selected_profile())
 
+    #def rebuild_combobox(self):
+    #    pass
     def keypress(self,size,key):
         prev_focus = self.get_focus()[1]
         key = self.__super.keypress(size,key)
         if self.get_focus()[1] == len(self.list)-1:
             dialog = InputDialog(('header',"Add new wired profile"),7,30)
             
-            exitcode,name = dialog.run(ui,self.body)
+            exitcode,name = dialog.run(ui,self.parent)
             if exitcode == 0:
                 wired.CreateWiredNetworkProfile(name,False)
                 self.set_list(wired.GetWiredProfileList())
                 self.rebuild_combobox()
             self.set_focus(prev_focus)
-            self.overlay._listbox.set_focus(prev_focus)
         else:
             wired.ReadWiredNetworkProfile(self.get_selected_profile())
         if key == 'delete':
+            if len(self.theList) == 1:
+                error(self.ui,self.parent,"Cannot delete the last wired profile.  Try renaming it ('F2')")
+                return key
             wired.DeleteWiredNetworkProfile(self.get_selected_profile())
+            # Return to the top of the list if something is deleted.
+
+            if wired.GetDefaultWiredNetwork() != None:
+                self.set_focus(self.theList.index(wired.GetDefaultWiredNetwork()))
+            else:
+                prev_focus -= 1
+                self.set_focus(prev_focus)
             self.set_list(wired.GetWiredProfileList())
             self.rebuild_combobox()
+        if key == 'f2':
+            dialog = InputDialog(('header',"Rename wired profile"),7,30,
+                    edit_text=unicode(self.get_selected_profile()))
+            exitcode,name = dialog.run(ui,self.parent)
+            if exitcode == 0:
+                # Save the new one, then kill the old one
+                wired.SaveWiredNetworkProfile(name)
+                wired.DeleteWiredNetworkProfile(self.get_selected_profile())
+                self.set_list(wired.GetWiredProfileList())
+                self.set_focus(self.theList.index(name))
+                self.rebuild_combobox()
         return key
         #if key == 'C':
             # Configure the network
@@ -401,7 +442,8 @@ class WiredComboBox(ComboBox):
 
     def get_selected_profile(self):
         """Get the selected wired profile"""
-        return self.theList[self.get_focus()[1]]
+        loc = self.get_focus()[1]
+        return self.theList[loc]
 
 ########################################
 ##### APPLICATION INTERFACE CLASS
@@ -684,7 +726,7 @@ class appGUI():
         if "f8" in keys or 'Q' in keys:
             loop.quit()
             return False
-        if "f5" in keys:
+        if "f5" in keys or 'R' in keys:
             self.lock_screen()
             wireless.Scan()
         if "D" in keys:
@@ -741,7 +783,7 @@ class appGUI():
             else:
                 nettype = 'wireless'
                 netname = str(self.wiredLB.get_focus()[1])
-            run_configscript(netname,nettype)
+            run_configscript(self.frame,netname,nettype)
             
         for k in keys:
             if urwid.is_mouse_event(k):

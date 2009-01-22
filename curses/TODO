@@ -1,6 +1,5 @@
 Things to do (in no particular order):
 
-*   Make a network config dialog for wired interfaces
 *   Implement a keyhandler function for the overall frame
     * Make keystrokes customizable
 *   Make color schemes customizable

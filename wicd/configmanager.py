@@ -26,14 +26,16 @@ reusable for other purposes as well.
 
 from ConfigParser import RawConfigParser
 
-from wicd.misc import stringToNone, Noneify
+from wicd.misc import stringToNone, Noneify, to_unicode
 
 
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
-    def __init__(self, path):
+    def __init__(self, path, debug=False, mark_whitespace="`'`"):
         RawConfigParser.__init__(self)
         self.config_file = path
+        self.debug = debug
+        self.mrk_ws = mark_whitespace
         self.read(path)
         
     def __repr__(self):
@@ -57,8 +59,12 @@ class ConfigManager(RawConfigParser):
         """
         if not self.has_section(section):
             self.add_section(section)
-            
-        RawConfigParser.set(self, section, str(option), str(value))
+        if isinstance(value, basestring):
+            value = to_unicode(value)
+            if value.startswith(' ') or value.endswith(' '):
+                value = "%(ws)s%(value)s%(ws)s" % {"value" : value,
+                                                   "ws" : self.mrk_ws}
+        RawConfigParser.set(self, section, str(option), value)
         if save:
             self.write()
 
@@ -75,16 +81,23 @@ class ConfigManager(RawConfigParser):
         
         """
         if not self.has_section(section):
-            self.add_section(section)
+            if default != "__None__":
+                self.add_section(section)
+            else:
+                return None
     
         if self.has_option(section, option):
             ret = RawConfigParser.get(self, section, option)
+            if (isinstance(ret, basestring) and ret.startswith(self.mrk_ws) 
+                and ret.endswith(self.mrk_ws)):
+                ret = ret[3:-3]
             if default:
-                print ''.join(['found ', option, ' in configuration ', ret])
+                if self.debug:
+                    print ''.join(['found ', option, ' in configuration ', 
+                                   str(ret)])
         else:
             if default != "__None__":
-                print ''.join(['did not find ', option,
-                           ' in configuration, setting default ', str(default)])
+                print 'did not find %s in configuration, setting default %s' % (option, str(default))
                 self.set(section, option, str(default), save=True)
                 ret = default
             else:

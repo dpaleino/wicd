@@ -1,8 +1,10 @@
-If you are reading this, you are probably wondering why your Wicd configuration
-files are not here.  What follows is a summary of the folders that wicd uses.
+WHERE ARE MY FILES?!
 
-For a more detailed (and complete) description what is in each directory, consult the
-man pages for wicd(8) and wicd-curses(8).
+If you are reading this, you are probably wondering why your Wicd configuration
+files are not here.  What follows is a summary of the folders that Wicd uses.
+
+For a more detailed (and complete) description what is in each directory,
+consult the man pages for wicd(8) and wicd-curses(8).
 
 ~/.wicd
     User-dependent configuration files, only used by wicd-curses

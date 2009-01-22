@@ -316,7 +316,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             ap['hidden'] = False
         
         if cell["channel"]:
-            ap["channel"] = True
+            ap["channel"] = cell["channel"]
         else:
             ap["channel"] = self._FreqToChannel(cell["frequency"])
         

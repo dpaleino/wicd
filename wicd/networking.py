@@ -393,8 +393,9 @@ class ConnectThread(threading.Thread):
             self.SetStatus('setting_static_ip')
             print 'Setting static IP : ' + self.network['ip']
             iface.SetAddress(self.network['ip'], self.network['netmask'])
-            print 'Setting default gateway : ' + self.network['gateway']
-            iface.SetDefaultRoute(self.network['gateway'])
+            if self.network.get('gateway'):
+                print 'Setting default gateway : ' + self.network['gateway']
+                iface.SetDefaultRoute(self.network['gateway'])
         else:
             # Run dhcp...
             self.SetStatus('running_dhcp')

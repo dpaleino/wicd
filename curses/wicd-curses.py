@@ -45,7 +45,8 @@ from dbus import version as dbus_version
 import gobject
 
 # Other important wicd-related stuff
-import wicd.misc as misc
+from wicd import wpath
+from wicd import misc
 from wicd import dbusmanager
 
 # Internal Python stuff
@@ -53,10 +54,14 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboBox,TextDialog,InputDialog
+from curses_misc import SelText,ComboBox,TextDialog,InputDialog,error
 from prefs_curses import PrefsDialog
 import netentry_curses
-from netentry_curses import WirelessSettingsDialog, error
+from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog
+
+# Stuff about getting the script configurer running
+from grp import getgrgid
+from os import getgroups,system
 
 language = misc.get_language_list_gui()
 
@@ -104,6 +109,7 @@ class wrap_exceptions:
                     # Zap the screen
                     ui.stop()
                     # Print out standard notification:
+
                     print "\nEXCEPTION!"
                     print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
                     print redraw_tag
@@ -180,10 +186,10 @@ def gen_network_list():
 
     id = 0
     wiredL = []
-    is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
+    #is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
     # This one makes a list of strings to put in a combo box.
-    for profile in wired.GetWiredProfileList():
-        theString = '%4s   %25s' % (id, profile)
+    #for profile in wired.GetWiredProfileList():
+        #theString = '%4s   %25s' % (id, profile)
         #### THIS IS wired.blah() in experimental
         #print config.GetLastUsedWiredNetwork()
         # Tag if no wireless IP present, and wired one is
@@ -194,9 +200,9 @@ def gen_network_list():
             #    'connected focus'))
         #else:
             #wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
-        wiredL.append(theString)
-        id+=1
-
+        #wiredL.append(theString)
+        #id+=1
+    wiredL = wired.GetWiredProfileList()
     wlessL = []
     # This one makes a list of NetLabels
     for network_id in range(0, wireless.GetNumberOfNetworks()):
@@ -211,38 +217,87 @@ def about_dialog(body):
     # The ASCII Art "Wicd" was made from the "smslant" font on one of those
     # online ASCII big text generators.
     theText = [
-[('green',"   ///       \\\\\\"),"       _      ___        __"],
-[('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /"],
-[('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / "],
-[('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  "],
-[('green',"|||  ||"),"(|^|)",('green',"||  |||"),
-"         ($VERSION)       ".replace("$VERSION",daemon.Hello())],
+('green',"   ///       \\\\\\"),"       _      ___        __\n",
+('green',"  ///         \\\\\\"),"     | | /| / (_)______/ /\n",
+('green'," ///           \\\\\\"),"    | |/ |/ / / __/ _  / \n",
+('green',"/||  //     \\\\  ||\\"),"   |__/|__/_/\__/\_,_/  \n",
+('green',"|||  ||"),"(|^|)",('green',"||  |||"),
+"         ($VERSION)       \n".replace("$VERSION",daemon.Hello()),
 
-[('green',"\\||  \\\\")," |+| ",('green',"//  ||/    ")],
-[('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net"],
-[('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:"],
-[('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)"],
-"     ___|+|___         Dan O'Reilly   (wicd)",
-"    |---------|        Andrew Psaltis (this ui)",
+('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
+('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net\n",
+('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
+('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
+"     ___|+|___         Dan O'Reilly   (wicd)\n",
+"    |---------|        Andrew Psaltis (this ui)\n",
 "-----------------------------------------------------"]
     about = TextDialog(theText,16,55,header=('header','About Wicd'))
     about.run(ui,body)
 
 def help_dialog(body):
     theText = [
-"For more detailed help, consult the wicd-curses(8) man page.",
-"", "All controls are case sensitive",
-[('bold','H'),"        Display this help dialog"],
-[('bold','enter'),"            Connect to selected network"],
-[('bold','D'),"                Disconnect from all networks"],
-[('bold','ESC'),"              Stop a network connection in progress"],
-[('bold','F5')," or ", ('bold','R'),"          Refresh network list"],
-[('bold','P'),"                Prefrences dialog"],
-[('bold','I'),"                Scan for hidden networks"],
-[('bold','S'),"                Select scripts"]
+"For more detailed help, consult the wicd-curses(8) man page.\n",
+"\n", "All controls are case sensitive\n",
+('bold','H'),"        Display this help dialog\n",
+('bold','enter'),"            Connect to selected network\n",
+('bold','D'),"                Disconnect from all networks\n",
+('bold','ESC'),"              Stop a network connection in progress\n",
+('bold','F5')," or ", ('bold','R'),"          Refresh network list\n",
+('bold','P'),"                Prefrences dialog\n",
+('bold','I'),"                Scan for hidden networks\n",
+('bold','S'),"                Select scripts\n"
     ]
     help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
+
+def run_configscript(parent,netname,nettype):
+    configfile = wpath.etc+netname+'-settings.conf'
+    header = 'profile' if nettype == 'wired' else 'BSSID'
+    profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
+            netname,'bssid')
+    
+    theText = [ 
+            """To avoid various complications, wicd-curses does not support directly editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "%s" config file, and look for the section labeled by the %s in question.  In this case, this is:
+
+[%s]
+
+Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.
+
+Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.""" % (configfile,header,profname)]
+    dialog = TextDialog(theText,16,80)
+    dialog.run(ui,parent)
+    # This code works with many distributions, but not all of them.  So, to
+    # limit complications, it has been deactivated.  If you want to run it,
+    # be my guest.  Be sure to deactivate the above stuff first.
+    """
+    loop.quit()
+    ui.stop()
+    argv = netname + ' ' +nettype
+
+    #cmd = '/usr/lib/configscript_curses.py '+argv
+    cmd = wpath.lib+'configscript_curses.py '+argv
+    # Check whether we can sudo.  Hopefully this is complete
+    glist = []
+    for i in getgroups():
+        glist.append(getgrgid(i)[0])
+    if 'root' in glist:
+        precmd = ''
+        precmdargv = ''
+        postcmd = ''
+    elif 'admin' in glist or 'wheel' in glist or 'sudo' in glist:
+        precmd = 'sudo'
+        precmdargv = ''
+        postcmd = ''
+    else:
+        precmd = 'su'
+        precmdargv = ' -c "'
+        postcmd = '"'
+    print "Calling command: " + precmd + precmdargv + cmd + postcmd
+    sys.stdout.flush()
+    system(precmd+precmdargv+cmd+postcmd)
+    raw_input("Press enter!")
+    main()
+    """
 
 ########################################
 ##### URWID SUPPORT CLASSES
@@ -297,10 +352,16 @@ class WiredComboBox(ComboBox):
     """
     list : the list of wired network profiles.  The rest is self-explanitory.
     """
-    def init(self,list):
+    def __init__(self,list):
+        self.ADD_PROFILE = '---Add a new profile---'
+        self.__super.__init__(use_enter=False)
+        self.set_list(list)
+        #self.set_focus(self.theList.index(wired.GetDefaultProfile()))
+
+    def set_list(self,list):
         self.theList = list
-        id = 0
-        wiredL = []
+        id=0
+        wiredL=[]
         is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
         for profile in list:
             theString = '%4s   %25s' % (id, profile)
@@ -316,11 +377,59 @@ class WiredComboBox(ComboBox):
             #    wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
             wiredL.append(theString)
             id+=1
-        self.__super.__init__(list=wiredL,use_enter=False)
-        self.set_focus(theList.index(wired.GetDefaultWiredProfile()))
+        wiredL.append(self.ADD_PROFILE)
+        if is_active:
+            self.attrs = ('connected','editnfc')
+            self.focus_attr = 'connected focus'
+        else :
+            self.attrs = ('body','editnfc')
+            self.focus_attr = 'focus'
+        self.list = wiredL
+        if self.theList != []:
+            wired.ReadWiredNetworkProfile(self.get_selected_profile())
 
+    #def rebuild_combobox(self):
+    #    pass
     def keypress(self,size,key):
-        self.__super.keypress(size,key)
+        prev_focus = self.get_focus()[1]
+        key = self.__super.keypress(size,key)
+        if self.get_focus()[1] == len(self.list)-1:
+            dialog = InputDialog(('header',"Add new wired profile"),7,30)
+            
+            exitcode,name = dialog.run(ui,self.parent)
+            if exitcode == 0:
+                wired.CreateWiredNetworkProfile(name,False)
+                self.set_list(wired.GetWiredProfileList())
+                self.rebuild_combobox()
+            self.set_focus(prev_focus)
+        else:
+            wired.ReadWiredNetworkProfile(self.get_selected_profile())
+        if key == 'delete':
+            if len(self.theList) == 1:
+                error(self.ui,self.parent,"Cannot delete the last wired profile.  Try renaming it ('F2')")
+                return key
+            wired.DeleteWiredNetworkProfile(self.get_selected_profile())
+            # Return to the top of the list if something is deleted.
+
+            if wired.GetDefaultWiredNetwork() != None:
+                self.set_focus(self.theList.index(wired.GetDefaultWiredNetwork()))
+            else:
+                prev_focus -= 1
+                self.set_focus(prev_focus)
+            self.set_list(wired.GetWiredProfileList())
+            self.rebuild_combobox()
+        if key == 'f2':
+            dialog = InputDialog(('header',"Rename wired profile"),7,30,
+                    edit_text=unicode(self.get_selected_profile()))
+            exitcode,name = dialog.run(ui,self.parent)
+            if exitcode == 0:
+                # Save the new one, then kill the old one
+                wired.SaveWiredNetworkProfile(name)
+                wired.DeleteWiredNetworkProfile(self.get_selected_profile())
+                self.set_list(wired.GetWiredProfileList())
+                self.set_focus(self.theList.index(name))
+                self.rebuild_combobox()
+        return key
         #if key == 'C':
             # Configure the network
         #    pass
@@ -331,11 +440,10 @@ class WiredComboBox(ComboBox):
         #    self.connect()
         #return key
 
-    def connect(self):
-        wired.ConnectWired()
     def get_selected_profile(self):
         """Get the selected wired profile"""
-        return self.theList[self._w.get_selected()[1]]
+        loc = self.get_focus()[1]
+        return self.theList[loc]
 
 ########################################
 ##### APPLICATION INTERFACE CLASS
@@ -369,7 +477,7 @@ class appGUI():
         wiredL,wlessL = [],[]# = gen_network_list()
         self.frame = None
 
-        self.wiredCB = urwid.Filler(ComboBox(list=wiredL,use_enter=False))
+        self.wiredCB = urwid.Filler(WiredComboBox(wiredL))
         self.wlessLB = urwid.ListBox(wlessL)
         self.update_netlist(force_check=True,firstrun=True)
         
@@ -400,7 +508,6 @@ class appGUI():
         self.screen_locked = False
         #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
-        
         self.pref = None
 
         self.update_status()
@@ -411,11 +518,12 @@ class appGUI():
     def lock_screen(self):
         self.frame.set_body(self.screen_locker)
         self.screen_locked = True
+        self.update_ui()
 
     def unlock_screen(self):
+        self.update_netlist(force_check=True)
         self.frame.set_body(self.thePile)
         self.screen_locked = False
-        self.update_netlist(force_check=True)
         self.update_ui()
 
     def raise_hidden_network_dialog(self):
@@ -432,24 +540,24 @@ class appGUI():
         # Location of last known focus is remapped to current location.
         # This might need to be cleaned up later.
 
-        if self.thePile.get_focus() is self.wiredCB: 
+        #self.set_status(str(self.frame.get_body().get_focus())+ ' '+ str(self.wiredCB))
+        if self.thePile.get_focus() == self.wiredCB: 
             wlessorwired = self.WIRED_IDX
-        else :
-            wlessorwired = self.WLESS_IDX
-        if self.thePile.get_focus() == self.no_wlan:
-            where = 0
-        elif self.thePile.get_focus() == self.wiredCB:
             where = self.thePile.get_focus().get_body().get_focus()[1]
-        else:
-            where = self.thePile.get_focus().get_focus()[1]
-
+        else: #self.thePile.get_focus() == self.wlessLB :
+            wlessorwired = self.WLESS_IDX
+            if self.wlessLB == self.no_wlan:
+                where = None
+            else: 
+                where = self.thePile.get_focus().get_focus()[1]
+                #where = self.wlessLB.get_focus()[1]
         self.focusloc = (wlessorwired,where)
-
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
     # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
+        # Run focus-collecting code if we are not running this for the first time
         if not firstrun:
             self.update_focusloc()
         """ Updates the overall network list."""
@@ -462,31 +570,45 @@ class appGUI():
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             if len(wlessL) != 0:
-                self.wlessLB = urwid.ListBox(wlessL)
-                #self.wlessLB.body = urwid.SimpleListWalker(wlessL)
+                if self.wlessLB == self.no_wlan:
+                    self.wlessLB = urwid.ListBox(wlessL)
+                else:
+                    self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
                 self.wlessLB = self.no_wlan
-                #self.wlessLB.body = urwid.SimpleListWalker([self.no_wlan])
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
+                #if firstrun:
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                            ('fixed',1,self.wiredCB),
                                            ('fixed',1,self.wlessH),
                                                       self.wlessLB] )
+                if not firstrun:
+                    self.frame.body = self.thePile
                 #self.focusloc = (self.thePile.get_focus(),
                 #    self.thePile.get_focus().get_focus()[1])
                 self.thePile.set_focus(self.focusloc[0])
                 if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
                 else:
-                    self.thePile.get_focus().set_focus(self.focusloc[1])
+                    if self.wlessLB is not self.no_wlan:
+                        self.thePile.get_focus().set_focus(self.focusloc[1])
+                    else:
+                        self.thePile.set_focus(self.wiredCB)
             else:
                 self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
-                self.frame.body = self.thePile
-                if self.focusloc[0] == self.wlessLB:
-                    self.wlessLB.set_focus(self.focusloc[1])
+                if not firstrun:
+                    self.frame.body = self.thePile
+                #if self.focusloc[0] == self.wlessLB:
+                self.wlessLB.set_focus(self.focusloc[1])
+                #self.thePile.get_focus().set_focus(self.focusloc[1])
                 #self.always_show_wired = not self.always_show_wired
         self.prev_state = state
+        if not firstrun:
+            self.update_ui()
+        if firstrun:
+            if wired.GetDefaultWiredNetwork() != None:
+                self.wiredCB.get_body().set_focus(wired.GetWiredProfileList().index(wired.GetDefaultWiredNetwork()))
 
     # Update the footer/status bar
     @wrap_exceptions()
@@ -529,6 +651,7 @@ class appGUI():
                 return True
             else:
                 self.set_status(language['not_connected'])
+                self.update_ui()
                 return True
 
 
@@ -542,6 +665,8 @@ class appGUI():
         # something, and we aren't connecting to something, return False
         # immediately.
         if from_idle and not self.connecting:
+            self.update_netlist()
+            self.update_ui()
             return False
         toAppend = ''
         # If we are connecting and being called from the idle function, spin
@@ -558,12 +683,15 @@ class appGUI():
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
     incr = 0
+    @wrap_exceptions()
     def idle_incr(self):
-        theText = ""
+        theText = " "
+        #if self.special != None:
+        #    theText += self.special
         if self.connecting:
-            theText = "-- Connecting -- Press ESC to cancel "
+            theText += "-- Connecting -- Press ESC to cancel "
         quit_note = "-- Press F8 or Q to quit."
-        self.footer1 = urwid.Text(str(self.incr) + ' '+theText+quit_note)
+        self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True
 
@@ -574,16 +702,11 @@ class appGUI():
         #if not self.connecting:
         #    gobject.idle_add(self.refresh_networks, None, False, None)
         self.unlock_screen()
-        # I'm hoping that this will resolve Adam's problem with the screen lock
-        # remaining onscreen until a key is pressed.  It goes away perfectly well
-        # here.
-        self.update_ui()
 
     # Same, same, same, same, same, same
     #@wrap_exceptions()
     def dbus_scan_started(self):
         self.lock_screen()
-        self.update_ui()
 
     # Redraw the screen
     @wrap_exceptions()
@@ -603,7 +726,8 @@ class appGUI():
         if "f8" in keys or 'Q' in keys:
             loop.quit()
             return False
-        if "f5" in keys:
+        if "f5" in keys or 'R' in keys:
+            self.lock_screen()
             wireless.Scan()
         if "D" in keys:
             # Disconnect from all networks.
@@ -612,8 +736,9 @@ class appGUI():
         # Guess what!  I actually need to put this here, else I'll have tons of
         # references to self.frame lying around. ^_^
         if "enter" in keys:
-            focus = self.thePile.get_focus()
-            if focus is self.wiredCB:
+            focus = self.frame.body.get_focus()
+            if focus == self.wiredCB:
+                self.special = focus
                 self.connect("wired",0)
             else:
                 # wless list only other option
@@ -638,7 +763,8 @@ class appGUI():
         if "C" in keys:
             focus = self.thePile.get_focus()
             if focus == self.wiredCB:
-                pass
+                WiredSettingsDialog(self.wiredCB.get_body().
+                        get_selected_profile()).run(ui,self.size,self.frame)
             else:
                 # wireless list only other option
                 wid,pos  = self.thePile.get_focus().get_focus()
@@ -649,6 +775,16 @@ class appGUI():
             self.raise_hidden_network_dialog()
         if "H" in keys:
             help_dialog(self.frame)
+        if "S" in keys:
+            focus = self.thePile.get_focus()
+            if focus == self.wiredCB:
+                nettype = 'wired'
+                netname = self.wiredCB.get_body().get_selected_profile()
+            else:
+                nettype = 'wireless'
+                netname = str(self.wiredLB.get_focus()[1])
+            run_configscript(self.frame,netname,nettype)
+            
         for k in keys:
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
@@ -659,18 +795,6 @@ class appGUI():
                 self.size = ui.get_cols_rows()
                 continue
             self.frame.keypress( self.size, k )
-
-        if " " in keys:
-                focus = self.thePile.get_focus()
-                if focus == self.wiredCB:
-                    #self.set_status('space pressed on wiredCB!')
-                    wid,pos = self.wiredCB.get_body().get_focus()
-                    text,attr = wid.get_text()
-                    wired.ReadWiredNetworkProfile(text)
-                    # Make sure our internal reference to the combobox matches the
-                    # one found in the pile.
-                    #self.wiredCB = self.thePile.get_focus()
-
         return True
     # TODO: Update this to use the networkentry stuff
     def connect(self, nettype, networkid, networkentry=None):

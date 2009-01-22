@@ -1,4 +1,5 @@
-.TH WICD-CURSES "8" "January 2009" "wicd-curses" 
+.\" First revision was r203
+.TH WICD-CURSES "8" "January 2009" "wicd-curses-r250" 
 .SH NAME
 .B wicd-curses
 \- curses-based wicd(8) controller
@@ -39,17 +40,25 @@ Bring up hidden network scanning dialog
 .TP
 .BR H
 Bring up a rather simplistic help dialog.  Of course, it mentions this man page first. :-)
-.PP
-The following is a work in progress and might not be fully functional as of yet.
+.\".PP
+.\"The following is a work in progress and might not be fully functional as of yet.
 .TP
 .BR C
 Bring up network configuration controller for the selected network
-.PP
-The following are not implemented yet:
+.TP
+.BR delete
+Delete the selected wired network profile (from the wired network combo box at the top)
+.TP
+.BR F2
+Rename the selected wired network profile (from the wired network combo box at the top)
+.\".PP
+.\"The following are not implemented yet:
 .TP
 .BR S
-Bring up the script selector for the selected network (requires superuser privileges)
-.SH "FILES"
+.\"Bring up the script selector for the selected network (requires superuser privileges)
+Bring up instructions on how to edit the scripts.  I have implemented a way to do this in the interface itself, but making it function with all Linux distros would be difficult.  Since you are reading this, you should know how to do what I suggest.  ;-)
+
+".SH "FILES"
 These are not used yet.
 .TP
 .I ~/.wicd/WHEREAREMYFILES

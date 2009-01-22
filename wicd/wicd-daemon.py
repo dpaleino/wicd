@@ -91,9 +91,11 @@ class WicdDaemon(dbus.service.Object):
         self.vpn_session =  None
         self.gui_open = False
         self.suspended = False
+        self._debug_mode = False
         self.connection_state = misc.NOT_CONNECTED
         self.connection_info = [""]
         self.auto_connecting = False
+        self.prefer_wired = False
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
@@ -121,6 +123,13 @@ class WicdDaemon(dbus.service.Object):
             self.wireless_bus.Scan()
             self.SetForcedDisconnect(True)
             print "--no-autoconnect detected, not autoconnecting..."
+            
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
             
     @dbus.service.method('org.wicd.daemon')
     def Hello(self):
@@ -319,6 +328,10 @@ class WicdDaemon(dbus.service.Object):
         fails it tries a wireless connection.
 
         """
+        # We don't want to rescan/connect if the gui is open.
+        if self.gui_open:
+            return
+        
         if fresh:
             self.wireless_bus.Scan()
         if self.wired_bus.CheckPluggedIn():
@@ -400,7 +413,8 @@ class WicdDaemon(dbus.service.Object):
     def ShouldAutoReconnect(self):
         """ Returns True if it's the right time to try autoreconnecting. """
         if self.GetAutoReconnect() and not self.CheckIfConnecting() and \
-           not self.GetForcedDisconnect() and not self.auto_connecting:
+           not self.GetForcedDisconnect() and not self.auto_connecting and \
+           not self.gui_open:
             return True
         else:
             return False
@@ -421,6 +435,7 @@ class WicdDaemon(dbus.service.Object):
         started.
         
         """
+        if self.debug_mode and value: print "Forced disconnect on"
         self.forced_disconnect = bool(value)
         self.wireless_bus.SetForcedDisconnect(bool(value))
         self.wired_bus.SetForcedDisconnect(bool(value))
@@ -492,7 +507,23 @@ class WicdDaemon(dbus.service.Object):
     def GetWiredAutoConnectMethod(self):
         """ Returns the wired autoconnect method. """
         return int(self.wired_connect_mode)
+                   
+                   
+    @dbus.service.method('org.wicd.dameon')
+    def GetPreferWiredNetwork(self):
+        """ Returns True if wired network preference is set. 
         
+        If this is True, wicd will switch from a wireless connection
+        to a wired one if an ethernet connection is available.
+        
+        """
+        return self.prefer_wired
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetPreferWiredNetwork(self, value):
+        """ Sets the prefer_wired state. """
+        self.prefer_wired = value
+    
     @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
         """ Sets the connection status.
@@ -630,13 +661,13 @@ class WicdDaemon(dbus.service.Object):
         
         """
         if win_name == "main":
-            default_width = 605
-            default_height = 400
+            default_width = -1
+            default_height = -1
             width_str = "window_width"
             height_str = "window_height"
         else:
-            default_width = 125
-            default_height = 500
+            default_width = -1
+            default_height = -1
             width_str = "pref_width"
             height_str = "pref_height"
 
@@ -823,6 +854,8 @@ class WicdDaemon(dbus.service.Object):
         self.SetLinkDetectionTool(app_conf.get("Settings", "link_detect_tool",
                                                default=0))
         self.SetFlushTool(app_conf.get("Settings", "flush_tool", default=0))
+        self.SetPreferWiredNetwork(app_conf.get("Settings", "prefer_wired", 
+                                                default=False))
         app_conf.write()
 
         if os.path.isfile(wireless_conf):
@@ -867,10 +900,18 @@ class WirelessDaemon(dbus.service.Object):
         self.hidden_essid = None
         self.daemon = daemon
         self.wifi = wifi
-        self.debug_mode = debug
+        self._debug_mode = debug
         self.forced_disconnect = False
         self.config = ConfigManager(os.path.join(wpath.etc, 
-                                                 "wireless-settings.conf"))
+                                                 "wireless-settings.conf"),
+                                    debug=debug)
+        
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
         
     @dbus.service.method('org.wicd.daemon.wireless')
     def SetHiddenNetworkESSID(self, essid):
@@ -1216,11 +1257,19 @@ class WiredDaemon(dbus.service.Object):
                                      object_path="/org/wicd/daemon/wired")
         self.daemon = daemon
         self.wired = wired
-        self.debug_mode = debug
+        self._debug_mode = debug
         self.forced_disconnect = False
         self.WiredNetwork = {}
         self.config = ConfigManager(os.path.join(wpath.etc,
-                                                 "wired-settings.conf"))
+                                                 "wired-settings.conf"), 
+                                    debug=debug)
+
+    def get_debug_mode(self):
+        return self._debug_mode
+    def set_debug_mode(self, mode):
+        self._debug_mode = mode
+        self.config.debug = mode
+    debug_mode = property(get_debug_mode, set_debug_mode)
         
     @dbus.service.method('org.wicd.daemon.wired')
     def GetWiredIP(self, ifconfig=""):

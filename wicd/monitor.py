@@ -268,16 +268,16 @@ class ConnectionStatus(object):
                                    error_handler=err_handle)
         self.reconnecting = False
         
-    def rescan_networks(self):
-        """ Calls a wireless scan. """
-        try:
-            if daemon.GetSuspend() or daemon.CheckIfConnecting():
-                return True
-            wireless.Scan()
-        except dbus.exceptions.DBusException, e:
-            print 'dbus exception while attempting rescan: %s' % str(e)
-        finally:
-            return True
+    #def rescan_networks(self):
+    #    """ Calls a wireless scan. """
+    #    try:
+    #        if daemon.GetSuspend() or daemon.CheckIfConnecting():
+    #            return True
+    #        wireless.Scan()
+    #    except dbus.exceptions.DBusException, e:
+    #        print 'dbus exception while attempting rescan: %s' % str(e)
+    #    finally:
+    #        return True
         
 def reply_handle():
     """ Just a dummy function needed for asynchronous dbus calls. """

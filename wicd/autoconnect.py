@@ -17,6 +17,8 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+from wicd import dbusmanager
+
 import dbus
 import time
 import gobject
@@ -29,9 +31,9 @@ else:
     DBusGMainLoop(set_as_default=True)
 
 try:
-    bus = dbus.SystemBus()
-    proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
-    daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
+    dbusmanager.connect_to_dbus()
+    daemon = dbusmanager.get_interface('daemon')
+    wireless = dbusmanager.get_interface('wireless')
 except Exception, e:
     print>>sys.stderr, "Exception caught: %s" % str(e)
     print>>sys.stderr, 'Could not connect to daemon.'
@@ -46,10 +48,10 @@ def error_handler(*args):
 
 if __name__ == '__main__':
     try:
-        time.sleep(3)
+        time.sleep(2)
+        wireless.Scan()
         daemon.SetSuspend(False)
         if not daemon.CheckIfConnecting():
-            daemon.SetForcedDisconnect(False)
             daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)
     except Exception, e:
         print>>sys.stderr, "Exception caught: %s" % str(e)

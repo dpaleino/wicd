@@ -318,7 +318,7 @@ def get_gettext():
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
     # If this is a unicode string, encode it and return
-    if type(x) not in [unicode, str]:
+    if not isinstance(x, basestring):
         return x
     if isinstance(x, unicode):
         return x.encode('utf-8')
@@ -399,7 +399,7 @@ def choose_sudo_prog():
         for p in env_path:
             paths.extend([p + '/gksudo', p + "/gksu", p + '/ktsuss'])
     for path in paths:
-        if os.access(path, os.F_OK):
+        if os.path.exists(path):
             return path
     
     return None
@@ -414,7 +414,7 @@ def find_path(cmd):
     """
     paths = os.getenv("PATH", default="/usr/bin:/usr/local/bin").split(':')
     for path in paths:
-        if os.access(os.path.join(path, cmd), os.F_OK):
+        if os.path.exists(os.path.join(path, cmd)):
             return os.path.join(path, cmd)
     return None
 
@@ -435,7 +435,7 @@ def get_language_list_gui():
     language['use_static_ip'] = _('Use Static IPs')
     language['use_static_dns'] = _('Use Static DNS')
     language['use_encryption'] = _('Use Encryption')
-    language['advanced_settings'] = _('Advanced Settings')
+    language['advanced_settings'] = _('Properties')
     language['wired_network'] = _('Wired Network')
     language['wired_network_instructions'] = _('To connect to a wired network,'
     ' you must create a network profile. To create a network profile, type a'

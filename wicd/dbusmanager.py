@@ -24,6 +24,7 @@ A module for managing wicd's dbus interfaces.
 #
 
 import dbus
+from dbus import DBusException
 if getattr(dbus, "version", (0, 0, 0)) < (0, 80, 0):
     import dbus.glib
 else:

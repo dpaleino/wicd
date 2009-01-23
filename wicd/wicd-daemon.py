@@ -99,30 +99,23 @@ class WicdDaemon(dbus.service.Object):
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
-
-        # Load the config file
-        self.ReadConfig()
-
+        
         # This will speed up the scanning process - if a client doesn't 
         # need a fresh scan, just feed them the old one.  A fresh scan
         # can be done by calling Scan(fresh=True).
         self.LastScan = []
         
+        # Load the config file
+        self.ReadConfig()
+        
         signal.signal(signal.SIGTERM, self.DaemonClosing)
         self.DaemonStarting()
         
         # Scan since we just got started
-        if auto_connect:
-            print "autoconnecting if needed...", str(self.GetWirelessInterface())
-            if not self.auto_reconnect:
-                self.AutoConnect(True)
-            else:
-                self.wireless_bus.Scan()
-        else:
-            print 'scan start'
-            self.wireless_bus.Scan()
-            self.SetForcedDisconnect(True)
+        if not auto_connect:
             print "--no-autoconnect detected, not autoconnecting..."
+            self.SetForcedDisconnect(True)
+            self.wireless_bus.Scan()
             
     def get_debug_mode(self):
         return self._debug_mode
@@ -328,16 +321,21 @@ class WicdDaemon(dbus.service.Object):
         fails it tries a wireless connection.
 
         """
+        print "Autoconnecting..."
         # We don't want to rescan/connect if the gui is open.
         if self.gui_open:
+            if self.debug_mode:
+                print "Skipping autoconnect because GUI is open."
             return
         
-        if fresh:
-            self.wireless_bus.Scan()
         if self.wired_bus.CheckPluggedIn():
-            self._wired_autoconnect()
+            if self.debug_mode:
+                print "Starting wired autoconnect..."
+            self._wired_autoconnect(fresh)
         else:
-            self.wireless_bus._wireless_autoconnect()
+            if self.debug_mode:
+                print "Starting wireless autoconnect..."
+            self.wireless_bus._wireless_autoconnect(fresh)
 
     @dbus.service.method('org.wicd.daemon')
     def GetAutoReconnect(self):
@@ -353,7 +351,7 @@ class WicdDaemon(dbus.service.Object):
         and wait for the user to initiate reconnection.
         
         """
-        print 'setting automatically reconnect when connection drops'
+        print 'setting automatically reconnect when connection drops %s' % value
         self.config.set("Settings", "auto_reconnect", misc.to_bool(value), True)
         self.auto_reconnect = misc.to_bool(value)
 
@@ -522,7 +520,7 @@ class WicdDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetPreferWiredNetwork(self, value):
         """ Sets the prefer_wired state. """
-        self.prefer_wired = value
+        self.prefer_wired = bool(value)
     
     @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
@@ -680,7 +678,7 @@ class WicdDaemon(dbus.service.Object):
         size.append(int(height))
         return size
     
-    def _wired_autoconnect(self):
+    def _wired_autoconnect(self, fresh=True):
         """ Attempts to autoconnect to a wired network. """
         wiredb = self.wired_bus
         if self.GetWiredAutoConnectMethod() == 3 and \
@@ -700,7 +698,7 @@ class WicdDaemon(dbus.service.Object):
             if not network:
                 print "Couldn't find a default wired connection," + \
                       " wired autoconnect failed."
-                self.wireless_bus._wireless_autoconnect()
+                self.wireless_bus._wireless_autoconnect(fresh)
                 return
 
         # Last-Used.
@@ -709,7 +707,7 @@ class WicdDaemon(dbus.service.Object):
             if not network:
                 print "no previous wired profile available, wired " + \
                       "autoconnect failed."
-                self.wireless_bus._wireless_autoconnect()
+                self.wireless_bus._wireless_autoconnect(fresh)
                 return
 
         wiredb.ReadWiredNetworkProfile(network)
@@ -718,12 +716,13 @@ class WicdDaemon(dbus.service.Object):
         self.auto_connecting = True
         time.sleep(1.5)
         try:
-            gobject.timeout_add_seconds(3, self._monitor_wired_autoconnect)
+            gobject.timeout_add_seconds(3, self._monitor_wired_autoconnect, 
+                                        fresh)
         except:
-            gobject.timeout_add(3000, self._monitor_wired_autoconnect)
+            gobject.timeout_add(3000, self._monitor_wired_autoconnect, fresh)
         return True
 
-    def _monitor_wired_autoconnect(self):
+    def _monitor_wired_autoconnect(self, fresh):
         """ Monitor a wired auto-connection attempt.
 
         Helper method called on a timer that monitors a wired
@@ -738,7 +737,7 @@ class WicdDaemon(dbus.service.Object):
             self.auto_connecting = False
             return False
         elif not self.wireless_bus.CheckIfWirelessConnecting():
-            self.wireless_bus._wireless_autoconnect()
+            self.wireless_bus._wireless_autoconnect(fresh)
             return False
         self.auto_connecting = False
         return False
@@ -902,6 +901,7 @@ class WirelessDaemon(dbus.service.Object):
         self.wifi = wifi
         self._debug_mode = debug
         self.forced_disconnect = False
+        self.LastScan = []
         self.config = ConfigManager(os.path.join(wpath.etc, 
                                                  "wireless-settings.conf"),
                                     debug=debug)
@@ -917,23 +917,33 @@ class WirelessDaemon(dbus.service.Object):
     def SetHiddenNetworkESSID(self, essid):
         """ Sets the ESSID of a hidden network for use with Scan(). """
         self.hidden_essid = str(misc.Noneify(essid))
-
     
     @dbus.service.method('org.wicd.daemon.wireless')
-    def Scan(self):
+    def Scan(self, sync=False):
         """ Scan for wireless networks.
         
-        Scans for wireless networks,optionally using a (hidden) essid
+        Scans for wireless networks, optionally using a (hidden) essid
         set with SetHiddenNetworkESSID.
+        
+        The sync keyword argument specifies whether the scan should
+        be done synchronously.
         
         """
         if self.debug_mode:
             print 'scanning start'
         self.SendStartScanSignal()
-        self._Scan()
+        if sync:
+            self._sync_scan()
+        else:
+            self._async_scan()
     
     @misc.threaded
-    def _Scan(self):
+    def _async_scan(self):
+        """ Run a scan in its own thread. """
+        self._sync_scan()
+        
+    def _sync_scan(self):
+        """ Run a scan and send a signal when its finished. """
         scan = self.wifi.Scan(str(self.hidden_essid))
         self.LastScan = scan
         if self.debug_mode:
@@ -1225,14 +1235,18 @@ class WirelessDaemon(dbus.service.Object):
         """ Emits a signal announcing a scan has finished. """
         pass
         
-    def _wireless_autoconnect(self):
+    def _wireless_autoconnect(self, fresh=True):
         """ Attempts to autoconnect to a wireless network. """
         print "No wired connection present, attempting to autoconnect " + \
               "to wireless network"
         if self.wifi.wireless_interface is None:
             print 'Autoconnect failed because wireless interface returned None'
             return
-
+        if fresh:
+            print 'start scan'
+            self.Scan(sync=True)
+            print 'end scan'
+        
         for x, network in enumerate(self.LastScan):
             if bool(network["has_profile"]):
                 if self.debug_mode:
@@ -1633,7 +1647,6 @@ def main(argv):
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
-    gobject.threads_init()
     if not no_poll:
         (child_pid, x, x, x) = gobject.spawn_async(
             [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")], 

@@ -484,7 +484,7 @@ class appGui(object):
         """ Kick off an asynchronous wireless scan. """
         if not DBUS_AVAIL: return
         self.refreshing = True
-        wireless.Scan(reply_handler=None, error_handler=None)
+        wireless.Scan(False)
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
         """ Refreshes the network list.

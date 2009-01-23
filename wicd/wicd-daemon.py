@@ -520,7 +520,7 @@ class WicdDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def SetPreferWiredNetwork(self, value):
         """ Sets the prefer_wired state. """
-        self.prefer_wired = value
+        self.prefer_wired = bool(value)
     
     @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
@@ -924,6 +924,9 @@ class WirelessDaemon(dbus.service.Object):
         
         Scans for wireless networks, optionally using a (hidden) essid
         set with SetHiddenNetworkESSID.
+        
+        The sync keyword argument specifies whether the scan should
+        be done synchronously.
         
         """
         if self.debug_mode:

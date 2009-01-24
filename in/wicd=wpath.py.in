@@ -19,6 +19,7 @@ current = os.path.dirname(os.path.realpath(__file__)) + '/'
 
 version = '%VERSION%'
 revision = '%REVNO%'
+curses_revision = '%CURSES_REVNO%'
 
 # DIRECTORIES
 

@@ -34,8 +34,7 @@ at least get a network connection.  Or those who don't like using X.  ;-)
 """
 
 # UI stuff
-#import urwid.raw_display
-import urwid.curses_display
+# This library is the only reason why I wrote this program.
 import urwid
 
 # DBus communication stuff
@@ -57,11 +56,16 @@ from time import sleep
 from curses_misc import SelText,DynEdit,DynIntEdit,ComboBox,Dialog2,TextDialog,InputDialog,error
 from prefs_curses import PrefsDialog
 import netentry_curses
+
 from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog
 
+from optparse import OptionParser
+
 # Stuff about getting the script configurer running
-from grp import getgrgid
-from os import getgroups,system
+#from grp import getgrgid
+#from os import getgroups,system
+
+CURSES_REVNO=wpath.curses_revision
 
 language = misc.get_language_list_gui()
 
@@ -245,7 +249,8 @@ def help_dialog(body):
 ('bold','F5')," or ", ('bold','R'),"          Refresh network list\n",
 ('bold','P'),"                Prefrences dialog\n",
 ('bold','I'),"                Scan for hidden networks\n",
-('bold','S'),"                Select scripts\n"
+('bold','S'),"                Select scripts\n",
+('bold','O'),"                Set up Ad-hoc network\n"
     ]
     help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
@@ -335,15 +340,6 @@ class NetLabel(urwid.WidgetWrap):
         return True
     def keypress(self,size,key):
         return self._w.keypress(size,key)
-        #if key == 'C':
-        #    conf = NetEntryBase(dbusmanager.get_dbus_ifaces())
-        #    conf.run(ui,ui.get_cols_rows(),)
-        #elif key == 'S':
-            # Configure scripts
-        #    pass
-        #elif key == 'enter':
-        #    self.connect()
-        #return key
     def connect(self):
         # This should work.
         wireless.ConnectWireless(self.id)
@@ -430,15 +426,6 @@ class WiredComboBox(ComboBox):
                 self.set_focus(self.theList.index(name))
                 self.rebuild_combobox()
         return key
-        #if key == 'C':
-            # Configure the network
-        #    pass
-        #elif key == 'S':
-            # Configure scripts
-        #    pass
-        #elif key == 'enter':
-        #    self.connect()
-        #return key
 
     def get_selected_profile(self):
         """Get the selected wired profile"""
@@ -593,7 +580,7 @@ class appGUI():
             # That dialog will sit there for a while if I don't get rid of it
             self.update_ui()
             wireless.SetHiddenNetworkESSID(misc.noneToString(hidden))
-            wireless.Scan()
+            wireless.Scan(True)
         wireless.SetHiddenNetworkESSID("")
         
     def update_focusloc(self):
@@ -788,7 +775,7 @@ class appGUI():
             return False
         if "f5" in keys or 'R' in keys:
             self.lock_screen()
-            wireless.Scan()
+            wireless.Scan(True)
         if "D" in keys:
             # Disconnect from all networks.
             daemon.Disconnect()
@@ -846,7 +833,7 @@ class appGUI():
             run_configscript(self.frame,netname,nettype)
         if "O" in keys:
             exitcode,data = AdHocDialog().run(ui,self.frame)
-            #essid,ip,channel,use_ics,use_encrypt,key_edit
+            #data = (essid,ip,channel,use_ics,use_encrypt,key_edit)
             if exitcode == 1:
                 wireless.CreateAdHocNetwork(data[0],
                                             data[2],
@@ -888,7 +875,15 @@ def main():
     # We are _not_ python.
     misc.RenameProcess('wicd-curses')
 
-    ui = urwid.curses_display.Screen()
+    # Import the screen based on whatever the user picked.
+    # The raw_display will have some features that may be useful to users
+    # later
+    if options.rawscreen:
+        import urwid.raw_display
+        ui = urwid.raw_display.Screen()
+    else:
+        import urwid.curses_display
+        ui = urwid.curses_display.Screen()
     # Default Color scheme.
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
@@ -970,6 +965,10 @@ setup_dbus()
 ##### MAIN ENTRY POINT
 ########################################
 if __name__ == '__main__':
+    parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
+    parser.add_option("-r", "--raw-screen",action="store_true",dest='rawscreen',
+            help="use urwid's raw screen controller")
+    (options,args) = parser.parse_args()
     main()
     # Make sure that the terminal does not try to overwrite the last line of
     # the program, so that everything looks pretty.

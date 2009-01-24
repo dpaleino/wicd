@@ -1,5 +1,5 @@
 .\" First revision was r203
-.TH WICD-CURSES "8" "January 2009" "wicd-curses-r250" 
+.TH WICD-CURSES "8" "January 2009" "wicd-curses-%CURSES_REVNO%"
 .SH NAME
 .B wicd-curses
 \- curses-based wicd(8) controller
@@ -10,7 +10,6 @@ It is designed to imitate the GTK-based wicd-client(1) as much as possible, and 
 
 This man page only documents the current status of wicd-curses.  This may/may not be the most up-to-date document.
 .SH "ARGUMENTS"
-These are not implemented yet.
 .TP
 .BR "\-r" , " \-\-raw\-screen"
 Use Urwid's raw console display, instead of the (faster) curses-based one.  This may be useful if you are experiencing unicode problems.
@@ -57,8 +56,11 @@ Rename the selected wired network profile (from the wired network combo box at t
 .BR S
 .\"Bring up the script selector for the selected network (requires superuser privileges)
 Bring up instructions on how to edit the scripts.  I have implemented a way to do this in the interface itself, but making it function with all Linux distros would be difficult.  Since you are reading this, you should know how to do what I suggest.  ;-)
+.TP
+.BR O
+Raise the Ad-Hoc network creation dialog
 
-".SH "FILES"
+.SH "FILES"
 These are not used yet.
 .TP
 .I ~/.wicd/WHEREAREMYFILES

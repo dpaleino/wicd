@@ -27,6 +27,7 @@ import subprocess
 # VERSIONNUMBER
 VERSION_NUM = '1.6.0'
 REVISION_NUM = 'unknown'
+CURSES_REVNO = 'r254'
 
 try:
     if not os.path.exists('vcsinfo.py'):
@@ -268,6 +269,7 @@ class configure(Command):
                     # other things to replace that aren't arguments
                     line = line.replace('%VERSION%', str(VERSION_NUM))
                     line = line.replace('%REVNO%', str(REVISION_NUM))
+                    line = line.replace('%CURSES_REVNO%', str(CURSES_REVNO))
                         
                     item_out.write(line)
                 

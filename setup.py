@@ -155,6 +155,8 @@ class configure(Command):
         elif os.path.exists('/etc/pld-release'):
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/pld/wicd'
+        elif os.path.exists('/usr/bin/crux'):
+            self.init = '/etc/rc.d/'
         else:
             self.init = 'FAIL'
             self.initfile = 'FAIL'

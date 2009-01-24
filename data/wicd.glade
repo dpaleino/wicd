@@ -456,6 +456,7 @@
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">6</property>
                                 <property name="bottom_attach">7</property>
+                                <property name="y_options"></property>
                               </packing>
                             </child>
                             <child>

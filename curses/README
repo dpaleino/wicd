@@ -29,6 +29,7 @@ H      : Raise help dialog
 S      : Provide instructions for configuring scripts
 delete : Delete selected wired network profile (from the wired ComboBox)
 F2     : Rename selected wired network profile (from the wired ComboBox)
+O      : Raise ad-hoc network dialog
 
 IN DIALOGS (Meta usually is "Alt"):
 ESC or Q: Quit dialog without saving information (if present)

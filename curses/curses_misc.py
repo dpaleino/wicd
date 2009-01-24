@@ -88,6 +88,20 @@ class DynWrap(urwid.AttrWrap):
     def selectable(self):
         return self._sensitive
 
+# Just an Edit Dynwrapped to the most common specifications
+class DynEdit(DynWrap):
+    def __init__(self,caption='',edit_text='',sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc'):
+        caption = ('editcp',caption + ': ')
+        edit = urwid.Edit(caption,edit_text)
+        self.__super.__init__(edit,sensitive,attrs,focus_attr)
+
+# Just an IntEdit Dynwrapped to the most common specifications
+class DynIntEdit(DynWrap):
+    def __init__(self,caption='',edit_text='',sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc'):
+        caption = ('editcp',caption + ':')
+        edit = urwid.IntEdit(caption,edit_text)
+        self.__super.__init__(edit,sensitive,attrs,focus_attr)
+
 class MaskingEditException(Exception):
     pass
 
@@ -436,13 +450,14 @@ class Dialog2(urwid.WidgetWrap):
                         overlay.mouse_event( size,
                                 event, button, col, row,
                                 focus=True)
-                    if k == 'window resize':
-                        size = ui.get_cols_rows()
-                    k = self.view.keypress( size, k )
-                    if k == 'esc':
-                        raise DialogExit(-1)
-                    if k:
-                        self.unhandled_key( size, k)
+                    else:
+                        if k == 'window resize':
+                            size = ui.get_cols_rows()
+                        k = self.view.keypress( size, k )
+                        if k == 'esc':
+                            raise DialogExit(-1)
+                        if k:
+                            self.unhandled_key( size, k)
         except DialogExit, e:
             return self.on_exit( e.args[0] )
                

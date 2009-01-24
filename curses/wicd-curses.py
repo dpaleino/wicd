@@ -54,7 +54,7 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,ComboBox,TextDialog,InputDialog,error
+from curses_misc import SelText,DynEdit,DynIntEdit,ComboBox,Dialog2,TextDialog,InputDialog,error
 from prefs_curses import PrefsDialog
 import netentry_curses
 from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog
@@ -445,6 +445,66 @@ class WiredComboBox(ComboBox):
         loc = self.get_focus()[1]
         return self.theList[loc]
 
+# Dialog2 that initiates an Ad-Hoc network connection
+class AdHocDialog(Dialog2):
+    def __init__(self):
+        essid_t = language['essid']
+        ip_t = language['ip']
+        channel_t = language['channel']
+        key_t = "    " + language['key']
+        use_ics_t = language['use_ics']
+        use_encrypt_t = language['use_wep_encryption']
+
+        self.essid_edit = DynEdit(essid_t)
+        self.ip_edit = DynEdit(ip_t)
+        self.channel_edit = DynIntEdit(channel_t)
+        self.key_edit = DynEdit(key_t,sensitive=False)
+
+        self.use_ics_chkb = urwid.CheckBox(use_ics_t)
+        self.use_encrypt_chkb = urwid.CheckBox(use_encrypt_t,
+                on_state_change=self.encrypt_callback)
+
+        blank = urwid.Text('')
+
+        # Set defaults
+        self.essid_edit.set_edit_text("My_Adhoc_Network")
+        self.ip_edit.set_edit_text("169.254.12.10")
+        self.channel_edit.set_edit_text("3")
+
+        l = [self.essid_edit,self.ip_edit,self.channel_edit,blank,
+                self.use_ics_chkb,self.use_encrypt_chkb,self.key_edit]
+        #for line in text:
+        #    l.append( urwid.Text( line,align=align))
+        body = urwid.ListBox(l)
+        #body = urwid.AttrWrap(body, 'body')
+
+        header = ('header',"Create an Ad-Hoc network")
+        Dialog2.__init__(self, header, 15, 50, body)
+        self.add_buttons([('OK',1),('Cancel',-1)])
+        self.frame.set_focus('body')
+
+    def encrypt_callback(self,chkbox,new_state,user_info=None):
+        self.key_edit.set_sensitive(new_state)
+
+    def unhandled_key(self, size, k):
+        if k in ('up','page up'):
+            self.frame.set_focus('body')
+        if k in ('down','page down'):
+            self.frame.set_focus('footer')
+        if k == 'enter':
+            # pass enter to the "ok" button
+            self.frame.set_focus('footer')
+            self.buttons.set_focus(0)
+            self.view.keypress( size, k )
+    def on_exit(self,exitcode):
+        data = ( self.essid_edit.get_edit_text(),
+                 self.ip_edit.get_edit_text(),
+                 self.channel_edit.get_edit_text(),
+                 self.use_ics_chkb.get_state(),
+                 self.use_encrypt_chkb.get_state(),
+                 self.key_edit.get_edit_text())
+
+        return exitcode, data
 ########################################
 ##### APPLICATION INTERFACE CLASS
 ########################################
@@ -784,6 +844,15 @@ class appGUI():
                 nettype = 'wireless'
                 netname = str(self.wiredLB.get_focus()[1])
             run_configscript(self.frame,netname,nettype)
+        if "O" in keys:
+            exitcode,data = AdHocDialog().run(ui,self.frame)
+            #essid,ip,channel,use_ics,use_encrypt,key_edit
+            if exitcode == 1:
+                wireless.CreateAdHocNetwork(data[0],
+                                            data[2],
+                                            data[1], "WEP",
+                                            data[5],
+                                            data[4], False)
             
         for k in keys:
             if urwid.is_mouse_event(k):

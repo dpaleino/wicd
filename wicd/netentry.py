@@ -21,7 +21,7 @@ import os
 import misc
 import wpath
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel
+from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
 language = misc.get_language_list_gui()
 
@@ -553,11 +553,19 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile = gtk.CheckButton(language['default_wired'])
                 
         # Build the profile list.
-        self.combo_profile_names = gtk.combo_box_entry_new_text()
+        self.combo_profile_names = gtk.combo_box_new_text() 
         self.profile_list = wired.GetWiredProfileList()
+        default_prof = wired.GetDefaultWiredNetwork()
         if self.profile_list:
-            for x in self.profile_list:
-                self.combo_profile_names.append_text(x)
+            starting_index = 0
+            for x, prof in enumerate(self.profile_list):
+                self.combo_profile_names.append_text(prof)
+                if default_prof == prof:
+                    starting_index = x
+            self.combo_profile_names.set_active(starting_index)
+        else:
+            print "no wired profiles found"
+            self.profile_help.show()
         
         # Format the profile help label.
         self.profile_help.set_justify(gtk.JUSTIFY_LEFT)
@@ -580,6 +588,11 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile.connect("toggled",
                                             self.toggle_default_profile)
         self.combo_profile_names.connect("changed", self.change_profile)
+
+        # Show everything, but hide the profile help label.
+        self.show_all()
+        self.profile_help.hide()
+        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
         
         # Toggle the default profile checkbox to the correct state.
         if to_bool(wired.GetWiredProperty("default")):
@@ -587,25 +600,6 @@ class WiredNetworkEntry(NetworkEntry):
         else:
             self.chkbox_default_profile.set_active(False)
 
-        # Show everything, but hide the profile help label.
-        self.show_all()
-        self.profile_help.hide()
-        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
-        
-        # Display the default profile if it exists.
-        if self.profile_list is not None:
-            prof = wired.GetDefaultWiredNetwork()
-            if prof != None:  # Make sure the default profile gets displayed.
-                i = 0
-                while self.combo_profile_names.get_active_text() != prof:
-                    self.combo_profile_names.set_active(i)
-                    i += 1
-            else:
-                self.combo_profile_names.set_active(0)
-            print "wired profiles found"
-        else:
-            print "no wired profiles found"
-            self.profile_help.show()        
         self.check_enable()
         self.wireddis = self.connect("destroy", self.destroy_called)
         
@@ -642,21 +636,32 @@ class WiredNetworkEntry(NetworkEntry):
     def add_profile(self, widget):
         """ Add a profile to the profile list. """
         print "adding profile"
-        profile_name = self.combo_profile_names.get_active_text()
+
+        response = string_input("Enter a profile name", "The profile name " +
+                                  "will not be used by the computer. It " +
+                                  "allows you to " + 
+                                  "easily distinguish between different network " +
+                                  "profiles.", "Profile name:")
+
+        # if response is "" or None
+        if not response:
+            return
+
+        profile_name = response
         profile_list = wired.GetWiredProfileList()
         if profile_list:
             if profile_name in profile_list:
                 return False
-        if profile_name != "":
-            self.profile_help.hide()
-            wired.CreateWiredNetworkProfile(profile_name, False)
-            self.combo_profile_names.prepend_text(profile_name)
-            self.combo_profile_names.set_active(0)
-            self.advanced_dialog.prof_name = profile_name
-            if self.is_full_gui:
-                self.button_delete.set_sensitive(True)
-                self.connect_button.set_sensitive(True)
-                self.advanced_button.set_sensitive(True)
+
+        self.profile_help.hide()
+        wired.CreateWiredNetworkProfile(profile_name, False)
+        self.combo_profile_names.prepend_text(profile_name)
+        self.combo_profile_names.set_active(0)
+        self.advanced_dialog.prof_name = profile_name
+        if self.is_full_gui:
+            self.button_delete.set_sensitive(True)
+            self.connect_button.set_sensitive(True)
+            self.advanced_button.set_sensitive(True)
 
     def remove_profile(self, widget):
         """ Remove a profile from the profile list. """

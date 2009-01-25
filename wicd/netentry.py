@@ -703,7 +703,7 @@ class WiredNetworkEntry(NetworkEntry):
             profile_name = self.combo_profile_names.get_active_text()
             wired.ReadWiredNetworkProfile(profile_name)
 
-            if self.advanced_dialog:
+            if hasattr(self, 'advanced_dialog'):
                 self.advanced_dialog.prof_name = profile_name
                 self.advanced_dialog.set_values()
             

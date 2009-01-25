@@ -49,7 +49,6 @@ def error_handler(*args):
 if __name__ == '__main__':
     try:
         time.sleep(2)
-        wireless.Scan(True)
         daemon.SetSuspend(False)
         if not daemon.CheckIfConnecting():
             daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)

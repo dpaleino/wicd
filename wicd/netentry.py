@@ -234,7 +234,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        profile = self.combo_profile_names.get_active_text()
+        profile = self.prof_name
         cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
             cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
@@ -535,10 +535,10 @@ class WiredNetworkEntry(NetworkEntry):
         """ Load the wired network entry. """
         NetworkEntry.__init__(self, dbus_ifaces)
         # Center the picture and pad it a bit
-        self.image.set_alignment(.5, 0)
+        self.image.set_padding(0, 0)
+        self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
-        #self.image.set_from_icon_name("network-wired", 6)
-        self.image.set_from_file(wpath.images + "wired.png")
+        self.image.set_from_file(wpath.images + "wired-gui.svg")
         self.image.show()
         self.connect_button.show()
 
@@ -555,9 +555,17 @@ class WiredNetworkEntry(NetworkEntry):
         # Build the profile list.
         self.combo_profile_names = gtk.combo_box_new_text() 
         self.profile_list = wired.GetWiredProfileList()
+        default_prof = wired.GetDefaultWiredNetwork()
         if self.profile_list:
-            for x in self.profile_list:
-                self.combo_profile_names.append_text(x)
+            starting_index = 0
+            for x, prof in enumerate(self.profile_list):
+                self.combo_profile_names.append_text(prof)
+                if default_prof == prof:
+                    starting_index = x
+            self.combo_profile_names.set_active(starting_index)
+        else:
+            print "no wired profiles found"
+            self.profile_help.show()
         
         # Format the profile help label.
         self.profile_help.set_justify(gtk.JUSTIFY_LEFT)
@@ -580,6 +588,11 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile.connect("toggled",
                                             self.toggle_default_profile)
         self.combo_profile_names.connect("changed", self.change_profile)
+
+        # Show everything, but hide the profile help label.
+        self.show_all()
+        self.profile_help.hide()
+        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
         
         # Toggle the default profile checkbox to the correct state.
         if to_bool(wired.GetWiredProperty("default")):
@@ -587,25 +600,6 @@ class WiredNetworkEntry(NetworkEntry):
         else:
             self.chkbox_default_profile.set_active(False)
 
-        # Show everything, but hide the profile help label.
-        self.show_all()
-        self.profile_help.hide()
-        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
-        
-        # Display the default profile if it exists.
-        if self.profile_list is not None:
-            prof = wired.GetDefaultWiredNetwork()
-            if prof != None:  # Make sure the default profile gets displayed.
-                i = 0
-                while self.combo_profile_names.get_active_text() != prof:
-                    self.combo_profile_names.set_active(i)
-                    i += 1
-            else:
-                self.combo_profile_names.set_active(0)
-            print "wired profiles found"
-        else:
-            print "no wired profiles found"
-            self.profile_help.show()        
         self.check_enable()
         self.wireddis = self.connect("destroy", self.destroy_called)
         
@@ -706,6 +700,7 @@ class WiredNetworkEntry(NetworkEntry):
                 return
             
             profile_name = self.combo_profile_names.get_active_text()
+            self.advanced_dialog.prof_name = profile_name
             wired.ReadWiredNetworkProfile(profile_name)
 
             self.advanced_dialog.txt_ip.set_text(self.format_entry("ip"))
@@ -734,7 +729,6 @@ class WirelessNetworkEntry(NetworkEntry):
         self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
         self.image.show()
-        #self.image.set_from_icon_name("network-wired", 6)
         self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
                                                                     "essid"))
         self.lbl_strength = GreyLabel()

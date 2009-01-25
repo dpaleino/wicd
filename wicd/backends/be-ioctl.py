@@ -376,9 +376,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             False otherwise.
 
         """
-        def error():
-            print "Unable to find ctrl_interface for wpa_supplicant.  " + \
-                  "Could not validate authentication."
+        error= "Unable to find ctrl_interface for wpa_supplicant.  " + \
+                   "Could not validate authentication."
         
         # Right now there's no way to do this for ralink drivers
         if self.wpa_driver == RALINK_DRIVER:
@@ -389,7 +388,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             socket = [os.path.join(ctrl_iface, s) \
                       for s in os.listdir(ctrl_iface) if s == self.iface][0]
         except OSError:
-            error()
+            print error
             return True
             
         wpa = wpactrl.WPACtrl(socket)

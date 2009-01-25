@@ -741,7 +741,8 @@ class WirelessConnectThread(ConnectThread):
         self.is_connecting = True
         
         # Run pre-connection script.
-        self.run_script_if_needed(self.before_script, 'pre-connection', self.network['bssid'], self.network['essid'])
+        self.run_script_if_needed(self.before_script, 'pre-connection', 
+                                  self.network['bssid'], self.network['essid'])
 
         
         # Take down interface and clean up previous connections.
@@ -783,7 +784,8 @@ class WirelessConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
-        self.run_script_if_needed(self.after_script, 'post-connection', self.network['bssid'], self.network['essid'])
+        self.run_script_if_needed(self.after_script, 'post-connection', 
+                                  self.network['bssid'], self.network['essid'])
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'
@@ -947,7 +949,8 @@ class WiredConnectThread(ConnectThread):
         self.is_connecting = True
 
         # Run pre-connection script.
-        self.run_script_if_needed(self.before_script, 'pre-connection', 'wired', 'wired')
+        self.run_script_if_needed(self.before_script, 'pre-connection', 'wired', 
+                                  'wired')
 
         # Take down interface and clean up previous connections.
         self.put_iface_down(liface)
@@ -965,7 +968,8 @@ class WiredConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
-        self.run_script_if_needed(self.after_script, 'post-connection', 'wired', 'wired')
+        self.run_script_if_needed(self.after_script, 'post-connection', 'wired', 
+                                  'wired')
 
         self.SetStatus('done')
         print 'Connecting thread exiting.'

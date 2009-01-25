@@ -48,7 +48,7 @@ class ConfigManager(RawConfigParser):
         """ Returns the path to the loaded config file. """
         return self.config_file
         
-    def set_option(self, section, option, value, save=False):
+    def set_option(self, section, option, value, write=False):
         """ Wrapper around ConfigParser.set
 
         Adds the option to write the config file change right away.
@@ -65,7 +65,7 @@ class ConfigManager(RawConfigParser):
                 value = "%(ws)s%(value)s%(ws)s" % {"value" : value,
                                                    "ws" : self.mrk_ws}
         RawConfigParser.set(self, section, str(option), value)
-        if save:
+        if write:
             self.write()
 
     def set(self, *args, **kargs):
@@ -98,7 +98,7 @@ class ConfigManager(RawConfigParser):
         else:
             if default != "__None__":
                 print 'did not find %s in configuration, setting default %s' % (option, str(default))
-                self.set(section, option, str(default), save=True)
+                self.set(section, option, str(default), write=True)
                 ret = default
             else:
                 ret = None

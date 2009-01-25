@@ -46,6 +46,45 @@ def alert(parent, message, block=True):
         dialog.run()
         dialog.destroy()
 
+def string_input(prompt, secondary, textbox_label):
+    # based on a version of a PyGTK text entry from
+    # http://ardoris.wordpress.com/2008/07/05/pygtk-text-entry-dialog/
+
+    def dialog_response(entry, dialog, response):
+        dialog.response(response)
+
+    dialog = gtk.MessageDialog(
+        None,
+        gtk.DIALOG_MODAL,
+        gtk.MESSAGE_QUESTION,
+        gtk.BUTTONS_OK_CANCEL,
+        None)
+
+    # set the text
+    dialog.set_markup("<span size='larger'><b>" + prompt + "</b></span>")
+    # add the secondary text
+    dialog.format_secondary_markup(secondary)
+
+    entry = gtk.Entry()
+    # allow the user to press enter instead of clicking OK
+    entry.connect("activate", dialog_response, dialog, gtk.RESPONSE_OK)
+
+    # create an hbox and pack the label and entry in
+    hbox = gtk.HBox()
+    hbox.pack_start(gtk.Label(textbox_label), False, 4, 4)
+    hbox.pack_start(entry)
+
+    # pack the boxes and show the dialog
+    dialog.vbox.pack_end(hbox, True, True, 0)
+    dialog.show_all()
+
+    if dialog.run() == gtk.RESPONSE_OK:
+        text = entry.get_text()
+        dialog.destroy()
+        return text
+    else:
+        dialog.destroy()
+        return None
 
 class SmallLabel(gtk.Label):
     def __init__(self, text=''):

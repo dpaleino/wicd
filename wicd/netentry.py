@@ -21,7 +21,7 @@ import os
 import misc
 import wpath
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel
+from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
 language = misc.get_language_list_gui()
 
@@ -553,7 +553,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile = gtk.CheckButton(language['default_wired'])
                 
         # Build the profile list.
-        self.combo_profile_names = gtk.combo_box_entry_new_text()
+        self.combo_profile_names = gtk.combo_box_new_text() 
         self.profile_list = wired.GetWiredProfileList()
         if self.profile_list:
             for x in self.profile_list:
@@ -642,21 +642,32 @@ class WiredNetworkEntry(NetworkEntry):
     def add_profile(self, widget):
         """ Add a profile to the profile list. """
         print "adding profile"
-        profile_name = self.combo_profile_names.get_active_text()
+
+        response = string_input("Enter a profile name", "The profile name " +
+                                  "will not be used by the computer. It " +
+                                  "allows you to " + 
+                                  "easily distinguish between different network " +
+                                  "profiles.", "Profile name:")
+
+        # if response is "" or None
+        if not response:
+            return
+
+        profile_name = response
         profile_list = wired.GetWiredProfileList()
         if profile_list:
             if profile_name in profile_list:
                 return False
-        if profile_name != "":
-            self.profile_help.hide()
-            wired.CreateWiredNetworkProfile(profile_name, False)
-            self.combo_profile_names.prepend_text(profile_name)
-            self.combo_profile_names.set_active(0)
-            self.advanced_dialog.prof_name = profile_name
-            if self.is_full_gui:
-                self.button_delete.set_sensitive(True)
-                self.connect_button.set_sensitive(True)
-                self.advanced_button.set_sensitive(True)
+
+        self.profile_help.hide()
+        wired.CreateWiredNetworkProfile(profile_name, False)
+        self.combo_profile_names.prepend_text(profile_name)
+        self.combo_profile_names.set_active(0)
+        self.advanced_dialog.prof_name = profile_name
+        if self.is_full_gui:
+            self.button_delete.set_sensitive(True)
+            self.connect_button.set_sensitive(True)
+            self.advanced_button.set_sensitive(True)
 
     def remove_profile(self, widget):
         """ Remove a profile from the profile list. """

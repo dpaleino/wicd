@@ -535,10 +535,10 @@ class WiredNetworkEntry(NetworkEntry):
         """ Load the wired network entry. """
         NetworkEntry.__init__(self, dbus_ifaces)
         # Center the picture and pad it a bit
-        self.image.set_alignment(.5, 0)
+        self.image.set_padding(0, 0)
+        self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
-        #self.image.set_from_icon_name("network-wired", 6)
-        self.image.set_from_file(wpath.images + "wired.png")
+        self.image.set_from_file(wpath.images + "wired-gui.svg")
         self.image.show()
         self.connect_button.show()
 
@@ -729,7 +729,6 @@ class WirelessNetworkEntry(NetworkEntry):
         self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
         self.image.show()
-        #self.image.set_from_icon_name("network-wired", 6)
         self.essid = noneToBlankString(wireless.GetWirelessProperty(networkID,
                                                                     "essid"))
         self.lbl_strength = GreyLabel()

@@ -234,7 +234,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        profile = self.combo_profile_names.get_active_text()
+        profile = self.prof_name
         cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
             cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
@@ -695,6 +695,7 @@ class WiredNetworkEntry(NetworkEntry):
                 return
             
             profile_name = self.combo_profile_names.get_active_text()
+            self.advanced_dialog.prof_name = profile_name
             wired.ReadWiredNetworkProfile(profile_name)
 
             self.advanced_dialog.txt_ip.set_text(self.format_entry("ip"))

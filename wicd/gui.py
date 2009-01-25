@@ -706,15 +706,14 @@ class appGui(object):
         [width, height] = self.window.get_size()
         try:
             daemon.WriteWindowSize(width, height, "main")
-        except:
+            daemon.SetGUIOpen(False)
+        except dbusmanager.DBusException:
             pass
 
         if self.standalone:
             sys.exit(0)
 
         self.is_visible = False
-        daemon.SetGUIOpen(False)
-        self.wait_for_events()
         return True
 
     def show_win(self):

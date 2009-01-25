@@ -63,20 +63,29 @@ class ConnectionStatus(object):
         self.last_reconnect_time = time.time()
         self.signal_changed = False
         self.iwconfig = ""
+        self.trigger_reconnect = False
         
         bus = dbusmanager.get_bus()
         bus.add_signal_receiver(self._force_update_connection_status, 
                                 "UpdateState", "org.wicd.daemon")
 
     def check_for_wired_connection(self, wired_ip):
-        """ Checks for an active wired connection.
+        """ Checks for a wired connection.
 
-        Checks for and updates the tray icon for an active wired connection
-        Returns True if wired connection is active, false if inactive.
+        Checks for two states:
+        1) A wired connection is not in use, but a cable is plugged
+           in, and the user has chosen to switch to a wired connection
+           whenever its available, even if already connected to a
+           wireless network
+           
+        2) A wired connection is currently active.
 
         """
+        if not wired_ip and daemon.GetPreferWiredNetwork():
+            if not daemon.GetForcedDisconnect() and wired.CheckPluggedIn():
+                self.trigger_reconnect = True
         
-        if wired_ip and wired.CheckPluggedIn():
+        elif wired_ip and wired.CheckPluggedIn():
             # Only change the interface if it's not already set for wired
             if not self.still_wired:
                 daemon.SetCurrentInterface(daemon.GetWiredInterface())
@@ -89,14 +98,17 @@ class ConnectionStatus(object):
     def check_for_wireless_connection(self, wireless_ip):
         """ Checks for an active wireless connection.
 
-        Checks for and updates the tray icon for an active
-        wireless connection.  Returns True if wireless connection 
-        is active, and False otherwise.
+        Checks for an active wireless connection.  Also notes
+        if the signal strength is 0, and if it remains there
+        for too long, triggers a wireless disconnect.
+        
+        Returns True if wireless connection is active, and 
+        False otherwise.
 
         """
 
         # Make sure we have an IP before we do anything else.
-        if wireless_ip is None:
+        if not wireless_ip:
             return False
 
         if daemon.NeedsExternalCalls():
@@ -158,6 +170,15 @@ class ConnectionStatus(object):
             # Check for wired.
             wired_ip = wired.GetWiredIP("")
             wired_found = self.check_for_wired_connection(wired_ip)
+            # Trigger an AutoConnect if we're plugged in, not connected
+            # to a wired network, and the "autoswitch to wired" option
+            # is on.
+            if self.trigger_reconnect:
+                self.trigger_reconnect = False
+                wireless.DisconnectWireless()
+                daemon.AutoConnect(False, reply_handler=lambda:None,
+                                   error_handler=lambda:None)
+                return True
             if wired_found:
                 self.update_state(misc.WIRED, wired_ip=wired_ip)
                 return True

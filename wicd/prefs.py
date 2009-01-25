@@ -58,6 +58,7 @@ class PreferencesDialog(object):
         self.reconnectcheckbox.set_active(daemon.GetAutoReconnect())
         self.debugmodecheckbox.set_active(daemon.GetDebugMode())
         self.displaytypecheckbox.set_active(daemon.GetSignalDisplayType())
+        self.preferwiredcheckbox.set_active(daemon.GetPreferWiredNetwork())
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
                      self.pumpradio]
@@ -148,6 +149,7 @@ class PreferencesDialog(object):
         daemon.SetAutoReconnect(self.reconnectcheckbox.get_active())
         daemon.SetDebugMode(self.debugmodecheckbox.get_active())
         daemon.SetSignalDisplayType(int(self.displaytypecheckbox.get_active()))
+        daemon.SetPreferWiredNetwork(bool(self.preferwiredcheckbox.get_active()))
         if self.showlistradiobutton.get_active():
             daemon.SetWiredAutoConnectMethod(2)
         elif self.lastusedradiobutton.get_active():
@@ -253,6 +255,8 @@ class PreferencesDialog(object):
             
         self.wiredcheckbox = setup_label("pref_always_check",
                                          'wired_always_on')
+        self.preferwiredcheckbox = setup_label("pref_prefer_wired_check",
+                                               "prefer_wired")
 
         self.reconnectcheckbox = setup_label("pref_auto_check",
                                              'auto_reconnect')

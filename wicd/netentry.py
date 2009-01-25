@@ -554,18 +554,6 @@ class WiredNetworkEntry(NetworkEntry):
                 
         # Build the profile list.
         self.combo_profile_names = gtk.combo_box_new_text() 
-        self.profile_list = wired.GetWiredProfileList()
-        default_prof = wired.GetDefaultWiredNetwork()
-        if self.profile_list:
-            starting_index = 0
-            for x, prof in enumerate(self.profile_list):
-                self.combo_profile_names.append_text(prof)
-                if default_prof == prof:
-                    starting_index = x
-            self.combo_profile_names.set_active(starting_index)
-        else:
-            print "no wired profiles found"
-            self.profile_help.show()
         
         # Format the profile help label.
         self.profile_help.set_justify(gtk.JUSTIFY_LEFT)
@@ -588,6 +576,20 @@ class WiredNetworkEntry(NetworkEntry):
         self.chkbox_default_profile.connect("toggled",
                                             self.toggle_default_profile)
         self.combo_profile_names.connect("changed", self.change_profile)
+        
+        # Build profile list.
+        self.profile_list = wired.GetWiredProfileList()
+        default_prof = wired.GetDefaultWiredNetwork()
+        if self.profile_list:
+            starting_index = 0
+            for x, prof in enumerate(self.profile_list):
+                self.combo_profile_names.append_text(prof)
+                if default_prof == prof:
+                    starting_index = x
+            self.combo_profile_names.set_active(starting_index)
+        else:
+            print "no wired profiles found"
+            self.profile_help.show()
 
         # Show everything, but hide the profile help label.
         self.show_all()
@@ -700,17 +702,11 @@ class WiredNetworkEntry(NetworkEntry):
                 return
             
             profile_name = self.combo_profile_names.get_active_text()
-            self.advanced_dialog.prof_name = profile_name
             wired.ReadWiredNetworkProfile(profile_name)
 
-            self.advanced_dialog.txt_ip.set_text(self.format_entry("ip"))
-            self.advanced_dialog.txt_netmask.set_text(self.format_entry("netmask"))
-            self.advanced_dialog.txt_gateway.set_text(self.format_entry("gateway"))
-            self.advanced_dialog.txt_dns_1.set_text(self.format_entry("dns1"))
-            self.advanced_dialog.txt_dns_2.set_text(self.format_entry("dns2"))
-            self.advanced_dialog.txt_dns_3.set_text(self.format_entry("dns3"))
             self.advanced_dialog.prof_name = profile_name
-
+            self.advanced_dialog.set_values()
+            
             is_default = wired.GetWiredProperty("default")
             self.chkbox_default_profile.set_active(to_bool(is_default))
 

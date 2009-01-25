@@ -551,8 +551,6 @@ class WiredNetworkEntry(NetworkEntry):
         self.button_delete = gtk.Button(stock=gtk.STOCK_DELETE)
         self.profile_help = gtk.Label(language['wired_network_instructions'])
         self.chkbox_default_profile = gtk.CheckButton(language['default_wired'])
-                
-        # Build the profile list.
         self.combo_profile_names = gtk.combo_box_new_text() 
         
         # Format the profile help label.
@@ -590,11 +588,12 @@ class WiredNetworkEntry(NetworkEntry):
         else:
             print "no wired profiles found"
             self.profile_help.show()
+            
+        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())            
 
         # Show everything, but hide the profile help label.
         self.show_all()
         self.profile_help.hide()
-        self.advanced_dialog = WiredSettingsDialog(self.combo_profile_names.get_active_text())
         
         # Toggle the default profile checkbox to the correct state.
         if to_bool(wired.GetWiredProperty("default")):
@@ -704,8 +703,9 @@ class WiredNetworkEntry(NetworkEntry):
             profile_name = self.combo_profile_names.get_active_text()
             wired.ReadWiredNetworkProfile(profile_name)
 
-            self.advanced_dialog.prof_name = profile_name
-            self.advanced_dialog.set_values()
+            if self.advanced_dialog:
+                self.advanced_dialog.prof_name = profile_name
+                self.advanced_dialog.set_values()
             
             is_default = wired.GetWiredProperty("default")
             self.chkbox_default_profile.set_active(to_bool(is_default))

@@ -1147,7 +1147,7 @@ class WirelessDaemon(dbus.service.Object):
         # Read the essid because we need to name those hidden
         # wireless networks now - but only read it if it is hidden.
         if cur_network["hidden"]:
-            cur_network["essid"] = config.get(section, x)
+            cur_network["essid"] = self.config.get(section, "essid")
             if cur_network["essid"] in ["", "Hidden", "<hidden>"]:
                 cur_network["essid"] = "<hidden>"
         for x in self.config.options(section):

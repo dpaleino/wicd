@@ -44,6 +44,7 @@ import os
 import pango
 import time
 import atexit
+from dbus import DBusException
 
 # Wicd specific imports
 from wicd import wpath

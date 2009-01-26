@@ -27,7 +27,7 @@ from curses_misc import SelText,DynWrap,ComboBox,TabColumns
 daemon = None
 wireless = None
 wired = None
-# Will work for now, I guess.
+
 language = misc.get_language_list_gui()
 
 class PrefsDialog(urwid.WidgetWrap):
@@ -64,6 +64,7 @@ class PrefsDialog(urwid.WidgetWrap):
         wired_t             = ('editcp',language['wired_interface']+':   ')
         wless_t             = ('editcp',language['wireless_interface']+':')
         always_show_wired_t = 'Always show wired interface'
+        prefer_wired_t      = 'Always switch to a wired connection when available'
 
         global_dns_cat_t = ('header','Global DNS Servers')
         global_dns_t     = ('editcp',language['use_global_dns'])
@@ -127,7 +128,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.net_cat     = urwid.Text(net_cat_t)
         self.wired_edit = urwid.AttrWrap(urwid.Edit(wired_t),'editbx','editfc')
         self.wless_edit = urwid.AttrWrap(urwid.Edit(wless_t),'editbx','editfc')
-        
+        self.prefer_wired_chkbx = urwid.CheckBox(prefer_wired_t)
         self.global_dns_cat = urwid.Text(global_dns_cat_t)
         # Default the global DNS settings to off.  They will be reenabled later
         # if so required.
@@ -154,7 +155,8 @@ class PrefsDialog(urwid.WidgetWrap):
         generalLB = urwid.ListBox([self.net_cat,
                                    self.wless_edit,#_blank,
                                    self.wired_edit,
-                                   self.always_show_wired_checkb,_blank,
+                                   self.always_show_wired_checkb,
+                                   self.prefer_wired_chkbx,_blank,
                                    self.global_dns_cat,
                                    self.global_dns_checkb,#_blank,
                                    self.search_dom,self.dns_dom,
@@ -279,7 +281,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
         self.always_show_wired_checkb.set_state(
                 daemon.GetAlwaysShowWiredInterface())
-
+        self.prefer_wired_chkbx.set_state(daemon.GetPreferWiredNetwork())
         # DNS
         self.global_dns_checkb.set_state(daemon.GetUseGlobalDNS())
         theDNS = daemon.GetGlobalDNSAddresses()
@@ -350,6 +352,7 @@ class PrefsDialog(urwid.WidgetWrap):
         daemon.SetAutoReconnect(self.auto_reconn_checkb.get_state())
         daemon.SetDebugMode(self.debug_mode_checkb.get_state())
         daemon.SetSignalDisplayType(int(self.use_dbm_checkb.get_state()))
+        daemon.SetPreferWiredNetwork(bool(self.prefer_wired_chkbx.get_state()))
         if self.wired_auto_2.get_state():
             daemon.SetWiredAutoConnectMethod(2)
         elif self.wired_auto_3.get_state():

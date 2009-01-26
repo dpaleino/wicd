@@ -174,16 +174,12 @@ class Controller(object):
         """
         return self.iface.GetIP(ifconfig)
 
-    def Disconnect(self):
+    def Disconnect(self, *args, **kargs):
         """ Disconnect from the network. """
         iface = self.iface
         if self.disconnect_script != None:
-            print 'Running wired disconnect script'
-            iwconfig = self.GetIwconfig()
-            misc.ExecuteScript(expand_script_macros(self.disconnect_script, 'disconnection',
-                                                    self.wiface.GetBSSID( iwconfig ),
-                                                    self.wiface.GetCurrentNetwork( iwconfig ) ))
-
+            print 'Running disconnect script'
+            misc.ExecuteScript(expand_script_macros(self.disconnect_script, 'disconnection', *args))
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.Down()
@@ -685,7 +681,14 @@ class Wireless(Controller):
         Resets it's IP address, and puts the interface down then up.
         
         """
-        Controller.Disconnect(self)
+        if BACKEND.NeedsExternalCalls():
+            iwconfig = self.GetIwconfig()
+        else:
+            iwconfig = None
+        bssid = self.wiface.GetBSSID(iwconfig),
+        essid = self.wiface.GetCurrentNetwork(iwconfig) 
+
+        Controller.Disconnect(self, bssid, essid)
         self.StopWPA()
     
     def SetWPADriver(self, driver):
@@ -893,6 +896,9 @@ class Wired(Controller):
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return self.connecting_thread
+    
+    def Disconnect(self):
+        Controller.Disconnect(self, 'wired', 'wired')
     
     def DetectWiredInterface(self):
         """ Attempts to automatically detect a wired interface. """

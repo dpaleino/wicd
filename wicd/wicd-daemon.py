@@ -1147,7 +1147,7 @@ class WirelessDaemon(dbus.service.Object):
         # Read the essid because we need to name those hidden
         # wireless networks now - but only read it if it is hidden.
         if cur_network["hidden"]:
-            cur_network["essid"] = config.get(section, x)
+            cur_network["essid"] = self.config.get(section, "essid")
             if cur_network["essid"] in ["", "Hidden", "<hidden>"]:
                 cur_network["essid"] = "<hidden>"
         for x in self.config.options(section):
@@ -1416,8 +1416,9 @@ class WiredDaemon(dbus.service.Object):
         if self.config.has_section(profilename):
             return False
 
-        for option in ["ip", "broadcast", "netmask","gateway", "dns1", "dns2",
-                       "dns3", "beforescript", "afterscript", "disconnectscript"]:
+        for option in ["ip", "broadcast", "netmask","gateway", "search_domain", 
+                       "dns_domain", "dns1", "dns2", "dns3", "beforescript", 
+                       "afterscript", "disconnectscript"]:
             self.config.set(profilename, option, None)
         self.config.set(profilename, "default", default)
         self.config.write()
@@ -1428,29 +1429,24 @@ class WiredDaemon(dbus.service.Object):
         """ Finds the previous lastused network, and sets lastused to False. """
         profileList = self.config.sections()
         for profile in profileList:
-            if self.config.has_option(profile, "lastused"):
-                if misc.to_bool(self.config.get(profile, "lastused")):
-                    self.config.set(profile, "lastused", False)
-                    self.SaveWiredNetworkProfile(profile)
+            if misc.to_bool(self.config.get(profile, "lastused")):
+                self.config.set(profile, "lastused", False, write=True)
 
     @dbus.service.method('org.wicd.daemon.wired')
     def UnsetWiredDefault(self):
         """ Unsets the default option in the current default wired profile. """
         profileList = self.config.sections()
         for profile in profileList:
-            if self.config.has_option(profile, "default"):
-                if misc.to_bool(self.config.get(profile, "default")):
-                    self.config.set(profile, "default", False)
-                    self.SaveWiredNetworkProfile(profile)
+            if misc.to_bool(self.config.get(profile, "default")):
+                self.config.set(profile, "default", False, write=True)
 
     @dbus.service.method('org.wicd.daemon.wired')
     def GetDefaultWiredNetwork(self):
         """ Returns the current default wired network. """
         profileList = self.config.sections()
         for profile in profileList:
-            if self.config.has_option(profile, "default"):
-                if misc.to_bool(self.config.get(profile, "default")):
-                    return profile
+            if misc.to_bool(self.config.get(profile, "default")):
+                return profile
         return None
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -1458,9 +1454,8 @@ class WiredDaemon(dbus.service.Object):
         """ Returns the profile of the last used wired network. """
         profileList = self.config.sections()
         for profile in profileList:
-            if self.config.has_option(profile, "lastused"):
-                if misc.to_bool(self.config.get(profile, "lastused")):
-                    return profile
+            if misc.to_bool(self.config.get(profile, "lastused")):
+                return profile
         return None
 
     @dbus.service.method('org.wicd.daemon.wired')
@@ -1481,6 +1476,8 @@ class WiredDaemon(dbus.service.Object):
         if profilename == "":
             self.config.write()
             return "500: Bad Profile name"
+        if self.debug_mode:
+            print "saving wired profile %s" % profilename
         profilename = misc.to_unicode(profilename)
         self.config.remove_section(profilename)
         self.config.add_section(profilename)
@@ -1499,6 +1496,8 @@ class WiredDaemon(dbus.service.Object):
         profile = {}
         profilename = misc.to_unicode(profilename)
         if self.config.has_section(profilename):
+            if self.debug_mode:
+                print "Reading wired profile %s" % profilename
             for x in self.config.options(profilename):
                 profile[x] = misc.Noneify(self.config.get(profilename, x))
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))

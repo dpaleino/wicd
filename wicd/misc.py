@@ -536,10 +536,13 @@ def get_language_list_gui():
     language['bad_pass'] = _('Connection Failed: Could not authenticate (bad password?)')
     language['done'] = _('Done connecting...')
     language['scanning'] = _('Scanning')
+    language['scanning_stand_by'] = _('Scanning networks... stand by...')
     language['cannot_start_daemon'] = _("Unable to connect to wicd daemon DBus interface.  " + \
                                     "This typically means there was a problem starting the daemon.  " + \
                                     "Check the wicd log for more info")
     language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
+    language['configuring_wireless'] = ("Configuring preferences for wireless network \"$A\" ($B)")
+    language['configuring_wired'] = ("Configuring preferences for wired profile \"$A\"")
     
     return language
 

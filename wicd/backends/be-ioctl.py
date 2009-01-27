@@ -484,7 +484,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                             if self.verbose: print cmd
                             misc.Run(cmd)
 
-    def GetBSSID(self):
+    def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
         if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]

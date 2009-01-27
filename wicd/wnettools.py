@@ -483,12 +483,15 @@ class BaseInterface(object):
     def FlushRoutes(self):
         """ Flush all network routes. """
         if not self.iface: return False
-        if self.IP_FOUND and self.flush_tool != misc.ROUTE:
-            cmd = "ip route flush dev " + self.iface
+        if self.IP_FOUND and self.flush_tool == misc.IP:
+            #cmd = "ip route flush dev " + self.iface
+            cmds = ['ip route flush all']
         else:
-            cmd = 'route del dev ' + self.iface
-        if self.verbose: print cmd
-        misc.Run(cmd)
+            cmds = ['route del default']
+            cmds.append('route del dev %s' % self.iface)
+        for cmd in cmds:
+            if self.verbose: print cmd
+            misc.Run(cmd)
 
     def SetDefaultRoute(self, gw):
         """ Add a default route with the specified gateway.

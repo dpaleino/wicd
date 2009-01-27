@@ -558,7 +558,7 @@ def get_language_list_gui():
 
     language["exception"] = _("EXCEPTION! Please report this to the maintainer and file a bug report with the backtrace below:")
     language["brought_to_you"] = _("Brought to you by:")
-    language["cannot_edit_scripts_1"] = _("To avoid various complications, wicd-curses does not support directly editing the scripts directly. However, you can edit them manually. First, (as root), open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:")
+    language["cannot_edit_scripts_1"] = _('To avoid various complications, wicd-curses does not support directly editing the scripts directly. However, you can edit them manually. First, (as root), open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:')
     language["cannot_edit_scripts_2"] = _('Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively. Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.')
     language["add_new_profile"] = _("Add a new profile")
     language["add_new_wired_profile"] = _("Add a new wired profile")

@@ -555,6 +555,18 @@ def get_language_list_gui():
     language['connecting_to_daemon'] = _("Connecting to daemon...")
     langauge['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
     language['could_not_connect'] = _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.")
+
+    language["exception"] = _("EXCEPTION! Please report this to the maintainer and file a bug report with the backtrace below:")
+    language["brought_to_you"] = _("Brought to you by:")
+    language["cannot_edit_scripts_1"] = _("To avoid various complications, wicd-curses does not support directly editing the scripts directly. However, you can edit them manually. First, (as root), open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:")
+    language["cannot_edit_scripts_2"] = _('Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively. Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.')
+    language["add_new_profile"] = _("Add a new profile")
+    language["add_new_wired_profile"] = _("Add a new wired profile")
+    language["no_delete_last_profile"] = _("wicd-curses does not support deleting the last wired profile.  Try renaming it ('F2')")
+    language["rename_wired_profile"] = _("Rename wired profile")
+    language["select_hidden_essid"] = _("Select Hidden Network ESSID")
+    language["esc_to_cancel"] = _("Press ESC to cancel")
+    language["press_to_quit"] = _("Press F8 or Q to quit.")
     
     return language
 

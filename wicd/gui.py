@@ -527,6 +527,7 @@ class appGui(object):
         instruct_label = self.wTree.get_widget("label_instructions")
         if num_networks > 0:
             instruct_label.show()
+            dbus_ifaces = dbusmanager.get_dbus_ifaces()
             for x in range(0, num_networks):
                 if printLine:
                     sep = gtk.HSeparator()
@@ -535,7 +536,7 @@ class appGui(object):
                     sep.show()
                 else:
                     printLine = True
-                tempnet = WirelessNetworkEntry(x, dbusmanager.get_dbus_ifaces())
+                tempnet = WirelessNetworkEntry(x, dbus_ifaces)
                 self.network_list.pack_start(tempnet, False, False)
                 tempnet.connect_button.connect("button-press-event",
                                                self.connect, "wireless", x,

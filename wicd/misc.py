@@ -541,8 +541,20 @@ def get_language_list_gui():
                                     "This typically means there was a problem starting the daemon.  " + \
                                     "Check the wicd log for more info")
     language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
-    language['configuring_wireless'] = ("Configuring preferences for wireless network \"$A\" ($B)")
-    language['configuring_wired'] = ("Configuring preferences for wired profile \"$A\"")
+    language['configuring_wireless'] = _("Configuring preferences for wireless network \"$A\" ($B)")
+    language['configuring_wired'] = _("Configuring preferences for wired profile \"$A\"")
+
+    language['always_switch_to_wired'] = _("Always switch to wired connection when available")
+    language['wired_autoconnect_settings'] = _("Wired Autoconnect Settings")
+    language['always_use_wext'] = _("You should almost always use wext as the WPA supplicant driver")
+    language['debugging'] = _("Debugging")
+    language['wpa_supplicant'] = _("WPA Supplicant")
+    language['automatic_reconnection'] = _("Automatic Reconnection")
+    language['global_dns_servers'] = _("Global DNS servers")
+    language['network_interfaces'] = _("Network Interfaces")
+    language['connecting_to_daemon'] = _("Connecting to daemon...")
+    langauge['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
+    language['could_not_connect'] = _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.")
     
     return language
 

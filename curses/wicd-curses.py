@@ -100,7 +100,7 @@ class wrap_exceptions:
                 print "This is most likely caused by the wicd daemon stopping"
                 print "while wicd-curses is running."
                 print ""
-                print "Please restart the daemon, and restart wicd-curses."
+                print "Please restart the daemon, and then restart wicd-curses."
                 raise
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
@@ -324,7 +324,7 @@ class NetLabel(urwid.WidgetWrap):
                 str(wireless.GetWirelessProperty(id, strenstr)))
         self.essid = wireless.GetWirelessProperty(id, 'essid')
         self.bssid = wireless.GetWirelessProperty(id, 'bssid')
-        self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else 'Unsecured'
+        self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else language['unsecured']
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
         theString = '  %*s  %25s %9s %17s %6s: %s' % (gap,
@@ -390,7 +390,7 @@ class WiredComboBox(ComboBox):
         prev_focus = self.get_focus()[1]
         key = self.__super.keypress(size,key)
         if self.get_focus()[1] == len(self.list)-1:
-            dialog = InputDialog(('header',"Add new wired profile"),7,30)
+            dialog = InputDialog(('header',"Add a new wired profile"),7,30)
             
             exitcode,name = dialog.run(ui,self.parent)
             if exitcode == 0:
@@ -465,7 +465,7 @@ class AdHocDialog(Dialog2):
         body = urwid.ListBox(l)
         #body = urwid.AttrWrap(body, 'body')
 
-        header = ('header',"Create an Ad-Hoc network")
+        header = ('header',language['create_adhoc_network'])
         Dialog2.__init__(self, header, 15, 50, body)
         self.add_buttons([('OK',1),('Cancel',-1)])
         self.frame.set_focus('body')
@@ -503,8 +503,8 @@ class appGUI():
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
         # Will need a translation sooner or later
-        self.screen_locker = urwid.Filler(urwid.Text(('important',"Scanning networks... stand by..."), align='center'))
-        self.no_wlan = urwid.Filler(urwid.Text(('important',"No wireless networks found."), align='center'))
+        self.screen_locker = urwid.Filler(urwid.Text(('important',language['scanning_stand_by']), align='center'))
+        self.no_wlan = urwid.Filler(urwid.Text(('important',language['no_wireless_networks_found']), align='center'))
         self.TITLE = 'Wicd Curses Interface'
         self.WIRED_IDX = 1
         self.WLESS_IDX = 3
@@ -542,7 +542,6 @@ class appGUI():
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
-        nothingness = urwid.Filler(urwid.Text('Hello, world!'))
         self.frame = urwid.Frame(self.thePile,
                                  header=header,
                                  footer=urwid.BoxAdapter(self.footerList,2))

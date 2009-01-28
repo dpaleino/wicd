@@ -553,7 +553,7 @@ def get_language_list_gui():
     language['global_dns_servers'] = _("Global DNS servers")
     language['network_interfaces'] = _("Network Interfaces")
     language['connecting_to_daemon'] = _("Connecting to daemon...")
-    langauge['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
+    language['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
     language['could_not_connect'] = _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.")
     return language
 

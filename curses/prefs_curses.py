@@ -60,13 +60,13 @@ class PrefsDialog(urwid.WidgetWrap):
         ####
 
         # General Settings
-        net_cat_t           = ('header','Network Interfaces')
+        net_cat_t           = ('header',language['network_interfaces'])
         wired_t             = ('editcp',language['wired_interface']+':   ')
         wless_t             = ('editcp',language['wireless_interface']+':')
-        always_show_wired_t = 'Always show wired interface'
-        prefer_wired_t      = 'Always switch to a wired connection when available'
+        always_show_wired_t = language['wired_always_on']
+        prefer_wired_t      = language['always_switch_to_wired']
 
-        global_dns_cat_t = ('header','Global DNS Servers')
+        global_dns_cat_t = ('header',language['global_dns_servers'])
         global_dns_t     = ('editcp',language['use_global_dns'])
         dns_dom_t        = ('editcp','    DNS Domain:   ')
         search_dom_t     = ('editcp','    Search domain:')
@@ -75,13 +75,13 @@ class PrefsDialog(urwid.WidgetWrap):
         dns3_t           = ('editcp','    DNS server 3: ')
 
 
-        wired_auto_cat_t= ('header','Wired Autoconnect Settings')
+        wired_auto_cat_t= ('header',language['wired_autoconnect_settings'])
         wired_auto_1_t = language['use_default_profile']
         wired_auto_2_t = language['show_wired_list']
         wired_auto_3_t = language['use_last_used_profile']
 
-        auto_reconn_cat_t = ('header','Automatic Reconnection')
-        auto_reconn_t = 'Automatically reconnect on connection loss'
+        auto_reconn_cat_t = ('header',language['automatic_reconnection'])
+        auto_reconn_t = language['auto_reconnect']
 
         #### External Programs
         automatic_t = language['wicd_auto_config']
@@ -102,20 +102,20 @@ class PrefsDialog(urwid.WidgetWrap):
  
         #### Advanced Settings
         #wpa_t=('editcp',language['wpa_supplicant_driver']+':')
-        wpa_cat_t=('header','WPA_Supplicant')
+        wpa_cat_t=('header',language['wpa_supplicant'])
         wpa_t=('editcp','Driver:')
         wpa_list = ['spam','double spam','triple spam','quadruple spam']
-        wpa_warn_t = ('important','You should almost always use wext as the WPA Supplicant Driver')
+        wpa_warn_t = ('important',language['always_use_wext'])
         
         backend_cat_t = ('header',language['backend'])
         backend_t = language['backend']+':'
         backend_list = ['spam','double spam','triple spam','quadruple spam']
-        backend_warn_t = ('important','Changes to the backend (probably) requires a daemon restart')
+        #backend_warn_t = ('important','Changes to the backend (probably) requires a daemon restart')
         
-        debug_cat_t = ('header','Debugging')
+        debug_cat_t = ('header',language['debugging'])
         debug_mode_t = language['use_debug_mode']
 
-        wless_cat_t = ('header','Wireless Interface')
+        wless_cat_t = ('header',language['wireless_interface'])
         use_dbm_t = language['display_type_dialog']
         
 
@@ -210,7 +210,6 @@ class PrefsDialog(urwid.WidgetWrap):
         
         self.backend_cat  = urwid.Text(backend_cat_t)
         self.backend_cbox = ComboBox(backend_t)
-        self.backend_warn = urwid.Text(backend_warn_t)
         
         self.debug_cat           = urwid.Text(debug_cat_t)
         self.debug_mode_checkb   = urwid.CheckBox(debug_mode_t)
@@ -222,7 +221,7 @@ class PrefsDialog(urwid.WidgetWrap):
         advancedLB = urwid.ListBox([self.wpa_cat,
                                     self.wpa_cbox,self.wpa_warn,_blank,
                                     self.backend_cat,
-                                    self.backend_cbox,self.backend_warn,_blank,
+                                    self.backend_cbox,_blank,
                                     self.debug_cat,
                                     self.debug_mode_checkb, _blank,
                                     self.wless_cat,
@@ -262,7 +261,7 @@ class PrefsDialog(urwid.WidgetWrap):
         #self.walker   = urwid.SimpleListWalker(content)
         #self.listbox = urwid.ListBox(self.walker)
         #self._linebox = urwid.LineBox(self._listbox)
-        self.tabs = TabColumns(headerList,lbList,'Preferences',self.button_cols)
+        self.tabs = TabColumns(headerList,lbList,language['preferences'],self.button_cols)
         #overlay = urwid.Overlay(self.tabs, body, ('fixed left', pos[0]),
         #                        width, ('fixed top', pos[1]), height)
         self.__super.__init__(self.tabs)

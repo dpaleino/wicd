@@ -292,7 +292,7 @@ def noneToString(text):
         return "None"
     else:
         return str(text)
-    
+
 def get_gettext():
     """ Set up gettext for translations. """
     # Borrowed from an excellent post on how to do this at
@@ -543,7 +543,7 @@ def get_language_list_gui():
     language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
     language['configuring_wireless'] = _("Configuring preferences for wireless network \"$A\" ($B)")
     language['configuring_wired'] = _("Configuring preferences for wired profile \"$A\"")
-
+    language['scan'] = _('Scan')
     language['always_switch_to_wired'] = _("Always switch to wired connection when available")
     language['wired_autoconnect_settings'] = _("Wired Autoconnect Settings")
     language['always_use_wext'] = _("You should almost always use wext as the WPA supplicant driver")
@@ -555,7 +555,6 @@ def get_language_list_gui():
     language['connecting_to_daemon'] = _("Connecting to daemon...")
     language['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
     language['could_not_connect'] = _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.")
-
     language["exception"] = _("EXCEPTION! Please report this to the maintainer and file a bug report with the backtrace below:")
     language["brought_to_you"] = _("Brought to you by:")
     language["cannot_edit_scripts_1"] = _('To avoid various complications, wicd-curses does not support directly editing the scripts directly. However, you can edit them manually. First, (as root), open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:')

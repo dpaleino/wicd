@@ -541,8 +541,32 @@ def get_language_list_gui():
                                     "This typically means there was a problem starting the daemon.  " + \
                                     "Check the wicd log for more info")
     language['lost_dbus'] = _("The wicd daemon has shut down, the UI will not function properly until it is restarted.")
-    language['configuring_wireless'] = ("Configuring preferences for wireless network \"$A\" ($B)")
-    language['configuring_wired'] = ("Configuring preferences for wired profile \"$A\"")
+    language['configuring_wireless'] = _("Configuring preferences for wireless network \"$A\" ($B)")
+    language['configuring_wired'] = _("Configuring preferences for wired profile \"$A\"")
+
+    language['always_switch_to_wired'] = _("Always switch to wired connection when available")
+    language['wired_autoconnect_settings'] = _("Wired Autoconnect Settings")
+    language['always_use_wext'] = _("You should almost always use wext as the WPA supplicant driver")
+    language['debugging'] = _("Debugging")
+    language['wpa_supplicant'] = _("WPA Supplicant")
+    language['automatic_reconnection'] = _("Automatic Reconnection")
+    language['global_dns_servers'] = _("Global DNS servers")
+    language['network_interfaces'] = _("Network Interfaces")
+    language['connecting_to_daemon'] = _("Connecting to daemon...")
+    language['cannot_connect_to_daemon'] = _("Can't connect to the daemon, trying to start it automatically...")
+    language['could_not_connect'] = _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.")
+
+    language["exception"] = _("EXCEPTION! Please report this to the maintainer and file a bug report with the backtrace below:")
+    language["brought_to_you"] = _("Brought to you by:")
+    language["cannot_edit_scripts_1"] = _('To avoid various complications, wicd-curses does not support directly editing the scripts directly. However, you can edit them manually. First, (as root), open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:')
+    language["cannot_edit_scripts_2"] = _('Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively. Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.')
+    language["add_new_profile"] = _("Add a new profile")
+    language["add_new_wired_profile"] = _("Add a new wired profile")
+    language["no_delete_last_profile"] = _("wicd-curses does not support deleting the last wired profile.  Try renaming it ('F2')")
+    language["rename_wired_profile"] = _("Rename wired profile")
+    language["select_hidden_essid"] = _("Select Hidden Network ESSID")
+    language["esc_to_cancel"] = _("Press ESC to cancel")
+    language["press_to_quit"] = _("Press F8 or Q to quit.")
     
     return language
 

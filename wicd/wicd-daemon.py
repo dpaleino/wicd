@@ -115,7 +115,7 @@ class WicdDaemon(dbus.service.Object):
         if not auto_connect:
             print "--no-autoconnect detected, not autoconnecting..."
             self.SetForcedDisconnect(True)
-            self.wireless_bus.Scan()
+        self.wireless_bus.Scan()
             
     def get_debug_mode(self):
         return self._debug_mode

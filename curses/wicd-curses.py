@@ -242,7 +242,7 @@ def help_dialog(body):
     theText = [
 "For more detailed help, consult the wicd-curses(8) man page.\n",
 "\n", "All controls are case sensitive\n",
-('bold','H'),"        Display this help dialog\n",
+('bold','H')," or ",('bold','h'),' or ',('bold','?'),"      Display this help dialog\n",
 ('bold','enter'),"            Connect to selected network\n",
 ('bold','D'),"                Disconnect from all networks\n",
 ('bold','ESC'),"              Stop a network connection in progress\n",
@@ -250,9 +250,10 @@ def help_dialog(body):
 ('bold','P'),"                Prefrences dialog\n",
 ('bold','I'),"                Scan for hidden networks\n",
 ('bold','S'),"                Select scripts\n",
-('bold','O'),"                Set up Ad-hoc network\n"
+('bold','O'),"                Set up Ad-hoc network\n",
+('bold','C'),"                Configure Selected Network\n"
     ]
-    help = TextDialog(theText,15,62,header=('header',"Wicd-Curses Help"))
+    help = TextDialog(theText,17,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
 
 def run_configscript(parent,netname,nettype):
@@ -768,7 +769,7 @@ class appGUI():
         keys = ui.get_input()
         # Should make a keyhandler method, but this will do until I get around to
         # that stage
-        if "f8" in keys or 'Q' in keys:
+        if "f8" in keys or 'Q' in keys or 'q' in keys:
             loop.quit()
             return False
         if "f5" in keys or 'R' in keys:
@@ -818,7 +819,7 @@ class appGUI():
             #self.netentry.run(ui,self.size,self.frame)
         if "I" in keys:
             self.raise_hidden_network_dialog()
-        if "H" in keys:
+        if "H" in keys or 'h' in keys or '?' in keys:
             help_dialog(self.frame)
         if "S" in keys:
             focus = self.thePile.get_focus()
@@ -904,7 +905,7 @@ def main():
         ('green','dark green','default'),
         ('blue','dark blue','default'),
         ('red','dark red','default'),
-        ('bold','default','default','bold')])
+        ('bold','white','default','bold')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)

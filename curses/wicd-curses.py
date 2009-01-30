@@ -259,17 +259,16 @@ def run_configscript(parent,netname,nettype):
     configfile = wpath.etc+netname+'-settings.conf'
     header = 'profile' if nettype == 'wired' else 'BSSID'
     profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
-            netname,'bssid')
-    
+            int(netname),'bssid')
     theText = [ 
-            """To avoid various complications, wicd-curses does not support directly editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "%s" config file, and look for the section labeled by the %s in question.  In this case, this is:
+            """To avoid various complications, wicd-curses does not support editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "%s" config file, and look for the section labeled by the %s in question.  For example, this network is:
 
 [%s]
 
-Once here, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.
+You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
 
-Alternatively, you can configure the wireless networks by ESSID, by looking for the "[<ESSID>]" field in the config file.""" % (configfile,header,profname)]
-    dialog = TextDialog(theText,16,80)
+Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information.""" % (configfile,header,profname)]
+    dialog = TextDialog(theText,20,80)
     dialog.run(ui,parent)
     # This code works with many distributions, but not all of them.  So, to
     # limit complications, it has been deactivated.  If you want to run it,
@@ -828,7 +827,7 @@ class appGUI():
                 netname = self.wiredCB.get_body().get_selected_profile()
             else:
                 nettype = 'wireless'
-                netname = str(self.wiredLB.get_focus()[1])
+                netname = str(self.wlessLB.get_focus()[1])
             run_configscript(self.frame,netname,nettype)
         if "O" in keys:
             exitcode,data = AdHocDialog().run(ui,self.frame)

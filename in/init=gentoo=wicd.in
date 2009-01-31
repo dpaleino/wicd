@@ -13,12 +13,13 @@ depend() {
 
 start() {
 	ebegin "Starting wicd daemon"
-	$WICD_DAEMON &>/dev/null
+	"${WICD_DAEMON}" >/dev/null 2>&1
 	eend $?
 }
 
 stop() {
 	ebegin "Stopping wicd daemon"
-	start-stop-daemon --stop --pidfile "$WICD_PIDFILE"
+	start-stop-daemon --stop --pidfile "${WICD_PIDFILE}"
 	eend $?
 }
+

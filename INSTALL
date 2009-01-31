@@ -1,7 +1,17 @@
 Installation of Wicd should be done using your distribution package if one
-exists.  If not, the installation is relatively straightforward.
+exists.  If not, the installation is relatively straightforward, but there
+are a few dependencies:
+  1. python (obviously)
+  2. pygtk
+  3. a dhcp client (dhclient, dhcpcd, and pump are supported)
+  4. wireless-tools (iwlist, iwconfig, etcetera)
+  5. net-tools (ip, route, etcetera)
+  6. a graphical sudo application (gksu, kdesu, and ktsuss are supported),
+     while optional, is strongly recommended
+  7. urwid (if you want to use the curses client)
+  8. pm-utils (optional for suspend/resume integration - needs version 1.2.4+)
 
-If you are installing from a subversion pull or beta/rc tarball and you want 
+If you are installing from a bzr pull or beta/rc tarball and you want 
 the native language translations, first run this:
   python setup.py get_translations
 You will not need to do this if you're installing from a release tarball.

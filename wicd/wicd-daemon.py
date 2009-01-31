@@ -1167,7 +1167,7 @@ class WirelessDaemon(dbus.service.Object):
 
         cur_network = self.LastScan[id]
         bssid_key = cur_network["bssid"]
-        essid_key = "essid:" + cur_network["essid"]
+        essid_key = "essid:" + str(cur_network["essid"])
 
         self.config.remove_section(bssid_key)
         self.config.add_section(bssid_key)

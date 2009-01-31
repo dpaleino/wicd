@@ -215,7 +215,8 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self._w.body.body.append(self.button_cols)
         
         self.prof_name = name
-        self._w.header = urwid.Text( ('header',">Configuring preferences for wired profile \"%s\"" % self.prof_name),align='right' )
+        title = ">"+language['configuring_wired'].replace('$A',self.prof_name)
+        self._w.header = urwid.Text( ('header',title),align='right' )
 
         self.set_values()
     def set_net_prop(self,option,value): 
@@ -277,8 +278,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
 
-        # Set the frame title so that people will always know what we're dealing with.
-        self._w.header = urwid.Text(('header',">Configuring preferences for wireless network \"%s\"" % wireless.GetWirelessProperty(networkID,'essid')),align='right' )
+        title = ">"+language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
+        self._w.header = urwid.Text(('header',title),align='right' )
     
     def encryption_toggle(self,chkbox,new_state,user_data=None):
         self.encryption_combo.set_sensitive(new_state)
@@ -412,37 +413,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self._w.body.body.insert(self._w.body.body.__len__()-1,self.pile_encrypt)
         #self._w.body.body.append(self.pile_encrypt)
 
-    def run(self,ui,dim,display):
-        self.ui = ui
-        self.parent = display
-        width,height = ui.get_cols_rows()
-        self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
-                                , ('fixed top',1), height-3)
+    def prerun(self,ui,dim,display):
         self.encryption_combo.build_combobox(self.overlay,ui,14)
         self.change_encrypt_method()
-        #self._w.body.body.append(self.pile_encrypt)
-
-        keys = True
-        while True:
-            if keys:
-                ui.draw_screen(dim, self.overlay.render(dim, True))
-            keys = ui.get_input()
-
-            for k in keys:
-                #Send key to underlying widget:
-                if urwid.is_mouse_event(k):
-                    event, button, col, row = k
-                    self.overlay.mouse_event( dim,
-                            event, button, col, row,
-                            focus=True)
-                self.overlay.keypress(dim, k)
-            if "window resize" in keys:
-                dim = ui.get_cols_rows()
-            if "esc" in keys or 'Q' in keys:
-                return False
-            if "meta enter" in keys or self.OK_PRESSED:
-                self.OK_PRESSED = False
-                if self.save_settings(self.networkID):
-                    return True
-            if self.CANCEL_PRESSED:
-                return False

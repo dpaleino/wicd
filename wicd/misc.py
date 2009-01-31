@@ -567,6 +567,11 @@ def get_language_list_gui():
     language["esc_to_cancel"] = _("Press ESC to cancel")
     language["press_to_quit"] = _("Press F8 or Q to quit.")
     
+    language['terminated'] = _("Terminated by user")
+    language['wicd_curses'] = _("Wicd Curses Interface")
+    language['dbus_fail'] = _("DBus failure! This is most likely caused by the wicd daemon stopping while wicd-curses is running. Please restart the daemon, and then restart wicd-curses.")
+
+
     return language
 
 def get_language_list_tray():

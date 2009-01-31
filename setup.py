@@ -27,7 +27,7 @@ import subprocess
 # VERSIONNUMBER
 VERSION_NUM = '1.6.0'
 REVISION_NUM = 'unknown'
-CURSES_REVNO = 'r266'
+CURSES_REVNO = 'r269'
 
 try:
     if not os.path.exists('vcsinfo.py'):

@@ -500,7 +500,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                 return 100 * int(strength) // int(max_strength)
             else:
                 # Prevent a divide by zero error.
-                ap['quality'] = int(strength)
+                strength = int(strength)
 
         if strength is None:
             strength = misc.RunRegex(altstrength_pattern, output)

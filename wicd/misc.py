@@ -211,13 +211,13 @@ def ParseEncryption(network):
 
     # Write the data to the files then chmod them so they can't be read 
     # by normal users.
-    file = open(wpath.networks + network["bssid"].replace(":", "").lower(), "w")
+    f = open(wpath.networks + network["bssid"].replace(":", "").lower(), "w")
     os.chmod(wpath.networks + network["bssid"].replace(":", "").lower(), 0600)
     os.chown(wpath.networks + network["bssid"].replace(":", "").lower(), 0, 0)
     # We could do this above, but we'd like to read protect
     # them before we write, so that it can't be read.
-    file.write(z)
-    file.close()
+    f.write(z)
+    f.close()
 
 def LoadEncryptionMethods():
     """ Load encryption methods from configuration files

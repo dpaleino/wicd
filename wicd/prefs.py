@@ -320,7 +320,6 @@ class PreferencesDialog(object):
         # "" is included as a hack for DBus limitations, so we remove it.
         self.backends.remove("")
         
-        cur_backend = daemon.GetSavedBackend()
         for x in self.backends:
             self.backendcombo.append_text(x)
             

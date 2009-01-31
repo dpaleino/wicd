@@ -204,7 +204,7 @@ def gen_network_list():
     wlessL = []
     # This one makes a list of NetLabels
     for network_id in range(0, wireless.GetNumberOfNetworks()):
-        is_active = wireless.GetCurrentSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id
+        is_active = wireless.GetCurrentSignalStrength("") != 0 and wireless.GetCurrentNetworkID(wireless.GetIwconfig())==network_id and wireless.GetWirelessIP('') != None
 
         label = NetLabel(network_id,is_active)
         wlessL.append(label)
@@ -730,7 +730,7 @@ class appGUI():
         #    theText += self.special
         if self.connecting:
             theText += "-- "+language['connecting']+' -- '+language["esc_to_cancel"]
-        quit_note = language["press_to_quit"]
+        quit_note = ' -- '+language["press_to_quit"]
         self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True

@@ -1,0 +1,6 @@
+Things to do (in no particular order):
+
+*   Implement a keyhandler function for the overall frame
+    * Make keystrokes customizable
+*   Make color schemes customizable
+*   Perform a mass code cleanup

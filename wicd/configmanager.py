@@ -26,7 +26,7 @@ reusable for other purposes as well.
 
 from ConfigParser import RawConfigParser
 
-from wicd.misc import stringToNone, Noneify, to_unicode
+from wicd.misc import Noneify, to_unicode
 
 
 class ConfigManager(RawConfigParser):
@@ -120,7 +120,7 @@ class ConfigManager(RawConfigParser):
         RawConfigParser.write(self, configfile)
         configfile.close()
         
-    def remove_section(self,section):
+    def remove_section(self, section):
         """ Wrapper around the ConfigParser.remove_section() method.
         
         This method only calls the ConfigParser.remove_section() method
@@ -131,4 +131,5 @@ class ConfigManager(RawConfigParser):
             RawConfigParser.remove_section(self, section)
             
     def reload(self):
+        """ Re-reads the config file, in case it was edited out-of-band. """
         self.read(self.config_file)

@@ -40,8 +40,7 @@ except Exception, e:
     sys.exit(1)
 
 def handler(*args):
-    loop.quit()
-
+    pass
 def error_handler(*args):
     print>>sys.stderr, 'Async error autoconnecting.'
     sys.exit(3)
@@ -51,7 +50,8 @@ if __name__ == '__main__':
         time.sleep(2)
         daemon.SetSuspend(False)
         if not daemon.CheckIfConnecting():
-            daemon.AutoConnect(True, reply_handler=handler, error_handler=handler)
+            daemon.AutoConnect(True, reply_handler=handler, 
+                               error_handler=error_handler)
     except Exception, e:
         print>>sys.stderr, "Exception caught: %s" % str(e)
         print>>sys.stderr, 'Error autoconnecting.'

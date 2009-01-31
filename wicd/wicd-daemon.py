@@ -1131,7 +1131,7 @@ class WirelessDaemon(dbus.service.Object):
     def ReadWirelessNetworkProfile(self, id):
         """ Reads in wireless profile as the active network """
         cur_network = self.LastScan[id]
-        essid_key = "essid:" + cur_network["essid"]
+        essid_key = "essid:%s" % cur_network["essid"]
         bssid_key = cur_network["bssid"]
         
         if self.config.get(essid_key, 'use_settings_globally'):
@@ -1167,7 +1167,7 @@ class WirelessDaemon(dbus.service.Object):
 
         cur_network = self.LastScan[id]
         bssid_key = cur_network["bssid"]
-        essid_key = "essid:" + str(cur_network["essid"])
+        essid_key = "essid:%s" % cur_network["essid"]
 
         self.config.remove_section(bssid_key)
         self.config.add_section(bssid_key)
@@ -1209,7 +1209,7 @@ class WirelessDaemon(dbus.service.Object):
 
         # Write the global section as well, if required.
         if config.get(essid_key, 'use_settings_globally'):
-                config.set(essid_key, option, str(cur_network[option]))
+            config.set(essid_key, option, str(cur_network[option]))
         config.write()
     
     @dbus.service.method('org.wicd.daemon.wireless')

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """configscript_curses.py
-Kind of like configscript.py, except writtwn using urwid.
+Kind of like configscript.py, except written using urwid.
 
 Also recycles a lot of configscript.py, too. :-)
 """

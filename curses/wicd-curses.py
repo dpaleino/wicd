@@ -712,6 +712,7 @@ class appGUI():
         # immediately.
         if from_idle and not self.connecting:
             self.update_netlist()
+            self.update_status()
             self.update_ui()
             return False
         toAppend = ''
@@ -851,7 +852,7 @@ class appGUI():
                 continue
             self.frame.keypress( self.size, k )
         return True
-    # TODO: Update this to use the networkentry stuff
+
     def connect(self, nettype, networkid, networkentry=None):
         """ Initiates the connection process in the daemon. """
         if nettype == "wireless":

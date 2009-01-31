@@ -293,8 +293,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         if not self.scan_iface:
             try:
                 self.scan_iface = iwscan.WirelessInterface(self.iface)
-            except (iwscan.error, e):
-                print "GetNetworks caught an exception: %s" %s
+            except iwscan.error, e:
+                print "GetNetworks caught an exception: %s" % e
                 return []
                 
         results = self.scan_iface.Scan()

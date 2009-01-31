@@ -56,11 +56,11 @@ class BackendManager(object):
     
     def get_available_backends(self):
         """ Returns a list of all valid backends in the backend directory. """
-        be_list = [""]
+        be_list = []
         for f in os.listdir(self.backend_dir):
             if self._valid_backend_file(os.path.join(self.backend_dir, f)):
                 be_list.append(f[3:-3])
-        return be_list
+        return be_list or [""]
     
     def get_update_interval(self):
         """ Returns how often in seconds the wicd monitor should update. """
@@ -90,7 +90,7 @@ class BackendManager(object):
             fail(backend_name, 'Invalid backend file.')
             return None
         
-    def _validate_backend(self, backend):
+    def _validate_backend(self, backend, backend_name):
         """ Ensures that a backend module is valid. """
         failed = False
         if not backend.NAME:
@@ -117,7 +117,7 @@ class BackendManager(object):
         backend = self._load_backend(backend_name)
         if not backend : return None
         
-        failed = self._validate_backend(backend)
+        failed = self._validate_backend(backend, backend_name)
         if failed:
             return None
 

@@ -69,10 +69,7 @@ misc.RenameProcess("wicd-client")
 if __name__ == '__main__':
     wpath.chdir(__file__)
     
-daemon = None
-wireless = None
-wired = None
-wired = None
+daemon = wireless = wired = None
 DBUS_AVAIL = False
 
 language = misc.get_language_list_tray()
@@ -362,7 +359,6 @@ class TrayIcon(object):
                 
         def on_activate(self, data=None):
             """ Opens the wicd GUI. """
-            global DBUS_AVAIL
             if DBUS_AVAIL:
                 self.toggle_wicd_gui()
             else:
@@ -644,7 +640,7 @@ Arguments:
 """ % wpath.version
 
 def setup_dbus(force=True):
-    global bus, daemon, wireless, wired, DBUS_AVAIL
+    global daemon, wireless, wired, DBUS_AVAIL
     print "Connecting to daemon..."
     try:
         dbusmanager.connect_to_dbus()
@@ -661,7 +657,6 @@ def setup_dbus(force=True):
         else:  
             return False
                 
-    bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']

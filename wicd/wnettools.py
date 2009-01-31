@@ -34,7 +34,7 @@ class WirelessInterface() -- Control a wireless network interface.
 import os
 import re
 import random
-from string import maketrans, translate, punctuation
+from string import maketrans, translate
 
 import wpath
 import misc

@@ -45,7 +45,6 @@ import re
 import time
 import threading
 import thread
-import re
 
 # wicd imports 
 import misc
@@ -82,21 +81,25 @@ def get_backend_list():
         return [""]
     
 def get_backend_update_interval():
+    """ Returns the suggested connection status update interval. """
     if BACKEND_MGR:
         return BACKEND_MGR.get_update_interval()
     else:
         return 5  # Seconds, this should never happen though.
     
 def get_current_backend():
+    """ Returns the current backend instance. """
     if BACKEND_MGR:
         return BACKEND_MGR.get_current_backend()
     else:
         return None
     
 def get_backend_description(backend_name):
+    """ Returns the description of the currently loaded backend. """
     return BACKEND_MGR.get_backend_description(backend_name)
 
 def get_backend_description_dict():
+    """ Returns a dict of all available backend descriptions. """
     d = {}
     for be in get_backend_list():
         if be:

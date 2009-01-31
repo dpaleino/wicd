@@ -43,7 +43,6 @@ dbus_dict = dbusmanager.get_dbus_ifaces()
 daemon = dbus_dict["daemon"]
 wired = dbus_dict["wired"]
 wireless = dbus_dict["wireless"]
-bus = dbusmanager.get_bus()
 
 monitor = to_time = update_callback = None
 
@@ -76,7 +75,7 @@ class ConnectionStatus(object):
         1) A wired connection is not in use, but a cable is plugged
            in, and the user has chosen to switch to a wired connection
            whenever its available, even if already connected to a
-           wireless network
+           wireless network.
            
         2) A wired connection is currently active.
 
@@ -92,6 +91,10 @@ class ConnectionStatus(object):
                 self.still_wired = True
             return True
         # Wired connection isn't active
+        elif wired_ip and self.still_wired:
+            # If we still have an IP, but no cable is plugged in 
+            # we should disconnect to clear it.
+            wired.DisconnectWired()
         self.still_wired = False
         return False
 
@@ -203,6 +206,13 @@ class ConnectionStatus(object):
         return True
     
     def _force_update_connection_status(self):
+        """ Run a connection status update on demand.
+        
+        Removes the scheduled update_connection_status()
+        call, explicitly calls the function, and reschedules
+        it.
+        
+        """
         global update_callback
         gobject.source_remove(update_callback)
         self.update_connection_status()
@@ -288,17 +298,6 @@ class ConnectionStatus(object):
                 daemon.AutoConnect(True, reply_handler=reply_handle,
                                    error_handler=err_handle)
         self.reconnecting = False
-        
-    #def rescan_networks(self):
-    #    """ Calls a wireless scan. """
-    #    try:
-    #        if daemon.GetSuspend() or daemon.CheckIfConnecting():
-    #            return True
-    #        wireless.Scan()
-    #    except dbus.exceptions.DBusException, e:
-    #        print 'dbus exception while attempting rescan: %s' % str(e)
-    #    finally:
-    #        return True
         
 def reply_handle():
     """ Just a dummy function needed for asynchronous dbus calls. """

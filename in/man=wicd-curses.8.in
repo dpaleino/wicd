@@ -19,7 +19,7 @@ All of these are case sensitive.
 .BR enter
 Connect to selected network
 .TP
-.BR "F8 " or " Q"
+.BR "F8 " or " Q " or " q"
 Quit the client.
 .TP
 .BR D
@@ -37,7 +37,7 @@ Bring up the preferences controller
 .BR I
 Bring up hidden network scanning dialog
 .TP
-.BR H
+.BR "H " or " h " or " ?"
 Bring up a rather simplistic help dialog.  Of course, it mentions this man page first. :-)
 .\".PP
 .\"The following is a work in progress and might not be fully functional as of yet.

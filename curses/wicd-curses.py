@@ -68,6 +68,8 @@ from optparse import OptionParser
 CURSES_REVNO=wpath.curses_revision
 
 language = misc.get_language_list_gui()
+# We need 'Connecting' without the '...'
+language['connecting']=misc.get_language_list_tray()['connecting']
 
 ########################################
 ##### SUPPORT CLASSES
@@ -87,7 +89,7 @@ class wrap_exceptions:
                 gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
-                print "\nTerminated by user."
+                print "\n"+language['terminated']
                 #raise
             except DBusException:
                 gobject.source_remove(redraw_tag)
@@ -95,12 +97,7 @@ class wrap_exceptions:
                 loop.quit()
                 # Zap the screen
                 ui.stop()
-                print ""
-                print "DBus failiure!"
-                print "This is most likely caused by the wicd daemon stopping"
-                print "while wicd-curses is running."
-                print ""
-                print "Please restart the daemon, and then restart wicd-curses."
+                print "\n"+language['dbus_fail']
                 raise
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
@@ -113,10 +110,7 @@ class wrap_exceptions:
                     # Zap the screen
                     ui.stop()
                     # Print out standard notification:
-
-                    print "\nEXCEPTION!"
-                    print "Please report this to the maintainer and/or file a bug report with the backtrace below:"
-                    print redraw_tag
+                    print "\n" + language['exception']
                     # Flush the buffer so that the notification is always above the
                     # backtrace
                     sys.stdout.flush()
@@ -230,7 +224,7 @@ def about_dialog(body):
 
 ('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
 ('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net\n",
-('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      Brought to you by:\n",
+('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      ",language["brought_to_you"],"\n",
 ('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
 "     ___|+|___         Dan O'Reilly   (wicd)\n",
 "    |---------|        Andrew Psaltis (this ui)\n",
@@ -262,13 +256,12 @@ def run_configscript(parent,netname,nettype):
     profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
             int(netname),'bssid')
     theText = [ 
-            """To avoid various complications, wicd-curses does not support editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "%s" config file, and look for the section labeled by the %s in question.  For example, this network is:
+            language['cannot_edit_scripts_1'].replace('$A',configfile).replace('$B',header),
+"\n\n["+profname+"]\n\n",
+# Translation needs to be changed to accomidate this text below.
+"""You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
 
-[%s]
-
-You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
-
-Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information.""" % (configfile,header,profname)]
+Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
     dialog = TextDialog(theText,20,80)
     dialog.run(ui,parent)
     # This code works with many distributions, but not all of them.  So, to
@@ -349,7 +342,7 @@ class WiredComboBox(ComboBox):
     list : the list of wired network profiles.  The rest is self-explanitory.
     """
     def __init__(self,list):
-        self.ADD_PROFILE = '---Add a new profile---'
+        self.ADD_PROFILE = '---'+language["add_new_profile"]+'---'
         self.__super.__init__(use_enter=False)
         self.set_list(list)
         #self.set_focus(self.theList.index(wired.GetDefaultProfile()))
@@ -390,7 +383,7 @@ class WiredComboBox(ComboBox):
         prev_focus = self.get_focus()[1]
         key = self.__super.keypress(size,key)
         if self.get_focus()[1] == len(self.list)-1:
-            dialog = InputDialog(('header',"Add a new wired profile"),7,30)
+            dialog = InputDialog(('header',language["add_new_wired_profile"]),7,30)
             
             exitcode,name = dialog.run(ui,self.parent)
             if exitcode == 0:
@@ -402,7 +395,7 @@ class WiredComboBox(ComboBox):
             wired.ReadWiredNetworkProfile(self.get_selected_profile())
         if key == 'delete':
             if len(self.theList) == 1:
-                error(self.ui,self.parent,"Cannot delete the last wired profile.  Try renaming it ('F2')")
+                error(self.ui,self.parent,language["no_delete_last_profile"])
                 return key
             wired.DeleteWiredNetworkProfile(self.get_selected_profile())
             # Return to the top of the list if something is deleted.
@@ -415,7 +408,7 @@ class WiredComboBox(ComboBox):
             self.set_list(wired.GetWiredProfileList())
             self.rebuild_combobox()
         if key == 'f2':
-            dialog = InputDialog(('header',"Rename wired profile"),7,30,
+            dialog = InputDialog(('header',language["rename_wired_profile"]),7,30,
                     edit_text=unicode(self.get_selected_profile()))
             exitcode,name = dialog.run(ui,self.parent)
             if exitcode == 0:
@@ -505,7 +498,7 @@ class appGUI():
         # Will need a translation sooner or later
         self.screen_locker = urwid.Filler(urwid.Text(('important',language['scanning_stand_by']), align='center'))
         self.no_wlan = urwid.Filler(urwid.Text(('important',language['no_wireless_networks_found']), align='center'))
-        self.TITLE = 'Wicd Curses Interface'
+        self.TITLE = language['wicd_curses']
         self.WIRED_IDX = 1
         self.WLESS_IDX = 3
 
@@ -573,7 +566,7 @@ class appGUI():
         self.update_ui()
 
     def raise_hidden_network_dialog(self):
-        dialog = InputDialog(('header','Select Hidden Network ESSID'),7,30,'Scan')
+        dialog = InputDialog(('header',language["select_hidden_essid"]),7,30,language['scan'])
         exitcode,hidden = dialog.run(ui,self.frame)
         if exitcode != -1:
             # That dialog will sit there for a while if I don't get rid of it
@@ -736,8 +729,8 @@ class appGUI():
         #if self.special != None:
         #    theText += self.special
         if self.connecting:
-            theText += "-- Connecting -- Press ESC to cancel "
-        quit_note = "-- Press F8 or Q to quit."
+            theText += "-- "+language['connecting']+' -- '+language["esc_to_cancel"]
+        quit_note = language["press_to_quit"]
         self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True
@@ -944,8 +937,7 @@ def setup_dbus(force=True):
     except DBusException:
         # I may need to be a little more verbose here.
         # Suggestions as to what should go here, please?
-        print "Can't connect to the daemon.  Are you sure it is running?"
-        print "Please check the wicd log for error messages."
+        print language['cannot_connect_to_daemon']
         #raise
         # return False # <- Will need soon.
     bus = dbusmanager.get_bus()

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #
 #   Copyright (C) 2007 - 2008 Adam Blackburn
 #   Copyright (C) 2007 - 2008 Dan O'Reilly
@@ -26,6 +27,7 @@ import subprocess
 # VERSIONNUMBER
 VERSION_NUM = '1.6.0'
 REVISION_NUM = 'unknown'
+CURSES_REVNO = 'r269'
 
 try:
     if not os.path.exists('vcsinfo.py'):
@@ -84,7 +86,8 @@ class configure(Command):
         ('no-install-kde', None, 'do not install the kde autostart file'),
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
-        ('no-install-docs', None, 'do not install the auxiliary documentation')
+        ('no-install-docs', None, 'do not install the auxiliary documentation'),
+        ('no-install-ncurses', None, 'do not install the ncurses client')
         ]
         
 
@@ -117,6 +120,7 @@ class configure(Command):
         self.no_install_acpi = False
         self.no_install_pmutils = False
         self.no_install_docs = False
+        self.no_install_ncurses = False
 
         # Determine the default init file location on several different distros
         
@@ -151,6 +155,8 @@ class configure(Command):
         elif os.path.exists('/etc/pld-release'):
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/pld/wicd'
+        elif os.path.exists('/usr/bin/crux'):
+            self.init = '/etc/rc.d/'
         else:
             self.init = 'FAIL'
             self.initfile = 'FAIL'
@@ -187,13 +193,22 @@ class configure(Command):
             else:
                 self.kdedir = kdedir_candidate + '/share/autostart'
         except (OSError, ValueError):
-            # If kde-config isn't present or returns an error, then we can
-            # assume that kde isn't installed on the user's system
-            self.no_install_kde = True
-            # If it turns out that the assumption above is wrong, then we'll
-            # do this instead:
-            #pass # use our default
-
+            # If kde-config isn't present, we'll check for kde-4.x
+            try:
+                kde4temp = subprocess.Popen(["kde4-config","--prefix"], stdout=subprocess.PIPE)
+                returncode = kde4temp.wait() # let it finish, and get the exit code
+                kde4dir_candidate = kde4temp.stdout.readline().strip() # read stdout
+                if len(kde4dir_candidate) == 0 or returncode != 0 or not os.path.isabs(kde4dir_candidate):
+                    raise ValueError
+                else:
+                   self.kdedir = kde4dir_candidate + '/share/autostart'
+            except (OSError, ValueError):
+                # If neither kde-config nor kde4-config are not present or 
+                # return an error, then we can assume that kde isn't installed
+                # on the user's system
+                self.no_install_kde = True
+                # If the assumption above turns out to be wrong, do this:
+                #pass # use our default
 
         self.python = '/usr/bin/python'
         self.pidfile = '/var/run/wicd/wicd.pid'
@@ -254,6 +269,7 @@ class configure(Command):
                     # other things to replace that aren't arguments
                     line = line.replace('%VERSION%', str(VERSION_NUM))
                     line = line.replace('%REVNO%', str(REVISION_NUM))
+                    line = line.replace('%CURSES_REVNO%', str(CURSES_REVNO))
                         
                     item_out.write(line)
                 
@@ -392,12 +408,21 @@ try:
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
     ]
+    if not wpath.no_install_ncurses:
+        data.append(( wpath.lib, ['curses/curses_misc.py']))
+        data.append(( wpath.lib, ['curses/prefs_curses.py']))
+        data.append(( wpath.lib, ['curses/wicd-curses.py']))
+        data.append(( wpath.lib, ['curses/netentry_curses.py']))
+        data.append(( wpath.lib, ['curses/configscript_curses.py']))
+        data.append(( wpath.bin, ['scripts/wicd-curses'])) 
+        if not wpath.no_install_man:
+            data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
-        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES' ]))
+        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES','other/WHEREAREMYFILES' ]))
     if not wpath.no_install_kde:
         data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
     if not wpath.no_install_init:

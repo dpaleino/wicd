@@ -1,0 +1,56 @@
+This is a curses-based client for wicd.  It is designed to imitate wicd-client
+as much as can be done with a console-based interface.  It is written using the
+Urwid (http://excess.org/urwid) toolkit, and thus requires it.
+
+That's all there is to it, really.  It installs unless you disable it when you
+call setup.py.
+
+Right now, it lists current available networks, and whether you are connected
+to anything or not, all of which is updated in real time.  Other features
+include the ability to connect to networks, global preferences controls, and
+per-network settings for wireless networks.
+
+All features that I plan on implementing (that are not mentioned above) are
+listed the TODO file in this same directory.  If you want any other features,
+ask me.  I try to be on the #wicd Freenode IRC channel most of the time.
+
+Controls:
+
+F5          : refresh wireless networks
+F8 or Q or q: quit 
+D           : disconnect from all active networks
+ESC         : if connecting to a network, stop doing so
+ENTER       : Attempt connection to selected network
+P           : Display preferences dialog
+C           : Display network configuration for selected network 
+A           : Display "About" dialog
+I           : Raise the "Scan for hidden networks" dialog
+H or h or ? : Raise help dialog
+S           : Provide instructions for configuring scripts
+delete      : Delete selected wired network profile (from the wired ComboBox)
+F2          : Rename selected wired network profile (from the wired ComboBox)
+O           : Raise ad-hoc network dialog
+
+IN DIALOGS (Meta usually is "Alt"):
+ESC or Q: Quit dialog without saving information (if present)
+Meta+Left/Right: Change tabs Left/Right (if tabs present)
+Meta+Enter : Quit dialog and save information
+
+FAQ (WIP):
+
+What is wicd-curses?
+    See above. :-)
+
+Why didn't you call it wicd-urwid?  There is a hachoir-urwid package out there.
+    I first called this "urwicd".  However, due to the relative obscurity of
+    the urwid package, and the fact that many more people know what "curses"
+    is, I named it wicd-curses.  After all, it _does_ use curses (by default,
+    anyway).
+
+Why don't you support lower-case keybindings for most of the commands?
+    I was trying to prevent mass chaos from happening because of mashing keys.
+    Of course, if you unwittingly have caps-lock on, that's going to cause said
+    chaos, too, so you might want to check that (or ask me about changing the
+    keymaps to ctrl/meta+KEY)
+
+~NaCl

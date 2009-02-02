@@ -3,6 +3,10 @@
 wicd-client \- manual page for wicd-client 
 .SH DESCRIPTION
 wireless (and wired) connection daemon front\-end.
+
+If wicd-curses(8) is installed, and you attempt to run wicd-client without 
+an active X server on the current terminal, wicd-client will attempt to run 
+wicd-curses(8) instead.  It will warn you the first time this happens.
 .SS "Arguments:"
 .TP
 \fB\-n\fR      \fB\-\-no\-tray\fR

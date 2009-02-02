@@ -1,26 +1,39 @@
 #!/bin/bash
 
-# borrowed from
-# http://repos.archlinux.org/viewvc.cgi/wicd/repos/extra-i686/wicd-daemon?revision=1&view=markup
-# and modified for 1.5.0
+# Arch init script for wicd
 
 . /etc/rc.conf
 . /etc/rc.d/functions
 
+WICD_BIN=%SBIN%wicd
+
+if [ -f /var/run/wicd/wicd.pid ]; then 
+	PID="$(cat /var/run/wicd/wicd.pid)"
+fi
+
 case "$1" in
   start)
     stat_busy "Starting wicd Daemon"
-    killall wicd &> /dev/null
-    %SBIN%wicd-daemon &> /dev/null
-    add_daemon wicd
-    stat_done
-    ;;
+	if [ -z "$PID" ]; then
+    	$WICD_BIN &> /dev/null
+	fi 
+	if [ ! -z "$PID" -o $? -gt 0 ]; then
+		stat_fail
+	else
+		add_daemon wicd
+		stat_done
+	fi
+	;;
   stop)
     stat_busy "Stopping wicd Daemon"
-    killall wicd &> /dev/null
-    rm_daemon wicd
-    stat_done
-    ;;
+    [ ! -z "$PID" ] && kill $PID &> /dev/null
+	if [ $? -gt 0 ]; then
+		stat_fail
+	else
+		rm_daemon wicd
+		stat_done
+	fi
+	;;
   restart)
     $0 stop
     sleep 1
@@ -29,5 +42,6 @@ case "$1" in
   *)
     echo "usage: $0 {start|stop|restart}"  
 esac
+
 exit 0
 

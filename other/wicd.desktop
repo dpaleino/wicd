@@ -1,12 +1,14 @@
 [Desktop Entry]
 Categories=Application;Network;
 Encoding=UTF-8
-Exec=/opt/wicd/gui.py
+Exec=wicd-client --no-tray
 GenericName=Network Manager
-Icon=/opt/wicd/images/wicd.png
-Icon[en_US]=/opt/wicd/images/wicd.png
-Name=Wicd
-Name[en_US]=Wicd
+Icon=wicd-client
+Icon[en_US]=wicd-client
+Name=Wicd Network Manager
+Name[en_US]=Wicd Network Manager
+Comment=Start the Wicd client without system tray icon
+Comment[en_US]=Start the Wicd client without system tray icon
 Terminal=false
 Type=Application
 Version=1.0

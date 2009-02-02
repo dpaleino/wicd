@@ -99,6 +99,7 @@ class WicdDaemon(dbus.service.Object):
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
+        self.sudo_app = 0
         
         # This will speed up the scanning process - if a client doesn't 
         # need a fresh scan, just feed them the old one.  A fresh scan
@@ -569,6 +570,11 @@ class WicdDaemon(dbus.service.Object):
         
         """
         return bool(self.need_profile_chooser)
+    
+    @dbus.service.method("org.wicd.daemon")
+    def GetAppAvailable(self, app):
+        """ Determine if a given  application is available."""
+        return bool(self.wifi.AppAvailable(app) or self.wired.AppAvailable(app))
 
     @dbus.service.method('org.wicd.daemon')
     def GetDHCPClient(self):
@@ -630,6 +636,17 @@ class WicdDaemon(dbus.service.Object):
         self.wired.flush_tool = int(flush_tool)
         self.wifi.flush_tool = int(flush_tool)
         self.config.set("Settings", "flush_tool", flush_tool, write=True)
+
+    @dbus.service.method('org.wicd.daemon')
+    def GetSudoApp(self):
+        """ Get the preferred sudo app. """
+        return self.sudo_app
+    
+    @dbus.service.method('org.wicd.daemon')
+    def SetSudoApp(self, sudo_app):
+        """ Set the preferred sudo app. """
+        self.sudo_app = sudo_app
+        self.config.set("Settings", "sudo_app", sudo_app, write=True)
         
     @dbus.service.method('org.wicd.daemon')
     def WriteWindowSize(self, width, height, win_name):
@@ -814,7 +831,6 @@ class WicdDaemon(dbus.service.Object):
         b_wired = self.wired_bus
         b_wifi = self.wireless_bus
         app_conf= self.config
-        verbose = True
         # Load the backend.
         be_def = 'external'
         self.SetBackend(app_conf.get("Settings", "backend", default=be_def))
@@ -845,15 +861,16 @@ class WicdDaemon(dbus.service.Object):
                                            default=True))
         self.SetDebugMode(app_conf.get("Settings", "debug_mode", default=False))
         self.SetWiredAutoConnectMethod(app_conf.get("Settings",
-                                                       "wired_connect_mode",
-                                                       default=1))
+                                                    "wired_connect_mode",
+                                                    default=1))
         self.SetSignalDisplayType(app_conf.get("Settings", 
-                                                 "signal_display_type",
-                                                 default=0))
+                                               "signal_display_type",
+                                               default=0))
         self.SetDHCPClient(app_conf.get("Settings", "dhcp_client", default=0))
         self.SetLinkDetectionTool(app_conf.get("Settings", "link_detect_tool",
                                                default=0))
         self.SetFlushTool(app_conf.get("Settings", "flush_tool", default=0))
+        self.SetSudoApp(app_conf.get("Settings", "sudo_app", default=0))
         self.SetPreferWiredNetwork(app_conf.get("Settings", "prefer_wired", 
                                                 default=False))
         app_conf.write()

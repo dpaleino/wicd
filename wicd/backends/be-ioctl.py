@@ -215,9 +215,9 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         
         """
         if not self.iface: return False
-        if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
+        if self.ethtool_cmd and self.link_detect != misc.MIITOOL:
             return self._eth_get_plugged_in()
-        elif self.MIITOOL_FOUND:
+        elif self.miitool_cmd:
             return self._mii_get_plugged_in()
         else:
             print 'Error: No way of checking for a wired connection. Make \

@@ -32,6 +32,7 @@ import gtk.glade
 
 from wicd import misc
 from wicd import wpath
+from wicd import dbusmanager
 from wicd.misc import checkboxTextboxToggle, noneToBlankString
 
 daemon = None
@@ -40,17 +41,37 @@ wired = None
 
 language = misc.get_language_list_gui()
 
+def setup_dbus():
+    global daemon, wireless, wired
+    daemon = dbusmanager.get_interface('daemon')
+    wireless = dbusmanager.get_interface('wireless')
+    wired = dbusmanager.get_interface('wired')
+
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
     def __init__(self, wTree, dbus):
-        global daemon, wireless, wired
-        daemon = dbus['daemon']
-        wireless = dbus['wireless']
-        wired = dbus['wired']
+        setup_dbus()
         self.wTree = wTree
         self.prep_settings_diag()
         self.load_preferences_diag()
         
+    def _setup_external_app_radios(self, radio_list, get_method, set_method):
+        """ Generic function for setting up external app radios. """
+        def set_available(apps):
+            for app in apps:
+                app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
+        
+        # Disable radios for apps that aren't installed.
+        set_available(radio_list[1:])
+        selected_app = get_method()
+        # Make sure the app we want to select is actually available.
+        if radio_list[selected_app].get_property("sensitive"):
+            radio_list[selected_app].set_active(True)
+        else:
+            # If it isn't, default to Automatic.
+            set_method(misc.AUTO)
+            radio_list[misc.AUTO].set_active(True)
+            
     def load_preferences_diag(self):
         """ Loads data into the preferences Dialog. """
         
@@ -62,19 +83,37 @@ class PreferencesDialog(object):
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
                      self.pumpradio]
-        dhcp_method = daemon.GetDHCPClient()
-        print 'DHCP method is %s' % daemon.GetDHCPClient()
-        dhcp_list[dhcp_method].set_active(True)
+        self._setup_external_app_radios(dhcp_list, daemon.GetDHCPClient,
+                                        daemon.SetDHCPClient)
+        #set_available(dhcp_list[1:])
+        #dhcp_method = daemon.GetDHCPClient()
+        #if dhcp_list[dhcp_method].get_sensitive():
+            #dhcp_list[dhcp_method].set_active(True)
+        #else:
+            #daemon.SetDHCPClient(misc.AUTO)
+            #self.dhcpautoradio.set_active(True)
         
         wired_link_list = [self.linkautoradio, self.ethtoolradio,
                            self.miitoolradio]
-        wired_link_method = daemon.GetLinkDetectionTool()
-        wired_link_list[wired_link_method].set_active(True)
+        self._setup_external_app_radios(wired_link_list,
+                                        daemon.GetLinkDetectionTool,
+                                        daemon.SetLinkDetectionTool)
+        #set_available(wired_link_list[1:])
+        #wired_link_method = daemon.GetLinkDetectionTool()
+        #if wired_link_list[wired_link_method].get_sensitive():
+            #wired_link_list[wired_link_method].set_active(True)
 
         flush_list = [self.flushautoradio, self.ipflushradio,
                       self.routeflushradio]
-        flush_method = daemon.GetFlushTool()
-        flush_list[flush_method].set_active(True)
+        self._setup_external_app_radios(flush_list, daemon.GetFlushTool,
+                                        daemon.SetFlushTool)
+        #flush_method = daemon.GetFlushTool()
+        #flush_list[flush_method].set_active(True)
+        
+        sudo_list = [self.sudoautoradio, self.gksudoradio, self.kdesuradio,
+                     self.ktsussradio]
+        self._setup_external_app_radios(sudo_list, daemon.GetSudoApp,
+                                        daemon.SetAudoApp)
         
         auto_conn_meth = daemon.GetWiredAutoConnectMethod()
         if auto_conn_meth == 1:
@@ -185,6 +224,16 @@ class PreferencesDialog(object):
         else:
             flush_tool = misc.ROUTE
         daemon.SetFlushTool(flush_tool)
+        
+        if self.sudoautoradio.get_active():
+            sudo_tool = misc.AUTO
+        elif self.gksudoradio.get_active():
+            sudo_tool = misc.GKSUDO
+        elif self.kdesuradio.get_active():
+            sudo_tool = misc.KDESU
+        else:
+            sudo_tool = misc.KTSUSS
+        daemon.SetSudoApp(sudo_tool)
 
         [width, height] = self.dialog.get_size()
         daemon.WriteWindowSize(width, height, "pref")
@@ -289,6 +338,12 @@ class PreferencesDialog(object):
                                           'wicd_auto_config')
         self.ipflushradio = setup_label("ip_flush_radio")
         self.routeflushradio = setup_label("route_flush_radio")
+        
+        # Graphical Sudo Apps
+        self.sudoautoradio = setup_label("sudo_auto_radio", "wicd_auto_config")
+        self.gksudoradio = setup_label("gksudo_radio")
+        self.kdesuradio = setup_label("kdesu_radio")
+        self.ktsussradio = setup_label("ktsuss_radio")
 
         # Replacement for the combo box hack
         self.wpadrivercombo = build_combobox("pref_wpa_combobox")
@@ -317,11 +372,10 @@ class PreferencesDialog(object):
         # Load backend combobox
         self.backends = daemon.GetBackendList()
         self.be_descriptions = daemon.GetBackendDescriptionDict()
-        # "" is included as a hack for DBus limitations, so we remove it.
-        self.backends.remove("")
         
         for x in self.backends:
-            self.backendcombo.append_text(x)
+            if x:
+                self.backendcombo.append_text(x)
             
     def be_combo_changed(self, combo):
         """ Update the description label for the given backend. """

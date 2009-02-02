@@ -220,10 +220,10 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
             except (IOError, ValueError, TypeError):
                 print 'Error checking link using /sys/class/net/%s/carrier' % self.iface
                 
-        if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
-            return self._eth_get_plugged_in()
-        elif self.MIITOOL_FOUND:
+        if self.miitool_cmd and self.link_detect == misc.MIITOOL:
             return self._mii_get_plugged_in()
+        elif self.ethtool_cmd:
+            return self._eth_get_plugged_in()
         else:
             print 'Error: No way of checking for a wired connection. Make ' + \
                    'sure that either mii-tool or ethtool is installed.'
@@ -236,14 +236,15 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         True if a link is detected, False otherwise.
         
         """
-        link_tool = 'ethtool'
+        cmd = "%s %s" % (self.ethtool_cmd, self.iface)
         if not self.IsUp():
             print 'Wired Interface is down, putting it up'
             self.Up()
             time.sleep(6)
-        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
-        if misc.RunRegex(re.compile('(Link detected: yes)', re.I | re.M  | 
-                                    re.S), tool_data) is not None:
+        if self.verbose: print cmd
+        tool_data = misc.Run(cmd, include_stderr=True)
+        if misc.RunRegex(re.compile('(Link detected: yes)', re.I | re.M  | re.S),
+                         tool_data):
             return True
         else:
             return False
@@ -255,14 +256,16 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         True if a link is detected, False otherwise.
         
         """
-        link_tool = 'mii-tool'
-        tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+        cmd = "%s %s" % (self.miitool_cmd, self.iface)
+        if self.verbose: print cmd
+        tool_data = misc.Run(cmd, include_stderr=True)
         if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M  | re.S), 
                          tool_data) is not None:
             print 'Wired Interface is down, putting it up'
             self.Up()
             time.sleep(4)
-            tool_data = misc.Run(link_tool + ' ' + self.iface, True)
+            if self.verbose: print cmd
+            tool_data = misc.Run(cmd, include_stderr=True)
         
         if misc.RunRegex(re.compile('(link ok)', re.I | re.M | re.S),
                          tool_data) is not None:
@@ -421,14 +424,14 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         """
         # Right now there's no way to do this for these drivers
-        if self.wpa_driver == RALINK_DRIVER or not self.WPA_CLI_FOUND:
+        if self.wpa_driver == RALINK_DRIVER or not self.wpa_cli_cmd:
             return True
 
         MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
         disconnected_time = 0
         while (time.time() - auth_time) < MAX_TIME:
-            cmd = 'wpa_cli -i ' + self.iface + ' status'
+            cmd = '%s -i %s status' % (self.wpa_cli_cmd, self.iface)
             output = misc.Run(cmd)
             result = misc.RunRegex(auth_pattern, output)
             if self.verbose:

@@ -105,6 +105,30 @@ def get_backend_description_dict():
         if be:
             d[be] = get_backend_description(be)
     return d
+
+def expand_script_macros(script, msg, bssid, essid):
+    """Expands any supported macros in a script.
+
+    Keyword arguments:
+    script -- the script to execute.
+    msg -- the name of the script, %{script} will be expanded to this.
+    bssid -- the bssid of the network we connect to, defaults to 'wired'.
+    essid -- the essid of the network we connect to, defaults to 'wired'."""
+    def repl(match):
+        macro = match.group(1).lower()
+        if macro_dict.has_key(macro):
+            return macro_dict[macro]
+        print 'Warning: found illegal macro %s in %s script' % (macro, msg)
+        return match.group()
+    
+    macro_dict = { 'script' : msg,
+             'bssid' : bssid,
+             'essid' : essid }
+    regex = re.compile(r'%\{([a-zA-Z0-9]+)\}')
+    expanded = regex.sub(repl, script)
+    print "Expanded '%s' to '%s'" % (script, expanded)
+    return expanded
+
     
 class Controller(object):
     """ Parent class for the different interface types. """
@@ -138,8 +162,6 @@ class Controller(object):
         self._dhcp_client = value
         if self.iface:
             self.iface.DHCP_CLIENT = value
-            self.iface.CheckDHCP()
-            
     def get_dhcp_client(self): return self._dhcp_client
     dhcp_client = property(get_dhcp_client, set_dhcp_client)
     
@@ -166,6 +188,7 @@ class Controller(object):
             return True
         
     def StopDHCP(self):
+        """ Stops all running DHCP clients. """
         return BACKEND.StopDHCP()
     
     def GetIP(self, ifconfig=""):
@@ -214,32 +237,11 @@ class Controller(object):
         
         """
         return self.iface.Down()
-
-def expand_script_macros(script, msg, bssid, essid):
-    """Expands any supported macros in a script.
-
-    Keyword arguments:
-    script -- the script to execute.
-    msg -- the name of the script, %{script} will be expanded to this.
-    bssid -- the bssid of the network we connect to, defaults to 'wired'.
-    essid -- the essid of the network we connect to, defaults to 'wired'."""
-
-    macro_dict = { 'script' : msg,
-             'bssid' : bssid,
-             'essid' : essid }
     
-    # Define a replacement function, this is done here so that %{script} will be substituted correctly
-    def repl(match):
-        macro = match.group( 1 ).lower()
-        if macro_dict.has_key( macro ):
-            return macro_dict[macro]
-        print 'Warning: found illegal macro %s in %s script' % (macro, msg)
-        return match.group()
-
-    regex = re.compile( r'%\{([a-zA-Z0-9]+)\}' )
-    expanded = regex.sub( repl, script )
-    print "Expanded '%s' to '%s'" % (script, expanded)
-    return expanded
+    def AppAvailable(self, app):
+        """ Determine if the given application is installed. """
+        return self.iface.AppAvailable(app)
+    
 
 class ConnectThread(threading.Thread):
     """ A class to perform network connections in a multi-threaded way.

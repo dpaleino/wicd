@@ -237,7 +237,8 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         profile = self.prof_name
         cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'],
+                                        prog_num=daemon.GetSudoApp())
             if not cmdbase:
                 error(None, language["no_sudo_prog"]) 
                 return
@@ -336,7 +337,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         cmdend = [os.path.join(wpath.lib, "configscript.py"), 
                                 str(self.networkID), "wireless"]
         if os.getuid() != 0:
-            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'])
+            cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'],
+                                        prog_num=daemon.GetSudoApp())
             if not cmdbase:
                 error(None, language["no_sudo_prog"]) 
                 return

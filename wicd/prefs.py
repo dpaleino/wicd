@@ -85,30 +85,17 @@ class PreferencesDialog(object):
                      self.pumpradio]
         self._setup_external_app_radios(dhcp_list, daemon.GetDHCPClient,
                                         daemon.SetDHCPClient)
-        #set_available(dhcp_list[1:])
-        #dhcp_method = daemon.GetDHCPClient()
-        #if dhcp_list[dhcp_method].get_sensitive():
-            #dhcp_list[dhcp_method].set_active(True)
-        #else:
-            #daemon.SetDHCPClient(misc.AUTO)
-            #self.dhcpautoradio.set_active(True)
         
         wired_link_list = [self.linkautoradio, self.ethtoolradio,
                            self.miitoolradio]
         self._setup_external_app_radios(wired_link_list,
                                         daemon.GetLinkDetectionTool,
                                         daemon.SetLinkDetectionTool)
-        #set_available(wired_link_list[1:])
-        #wired_link_method = daemon.GetLinkDetectionTool()
-        #if wired_link_list[wired_link_method].get_sensitive():
-            #wired_link_list[wired_link_method].set_active(True)
 
         flush_list = [self.flushautoradio, self.ipflushradio,
                       self.routeflushradio]
         self._setup_external_app_radios(flush_list, daemon.GetFlushTool,
                                         daemon.SetFlushTool)
-        #flush_method = daemon.GetFlushTool()
-        #flush_list[flush_method].set_active(True)
         
         sudo_list = [self.sudoautoradio, self.gksudoradio, self.kdesuradio,
                      self.ktsussradio]

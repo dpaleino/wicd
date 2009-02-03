@@ -31,9 +31,10 @@ class WirelessInterface() -- Control a wireless network interface.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import wicd.misc as misc
-import wicd.wnettools as wnettools
-import wicd.wpath as wpath
+from wicd import misc
+from wicd import wnettools
+from wicd import wpath
+from wicd.wnettools import *
 
 import iwscan
 import wpactrl
@@ -82,29 +83,6 @@ SIOCGMIIPHY = 0x8947
 SIOCETHTOOL = 0x8946
 SIOCGIFFLAGS = 0x8913
 
-def SetDNS(*args, **kargs):
-    """ Call the wnettools SetDNS method. """
-    return wnettools.SetDNS(*args, **kargs)
-
-def GetDefaultGateway(*args, **kargs):
-    """ Call the wnettools GetDefaultGateway method. """
-    return wnettools.GetDefaultGateway(*args, **kargs)
-
-def StopDHCP(*args, **kargs):
-    """ Call the wnettools StopDHCP method. """
-    return wnettools.StopDHCP(*args, **kargs)
-
-def GetWirelessInterfaces(*args, **kargs):
-    """ Call the wnettools GetWirelessInterfaces method. """
-    return wnettools.GetWirelessInterfaces(*args, **kargs)
-
-def GetWiredInterfaces(*args, **kargs):
-    """ Call the wnettools GetWiredInterfaces method. """
-    return wnettools.GetWiredInterfaces(*args, **kargs)
-
-def IsValidWpaSuppDriver(*args, **kargs):
-    """ Call the wnettools IsValidWpaSuppDrive method. """
-    return wnettools.IsValidWpaSuppDriver(*args, **kargs)
 
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.

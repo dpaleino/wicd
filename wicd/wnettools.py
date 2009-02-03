@@ -47,6 +47,9 @@ blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
+__all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces", "StopDHCP",
+           "GetWirelessInterfaces", "IsValidWpaSuppDriver", "NeedsExternalCalls"]
+
 def _sanitize_string(string):
     if string:
         return translate(str(string), blank_trans, blacklist_norm)
@@ -483,9 +486,12 @@ class BaseInterface(object):
         if self.route_cmd and self.flush_tool == misc.ROUTE:
             cmds = ['%s del default' % self.route_cmd]
             cmds.append('route del dev %s' % self.iface)
-        elif self.ip_cmd and self.flush_tool == misc.IP:
+        elif self.ip_cmd:
             #cmd = "ip route flush dev " + self.iface
             cmds = ['%s route flush all' % self.ip_cmd]
+        else:
+            print "No flush command available!"
+            cmds = []
         for cmd in cmds:
             if self.verbose: print cmd
             misc.Run(cmd)

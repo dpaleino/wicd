@@ -24,6 +24,10 @@ in Wicd will be placed.  Pass "--help" as an option to the following command
 for more information, otherwise run it as is to configure Wicd for installation.
   python setup.py configure
 
+Note that setup.py will try to determine if and where to install the autostart
+desktop file for kde (either kde3 or kde4, but not both) and where to install
+the sleep hook for pm-utils.  
+
 Finally, do the actual installation.  This step will need to be done as
 root or with sudo in most cases:
   python setup.py install

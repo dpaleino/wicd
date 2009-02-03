@@ -275,7 +275,6 @@ class BaseInterface(object):
         warning is printed.
         
         """
-        
         self.dhclient_cmd = self._find_program_path("dhclient")
         self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")

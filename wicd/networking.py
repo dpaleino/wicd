@@ -668,7 +668,11 @@ class Wireless(Controller):
         The first available wireless interface.
 
         """
-        return BACKEND.GetWirelessInterfaces()
+        ifaces = BACKEND.GetWirelessInterfaces()
+        if ifaces:
+            return ifaces[0]
+        else:
+            return None
 
     def GetKillSwitchStatus(self):
         """ Get the current status of the Killswitch. 

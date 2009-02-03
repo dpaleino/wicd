@@ -6,8 +6,6 @@ This module implements functions to control and obtain information from
 network interfaces.  It utilizes ioctl calls and python modules to
 obtain this information whenever possible.
 
-def SetDNS() -- Set the DNS servers of the system.
-def GetWirelessInterfaces() -- Get the wireless interfaces available.
 class Interface() -- Control a network interface.
 class WiredInterface() -- Control a wired network interface.
 class WirelessInterface() -- Control a wireless network interface.

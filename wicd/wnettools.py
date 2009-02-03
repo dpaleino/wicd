@@ -127,7 +127,7 @@ def GetWirelessInterfaces():
     ifnames = [iface for iface in os.listdir(dev_dir) if os.path.isdir(dev_dir + iface)
                and 'wireless' in os.listdir(dev_dir + iface)]
     
-    return bool(ifnames) and ifnames[0] or None
+    return ifnames
 
 def GetWiredInterfaces():
     """ Returns a list of wired interfaces on the system. """

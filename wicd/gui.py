@@ -37,6 +37,7 @@ from dbus import version as dbus_version
 from wicd import misc
 from wicd import wpath
 from wicd import dbusmanager
+from wicd import prefs
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
@@ -44,12 +45,6 @@ from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
-
-try:
-    import pygtk
-    pygtk.require("2.0")
-except:
-    pass
 
 proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
@@ -71,6 +66,7 @@ def setup_dbus(force=True):
                 return False
         else:  
             return False
+    prefs.setup_dbus()
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']

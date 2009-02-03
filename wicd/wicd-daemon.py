@@ -79,10 +79,11 @@ class WicdDaemon(dbus.service.Object):
         """ Initializes the daemon DBus object. """
         dbus.service.Object.__init__(self, bus_name=bus_name, 
                                      object_path=object_path)
-        self.wifi = networking.Wireless()
-        self.wired = networking.Wired()
         self.config = ConfigManager(os.path.join(wpath.etc,
                                                  "manager-settings.conf"))
+        self._debug_mode = bool(self.config.get("Settings", "debug_mode"))
+        self.wifi = networking.Wireless(debug=self._debug_mode)
+        self.wired = networking.Wired(debug=self._debug_mode)
         self.wired_bus= WiredDaemon(bus_name, self, wired=self.wired)
         self.wireless_bus = WirelessDaemon(bus_name, self, wifi=self.wifi)
         self.forced_disconnect = False
@@ -274,8 +275,8 @@ class WicdDaemon(dbus.service.Object):
         """ Sets if debugging mode is on or off. """
         self.config.set("Settings", "debug_mode", debug, write=True)
         self.debug_mode = misc.to_bool(debug)
-        self.wifi.debug = self.debug_mode
-        self.wired.debug = self.debug_mode
+        self.wifi.debug = debug
+        self.wired.debug = debug
         self.wireless_bus.debug_mode = debug
         self.wired_bus.debug_mode = debug
 

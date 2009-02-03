@@ -132,7 +132,7 @@ def expand_script_macros(script, msg, bssid, essid):
     
 class Controller(object):
     """ Parent class for the different interface types. """
-    def __init__(self):
+    def __init__(self, debug=False):
         """ Initialise the class. """
         self.global_dns_1 = None
         self.global_dns_2 = None
@@ -141,7 +141,7 @@ class Controller(object):
         self.global_search_dom = None
         self._dhcp_client = None
         self._flush_tool = None
-        self._debug = None
+        self._debug = debug
         self._backend = None
         self.connecting_thread = None
         self.before_script = None
@@ -477,9 +477,9 @@ class ConnectThread(threading.Thread):
 class Wireless(Controller):
     """ A wrapper for common wireless interface functions. """
 
-    def __init__(self):
+    def __init__(self, debug=False):
         """ Initialize the class. """
-        Controller.__init__(self)
+        Controller.__init__(self, debug=debug)
         self._wpa_driver = None
         self._wireless_interface = None
         self.wiface = None 
@@ -844,9 +844,9 @@ class WirelessConnectThread(ConnectThread):
 class Wired(Controller):
     """ A wrapper for common wired interface functions. """
 
-    def __init__(self):
+    def __init__(self, debug=False):
         """ Initialise the class. """
-        Controller.__init__(self)
+        Controller.__init__(self, debug=debug)
         self.wpa_driver = None
         self._link_detect = None
         self._wired_interface = None

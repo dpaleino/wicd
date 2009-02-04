@@ -199,8 +199,8 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
             return self._mii_get_plugged_in()
         else:
-            print 'Error: No way of checking for a wired connection. Make ' + \
-                   'sure that either mii-tool or ethtool is installed.'
+            print ('Error: No way of checking for a wired connection. Make ' +
+                   'sure that either mii-tool or ethtool is installed.')
             return False
 
     def _eth_get_plugged_in(self):

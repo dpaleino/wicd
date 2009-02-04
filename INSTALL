@@ -1,8 +1,8 @@
 Installation of Wicd should be done using your distribution package if one
 exists.  If not, the installation is relatively straightforward, but there
 are a few dependencies:
-  1. python (obviously)
-  2. pygtk
+  1. python (obviously) and pygtk
+  2. dbus and its glib and python bindings
   3. a dhcp client (dhclient, dhcpcd, and pump are supported)
   4. wireless-tools (iwlist, iwconfig, etcetera)
   5. net-tools (ip, route, etcetera)
@@ -23,6 +23,10 @@ You can specify exactly where every non-Python file (and some Python files)
 in Wicd will be placed.  Pass "--help" as an option to the following command
 for more information, otherwise run it as is to configure Wicd for installation.
   python setup.py configure
+
+Note that setup.py will try to determine if and where to install the autostart
+desktop file for kde (either kde3 or kde4, but not both) and where to install
+the sleep hook for pm-utils.  
 
 Finally, do the actual installation.  This step will need to be done as
 root or with sudo in most cases:

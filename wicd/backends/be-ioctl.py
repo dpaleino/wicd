@@ -6,8 +6,6 @@ This module implements functions to control and obtain information from
 network interfaces.  It utilizes ioctl calls and python modules to
 obtain this information whenever possible.
 
-def SetDNS() -- Set the DNS servers of the system.
-def GetWirelessInterfaces() -- Get the wireless interfaces available.
 class Interface() -- Control a network interface.
 class WiredInterface() -- Control a wired network interface.
 class WirelessInterface() -- Control a wireless network interface.
@@ -31,9 +29,10 @@ class WirelessInterface() -- Control a wireless network interface.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import wicd.misc as misc
-import wicd.wnettools as wnettools
-import wicd.wpath as wpath
+from wicd import misc
+from wicd import wnettools
+from wicd import wpath
+from wicd.wnettools import *
 
 import iwscan
 import wpactrl
@@ -82,29 +81,6 @@ SIOCGMIIPHY = 0x8947
 SIOCETHTOOL = 0x8946
 SIOCGIFFLAGS = 0x8913
 
-def SetDNS(*args, **kargs):
-    """ Call the wnettools SetDNS method. """
-    return wnettools.SetDNS(*args, **kargs)
-
-def GetDefaultGateway(*args, **kargs):
-    """ Call the wnettools GetDefaultGateway method. """
-    return wnettools.GetDefaultGateway(*args, **kargs)
-
-def StopDHCP(*args, **kargs):
-    """ Call the wnettools StopDHCP method. """
-    return wnettools.StopDHCP(*args, **kargs)
-
-def GetWirelessInterfaces(*args, **kargs):
-    """ Call the wnettools GetWirelessInterfaces method. """
-    return wnettools.GetWirelessInterfaces(*args, **kargs)
-
-def GetWiredInterfaces(*args, **kargs):
-    """ Call the wnettools GetWiredInterfaces method. """
-    return wnettools.GetWiredInterfaces(*args, **kargs)
-
-def IsValidWpaSuppDriver(*args, **kargs):
-    """ Call the wnettools IsValidWpaSuppDrive method. """
-    return wnettools.IsValidWpaSuppDriver(*args, **kargs)
 
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.
@@ -215,13 +191,13 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         
         """
         if not self.iface: return False
-        if self.ETHTOOL_FOUND and self.link_detect != misc.MIITOOL:
+        if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
             return self._eth_get_plugged_in()
-        elif self.MIITOOL_FOUND:
+        elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
             return self._mii_get_plugged_in()
         else:
-            print 'Error: No way of checking for a wired connection. Make \
-                   sure that either mii-tool or ethtool is installed.'
+            print ('Error: No way of checking for a wired connection. Make' +
+                   'sure that either mii-tool or ethtool is installed.')
             return False
 
     def _eth_get_plugged_in(self):

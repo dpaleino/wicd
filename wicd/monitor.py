@@ -275,8 +275,9 @@ class ConnectionStatus(object):
             return
         
         # Some checks to keep reconnect retries from going crazy.
-        if self.reconnect_tries > 2 and \
-           (time.time() - self.last_reconnect_time) < 300:
+        if (self.reconnect_tries > 3 and
+           (time.time() - self.last_reconnect_time) < 200):
+            print "Throttling autoreconnect"
             return
 
         self.reconnecting = True

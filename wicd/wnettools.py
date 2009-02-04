@@ -38,6 +38,7 @@ from string import maketrans, translate
 
 import wpath
 import misc
+from misc import find_path
 
 RALINK_DRIVER = 'ralink legacy'
 
@@ -45,6 +46,9 @@ RALINK_DRIVER = 'ralink legacy'
 blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
+
+__all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces", "StopDHCP",
+           "GetWirelessInterfaces", "IsValidWpaSuppDriver", "NeedsExternalCalls"]
 
 def _sanitize_string(string):
     if string:
@@ -123,7 +127,7 @@ def GetWirelessInterfaces():
     ifnames = [iface for iface in os.listdir(dev_dir) if os.path.isdir(dev_dir + iface)
                and 'wireless' in os.listdir(dev_dir + iface)]
     
-    return bool(ifnames) and ifnames[0] or None
+    return ifnames
 
 def GetWiredInterfaces():
     """ Returns a list of wired interfaces on the system. """
@@ -160,11 +164,6 @@ class BaseInterface(object):
         self.iface = _sanitize_string_strict(iface)
         self.verbose = verbose
         self.DHCP_CLIENT = None
-        self.DHCP_CMD = None
-        self.DHCP_RELEASE = None
-        self.MIITOOL_FOUND = False
-        self.ETHTOOL_FOUND = False
-        self.IP_FOUND = False
         self.flush_tool = None
         self.link_detect = None       
     
@@ -181,29 +180,91 @@ class BaseInterface(object):
         """
         self.iface = _sanitize_string_strict(str(iface))
         
-    def _find_client_path(self, client):
+    def _find_program_path(self, program):
         """ Determines the full path for the given program.
         
-        Searches a hardcoded list of paths for a given program name.
+        Searches for a given program name on the PATH.
         
         Keyword arguments:
-        client -- The name of the program to search for
+        program -- The name of the program to search for
         
         Returns:
         The full path of the program or None
         
         """
-        paths = ['/sbin/', '/usr/sbin/', '/bin/', '/usr/bin/',
-                 '/usr/local/sbin/', '/usr/local/bin/']
-        for path in paths:
-            if os.path.exists("%s%s" % (path, client)):
-                return "%s%s" % (path, client)
-        if self.verbose:
-            print "WARNING: No path found for %s"  % (client)
-        return None
+        path = find_path(program)
+        if not path and self.verbose:
+            print "WARNING: No path found for %s" % program
+        return path
 
+    
+    def _get_dhcp_command(self, flavor=None):
+        """ Returns the correct DHCP client command. 
+       
+        Given a type of DHCP request (create or release a lease),
+        this method will build a command to complete the request
+        using the correct dhcp client, and cli options.
+        
+        """
+        def get_client_name(cl):
+            """ Converts the integer value for a dhcp client to a string. """
+            if self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
+                client = "dhclient"
+                cmd = self.dhclient_cmd
+            elif self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
+                client = "dhcpcd"
+                cmd = self.dhcpcd_cmd
+            elif self.pump_cmd and cl in [misc.PUMP, misc.AUTO]: 
+                client = "pump"
+                cmd = self.pump_cmd
+            else:
+                client = None
+                cmd = ""
+            return (client, cmd)
+        
+        connect_dict = {
+            "dhclient" : r"%s %s", 
+            "pump" : r"%s -i %s",
+            "dhcpcd" : r"%s %s",
+        }
+        release_dict = {
+            "dhclient" : r"%s -r %s",
+            "pump" : r"%s -r -i %s",
+            "dhcpcd" : r"%s -k %s",
+        }
+        (client_name, cmd) = get_client_name(self.DHCP_CLIENT)
+        if not client_name or not cmd:
+            print "WARNING: Failed to find a valid dhcp client!"
+            return ""
+            
+        if flavor == "connect":
+            return connect_dict[client_name] % (cmd, self.iface)
+        elif flavor == "release":
+            return release_dict[client_name] % (cmd, self.iface)
+        else:
+            return str(cmd)
+    
+    def AppAvailable(self, app):
+        """ Return whether a given app is available.
+        
+        Given the name of an executable, determines if it is
+        available for use by checking for a defined 'app'_cmd
+        instance variable.
+        
+        """
+        return bool(self.__dict__.get("%s_cmd" % app.replace("-", "")))
+        
+    def Check(self):
+        """ Check that all required tools are available. """
+        # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
+        self.CheckDHCP()
+        self.CheckWiredTools()
+        self.CheckWirelessTools()
+        self.CheckSudoApplications()
+        self.CheckRouteFlushTool()
+        
     def CheckDHCP(self):
-        """ Check for a valid DHCP client. 
+        """ Check for the existence of valid DHCP clients. 
         
         Checks for the existence of a supported DHCP client.  If one is
         found, the appropriate values for DHCP_CMD, DHCP_RELEASE, and
@@ -211,97 +272,30 @@ class BaseInterface(object):
         warning is printed.
         
         """
-        def get_client_name(cl):
-            """ Converts the integer value for a dhcp client to a string. """
-            if cl in [misc.DHCLIENT, "dhclient"]:
-                client = "dhclient"
-            elif cl in [misc.DHCPCD, "dhcpcd"]:
-                client = "dhcpcd"
-            else:
-                client = "pump"
-            return client
+        self.dhclient_cmd = self._find_program_path("dhclient")
+        self.dhcpcd_cmd = self._find_program_path("dhcpcd")
+        self.pump_cmd = self._find_program_path("pump")
         
-        if self.DHCP_CLIENT:
-            dhcp_client = get_client_name(self.DHCP_CLIENT)
-            dhcp_path = self._find_client_path(dhcp_client)
-            if not dhcp_path:
-                print "WARNING: Could not find selected dhcp client.  Wicd " + \
-                      " will try to find another supported client."
-        if not self.DHCP_CLIENT or not dhcp_path:
-            dhcp_client = None
-            dhcp_path = None
-            dhcpclients = ["dhclient", "dhcpcd", "pump"]
-            for client in dhcpclients:
-                dhcp_path = self._find_client_path(client)
-                if dhcp_path:
-                    dhcp_client = client
-                    break
-    
-        if not dhcp_client:
-            print "WARNING: No supported DHCP Client could be found!"
-            return
-        elif dhcp_client in [misc.DHCLIENT, "dhclient"]:
-            dhcp_client = misc.DHCLIENT
-            dhcp_cmd = dhcp_path
-            dhcp_release = dhcp_cmd + " -r"
-        elif dhcp_client in [misc.PUMP, "pump"]:
-            dhcp_client = misc.PUMP
-            dhcp_cmd = dhcp_path + " -i"
-            dhcp_release = dhcp_cmd + " -r -i"
-        elif dhcp_client in [misc.DHCPCD, "dhcpcd"]:
-            dhcp_client = misc.DHCPCD
-            dhcp_cmd = dhcp_path
-            dhcp_release = dhcp_cmd + " -k"
-        else:
-            dhcp_client = None
-            dhcp_cmd = None
-            dhcp_release = None
-
-        self.DHCP_CMD = dhcp_cmd
-        self.DHCP_RELEASE = dhcp_release
-        self.DHCP_CLIENT = dhcp_client
-    
     def CheckWiredTools(self):
         """ Check for the existence of ethtool and mii-tool. """
-        miitool_path = self._find_client_path("mii-tool")
-        if miitool_path:
-            self.miitool_cmd = miitool_path
-            self.MIITOOL_FOUND = True
-        else:
-            self.miitool_cmd = None
-            self.MIITOOL_FOUND = False
-        
-        ethtool_path = self._find_client_path("ethtool")
-        if ethtool_path:
-            self.ethtool_cmd = ethtool_path
-            self.ETHTOOL_FOUND = True
-        else:
-            self.ethtool_cmd = None
-            self.ETHTOOL_FOUND = False
+        self.miitool_cmd = self._find_program_path("mii-tool")
+        self.ethtool_cmd = self._find_program_path("ethtool")
             
     def CheckWirelessTools(self):
         """ Check for the existence of wpa_cli """
-        wpa_cli_path = self._find_client_path("wpa_cli")
-        if wpa_cli_path:
-            self.WPA_CLI_FOUND = True
-        else:
-            self.WPA_CLI_FOUND = False
+        self.wpa_cli_cmd = self._find_program_path("wpa_cli")
+        if not self.wpa_cli_cmd:
             print "wpa_cli not found.  Authentication will not be validated."
-
-    def Check(self):
-        """ Check that all required tools are available. """
-        # THINGS TO CHECK FOR: ethtool, pptp-linux, dhclient, host
-        self.CheckDHCP()
-        self.CheckWiredTools()
-        self.CheckWirelessTools()
-        
-        ip_path = self._find_client_path("ip")
-        if ip_path:
-            self.ip_cmd = ip_path
-            self.IP_FOUND = True
-        else:
-            self.ip_cmd = None
-            self.IP_FOUND = False
+     
+    def CheckRouteFlushTool(self):
+        """ Check for a route flush tool. """
+        self.ip_cmd = self._find_program_path("ip")
+        self.route_cmd = self._find_program_path("route")
+            
+    def CheckSudoApplications(self):
+        self.gksudo_cmd = self._find_program_path("gksudo")
+        self.kdesu_cmd = self._find_program_path("kdesu")
+        self.ktsuss_cmd = self._find_program_path("ktsuss")
 
     def Up(self):
         """ Bring the network interface up.
@@ -461,7 +455,8 @@ class BaseInterface(object):
         """
         if not self.iface: return False
         
-        cmd = self.DHCP_CMD + " " + self.iface
+        cmd = "%s %s" % (self._get_dhcp_command('connect'), self.iface)
+        #cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
         
@@ -476,19 +471,23 @@ class BaseInterface(object):
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         if not self.iface: return False
-        cmd = self.DHCP_RELEASE + " " + self.iface
+        cmd = "%s %s" % (self._get_dhcp_command("release"), self.iface)
+        #cmd = self.DHCP_RELEASE + " " + self.iface
         if self.verbose: print cmd
         misc.Run(cmd)
 
     def FlushRoutes(self):
         """ Flush all network routes. """
         if not self.iface: return False
-        if self.IP_FOUND and self.flush_tool == misc.IP:
+        if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
             #cmd = "ip route flush dev " + self.iface
-            cmds = ['ip route flush all']
-        else:
-            cmds = ['route del default']
+            cmds = ['%s route flush all' % self.ip_cmd]
+        elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
+            cmds = ['%s del default' % self.route_cmd]
             cmds.append('route del dev %s' % self.iface)
+        else:
+            print "No flush command available!"
+            cmds = []
         for cmd in cmds:
             if self.verbose: print cmd
             misc.Run(cmd)

@@ -37,6 +37,7 @@ from dbus import version as dbus_version
 from wicd import misc
 from wicd import wpath
 from wicd import dbusmanager
+from wicd import prefs
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
@@ -44,12 +45,6 @@ from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
-
-try:
-    import pygtk
-    pygtk.require("2.0")
-except:
-    pass
 
 proxy_obj = daemon = wireless = wired = bus = None
 language = misc.get_language_list_gui()
@@ -71,6 +66,7 @@ def setup_dbus(force=True):
                 return False
         else:  
             return False
+    prefs.setup_dbus()
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
@@ -304,8 +300,7 @@ class appGui(object):
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         if not self.pref:
-            self.pref = PreferencesDialog(self.wTree,
-                                          dbusmanager.get_dbus_ifaces())
+            self.pref = PreferencesDialog(self.wTree)
         else:
             self.pref.load_preferences_diag()
         if self.pref.run() == 1:
@@ -363,51 +358,63 @@ class appGui(object):
         if not self.is_visible or self.refreshing:
             return True
         
-        fast = not daemon.NeedsExternalCalls()
-        wired_connecting = wired.CheckIfWiredConnecting()
-        wireless_connecting = wireless.CheckIfWirelessConnecting()
-        self.connecting = wired_connecting or wireless_connecting
+        daemon.UpdateState()
+        [state, info] = daemon.GetConnectionStatus()
+            
+        if state == misc.WIRED:
+            return self.set_wired_state(info)
+        elif state == misc.WIRELESS:
+            return self.set_wireless_state(info)
+        elif state == misc.CONNECTING:
+            return self.set_connecting_state(info)
+        elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
+            return self.set_not_connected_state(info)
         
-        if self.connecting:
-            if not self.pulse_active:
-                self.pulse_active = True
-                gobject.timeout_add(100, self.pulse_progress_bar)
-                gobject.idle_add(self.network_list.set_sensitive, False)
-                gobject.idle_add(self.status_area.show_all)
-            if self.statusID:
-                gobject.idle_add(self.status_bar.remove, 1, self.statusID)
-            if wireless_connecting:
-                if not fast:
-                    iwconfig = wireless.GetIwconfig()
-                else:
-                    iwconfig = ''
-                gobject.idle_add(self.set_status, wireless.GetCurrentNetwork(iwconfig) + ': ' +
-                       language[str(wireless.CheckWirelessConnectingMessage())])
-            if wired_connecting:
-                gobject.idle_add(self.set_status, language['wired_network'] + ': ' +
-                             language[str(wired.CheckWiredConnectingMessage())])
-            return True
-        else:
-            if self.pulse_active:
-                self.pulse_active = False
-                gobject.idle_add(self.network_list.set_sensitive, True)
-                gobject.idle_add(self.status_area.hide_all)
-
-            if self.statusID:
-                gobject.idle_add(self.status_bar.remove, 1, self.statusID)
-
-            # Determine connection status.
-            if self.check_for_wired(wired.GetWiredIP("")):
-                return True
-            if not fast:
-                iwconfig = wireless.GetIwconfig()
-            else:
-                iwconfig = ''
-            if self.check_for_wireless(iwconfig, wireless.GetWirelessIP("")):
-                return True
-            self.set_status(language['not_connected'])
-            return True
+    def set_wired_state(self, info):
+        self._set_connected_state()
+        self.set_status(language['connected_to_wired'].replace('$A', info[0]))
+        return True
     
+    def set_wireless_state(self, info):
+        self._set_connected_state()
+        self.set_status(language['connected_to_wireless'].replace
+                        ('$A', info[1]).replace
+                        ('$B', daemon.FormatSignalForPrinting(info[2])).replace
+                        ('$C', info[0]))
+        return True
+        
+    def set_not_connected_state(self, info):
+        self.connecting = False
+        self.set_status(language['not_connected'])
+        return True
+        
+    def _set_connected_state(self):
+        self.connecting = False
+        if self.pulse_active:
+            self.pulse_active = False
+            gobject.idle_add(self.network_list.set_sensitive, True)
+            gobject.idle_add(self.status_area.hide_all)
+
+        if self.statusID:
+            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+    
+    def set_connecting_state(self, info):
+        self.connecting = True
+        if not self.pulse_active:
+            self.pulse_active = True
+            gobject.timeout_add(100, self.pulse_progress_bar)
+            gobject.idle_add(self.network_list.set_sensitive, False)
+            gobject.idle_add(self.status_area.show_all)
+        if self.statusID:
+            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+        if info[0] == "wireless":
+            gobject.idle_add(self.set_status, str(info[1]) + ': ' +
+                   language[str(wireless.CheckWirelessConnectingMessage())])
+        elif info[0] == "wired":
+            gobject.idle_add(self.set_status, language['wired_network'] + ': ' +
+                         language[str(wired.CheckWiredConnectingMessage())])
+        return True
+        
     def update_connect_buttons(self, state=None, x=None, force_check=False):
         """ Updates the connect/disconnect buttons for each network entry.
 
@@ -426,41 +433,6 @@ class appGui(object):
                     entry.update_connect_button(state, apbssid)
         self.prev_state = state
     
-    def check_for_wired(self, wired_ip):
-        """ Determine if wired is active, and if yes, set the status. """
-        if wired_ip and wired.CheckPluggedIn():
-            self.set_status(
-                language['connected_to_wired'].replace('$A',wired_ip)
-            )
-            return True
-        else:
-            return False
-        
-    def check_for_wireless(self, iwconfig, wireless_ip):
-        """ Determine if wireless is active, and if yes, set the status. """
-        if not wireless_ip:
-            return False
-        
-        network = wireless.GetCurrentNetwork(iwconfig)
-        if not network:
-            return False
-    
-        network = str(network)
-        if daemon.GetSignalDisplayType() == 0:
-            strength = wireless.GetCurrentSignalStrength(iwconfig)
-        else:
-            strength = wireless.GetCurrentDBMStrength(iwconfig)
-
-        if strength is None:
-            return False
-        strength = str(strength)            
-        ip = str(wireless_ip)
-        self.set_status(language['connected_to_wireless'].replace
-                        ('$A', network).replace
-                        ('$B', daemon.FormatSignalForPrinting(strength)).replace
-                        ('$C', wireless_ip))
-        return True
-
     def set_status(self, msg):
         """ Sets the status bar message for the GUI. """
         self.statusID = self.status_bar.push(1, msg)

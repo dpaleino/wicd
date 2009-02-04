@@ -29,25 +29,39 @@ from commands import getoutput
 # wicd imports
 import wpath
 
-if __name__ == '__main__':
-    wpath.chdir(__file__)
-    
+# Connection state constants
 NOT_CONNECTED = 0
 CONNECTING = 1
 WIRELESS = 2
 WIRED = 3
 SUSPENDED = 4
 
+# Automatic app selection constant
 AUTO = 0
+
+# DHCP Clients
 DHCLIENT = 1
 DHCPCD = 2
 PUMP = 3
 
+# Link detection tools
 ETHTOOL = 1
 MIITOOL = 2
 
+# Route flushing tools
 IP = 1
 ROUTE = 2
+
+# Graphical sudo apps
+GKSUDO = 1
+KDESU = 2
+KTSUSS = 3
+sudo_dict = { 
+    AUTO : "",
+    GKSUDO : "gksudo",
+    KDESU : "kdesu",
+    KTSUSS: "ktsuss",
+}
 
 class WicdError(Exception):
     pass
@@ -375,9 +389,9 @@ def detect_desktop_environment():
             pass
     return desktop_environment
 
-def get_sudo_cmd(msg):
+def get_sudo_cmd(msg, prog_num=0):
     """ Returns a graphical sudo command for generic use. """
-    sudo_prog = choose_sudo_prog()
+    sudo_prog = choose_sudo_prog(prog_num)
     if not sudo_prog: return None
     if re.search("(ktsuss|gksu|gksudo)$", sudo_prog):
         msg_flag = "-m"
@@ -385,8 +399,10 @@ def get_sudo_cmd(msg):
         msg_flag = "--caption"
     return [sudo_prog, msg_flag, msg]
 
-def choose_sudo_prog():
+def choose_sudo_prog(prog_num=0):
     """ Try to intelligently decide which graphical sudo program to use. """
+    if prog_num:
+        return find_path(sudo_dict[prog_num])
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
     
@@ -412,7 +428,10 @@ def find_path(cmd):
     the file can not be found.
     
     """
-    paths = os.getenv("PATH", default="/usr/bin:/usr/local/bin").split(':')
+    paths = os.getenv("PATH").split(':')
+    if not paths:
+        paths = ["/usr/local/sbin", "/usr/local/bin", "/usr/sbin", "/usr/bin",
+                 "/sbin", "/bin"]
     for path in paths:
         if os.path.exists(os.path.join(path, cmd)):
             return os.path.join(path, cmd)

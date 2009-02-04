@@ -462,7 +462,7 @@ class TrayIcon(object):
                 gtk.main_iteration()
             if item.state != gtk.STATE_PRELIGHT:
                 return True
-            wireless.Scan(reply_handler=dummy, error_handler=dummy)
+            wireless.Scan(False)
         
         def populate_network_menu(self, data=None):
             """ Populates the network list submenu. """

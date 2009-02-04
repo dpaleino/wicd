@@ -616,7 +616,7 @@ class WicdDaemon(dbus.service.Object):
         
         """
         self.link_detect_tool = int(link_tool)
-        self.wired.link_tool = int(link_tool)
+        self.wired.link_detect = int(link_tool)
         self.config.set("Settings", "link_detect_tool", link_tool, write=True)
 
     @dbus.service.method('org.wicd.daemon')
@@ -787,6 +787,7 @@ class WicdDaemon(dbus.service.Object):
     def ConnectResultsSent(self, result):
         print "Sending connection attempt result %s" % result
         
+    @dbus.service.method("org.wicd.daemon")
     @dbus.service.signal(dbus_interface="org.wicd.daemon", signature='')
     def UpdateState(self):
         pass

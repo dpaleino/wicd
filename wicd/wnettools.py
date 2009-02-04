@@ -208,16 +208,13 @@ class BaseInterface(object):
         """
         def get_client_name(cl):
             """ Converts the integer value for a dhcp client to a string. """
-            if (cl in [misc.DHCLIENT, "dhclient"] or 
-                (cl == misc.AUTO and self.dhclient_cmd)):
+            if self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
                 client = "dhclient"
                 cmd = self.dhclient_cmd
-            elif (cl in [misc.DHCPCD, "dhcpcd"] or
-                  (cl == misc.AUTO and self.dhcpcd_cmd)):
+            elif self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
                 client = "dhcpcd"
                 cmd = self.dhcpcd_cmd
-            elif (cl in [misc.PUMP, "pump"] or 
-                  (cl == misc.AUTO and self.pump_cmd)):
+            elif self.pump_cmd and cl in [misc.PUMP, misc.AUTO]: 
                 client = "pump"
                 cmd = self.pump_cmd
             else:
@@ -482,12 +479,12 @@ class BaseInterface(object):
     def FlushRoutes(self):
         """ Flush all network routes. """
         if not self.iface: return False
-        if self.route_cmd and self.flush_tool == misc.ROUTE:
-            cmds = ['%s del default' % self.route_cmd]
-            cmds.append('route del dev %s' % self.iface)
-        elif self.ip_cmd:
+        if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
             #cmd = "ip route flush dev " + self.iface
             cmds = ['%s route flush all' % self.ip_cmd]
+        elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
+            cmds = ['%s del default' % self.route_cmd]
+            cmds.append('route del dev %s' % self.iface)
         else:
             print "No flush command available!"
             cmds = []

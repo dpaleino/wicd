@@ -300,8 +300,7 @@ class appGui(object):
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         if not self.pref:
-            self.pref = PreferencesDialog(self.wTree,
-                                          dbusmanager.get_dbus_ifaces())
+            self.pref = PreferencesDialog(self.wTree)
         else:
             self.pref.load_preferences_diag()
         if self.pref.run() == 1:

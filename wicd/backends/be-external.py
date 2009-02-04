@@ -194,10 +194,10 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
             except (IOError, ValueError, TypeError):
                 print 'Error checking link using /sys/class/net/%s/carrier' % self.iface
                 
-        if self.miitool_cmd and self.link_detect == misc.MIITOOL:
-            return self._mii_get_plugged_in()
-        elif self.ethtool_cmd:
+        if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
             return self._eth_get_plugged_in()
+        elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
+            return self._mii_get_plugged_in()
         else:
             print 'Error: No way of checking for a wired connection. Make ' + \
                    'sure that either mii-tool or ethtool is installed.'

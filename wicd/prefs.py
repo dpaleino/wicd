@@ -49,7 +49,7 @@ def setup_dbus():
 
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
-    def __init__(self, wTree, dbus):
+    def __init__(self, wTree):
         setup_dbus()
         self.wTree = wTree
         self.prep_settings_diag()

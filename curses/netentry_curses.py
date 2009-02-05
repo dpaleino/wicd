@@ -343,7 +343,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
 
     # Ripped from netentry.py
-    def save_settings(self, networkid):
+    def save_settings(self):
         # Check encryption info
         if self.encryption_chkbox.get_state():
             #print "setting encryption info..."
@@ -358,11 +358,11 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 self.set_net_prop(x, noneToString(encryption_info[x].
                                                    get_edit_text()))
         elif not self.encryption_chkbox.get_state() and \
-             wireless.GetWirelessProperty(networkid, "encryption"):
+             wireless.GetWirelessProperty(self.networkID, "encryption"):
             error(self.ui, self.overlay, language['enable_encryption'])
             return False
         else:
-            #print 'encryption is ' + str(wireless.GetWirelessProperty(networkid, 
+            #print 'encryption is ' + str(wireless.GetWirelessProperty(self.networkID, 
             #                                                      "encryption"))
             #print "no encryption specified..."
             self.set_net_prop("enctype", "None")
@@ -372,9 +372,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.set_net_prop('use_settings_globally', True)
         else:
             self.set_net_prop('use_settings_globally', False)
-            wireless.RemoveGlobalEssidEntry(networkid)
+            wireless.RemoveGlobalEssidEntry(self.networkID)
             
-        wireless.SaveWirelessNetworkProfile(networkid)
+        wireless.SaveWirelessNetworkProfile(self.networkID)
         return True
 
     # More or less ripped from netentry.py

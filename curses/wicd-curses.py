@@ -726,10 +726,10 @@ class appGUI():
     @wrap_exceptions()
     def idle_incr(self):
         theText = " "
-        #if self.special != None:
-        #    theText += self.special
         if self.connecting:
             theText += "-- "+language['connecting']+' -- '+language["esc_to_cancel"]
+        else:
+            theText += "-- Press H or ? for Help"
         quit_note = ' -- '+language["press_to_quit"]
         self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1

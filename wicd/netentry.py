@@ -20,6 +20,7 @@ import os
 
 import misc
 import wpath
+import dbusmanager
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
 from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
@@ -30,6 +31,12 @@ daemon = None
 wired = None
 wireless = None
         
+def setup_dbus():
+    global daemon, wireless, wired
+    daemon = dbusmanager.get_interface('daemon')
+    wireless = dbusmanager.get_interface('wireless')
+    wired = dbusmanager.get_interface('wired')
+    
 class AdvancedSettingsDialog(gtk.Dialog):
     def __init__(self):
         """ Build the base advanced settings dialog.
@@ -466,17 +473,14 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
         
 class NetworkEntry(gtk.HBox):
-    def __init__(self, dbus_ifaces):
+    def __init__(self):
         """ Base network entry class.
         
         Provides gtk objects used by both the WiredNetworkEntry and
         WirelessNetworkEntry classes.
         
         """
-        global daemon, wired, wireless
-        daemon = dbus_ifaces["daemon"]
-        wired = dbus_ifaces["wired"]
-        wireless = dbus_ifaces["wireless"]
+        setup_dbus()
         gtk.HBox.__init__(self, False, 2)
         self.image = gtk.Image()
         self.pack_start(self.image, False, False)
@@ -533,9 +537,9 @@ class NetworkEntry(gtk.HBox):
         
 
 class WiredNetworkEntry(NetworkEntry):
-    def __init__(self, dbus_ifaces):
+    def __init__(self):
         """ Load the wired network entry. """
-        NetworkEntry.__init__(self, dbus_ifaces)
+        NetworkEntry.__init__(self)
         # Center the picture and pad it a bit
         self.image.set_padding(0, 0)
         self.image.set_alignment(.5, .5)
@@ -718,9 +722,9 @@ class WiredNetworkEntry(NetworkEntry):
 
 
 class WirelessNetworkEntry(NetworkEntry):
-    def __init__(self, networkID, dbus_ifaces):
+    def __init__(self, networkID):
         """ Build the wireless network entry. """
-        NetworkEntry.__init__(self, dbus_ifaces)
+        NetworkEntry.__init__(self)
 
         self.networkID = networkID
         self.image.set_padding(0, 0)

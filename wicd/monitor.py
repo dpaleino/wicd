@@ -311,12 +311,12 @@ def err_handle(error):
 def add_poll_callback():
     global monitor, to_time, update_callback
 
-    try:
+    if hasattr(gobject, "timeout_add_seconds"):
         update_callback = gobject.timeout_add_seconds(to_time, 
                                                monitor.update_connection_status)
-    except:
+    else:
         update_callback = gobject.timeout_add(to_time * 1000, 
-                                               monitor.update_connection_status)        
+                                              monitor.update_connection_status)        
     
 def main():
     """ Starts the connection monitor. 

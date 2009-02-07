@@ -74,6 +74,21 @@ DBUS_AVAIL = False
 
 language = misc.get_language_list_tray()
 
+
+def catchdbus(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except DBusException, e:
+            print "warning: ignoring exception %s" % egg
+            return None
+    wrapper.__name__ = func.__name__
+    wrapper.__module__ = func.__module__
+    wrapper.__dict__ = func.__dict__
+    wrapper.__doc__ = func.__doc__
+    return wrapper
+            
+
 class NetworkMenuItem(gtk.ImageMenuItem):
     def __init__(self, lbl, is_active=False):
         gtk.ImageMenuItem.__init__(self)
@@ -130,6 +145,7 @@ class TrayIcon(object):
                 handle_no_dbus()
                 self.set_not_connected_state()
 
+        @catchdbus
         def wired_profile_chooser(self):
             """ Launch the wired profile chooser. """
             gui.WiredProfileChooser()
@@ -142,6 +158,7 @@ class TrayIcon(object):
             self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
                                                                      wired_ip))
             
+        @catchdbus
         def set_wireless_state(self, info):
             """ Sets the icon info for a wireless state. """
             lock = ''
@@ -170,6 +187,7 @@ class TrayIcon(object):
                                 cur_network + "...")
             self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
             
+        @catchdbus
         def set_not_connected_state(self, info=None):
             """ Set the icon info for the not connected state. """
             self.tr.set_from_file(wpath.images + "no-signal.png")
@@ -182,6 +200,7 @@ class TrayIcon(object):
                 status = language['not_connected']
             self.tr.set_tooltip(status)
 
+        @catchdbus
         def update_tray_icon(self, state=None, info=None):
             """ Updates the tray icon and current connection status. """
             if not self.use_tray or not DBUS_AVAIL: return False
@@ -202,6 +221,7 @@ class TrayIcon(object):
                 return False
             return True
 
+        @catchdbus
         def set_signal_image(self, wireless_signal, lock):
             """ Sets the tray icon image for an active wireless connection. """
             if self.animate:
@@ -230,6 +250,7 @@ class TrayIcon(object):
             img_file = ''.join([wpath.images, prefix, signal_img, lock, ".png"])
             self.tr.set_from_file(img_file)
         
+        @catchdbus
         def get_bandwidth_state(self):
             """ Determines what network activity state we are in. """
             transmitting = False
@@ -408,6 +429,7 @@ class TrayIcon(object):
                 item.set_sensitive(False)  
             del item
                 
+        @catchdbus
         def _get_img(self, net_id):
             """ Determines which image to use for the wireless entries. """
             def fix_strength(val, default):
@@ -441,6 +463,7 @@ class TrayIcon(object):
                     signal_img = 'signal-25.png'
             return wpath.images + signal_img
             
+        @catchdbus
         def on_net_menu_activate(self, item):
             """ Trigger a background scan to populate the network menu. 
             
@@ -464,6 +487,7 @@ class TrayIcon(object):
                 return True
             wireless.Scan(False)
         
+        @catchdbus
         def populate_network_menu(self, data=None):
             """ Populates the network list submenu. """
             def get_prop(net_id, prop):

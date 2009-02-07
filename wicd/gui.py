@@ -221,11 +221,12 @@ class appGui(object):
             bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
                                     "org.wicd.daemon")
             
+        self._do_statusbar_update(*daemon.GetConnectionStatus())
+        self.wait_for_events(0.1)
         if hasattr(gobject, "timeout_add_seconds"):
             self.update_cb = gobject.timeout_add_seconds(2, self.update_statusbar)
         else:
             self.update_cb = gobject.timeout_add(2000, self.update_statusbar)
-        self._do_statusbar_update(*daemon.GetConnectionStatus())
         self.refresh_clicked()
         
     def handle_connection_results(self, results):
@@ -355,14 +356,17 @@ class appGui(object):
 
     def update_statusbar(self):
         """ Triggers a status update in wicd-monitor. """
-        if not self.is_visible or self.refreshing:
+        if not self.is_visible:
             return True
         
-        daemon.UpdateState()
+        if self.connecting:
+            self._do_statusbar_update(*daemon.GetConnectionStatus())
+        else:
+            daemon.UpdateState()
         return True
     
     def _do_statusbar_update(self, state, info):
-        if not self.is_visible or self.refreshing:
+        if not self.is_visible:
             return True
         
         if state == misc.WIRED:
@@ -373,14 +377,15 @@ class appGui(object):
             return self.set_connecting_state(info)
         elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
             return self.set_not_connected_state(info)
+        return True
         
     def set_wired_state(self, info):
-        self._set_connected_state()
+        self._set_not_connecting_state()
         self.set_status(language['connected_to_wired'].replace('$A', info[0]))
         return True
     
     def set_wireless_state(self, info):
-        self._set_connected_state()
+        self._set_not_connecting_state()
         self.set_status(language['connected_to_wireless'].replace
                         ('$A', info[1]).replace
                         ('$B', daemon.FormatSignalForPrinting(info[2])).replace
@@ -389,10 +394,11 @@ class appGui(object):
         
     def set_not_connected_state(self, info):
         self.connecting = False
+        self._set_not_connecting_state()
         self.set_status(language['not_connected'])
         return True
         
-    def _set_connected_state(self):
+    def _set_not_connecting_state(self):
         self.connecting = False
         if self.pulse_active:
             self.pulse_active = False

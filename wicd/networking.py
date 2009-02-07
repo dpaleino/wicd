@@ -71,6 +71,7 @@ def abortable(func):
     wrapper.__name__ = func.__name__
     wrapper.__dict__ = func.__dict__
     wrapper.__doc__ = func.__doc__
+    wrapper.__module = func.__module__
     return wrapper
 
 def get_backend_list():

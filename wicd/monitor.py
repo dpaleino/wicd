@@ -69,15 +69,16 @@ class ConnectionStatus(object):
     def __init__(self):
         """ Initialize variables needed for the connection status methods. """
         self.last_strength = -2
+        self.last_state = misc.NOT_CONNECTED
+        self.last_reconnect_time = time.time()
+        self.last_network = ""
         self.displayed_strength = -1
         self.still_wired = False
         self.network = ''
         self.tried_reconnect = False
         self.connection_lost_counter = 0
-        self.last_state = misc.NOT_CONNECTED
         self.reconnecting = False
         self.reconnect_tries = 0
-        self.last_reconnect_time = time.time()
         self.signal_changed = False
         self.iwconfig = ""
         self.trigger_reconnect = False
@@ -155,8 +156,9 @@ class ConnectionStatus(object):
             self.connection_lost_counter = 0
 
         if (wifi_signal != self.last_strength or
-            self.network != wireless.GetCurrentNetwork(self.iwconfig)):
+            self.network != self.last_network):
             self.last_strength = wifi_signal
+            self.last_network = self.network
             self.signal_changed = True
             daemon.SetCurrentInterface(daemon.GetWirelessInterface())    
             
@@ -262,8 +264,8 @@ class ConnectionStatus(object):
         daemon.SetConnectionStatus(state, info)
 
         # Send a D-Bus signal announcing status has changed if necessary.
-        if state != self.last_state or \
-           (state == misc.WIRELESS and self.signal_changed):
+        if (state != self.last_state or (state == misc.WIRELESS and 
+                                         self.signal_changed)):
             daemon.EmitStatusChanged(state, info)
         self.last_state = state
         return True

@@ -379,12 +379,12 @@ class WicdDaemon(dbus.service.Object):
         print 'canceling connection attempt'
         if self.wifi.connecting_thread:
             self.wifi.connecting_thread.should_die = True
-            self.wifi.StopDHCP()
+            self.wifi.ReleaseDHCP()
             self.wifi.StopWPA()
             self.wifi.connecting_thread.connect_result = 'aborted'
         if self.wired.connecting_thread:
             self.wired.connecting_thread.should_die = True
-            self.wired.StopDHCP()
+            self.wired.ReleaseDHCP()
             self.wired.connecting_thread.connect_result = 'aborted'
     
     @dbus.service.method('org.wicd.daemon')

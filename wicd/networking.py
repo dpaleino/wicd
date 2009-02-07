@@ -151,11 +151,11 @@ class Controller(object):
         self.iface = None
         self.backend_manager = BackendManager()   
     
+    def get_debug(self): return self._debug
     def set_debug(self, value):
         self._debug = value
         if self.iface:
             self.iface.SetDebugMode(value)
-    def get_debug(self): return self._debug
     debug = property(get_debug, set_debug)
     
     def set_dhcp_client(self, value):
@@ -187,10 +187,6 @@ class Controller(object):
         else:
             return True
         
-    def StopDHCP(self):
-        """ Stops all running DHCP clients. """
-        return BACKEND.StopDHCP()
-    
     def GetIP(self, ifconfig=""):
         """ Get the IP of the interface.
 
@@ -208,9 +204,14 @@ class Controller(object):
             misc.ExecuteScript(expand_script_macros(self.disconnect_script, 'disconnection', *args))
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
+        iface.FlushRoutes()
         iface.Down()
         iface.Up()
         
+    def ReleaseDHCP(self):
+        """ Release the DHCP lease for this interface. """
+        return self.iface.ReleaseDHCP()
+    
     def IsUp(self):
         """ Calls the IsUp method for the wired interface. 
         
@@ -435,12 +436,6 @@ class ConnectThread(threading.Thread):
         print "Releasing DHCP leases..."
         iface.ReleaseDHCP()
         
-    @abortable        
-    def stop_dhcp_clients(self, iface):
-        """ Stop and running DHCP clients. """
-        print 'Stopping DHCP clients'
-        BACKEND.StopDHCP()
-        
     def connect_aborted(self, reason):
         """ Sets the thread status to aborted. """
         if self.abort_reason:
@@ -643,8 +638,8 @@ class Wireless(Controller):
         """
         wiface = self.wiface
         print 'Creating ad-hoc network'
-        print 'Killing dhclient and wpa_supplicant'
-        BACKEND.StopDHCP()
+        print 'Stopping dhcp client and wpa_supplicant'
+        BACKEND.ReleaseDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()
@@ -761,7 +756,6 @@ class WirelessConnectThread(ConnectThread):
         self.put_iface_down(wiface)
         self.release_dhcp_clients(wiface)
         self.reset_ip_addresses(wiface)
-        self.stop_dhcp_clients(wiface)
         self.stop_wpa(wiface)
         self.flush_routes(wiface)
 
@@ -971,7 +965,6 @@ class WiredConnectThread(ConnectThread):
         self.put_iface_down(liface)
         self.release_dhcp_clients(liface)
         self.reset_ip_addresses(liface)
-        self.stop_dhcp_clients(liface)
         self.flush_routes(liface)
         
         # Bring up interface.

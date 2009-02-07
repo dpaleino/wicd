@@ -454,7 +454,7 @@ def get_language_list_gui():
     language['use_static_ip'] = _('Use Static IPs')
     language['use_static_dns'] = _('Use Static DNS')
     language['use_encryption'] = _('Use Encryption')
-    language['advanced_settings'] = _('Properties')
+    language['advanced_settings'] = _('Advanced Settings')
     language['wired_network'] = _('Wired Network')
     language['wired_network_instructions'] = _('To connect to a wired network,'
     ' you must create a network profile. To create a network profile, type a'
@@ -647,5 +647,6 @@ def threaded(f):
     wrapper.__name__ = f.__name__
     wrapper.__dict__ = f.__dict__
     wrapper.__doc__ = f.__doc__
+    wrapper.__module__ = f.__module__
 
     return wrapper

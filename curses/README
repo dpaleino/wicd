@@ -49,7 +49,7 @@ Why didn't you call it wicd-urwid?  There is a hachoir-urwid package out there.
 
 Why don't you support lower-case keybindings for most of the commands?
     I was trying to prevent mass chaos from happening because of mashing keys.
-    Of course, if you unwittingly have caps-lock on, that's going to cause said
+    Of course, if you unwittingly have caps-lock on, that's going to cause mass
     chaos, too, so you might want to check that (or ask me about changing the
     keymaps to ctrl/meta+KEY)
 

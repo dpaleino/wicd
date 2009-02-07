@@ -323,8 +323,6 @@ class PrefsDialog(urwid.WidgetWrap):
             pass # It defaults to 0 anyway
 
         self.backends = daemon.GetBackendList()
-        # Remove the blank string b/c of some dbus mess
-        self.backends.remove('')
         self.thebackends= [unicode(w) for w in self.backends]
         self.backend_cbox.set_list(self.thebackends) 
         cur_backend = daemon.GetSavedBackend()
@@ -438,53 +436,3 @@ class PrefsDialog(urwid.WidgetWrap):
                 return False
             if self.OK_PRESSED or 'meta enter' in keys:
                 return True
-
-
-###
-### EXTERNAL ENTRY POINT STUFF
-###
-def run_it():
-    dialog = PrefsDialog(None,(0,0),ui,dbusmanager.get_dbus_ifaces())
-    keys = True
-    dim = ui.get_cols_rows()
-    dialog.load_settings()
-    dialog.ready_comboboxes(ui,dialog)
-    while True:
-        if keys:
-            ui.draw_screen(dim, dialog.render(dim, True))
-        keys = ui.get_input()
-
-        if "window resize" in keys:
-            dim = ui.get_cols_rows()
-        if "esc" in keys or 'Q' in keys:
-            return False
-        for k in keys:
-            dialog.keypress(dim, k)
-        if dialog.CANCEL_PRESSED:
-            return False
-        if dialog.OK_PRESSED:
-            dialog.save_results()
-            return True
-
-if __name__=='__main__':
-    try:
-        dbusmanager.connect_to_dbus()
-    except DBusException:
-        # I may need to be a little more verbose here.
-        # Suggestions as to what should go here
-        print "Can't connect to the daemon.  Are you sure it is running?"
-        print "Please check the wicd log for error messages."
-        raise
-    ui = urwid.curses_display.Screen()
-    ui.register_palette([
-        ('body','light gray','default'),
-        ('focus','dark magenta','light gray'),
-        ('header','light blue','default'),
-        ('important','light red','default'),
-        ('connected','dark green','default'),
-        ('connected focus','default','dark green'),
-        ('editcp', 'default', 'default', 'standout'),
-        ('editbx', 'light gray', 'dark blue'),
-        ('editfc', 'white','dark blue', 'bold'),
-        ('tab active','dark green','light gray')])
-    ui.run_wrapper(run_it)

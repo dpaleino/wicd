@@ -444,6 +444,12 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         print 'wpa_supplicant rescan forced...'
         cmd = 'wpa_cli -i' + self.iface + ' scan'
         misc.Run(cmd)
+        
+    def StopWPA(self):
+        """ Terminates wpa using wpa_cli"""
+        cmd = 'wpa_cli -i %s terminate' % self.iface
+        if self.verbose: print cmd
+        misc.Run(cmd)
 
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """

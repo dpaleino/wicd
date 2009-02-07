@@ -454,8 +454,7 @@ class appGui(object):
         
         """
         if not DBUS_AVAIL: return
-        if not self.connecting:
-            gobject.idle_add(self.refresh_networks, None, False, None)
+        gobject.idle_add(self.refresh_networks, None, False, None)
             
     def dbus_scan_started(self):
         """ Called when a wireless scan starts. """
@@ -464,7 +463,7 @@ class appGui(object):
     
     def refresh_clicked(self, widget=None):
         """ Kick off an asynchronous wireless scan. """
-        if not DBUS_AVAIL: return
+        if not DBUS_AVAIL or self.connecting: return
         self.refreshing = True
         wireless.Scan(False)
 

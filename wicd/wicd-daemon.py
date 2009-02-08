@@ -97,7 +97,6 @@ class WicdDaemon(dbus.service.Object):
         self.connection_info = [""]
         self.auto_connecting = False
         self.prefer_wired = False
-        self._scanning = False
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
@@ -922,6 +921,7 @@ class WirelessDaemon(dbus.service.Object):
         self.wifi = wifi
         self._debug_mode = debug
         self.forced_disconnect = False
+        self._scanning = False
         self.LastScan = []
         self.config = ConfigManager(os.path.join(wpath.etc, 
                                                  "wireless-settings.conf"),
@@ -1272,9 +1272,7 @@ class WirelessDaemon(dbus.service.Object):
             print 'Autoconnect failed because wireless interface returned None'
             return
         if fresh:
-            print 'start scan'
             self.Scan(sync=True)
-            print 'end scan'
         
         for x, network in enumerate(self.LastScan):
             if bool(network["has_profile"]):
@@ -1680,10 +1678,8 @@ def main(argv):
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     if not no_poll:
-        (child_pid, x, x, x) = gobject.spawn_async(
-            [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")], 
-            flags=gobject.SPAWN_CHILD_INHERITS_STDIN
-        )
+        (child_pid, x, y, z) = gobject.spawn_async(
+            [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")])
     signal.signal(signal.SIGTERM, sigterm_caught)
     
     # Enter the main loop

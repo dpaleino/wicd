@@ -273,7 +273,11 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                 print "GetNetworks caught an exception: %s" % e
                 return []
                 
-        results = self.scan_iface.Scan()
+        try:
+            results = self.scan_iface.Scan()
+        except iwscan.error, e:
+            print "ERROR: %s"
+            return []
         return filter(None, [self._parse_ap(cell) for cell in results])
     
     def _parse_ap(self, cell):
@@ -334,6 +338,18 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             
         return ap
             
+    def _connect_to_wpa_ctrl_iface(self):
+        """ Connect to the wpa ctrl interface. """
+        ctrl_iface = '/var/run/wpa_supplicant'
+        try:
+            socket = [os.path.join(ctrl_iface, s) \
+                      for s in os.listdir(ctrl_iface) if s == self.iface][0]
+        except OSError, error:
+            print error
+            return None
+            
+        return wpactrl.WPACtrl(socket)
+    
     def ValidateAuthentication(self, auth_time):
         """ Validate WPA authentication.
 
@@ -359,15 +375,10 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         if self.wpa_driver == RALINK_DRIVER:
             return True
             
-        ctrl_iface = '/var/run/wpa_supplicant'
-        try:
-            socket = [os.path.join(ctrl_iface, s) \
-                      for s in os.listdir(ctrl_iface) if s == self.iface][0]
-        except OSError:
-            print error
-            return True
-            
-        wpa = wpactrl.WPACtrl(socket)
+        wpa = self._connect_to_wpa_ctrl_iface()
+        if not wpa:
+            print "Failed to open ctrl interface"
+            return False
         
         MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
@@ -402,6 +413,13 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         print 'wpa_supplicant authentication may have failed.'
         return False
+    
+    def StopWPA(self):
+        """ Terminates wpa_supplicant using its ctrl interface. """
+        wpa = self._connect_to_wpa_ctrl_iface()
+        if not wpa:
+            return
+        wpa.request("TERMINATE")
 
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.

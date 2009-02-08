@@ -47,7 +47,7 @@ blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
-__all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces", "StopDHCP",
+__all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces",
            "GetWirelessInterfaces", "IsValidWpaSuppDriver", "NeedsExternalCalls"]
 
 def _sanitize_string(string):
@@ -106,11 +106,6 @@ def GetDefaultGateway():
     if not gateway:
         print 'couldn\'t retrieve default gateway from route -n'
     return gateway
-
-def StopDHCP():
-    """ Stop the DHCP client. """
-    cmd = 'killall dhclient dhclient3 pump dhcpcd-bin'
-    misc.Run(cmd)
 
 def GetWirelessInterfaces():
     """ Get available wireless interfaces.
@@ -455,7 +450,7 @@ class BaseInterface(object):
         """
         if not self.iface: return False
         
-        cmd = "%s %s" % (self._get_dhcp_command('connect'), self.iface)
+        cmd = self._get_dhcp_command('connect')
         #cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
@@ -471,20 +466,31 @@ class BaseInterface(object):
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         if not self.iface: return False
-        cmd = "%s %s" % (self._get_dhcp_command("release"), self.iface)
-        #cmd = self.DHCP_RELEASE + " " + self.iface
+        cmd = self._get_dhcp_command("release")
         if self.verbose: print cmd
         misc.Run(cmd)
 
-    def FlushRoutes(self):
-        """ Flush all network routes. """
+    def DelDefaultRoute(self):
+        """ Delete only the default route for a device. """
         if not self.iface: return False
         if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
-            #cmd = "ip route flush dev " + self.iface
-            cmds = ['%s route flush all' % self.ip_cmd]
+            cmd = '%s route del default dev %s' % (self.ip_cmd, self.iface)
         elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
-            cmds = ['%s del default' % self.route_cmd]
-            cmds.append('route del dev %s' % self.iface)
+            cmd = '%s del default dev %s' % (self.route_cmd, self.iface)
+        else:
+            print "No route manipulation command available!"
+            return 
+        if self.verbose: print cmd
+        misc.Run(cmd)
+            
+        
+    def FlushRoutes(self):
+        """ Flush network routes for this device. """
+        if not self.iface: return False
+        if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
+            cmds = ['%s route flush dev %s' % (self.ip_cmd, self.iface)]
+        elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
+            cmds = ['%s del dev %s' % (self.route_cmd, self.iface)]
         else:
             print "No flush command available!"
             cmds = []
@@ -583,9 +589,7 @@ class BaseWirelessInterface(BaseInterface):
 
     def StopWPA(self):
         """ Stop wireless encryption. """
-        cmd = 'killall wpa_supplicant'
-        if self.verbose: print cmd
-        misc.Run(cmd)
+        raise NotImplementedError
 
     def GetKillSwitchStatus(self):
         """ Determines if the wireless killswitch is enabled.

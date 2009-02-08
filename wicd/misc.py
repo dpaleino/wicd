@@ -647,5 +647,6 @@ def threaded(f):
     wrapper.__name__ = f.__name__
     wrapper.__dict__ = f.__dict__
     wrapper.__doc__ = f.__doc__
+    wrapper.__module__ = f.__module__
 
     return wrapper

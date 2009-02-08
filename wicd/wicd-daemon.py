@@ -97,6 +97,7 @@ class WicdDaemon(dbus.service.Object):
         self.connection_info = [""]
         self.auto_connecting = False
         self.prefer_wired = False
+        self._scanning = False
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
@@ -949,6 +950,10 @@ class WirelessDaemon(dbus.service.Object):
         be done synchronously.
         
         """
+        if self._scanning:
+            if self.debug_mode:
+                print "scan already in progress, skipping"
+            return False
         if self.debug_mode:
             print 'scanning start'
         self.SendStartScanSignal()
@@ -956,6 +961,7 @@ class WirelessDaemon(dbus.service.Object):
             self._sync_scan()
         else:
             self._async_scan()
+        return True
     
     @misc.threaded
     def _async_scan(self):
@@ -1251,12 +1257,12 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendStartScanSignal(self):
         """ Emits a signal announcing a scan has started. """
-        pass
+        self._scanning = True
     
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendEndScanSignal(self):
         """ Emits a signal announcing a scan has finished. """
-        pass
+        self._scanning = False
         
     def _wireless_autoconnect(self, fresh=True):
         """ Attempts to autoconnect to a wireless network. """

@@ -425,12 +425,12 @@ class PrefsDialog(urwid.WidgetWrap):
                 return False
             for k in keys:
                 #Send key to underlying widget:
+                overlay.keypress(dim, k)
                 if urwid.is_mouse_event(k):
                     event, button, col, row = k
                     overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                overlay.keypress(dim, k)
             # Check if buttons are pressed.
             if self.CANCEL_PRESSED:
                 return False

@@ -93,16 +93,14 @@ class wrap_exceptions:
                 #raise
             except DBusException:
                 gobject.source_remove(redraw_tag)
-                # Quit the loop
                 loop.quit()
-                # Zap the screen
                 ui.stop()
                 print "\n"+language['dbus_fail']
                 raise
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
                 # set), then don't try to stop it, just gracefully die.
-                if redraw_tag != -1:
+                if redraw_tag != None:
                     # Remove update_ui from the event queue
                     gobject.source_remove(redraw_tag)
                     # Quit the loop
@@ -166,8 +164,8 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 # working...
 # Also defunct.
 # Current list header is STR,ESSID,ENCRYPT,BSSID,TYPE,CHANNEL
-def gen_list_header():
-    return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
+#def gen_list_header():
+#    return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
 
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
@@ -245,9 +243,10 @@ def help_dialog(body):
 ('bold','I'),"                Scan for hidden networks\n",
 ('bold','S'),"                Select scripts\n",
 ('bold','O'),"                Set up Ad-hoc network\n",
-('bold','C'),"                Configure Selected Network\n"
+('bold','C'),"                Configure Selected Network\n",
+('bold','A'),"                Display 'about' dialog\n"
     ]
-    help = TextDialog(theText,17,62,header=('header',"Wicd-Curses Help"))
+    help = TextDialog(theText,18,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
 
 def run_configscript(parent,netname,nettype):
@@ -545,7 +544,6 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
-        #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
         self.pref = None
 
@@ -908,7 +906,7 @@ def run():
     global loop,redraw_tag
 
     ui.set_mouse_tracking()
-    redraw_tag = -1
+    redraw_tag = None
     app = appGUI()
 
     # Connect signals and whatnot to UI screen control functions

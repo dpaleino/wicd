@@ -409,17 +409,19 @@ def choose_sudo_prog(prog_num=0):
         return find_path(sudo_dict[prog_num])
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
+    paths = []
     
     if desktop_env == "kde":
-        paths = []
-        for p in env_path:
-            paths.extend([p + '/kdesu', p + '/kdesudo', p + '/ktsuss'])
+        progs = ["kdesu", "kdesudo", "ktusss"]
     else:
-        paths = []
-        for p in env_path:
-            paths.extend([p + '/gksudo', p + "/gksu", p + '/ktsuss'])
+        progs = ["gksudo", "gksu", "ktsuss"]
+        
+    for prog in progs:
+        paths.extend([os.path.join(p, prog) for p in env_path])
+        
     for path in paths:
         if os.path.exists(path):
+            print "returning %s" % path
             return path
     
     return None

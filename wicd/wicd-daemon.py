@@ -1012,10 +1012,7 @@ class WirelessDaemon(dbus.service.Object):
             value = self.LastScan[networkid].get(property)
         except IndexError:
             return ""
-        try:
-            value = misc.to_unicode(value)
-        except:
-            pass
+        value = misc.to_unicode(value)
         return value
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -1027,14 +1024,13 @@ class WirelessDaemon(dbus.service.Object):
                    + " permitted."
             return False
         self.LastScan[networkid][property] = misc.Noneify(value)
-    #end function SetProperty
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def DetectWirelessInterface(self):
         """ Returns an automatically detected wireless interface. """
         iface = self.wifi.DetectWirelessInterface()
         if iface:
-            print 'automatically detected wireless interface ' + iface
+            print 'Automatically detected wireless interface ' + iface
         else:
             print "Couldn't detect a wireless interface."
         return str(iface)

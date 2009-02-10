@@ -22,6 +22,7 @@ import locale
 import gettext
 import sys
 import re
+import gobject
 from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
@@ -421,7 +422,6 @@ def choose_sudo_prog(prog_num=0):
         
     for path in paths:
         if os.path.exists(path):
-            print "returning %s" % path
             return path
     
     return None
@@ -461,6 +461,7 @@ def get_language_list_gui():
     language['use_static_dns'] = _('Use Static DNS')
     language['use_encryption'] = _('Use Encryption')
     language['advanced_settings'] = _('Advanced Settings')
+    language['properties'] = _('Properties')
     language['wired_network'] = _('Wired Network')
     language['wired_network_instructions'] = _('To connect to a wired network,'
     ' you must create a network profile. To create a network profile, type a'
@@ -656,3 +657,11 @@ def threaded(f):
     wrapper.__module__ = f.__module__
 
     return wrapper
+
+def timeout_add(time, func, milli=False):
+    """ Convience function for running a function on a timer. """
+    if hasattr(gobject, "timeout_add_seconds") and not milli:
+        return gobject.timeout_add_seconds(time, func)
+    else:
+        return gobject.timeout_add(time * 1000, func)
+ 

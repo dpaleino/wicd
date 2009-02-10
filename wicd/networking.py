@@ -254,7 +254,6 @@ class ConnectThread(threading.Thread):
     """
 
     is_connecting = None
-    connecting_thread = None
     should_die = False
     lock = thread.allocate_lock()
 

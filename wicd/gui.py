@@ -223,10 +223,7 @@ class appGui(object):
             
         self._do_statusbar_update(*daemon.GetConnectionStatus())
         self.wait_for_events(0.1)
-        if hasattr(gobject, "timeout_add_seconds"):
-            self.update_cb = gobject.timeout_add_seconds(2, self.update_statusbar)
-        else:
-            self.update_cb = gobject.timeout_add(2000, self.update_statusbar)
+        self.update_cb = misc.timeout_add(2, self.update_statusbar)
         self.refresh_clicked()
         
     def handle_connection_results(self, results):
@@ -412,7 +409,7 @@ class appGui(object):
         self.connecting = True
         if not self.pulse_active:
             self.pulse_active = True
-            gobject.timeout_add(100, self.pulse_progress_bar)
+            misc.timeout_add(100, self.pulse_progress_bar, milli=True)
             gobject.idle_add(self.network_list.set_sensitive, False)
             gobject.idle_add(self.status_area.show_all)
         if self.statusID:
@@ -715,10 +712,7 @@ class appGui(object):
         gobject.idle_add(self.refresh_clicked)
         bus.add_signal_receiver(self._do_statusbar_update, 'StatusChanged',
                                 'org.wicd.daemon')
-        if hasattr(gobject, "timeout_add_seconds"):
-            self.update_cb = gobject.timeout_add_seconds(2, self.update_statusbar)
-        else:
-            self.update_cb = gobject.timeout_add(2000, self.update_statusbar)
+        self.update_cb = misc.timeout_add(2, self.update_statusbar)
 
 
 if __name__ == '__main__':

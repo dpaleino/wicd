@@ -663,5 +663,6 @@ def timeout_add(time, func, milli=False):
     if hasattr(gobject, "timeout_add_seconds") and not milli:
         return gobject.timeout_add_seconds(time, func)
     else:
-        return gobject.timeout_add(time * 1000, func)
+        if not milli: time = time * 1000
+        return gobject.timeout_add(time, func)
  

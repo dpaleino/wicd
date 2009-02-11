@@ -22,6 +22,7 @@ import locale
 import gettext
 import sys
 import re
+import gobject
 from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
@@ -313,16 +314,20 @@ def get_gettext():
     # http://www.learningpython.com/2006/12/03/translating-your-pythonpygtk-application/
     local_path = wpath.translations
     langs = []
+    osLanguage = os.environ.get('LANGUAGE', None)
+    if osLanguage:
+        langs += osLanguage.split(":")
+    osLanguage = None
+    osLanguage = os.environ.get('LC_MESSAGES', None)
+    if osLanguage:
+        langs += osLanguage.split(":")
     try:
         lc, encoding = locale.getdefaultlocale()
     except ValueError, e:
         print str(e)
         print "Default locale unavailable, falling back to en_US"
     if (lc):
-        langs = [lc]
-    osLanguage = os.environ.get('LANGUAGE', None)
-    if (osLanguage):
-        langs += osLanguage.split(":")
+        langs += [lc]
     langs += ["en_US"]
     lang = gettext.translation('wicd', local_path, languages=langs, 
                                fallback=True)
@@ -405,15 +410,16 @@ def choose_sudo_prog(prog_num=0):
         return find_path(sudo_dict[prog_num])
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
+    paths = []
     
     if desktop_env == "kde":
-        paths = []
-        for p in env_path:
-            paths.extend([p + '/kdesu', p + '/kdesudo', p + '/ktsuss'])
+        progs = ["kdesu", "kdesudo", "ktusss"]
     else:
-        paths = []
-        for p in env_path:
-            paths.extend([p + '/gksudo', p + "/gksu", p + '/ktsuss'])
+        progs = ["gksudo", "gksu", "ktsuss"]
+        
+    for prog in progs:
+        paths.extend([os.path.join(p, prog) for p in env_path])
+        
     for path in paths:
         if os.path.exists(path):
             return path
@@ -455,6 +461,7 @@ def get_language_list_gui():
     language['use_static_dns'] = _('Use Static DNS')
     language['use_encryption'] = _('Use Encryption')
     language['advanced_settings'] = _('Advanced Settings')
+    language['properties'] = _('Properties')
     language['wired_network'] = _('Wired Network')
     language['wired_network_instructions'] = _('To connect to a wired network,'
     ' you must create a network profile. To create a network profile, type a'
@@ -650,3 +657,12 @@ def threaded(f):
     wrapper.__module__ = f.__module__
 
     return wrapper
+
+def timeout_add(time, func, milli=False):
+    """ Convience function for running a function on a timer. """
+    if hasattr(gobject, "timeout_add_seconds") and not milli:
+        return gobject.timeout_add_seconds(time, func)
+    else:
+        if not milli: time = time * 1000
+        return gobject.timeout_add(time, func)
+ 

@@ -100,7 +100,7 @@ class wrap_exceptions:
             except :
                 # If the UI isn't inactive (redraw_tag wouldn't normally be
                 # set), then don't try to stop it, just gracefully die.
-                if redraw_tag != None:
+                if redraw_tag != -1:
                     # Remove update_ui from the event queue
                     gobject.source_remove(redraw_tag)
                     # Quit the loop
@@ -702,9 +702,9 @@ class appGUI():
         # something, and we aren't connecting to something, return False
         # immediately.
         if from_idle and not self.connecting:
-            self.update_netlist()
+            #self.update_netlist()
             self.update_status()
-            self.update_ui()
+            #self.update_ui()
             return False
         toAppend = ''
         # If we are connecting and being called from the idle function, spin
@@ -759,11 +759,11 @@ class appGUI():
         #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
-        # Should make a keyhandler method, but this will do until I get around to
-        # that stage
+
+        # Handle keystrokes
         if "f8" in keys or 'Q' in keys or 'q' in keys:
             loop.quit()
-            return False
+            #return False
         if "f5" in keys or 'R' in keys:
             self.lock_screen()
             wireless.Scan(True)
@@ -906,7 +906,7 @@ def run():
     global loop,redraw_tag
 
     ui.set_mouse_tracking()
-    redraw_tag = None
+    redraw_tag = -1
     app = appGUI()
 
     # Connect signals and whatnot to UI screen control functions

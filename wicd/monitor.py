@@ -53,7 +53,8 @@ def diewithdbus(func):
             ret = func(self, *__args, **__kargs)
             self.__lost_dbus_count = 0
             return ret
-        except dbusmanager.DBusException:
+        except dbusmanager.DBusException, e:
+            print  "Caught exception %e" % str(e)
             if not hasattr(self, "__lost_dbus_count"):
                 self.__lost_dbus_count = 0
             if self.__lost_dbus_count > 3:
@@ -102,6 +103,7 @@ class ConnectionStatus(object):
         2) A wired connection is currently active.
 
         """
+        self.trigger_reconnect = False
         if not wired_ip and daemon.GetPreferWiredNetwork():
             if not daemon.GetForcedDisconnect() and wired.CheckPluggedIn():
                 self.trigger_reconnect = True
@@ -196,15 +198,6 @@ class ConnectionStatus(object):
         # Check for wired.
         wired_ip = wired.GetWiredIP("")
         wired_found = self.check_for_wired_connection(wired_ip)
-        # Trigger an AutoConnect if we're plugged in, not connected
-        # to a wired network, and the "autoswitch to wired" option
-        # is on.
-        if self.trigger_reconnect:
-            self.trigger_reconnect = False
-            wireless.DisconnectWireless()
-            daemon.AutoConnect(False, reply_handler=lambda:None,
-                               error_handler=lambda:None)
-            return True
         if wired_found:
             self.update_state(misc.WIRED, wired_ip=wired_ip)
             return True
@@ -214,6 +207,22 @@ class ConnectionStatus(object):
         self.signal_changed = False
         wireless_found = self.check_for_wireless_connection(wifi_ip)
         if wireless_found:
+            if self.trigger_reconnect:
+                # If we made it here, that means we want to switch
+                # to a wired network whenever possible, but a wireless
+                # connection is active.  So we kill the wireless connection
+                # so the autoconnect logic will connect to the wired network.
+                self.trigger_reconnect = False
+                
+                # Don't trigger it if the gui is open, because autoconnect
+                # is disabled while it's open.
+                if not daemon.GetGUIOpen():
+                    print 'Killing wireless connection to switch to wired...'
+                    wireless.DisconnectWireless()
+                    daemon.AutoConnect(False, reply_handler=lambda:None,
+                                       error_handler=lambda:None)
+                    self.update_state(misc.NOT_CONNECTED)
+                    return True
             self.update_state(misc.WIRELESS, wifi_ip=wifi_ip)
             return True
     

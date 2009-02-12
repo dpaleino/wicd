@@ -217,15 +217,22 @@ class BaseInterface(object):
                 cmd = ""
             return (client, cmd)
         
-        connect_dict = {
-            "dhclient" : r"%s %s", 
-            "pump" : r"%s -i %s",
-            "dhcpcd" : r"%s %s",
-        }
-        release_dict = {
-            "dhclient" : r"%s -r %s",
-            "pump" : r"%s -r -i %s",
-            "dhcpcd" : r"%s -k %s",
+        client_dict = {
+            "dhclient" : 
+                {'connect' : r"%s %s", 
+                 'release' : r"%s -r %s",
+                 'id' : misc.DHCLIENT, 
+                 },
+            "pump" : 
+                { 'connect' : r"%s -i %s", 
+                  'release' : r"%s -r -i %s",
+                  'id' : misc.PUMP,
+                },
+            "dhcpcd" : 
+                {'connect' : r"%s %s",
+                 'release' : r"%s -k %s",
+                 'id' : misc.DHCPCD,
+                },
         }
         (client_name, cmd) = get_client_name(self.DHCP_CLIENT)
         if not client_name or not cmd:
@@ -233,11 +240,11 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
-            return connect_dict[client_name] % (cmd, self.iface)
+            return client_dict[client_name]['connect'] % (cmd, self.iface)
         elif flavor == "release":
-            return release_dict[client_name] % (cmd, self.iface)
+            return client_dict[client_name]['release'] % (cmd, self.iface)
         else:
-            return str(cmd)
+            return client_dict[client_name]['id']
     
     def AppAvailable(self, app):
         """ Return whether a given app is available.
@@ -451,18 +458,19 @@ class BaseInterface(object):
         if not self.iface: return False
         
         cmd = self._get_dhcp_command('connect')
-        #cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout
         
-        DHCP_CLIENT = self.DHCP_CLIENT        
+        DHCP_CLIENT = self._get_dhcp_command() 
         if DHCP_CLIENT == misc.DHCLIENT:
             return self._parse_dhclient(pipe)
         elif DHCP_CLIENT == misc.PUMP:
             return self._parse_pump(pipe)
         elif DHCP_CLIENT == misc.DHCPCD:
             return self._parse_dhcpcd(pipe)
+        else:
+            print 'ERROR no dhclient found!'
     
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """

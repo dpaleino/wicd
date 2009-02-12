@@ -80,7 +80,7 @@ def catchdbus(func):
         try:
             return func(*args, **kwargs)
         except DBusException, e:
-            print "warning: ignoring exception %s" % egg
+            print "warning: ignoring exception %s" % e
             return None
     wrapper.__name__ = func.__name__
     wrapper.__module__ = func.__module__

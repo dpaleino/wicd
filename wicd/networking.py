@@ -44,7 +44,9 @@ class WiredConnectThread() -- Connection thread for wired
 import re
 import time
 import threading
+import os
 import thread
+from signal import SIGTERM
 
 # wicd imports 
 import misc
@@ -202,7 +204,8 @@ class Controller(object):
         iface = self.iface
         if self.disconnect_script != None:
             print 'Running disconnect script'
-            misc.ExecuteScript(expand_script_macros(self.disconnect_script, 'disconnection', *args))
+            misc.ExecuteScript(expand_script_macros(self.disconnect_script,
+                                                    'disconnection', *args))
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.FlushRoutes()
@@ -212,6 +215,14 @@ class Controller(object):
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         return self.iface.ReleaseDHCP()
+    
+    def KillDHCP(self):
+        """ Kill the managed DHCP client if its in a connecting state. """
+        if (self.connecting_thread.is_connecting and 
+            self.iface.dhcp_object):
+            if self.iface.dhcp_object.poll() is None:
+                os.kill(self.iface.dhcp_object.pid, SIGTERM)
+                self.iface.dhcp_object = None
     
     def IsUp(self):
         """ Calls the IsUp method for the wired interface. 
@@ -404,7 +415,8 @@ class ConnectThread(threading.Thread):
             print "Running DHCP"
             dhcp_status = iface.StartDHCP()
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
-                self.abort_connection(dhcp_status)
+                if self.connect_result != "aborted":
+                    self.abort_connection(dhcp_status)
                 return
         
     @abortable            

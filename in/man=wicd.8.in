@@ -1,5 +1,5 @@
 .\" Written by Robby Workman <rworkman@slackware.com>
-.TH WICD 8 "June 2008" "wicd-%VERSION%"
+.TH WICD 8 "wicd-%VERSION%"
 .SH NAME
 .B Wicd
 \- Wired and Wireless Network Connection Manager
@@ -139,6 +139,7 @@ log if you are having connection or other problems.
 .BR wicd-manager-settings.conf (5),
 .BR wicd-wired-settings.conf (5),
 .BR wicd-wireless-settings.conf (5),
+.BR wicd-curses (8),
 .BR ifconfig (8),
 .BR iwconfig (8),
 .BR wpa_supplicant (8),
@@ -155,6 +156,8 @@ log if you are having connection or other problems.
 Adam Blackburn <compwiz18@gmail.com>
 .br
 Dan O'Reilly <oreilldf@gmail.com>
+.br
+Andrew Psaltis <insertmail@here> (curses client)
 
 .SH MANPAGE AUTHOR
 Robby Workman <rworkman@slackware.com>

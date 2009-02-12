@@ -34,8 +34,8 @@ def error(ui,parent,message):
     return dialog.run(ui,parent)
 
 # My savior.  :-)
-# Although I could have made this myself pretty easily, just want to give credit where
-# its due.
+# Although I could have made this myself pretty easily, just want to give credit
+# where it's due.
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
 class SelText(urwid.Text):
     """A selectable text widget. See urwid.Text."""
@@ -137,14 +137,14 @@ class MaskingEdit(urwid.Edit):
         focus.
         """
         # If we aren't masking anything ATM, then act like an Edit.  No problems.
-        if self.mask_mode == "off" or  (self.mask_mode == 'on_focus' and focus == True):
+        if self.mask_mode == "off" or (self.mask_mode == 'on_focus' and focus == True):
             canv = self.__super.render((maxcol,),focus)
-            # The cache messes this thing up, because I am totally changing what is
-            # displayed.
+            # The cache messes this thing up, because I am totally changing what
+            # is displayed.
             self._invalidate()
             return canv
-        # Else, we have a slight mess to deal with...
 
+        # Else, we have a slight mess to deal with...
         self._shift_view_to_cursor = not not focus # force bool
 
         text, attr = self.get_text()
@@ -218,14 +218,13 @@ class TabColumns(urwid.WidgetWrap):
 
 
 ### Combo box code begins here
-
 class ComboBoxException(Exception):
     pass
 
 # A "combo box" of SelTexts
 # I based this off of the code found here:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
-# This is a hack.  It isn't without quirks, but it more or less works.
+# This is a hack/kludge.  It isn't without quirks, but it more or less works.
 # We need to wait for changes in urwid's Canvas controls before we can actually
 # make a real ComboBox.
 class ComboBox(urwid.WidgetWrap):
@@ -342,9 +341,11 @@ class ComboBox(urwid.WidgetWrap):
         str,trash =  self.label.get_text()
 
 
-        self.cbox  = DynWrap(SelText([self.list[self.focus]+'    vvv']),attrs=self.attrs,focus_attr=self.focus_attr)
+        self.cbox = DynWrap(SelText([self.list[self.focus]+'    vvv']),
+                attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
-            w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
+            w = urwid.Columns([('fixed',len(str),self.label),self.cbox],
+                    dividechars=1)
             self.overlay = self.ComboSpace(self.list,parent,ui,self.focus,
                     pos=(len(str)+1,row))
         else:
@@ -371,7 +372,8 @@ class ComboBox(urwid.WidgetWrap):
                 self.set_focus(self.list.index(retval))
                 #self.cbox.set_w(SelText(retval+'    vvv'))
                 if self.callback != None:
-                    self.callback(self,self.overlay._listbox.get_focus()[1],self.user_args)
+                    self.callback(self,self.overlay._listbox.get_focus()[1],
+                            self.user_args)
         return self._w.keypress(size,key)
 
     def selectable(self):
@@ -417,6 +419,7 @@ class Dialog2(urwid.WidgetWrap):
        #w = urwid.Padding(w, ('fixed left',2), ('fixed right',2))
        #w = urwid.Filler(w, ('fixed top',1), ('fixed bottom',1))
        #w = urwid.AttrWrap(w, 'body')
+
     # buttons: tuple of name,exitcode
     def add_buttons(self, buttons):
         l = []
@@ -509,8 +512,3 @@ class InputDialog(Dialog2):
        
     def on_exit(self, exitcode):
         return exitcode, self.edit.get_edit_text()
-
-# Pile that has an edit and a label saying that the file at the path specified 
-# does not exist
-#class FileGuessEdit(urwid.WidgetWrap):
-#    def __init__(self,caption='',

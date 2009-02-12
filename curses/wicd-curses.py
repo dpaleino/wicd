@@ -93,9 +93,7 @@ class wrap_exceptions:
                 #raise
             except DBusException:
                 gobject.source_remove(redraw_tag)
-                # Quit the loop
                 loop.quit()
-                # Zap the screen
                 ui.stop()
                 print "\n"+language['dbus_fail']
                 raise
@@ -166,8 +164,8 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 # working...
 # Also defunct.
 # Current list header is STR,ESSID,ENCRYPT,BSSID,TYPE,CHANNEL
-def gen_list_header():
-    return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
+#def gen_list_header():
+#    return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
 
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
@@ -245,9 +243,10 @@ def help_dialog(body):
 ('bold','I'),"                Scan for hidden networks\n",
 ('bold','S'),"                Select scripts\n",
 ('bold','O'),"                Set up Ad-hoc network\n",
-('bold','C'),"                Configure Selected Network\n"
+('bold','C'),"                Configure Selected Network\n",
+('bold','A'),"                Display 'about' dialog\n"
     ]
-    help = TextDialog(theText,17,62,header=('header',"Wicd-Curses Help"))
+    help = TextDialog(theText,18,62,header=('header',"Wicd-Curses Help"))
     help.run(ui,body)
 
 def run_configscript(parent,netname,nettype):
@@ -545,7 +544,6 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
-        #self.always_show_wired = daemon.GetAlwaysShowWiredInterface()
 
         self.pref = None
 
@@ -704,9 +702,9 @@ class appGUI():
         # something, and we aren't connecting to something, return False
         # immediately.
         if from_idle and not self.connecting:
-            self.update_netlist()
+            #self.update_netlist()
             self.update_status()
-            self.update_ui()
+            #self.update_ui()
             return False
         toAppend = ''
         # If we are connecting and being called from the idle function, spin
@@ -726,10 +724,10 @@ class appGUI():
     @wrap_exceptions()
     def idle_incr(self):
         theText = " "
-        #if self.special != None:
-        #    theText += self.special
         if self.connecting:
             theText += "-- "+language['connecting']+' -- '+language["esc_to_cancel"]
+        else:
+            theText += "-- Press H or ? for Help"
         quit_note = ' -- '+language["press_to_quit"]
         self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
@@ -761,11 +759,11 @@ class appGUI():
         #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
-        # Should make a keyhandler method, but this will do until I get around to
-        # that stage
+
+        # Handle keystrokes
         if "f8" in keys or 'Q' in keys or 'q' in keys:
             loop.quit()
-            return False
+            #return False
         if "f5" in keys or 'R' in keys:
             self.lock_screen()
             wireless.Scan(True)

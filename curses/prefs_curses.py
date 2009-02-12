@@ -110,7 +110,8 @@ class PrefsDialog(urwid.WidgetWrap):
         backend_cat_t = ('header',language['backend'])
         backend_t = language['backend']+':'
         backend_list = ['spam','double spam','triple spam','quadruple spam']
-        #backend_warn_t = ('important','Changes to the backend (probably) requires a daemon restart')
+        #backend_warn_t = ('important',
+        #   'Changes to the backend (probably) requires a daemon restart')
         
         debug_cat_t = ('header',language['debugging'])
         debug_mode_t = language['use_debug_mode']
@@ -145,10 +146,10 @@ class PrefsDialog(urwid.WidgetWrap):
         self.always_show_wired_checkb = urwid.CheckBox(always_show_wired_t)
 
         self.wired_auto_l  = []
-        self.wired_auto_cat = urwid.Text(wired_auto_cat_t)
-        self.wired_auto_1 =   urwid.RadioButton(self.wired_auto_l,wired_auto_1_t)
-        self.wired_auto_2 =   urwid.RadioButton(self.wired_auto_l,wired_auto_2_t)
-        self.wired_auto_3 =   urwid.RadioButton(self.wired_auto_l,wired_auto_3_t)
+        self.wired_auto_cat= urwid.Text(wired_auto_cat_t)
+        self.wired_auto_1  = urwid.RadioButton(self.wired_auto_l,wired_auto_1_t)
+        self.wired_auto_2  = urwid.RadioButton(self.wired_auto_l,wired_auto_2_t)
+        self.wired_auto_3  = urwid.RadioButton(self.wired_auto_l,wired_auto_3_t)
 
         self.auto_reconn_cat    = urwid.Text(auto_reconn_cat_t)
         self.auto_reconn_checkb = urwid.CheckBox(auto_reconn_t)
@@ -247,23 +248,10 @@ class PrefsDialog(urwid.WidgetWrap):
         self.OK_PRESSED = False
 
 
-        self.button_cols = urwid.Columns([ok_button,cancel_button],dividechars=1)
-        #self.active_tab = self.header0
+        self.button_cols = urwid.Columns([ok_button,cancel_button],
+                dividechars=1)
 
-        #self.columns = urwid.Columns([('fixed',len(header0_t),self.header0),
-        #                              ('fixed',len(header1_t),self.header1),
-        #                              ('fixed',len(header2_t),self.header2),
-        #                              urwid.Text(('header',title),align='right')],
-        #                              dividechars=1)
-        
-        #content = [self.columns,generalPile]
-        #self._label = urwid.AttrWrap(SelText(titles),attr[0],attr[1])
-        #self.walker   = urwid.SimpleListWalker(content)
-        #self.listbox = urwid.ListBox(self.walker)
-        #self._linebox = urwid.LineBox(self._listbox)
         self.tabs = TabColumns(headerList,lbList,language['preferences'],self.button_cols)
-        #overlay = urwid.Overlay(self.tabs, body, ('fixed left', pos[0]),
-        #                        width, ('fixed top', pos[1]), height)
         self.__super.__init__(self.tabs)
         
     def load_settings(self):
@@ -272,7 +260,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.OK_PRESSED = False
 
         ### General Settings
-        # Urwid does not like dbus.Strings as text markups
+        # ComboBox does not like dbus.Strings as text markups.  My fault. :/
         wless_iface = unicode(daemon.GetWirelessInterface())
         wired_iface = unicode(daemon.GetWiredInterface())
         self.wless_edit.set_edit_text(wless_iface)
@@ -292,7 +280,6 @@ class PrefsDialog(urwid.WidgetWrap):
 
         # Wired Automatic Connection
         self.wired_auto_l[daemon.GetWiredAutoConnectMethod()-1]
-        
         self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
 
         ### External Programs
@@ -320,7 +307,7 @@ class PrefsDialog(urwid.WidgetWrap):
         try:
             self.wpa_cbox.set_focus(self.wpadrivers.index(def_driver))
         except ValueError:
-            pass # It defaults to 0 anyway
+            pass # It defaults to 0 anyway (I hope)
 
         self.backends = daemon.GetBackendList()
         self.thebackends= [unicode(w) for w in self.backends]
@@ -405,9 +392,6 @@ class PrefsDialog(urwid.WidgetWrap):
     def run(self,ui, dim, display):
         width,height = ui.get_cols_rows()
         self.load_settings()
-        # TODO: The below, if things go 'well'
-        # If we are small, "tabbify" the interface
-        # Else, pile it together
 
         overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
                                 , ('fixed top',1), height-3)
@@ -425,12 +409,12 @@ class PrefsDialog(urwid.WidgetWrap):
                 return False
             for k in keys:
                 #Send key to underlying widget:
+                overlay.keypress(dim, k)
                 if urwid.is_mouse_event(k):
                     event, button, col, row = k
                     overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                overlay.keypress(dim, k)
             # Check if buttons are pressed.
             if self.CANCEL_PRESSED:
                 return False

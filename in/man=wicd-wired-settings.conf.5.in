@@ -1,5 +1,5 @@
 .\" Written by Robby Workman <rworkman@slackware.com>
-.TH WICD-WIRED-SETTINGS.CONF 5 "June 2008" "wicd-%VERSION%"
+.TH WICD-WIRED-SETTINGS.CONF 5 "wicd-%VERSION%"
 .SH NAME
 wicd-wired-settings.conf \- controls Wicd's wired network settings
 
@@ -70,6 +70,7 @@ Static DNS address if "use_static_dns = True" and "use_global_dns = False"
 
 .SH "SEE ALSO"
 .BR wicd (8),
+.BR wicd-curses (8),
 .BR wicd-manager-settings.conf (5),
 .BR wicd-wireless-settings.conf (5).
 

@@ -54,6 +54,8 @@ def diewithdbus(func):
             self.__lost_dbus_count = 0
             return ret
         except dbusmanager.DBusException:
+            if not hasattr(self, "__lost_dbus_count"):
+                self.__lost_dbus_count = 0
             if self.__lost_dbus_count > 3:
                 sys.exit(1)
             self.__lost_dbus_count += 1

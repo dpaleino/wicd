@@ -390,23 +390,29 @@ class appGui(object):
         return True
         
     def set_not_connected_state(self, info):
-        self.connecting = False
-        self._set_not_connecting_state()
+        if self.connecting:
+            self._set_not_connecting_state()
         self.set_status(language['not_connected'])
         return True
         
     def _set_not_connecting_state(self):
-        self.connecting = False
+        if self.connecting:
+            gobject.source_remove(self.update_cb)
+            self.update_cb = misc.timeout_add(2, self.update_statusbar)
+            self.connecting = False
         if self.pulse_active:
             self.pulse_active = False
             gobject.idle_add(self.network_list.set_sensitive, True)
             gobject.idle_add(self.status_area.hide_all)
-
         if self.statusID:
             gobject.idle_add(self.status_bar.remove, 1, self.statusID)
     
     def set_connecting_state(self, info):
-        self.connecting = True
+        if not self.connecting:
+            gobject.source_remove(self.update_cb)
+            self.update_cb = misc.timeout_add(500, self.update_statusbar, 
+                                              milli=True)
+            self.connecting = True
         if not self.pulse_active:
             self.pulse_active = True
             misc.timeout_add(100, self.pulse_progress_bar, milli=True)
@@ -710,6 +716,7 @@ class appGui(object):
         daemon.SetGUIOpen(True)
         self.wait_for_events(0.1)
         gobject.idle_add(self.refresh_clicked)
+        self._do_statusbar_update(*daemon.GetConnectionStatus())
         bus.add_signal_receiver(self._do_statusbar_update, 'StatusChanged',
                                 'org.wicd.daemon')
         self.update_cb = misc.timeout_add(2, self.update_statusbar)

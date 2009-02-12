@@ -380,6 +380,9 @@ class WicdDaemon(dbus.service.Object):
         if self.wifi.connecting_thread:
             self.wifi.connecting_thread.should_die = True
             self.wifi.ReleaseDHCP()
+            # We have to actually kill dhcp if its still hanging
+            # around.  It could still be trying to get a lease.
+            self.wifi.KillDHCP()
             self.wifi.StopWPA()
             self.wifi.connecting_thread.connect_result = 'aborted'
         if self.wired.connecting_thread:

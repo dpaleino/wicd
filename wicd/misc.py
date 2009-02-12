@@ -69,7 +69,7 @@ class WicdError(Exception):
     
 
 __LANG = None
-def Run(cmd, include_stderr=False, return_pipe=False):
+def Run(cmd, include_stderr=False, return_pipe=False, return_obj=False):
     """ Run a command.
 
     Runs the given command, returning either the output
@@ -112,6 +112,8 @@ def Run(cmd, include_stderr=False, return_pipe=False):
         return ""
         
     
+    if return_obj:
+        return f
     if return_pipe:
         return f.stdout
     else:

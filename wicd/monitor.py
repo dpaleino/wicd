@@ -54,6 +54,8 @@ def diewithdbus(func):
             self.__lost_dbus_count = 0
             return ret
         except dbusmanager.DBusException:
+            if not hasattr(self, "__lost_dbus_count"):
+                self.__lost_dbus_count = 0
             if self.__lost_dbus_count > 3:
                 sys.exit(1)
             self.__lost_dbus_count += 1
@@ -330,12 +332,8 @@ def err_handle(error):
 def add_poll_callback():
     global monitor, to_time, update_callback
 
-    if hasattr(gobject, "timeout_add_seconds"):
-        update_callback = gobject.timeout_add_seconds(to_time, 
-                                               monitor.update_connection_status)
-    else:
-        update_callback = gobject.timeout_add(to_time * 1000, 
-                                              monitor.update_connection_status)        
+    update_callback = misc.timeout_add(to_time, 
+                                       monitor.update_connection_status)
     
 def main():
     """ Starts the connection monitor. 

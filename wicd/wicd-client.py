@@ -69,7 +69,7 @@ misc.RenameProcess("wicd-client")
 if __name__ == '__main__':
     wpath.chdir(__file__)
     
-daemon = wireless = wired = None
+daemon = wireless = wired = lost_dbus_id = None
 DBUS_AVAIL = False
 
 language = misc.get_language_list_tray()
@@ -80,7 +80,7 @@ def catchdbus(func):
         try:
             return func(*args, **kwargs)
         except DBusException, e:
-            print "warning: ignoring exception %s" % egg
+            print "warning: ignoring exception %s" % e
             return None
     wrapper.__name__ = func.__name__
     wrapper.__module__ = func.__module__
@@ -664,7 +664,7 @@ Arguments:
 """ % wpath.version
 
 def setup_dbus(force=True):
-    global daemon, wireless, wired, DBUS_AVAIL
+    global daemon, wireless, wired, DBUS_AVAIL, lost_dbus_id
     print "Connecting to daemon..."
     try:
         dbusmanager.connect_to_dbus()
@@ -681,13 +681,15 @@ def setup_dbus(force=True):
         else:  
             return False
                 
+    if lost_dbus_id:
+        gobject.source_remove(lost_dbus_id)
+        lost_dbus_id = None
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
     DBUS_AVAIL = True
     print "Connected."
-    
     return True
 
 def on_exit():
@@ -698,11 +700,13 @@ def on_exit():
             pass
 
 def handle_no_dbus():
-    global DBUS_AVAIL
+    """ Called when dbus announces its shutting down. """
+    global DBUS_AVAIL, lost_dbus_id
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    error(None, language['lost_dbus'], block=False)
+    lost_dbus_id = misc.timeout_add(5, lambda:error(None, language['lost_dbus'], 
+                                                    block=False))
     return False
 
 def main(argv):

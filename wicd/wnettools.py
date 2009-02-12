@@ -453,7 +453,8 @@ class BaseInterface(object):
         cmd = self._get_dhcp_command('connect')
         #cmd = self.DHCP_CMD + " " + self.iface
         if self.verbose: print cmd
-        pipe = misc.Run(cmd, include_stderr=True, return_pipe=True)
+        self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
+        pipe = self.dhcp_object.stdout
         
         DHCP_CLIENT = self.DHCP_CLIENT        
         if DHCP_CLIENT == misc.DHCLIENT:

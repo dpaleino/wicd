@@ -45,7 +45,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         the WiredSettingsDialog and WirelessSettingsDialog.
         
         """
-        gtk.Dialog.__init__(self, title=language['advanced_settings'],
+        gtk.Dialog.__init__(self, title=language['properties'],
                             flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CANCEL,
                                                            gtk.RESPONSE_REJECT,
                                                            gtk.STOCK_OK,
@@ -149,7 +149,6 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.chkbox_static_dns.set_sensitive(False)
         else:
             self.chkbox_static_dns.set_sensitive(True)
-            #self.chkbox_static_dns.set_active(False)
 
         self.txt_ip.set_sensitive(self.chkbox_static_ip.get_active())
         self.txt_netmask.set_sensitive(self.chkbox_static_ip.get_active())
@@ -513,18 +512,13 @@ class NetworkEntry(gtk.HBox):
         self.advanced_image.set_from_stock(gtk.STOCK_EDIT, 4)
         self.advanced_image.set_padding(4, 0)
         self.advanced_button.set_alignment(.5, .5)
-        self.advanced_button.set_label(language['advanced_settings'])
+        self.advanced_button.set_label(language['properties'])
         self.advanced_button.set_image(self.advanced_image)
         
-        #self.buttons_hbox.pack_start(self.script_button, False, False)
         self.buttons_hbox.pack_start(self.connect_hbox, False, False)
         self.buttons_hbox.pack_start(self.advanced_button, False, False)
 
         self.vbox_top = gtk.VBox(False, 0)
-        #self.vbox_top.pack_end(self.buttons_hbox, False, False)
-        #self.vbox_top.pack_end(self.connect_hbox, False, False)
-        
-
         self.expander_vbox.pack_start(self.name_label)
         self.expander_vbox.pack_start(self.vbox_top)
         self.expander_vbox.pack_start(self.buttons_hbox)
@@ -550,7 +544,6 @@ class WiredNetworkEntry(NetworkEntry):
 
         self.name_label.set_label(language['wired_network'])
         
-        #self.reset_static_checkboxes()
         self.is_full_gui = True
         
         self.button_add = gtk.Button(stock=gtk.STOCK_ADD)
@@ -759,7 +752,6 @@ class WirelessNetworkEntry(NetworkEntry):
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
-        # self.vbox_top.pack_start(self.hbox_status, True, True)
 
         if to_bool(self.format_entry(networkID, "automatic")):
             self.chkbox_autoconnect.set_active(True)
@@ -813,11 +805,11 @@ class WirelessNetworkEntry(NetworkEntry):
             
     def set_signal_strength(self, strength, dbm_strength):
         """ Set the signal strength displayed in the WirelessNetworkEntry. """
-        if strength is not None:
+        if strength:
             strength = int(strength)
         else:
             strength = -1
-        if dbm_strength is not None:
+        if dbm_strength:
             dbm_strength = int(dbm_strength)
         else:
             dbm_strength = -100

@@ -380,6 +380,9 @@ class WicdDaemon(dbus.service.Object):
         if self.wifi.connecting_thread:
             self.wifi.connecting_thread.should_die = True
             self.wifi.ReleaseDHCP()
+            # We have to actually kill dhcp if its still hanging
+            # around.  It could still be trying to get a lease.
+            self.wifi.KillDHCP()
             self.wifi.StopWPA()
             self.wifi.connecting_thread.connect_result = 'aborted'
         if self.wired.connecting_thread:
@@ -1012,10 +1015,7 @@ class WirelessDaemon(dbus.service.Object):
             value = self.LastScan[networkid].get(property)
         except IndexError:
             return ""
-        try:
-            value = misc.to_unicode(value)
-        except:
-            pass
+        value = misc.to_unicode(value)
         return value
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -1027,14 +1027,13 @@ class WirelessDaemon(dbus.service.Object):
                    + " permitted."
             return False
         self.LastScan[networkid][property] = misc.Noneify(value)
-    #end function SetProperty
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def DetectWirelessInterface(self):
         """ Returns an automatically detected wireless interface. """
         iface = self.wifi.DetectWirelessInterface()
         if iface:
-            print 'automatically detected wireless interface ' + iface
+            print 'Automatically detected wireless interface ' + iface
         else:
             print "Couldn't detect a wireless interface."
         return str(iface)

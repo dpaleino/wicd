@@ -218,6 +218,7 @@ class Controller(object):
     
     def KillDHCP(self):
         """ Kill the managed DHCP client if its in a connecting state. """
+        print 'running kill dhcp.'
         if (self.connecting_thread.is_connecting and 
             self.iface.dhcp_object):
             if self.iface.dhcp_object.poll() is None:

@@ -897,7 +897,7 @@ def main():
         ('green','dark green','default'),
         ('blue','dark blue','default'),
         ('red','dark red','default'),
-        ('bold','white','default','bold')])
+        ('bold','white','black','bold')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
     ui.run_wrapper(run)

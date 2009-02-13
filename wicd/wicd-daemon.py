@@ -323,12 +323,15 @@ class WicdDaemon(dbus.service.Object):
 
         """
         print "Autoconnecting..."
+        if self.CheckIfConnecting():
+            if self.debug_mode:
+                print 'Already connecting, doing nothing.'
+            return
         # We don't want to rescan/connect if the gui is open.
         if self.gui_open:
             if self.debug_mode:
                 print "Skipping autoconnect because GUI is open."
             return
-        
         if self.wired_bus.CheckPluggedIn():
             if self.debug_mode:
                 print "Starting wired autoconnect..."
@@ -388,6 +391,7 @@ class WicdDaemon(dbus.service.Object):
         if self.wired.connecting_thread:
             self.wired.connecting_thread.should_die = True
             self.wired.ReleaseDHCP()
+            self.wired.KillDHCP()
             self.wired.connecting_thread.connect_result = 'aborted'
     
     @dbus.service.method('org.wicd.daemon')
@@ -425,9 +429,7 @@ class WicdDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon')
     def GetForcedDisconnect(self):
         """ Returns the forced_disconnect status.  See SetForcedDisconnect. """
-        return (bool(self.forced_disconnect) or
-               bool(self.wireless_bus.GetForcedDisconnect()) or
-               bool(self.wired_bus.GetForcedDisconnect()))
+        return bool(self.forced_disconnect)
 
     @dbus.service.method('org.wicd.daemon')
     def SetForcedDisconnect(self, value):
@@ -440,8 +442,6 @@ class WicdDaemon(dbus.service.Object):
         """
         if self.debug_mode and value: print "Forced disconnect on"
         self.forced_disconnect = bool(value)
-        self.wireless_bus.SetForcedDisconnect(bool(value))
-        self.wired_bus.SetForcedDisconnect(bool(value))
         
     @dbus.service.method('org.wicd.daemon')
     def GetSignalDisplayType(self):
@@ -923,7 +923,6 @@ class WirelessDaemon(dbus.service.Object):
         self.daemon = daemon
         self.wifi = wifi
         self._debug_mode = debug
-        self.forced_disconnect = False
         self._scanning = False
         self.LastScan = []
         self.config = ConfigManager(os.path.join(wpath.etc, 
@@ -1041,26 +1040,9 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def DisconnectWireless(self):
         """ Disconnects the wireless network. """
-        self.SetForcedDisconnect(True)
         self.wifi.Disconnect()
         self.daemon.UpdateState()
 
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def GetForcedDisconnect(self):
-        """ Returns the forced_disconnect status.  See SetForcedDisconnect. """
-        return bool(self.forced_disconnect)
-
-    @dbus.service.method('org.wicd.daemon.wireless')
-    def SetForcedDisconnect(self, value):
-        """ Sets the forced_disconnect status.
-        
-        Set to True when a user manually disconnects or cancels a connection.
-        It gets set to False as soon as the connection process is manually
-        started.
-        
-        """
-        self.forced_disconnect = bool(value)
-    
     @dbus.service.method('org.wicd.daemon.wireless')
     def IsWirelessUp(self):
         """ Returns a boolean specifying if wireless is up or down. """
@@ -1119,13 +1101,13 @@ class WirelessDaemon(dbus.service.Object):
         # Will returned instantly, that way we don't hold up dbus.
         # CheckIfWirelessConnecting can be used to test if the connection
         # is done.
-        self.SetForcedDisconnect(False)
         self.wifi.before_script = self.GetWirelessProperty(id, 'beforescript')
         self.wifi.after_script = self.GetWirelessProperty(id, 'afterscript')
         self.wifi.disconnect_script = self.GetWirelessProperty(id,
                                                             'disconnectscript')
         print 'Connecting to wireless network ' + self.LastScan[id]['essid']
-        self.daemon.wired_bus.DisconnectWired()
+        self.daemon.wired_bus.wired.Disconnect()
+        self.daemon.SetForcedDisconnect(False)
         conthread = self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)
         self.daemon.UpdateState()
 
@@ -1298,7 +1280,6 @@ class WiredDaemon(dbus.service.Object):
         self.daemon = daemon
         self.wired = wired
         self._debug_mode = debug
-        self.forced_disconnect = False
         self.WiredNetwork = {}
         self.config = ConfigManager(os.path.join(wpath.etc,
                                                  "wired-settings.conf"), 
@@ -1378,7 +1359,6 @@ class WiredDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def DisconnectWired(self):
         """ Disconnects the wired network. """
-        self.SetForcedDisconnect(True)
         self.wired.Disconnect()
         self.daemon.UpdateState()
 
@@ -1406,29 +1386,13 @@ class WiredDaemon(dbus.service.Object):
         return self.wired.DisableInterface()
 
     @dbus.service.method('org.wicd.daemon.wired')
-    def GetForcedDisconnect(self):
-        """ Returns the forced_disconnect status.  See SetForcedDisconnect. """
-        return bool(self.forced_disconnect)
-
-    @dbus.service.method('org.wicd.daemon.wired')
-    def SetForcedDisconnect(self, value):
-        """ Sets the forced_disconnect status.
-        
-        Set to True when a user manually disconnects or cancels a connection.
-        It gets set to False as soon as the connection process is manually
-        started.
-        
-        """
-        self.forced_disconnect = bool(value)
-        
-    @dbus.service.method('org.wicd.daemon.wired')
     def ConnectWired(self):
         """ Connects to a wired network. """
-        self.SetForcedDisconnect(False)
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")
-        self.daemon.wireless_bus.DisconnectWireless()
+        self.daemon.wireless_bus.wifi.Disconnect()
+        self.daemon.SetForcedDisconnect(False)
         self.wired.Connect(self.WiredNetwork, debug=self.debug_mode)
         self.daemon.UpdateState()
         

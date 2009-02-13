@@ -197,6 +197,7 @@ class appGui(object):
         self.connecting = False
         self.refreshing = False
         self.prev_state = None
+        self.update_cb = None
         self.network_list.set_sensitive(False)
         label = gtk.Label("%s..." % language['scanning'])
         self.network_list.pack_start(label)
@@ -356,10 +357,11 @@ class appGui(object):
         if not self.is_visible:
             return True
         
+        daemon.UpdateState()
         if self.connecting:
+            # If we're connecting, don't wait for the monitor to send
+            # us a signal, since it won't until the connection is made.
             self._do_statusbar_update(*daemon.GetConnectionStatus())
-        else:
-            daemon.UpdateState()
         return True
     
     def _do_statusbar_update(self, state, info):
@@ -377,12 +379,16 @@ class appGui(object):
         return True
         
     def set_wired_state(self, info):
-        self._set_not_connecting_state()
+        if self.connecting:
+            # Adjust our state from connecting->connected.
+            self._set_not_connecting_state()
         self.set_status(language['connected_to_wired'].replace('$A', info[0]))
         return True
     
     def set_wireless_state(self, info):
-        self._set_not_connecting_state()
+        if self.connecting:
+            # Adjust our state from connecting->connected.
+            self._set_not_connecting_state()
         self.set_status(language['connected_to_wireless'].replace
                         ('$A', info[1]).replace
                         ('$B', daemon.FormatSignalForPrinting(info[2])).replace
@@ -391,12 +397,13 @@ class appGui(object):
         
     def set_not_connected_state(self, info):
         if self.connecting:
+            # Adjust our state from connecting->not-connected.
             self._set_not_connecting_state()
         self.set_status(language['not_connected'])
         return True
         
     def _set_not_connecting_state(self):
-        if self.connecting:
+        if self.connecting and self.update_cb:
             gobject.source_remove(self.update_cb)
             self.update_cb = misc.timeout_add(2, self.update_statusbar)
             self.connecting = False
@@ -408,7 +415,7 @@ class appGui(object):
             gobject.idle_add(self.status_bar.remove, 1, self.statusID)
     
     def set_connecting_state(self, info):
-        if not self.connecting:
+        if not self.connecting and self.update_cb:
             gobject.source_remove(self.update_cb)
             self.update_cb = misc.timeout_add(500, self.update_statusbar, 
                                               milli=True)
@@ -661,6 +668,7 @@ class appGui(object):
         """
         widget.hide()
         networkentry.connect_button.show()
+        daemon.SetForcedDisconnect(True)
         if nettype == "wired":
             wired.DisconnectWired()
         else:

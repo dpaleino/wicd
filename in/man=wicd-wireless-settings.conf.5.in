@@ -1,5 +1,5 @@
 .\" Written by Robby Workman <rworkman@slackware.com>
-.TH WICD-WIRELESS-SETTINGS.CONF 5 "June 2008" "wicd-%VERSION%"
+.TH WICD-WIRELESS-SETTINGS.CONF 5 "wicd-%VERSION%"
 .SH NAME
 wicd-wired-settings.conf \- controls Wicd's wireless network settings
 
@@ -122,6 +122,7 @@ of the stanza will be in this format:
 
 .SH "SEE ALSO"
 .BR wicd (8),
+.BR wicd-curses (8),
 .BR wicd-manager-settings.conf (5),
 .BR wicd-wired-settings.conf (5).
 

@@ -403,8 +403,9 @@ class appGui(object):
         return True
         
     def _set_not_connecting_state(self):
-        if self.connecting and self.update_cb:
-            gobject.source_remove(self.update_cb)
+        if self.connecting:
+            if self.update_cb:
+                gobject.source_remove(self.update_cb)
             self.update_cb = misc.timeout_add(2, self.update_statusbar)
             self.connecting = False
         if self.pulse_active:
@@ -415,8 +416,9 @@ class appGui(object):
             gobject.idle_add(self.status_bar.remove, 1, self.statusID)
     
     def set_connecting_state(self, info):
-        if not self.connecting and self.update_cb:
-            gobject.source_remove(self.update_cb)
+        if not self.connecting:
+            if self.update_cb:
+                gobject.source_remove(self.update_cb)
             self.update_cb = misc.timeout_add(500, self.update_statusbar, 
                                               milli=True)
             self.connecting = True

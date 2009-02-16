@@ -86,32 +86,27 @@ class wrap_exceptions:
             try:
                 return f(*args, **kargs)
             except KeyboardInterrupt:
-                gobject.source_remove(redraw_tag)
+                #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
                 print "\n"+language['terminated']
                 #raise
             except DBusException:
-                gobject.source_remove(redraw_tag)
+                #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
                 print "\n"+language['dbus_fail']
                 raise
             except :
-                # If the UI isn't inactive (redraw_tag wouldn't normally be
-                # set), then don't try to stop it, just gracefully die.
-                if redraw_tag != -1:
-                    # Remove update_ui from the event queue
-                    gobject.source_remove(redraw_tag)
-                    # Quit the loop
-                    loop.quit()
-                    # Zap the screen
-                    ui.stop()
-                    # Print out standard notification:
-                    print "\n" + language['exception']
-                    # Flush the buffer so that the notification is always above the
-                    # backtrace
-                    sys.stdout.flush()
+                # Quit the loop
+                loop.quit()
+                # Zap the screen
+                ui.stop()
+                # Print out standard notification:
+                print "\n" + language['exception']
+                # Flush the buffer so that the notification is always above the
+                # backtrace
+                sys.stdout.flush()
                 # Raise the exception
                 #sleep(2)
                 raise
@@ -903,10 +898,9 @@ def main():
     ui.run_wrapper(run)
 
 def run():
-    global loop,redraw_tag
+    global loop
 
     ui.set_mouse_tracking()
-    redraw_tag = -1
     app = appGUI()
 
     # Connect signals and whatnot to UI screen control functions
@@ -919,7 +913,7 @@ def run():
                             'org.wicd.daemon')
     loop = gobject.MainLoop()
     # Update what the interface looks like as an idle function
-    redraw_tag = gobject.idle_add(app.update_ui)
+    gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(1500,app.update_status)
     gobject.idle_add(app.idle_incr)

@@ -434,7 +434,7 @@ class TrayIcon(object):
             """ Determines which image to use for the wireless entries. """
             def fix_strength(val, default):
                 """ Assigns given strength to a default value if needed. """
-                return val is not None and int(val) or default
+                return val and int(val) or default
             
             def get_prop(prop):
                 return wireless.GetWirelessProperty(net_id, prop)

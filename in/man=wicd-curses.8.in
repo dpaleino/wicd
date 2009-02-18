@@ -64,19 +64,14 @@ Bring up instructions on how to edit the scripts.  I have implemented a way to d
 Raise the Ad-Hoc network creation dialog
 
 .SH "FILES"
-These are not used yet.
 .TP
 .I ~/.wicd/WHEREAREMYFILES
 Reminder that your network configuration files are not here ;-)
-.TP 
-.I %LIB%keymap.py
-Tentative location of the system keymap
+.PP
+These following are not used yet:
 .TP
 .I %LIB%colors.py
 Tentative location of the system color schemes
-.TP
-.I ~/.wicd/keymap.py
-Custom keybindings.  Also where you can (later) disable the mouse.
 .TP
 .I ~/.wicd/colors.py
 Custom color schemes.
@@ -87,7 +82,7 @@ Custom color schemes.
 .SH BUGS
 Probably lots.  ;-)
 
-If you happen to find one, ask about it on #wicd on freenode, or submit a bug report to http://launchpad.net/wicd, branch experimental-nacl.
+If you happen to find one, ask about it on #wicd on freenode, or submit a bug report to http://launchpad.net/wicd.
 
 .SH WICD-CURSES AUTHOR
 Andrew Psaltis <ampsaltis@gmail.com>

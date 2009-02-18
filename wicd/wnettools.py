@@ -34,21 +34,43 @@ class WirelessInterface() -- Control a wireless network interface.
 import os
 import re
 import random
+import time
 from string import maketrans, translate
 
 import wpath
 import misc
-from misc import find_path
+from misc import find_path 
+
+# Regular expressions.
+__re_mode = (re.I | re.M | re.S)
+essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', __re_mode)
+ap_mac_pattern = re.compile('.*Address: (.*?)\n', __re_mode)
+channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
+strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', __re_mode)
+signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
+mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
+freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
+wep_pattern = re.compile('.*Encryption key:(.*?)\n', __re_mode)
+altwpa_pattern = re.compile('(wpa_ie)', __re_mode)
+wpa1_pattern = re.compile('(WPA Version 1)', __re_mode)
+wpa2_pattern = re.compile('(WPA2)', __re_mode)
+
+#iwconfig-only regular expressions.
+ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
+bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
+
+# Regular expressions for wpa_cli output
+auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
 
 RALINK_DRIVER = 'ralink legacy'
-
 
 blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
 __all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces",
-           "GetWirelessInterfaces", "IsValidWpaSuppDriver", "NeedsExternalCalls"]
+           "GetWirelessInterfaces", "IsValidWpaSuppDriver"]
 
 def _sanitize_string(string):
     if string:
@@ -135,7 +157,6 @@ def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
     raise NotImplementedError
 
-    
 def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",
@@ -529,16 +550,46 @@ class BaseInterface(object):
         The IP address of the interface in dotted quad form.
 
         """
-        raise NotImplementedError
+        if not ifconfig:
+            cmd = 'ifconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = ifconfig
+        return misc.RunRegex(ip_pattern, output)
     
-    def IsUp(self):
+    def IsUp(self, ifconfig=None):
         """ Determines if the interface is up.
-        
+
         Returns:
         True if the interface is up, False otherwise.
-        
+
         """
-        raise NotImplementedError
+        if not self.iface: return False
+        flags_file = '/sys/class/net/%s/flags' % self.iface
+        try:
+            flags = open(flags_file, "r").read().strip()
+        except IOError:
+            print "Could not open %s, using ifconfig to determine status" % flags_file
+            return self._slow_is_up(ifconfig)
+        return bool(int(flags, 16) & 1)
+        
+        
+    def _slow_is_up(self, ifconfig=None):
+        """ Determine if an interface is up using ifconfig. """
+        if not ifconfig:
+            cmd = "ifconfig " + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = ifconfig
+        lines = output.split('\n')
+        if len(lines) < 5:
+            return False
+        for line in lines[1:4]:
+            if line.strip().startswith('UP'):
+                return True   
+        return False
 
 
 class BaseWiredInterface(BaseInterface):
@@ -555,17 +606,95 @@ class BaseWiredInterface(BaseInterface):
 
     def GetPluggedIn(self):
         """ Get the current physical connection state.
-        
+
         The method will first attempt to use ethtool do determine
         physical connection state.  Should ethtool fail to run properly,
         mii-tool will be used instead.
+
+        Returns:
+        True if a link is detected, False otherwise.
+
+        """
+        if not self.iface:
+            return False
+        # check for link using /sys/class/net/iface/carrier
+        # is usually more accurate
+        sys_device = '/sys/class/net/%s/' % self.iface
+        carrier_path = sys_device + 'carrier'
+        if not self.IsUp():
+            MAX_TRIES = 3
+            tries = 0
+            self.Up()
+            while True:
+                tries += 1
+                time.sleep(2)
+                if self.IsUp() or tries > MAX_TRIES: break
+      
+        if os.path.exists(carrier_path):
+            carrier = open(carrier_path, 'r')
+            try:
+                link = carrier.read().strip()
+                link = int(link)
+                if link == 1:
+                    return True
+                elif link == 0:
+                    return False
+            except (IOError, ValueError, TypeError):
+                print 'Error checking link using /sys/class/net/%s/carrier' % self.iface
+                
+        if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
+            return self._eth_get_plugged_in()
+        elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
+            return self._mii_get_plugged_in()
+        else:
+            print ('Error: No way of checking for a wired connection. Make ' +
+                   'sure that either mii-tool or ethtool is installed.')
+            return False
+
+    def _eth_get_plugged_in(self):
+        """ Use ethtool to determine the physical connection state.
         
         Returns:
         True if a link is detected, False otherwise.
         
         """
-        raise NotImplementedError
-
+        cmd = "%s %s" % (self.ethtool_cmd, self.iface)
+        if not self.IsUp():
+            print 'Wired Interface is down, putting it up'
+            self.Up()
+            time.sleep(6)
+        if self.verbose: print cmd
+        tool_data = misc.Run(cmd, include_stderr=True)
+        if misc.RunRegex(re.compile('(Link detected: yes)', re.I | re.M  | re.S),
+                         tool_data):
+            return True
+        else:
+            return False
+    
+    def _mii_get_plugged_in(self):
+        """ Use mii-tool to determine the physical connection state. 
+                
+        Returns:
+        True if a link is detected, False otherwise.
+        
+        """
+        cmd = "%s %s" % (self.miitool_cmd, self.iface)
+        if self.verbose: print cmd
+        tool_data = misc.Run(cmd, include_stderr=True)
+        if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M  | re.S), 
+                         tool_data) is not None:
+            print 'Wired Interface is down, putting it up'
+            self.Up()
+            time.sleep(4)
+            if self.verbose: print cmd
+            tool_data = misc.Run(cmd, include_stderr=True)
+        
+        if misc.RunRegex(re.compile('(link ok)', re.I | re.M | re.S),
+                         tool_data) is not None:
+            return True
+        else:
+            return False
+        
 
 class BaseWirelessInterface(BaseInterface):
     """ Control a wireless network interface. """
@@ -595,10 +724,6 @@ class BaseWirelessInterface(BaseInterface):
         cmd = ['iwconfig', self.iface, 'essid', essid]
         if self.verbose: print str(cmd)
         misc.Run(cmd)
-
-    def StopWPA(self):
-        """ Stop wireless encryption. """
-        raise NotImplementedError
 
     def GetKillSwitchStatus(self):
         """ Determines if the wireless killswitch is enabled.
@@ -823,10 +948,6 @@ class BaseWirelessInterface(BaseInterface):
             if self.verbose: print cmd
             misc.Run(cmd)
 
-    def ValidateAuthentication(self, auth_time):
-        """ Validate WPA authentication. """
-        raise NotImplementedError
-
     def _AuthenticateRalinkLegacy(self, network):
         """ Authenticate with the specified wireless network.
 
@@ -866,9 +987,207 @@ class BaseWirelessInterface(BaseInterface):
                     if self.verbose: print ' '.join(cmd)
                     misc.Run(cmd)
 
+    def GetNetworks(self):
+        """ Get a list of available wireless networks.
+
+        Returns:
+        A list containing available wireless networks.
+
+        """
+        cmd = 'iwlist ' + self.iface + ' scan'
+        if self.verbose: print cmd
+        results = misc.Run(cmd)
+        # Split the networks apart, using Cell as our split point
+        # this way we can look at only one network at a time.
+        # The spaces around '   Cell ' are to minimize the chance that someone
+        # has an essid named Cell...
+        networks = results.split( '   Cell ' )
+
+        # Get available network info from iwpriv get_site_survey
+        # if we're using a ralink card (needed to get encryption info)
+        if self.wpa_driver == RALINK_DRIVER:
+            ralink_info = self._GetRalinkInfo()
+        else:
+            ralink_info = None
+
+        # An array for the access points
+        access_points = []
+        for cell in networks:
+            # Only use sections where there is an ESSID.
+            if 'ESSID:' in cell:
+                # Add this network to the list of networks
+                entry = self._ParseAccessPoint(cell, ralink_info)
+                if entry is not None:
+                    access_points.append(entry)
+
+        return access_points
+    
+    def _ParseAccessPoint(self, cell, ralink_info):
+        """ Parse a single cell from the output of iwlist.
+
+        Keyword arguments:
+        cell -- string containing the cell information
+        ralink_info -- string contating network information needed
+                       for ralink cards.
+
+        Returns:
+        A dictionary containing the cell networks properties.
+
+        """
+
+        ap = {}
+        ap['essid'] = misc.RunRegex(essid_pattern, cell)
+        try:
+            ap['essid'] = misc.to_unicode(ap['essid'])
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            print 'Unicode problem with current network essid, ignoring!!'
+            return None
+        if ap['essid'] in ['<hidden>', ""]:
+            ap['hidden'] = True
+            ap['essid'] = "<hidden>"
+        else:
+            ap['hidden'] = False
+
+        # Channel - For cards that don't have a channel number,
+        # convert the frequency.
+        ap['channel'] = misc.RunRegex(channel_pattern, cell)
+        if ap['channel'] == None:
+            freq = misc.RunRegex(freq_pattern, cell)
+            ap['channel'] = self._FreqToChannel(freq)
+
+        # BSSID
+        ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)
+
+        # Mode
+        ap['mode'] = misc.RunRegex(mode_pattern, cell)
+
+        # Break off here if we're using a ralink card
+        if self.wpa_driver == RALINK_DRIVER:
+            ap = self._ParseRalinkAccessPoint(ap, ralink_info, cell)
+        elif misc.RunRegex(wep_pattern, cell) == 'on':
+            # Encryption - Default to WEP
+            ap['encryption'] = True
+            ap['encryption_method'] = 'WEP'
+
+            if misc.RunRegex(wpa1_pattern, cell) == 'WPA Version 1':
+                ap['encryption_method'] = 'WPA'
+
+            if misc.RunRegex(altwpa_pattern, cell) == 'wpa_ie':
+                ap['encryption_method'] = 'WPA'
+
+            if misc.RunRegex(wpa2_pattern, cell) == 'WPA2':
+                ap['encryption_method'] = 'WPA2'
+        else:
+            ap['encryption'] = False
+
+        # Link Quality
+        # Set strength to -1 if the quality is not found
+
+        # more of the patch from
+        # https://bugs.launchpad.net/wicd/+bug/175104
+        if (strength_pattern.match(cell)):
+            [(strength, max_strength)] = strength_pattern.findall(cell)
+            if max_strength:
+                ap["quality"] = 100 * int(strength) // int(max_strength)
+            else:
+                ap["quality"] = int(strength)
+        elif misc.RunRegex(altstrength_pattern,cell):
+            ap['quality'] = misc.RunRegex(altstrength_pattern, cell)
+        else:
+            ap['quality'] = -1
+
+        # Signal Strength (only used if user doesn't want link
+        # quality displayed or it isn't found)
+        if misc.RunRegex(signaldbm_pattern, cell):
+            ap['strength'] = misc.RunRegex(signaldbm_pattern, cell)
+        elif self.wpa_driver != RALINK_DRIVER:  # This is already set for ralink
+            ap['strength'] = -1
+
+        return ap
+
+    def ValidateAuthentication(self, auth_time):
+        """ Validate WPA authentication.
+
+            Validate that the wpa_supplicant authentication
+            process was successful.
+
+            NOTE: It's possible this could return False,
+            though in reality wpa_supplicant just isn't
+            finished yet.
+            
+            Keyword arguments:
+            auth_time -- The time at which authentication began.
+            
+            Returns:
+            True if wpa_supplicant authenticated succesfully,
+            False otherwise.
+
+        """
+        # Right now there's no way to do this for these drivers
+        if self.wpa_driver == RALINK_DRIVER or not self.wpa_cli_cmd:
+            return True
+
+        MAX_TIME = 35
+        MAX_DISCONNECTED_TIME = 3
+        disconnected_time = 0
+        while (time.time() - auth_time) < MAX_TIME:
+            cmd = '%s -i %s status' % (self.wpa_cli_cmd, self.iface)
+            output = misc.Run(cmd)
+            result = misc.RunRegex(auth_pattern, output)
+            if self.verbose:
+                print 'WPA_CLI RESULT IS', result
+
+            if not result:
+                return False
+            if result == "COMPLETED":
+                return True
+            elif result == "DISCONNECTED":
+                disconnected_time += 1
+                if disconnected_time > MAX_DISCONNECTED_TIME:
+                    disconnected_time = 0
+                    # Force a rescan to get wpa_supplicant moving again.
+                    self._ForceSupplicantScan()
+                    MAX_TIME += 5
+            else:
+                disconnected_time = 0
+            time.sleep(1)
+
+        print 'wpa_supplicant authentication may have failed.'
+        return False
+        
+
+    def _ForceSupplicantScan(self):
+        """ Force wpa_supplicant to rescan available networks.
+    
+        This function forces wpa_supplicant to rescan.
+        This works around authentication validation sometimes failing for
+        wpa_supplicant because it remains in a DISCONNECTED state for 
+        quite a while, after which a rescan is required, and then
+        attempting to authenticate.  This whole process takes a long
+        time, so we manually speed it up if we see it happening.
+        
+        """
+        print 'wpa_supplicant rescan forced...'
+        cmd = 'wpa_cli -i' + self.iface + ' scan'
+        misc.Run(cmd)
+        
+    def StopWPA(self):
+        """ Terminates wpa using wpa_cli"""
+        cmd = 'wpa_cli -i %s terminate' % self.iface
+        if self.verbose: print cmd
+        misc.Run(cmd)
+
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
-        raise NotImplementedError
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+            
+        bssid = misc.RunRegex(bssid_pattern, output)
+        return bssid
 
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
@@ -877,7 +1196,28 @@ class BaseWirelessInterface(BaseInterface):
         The signal strength.
 
         """
-        raise NotImplementedError
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+
+        strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',
+                                      re.I | re.M  | re.S)
+        altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', re.I | re.M | re.S)
+        [(strength, max_strength)] = strength_pattern.findall(output)
+        if max_strength and strength:
+            if int(max_strength) != 0:
+                return 100 * int(strength) // int(max_strength)
+            else:
+                # Prevent a divide by zero error.
+                strength = int(strength)
+
+        if strength is None:
+            strength = misc.RunRegex(altstrength_pattern, output)
+        
+        return strength
     
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
@@ -886,7 +1226,16 @@ class BaseWirelessInterface(BaseInterface):
         The dBm signal strength.
 
         """
-        raise NotImplementedError
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+        signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)',
+                                       re.I | re.M | re.S)
+        dbm_strength = misc.RunRegex(signaldbm_pattern, output)
+        return dbm_strength
 
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
@@ -895,4 +1244,14 @@ class BaseWirelessInterface(BaseInterface):
         The current network essid.
 
         """
-        raise NotImplementedError
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+        network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',
+                                           re.I | re.M  | re.S), output)
+        if network:
+            network = misc.to_unicode(network)
+        return network

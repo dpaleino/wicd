@@ -57,7 +57,7 @@ ROUTE = 2
 GKSUDO = 1
 KDESU = 2
 KTSUSS = 3
-sudo_dict = { 
+__sudo_dict = { 
     AUTO : "",
     GKSUDO : "gksudo",
     KDESU : "kdesu",
@@ -212,19 +212,34 @@ def ParseEncryption(network):
     """
     enctemplate = open(wpath.encryption + network["enctype"])
     template = enctemplate.readlines()
-    # Set these to nothing so that we can hold them outside the loop
-    z = "ap_scan=1\n"
-    # Loop through the lines in the template, selecting ones to use
-    for y, x in enumerate(template):
-        x = x.strip("\n")
-        if y > 4:
-            # replace values
-            x = x.replace("$_SCAN","0")
-            for t in network:
-                # Don't bother if z's value is None cause it will cause errors
-                if Noneify(network[t]) is not None:
-                    x = x.replace("$_" + str(t).upper(), str(network[t]))
-            z = z + "\n" + x
+    config_file = "ap_scan=1\n"
+    should_replace = False
+    for index, line in enumerate(template):
+        if not should_replace:
+            if line.strip().startswith('---'):
+                should_replace = True
+        else:
+            if line.strip().startswith("}"):
+                # This is the last line, so we just write it.
+                config_file = ''.join([config_file, line])
+            elif "$_" in line: 
+                cur_val = re.findall('\$_([A-Z0-9]+)', line)
+                if cur_val:
+                    if cur_val[0] == 'SCAN':
+                        #TODO should this be hardcoded?
+                        line = line.replace("$_SCAN", "0")
+                        config_file = ''.join([config_file, line])
+                    else:
+                        rep_val = network.get(cur_val[0].lower())
+                        if rep_val:
+                            line = line.replace("$_%s" % cur_val[0], rep_val)
+                            config_file = ''.join([config_file, line])
+                        else:
+                            print "Ignoring template line: '%s'" % line
+                else:
+                    print "Weird parsing error occurred"
+            else:  # Just a regular entry.
+                config_file = ''.join([config_file, line])
 
     # Write the data to the files then chmod them so they can't be read 
     # by normal users.
@@ -233,7 +248,7 @@ def ParseEncryption(network):
     os.chown(wpath.networks + network["bssid"].replace(":", "").lower(), 0, 0)
     # We could do this above, but we'd like to read protect
     # them before we write, so that it can't be read.
-    f.write(z)
+    f.write(config_file)
     f.close()
 
 def LoadEncryptionMethods():
@@ -409,7 +424,7 @@ def get_sudo_cmd(msg, prog_num=0):
 def choose_sudo_prog(prog_num=0):
     """ Try to intelligently decide which graphical sudo program to use. """
     if prog_num:
-        return find_path(sudo_dict[prog_num])
+        return find_path(__sudo_dict[prog_num])
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
     paths = []

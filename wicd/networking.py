@@ -152,7 +152,7 @@ class Controller(object):
         self.disconnect_script = None
         self.driver = None
         self.iface = None
-        self.backend_manager = BackendManager()   
+        self.backend_manager = BackendManager()
     
     def get_debug(self): return self._debug
     def set_debug(self, value):
@@ -226,7 +226,7 @@ class Controller(object):
                 self.iface.dhcp_object = None
     
     def IsUp(self):
-        """ Calls the IsUp method for the wired interface. 
+        """ Calls the IsUp method for the wired interface.
         
         Returns:
         True if the interface is up, False otherwise.
@@ -999,3 +999,4 @@ class WiredConnectThread(ConnectThread):
         
         self.connect_result = "Success"
         self.is_connecting = False
+

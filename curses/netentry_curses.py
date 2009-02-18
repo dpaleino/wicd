@@ -54,11 +54,11 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
 
         use_static_dns_t = language['use_static_dns']
         use_global_dns_t = language['use_global_dns']
-        dns_dom_t        = ('editcp',language['dns_domain']+':   ')
-        search_dom_t     = ('editcp',language['search_domain']+':')
-        dns1_t           = ('editcp',language['dns']+ ' ' + language['1']+':'+' '*8)
-        dns2_t           = ('editcp',language['dns']+ ' ' + language['2']+':'+' '*8)
-        dns3_t           = ('editcp',language['dns']+ ' ' + language['3']+':'+' '*8)
+        dns_dom_t    = ('editcp',language['dns_domain']+':   ')
+        search_dom_t = ('editcp',language['search_domain']+':')
+        dns1_t       = ('editcp',language['dns']+ ' ' + language['1']+':'+' '*8)
+        dns2_t       = ('editcp',language['dns']+ ' ' + language['2']+':'+' '*8)
+        dns3_t       = ('editcp',language['dns']+ ' ' + language['3']+':'+' '*8)
 
         cancel_t = 'Cancel'
         ok_t = 'OK'
@@ -105,7 +105,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
 
         self._listbox = urwid.ListBox(walker)
         #self._frame = urwid.Frame(self._listbox)
-        self._frame = urwid.Frame(self._listbox)
+        self._frame = urwid.Frame(self._listbox,footer=self.button_cols)
         self.__super.__init__(self._frame)
     
 
@@ -192,7 +192,12 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                     self.overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                self.overlay.keypress(dim, k)
+                k = self.overlay.keypress(dim, k)
+                if k in ('up','page up'):
+                    self._w.set_focus('body')
+                elif k in ('down','page down'):
+                    self._w.set_focus('footer')
+
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
             if "esc" in keys or 'Q' in keys:
@@ -204,6 +209,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             if self.CANCEL_PRESSED:
                 return False
 
+
 class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,name):
         global wired, daemon
@@ -212,7 +218,6 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         #self.cur_default = 
         # Add widgets to listbox
         self._w.body.body.append(self.set_default)
-        self._w.body.body.append(self.button_cols)
         
         self.prof_name = name
         title = ">"+language['configuring_wired'].replace('$A',self.prof_name)
@@ -265,16 +270,19 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.networkID = networkID
         global_settings_t = language['global_settings']
         encryption_t = language['use_encryption']
-
+        autoconnect_t = language['automatic_connect']
+        
         self.global_settings_chkbox = urwid.CheckBox(global_settings_t)
         self.encryption_chkbox = urwid.CheckBox(encryption_t,on_state_change=self.encryption_toggle)
         self.encryption_combo = ComboBox(callback=self.combo_on_change)
+        self.autoconnect_chkbox = urwid.CheckBox(autoconnect_t)
         self.pile_encrypt = None
         # _w is a Frame, _w.body is a ListBox, _w.body.body is the ListWalker :-)
-        self._w.body.body.append(self.global_settings_chkbox)
-        self._w.body.body.append(self.encryption_chkbox)
-        self._w.body.body.append(self.encryption_combo)
-        self._w.body.body.append(self.button_cols)
+        self._listbox.body.append(urwid.Text(""))
+        self._listbox.body.append(self.global_settings_chkbox)
+        self._listbox.body.append(self.autoconnect_chkbox)
+        self._listbox.body.append(self.encryption_chkbox)
+        self._listbox.body.append(self.encryption_combo)
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
 
@@ -306,6 +314,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.dns_dom_edit.set_edit_text(self.format_entry(networkID, "dns_domain"))
         self.search_dom_edit.set_edit_text(self.format_entry(networkID, "search_domain"))
         
+        self.autoconnect_chkbox.set_state(to_bool(self.format_entry(networkID, "automatic")))
 
         #self.reset_static_checkboxes()
         self.encryption_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID,
@@ -367,6 +376,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             #print "no encryption specified..."
             self.set_net_prop("enctype", "None")
         AdvancedSettingsDialog.save_settings(self)
+
+        # Save the autoconnect setting.  This is not where it originally was
+        # in the GTK UI.
+        self.set_net_prop("automatic",self.autoconnect_chkbox.get_state())
         
         if self.global_settings_chkbox.get_state():
             self.set_net_prop('use_settings_globally', True)
@@ -385,7 +398,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.encryption_info = {}
 
         if self._w.body.body.__contains__(self.pile_encrypt):
-            self._w.body.body.pop(self._w.body.body.__len__()-2)
+            self._w.body.body.pop(self._w.body.body.__len__()-1)
 
         # If nothing is selected, select the first entry.
         if ID == -1:
@@ -397,9 +410,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         for x in opts:
             edit = None
             if language.has_key(opts[x][0]):
-                edit = MaskingEdit(('editcp',language[opts[x][0].lower().replace(' ','_')]+': '),mask_mode='on_focus')
+                edit = MaskingEdit(('editcp',language[opts[x][0].lower().replace(' ','_')]+': '),mask_mode='no_focus')
             else:
-                edit = MaskingEdit(('editcp',opts[x][0].replace('_',' ')+': '),mask_mode='on_focus')
+                edit = MaskingEdit(('editcp',opts[x][0].replace('_',' ')+': '),mask_mode='no_focus')
             theList.append(edit)
             # Add the data to any array, so that the information
             # can be easily accessed by giving the name of the wanted
@@ -410,7 +423,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 wireless.GetWirelessProperty(self.networkID, opts[x][1])))
 
         self.pile_encrypt = DynWrap(urwid.Pile(theList),attrs=('editbx','editnfc'))
-        self._w.body.body.insert(self._w.body.body.__len__()-1,self.pile_encrypt)
+        self._w.body.body.insert(self._w.body.body.__len__(),self.pile_encrypt)
         #self._w.body.body.append(self.pile_encrypt)
 
     def prerun(self,ui,dim,display):

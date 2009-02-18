@@ -110,13 +110,13 @@ class MaskingEdit(urwid.Edit):
     """
     mask_mode = one of:
         "always" : everything is a '*' all of the time
-        "on_focus" : everything is a '*' only when not in focus
+        "no_focus" : everything is a '*' only when not in focus
         "off" : everything is always unmasked
     mask_char = the single character that masks all other characters in the field
     """
     def __init__(self, caption = "", edit_text = "", multiline = False,
             align = 'left', wrap = 'space', allow_tab = False,
-            edit_pos = None, layout=None, mask_mode="masked",mask_char='*'):
+            edit_pos = None, layout=None, mask_mode="always",mask_char='*'):
         self.mask_mode = mask_mode
         if len(mask_char) > 1:
             raise MaskingEditException('Masks of more than one character are not supported!')
@@ -137,7 +137,7 @@ class MaskingEdit(urwid.Edit):
         focus.
         """
         # If we aren't masking anything ATM, then act like an Edit.  No problems.
-        if self.mask_mode == "off" or (self.mask_mode == 'on_focus' and focus == True):
+        if self.mask_mode == "off" or (self.mask_mode == 'no_focus' and focus == True):
             canv = self.__super.render((maxcol,),focus)
             # The cache messes this thing up, because I am totally changing what
             # is displayed.

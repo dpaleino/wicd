@@ -223,7 +223,7 @@ def ParseEncryption(network):
                 # This is the last line, so we just write it.
                 config_file = ''.join([config_file, line])
             elif "$_" in line: 
-                cur_val = re.findall('\$_([A-Z0-9]+)', line)
+                cur_val = re.findall('\$_([A-Z0-9_]+)', line)
                 if cur_val:
                     if cur_val[0] == 'SCAN':
                         #TODO should this be hardcoded?

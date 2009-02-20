@@ -33,6 +33,8 @@ from wicd import misc
 from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import *
+from wicd.wnettools import strength_pattern, altstrength_pattern, wep_pattern, \
+                           signaldbm_pattern
 
 import iwscan
 import wpactrl
@@ -57,14 +59,6 @@ but it may not work properly on all systems.
 Dependencies:
 python-wpactrl (http://projects.otaku42.de/wiki/PythonWpaCtrl)
 python-iwscan (http://projects.otaku42.de/browser/python-iwscan/)"""
-
-strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', 
-                              re.I | re.M  | re.S)
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)',
-                                 re.I | re.M | re.S)
-signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)',
-                               re.I | re.M | re.S)
-wep_pattern = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
 
 RALINK_DRIVER = 'ralink legacy'
 

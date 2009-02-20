@@ -99,7 +99,8 @@ class wrap_exceptions:
                 raise
             except :
                 # Quit the loop
-                loop.quit()
+                if 'loop' in locals():
+                    loop.quit()
                 # Zap the screen
                 ui.stop()
                 # Print out standard notification:

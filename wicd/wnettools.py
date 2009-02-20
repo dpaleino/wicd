@@ -182,6 +182,7 @@ class BaseInterface(object):
         self.DHCP_CLIENT = None
         self.flush_tool = None
         self.link_detect = None       
+        self.dhcp_object = None
     
     def SetDebugMode(self, value):
         """ If True, verbose output is enabled. """

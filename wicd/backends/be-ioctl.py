@@ -335,14 +335,16 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
     def _connect_to_wpa_ctrl_iface(self):
         """ Connect to the wpa ctrl interface. """
         ctrl_iface = '/var/run/wpa_supplicant'
-        try:
-            socket = [os.path.join(ctrl_iface, s) \
-                      for s in os.listdir(ctrl_iface) if s == self.iface][0]
-        except OSError, error:
-            print error
+        socket_loc = os.path.join(ctrl_iface, self.iface)
+        if os.path.exists(socket_loc):
+            try:
+                return wpactrl.WPACtrl(socket)
+            except wpactrl.error, e:
+                print "Couldn't open ctrl_interface: %s" % e
+                return None
+        else:
+            print "Couldn't find a wpa_supplicant ctrl_interface for iface %s" % self.iface
             return None
-            
-        return wpactrl.WPACtrl(socket)
     
     def ValidateAuthentication(self, auth_time):
         """ Validate WPA authentication.

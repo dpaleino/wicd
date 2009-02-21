@@ -896,6 +896,7 @@ def main():
         ('bold','white','black','bold')])
     # This is a wrapper around a function that calls another a function that is a
     # wrapper around a infinite loop.  Fun.
+    urwid.set_encoding('utf8')
     ui.run_wrapper(run)
 
 def run():

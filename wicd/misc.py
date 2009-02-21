@@ -529,7 +529,7 @@ def get_language_list_gui():
     language['stop_showing_chooser'] = _('Stop Showing Autoconnect pop-up temporarily')
     language['display_type_dialog'] = _('Use dBm to measure signal strength')
     language['scripts'] = _('Scripts')
-    language['invalid_address'] = _('Invalid address in $A entry.')
+    #language['invalid_address'] = _('Invalid address in $A entry.')
     language['global_settings'] = _('Use these settings for all networks sharing this essid')
     language['encrypt_info_missing'] = _('Required encryption information is missing.')
     language['enable_encryption'] = _('This network requires encryption to be enabled.')
@@ -613,6 +613,14 @@ def get_language_list_gui():
     language['terminated'] = _("Terminated by user")
     language['wicd_curses'] = _("Wicd Curses Interface")
     language['dbus_fail'] = _("DBus failure! This is most likely caused by the wicd daemon stopping while wicd-curses is running. Please restart the daemon, and then restart wicd-curses.")
+
+    # Fix strings in wicd-curses
+    for i in language.keys():
+        try :
+            language[i] = language[i].decode('utf8')
+        except:
+            print "\"%s\"" % language[i]
+            raise
 
 
     return language

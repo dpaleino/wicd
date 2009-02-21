@@ -338,7 +338,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         socket_loc = os.path.join(ctrl_iface, self.iface)
         if os.path.exists(socket_loc):
             try:
-                return wpactrl.WPACtrl(socket)
+                return wpactrl.WPACtrl(socket_loc)
             except wpactrl.error, e:
                 print "Couldn't open ctrl_interface: %s" % e
                 return None

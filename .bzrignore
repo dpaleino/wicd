@@ -21,4 +21,5 @@ other/postinst
 scripts/wicd
 scripts/wicd-client
 scripts/wicd-curses
+translations/*
 wicd/wpath.py

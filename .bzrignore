@@ -3,8 +3,10 @@ install.log
 uninstall.log
 .bzrignore
 vcsinfo.py
+build
 build/*
 init/*/*
+wpath.py*
 man/wicd-curses.8
 man/wicd-manager-settings.conf.5
 man/wicd-wired-settings.conf.5
@@ -15,6 +17,7 @@ other/55wicd
 other/80-wicd-connect.sh
 other/WHEREAREMYFILES
 other/wicd.conf
+other/postinst
 scripts/wicd
 scripts/wicd-client
 scripts/wicd-curses

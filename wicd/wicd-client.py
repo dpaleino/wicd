@@ -625,7 +625,7 @@ class TrayIcon(object):
             def __init__(self, use_tray=True):
                 TrayIcon.TrayIconGUI.__init__(self, use_tray)
                 self.use_tray = use_tray
-                if not use_tray: 
+                if not use_tray:
                     self.toggle_wicd_gui()
                     return
 

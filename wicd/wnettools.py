@@ -47,7 +47,7 @@ essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', __re_mode)
 ap_mac_pattern = re.compile('.*Address: (.*?)\n', __re_mode)
 channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', __re_mode)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
 mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
 freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
@@ -383,7 +383,7 @@ class BaseInterface(object):
         the connection attempt.
 
         Keyword arguments:
-        pipe -- stdout pipe to the dhcpcd process.
+        pipe -- stdout pipe to the dhclient process.
         
         Returns:
         'success' if succesful', an error code string otherwise.
@@ -408,7 +408,7 @@ class BaseInterface(object):
         """ Determines if obtaining an IP using pump succeeded.
 
         Keyword arguments:
-        pipe -- stdout pipe to the dhcpcd process.
+        pipe -- stdout pipe to the pump process.
         
         Returns:
         'success' if succesful, an error code string otherwise.
@@ -443,7 +443,7 @@ class BaseInterface(object):
         
         while not dhcpcd_complete:
             line = pipe.readline()
-            if line.startswith("Error"):
+            if "Error" in line or "timed out" in line:
                 dhcpcd_success = False
                 dhcpcd_complete = True
             elif line == '':
@@ -1083,18 +1083,8 @@ class BaseWirelessInterface(BaseInterface):
 
         # Link Quality
         # Set strength to -1 if the quality is not found
-
-        # more of the patch from
-        # https://bugs.launchpad.net/wicd/+bug/175104
-        if (strength_pattern.match(cell)):
-            [(strength, max_strength)] = strength_pattern.findall(cell)
-            if max_strength:
-                ap["quality"] = 100 * int(strength) // int(max_strength)
-            else:
-                ap["quality"] = int(strength)
-        elif misc.RunRegex(altstrength_pattern,cell):
-            ap['quality'] = misc.RunRegex(altstrength_pattern, cell)
-        else:
+        ap['quality'] = self._get_link_quality(cell)
+        if ap['quality'] is None:
             ap['quality'] = -1
 
         # Signal Strength (only used if user doesn't want link
@@ -1190,6 +1180,22 @@ class BaseWirelessInterface(BaseInterface):
         bssid = misc.RunRegex(bssid_pattern, output)
         return bssid
 
+    def _get_link_quality(self, output):
+        """ Parse out the link quality from iwlist scan or iwconfig output. """
+        try:
+            [(strength, max_strength)] = strength_pattern.findall(output)
+        except ValueError:
+            (strength, max_strength) = (None, None)
+
+        if strength in ['', None]:
+            [(strength, max_strength)] = altstrength_pattern.findall(output)
+        if strength not in ['', None] and max_strength:
+            return (100 * int(strength) // int(max_strength))
+        elif strength not in ["", None]:
+            return int(strength)
+        else:
+            return None
+
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
@@ -1203,22 +1209,7 @@ class BaseWirelessInterface(BaseInterface):
             output = misc.Run(cmd)
         else:
             output = iwconfig
-
-        strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)',
-                                      re.I | re.M  | re.S)
-        altstrength_pattern = re.compile('.*Signal level:?=? ?(\d\d*)', re.I | re.M | re.S)
-        [(strength, max_strength)] = strength_pattern.findall(output)
-        if max_strength and strength:
-            if int(max_strength) != 0:
-                return 100 * int(strength) // int(max_strength)
-            else:
-                # Prevent a divide by zero error.
-                strength = int(strength)
-
-        if strength is None:
-            strength = misc.RunRegex(altstrength_pattern, output)
-        
-        return strength
+        return self._get_link_quality(output)
     
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.

@@ -51,6 +51,10 @@ class configure(Command):
         ('lib=', None, 'set the lib directory'),
         ('share=', None, 'set the share directory'),
         ('etc=', None, 'set the etc directory'),
+        ('scripts=', None, 'set the global scripts directory'),
+        ('disconnectscripts=', None, 'set the global disconnect scripts directory'),
+        ('preconnectscripts=', None, 'set the global preconnect scripts directory'),
+        ('postconnectscripts=', None, 'set the global postconnect scripts directory'),
         ('images=', None, 'set the image directory'),
         ('encryption=', None, 'set the encryption template directory'),
         ('bin=', None, 'set the bin directory'),
@@ -96,6 +100,10 @@ class configure(Command):
         self.lib = '/usr/lib/wicd/'
         self.share = '/usr/share/wicd/'
         self.etc = '/etc/wicd/'
+        self.scripts = self.etc + "scripts/"
+        self.preconnectscripts = self.scripts + "preconnect/"
+        self.postconnectscripts = self.scripts + "postconnect/"
+        self.disconnectscripts = self.scripts + "disconnect/"
         self.icons = '/usr/share/icons/hicolor/'
         self.images = '/usr/share/pixmaps/wicd/'
         self.encryption = self.etc + 'encryption/templates/'
@@ -175,10 +183,12 @@ class configure(Command):
         # If we don't get anything from *-config, or it didn't run properly, 
         # or the path is not a proper absolute path, raise an error
         try:
-            pmtemp = subprocess.Popen(["pkg-config","--variable=pm_sleephooks","pm-utils"], stdout=subprocess.PIPE)
+            pmtemp = subprocess.Popen(["pkg-config", "--variable=pm_sleephooks", 
+                                       "pm-utils"], stdout=subprocess.PIPE)
             returncode = pmtemp.wait() # let it finish, and get the exit code
             pmutils_candidate = pmtemp.stdout.readline().strip() # read stdout
-            if len(pmutils_candidate) == 0 or returncode != 0 or not os.path.isabs(pmutils_candidate):
+            if len(pmutils_candidate) == 0 or returncode != 0 or \
+               not os.path.isabs(pmutils_candidate):
                 raise ValueError
             else:
                 self.pmutils = pmutils_candidate
@@ -189,7 +199,8 @@ class configure(Command):
             kdetemp = subprocess.Popen(["kde-config","--prefix"], stdout=subprocess.PIPE)
             returncode = kdetemp.wait() # let it finish, and get the exit code
             kdedir_candidate = kdetemp.stdout.readline().strip() # read stdout
-            if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
+            if len(kdedir_candidate) == 0 or returncode != 0 or \
+               not os.path.isabs(kdedir_candidate):
                 raise ValueError
             else:
                 self.kdedir = kdedir_candidate + '/share/autostart'
@@ -218,11 +229,10 @@ class configure(Command):
 
 
     def finalize_options(self):
-        if self.distro_detect_failed == True:
-            if not self.no_install_init:
-                if self.init == 'FAIL' or self.initfile == 'FAIL':
-                    print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \
-                          'Please specify --init and --initfile to continue with configuration.'
+        if self.distro_detect_failed and not self.no_install_init and \
+           'FAIL' in [self.init, self.initfile]:
+            print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \
+                  'Please specify --init and --initfile to continue with configuration.'
                     
                 
         # loop through the argument definitions in user_options
@@ -408,6 +418,10 @@ try:
     (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py', 'wicd/suspend.py', 'wicd/autoconnect.py']), #'wicd/wicd-gui.py', 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
+    (wpath.scripts, []),
+    (wpath.disconnectscripts, []),
+    (wpath.preconnectscripts, []),
+    (wpath.postconnectscripts, []),
     ]
     if not wpath.no_install_ncurses:
         data.append(( wpath.lib, ['curses/curses_misc.py']))
@@ -456,14 +470,16 @@ except Exception, e:
 python setup.py configure has not yet been run.'''
 
 
-wpactrl_ext = Extension(name = 'wpactrl', sources = ['depends/python-wpactrl/wpa_ctrl.c', 'depends/python-wpactrl/wpactrl.c'],
-                extra_compile_args = ["-fno-strict-aliasing"])
+wpactrl_ext = Extension(name = 'wpactrl', 
+                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
+                                   'depends/python-wpactrl/wpactrl.c'],
+                        extra_compile_args = ["-fno-strict-aliasing"])
 
-iwscan_ext = Extension(name      = 'iwscan',
-                libraries = ['iw'],
-                sources   = ['depends/python-iwscan/pyiwscan.c'])
+iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
+                       sources = ['depends/python-iwscan/pyiwscan.c'])
     
-setup(cmdclass={'configure' : configure, 'get_translations' : get_translations, 'uninstall' : uninstall, 'test' : test, 'cleargenerated' : cleargenerated},
+setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
+                'uninstall' : uninstall, 'test' : test, 'cleargenerated' : cleargenerated},
       name="Wicd",
       version=VERSION_NUM,
       description="A wireless and wired network manager",
@@ -476,16 +492,12 @@ encryption types, such as WPA and WEP. Wicd will automatically
 connect at startup to any preferred network within range.
 """,
       author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@users.sourceforge.net, imdano@users.sourceforge.net",
+      author_email="compwiz18@users.sourceforge.net, oreilldf@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 
-                  'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 
-                  'wicd.configmanager', 'wicd.guiutil'], 
+      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools',
+                  'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 
+                  'wicd.logfile', 'wicd.backend', 'wicd.configmanager', 'wicd.guiutil'], 
       ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )
-##print "Running post-install configuration..."
-##os.system("other/postinst")
-##print 'Done.'

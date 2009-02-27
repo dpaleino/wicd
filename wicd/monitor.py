@@ -45,7 +45,7 @@ daemon = dbus_dict["daemon"]
 wired = dbus_dict["wired"]
 wireless = dbus_dict["wireless"]
 
-monitor = to_time = update_callback = None
+monitor = to_time = update_callback = mainloop = None
 
 def diewithdbus(func):
     def wrapper(self, *__args, **__kargs):
@@ -54,11 +54,11 @@ def diewithdbus(func):
             self.__lost_dbus_count = 0
             return ret
         except dbusmanager.DBusException, e:
-            print  "Caught exception %e" % str(e)
+            print  "Caught exception %s" % str(e)
             if not hasattr(self, "__lost_dbus_count"):
                 self.__lost_dbus_count = 0
             if self.__lost_dbus_count > 3:
-                sys.exit(1)
+                mainloop.quit()
             self.__lost_dbus_count += 1
             return True
     
@@ -351,7 +351,7 @@ def main():
     an amount of time determined by the active backend.
     
     """
-    global monitor, to_time
+    global monitor, to_time, mainloop
     
     monitor = ConnectionStatus()
     to_time = daemon.GetBackendUpdateInterval()

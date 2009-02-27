@@ -109,12 +109,12 @@ class TrayIcon(object):
     Base Class for implementing a tray icon to display network status.
     
     """
-    def __init__(self, use_tray, animate):
+    def __init__(self, animate):
         if USE_EGG:
-            self.tr = self.EggTrayIconGUI(use_tray)
+            self.tr = self.EggTrayIconGUI()
         else:
-            self.tr = self.StatusTrayIconGUI(use_tray)
-        self.icon_info = self.TrayConnectionInfo(self.tr, use_tray, animate)
+            self.tr = self.StatusTrayIconGUI()
+        self.icon_info = self.TrayConnectionInfo(self.tr, animate)
         
     def is_embedded(self):
         if USE_EGG:
@@ -125,7 +125,7 @@ class TrayIcon(object):
 
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
-        def __init__(self, tr, use_tray=True, animate=True):
+        def __init__(self, tr, animate=True):
             """ Initialize variables needed for the icon status methods. """
             self.last_strength = -2
             self.still_wired = False
@@ -133,7 +133,6 @@ class TrayIcon(object):
             self.tried_reconnect = False
             self.connection_lost_counter = 0
             self.tr = tr
-            self.use_tray = use_tray
             self.last_sndbytes = -1
             self.last_rcvbytes = -1
             self.max_snd_gain = 10000
@@ -203,7 +202,7 @@ class TrayIcon(object):
         @catchdbus
         def update_tray_icon(self, state=None, info=None):
             """ Updates the tray icon and current connection status. """
-            if not self.use_tray or not DBUS_AVAIL: return False
+            if not DBUS_AVAIL: return False
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
@@ -330,7 +329,7 @@ class TrayIcon(object):
         tray icons.
 
         """
-        def __init__(self, use_tray):
+        def __init__(self):
             menu = """
                     <ui>
                         <menubar name="Menubar">
@@ -361,7 +360,6 @@ class TrayIcon(object):
                                                                   props.parent)
             self.gui_win = None
             self.current_icon_path = None
-            self.use_tray = use_tray
             self._is_scanning = False
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             net_menuitem.connect("activate", self.on_net_menu_activate)
@@ -571,14 +569,9 @@ class TrayIcon(object):
             for machines running versions of GTK < 2.10.
             
             """
-            def __init__(self, use_tray=True):
+            def __init__(self):
                 """Initializes the tray icon"""
-                TrayIcon.TrayIconGUI.__init__(self, use_tray)
-                self.use_tray = use_tray
-                if not use_tray: 
-                    self.toggle_wicd_gui()
-                    return
-
+                TrayIcon.TrayIconGUI.__init__(self)
                 self.tooltip = gtk.Tooltips()
                 self.eb = gtk.EventBox()
                 self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
@@ -601,7 +594,6 @@ class TrayIcon(object):
 
             def set_from_file(self, val=None):
                 """ Calls set_from_file on the gtk.Image for the tray icon. """
-                if not self.use_tray: return
                 self.pic.set_from_file(val)
 
             def set_tooltip(self, val):
@@ -611,7 +603,6 @@ class TrayIcon(object):
                 tray icon.
 
                 """
-                if not self.use_tray: return
                 self.tooltip.set_tip(self.eb, val)
 
 
@@ -622,13 +613,8 @@ class TrayIcon(object):
             Uses gtk.StatusIcon to implement a tray icon.
             
             """
-            def __init__(self, use_tray=True):
-                TrayIcon.TrayIconGUI.__init__(self, use_tray)
-                self.use_tray = use_tray
-                if not use_tray:
-                    self.toggle_wicd_gui()
-                    return
-
+            def __init__(self):
+                TrayIcon.TrayIconGUI.__init__(self)
                 gtk.StatusIcon.__init__(self)
 
                 self.current_icon_path = ''
@@ -645,7 +631,6 @@ class TrayIcon(object):
 
             def set_from_file(self, path=None):
                 """ Sets a new tray icon picture. """
-                if not self.use_tray: return
                 if path != self.current_icon_path:
                     self.current_icon_path = path
                     gtk.StatusIcon.set_from_file(self, path)
@@ -716,9 +701,6 @@ def main(argv):
     argv -- The arguments passed to the script.
 
     """
-    use_tray = True
-    animate = True
-
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'nha', ['help', 'no-tray',
                                                          'no-animate'])
@@ -727,6 +709,8 @@ def main(argv):
         usage()
         sys.exit(2)
 
+    use_tray = True
+    animate = True
     for opt, a in opts:
         if opt in ('-h', '--help'):
             usage()
@@ -750,7 +734,7 @@ def main(argv):
         sys.exit(0)
 
     # Set up the tray icon GUI and backend
-    tray_icon = TrayIcon(use_tray, animate)
+    tray_icon = TrayIcon(animate)
 
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).
@@ -767,7 +751,8 @@ def main(argv):
                             'org.wicd.daemon.wireless')
     bus.add_signal_receiver(tray_icon.tr.tray_scan_started,
                             'SendStartScanSignal', 'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(lambda: handle_no_dbus() or tray_icon.icon_info.set_not_connected_state(), 
+    bus.add_signal_receiver(lambda: (handle_no_dbus() or 
+                                     tray_icon.icon_info.set_not_connected_state()), 
                             "DaemonClosing", 'org.wicd.daemon')
     bus.add_signal_receiver(lambda: setup_dbus(force=False), "DaemonStarting",
                             "org.wicd.daemon")

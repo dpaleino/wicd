@@ -5,6 +5,7 @@
 
 # This is defined in /usr/lib/python2.5/site-packages/wicd/wpath.py
 PIDFILE="%PIDFILE%"
+DAEMON="%SBIN%wicd"
 
 # Define start and stop functions
 
@@ -15,7 +16,7 @@ wicd_start() {
     echo "$PIDFILE and try again..."
     exit 1
   else
-    echo "Starting wicd daemon..."
+    echo "Starting wicd daemon: $DAEMON"
     wicd 2>/dev/null 1>&2
   fi
 }

@@ -96,6 +96,10 @@ def Run(cmd, include_stderr=False, return_pipe=False, return_obj=False):
     else:
         err = None
         fds = False
+    if return_obj:
+        std_in = PIPE
+    else:
+        std_in = None
     
     # We need to make sure that the results of the command we run
     # are in English, so we set up a temporary environment.
@@ -106,8 +110,8 @@ def Run(cmd, include_stderr=False, return_pipe=False, return_obj=False):
     tmpenv["LANG"] = __LANG
     
     try:
-        f = Popen(cmd, shell=False, stdout=PIPE, stderr=err, close_fds=fds,
-                  cwd='/', env=tmpenv)
+        f = Popen(cmd, shell=False, stdout=PIPE, stdin=std_in, stderr=err,
+                  close_fds=fds, cwd='/', env=tmpenv)
     except OSError, e:
         print "Running command %s failed: %s" % (str(cmd), str(e))
         return ""

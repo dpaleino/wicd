@@ -396,7 +396,7 @@ class ConnectThread(threading.Thread):
             print 'Setting the broadcast address...' + self.network['broadcast']
             iface.SetAddress(broadcast=self.network['broadcast'])
         
-    @abortable            
+    @abortable
     def set_ip_address(self, iface):
         """ Set the IP address for the given interface. 
         
@@ -420,7 +420,7 @@ class ConnectThread(threading.Thread):
                     self.abort_connection(dhcp_status)
                 return
         
-    @abortable            
+    @abortable
     def set_dns_addresses(self):
         """ Set the DNS address(es).
 
@@ -443,7 +443,7 @@ class ConnectThread(threading.Thread):
                            self.network.get('dns_domain'),
                            self.network.get('search_domain'))
 
-    @abortable        
+    @abortable
     def release_dhcp_clients(self, iface):
         """ Release all running dhcp clients. """
         print "Releasing DHCP leases..."
@@ -474,7 +474,7 @@ class ConnectThread(threading.Thread):
         finally:
             self.lock.release()
         
-    @abortable            
+    @abortable
     def put_iface_up(self, iface):
         """ Bring up given interface. """
         print 'Putting interface up...'
@@ -819,7 +819,7 @@ class WirelessConnectThread(ConnectThread):
         print 'Stopping wpa_supplicant'
         wiface.StopWPA()
         
-    @abortable    
+    @abortable
     def generate_psk_and_authenticate(self, wiface):
         """ Generates a PSK and authenticates if necessary. 
         

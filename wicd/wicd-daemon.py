@@ -1053,7 +1053,7 @@ class WirelessDaemon(dbus.service.Object):
         """ Returns the current signal strength. """
         try:
             strength = int(self.wifi.GetSignalStrength(iwconfig))
-        except:
+        except TypeError:
             strength = 0
         return strength
 

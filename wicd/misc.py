@@ -26,6 +26,7 @@ import gobject
 from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
+from itertools import repeat, chain, izip
 
 # wicd imports
 import wpath
@@ -243,9 +244,11 @@ def ParseEncryption(network):
 
     # Write the data to the files then chmod them so they can't be read 
     # by normal users.
-    f = open(wpath.networks + network["bssid"].replace(":", "").lower(), "w")
-    os.chmod(wpath.networks + network["bssid"].replace(":", "").lower(), 0600)
-    os.chown(wpath.networks + network["bssid"].replace(":", "").lower(), 0, 0)
+    file_loc = os.path.join(wpath.networks,
+                            network['bssid'].replace(":", "").lower())
+    f = open(file_loc, "w")
+    os.chmod(file_loc, 0600)
+    os.chown(file_loc, 0, 0)
     # We could do this above, but we'd like to read protect
     # them before we write, so that it can't be read.
     f.write(config_file)
@@ -690,4 +693,31 @@ def timeout_add(time, func, milli=False):
     else:
         if not milli: time = time * 1000
         return gobject.timeout_add(time, func)
- 
+
+def izip_longest(*args, **kwds):
+    """ Implement the itertools.izip_longest method.
+    
+    We implement the method here because its new in Python 2.6.
+    
+    """
+    # izip_longest('ABCD', 'xy', fillvalue='-') --> Ax By C- D-
+    fillvalue = kwds.get('fillvalue')
+    def sentinel(counter = ([fillvalue]*(len(args)-1)).pop):
+        yield counter()         # yields the fillvalue, or raises IndexError
+    fillers = repeat(fillvalue)
+    iters = [chain(it, sentinel(), fillers) for it in args]
+    try:
+        for tup in izip(*iters):
+            yield tup
+    except IndexError:
+        pass
+
+def grouper(n, iterable, fillvalue=None):
+    """ Iterate over several elements at once
+
+    "grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx"
+
+    """
+    args = [iter(iterable)] * n
+    return izip_longest(fillvalue=fillvalue, *args)
+

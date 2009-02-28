@@ -33,8 +33,7 @@ from wicd import misc
 from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import *
-from wicd.wnettools import strength_pattern, altstrength_pattern, wep_pattern, \
-                           signaldbm_pattern
+from wicd.wnettools import wep_pattern, signaldbm_pattern
 
 import iwscan
 import wpactrl
@@ -311,17 +310,10 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             
         # Link Quality
         ap['qual_found'] = True
-        try:
-            [(strength, max_strength)] = strength_pattern.findall(cell["stats"])
-            if max_strength:
-                ap["quality"] = 100 * int(strength) // int(max_strength)
-            else:
-                ap["quality"] = int(strength)
-        except ValueError:
-            ap['quality'] = misc.RunRegex(altstrength_pattern,cell["stats"])
-            if not ap['quality']:
-                ap['qual_found'] = False
-                ap['quality'] = -1
+        ap['quality'] = self._get_link_quality(cell['stats'])
+        if ap['quality'] is None:
+            ap['qual_found'] = False
+            ap['quality'] = -1
 
         # Signal Strength (only used if user doesn't want link
         # quality displayed or it isn't found)
@@ -338,7 +330,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         socket_loc = os.path.join(ctrl_iface, self.iface)
         if os.path.exists(socket_loc):
             try:
-                return wpactrl.WPACtrl(socket)
+                return wpactrl.WPACtrl(socket_loc)
             except wpactrl.error, e:
                 print "Couldn't open ctrl_interface: %s" % e
                 return None
@@ -498,10 +490,12 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         strength = ord(buff[2])
         max_strength = self._get_max_strength()
-        if strength and max_strength:
+        if strength not in ['', None] and max_strength:
             return 100 * int(strength) // int(max_strength)
-        
-        return strength
+        elif strength not in ['', None]:
+            return int(strength)
+        else:
+            return None
     
     def _get_max_strength(self):
         """ Gets the maximum possible strength from the wireless driver. """

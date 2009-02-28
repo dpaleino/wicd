@@ -45,7 +45,6 @@ import re
 import time
 import threading
 import os
-import thread
 from signal import SIGTERM
 
 # wicd imports 
@@ -267,7 +266,7 @@ class ConnectThread(threading.Thread):
 
     is_connecting = None
     should_die = False
-    lock = thread.allocate_lock()
+    lock = threading.Lock()
 
     def __init__(self, network, interface_name, before_script, after_script, 
                  disconnect_script, gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, 
@@ -470,7 +469,7 @@ class ConnectThread(threading.Thread):
         try:
             if self._should_die:
                 self.connect_aborted('aborted')
-                thread.exit()
+                raise SystemExit
         finally:
             self.lock.release()
         

@@ -512,3 +512,33 @@ class InputDialog(Dialog2):
        
     def on_exit(self, exitcode):
         return exitcode, self.edit.get_edit_text()
+
+
+# htop-style menu menu-bar on the bottom of the screen
+class OptCols(urwid.WidgetWrap):
+    # tuples = [(key,desc,on_event)], on_event currently ignored
+    # attrs = (attr_key,attr_desc)
+    def __init__(self,tuples,attrs=('body','infobar')):
+        # Find the longest string.  Keys for this bar should be no greater than
+        # 2 characters long (e.g., -> for left)
+        maxlen = 6
+        for i in tuples:
+            newmax = len(i[0])+len(i[1])
+            if newmax > maxlen:
+                maxlen = newmax
+        
+        # Construct the texts
+        textList = []
+        i = 0
+        for cmd in tuples:
+            #theText = urwid.Text([(attrs[0],cmd[0]),(attrs[1],cmd[1])])
+            col = urwid.Columns([('fixed',len(cmd[0]),
+                                      urwid.Text((attrs[0],cmd[0])) ),
+                                  urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])])
+            if i != len(tuples)-1:
+                textList.append(('fixed',maxlen,col))
+            else: # The last one
+                textList.append(col)
+            i+=1
+        cols = urwid.Columns(textList)
+        self.__super.__init__(cols)

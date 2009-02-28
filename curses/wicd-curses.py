@@ -53,7 +53,7 @@ import sys
 from time import sleep
 
 # Curses UIs for other stuff
-from curses_misc import SelText,DynEdit,DynIntEdit,ComboBox,Dialog2,TextDialog,InputDialog,error
+from curses_misc import *
 from prefs_curses import PrefsDialog
 import netentry_curses
 
@@ -524,9 +524,24 @@ class appGUI():
         #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
         #          spam,spam,spam,spam] ]
         #self.spamLB = urwid.ListBox(spamL)
+        # Keymappings proposed by nanotube in #wicd
+        keys = [
+                ('H' ,'Help'  ,None),
+                ('->','Config',None),
+                #('  ','         ',None),
+                ('C' ,'Connect',None),
+                ('D' ,'Disconn',None),
+                ('R' ,'Refresh',None),
+                ('P' ,'Prefs',None),
+                ('I' ,'Hidden',None),
+                ('Q' ,'Quit',None)
+               ]
+                #(' ' ,'       ',None),
+                #(' ' ,'       ',None),
+                #(' ' ,'       ',None),
 
-        self.footer1 = urwid.AttrWrap(urwid.Text("Something important will eventually go here."),'body')
-        self.footer2 = urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important')
+        self.footer1 = OptCols(keys)
+        self.footer2 = urwid.Columns([urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important'),urwid.Text('0',align='right')])
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
@@ -708,7 +723,9 @@ class appGUI():
         if from_idle and self.connecting:
             # This is probably the wrong way to do this, but it works for now.
             toAppend=self.twirl[self.incr % 4]
-        self.footer2 = urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important')
+        self.footer2 = urwid.Columns([
+            urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important'),
+            ('fixed',8,urwid.Text(str(self.incr),align='right'))])
         self.frame.set_footer(urwid.BoxAdapter(
             urwid.ListBox([self.footer1,self.footer2]),2))
         return True
@@ -725,7 +742,7 @@ class appGUI():
         else:
             theText += "-- Press H or ? for Help"
         quit_note = ' -- '+language["press_to_quit"]
-        self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
+        #self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True
 
@@ -891,6 +908,7 @@ def main():
         ('editfc', 'white','dark blue', 'bold'),
         ('editnfc','dark gray','default'),
         ('tab active','dark green','light gray'),
+        ('infobar','black','dark cyan'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),

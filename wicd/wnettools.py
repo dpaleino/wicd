@@ -63,6 +63,7 @@ ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S
 bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
 bitrate_pattern = re.compile('.*Bit Rate=(.*?)s', __re_mode)
 opmode_pattern = re.compile('.*Mode:(.*?) ', __re_mode)
+authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', __re_mode)
 
 # Regular expressions for wpa_cli output
 auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
@@ -1210,6 +1211,18 @@ class BaseWirelessInterface(BaseInterface):
             
         opmode = misc.RunRegex(opmode_pattern, output)
         return opmode
+
+    def GetAvailableAuthMethods(self, iwlistauth=None):
+        """ Get the MAC address for the interface. """
+        if not iwlistauth:
+            cmd = 'iwlist ' + self.iface + ' auth'
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwlistauth
+            
+        authm = misc.RunRegex(authmethods_pattern, output).replace(' ', '').replace('\t', '').replace('\n', '; ')[:-2]
+        return authm
 
     def _get_link_quality(self, output):
         """ Parse out the link quality from iwlist scan or iwconfig output. """

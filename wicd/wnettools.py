@@ -50,6 +50,7 @@ channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
+bitrates_pattern = re.compile('.*Bit Rates:(.*?)E', __re_mode)
 mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
 freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
 wep_pattern = re.compile('.*Encryption key:(.*?)\n', __re_mode)
@@ -1059,7 +1060,7 @@ class BaseWirelessInterface(BaseInterface):
             ap['channel'] = self._FreqToChannel(freq)
 
         # Bit Rate
-        ap['bitrate'] = misc.RunRegex(bitrate_pattern, cell)
+        ap['bitrates'] = misc.RunRegex(bitrates_pattern, cell).replace('\n', '; ').replace('  ', '')[:-2]
 
         # BSSID
         ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)

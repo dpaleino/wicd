@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ ioctl Network interface control tools for wicd.
 
@@ -468,6 +469,19 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
+        if not self.iface: return ""
+        data = (self.iface + '\0' * 32)[:32]
+        try:
+            result = fcntl.ioctl(self.sock.fileno(), SIOCGIWAP, data)[16:]
+        except IOError, e:
+            if self.verbose:
+                print "SIOCGIWAP failed: " + str(e)
+            return ""
+        raw_addr = struct.unpack("xxBBBBBB", result[:8])
+        return "%02X:%02X:%02X:%02X:%02X:%02X" % raw_addr
+
+    def GetCurrentBitrate(self, iwconfig=None):
+        """ Get the current bitrate for the interface. """
         if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
         try:

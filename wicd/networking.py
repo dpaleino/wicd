@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ networking - Provides wrappers for common network operations
 
@@ -623,6 +624,16 @@ class Wireless(Controller):
         
         """
         return self.wiface.GetBSSID()
+
+    def GetCurrentBitrate(self):
+        """ Get the current bitrate of the interface. 
+        
+        Returns:
+        The bitrate of the active access point as a string, or
+        None the bitrate can't be found.
+        
+        """
+        return self.wiface.GetCurrentBitrate()
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """

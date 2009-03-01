@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ Network interface control tools for wicd.
 
@@ -59,6 +60,7 @@ wpa2_pattern = re.compile('(WPA2)', __re_mode)
 #iwconfig-only regular expressions.
 ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
 bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
+bitrate_pattern = re.compile('.*Bit Rate=(.*?)s', __re_mode)
 
 # Regular expressions for wpa_cli output
 auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
@@ -1056,6 +1058,9 @@ class BaseWirelessInterface(BaseInterface):
             freq = misc.RunRegex(freq_pattern, cell)
             ap['channel'] = self._FreqToChannel(freq)
 
+        # Bit Rate
+        ap['bitrate'] = misc.RunRegex(bitrate_pattern, cell)
+
         # BSSID
         ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)
 
@@ -1179,6 +1184,18 @@ class BaseWirelessInterface(BaseInterface):
             
         bssid = misc.RunRegex(bssid_pattern, output)
         return bssid
+
+    def GetCurrentBitrate(self, iwconfig=None):
+        """ Get the MAC address for the interface. """
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+            
+        bitrate = misc.RunRegex(bitrate_pattern, output)
+        return bitrate + 's'
 
     def _get_link_quality(self, output):
         """ Parse out the link quality from iwlist scan or iwconfig output. """

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ wicd - wireless connection daemon implementation.
 
@@ -994,6 +995,10 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetApBssid(self):
         return self.wifi.GetBSSID()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetCurrentBitrate(self):
+        return self.wifi.GetCurrentBitrate()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,

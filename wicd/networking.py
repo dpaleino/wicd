@@ -625,7 +625,7 @@ class Wireless(Controller):
         """
         return self.wiface.GetBSSID()
 
-    def GetCurrentBitrate(self):
+    def GetCurrentBitrate(self, iwconfig):
         """ Get the current bitrate of the interface. 
         
         Returns:
@@ -633,7 +633,7 @@ class Wireless(Controller):
         None the bitrate can't be found.
         
         """
-        return self.wiface.GetCurrentBitrate()
+        return self.wiface.GetCurrentBitrate(iwconfig)
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """

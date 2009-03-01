@@ -997,8 +997,8 @@ class WirelessDaemon(dbus.service.Object):
         return self.wifi.GetBSSID()
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetCurrentBitrate(self):
-        return self.wifi.GetCurrentBitrate()
+    def GetCurrentBitrate(self, iwconfig):
+        return self.wifi.GetCurrentBitrate(iwconfig)
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
@@ -1128,6 +1128,12 @@ class WirelessDaemon(dbus.service.Object):
     def GetWirelessIP(self, ifconfig=""):
         """ Returns the IP associated with the wireless interface. """
         ip = self.wifi.GetIP(ifconfig)
+        return ip
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetOperationalMode(self, ifconfig=""):
+        """ Returns the IP associated with the wireless interface. """
+        ip = self.wifi.GetOperationalMode(ifconfig)
         return ip
 
     @dbus.service.method('org.wicd.daemon.wireless')

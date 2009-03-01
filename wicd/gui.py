@@ -632,9 +632,12 @@ class appGui(object):
         # Make sure no entries are left blank
         if entry.chkbox_encryption.get_active():
             encryption_info = entry.encryption_info
-            for x in encryption_info:
-                if encryption_info[x].get_text() == "":
-                    error(self.window, language['encrypt_info_missing'])
+            for entry_info in encryption_info.itervalues():
+                if entry_info[0].entry.get_text() == "" and \
+                   entry_info[1] == 'required':
+                    error(self, "%s (%s)" % (language['encrypt_info_missing'], 
+                                             entry_info[0].label.get_label())
+                          )
                     return False
         # Make sure the checkbox is checked when it should be
         elif not entry.chkbox_encryption.get_active() and \

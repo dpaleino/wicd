@@ -635,6 +635,16 @@ class Wireless(Controller):
         """
         return self.wiface.GetCurrentBitrate(iwconfig)
 
+    def GetOperationalMode(self, iwconfig):
+        """ Get the current operational mode of the interface. 
+        
+        Returns:
+        The operational mode of the interface as a string, or
+        None if the operational mode can't be found.
+        
+        """
+        return self.wiface.GetOperationalMode(iwconfig)
+
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
         return self.wiface.GetIwconfig()

@@ -1001,6 +1001,11 @@ class WirelessDaemon(dbus.service.Object):
         return self.wifi.GetCurrentBitrate(iwconfig)
 
     @dbus.service.method('org.wicd.daemon.wireless')
+    def GetOperationalMode(self, iwconfig):
+        """ Returns the operational mode for the iwconfig parameter """
+        return misc.to_unicode(self.wifi.GetOperationalMode())
+
+    @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
                            ics):
         """ Creates an ad-hoc network using user inputted settings. """

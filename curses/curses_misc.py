@@ -557,7 +557,7 @@ class OptCols(urwid.WidgetWrap):
                 args = cmd[1]
             #self.callbacks.append(cmd[2])
             col = ClickCols([
-                            ('fixed',len(key),urwid.Text((attrs[0],key)) ),
+                ('fixed',len(key)+1,urwid.Text((attrs[0],key+':')) ),
                               urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])],
                               callback,args)
             #if i != len(tuples)-1:

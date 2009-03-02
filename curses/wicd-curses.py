@@ -902,7 +902,7 @@ def main():
         ('editfc', 'white','dark blue', 'bold'),
         ('editnfc','dark gray','default'),
         ('tab active','dark green','light gray'),
-        ('infobar','black','dark blue'),
+        ('infobar','light gray','dark blue'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),
@@ -975,4 +975,4 @@ if __name__ == '__main__':
     main()
     # Make sure that the terminal does not try to overwrite the last line of
     # the program, so that everything looks pretty.
-    print ""
+    #print ""

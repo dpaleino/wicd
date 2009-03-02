@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -* coding: utf-8 -*-
 
 """ wicd-curses. (curses/urwid-based) console interface to wicd
 
@@ -99,8 +100,8 @@ class wrap_exceptions:
                 raise
             except :
                 # Quit the loop
-                if 'loop' in locals():
-                    loop.quit()
+                #if 'loop' in locals():
+                loop.quit()
                 # Zap the screen
                 ui.stop()
                 # Print out standard notification:
@@ -487,6 +488,7 @@ class AdHocDialog(Dialog2):
 class appGUI():
     """The UI itself, all glory belongs to it!"""
     def __init__(self):
+        global loop
         self.size = ui.get_cols_rows()
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
@@ -527,20 +529,20 @@ class appGUI():
         # Keymappings proposed by nanotube in #wicd
         keys = [
                 ('H' ,'Help'  ,None),
-                ('->','Config',None),
+                ('right','Config',None),
                 #('  ','         ',None),
                 ('C' ,'Connect',None),
                 ('D' ,'Disconn',None),
                 ('R' ,'Refresh',None),
                 ('P' ,'Prefs',None),
                 ('I' ,'Hidden',None),
-                ('Q' ,'Quit',None)
+                ('Q' ,'Quit',loop.quit)
                ]
                 #(' ' ,'       ',None),
                 #(' ' ,'       ',None),
                 #(' ' ,'       ',None),
 
-        self.footer1 = OptCols(keys)
+        self.footer1 = OptCols(keys,debug=True)
         self.footer2 = urwid.Columns([urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important'),urwid.Text('0',align='right')])
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
@@ -734,15 +736,8 @@ class appGUI():
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
     incr = 0
-    @wrap_exceptions()
+    #@wrap_exceptions()
     def idle_incr(self):
-        theText = " "
-        if self.connecting:
-            theText += "-- "+language['connecting']+' -- '+language["esc_to_cancel"]
-        else:
-            theText += "-- Press H or ? for Help"
-        quit_note = ' -- '+language["press_to_quit"]
-        #self.footer1 = urwid.Text(str(self.incr) + theText+quit_note,wrap='clip')
         self.incr+=1
         return True
 
@@ -765,7 +760,7 @@ class appGUI():
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
         ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
-        # It looks like if I wanted to get the statusbar to update itself
+        # It looks like if I want to get the statusbar to update itself
         # continuously, I would have to use overlay the canvasses and redirect
         # the input.  I'll try to get that working at a later time, if people
         # want that "feature".
@@ -793,7 +788,7 @@ class appGUI():
                 self.connect("wired",0)
             else:
                 # wless list only other option
-                wid,pos  = self.thePile.get_focus().get_focus()
+                wid,pos  =  self.thePile.get_focus().get_focus()
                 self.connect("wireless",pos)
 
         if "esc" in keys:
@@ -875,7 +870,6 @@ class appGUI():
 
 def main():
     global ui
-
     # We are _not_ python.
     misc.RenameProcess('wicd-curses')
 
@@ -908,7 +902,7 @@ def main():
         ('editfc', 'white','dark blue', 'bold'),
         ('editnfc','dark gray','default'),
         ('tab active','dark green','light gray'),
-        ('infobar','black','dark cyan'),
+        ('infobar','black','dark blue'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),
@@ -921,7 +915,8 @@ def main():
 
 def run():
     global loop
-
+    loop = gobject.MainLoop()
+    
     ui.set_mouse_tracking()
     app = appGUI()
 
@@ -933,7 +928,6 @@ def run():
     # I've left this commented out many times.
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
-    loop = gobject.MainLoop()
     # Update what the interface looks like as an idle function
     gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.

@@ -196,8 +196,8 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                     k = self.overlay.keypress(dim, k)
                     if k in ('up','page up'):
                         self._w.set_focus('body')
-                        # Until I figure out a better way to do this, then this will
-                        # have to do.
+                        # Until I figure out a better way to do this, then
+                        # this will have to do.
                         self._w.body.get_focus()[0].get_focus()._invalidate()
                         #self._w.body.keypress(dim,'down')
                     elif k in ('down','page down'):

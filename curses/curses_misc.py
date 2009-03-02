@@ -136,7 +136,8 @@ class MaskingEdit(urwid.Edit):
         Render edit widget and return canvas.  Include cursor when in
         focus.
         """
-        # If we aren't masking anything ATM, then act like an Edit.  No problems.
+        # If we aren't masking anything ATM, then act like an Edit.
+        # No problems.
         if self.mask_mode == "off" or (self.mask_mode == 'no_focus' and focus == True):
             canv = self.__super.render((maxcol,),focus)
             # The cache messes this thing up, because I am totally changing what
@@ -438,7 +439,8 @@ class Dialog2(urwid.WidgetWrap):
     def run(self,ui,parent):
         ui.set_mouse_tracking()
         size = ui.get_cols_rows()
-        overlay = urwid.Overlay(urwid.LineBox(self.view), parent, 'center', self.width,
+        overlay = urwid.Overlay(urwid.LineBox(self.view),
+                                parent, 'center', self.width,
                                 'middle', self.height)
         try:
             while True:
@@ -514,31 +516,80 @@ class InputDialog(Dialog2):
         return exitcode, self.edit.get_edit_text()
 
 
+class ClickCols(urwid.WidgetWrap):
+    def __init__(self,items,callback=None,args=None):
+        cols = urwid.Columns(items)
+        self.__super.__init__(cols)
+        self.callback = callback
+        self.args = args
+    def mouse_event(self,size,event,button,x,y,focus):
+        self.callback(self.args)
+
 # htop-style menu menu-bar on the bottom of the screen
 class OptCols(urwid.WidgetWrap):
     # tuples = [(key,desc,on_event)], on_event currently ignored
     # attrs = (attr_key,attr_desc)
-    def __init__(self,tuples,attrs=('body','infobar')):
+    # mentions of 'left' and right will be converted to <- and -> respectively
+    def __init__(self,tuples,attrs=('body','infobar'),debug=False):
         # Find the longest string.  Keys for this bar should be no greater than
         # 2 characters long (e.g., -> for left)
-        maxlen = 6
-        for i in tuples:
-            newmax = len(i[0])+len(i[1])
-            if newmax > maxlen:
-                maxlen = newmax
+        #maxlen = 6
+        #for i in tuples:
+        #    newmax = len(i[0])+len(i[1])
+        #    if newmax > maxlen:
+        #        maxlen = newmax
         
         # Construct the texts
         textList = []
         i = 0
+        # callbacks map the text contents to its assigned callback.
+        self.callbacks = []
         for cmd in tuples:
+            if cmd[0] == 'left':
+                key = '<-'
+            elif cmd[0] == 'right':
+                key = '->'
+            else:
+                key = cmd[0]
             #theText = urwid.Text([(attrs[0],cmd[0]),(attrs[1],cmd[1])])
-            col = urwid.Columns([('fixed',len(cmd[0]),
-                                      urwid.Text((attrs[0],cmd[0])) ),
-                                  urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])])
-            if i != len(tuples)-1:
-                textList.append(('fixed',maxlen,col))
-            else: # The last one
-                textList.append(col)
+            if debug:
+                callback = self.debugClick
+                args = cmd[1]
+            #self.callbacks.append(cmd[2])
+            col = ClickCols([
+                            ('fixed',len(key),urwid.Text((attrs[0],key)) ),
+                              urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])],
+                              callback,args)
+            #if i != len(tuples)-1:
+            #    textList.append(('fixed',maxlen,col))
+            #else: # The last one
+            textList.append(col)
             i+=1
+        if debug:
+            self.debug = urwid.Text("DEBUG_MODE")
+            textList.append(('fixed',10,self.debug))
+            
         cols = urwid.Columns(textList)
         self.__super.__init__(cols)
+    def debugClick(self,args):
+        self.debug.set_text(args)
+
+    def mouse_event(self,size,event,button,x,y,focus):
+        # Widgets are evenly long (as of current), so...
+        return self._w.mouse_event(size,event,button,x,y,focus)
+        """
+        if self.debug:
+            if x > size[0]-10:
+                return
+            widsize = (size[0]-10)/len(self.callbacks)
+        else:
+            widsize = size[0]/len(self.callbacks)
+        widnum = x/widsize
+        if self.debug:
+            text = str(widnum)
+            if self.callbacks[widnum] == None:
+                text += " None"
+            self.debug.set_text(text)
+        elif self.callbacks[widnum] != None:
+            self.callbacks[widnum]()
+        """

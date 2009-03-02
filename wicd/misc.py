@@ -353,7 +353,11 @@ def get_gettext():
     if osLanguage:
         langs += osLanguage.split(":")
     try:
-        lc, encoding = locale.getdefaultlocale()
+        # This avoids a bug: locale.getdefaultlocale() prefers
+        # LC_CTYPE over LANG/LANGUAGE
+        lc, encoding = locale.getdefaultlocale(envvars=('LC_MESSAGES', 
+                                                        'LC_ALL', 'LANG', 
+                                                        'LANGUAGE'))
     except ValueError, e:
         print str(e)
         print "Default locale unavailable, falling back to en_US"

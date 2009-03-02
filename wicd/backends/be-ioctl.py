@@ -296,6 +296,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         
         ap["bssid"] = cell["bssid"]
         ap["mode"] = cell["mode"]
+        ap["bitrates"] = cell["bitrate"]
         
         if cell["enc"]:
             ap["encryption"] = True
@@ -484,14 +485,27 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         """ Get the current bitrate for the interface. """
         if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        fmt = "ihbb"
+        size = struct.calcsize(fmt)
         try:
-            result = fcntl.ioctl(self.sock.fileno(), SIOCGIWAP, data)[16:]
+            data = fcntl.ioctl(s, 0x8B21, ifreq)[16:]  # 0x8B21 is SIOCGIWRATE in /usr/include/linux/wireless.h
         except IOError, e:
             if self.verbose:
                 print "SIOCGIWAP failed: " + str(e)
             return ""
-        raw_addr = struct.unpack("xxBBBBBB", result[:8])
-        return "%02X:%02X:%02X:%02X:%02X:%02X" % raw_addr
+        f, e, x, x = struct.unpack(fmt, data[:size])
+	return (f / 1000000) + ' Mb/s'
+
+    def GetOperationalMode(self, iwconfig=None):
+        """ Get the MAC address for the interface. """
+        # TODO: implement me
+        return ''
+
+    def GetAvailableAuthMethods(self, iwlistauth=None):
+        """ Get the MAC address for the interface. """
+        # TODO: Implement me
+        return ''
 
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.

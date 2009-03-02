@@ -51,7 +51,7 @@ from wicd import dbusmanager
 
 # Internal Python stuff
 import sys
-from time import sleep
+from time import sleep, strftime, ctime
 
 # Curses UIs for other stuff
 from curses_misc import *
@@ -543,7 +543,9 @@ class appGUI():
                 #(' ' ,'       ',None),
 
         self.footer1 = OptCols(keys,debug=True)
-        self.footer2 = urwid.Columns([urwid.AttrWrap(urwid.Text("If you are seeing this, then something has gone wrong!"),'important'),urwid.Text('0',align='right')])
+        self.time_label = urwid.Text(strftime('%H:%M:%S'))
+        self.status_label = urwid.AttrWrap(urwid.Text('blah'),'important')
+        self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
@@ -707,6 +709,7 @@ class appGUI():
 
     # Cheap little indicator stating that we are actually connecting
     twirl = ['|','/','-','\\']
+    tcount = 0 # Counter for said indicator
     def set_status(self,text,from_idle=False):
         # Set the status text, usually called by the update_status method
         # from_idle : a check to see if we are being called directly from the
@@ -717,6 +720,7 @@ class appGUI():
         if from_idle and not self.connecting:
             #self.update_netlist()
             self.update_status()
+            self.tcount = 0
             #self.update_ui()
             return False
         toAppend = ''
@@ -724,21 +728,22 @@ class appGUI():
         # the wheel.
         if from_idle and self.connecting:
             # This is probably the wrong way to do this, but it works for now.
-            toAppend=self.twirl[self.incr % 4]
-        self.footer2 = urwid.Columns([
-            urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important'),
-            ('fixed',8,urwid.Text(str(self.incr),align='right'))])
-        self.frame.set_footer(urwid.BoxAdapter(
-            urwid.ListBox([self.footer1,self.footer2]),2))
+            toAppend=self.twirl[self.tcount % 4]
+            self.tcount+=1
+        #self.footer2 = urwid.Columns([
+        #    urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important'),
+        #    ('fixed',8,urwid.Text(str(self.time),align='right'))])
+        self.status_label.set_text(text+' '+toAppend)
+        #self.frame.set_footer(urwid.BoxAdapter(
+        #    urwid.ListBox([self.footer1,self.footer2]),2))
         return True
 
     # Make sure the screen is still working by providing a pretty counter.
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
-    incr = 0
     #@wrap_exceptions()
-    def idle_incr(self):
-        self.incr+=1
+    def update_time(self):
+        self.time_label.set_text(strftime('%H:%M:%S'))
         return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
@@ -931,8 +936,8 @@ def run():
     # Update what the interface looks like as an idle function
     gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
-    gobject.timeout_add(1500,app.update_status)
-    gobject.idle_add(app.idle_incr)
+    gobject.timeout_add(2000,app.update_status)
+    gobject.timeout_add(1000,app.update_time)
     # DEFUNCT: Terminate the loop if the UI is terminated.
     #gobject.idle_add(app.stop_loop)
     loop.run()

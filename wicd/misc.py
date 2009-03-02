@@ -58,7 +58,7 @@ ROUTE = 2
 GKSUDO = 1
 KDESU = 2
 KTSUSS = 3
-__sudo_dict = { 
+_sudo_dict = { 
     AUTO : "",
     GKSUDO : "gksudo",
     KDESU : "kdesu",
@@ -172,9 +172,20 @@ def WriteLine(my_file, text):
     """ write a line to a file """
     my_file.write(text + "\n")
 
-def ExecuteScript(script):
+def ExecuteScripts(scripts_dir, verbose=False):
+    """ Execute every executable file in a given directory. """
+    for obj in os.listdir(scripts_dir):
+        obj = os.path.abspath(os.path.join(scripts_dir, obj))
+        if os.path.isfile(obj) and os.access(obj, os.X_OK):
+            ExecuteScript(os.path.abspath(obj), verbose=verbose)
+
+def ExecuteScript(script, verbose=False):
     """ Execute a command and send its output to the bit bucket. """
-    call("%s > /dev/null 2>&1" % script, shell=True)
+    if verbose:
+        print "Executing %s" % script
+    ret = call("%s > /dev/null 2>&1" % script, shell=True)
+    if verbose:
+        "%s returned %s" % (script, ret)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """
@@ -427,7 +438,7 @@ def get_sudo_cmd(msg, prog_num=0):
 def choose_sudo_prog(prog_num=0):
     """ Try to intelligently decide which graphical sudo program to use. """
     if prog_num:
-        return find_path(__sudo_dict[prog_num])
+        return find_path(_sudo_dict[prog_num])
     desktop_env = detect_desktop_environment()
     env_path = os.environ['PATH'].split(":")
     paths = []

@@ -201,10 +201,12 @@ class Controller(object):
     def Disconnect(self, *args, **kargs):
         """ Disconnect from the network. """
         iface = self.iface
-        if self.disconnect_script != None:
+        misc.ExecuteScripts(wpath.disconnectscripts, self.debug)
+        if self.disconnect_script:
             print 'Running disconnect script'
             misc.ExecuteScript(expand_script_macros(self.disconnect_script,
-                                                    'disconnection', *args))
+                                                    'disconnection', *args),
+                               self.debug)
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.FlushRoutes()
@@ -368,6 +370,10 @@ class ConnectThread(threading.Thread):
         iface.Down()
         
     @abortable
+    def run_global_scripts_if_needed(self, script_dir):
+        misc.ExecuteScripts(script_dir, verbose=self.debug)
+
+    @abortable
     def run_script_if_needed(self, script, msg, bssid='wired', essid='wired'):
         """ Execute a given script if needed.
         
@@ -378,7 +384,8 @@ class ConnectThread(threading.Thread):
         """
         if script:
             print 'Executing %s script' % (msg)
-            misc.ExecuteScript(expand_script_macros(script, msg, bssid, essid))
+            misc.ExecuteScript(expand_script_macros(script, msg, bssid, essid),
+                               self.debug)
         
     @abortable
     def flush_routes(self, iface):
@@ -760,6 +767,7 @@ class WirelessConnectThread(ConnectThread):
         self.is_connecting = True
         
         # Run pre-connection script.
+        self.run_global_scripts_if_needed(wpath.preconnectscripts)
         self.run_script_if_needed(self.before_script, 'pre-connection', 
                                   self.network['bssid'], self.network['essid'])
 
@@ -802,6 +810,7 @@ class WirelessConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
+        self.run_global_scripts_if_needed(wpath.postconnectscripts)
         self.run_script_if_needed(self.after_script, 'post-connection', 
                                   self.network['bssid'], self.network['essid'])
 
@@ -970,6 +979,7 @@ class WiredConnectThread(ConnectThread):
         self.is_connecting = True
 
         # Run pre-connection script.
+        self.run_global_scripts_if_needed(wpath.preconnectscripts)
         self.run_script_if_needed(self.before_script, 'pre-connection', 'wired', 
                                   'wired')
 
@@ -988,6 +998,7 @@ class WiredConnectThread(ConnectThread):
         self.set_dns_addresses()
         
         # Run post-connection script.
+        self.run_global_scripts_if_needed(wpath.postconnectscripts)
         self.run_script_if_needed(self.after_script, 'post-connection', 'wired', 
                                   'wired')
 

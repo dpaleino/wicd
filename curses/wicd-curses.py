@@ -161,9 +161,6 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 # working...
 # Also defunct.
 # Current list header is STR,ESSID,ENCRYPT,BSSID,TYPE,CHANNEL
-#def gen_list_header():
-#    return '%3s %4s  %s %19s %s ' % ('NUM','STR','BSSID','CHANNEL','ESSID')
-
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
 # DBUS interfaces do.  ^_^
@@ -297,16 +294,26 @@ Once there, you can adjust (or add) the "beforescript", "afterscript", and "disc
 ##### URWID SUPPORT CLASSES
 ########################################
 
+def gen_list_header():
+    if daemon.GetSignalDisplayType() == 0:
+        # Allocate 25 cols for the ESSID name
+        essidgap = 25
+    else:
+        # Need 3 more to accomodate dBm strings (I think)
+        essidgap = 28
+    return 'C  %s %*s %9s %17s %6s %s' % ('STR',essidgap,'ESSID','ENCRYPT','BSSID','MODE','CHNL')
+
 # Wireless network label
 class NetLabel(urwid.WidgetWrap):
     def __init__(self, id, is_active):
-    # Pick which strength measure to use based on what the daemon says
+        # Pick which strength measure to use based on what the daemon says
+        # gap allocates more space to the first module
         if daemon.GetSignalDisplayType() == 0:
             strenstr = 'quality'
-            gap = 3
+            gap = 4 # Allow for 100%
         else:
             strenstr = 'strength'
-            gap = 5
+            gap = 7 # -XX dbm = 7
         self.id = id
         # All of that network property stuff
         self.stren = daemon.FormatSignalForPrinting(
@@ -316,7 +323,7 @@ class NetLabel(urwid.WidgetWrap):
         self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else language['unsecured']
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
-        theString = '  %*s  %25s %9s %17s %6s: %s' % (gap,
+        theString = '  %*s %25s %9s %17s %6s %4s' % (gap,
                 self.stren,self.essid,self.encrypt,self.bssid,self.mode,self.channel)
         if is_active:
             theString = '>'+theString[1:]
@@ -481,6 +488,7 @@ class AdHocDialog(Dialog2):
                  self.key_edit.get_edit_text())
 
         return exitcode, data
+
 ########################################
 ##### APPLICATION INTERFACE CLASS
 ########################################
@@ -504,7 +512,8 @@ class appGUI():
 
         header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
         self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
-        self.wlessH=urwid.Filler(urwid.Text("Wireless Network(s)"))
+        self.list_header=urwid.AttrWrap(urwid.Text(gen_list_header()),'listbar')
+        self.wlessH=NSelListBox([urwid.Text("Wireless Network(s)"),self.list_header])
 
         #if wireless.GetNumberOfNetworks() == 0:
         #    wireless.Scan()
@@ -614,6 +623,7 @@ class appGUI():
         # Run focus-collecting code if we are not running this for the first time
         if not firstrun:
             self.update_focusloc()
+            self.list_header.set_text(gen_list_header())
         """ Updates the overall network list."""
         if not state:
             state, x = daemon.GetConnectionStatus()
@@ -635,7 +645,7 @@ class appGUI():
                 #if firstrun:
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                            ('fixed',1,self.wiredCB),
-                                           ('fixed',1,self.wlessH),
+                                           ('fixed',2,self.wlessH),
                                                       self.wlessLB] )
                 if not firstrun:
                     self.frame.body = self.thePile
@@ -910,6 +920,7 @@ def main():
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
         ('timebar','dark gray','default'),
+        ('listbar','dark gray','default'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),

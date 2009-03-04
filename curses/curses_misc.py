@@ -49,7 +49,12 @@ class SelText(urwid.Text):
         """Don't handle any keys."""
         return key
 
-# This class is annoying.  ^_^
+# ListBox that can't be selected.
+class NSelListBox(urwid.ListBox):
+    def selectable(self):
+        return False
+
+# This class is annoying.  :/
 class DynWrap(urwid.AttrWrap):
     """
     Makes an object have mutable selectivity.  Attributes will change like

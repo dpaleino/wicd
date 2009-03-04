@@ -157,25 +157,13 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
     return True
 
 
-# Self explanitory, and not used until I can get some list sort function
-# working...
-# Also defunct.
-# Current list header is STR,ESSID,ENCRYPT,BSSID,TYPE,CHANNEL
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
 # DBUS interfaces do.  ^_^
 # Whatever calls this must be exception-wrapped if it is run if the UI is up
 def gen_network_list():
-    # Pick which strength measure to use based on what the daemon says
-    if daemon.GetSignalDisplayType() == 0:
-        strenstr = 'quality'
-        gap = 3
-    else:
-        strenstr = 'strength'
-        gap = 5
-
-    id = 0
-    wiredL = []
+    #id=0
+    #wiredL = []
     #is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
     # This one makes a list of strings to put in a combo box.
     #for profile in wired.GetWiredProfileList():
@@ -615,6 +603,7 @@ class appGUI():
                 where = self.thePile.get_focus().get_focus()[1]
                 #where = self.wlessLB.get_focus()[1]
         self.focusloc = (wlessorwired,where)
+    
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
     # TODO: Preserve current focus when updating the list.
@@ -660,7 +649,7 @@ class appGUI():
                     else:
                         self.thePile.set_focus(self.wiredCB)
             else:
-                self.thePile = urwid.Pile([('fixed',1,self.wlessH),self.wlessLB] )
+                self.thePile = urwid.Pile([('fixed',2,self.wlessH),self.wlessLB] )
                 if not firstrun:
                     self.frame.body = self.thePile
                 #if self.focusloc[0] == self.wlessLB:

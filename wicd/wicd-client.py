@@ -53,6 +53,8 @@ from wicd import gui
 from wicd import dbusmanager
 from wicd.guiutil import error
 
+from wicd.translations import language
+
 ICON_AVAIL = True
 USE_EGG = False
 # Import egg.trayicon if we're using an older gtk version
@@ -71,9 +73,6 @@ if __name__ == '__main__':
     
 daemon = wireless = wired = lost_dbus_id = None
 DBUS_AVAIL = False
-
-language = misc.get_language_list_tray()
-
 
 def catchdbus(func):
     def wrapper(*args, **kwargs):
@@ -179,7 +178,7 @@ class TrayIcon(object):
         def set_connecting_state(self, info):
             """ Sets the icon info for a connecting state. """
             if info[0] == 'wired' and len(info) == 1:
-                cur_network = language['wired']
+                cur_network = language['wired_network']
             else:
                 cur_network = info[1]
             self.tr.set_tooltip(language['connecting'] + " to " + 

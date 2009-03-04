@@ -67,9 +67,10 @@ from optparse import OptionParser
 
 CURSES_REVNO=wpath.curses_revision
 
-language = misc.get_language_list_gui()
-# We need 'Connecting' without the '...'
-language['connecting']=misc.get_language_list_tray()['connecting']
+# Fix strings in wicd-curses
+from wicd.translations import language
+for i in language.keys():
+    language[i] = language[i].decode('utf8')
 
 ########################################
 ##### SUPPORT CLASSES

@@ -42,6 +42,7 @@ except Exception, e:
     print 'failed to find revision number:'
     print e
 
+
 class configure(Command):
     description = "configure the paths that Wicd will be installed to"
     
@@ -51,6 +52,7 @@ class configure(Command):
         ('lib=', None, 'set the lib directory'),
         ('share=', None, 'set the share directory'),
         ('etc=', None, 'set the etc directory'),
+        ('scripts=', None, 'set the global scripts directory'),
         ('images=', None, 'set the image directory'),
         ('encryption=', None, 'set the encryption template directory'),
         ('bin=', None, 'set the bin directory'),
@@ -91,11 +93,11 @@ class configure(Command):
         ('no-install-ncurses', None, 'do not install the ncurses client')
         ]
         
-
     def initialize_options(self):
         self.lib = '/usr/lib/wicd/'
         self.share = '/usr/share/wicd/'
         self.etc = '/etc/wicd/'
+        self.scripts = self.etc + "scripts/"
         self.icons = '/usr/share/icons/hicolor/'
         self.images = '/usr/share/pixmaps/wicd/'
         self.encryption = self.etc + 'encryption/templates/'
@@ -160,7 +162,6 @@ class configure(Command):
             self.init = '/etc/rc.d/'
         else:
             self.init = 'FAIL'
-            self.initfile = 'FAIL'
             self.no_install_init = True
             self.distro_detect_failed = True
             print 'WARNING: Unable to detect the distribution in use.  ' + \
@@ -175,10 +176,12 @@ class configure(Command):
         # If we don't get anything from *-config, or it didn't run properly, 
         # or the path is not a proper absolute path, raise an error
         try:
-            pmtemp = subprocess.Popen(["pkg-config","--variable=pm_sleephooks","pm-utils"], stdout=subprocess.PIPE)
+            pmtemp = subprocess.Popen(["pkg-config", "--variable=pm_sleephooks", 
+                                       "pm-utils"], stdout=subprocess.PIPE)
             returncode = pmtemp.wait() # let it finish, and get the exit code
             pmutils_candidate = pmtemp.stdout.readline().strip() # read stdout
-            if len(pmutils_candidate) == 0 or returncode != 0 or not os.path.isabs(pmutils_candidate):
+            if len(pmutils_candidate) == 0 or returncode != 0 or \
+               not os.path.isabs(pmutils_candidate):
                 raise ValueError
             else:
                 self.pmutils = pmutils_candidate
@@ -189,7 +192,8 @@ class configure(Command):
             kdetemp = subprocess.Popen(["kde-config","--prefix"], stdout=subprocess.PIPE)
             returncode = kdetemp.wait() # let it finish, and get the exit code
             kdedir_candidate = kdetemp.stdout.readline().strip() # read stdout
-            if len(kdedir_candidate) == 0 or returncode != 0 or not os.path.isabs(kdedir_candidate):
+            if len(kdedir_candidate) == 0 or returncode != 0 or \
+               not os.path.isabs(kdedir_candidate):
                 raise ValueError
             else:
                 self.kdedir = kdedir_candidate + '/share/autostart'
@@ -199,10 +203,11 @@ class configure(Command):
                 kde4temp = subprocess.Popen(["kde4-config","--prefix"], stdout=subprocess.PIPE)
                 returncode = kde4temp.wait() # let it finish, and get the exit code
                 kde4dir_candidate = kde4temp.stdout.readline().strip() # read stdout
-                if len(kde4dir_candidate) == 0 or returncode != 0 or not os.path.isabs(kde4dir_candidate):
+                if len(kde4dir_candidate) == 0 or returncode != 0 or \
+                   not os.path.isabs(kde4dir_candidate):
                     raise ValueError
                 else:
-                   self.kdedir = kde4dir_candidate + '/share/autostart'
+                    self.kdedir = kde4dir_candidate + '/share/autostart'
             except (OSError, ValueError):
                 # If neither kde-config nor kde4-config are not present or 
                 # return an error, then we can assume that kde isn't installed
@@ -216,15 +221,12 @@ class configure(Command):
         self.initfilename = os.path.basename(self.initfile)
         self.wicdgroup = 'users'
 
-
     def finalize_options(self):
-        if self.distro_detect_failed == True:
-            if not self.no_install_init:
-                if self.init == 'FAIL' or self.initfile == 'FAIL':
-                    print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \
-                          'Please specify --init and --initfile to continue with configuration.'
-                    
-                
+        if self.distro_detect_failed and not self.no_install_init and \
+           'FAIL' in [self.init, self.initfile]:
+            print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \
+                  'Please specify --init and --initfile to continue with configuration.'
+
         # loop through the argument definitions in user_options
         for argument in self.user_options:
             # argument name is the first item in the user_options list
@@ -247,12 +249,15 @@ class configure(Command):
         values = list()
         for argument in self.user_options:
             if argument[0].endswith('='):
-                print argument[0][:-1],'is',
-                print getattr(self, argument[0][:-1])
-                values.append((argument[0][:-1], getattr(self, argument[0][:-1].replace('-','_'))))
+                cur_arg = argument[0][:-1]
+                cur_arg_value = getattr(self, cur_arg)
+                print "%s is %s" % (cur_arg, cur_arg_value)
+                values.append((cur_arg, cur_arg_value.replace('-', '_')))
             else:
-                print "Found switch",argument,getattr(self, argument[0].replace('-','_'))
-                values.append((argument[0], bool(getattr(self, argument[0].replace('-','_')))))
+                cur_arg = argument[0]
+                cur_arg_value = getattr(self, cur_arg.replace('-', '_'))
+                print "Found switch %s %s" % (argument, cur_arg_value) 
+                values.append((cur_arg, bool(cur_arg_value)))
         
         print 'Replacing values in template files...'
         for item in os.listdir('in'):
@@ -265,7 +270,8 @@ class configure(Command):
                 item_out = open(final_name, 'w')
                 for line in item_in.readlines():
                     for item, value in values:
-                        line = line.replace('%' + str(item.upper().replace('-','_')) + '%', str(value))
+                        line = line.replace('%' + str(item.upper().replace('-','_')) + \
+                                            '%', str(value))
 
                     # other things to replace that aren't arguments
                     line = line.replace('%VERSION%', str(VERSION_NUM))
@@ -353,7 +359,8 @@ class get_translations(Command):
             shutil.move(pofile, lang_identifier+'.po')
             print 'Got',lang_identifier
             os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
-            os.system('msgfmt --output-file=translations/'+lang_identifier+'/LC_MESSAGES/wicd.mo '+lang_identifier+'.po')
+            os.system('msgfmt --output-file=translations/' + lang_identifier +
+                      '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
             os.remove(lang_identifier+'.po')
 
 
@@ -373,7 +380,7 @@ class uninstall(Command):
 
 try:
     import wpath
-except:
+except ImportError:
     print '''Error importing wpath.py. You can safely ignore this
 message. It is probably because you haven't run python setup.py
 configure yet or you are running it for the first time.'''
@@ -400,22 +407,29 @@ try:
     (wpath.icons + '22x22/apps/', ['icons/22px/wicd-client.png']),
     (wpath.icons + '16x16/apps/', ['icons/16px/wicd-client.png']),
     (wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]),
-    (wpath.encryption, [('encryption/templates/' + b) for b in os.listdir('encryption/templates') if not b.startswith('.')]),
+    (wpath.encryption, [('encryption/templates/' + b) for b in 
+                        os.listdir('encryption/templates') if not b.startswith('.')]),
     (wpath.networks, []),
     (wpath.bin, ['scripts/wicd-client', ]), 
     (wpath.sbin,  ['scripts/wicd', ]),  
     (wpath.share, ['data/wicd.glade', ]),
-    (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py', 'wicd/suspend.py', 'wicd/autoconnect.py']), #'wicd/wicd-gui.py', 
+    (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py',
+                 'wicd/wicd-daemon.py', 'wicd/configscript.py',
+                 'wicd/suspend.py', 'wicd/autoconnect.py']), 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
+    (wpath.scripts, []),
+    (wpath.disconnectscripts, []),
+    (wpath.preconnectscripts, []),
+    (wpath.postconnectscripts, []),
     ]
     if not wpath.no_install_ncurses:
-        data.append(( wpath.lib, ['curses/curses_misc.py']))
-        data.append(( wpath.lib, ['curses/prefs_curses.py']))
-        data.append(( wpath.lib, ['curses/wicd-curses.py']))
-        data.append(( wpath.lib, ['curses/netentry_curses.py']))
-        data.append(( wpath.lib, ['curses/configscript_curses.py']))
-        data.append(( wpath.bin, ['scripts/wicd-curses'])) 
+        data.append((wpath.lib, ['curses/curses_misc.py']))
+        data.append((wpath.lib, ['curses/prefs_curses.py']))
+        data.append((wpath.lib, ['curses/wicd-curses.py']))
+        data.append((wpath.lib, ['curses/netentry_curses.py']))
+        data.append((wpath.lib, ['curses/configscript_curses.py']))
+        data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
     piddir = os.path.dirname(wpath.pidfile)
@@ -423,22 +437,23 @@ try:
         piddir += '/'
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
-        data.append(( wpath.docdir, [ 'INSTALL', 'LICENSE', 'AUTHORS', 'README', 'CHANGES','other/WHEREAREMYFILES' ]))
+        data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
+                                     'README', 'CHANGES', 'other/WHEREAREMYFILES']))
     if not wpath.no_install_kde:
-        data.append(( wpath.kdedir, [ 'other/wicd-tray.desktop' ]))
+        data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
     if not wpath.no_install_init:
-        data.append(( wpath.init, [ wpath.initfile ]))
+        data.append((wpath.init, [ wpath.initfile ]))
     if not wpath.no_install_man:
-        data.append(( wpath.mandir + 'man8/', [ 'man/wicd.8' ]))
-        data.append(( wpath.mandir + 'man5/', [ 'man/wicd-manager-settings.conf.5' ]))
-        data.append(( wpath.mandir + 'man5/', [ 'man/wicd-wired-settings.conf.5' ]))
-        data.append(( wpath.mandir + 'man5/', [ 'man/wicd-wireless-settings.conf.5' ]))
-        data.append(( wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
+        data.append((wpath.mandir + 'man8/', [ 'man/wicd.8' ]))
+        data.append((wpath.mandir + 'man5/', [ 'man/wicd-manager-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/', [ 'man/wicd-wired-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/', [ 'man/wicd-wireless-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
     if not wpath.no_install_acpi:
-        data.append(( wpath.resume, ['other/80-wicd-connect.sh' ]))
-        data.append(( wpath.suspend, ['other/50-wicd-suspend.sh' ]))
+        data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
+        data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))
     if not wpath.no_install_pmutils:
-        data.append(( wpath.pmutils, ['other/55wicd' ]))
+        data.append((wpath.pmutils, ['other/55wicd' ]))
     print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):
@@ -448,22 +463,24 @@ try:
             if codes[0].lower() == codes[1].lower():
                 short_language = codes[0].lower()
             print short_language,
-            data.append((wpath.translations + short_language + '/LC_MESSAGES/', ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
-    print
+            data.append((wpath.translations + short_language + '/LC_MESSAGES/',
+                        ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
 except Exception, e:
     print str(e)
     print '''Error setting up data array. This is normal if 
 python setup.py configure has not yet been run.'''
 
 
-wpactrl_ext = Extension(name = 'wpactrl', sources = ['depends/python-wpactrl/wpa_ctrl.c', 'depends/python-wpactrl/wpactrl.c'],
-                extra_compile_args = ["-fno-strict-aliasing"])
+wpactrl_ext = Extension(name = 'wpactrl', 
+                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
+                                   'depends/python-wpactrl/wpactrl.c'],
+                        extra_compile_args = ["-fno-strict-aliasing"])
 
-iwscan_ext = Extension(name      = 'iwscan',
-                libraries = ['iw'],
-                sources   = ['depends/python-iwscan/pyiwscan.c'])
+iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
+                       sources = ['depends/python-iwscan/pyiwscan.c'])
     
-setup(cmdclass={'configure' : configure, 'get_translations' : get_translations, 'uninstall' : uninstall, 'test' : test, 'cleargenerated' : cleargenerated},
+setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
+                'uninstall' : uninstall, 'test' : test, 'cleargenerated' : cleargenerated},
       name="Wicd",
       version=VERSION_NUM,
       description="A wireless and wired network manager",
@@ -472,20 +489,17 @@ Wicd supports wired and wireless networks, and capable of
 creating and tracking profiles for both.  It has a 
 template-based wireless encryption system, which allows the user
 to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicd will automatically
+encryption types, such as WPA and WEP. Wicdl will automatically
 connect at startup to any preferred network within range.
 """,
       author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@users.sourceforge.net, imdano@users.sourceforge.net",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      ## scripts=['configscript.py', 'autoconnect.py', 'gui.py', 'wicd.py', 'daemon.py', 'suspend.py', 'monitor.py'],
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools', 'wicd.wpath', 
-                  'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 'wicd.logfile', 'wicd.backend', 
-                  'wicd.configmanager', 'wicd.guiutil'], 
+      py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
+                  'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+                  'wicd.logfile','wicd.backend','wicd.configmanager',
+                  'wicd.guiutil','wicd.translations'], 
       ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )
-##print "Running post-install configuration..."
-##os.system("other/postinst")
-##print 'Done.'

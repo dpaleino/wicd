@@ -39,7 +39,7 @@ daemon = None
 wireless = None
 wired = None
 
-language = misc.get_language_list_gui()
+from translations import language
 
 def setup_dbus():
     global daemon, wireless, wired

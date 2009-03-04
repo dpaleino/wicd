@@ -253,7 +253,7 @@ class configure(Command):
                 cur_arg = argument[0][:-1]
                 cur_arg_value = getattr(self, cur_arg)
                 print "%s is %s" % (cur_arg, cur_arg_value)
-                values.append((cur_arg, cur_arg_value.replace('-', '_')))
+                values.append((cur_arg, getattr(self, cur_arg.replace('-','_'))))
             else:
                 cur_arg = argument[0]
                 cur_arg_value = getattr(self, cur_arg.replace('-', '_'))

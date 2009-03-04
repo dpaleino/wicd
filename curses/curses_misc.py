@@ -545,12 +545,21 @@ class OptCols(urwid.WidgetWrap):
         # callbacks map the text contents to its assigned callback.
         self.callbacks = []
         for cmd in tuples:
-            if cmd[0] == 'left':
-                key = '<-'
-            elif cmd[0] == 'right':
-                key = '->'
-            else:
-                key = cmd[0]
+            splitcmd = cmd[0].split()
+            key = ''
+            for part in splitcmd:
+                if part == 'ctrl':
+                    key+='C^'
+                elif part == 'meta':
+                    key+='M^'
+                else:
+                   if part == 'left':
+                       key += '<-'
+                   elif part == 'right':
+                       key += '->'
+                   else:
+                       key += part
+            
             #theText = urwid.Text([(attrs[0],cmd[0]),(attrs[1],cmd[1])])
             if debug:
                 callback = self.debugClick

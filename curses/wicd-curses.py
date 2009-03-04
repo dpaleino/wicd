@@ -543,7 +543,9 @@ class appGUI():
                 #(' ' ,'       ',None),
 
         self.footer1 = OptCols(keys,debug=True)
-        self.time_label = urwid.Text(strftime('%H:%M:%S'))
+        #self.time_label = urwid.Text(strftime('%H:%M:%S'))
+        self.time_label = \
+                  urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
         self.status_label = urwid.AttrWrap(urwid.Text('blah'),'important')
         self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
         self.footerList = urwid.ListBox([self.footer1,self.footer2])
@@ -892,29 +894,29 @@ def main():
     # Default Color scheme.
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
-    # Note: the current palette below is optimized for the linux console.
-    # For example, this looks particularly bad on a default-colored XTerm.
-    # NB: To find current terminal background use variable COLORFGBG
+
+    # Thanks to nanotube on #wicd for helping with this
     ui.register_palette([
         ('body','default','default'),
         ('focus','dark magenta','light gray'),
         ('header','light blue','default'),
         ('important','light red','default'),
         ('connected','dark green','default'),
-        ('connected focus','default','dark green'),
+        ('connected focus','black','dark green'),
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
         ('editfc', 'white','dark blue', 'bold'),
-        ('editnfc','dark gray','default'),
+        ('editnfc','dark gray','default','bold'),
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
+        ('timebar','dark gray','default'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','dark blue','default'),
         ('red','dark red','default'),
         ('bold','white','black','bold')])
-    # This is a wrapper around a function that calls another a function that is a
-    # wrapper around a infinite loop.  Fun.
+    # This is a wrapper around a function that calls another a function that
+    # is a wrapper around a infinite loop.  Fun.
     urwid.set_encoding('utf8')
     ui.run_wrapper(run)
 

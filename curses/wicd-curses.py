@@ -212,24 +212,51 @@ def about_dialog(body):
     about = TextDialog(theText,16,55,header=('header','About Wicd'))
     about.run(ui,body)
 
+# Modeled after htop's help
 def help_dialog(body):
-    theText = [
+    textT  = urwid.Text(('header','Wicd-curses help'),'right') 
+    textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REVNO),' using wicd ',unicode(daemon.Hello()),'\n'])
+
+    textH = urwid.Text([
 "For more detailed help, consult the wicd-curses(8) man page.\n",
-"\n", "All controls are case sensitive\n",
-('bold','H')," or ",('bold','h'),' or ',('bold','?'),"      Display this help dialog\n",
-('bold','enter'),"            Connect to selected network\n",
-('bold','D'),"                Disconnect from all networks\n",
-('bold','ESC'),"              Stop a network connection in progress\n",
-('bold','F5')," or ", ('bold','R'),"          Refresh network list\n",
-('bold','P'),"                Prefrences dialog\n",
-('bold','I'),"                Scan for hidden networks\n",
-('bold','S'),"                Select scripts\n",
-('bold','O'),"                Set up Ad-hoc network\n",
-('bold','C'),"                Configure Selected Network\n",
-('bold','A'),"                Display 'about' dialog\n"
-    ]
-    help = TextDialog(theText,18,62,header=('header',"Wicd-Curses Help"))
-    help.run(ui,body)
+('bold','->'),' and ',('bold','<-')," are the right and left arrows respectively\n"])
+
+    text1 = urwid.Text([
+('bold','H h ?'),": Display this help dialog\n",
+('bold','enter'),": Connect to selected network\n",
+('bold','    D'),": Disconnect from all networks\n",
+('bold','  ESC'),": Stop a network connection in progress\n",
+('bold',' F5 R'),": Refresh network list\n",
+('bold','    P'),": Prefrences dialog\n",
+    ])
+    text2 = urwid.Text([
+('bold','    I'),": Scan for hidden networks\n",
+('bold','    S'),": Select scripts\n",
+('bold','    O'),": Set up Ad-hoc network\n",
+('bold','   ->'),": Configure selected network\n",
+('bold','    A'),": Display 'about' dialog\n",
+('bold','    Q'),": Quit wicd-curses\n",
+    ])
+    textF = urwid.Text('Press any key to return.')
+    blank = urwid.Text('')
+    # Pile containing a text and columns?
+    cols = urwid.Columns([text1,text2])
+    pile = urwid.Pile([textH,cols])
+    fill = urwid.Filler(pile)
+    frame = urwid.Frame(fill,header=urwid.Pile([textT,textSH]),footer=textF)
+    dim = ui.get_cols_rows()
+    while True:
+        ui.draw_screen(dim, frame.render(dim, True))
+            
+        keys = ui.get_input()
+        if 'window resize' in keys:
+            dim = ui.get_cols_rows()
+        elif ui.get_input():
+            break
+        #elif keys != '':
+        #    break
+    #help = TextDialog(theText,18,62,header=('header',"Wicd-Curses Help"))
+    #help.run(ui,body)
 
 def run_configscript(parent,netname,nettype):
     configfile = wpath.etc+netname+'-settings.conf'
@@ -912,7 +939,7 @@ def main():
         ('listbar','dark gray','default'),
         # Simple colors around text
         ('green','dark green','default'),
-        ('blue','dark blue','default'),
+        ('blue','light blue','default'),
         ('red','dark red','default'),
         ('bold','white','black','bold')])
     # This is a wrapper around a function that calls another a function that

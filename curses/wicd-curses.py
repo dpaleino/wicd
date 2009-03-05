@@ -251,7 +251,7 @@ def help_dialog(body):
         keys = ui.get_input()
         if 'window resize' in keys:
             dim = ui.get_cols_rows()
-        elif ui.get_input():
+        elif keys:
             break
         #elif keys != '':
         #    break

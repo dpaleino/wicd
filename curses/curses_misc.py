@@ -171,9 +171,10 @@ class TabColumns(urwid.WidgetWrap):
     attr = normal attributes
     attrsel = attribute when active
     """
-    def __init__(self,tab_str,tab_wid,title,bottom_part,attr=('body','focus'),
+    # FIXME Make the bottom_part optional
+    def __init__(self,tab_str,tab_wid,title,bottom_part=None,attr=('body','focus'),
             attrsel='tab active', attrtitle='header'):
-        self.bottom_part = bottom_part
+        #self.bottom_part = bottom_part
         #title_wid = urwid.Text((attrtitle,title),align='right')
         column_list = []
         for w in tab_str:
@@ -195,7 +196,7 @@ class TabColumns(urwid.WidgetWrap):
         self.pile = urwid.Pile([
             ('fixed',1,urwid.Filler(self.columns,'top')),
             urwid.Filler(lbox,'top',height=('relative',99)),
-            ('fixed',1,urwid.Filler(self.bottom_part,'bottom'))
+            #('fixed',1,urwid.Filler(self.bottom_part,'bottom'))
             ])
         if not firstrun:
             self.frame.set_body(self.pile)
@@ -205,7 +206,7 @@ class TabColumns(urwid.WidgetWrap):
         return True
 
     def keypress(self,size,key):
-        self._w.keypress(size,key)
+        key = self._w.keypress(size,key)
         if key == "meta [" or key == "meta ]":
             self._w.get_body().set_focus(0)
             newK = 'left' if key[-1] == '[' else 'right'
@@ -220,7 +221,8 @@ class TabColumns(urwid.WidgetWrap):
                 self.columns.get_focus().set_attr('tab active')
                 self.active_tab = self.columns.get_focus()
                 self.gen_pile(self.tab_map[self.active_tab])
-            return key
+        
+        return key
         #    self.listbox.body = lw
 
 
@@ -346,7 +348,6 @@ class ComboBox(urwid.WidgetWrap):
         self.build_combobox(self.parent,self.ui,self.row)
     def build_combobox(self,parent,ui,row):
         str,trash =  self.label.get_text()
-
 
         self.cbox = DynWrap(SelText([self.list[self.focus]+'    vvv']),
                 attrs=self.attrs,focus_attr=self.focus_attr)

@@ -564,9 +564,6 @@ class appGUI():
                 ('I' ,'Hidden',None),
                 ('Q' ,'Quit',loop.quit)
                ]
-                #(' ' ,'       ',None),
-                #(' ' ,'       ',None),
-                #(' ' ,'       ',None),
 
         self.primaryCols = OptCols(keys,debug=True)
         #self.time_label = urwid.Text(strftime('%H:%M:%S'))
@@ -607,7 +604,6 @@ class appGUI():
                                   ('<-','OK'),
                                   ('ESC','Cancel')
                                   ],debug=True )
-
 
     # Does what it says it does
     def lock_screen(self):
@@ -650,7 +646,6 @@ class appGUI():
     
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
-    # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
         # Don't even try to do this if we are running a dialog
@@ -754,7 +749,6 @@ class appGUI():
                 self.set_status(language['not_connected'])
                 self.update_ui()
                 return True
-
 
     # Cheap little indicator stating that we are actually connecting
     twirl = ['|','/','-','\\']
@@ -873,11 +867,14 @@ class appGUI():
                 if not self.pref:
                     self.pref = PrefsDialog(self.frame,(0,1),ui,
                             dbusmanager.get_dbus_ifaces()) 
-                if self.pref.run(ui,self.size,self.frame):
-                    self.pref.save_settings()
-                self.update_ui()
+                self.pref.load_settings()
+                self.pref.ready_widgets(ui,self.frame)
+                self.frame.set_footer(urwid.Pile([self.prefCols,self.footer2]))
+                self.diag = self.pref
+                self.frame.set_body(self.diag)
+                # Halt here, keypress gets passed to the dialog otherwise
+                return True
             if "A" in keys:
-                self.footer1 = self.confCols
                 about_dialog(self.frame)
             if "C" in keys:
                 # Same as "enter" for now
@@ -925,7 +922,8 @@ class appGUI():
             if self.diag:
                 if k == 'esc':
                     self.restore_primary()
-                if k == 'left' or k == 'meta enter':
+                if (k == 'left' and self.diag.__class__.__mro__[0] == \
+                        type(urwid.WidgetWrap))  or k == 'meta enter':
                     self.diag.save_settings()
                     self.restore_primary()
         return True

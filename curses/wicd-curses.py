@@ -58,7 +58,7 @@ from curses_misc import *
 from prefs_curses import PrefsDialog
 import netentry_curses
 
-from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog
+from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog,AdvancedSettingsDialog
 
 from optparse import OptionParser
 
@@ -922,8 +922,7 @@ class appGUI():
             if self.diag:
                 if k == 'esc':
                     self.restore_primary()
-                if (k == 'left' and self.diag.__class__.__mro__[0] == \
-                        type(urwid.WidgetWrap))  or k == 'meta enter':
+                if (k == 'left' and issubclass(self.diag.__class__,AdvancedSettingsDialog))  or k == 'meta enter':
                     self.diag.save_settings()
                     self.restore_primary()
         return True

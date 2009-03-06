@@ -880,16 +880,15 @@ class appGUI():
                 self.footer1 = self.confCols
                 about_dialog(self.frame)
             if "C" in keys:
-                focus = self.thePile.get_focus()
+                # Same as "enter" for now
+                focus = self.frame.body.get_focus()
                 if focus == self.wiredCB:
-                    WiredSettingsDialog(self.wiredCB.get_body().
-                            get_selected_profile()).run(ui,self.size,self.frame)
+                    self.special = focus
+                    self.connect("wired",0)
                 else:
-                    # wireless list only other option
-                    wid,pos  = self.thePile.get_focus().get_focus()
-                    WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
-                #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
-                #self.netentry.run(ui,self.size,self.frame)
+                    # wless list only other option
+                    wid,pos  =  self.thePile.get_focus().get_focus()
+                    self.connect("wireless",pos)
             if "I" in keys:
                 self.raise_hidden_network_dialog()
             if "H" in keys or 'h' in keys or '?' in keys:

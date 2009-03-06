@@ -314,9 +314,9 @@ def gen_list_header():
         # Allocate 25 cols for the ESSID name
         essidgap = 25
     else:
-        # Need 3 more to accomodate dBm strings (I think)
+        # Need 3 more to accomodate dBm strings
         essidgap = 28
-    return 'C  %s %*s %9s %17s %6s %s' % ('STR',essidgap,'ESSID','ENCRYPT','BSSID','MODE','CHNL')
+    return 'C %s %*s %9s %17s %6s %s' % ('STR ',essidgap,'ESSID','ENCRYPT','BSSID','MODE','CHNL')
 
 # Wireless network label
 class NetLabel(urwid.WidgetWrap):
@@ -338,7 +338,7 @@ class NetLabel(urwid.WidgetWrap):
         self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else language['unsecured']
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
-        theString = '  %*s %25s %9s %17s %6s %4s' % (gap,
+        theString = '  %-*s %25s %9s %17s %6s %4s' % (gap,
                 self.stren,self.essid,self.encrypt,self.bssid,self.mode,self.channel)
         if is_active:
             theString = '>'+theString[1:]
@@ -536,7 +536,9 @@ class appGUI():
 
         # These are empty to make sure that things go my way.
         wiredL,wlessL = [],[]# = gen_network_list()
+
         self.frame = None
+        self.diag = None
 
         self.wiredCB = urwid.Filler(WiredComboBox(wiredL))
         self.wlessLB = urwid.ListBox(wlessL)
@@ -566,19 +568,22 @@ class appGUI():
                 #(' ' ,'       ',None),
                 #(' ' ,'       ',None),
 
-        self.footer1 = OptCols(keys,debug=True)
+        self.primaryCols = OptCols(keys,debug=True)
         #self.time_label = urwid.Text(strftime('%H:%M:%S'))
         self.time_label = \
                   urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
         self.status_label = urwid.AttrWrap(urwid.Text('blah'),'important')
         self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
-        self.footerList = urwid.ListBox([self.footer1,self.footer2])
+        self.footerList = urwid.Pile([self.primaryCols,self.footer2])
         # Pop takes a number!
         #walker.pop(1)
         self.frame = urwid.Frame(self.thePile,
                                  header=header,
-                                 footer=urwid.BoxAdapter(self.footerList,2))
+                                 footer=self.footerList)
         self.wiredCB.get_body().build_combobox(self.frame,ui,3)
+
+        # Init the other columns used in the program
+        self.init_other_optcols()
 
         self.frame.set_body(self.thePile)
         # Booleans gallore!
@@ -591,6 +596,18 @@ class appGUI():
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
+
+    def init_other_optcols(self):
+        # The "tabbed" preferences dialog
+        self.prefCols = OptCols( [('meta enter','OK'),
+                                  ('ESC','Cancel'),
+                                  ('meta [','Tab Left',),
+                                  ('meta ]','Tab Right')],debug=True )
+        self.confCols = OptCols( [
+                                  ('<-','OK'),
+                                  ('ESC','Cancel')
+                                  ],debug=True )
+
 
     # Does what it says it does
     def lock_screen(self):
@@ -636,7 +653,11 @@ class appGUI():
     # TODO: Preserve current focus when updating the list.
     @wrap_exceptions()
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
-        # Run focus-collecting code if we are not running this for the first time
+        # Don't even try to do this if we are running a dialog
+        if self.diag:
+            return
+        # Run focus-collecting code if we are not running this for the first
+        # time
         if not firstrun:
             self.update_focusloc()
             self.list_header.set_text(gen_list_header())
@@ -787,6 +808,11 @@ class appGUI():
     def dbus_scan_started(self):
         self.lock_screen()
 
+    def restore_primary(self):
+        self.frame.set_body(self.thePile)
+        self.diag = None
+        self.frame.set_footer(urwid.Pile([self.primaryCols,self.footer2]))
+        self.update_ui()
     # Redraw the screen
     @wrap_exceptions()
     def update_ui(self):
@@ -800,78 +826,92 @@ class appGUI():
         #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
+            
+        if not self.diag:
+            # Handle keystrokes
+            if "f8" in keys or 'Q' in keys or 'q' in keys:
+                loop.quit()
+                #return False
+            if "f5" in keys or 'R' in keys:
+                self.lock_screen()
+                wireless.Scan(True)
+            if "D" in keys:
+                # Disconnect from all networks.
+                daemon.Disconnect()
+                self.update_netlist()
+            if 'right' in keys:
+                focus = self.thePile.get_focus()
+                self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
+                if focus == self.wiredCB:
+                    self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile())
+                    self.frame.set_body(self.diag)
+                else:
+                    # wireless list only other option
+                    wid,pos  = self.thePile.get_focus().get_focus()
+                    self.diag = WirelessSettingsDialog(pos)
+                    self.diag.ready_widgets(ui,self.frame)
+                    self.frame.set_body(self.diag)
+            # Guess what!  I actually need to put this here, else I'll have
+            # tons of references to self.frame lying around. ^_^
+            if "enter" in keys:
+                focus = self.frame.body.get_focus()
+                if focus == self.wiredCB:
+                    self.special = focus
+                    self.connect("wired",0)
+                else:
+                    # wless list only other option
+                    wid,pos  =  self.thePile.get_focus().get_focus()
+                    self.connect("wireless",pos)
 
-        # Handle keystrokes
-        if "f8" in keys or 'Q' in keys or 'q' in keys:
-            loop.quit()
-            #return False
-        if "f5" in keys or 'R' in keys:
-            self.lock_screen()
-            wireless.Scan(True)
-        if "D" in keys:
-            # Disconnect from all networks.
-            daemon.Disconnect()
-            self.update_netlist()
-        # Guess what!  I actually need to put this here, else I'll have tons of
-        # references to self.frame lying around. ^_^
-        if "enter" in keys:
-            focus = self.frame.body.get_focus()
-            if focus == self.wiredCB:
-                self.special = focus
-                self.connect("wired",0)
-            else:
-                # wless list only other option
-                wid,pos  =  self.thePile.get_focus().get_focus()
-                self.connect("wireless",pos)
-
-        if "esc" in keys:
-            # Force disconnect here if connection in progress
-            if self.connecting:
-                daemon.CancelConnect()
-                # Prevents automatic reconnecting if that option is enabled
-                daemon.SetForcedDisconnect(True)
-        if "P" in keys:
-            if not self.pref:
-                self.pref = PrefsDialog(self.frame,(0,1),ui,
-                        dbusmanager.get_dbus_ifaces()) 
-            if self.pref.run(ui,self.size,self.frame):
-                self.pref.save_results()
-            self.update_ui()
-        if "A" in keys:
-            about_dialog(self.frame)
-        if "C" in keys:
-            focus = self.thePile.get_focus()
-            if focus == self.wiredCB:
-                WiredSettingsDialog(self.wiredCB.get_body().
-                        get_selected_profile()).run(ui,self.size,self.frame)
-            else:
-                # wireless list only other option
-                wid,pos  = self.thePile.get_focus().get_focus()
-                WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
-            #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
-            #self.netentry.run(ui,self.size,self.frame)
-        if "I" in keys:
-            self.raise_hidden_network_dialog()
-        if "H" in keys or 'h' in keys or '?' in keys:
-            help_dialog(self.frame)
-        if "S" in keys:
-            focus = self.thePile.get_focus()
-            if focus == self.wiredCB:
-                nettype = 'wired'
-                netname = self.wiredCB.get_body().get_selected_profile()
-            else:
-                nettype = 'wireless'
-                netname = str(self.wlessLB.get_focus()[1])
-            run_configscript(self.frame,netname,nettype)
-        if "O" in keys:
-            exitcode,data = AdHocDialog().run(ui,self.frame)
-            #data = (essid,ip,channel,use_ics,use_encrypt,key_edit)
-            if exitcode == 1:
-                wireless.CreateAdHocNetwork(data[0],
-                                            data[2],
-                                            data[1], "WEP",
-                                            data[5],
-                                            data[4], False)
+            if "esc" in keys:
+                # Force disconnect here if connection in progress
+                if self.connecting:
+                    daemon.CancelConnect()
+                    # Prevents automatic reconnecting if that option is enabled
+                    daemon.SetForcedDisconnect(True)
+            if "P" in keys:
+                if not self.pref:
+                    self.pref = PrefsDialog(self.frame,(0,1),ui,
+                            dbusmanager.get_dbus_ifaces()) 
+                if self.pref.run(ui,self.size,self.frame):
+                    self.pref.save_settings()
+                self.update_ui()
+            if "A" in keys:
+                self.footer1 = self.confCols
+                about_dialog(self.frame)
+            if "C" in keys:
+                focus = self.thePile.get_focus()
+                if focus == self.wiredCB:
+                    WiredSettingsDialog(self.wiredCB.get_body().
+                            get_selected_profile()).run(ui,self.size,self.frame)
+                else:
+                    # wireless list only other option
+                    wid,pos  = self.thePile.get_focus().get_focus()
+                    WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
+                #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
+                #self.netentry.run(ui,self.size,self.frame)
+            if "I" in keys:
+                self.raise_hidden_network_dialog()
+            if "H" in keys or 'h' in keys or '?' in keys:
+                help_dialog(self.frame)
+            if "S" in keys:
+                focus = self.thePile.get_focus()
+                if focus == self.wiredCB:
+                    nettype = 'wired'
+                    netname = self.wiredCB.get_body().get_selected_profile()
+                else:
+                    nettype = 'wireless'
+                    netname = str(self.wlessLB.get_focus()[1])
+                run_configscript(self.frame,netname,nettype)
+            if "O" in keys:
+                exitcode,data = AdHocDialog().run(ui,self.frame)
+                #data = (essid,ip,channel,use_ics,use_encrypt,key_edit)
+                if exitcode == 1:
+                    wireless.CreateAdHocNetwork(data[0],
+                                                data[2],
+                                                data[1], "WEP",
+                                                data[5],
+                                                data[4], False)
             
         for k in keys:
             if urwid.is_mouse_event(k):
@@ -882,7 +922,13 @@ class appGUI():
             if k == "window resize":
                 self.size = ui.get_cols_rows()
                 continue
-            self.frame.keypress( self.size, k )
+            k = self.frame.keypress( self.size, k )
+            if self.diag:
+                if k == 'esc':
+                    self.restore_primary()
+                if k == 'left' or k == 'meta enter':
+                    self.diag.save_settings()
+                    self.restore_primary()
         return True
 
     def connect(self, nettype, networkid, networkentry=None):

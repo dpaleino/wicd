@@ -322,7 +322,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
 
-    def save_results(self):
+    def save_settings(self):
         """ Pushes the selected settings to the daemon.
             This exact order is found in prefs.py"""
         daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())

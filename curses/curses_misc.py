@@ -206,9 +206,10 @@ class TabColumns(urwid.WidgetWrap):
 
     def keypress(self,size,key):
         self._w.keypress(size,key)
-        if key == "meta left" or key == "meta right":
+        if key == "meta [" or key == "meta ]":
             self._w.get_body().set_focus(0)
-            self.keypress(size,key[5:])
+            newK = 'left' if key[-1] == '[' else 'right'
+            self.keypress(size,newK)
             self._w.get_body().set_focus(1)
         else:
             wid = self.pile.get_focus().get_body()

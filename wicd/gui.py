@@ -43,12 +43,12 @@ from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
 from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
+from wicd.translations import language
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
 
 proxy_obj = daemon = wireless = wired = bus = None
-language = misc.get_language_list_gui()
 DBUS_AVAIL = False
 
 def setup_dbus(force=True):

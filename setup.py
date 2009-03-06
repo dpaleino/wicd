@@ -162,7 +162,6 @@ class configure(Command):
             self.init = '/etc/rc.d/'
         else:
             self.init = 'FAIL'
-            self.initfile = 'FAIL'
             self.no_install_init = True
             self.distro_detect_failed = True
             print 'WARNING: Unable to detect the distribution in use.  ' + \
@@ -253,7 +252,7 @@ class configure(Command):
                 cur_arg = argument[0][:-1]
                 cur_arg_value = getattr(self, cur_arg)
                 print "%s is %s" % (cur_arg, cur_arg_value)
-                values.append((cur_arg, cur_arg_value.replace('-', '_')))
+                values.append((cur_arg, getattr(self, cur_arg.replace('-','_'))))
             else:
                 cur_arg = argument[0]
                 cur_arg_value = getattr(self, cur_arg.replace('-', '_'))
@@ -490,16 +489,17 @@ Wicd supports wired and wireless networks, and capable of
 creating and tracking profiles for both.  It has a 
 template-based wireless encryption system, which allows the user
 to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicd will automatically
+encryption types, such as WPA and WEP. Wicdl will automatically
 connect at startup to any preferred network within range.
 """,
       author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@users.sourceforge.net, oreilldf@gmail.com",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools',
-                  'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 
-                  'wicd.logfile', 'wicd.backend', 'wicd.configmanager', 'wicd.guiutil'], 
+      py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
+                  'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+                  'wicd.logfile','wicd.backend','wicd.configmanager',
+                  'wicd.guiutil','wicd.translations'], 
       ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )

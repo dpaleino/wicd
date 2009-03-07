@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -* coding: utf-8 -*-
-# ^^ why do I need this?
 
 #
 #   Copyright (C) 2007 - 2009 Adam Blackburn

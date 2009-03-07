@@ -26,11 +26,7 @@ from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-
-
 from wicd.translations import language
-for i in language.keys():
-    language[i] = language[i].decode('utf8')
 
 daemon = None
 wired = None
@@ -194,11 +190,16 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                     self.overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                k = self.overlay.keypress(dim, k)
-                if k in ('up','page up'):
-                    self._w.set_focus('body')
-                elif k in ('down','page down'):
-                    self._w.set_focus('footer')
+                else:
+                    k = self.overlay.keypress(dim, k)
+                    if k in ('up','page up'):
+                        self._w.set_focus('body')
+                        # Until I figure out a better way to do this, then this will
+                        # have to do.
+                        self._w.body.get_focus()[0].get_focus()._invalidate()
+                        #self._w.body.keypress(dim,'down')
+                    elif k in ('down','page down'):
+                        self._w.set_focus('footer')
 
             if "window resize" in keys:
                 dim = ui.get_cols_rows()

@@ -29,8 +29,6 @@ wireless = None
 wired = None
 
 from wicd.translations import language
-for i in language.keys():
-    language[i] = language[i].decode('utf8')
 
 class PrefsDialog(urwid.WidgetWrap):
     def __init__(self,body,pos,ui,dbus=None):

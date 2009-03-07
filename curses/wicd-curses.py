@@ -866,7 +866,6 @@ def main():
     # Import the screen based on whatever the user picked.
     # The raw_display will have some features that may be useful to users
     # later
-    parser.set_defaults(screen='raw')
     if options.screen == 'raw':
         import urwid.raw_display
         ui = urwid.raw_display.Screen()
@@ -955,7 +954,6 @@ setup_dbus()
 ########################################
 if __name__ == '__main__':
     parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
-    # raw = True. curses = False
     parser.set_defaults(screen='raw')
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")

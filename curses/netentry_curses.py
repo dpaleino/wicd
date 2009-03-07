@@ -26,11 +26,7 @@ from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-
-
 from wicd.translations import language
-for i in language.keys():
-    language[i] = language[i].decode('utf8')
 
 daemon = None
 wired = None

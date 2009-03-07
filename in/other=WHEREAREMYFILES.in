@@ -1,13 +1,18 @@
 WHERE ARE MY FILES?!
 
-If you are reading this, you are probably wondering why your Wicd configuration
-files are not here.  What follows is a summary of the folders that Wicd uses.
+If you are reading this in %VARLIB%, then you may ignore (but please don't
+delete) this file.  The only reason it is here is that it is definitely
+constant between package updates.
+
+If you are reading this from your home directory, you are probably wondering
+why your Wicd configuration files are not in ~/.wicd.  What follows is a
+summary of the folders that Wicd uses.
 
 For a more detailed (and complete) description what is in each directory,
 consult the man pages for wicd(8) and wicd-curses(8).
 
 ~/.wicd
-    User-dependent configuration files, only used by wicd-curses
+    User-dependent configuration files
 
 %ETC%
     Global configuration files

@@ -7,8 +7,8 @@ if [ ! -d "$HOME/.wicd" ]; then
     mkdir -p "$HOME/.wicd"
 fi
 # Make sure the user knows WHEREAREMYFILES ;-)
-if [ -e "%DOCDIR%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; then
-    ln -s "%DOCDIR%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
+if [ -e "%VARLIB%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; then
+    ln -s "%VARLIB%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
 fi
 if [ "$DISPLAY" = "" ]; then
     if [ -x "%BIN%wicd-curses" ]; then

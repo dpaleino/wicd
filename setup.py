@@ -68,6 +68,7 @@ class configure(Command):
         ('icons=', None, "set the base directory for the .desktop file's icons"),
         ('translations=', None, 'set the directory translations are stored in'),
         ('autostart=', None, 'set the directory that will be autostarted on desktop login'),
+        ('varlib=',None , 'set the path for wicd\'s variable state data'),
         ('init=', None, 'set the directory for the init file'),
         ('docdir=', None, 'set the directory for the documentation'),
         ('mandir=', None, 'set the directory for the man pages'),
@@ -104,7 +105,8 @@ class configure(Command):
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
         self.backends = self.lib + 'backends'
-        self.networks = '/var/lib/wicd/configurations/'
+        self.varlib = '/var/lib/wicd/'
+        self.networks = self.varlib + 'configurations/'
         self.log = '/var/log/wicd/'
         self.resume = '/etc/acpi/resume.d/'
         self.suspend = '/etc/acpi/suspend.d/'
@@ -252,7 +254,7 @@ class configure(Command):
                 cur_arg = argument[0][:-1]
                 cur_arg_value = getattr(self, cur_arg)
                 print "%s is %s" % (cur_arg, cur_arg_value)
-                values.append((cur_arg, cur_arg_value.replace('-', '_')))
+                values.append((cur_arg, getattr(self, cur_arg.replace('-','_'))))
             else:
                 cur_arg = argument[0]
                 cur_arg_value = getattr(self, cur_arg.replace('-', '_'))
@@ -438,7 +440,8 @@ try:
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
         data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
-                                     'README', 'CHANGES', 'other/WHEREAREMYFILES']))
+                                     'README', 'CHANGES', ]))
+        data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
     if not wpath.no_install_kde:
         data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
     if not wpath.no_install_init:

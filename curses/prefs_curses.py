@@ -28,7 +28,7 @@ daemon = None
 wireless = None
 wired = None
 
-language = misc.get_language_list_gui()
+from wicd.translations import language
 
 class PrefsDialog(urwid.WidgetWrap):
     def __init__(self,body,pos,ui,dbus=None):

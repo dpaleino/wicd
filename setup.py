@@ -28,7 +28,7 @@ import subprocess
 VERSION_NUM = '1.6.0a1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
-CURSES_REVNO = 'uimod-r288'
+CURSES_REVNO = 'uimod-r289'
 
 try:
     if not os.path.exists('vcsinfo.py'):

@@ -163,24 +163,6 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 # DBUS interfaces do.  ^_^
 # Whatever calls this must be exception-wrapped if it is run if the UI is up
 def gen_network_list():
-    #id=0
-    #wiredL = []
-    #is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
-    # This one makes a list of strings to put in a combo box.
-    #for profile in wired.GetWiredProfileList():
-        #theString = '%4s   %25s' % (id, profile)
-        #### THIS IS wired.blah() in experimental
-        #print config.GetLastUsedWiredNetwork()
-        # Tag if no wireless IP present, and wired one is
-        #if is_active:
-        #    theString = '>'+theString[1:]
-            
-            #wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
-            #    'connected focus'))
-        #else:
-            #wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
-        #wiredL.append(theString)
-        #id+=1
     wiredL = wired.GetWiredProfileList()
     wlessL = []
     # This one makes a list of NetLabels
@@ -239,6 +221,9 @@ def help_dialog(body):
 ('bold','    Q'),": Quit wicd-curses\n",
     ])
     textF = urwid.Text('Press any key to return.')
+    
+    # textJ = urwid.Text('Nobody expects the Spanish Inquisition!')
+
     blank = urwid.Text('')
     # Pile containing a text and columns?
     cols = urwid.Columns([text1,text2])
@@ -250,6 +235,14 @@ def help_dialog(body):
         ui.draw_screen(dim, frame.render(dim, True))
             
         keys = ui.get_input()
+        # Don't stop because someone let go of the mouse on the frame
+        mouse_release = False
+        for k in keys:
+            if urwid.is_mouse_event(k) and k[0] == "mouse release":
+                mouse_release = True
+                break
+        if mouse_release :
+            continue
         if 'window resize' in keys:
             dim = ui.get_cols_rows()
         elif keys:
@@ -306,10 +299,6 @@ Once there, you can adjust (or add) the "beforescript", "afterscript", and "disc
     main()
     """
 
-########################################
-##### URWID SUPPORT CLASSES
-########################################
-
 def gen_list_header():
     if daemon.GetSignalDisplayType() == 0:
         # Allocate 25 cols for the ESSID name
@@ -318,6 +307,10 @@ def gen_list_header():
         # Need 3 more to accomodate dBm strings
         essidgap = 28
     return 'C %s %*s %9s %17s %6s %s' % ('STR ',essidgap,'ESSID','ENCRYPT','BSSID','MODE','CHNL')
+
+########################################
+##### URWID SUPPORT CLASSES
+########################################
 
 # Wireless network label
 class NetLabel(urwid.WidgetWrap):
@@ -566,7 +559,7 @@ class appGUI():
                 ('Q' ,'Quit',loop.quit)
                ]
 
-        self.primaryCols = OptCols(keys,debug=True)
+        self.primaryCols = OptCols(keys,self.handle_keys)
         #self.time_label = urwid.Text(strftime('%H:%M:%S'))
         self.time_label = \
                   urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
@@ -598,13 +591,14 @@ class appGUI():
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
         self.prefCols = OptCols( [('meta enter','OK'),
-                                  ('ESC','Cancel'),
+                                  ('esc','Cancel'),
                                   ('meta [','Tab Left',),
-                                  ('meta ]','Tab Right')],debug=True )
+                                  ('meta ]','Tab Right')],self.handle_keys
+                                  )
         self.confCols = OptCols( [
-                                  ('<-','OK'),
-                                  ('ESC','Cancel')
-                                  ],debug=True )
+                                  ('left','OK'),
+                                  ('esc','Cancel')
+                                  ],self.handle_keys)
 
     # Does what it says it does
     def lock_screen(self):
@@ -808,20 +802,8 @@ class appGUI():
         self.diag = None
         self.frame.set_footer(urwid.Pile([self.primaryCols,self.footer2]))
         self.update_ui()
-    # Redraw the screen
-    @wrap_exceptions()
-    def update_ui(self):
-        #self.update_status()
-        canvas = self.frame.render( (self.size),True )
-        ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
-        # It looks like if I want to get the statusbar to update itself
-        # continuously, I would have to use overlay the canvasses and redirect
-        # the input.  I'll try to get that working at a later time, if people
-        # want that "feature".
-        #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
-        ui.draw_screen((self.size),canvas)
-        keys = ui.get_input()
-            
+
+    def handle_keys(self,keys):
         if not self.diag:
             # Handle keystrokes
             if "f8" in keys or 'Q' in keys or 'q' in keys:
@@ -890,7 +872,10 @@ class appGUI():
             if "I" in keys:
                 self.raise_hidden_network_dialog()
             if "H" in keys or 'h' in keys or '?' in keys:
-                help_dialog(self.frame)
+                # FIXME I shouldn't need this, OptCols messes up this one
+                # particular button
+                if not self.diag:
+                    help_dialog(self.frame)
             if "S" in keys:
                 focus = self.thePile.get_focus()
                 if focus == self.wiredCB:
@@ -910,22 +895,38 @@ class appGUI():
                                                 data[5],
                                                 data[4], False)
             
+        if self.diag:
+            if 'esc' in keys:
+                self.restore_primary()
+            if ('left' in keys and issubclass(self.diag.__class__,AdvancedSettingsDialog))  or 'meta enter' in keys:
+                self.diag.save_settings()
+                self.restore_primary()
         for k in keys:
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
                 self.frame.mouse_event( self.size,
                         event, button, col, row,
                         focus=True)
+                continue
             if k == "window resize":
                 self.size = ui.get_cols_rows()
                 continue
-            k = self.frame.keypress( self.size, k )
-            if self.diag:
-                if k == 'esc':
-                    self.restore_primary()
-                if (k == 'left' and issubclass(self.diag.__class__,AdvancedSettingsDialog))  or k == 'meta enter':
-                    self.diag.save_settings()
-                    self.restore_primary()
+
+    # Redraw the screen
+    @wrap_exceptions()
+    def update_ui(self):
+        #self.update_status()
+        canvas = self.frame.render( (self.size),True )
+        ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
+        # It looks like if I want to get the statusbar to update itself
+        # continuously, I would have to use overlay the canvasses and redirect
+        # the input.  I'll try to get that working at a later time, if people
+        # want that "feature".
+        #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
+        ui.draw_screen((self.size),canvas)
+        keys = ui.get_input()
+        self.handle_keys(keys)
+            
         return True
 
     def connect(self, nettype, networkid, networkentry=None):

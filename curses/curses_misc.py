@@ -530,14 +530,15 @@ class ClickCols(urwid.WidgetWrap):
         self.callback = callback
         self.args = args
     def mouse_event(self,size,event,button,x,y,focus):
-        self.callback(self.args)
+        if event == "mouse press":
+            self.callback(self.args)
 
 # htop-style menu menu-bar on the bottom of the screen
 class OptCols(urwid.WidgetWrap):
-    # tuples = [(key,desc,on_event)], on_event currently ignored
+    # tuples = [(key,desc)], on_event gets passed a key
     # attrs = (attr_key,attr_desc)
     # mentions of 'left' and right will be converted to <- and -> respectively
-    def __init__(self,tuples,attrs=('body','infobar'),debug=False):
+    def __init__(self,tuples,handler,attrs=('body','infobar'),debug=False):
         # Find the longest string.  Keys for this bar should be no greater than
         # 2 characters long (e.g., -> for left)
         #maxlen = 6
@@ -564,6 +565,8 @@ class OptCols(urwid.WidgetWrap):
                        key += '<-'
                    elif part == 'right':
                        key += '->'
+                   elif part == 'esc':
+                       key += 'ESC'
                    else:
                        key += part
             
@@ -571,6 +574,9 @@ class OptCols(urwid.WidgetWrap):
             if debug:
                 callback = self.debugClick
                 args = cmd[1]
+            else:
+                callback = handler
+                args = cmd[0]
             #self.callbacks.append(cmd[2])
             col = ClickCols([
                 ('fixed',len(key)+1,urwid.Text((attrs[0],key+':')) ),

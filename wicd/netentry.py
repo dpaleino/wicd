@@ -24,7 +24,7 @@ import dbusmanager
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
 from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
-language = misc.get_language_list_gui()
+from translations import language
 
 # These get set when a NetworkEntry is instantiated.
 daemon = None
@@ -57,9 +57,9 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.txt_gateway = LabelEntry(language['gateway'])
         self.txt_search_dom = LabelEntry(language['search_domain'])
         self.txt_domain = LabelEntry(language['dns_domain'])
-        self.txt_dns_1 = LabelEntry(language['dns'] + ' ' + language['1'])
-        self.txt_dns_2 = LabelEntry(language['dns'] + ' ' + language['2'])
-        self.txt_dns_3 = LabelEntry(language['dns'] + ' ' + language['3'])
+        self.txt_dns_1 = LabelEntry(language['dns'] + ' 1')
+        self.txt_dns_2 = LabelEntry(language['dns'] + ' 2')
+        self.txt_dns_3 = LabelEntry(language['dns'] + ' 3')
         self.chkbox_static_ip = gtk.CheckButton(language['use_static_ip'])
         self.chkbox_static_dns = gtk.CheckButton(language['use_static_dns'])
         self.chkbox_global_dns = gtk.CheckButton(language['use_global_dns'])

@@ -1,5 +1,5 @@
 .\" First revision was r203
-.TH WICD-CURSES "8" "January 2009" "wicd-curses-%CURSES_REVNO%"
+.TH WICD-CURSES "8" "February 2009" "wicd-curses-%CURSES_REVNO%"
 .SH NAME
 .B wicd-curses
 \- curses-based wicd(8) controller
@@ -12,7 +12,14 @@ This man page only documents the current status of wicd-curses.  This may/may no
 .SH "ARGUMENTS"
 .TP
 .BR "\-r" , " \-\-raw\-screen"
-Use Urwid's raw console display, instead of the (faster) curses-based one.  This may be useful if you are experiencing unicode problems.
+Use Urwid's raw console display.  This is the default, and has several
+advantages over the faster curses display, inculding fully functional unicode 
+and internationalization support.
+.TP
+.BR "\-c" , " \-\-curses\-screen"
+Use Urwid's curses display.  This may be faster than the default raw
+display, but it lacks proper unicode support.  This is fine to use if your
+language of choice only uses Latin characters.
 .SH CONTROLS
 All of these are case sensitive.
 .TP

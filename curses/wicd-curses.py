@@ -797,13 +797,18 @@ class appGUI():
             about_dialog(self.frame)
         if "C" in keys:
             focus = self.thePile.get_focus()
-            if focus == self.wiredCB:
-                WiredSettingsDialog(self.wiredCB.get_body().
-                        get_selected_profile()).run(ui,self.size,self.frame)
-            else:
-                # wireless list only other option
-                wid,pos  = self.thePile.get_focus().get_focus()
-                WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
+            try:
+                if focus == self.wiredCB:
+                    WiredSettingsDialog(self.wiredCB.get_body().
+                            get_selected_profile()).run(ui,self.size,self.frame)
+                else:
+                    # wireless list only other option
+                    wid,pos  = self.thePile.get_focus().get_focus()
+                    WirelessSettingsDialog(pos).run(ui,self.size,self.frame)
+            except:
+                # wtf do I need this?
+                loop.quit()
+                raise
             #self.netentry = NetEntryBase(dbusmanager.get_dbus_ifaces())
             #self.netentry.run(ui,self.size,self.frame)
         if "I" in keys:

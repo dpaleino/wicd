@@ -10,4 +10,4 @@
 # pidfile: %PIDFILE%
 #
 
-. /lib/lsb.init_functions $1
+. /lib/lsb/init_functions $1

@@ -131,7 +131,7 @@ def expand_script_macros(script, msg, bssid, essid):
     print "Expanded '%s' to '%s'" % (script, expanded)
     return expanded
 
-    
+ 
 class Controller(object):
     """ Parent class for the different interface types. """
     def __init__(self, debug=False):
@@ -334,7 +334,6 @@ class ConnectThread(threading.Thread):
             self.connecting_message = status
         finally:
             self.lock.release()
-
 
     def GetStatus(self):
         """ Get the threads current status message in a thread-safe way.

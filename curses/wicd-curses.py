@@ -222,7 +222,7 @@ def help_dialog(body):
     ])
     textF = urwid.Text('Press any key to return.')
     
-    # textJ = urwid.Text('Nobody expects the Spanish Inquisition!')
+    # textJ = urwid.Text(('important','Nobody expects the Spanish Inquisition!'))
 
     blank = urwid.Text('')
     # Pile containing a text and columns?
@@ -902,6 +902,7 @@ class appGUI():
                 self.diag.save_settings()
                 self.restore_primary()
         for k in keys:
+            self.frame.keypress(self.size,k)
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
                 self.frame.mouse_event( self.size,

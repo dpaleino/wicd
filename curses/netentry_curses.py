@@ -192,11 +192,12 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                     self.overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                k = self.overlay.keypress(dim, k)
-                if k in ('up','page up'):
-                    self._w.set_focus('body')
-                elif k in ('down','page down'):
-                    self._w.set_focus('footer')
+                else: 
+                    k = self.overlay.keypress(dim, k)
+                    if k in ('up','page up'):
+                        self._w.set_focus('body')
+                    elif k in ('down','page down'):
+                        self._w.set_focus('footer')
 
             if "window resize" in keys:
                 dim = ui.get_cols_rows()
@@ -267,7 +268,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,networkID):
         global wireless, daemon
         AdvancedSettingsDialog.__init__(self)
-        self.networkID = networkID
+        self.networkid = networkID
         global_settings_t = language['global_settings']
         encryption_t = language['use_encryption']
         autoconnect_t = language['automatic_connect']
@@ -298,7 +299,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
     def set_values(self):
         """ Set the various network settings to the right values. """
-        networkID = self.networkID
+        networkID = self.networkid
         self.ip_edit.set_edit_text(self.format_entry(networkID,"ip"))
         self.netmask_edit.set_edit_text(self.format_entry(networkID,"netmask"))
         self.gateway_edit.set_edit_text(self.format_entry(networkID,"gateway"))
@@ -324,17 +325,13 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
         # Throw the encryption stuff into a list
         list = []
+        activeID = -1  # Set the menu to this item when we are done
         for x, enc_type in enumerate(self.encrypt_types):
-            list.append(enc_type[0])
+            list.append(enc_type['name'])
+            if enc_type['type'] == wireless.GetWirelessProperty(networkID, "enctype"):
+                activeID = x
         self.encryption_combo.set_list(list)
 
-        self.change_encrypt_method()
-        activeID = -1  # Set the menu to this item when we are done
-        user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
-        for x, enc_type in enumerate(self.encrypt_types):
-            if enc_type[1] == user_enctype:
-                activeID = x
-        
         self.encryption_combo.set_focus(activeID)
         if activeID != -1:
             self.encryption_chkbox.set_state(True,do_callback=False)
@@ -343,9 +340,12 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             self.encryption_combo.set_focus(0)
 
+        self.change_encrypt_method()
+        
+
     def set_net_prop(self, option, value):
         """ Sets the given option to the given value for this network. """
-        wireless.SetWirelessProperty(self.networkID, option, value)
+        wireless.SetWirelessProperty(self.networkid, option, value)
 
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
@@ -356,25 +356,32 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Check encryption info
         if self.encryption_chkbox.get_state():
             #print "setting encryption info..."
-            encryption_info = self.encryption_info
-            encrypt_methods = misc.LoadEncryptionMethods()
+            encrypt_info = self.encryption_info
+            encrypt_methods = self.encrypt_types
             self.set_net_prop("enctype",
-                               encrypt_methods[self.encryption_combo.get_focus()[1] ][1])
-            for x in encryption_info:
-                if encryption_info[x].get_edit_text() == "":
-                    error(self.ui, self.overlay,language['encrypt_info_missing'])
+                               encrypt_methods[self.encryption_combo.get_focus()[1] ]['type'])
+            # Make sure all required fields are filled in.
+            for entry_info in encrypt_info.itervalues():
+                if entry_info[0].get_edit_text() == "" \
+                    and entry_info[1] == 'required':
+                    error(self.ui, self.overlay,"%s (%s)" \
+                            % (language['encrypt_info_missing'], 
+                               entry_info[0].get_captionabel() )
+                          )
                     return False
-                self.set_net_prop(x, noneToString(encryption_info[x].
+
+            for entry_key, entry_info in encrypt_info.iteritems():
+                self.set_net_prop(entry_key, noneToString(entry_info[0].
                                                    get_edit_text()))
         elif not self.encryption_chkbox.get_state() and \
-             wireless.GetWirelessProperty(self.networkID, "encryption"):
+             wireless.GetWirelessProperty(self.networkid, "encryption"):
+            # Encrypt checkbox is off, but the network needs it.
             error(self.ui, self.overlay, language['enable_encryption'])
             return False
         else:
-            #print 'encryption is ' + str(wireless.GetWirelessProperty(self.networkID, 
-            #                                                      "encryption"))
-            #print "no encryption specified..."
             self.set_net_prop("enctype", "None")
+            for entry in encrypt_info.iterkeys():
+                self.set_net_prop(entry[0].entry, "")
         AdvancedSettingsDialog.save_settings(self)
 
         # Save the autoconnect setting.  This is not where it originally was
@@ -385,9 +392,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.set_net_prop('use_settings_globally', True)
         else:
             self.set_net_prop('use_settings_globally', False)
-            wireless.RemoveGlobalEssidEntry(self.networkID)
+            wireless.RemoveGlobalEssidEntry(self.networkid)
             
-        wireless.SaveWirelessNetworkProfile(self.networkID)
+        wireless.SaveWirelessNetworkProfile(self.networkid)
         return True
 
     # More or less ripped from netentry.py
@@ -402,26 +409,29 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
         # If nothing is selected, select the first entry.
         if ID == -1:
-            self.encryption_combo.set_active(0)
+            self.encryption_combo.set_focus(0)
             ID = 0
 
-        opts = methods[ID][2]
         theList = []
-        for x in opts:
-            edit = None
-            if language.has_key(opts[x][0]):
-                edit = MaskingEdit(('editcp',language[opts[x][0].lower().replace(' ','_')]+': '),mask_mode='no_focus')
-            else:
-                edit = MaskingEdit(('editcp',opts[x][0].replace('_',' ')+': '),mask_mode='no_focus')
-            theList.append(edit)
-            # Add the data to any array, so that the information
-            # can be easily accessed by giving the name of the wanted
-            # data.
-            self.encryption_info[opts[x][1]] = edit
+        for type_ in ['required', 'optional']:
+            fields = methods[ID][type_]
+            for field in fields:
+                if language.has_key(field[1]):
+                    edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
+                else:
+                    edit = MaskingEdit(('editcp',field[1].replace('_',' ')+': '))
+                edit.set_mask_mode('no_focus')
+                theList.append(edit)
+                # Add the data to any array, so that the information
+                # can be easily accessed by giving the name of the wanted
+                # data.
+                self.encryption_info[field[0]] = [edit, type_]
 
-            edit.set_edit_text(noneToBlankString(
-                wireless.GetWirelessProperty(self.networkID, opts[x][1])))
+                edit.set_edit_text(noneToBlankString(
+                    wireless.GetWirelessProperty(self.networkid, field[0])))
 
+        #FIXME: This causes the entire pile to light up upon use.
+        # Make this into a listbox?
         self.pile_encrypt = DynWrap(urwid.Pile(theList),attrs=('editbx','editnfc'))
         self._w.body.body.insert(self._w.body.body.__len__(),self.pile_encrypt)
         #self._w.body.body.append(self.pile_encrypt)

@@ -1,7 +1,9 @@
 name = EAP-TLS
 author = Dan O'Reilly
 version = 1
-require identity *Identity ca_cert *Path_to_CA_Cert client_cert *Path_to_Client_Cert private_key *Private_Key private_key_passwd *Private_Key_Password
+require identity *Identity private_key *Private_Key private_key_passwd *Private_Key_Password
+optional ca_cert *Path_to_CA_Cert client_cert *Path_to_Client_Cert
+
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

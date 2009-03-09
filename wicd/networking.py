@@ -131,7 +131,7 @@ def expand_script_macros(script, msg, bssid, essid):
     print "Expanded '%s' to '%s'" % (script, expanded)
     return expanded
 
-    
+ 
 class Controller(object):
     """ Parent class for the different interface types. """
     def __init__(self, debug=False):

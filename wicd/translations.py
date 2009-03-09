@@ -160,6 +160,7 @@ language['cannot_start_daemon'] = _('Unable to connect to wicd daemon DBus inter
                                 "This typically means there was a problem starting the daemon.  " + \
                                 "Check the wicd log for more info')
 language['lost_dbus'] = _('The wicd daemon has shut down, the UI will not function properly until it is restarted.')
+language['access_denied'] = _("Unable to contact the wicd dameon due to an access denied error from DBus.  Please check your DBus configuration.")
 language['configuring_wireless'] = _('Configuring preferences for wireless network "$A" ($B)')
 language['configuring_wired'] = _('Configuring preferences for wired profile "$A"')
 language['scan'] = _('Scan')

@@ -28,7 +28,7 @@ import subprocess
 VERSION_NUM = '1.6.0a1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
-CURSES_REVNO = 'r277'
+CURSES_REVNO = 'r279'
 
 try:
     if not os.path.exists('vcsinfo.py'):
@@ -68,6 +68,7 @@ class configure(Command):
         ('icons=', None, "set the base directory for the .desktop file's icons"),
         ('translations=', None, 'set the directory translations are stored in'),
         ('autostart=', None, 'set the directory that will be autostarted on desktop login'),
+        ('varlib=',None , 'set the path for wicd\'s variable state data'),
         ('init=', None, 'set the directory for the init file'),
         ('docdir=', None, 'set the directory for the documentation'),
         ('mandir=', None, 'set the directory for the man pages'),
@@ -104,7 +105,8 @@ class configure(Command):
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
         self.backends = self.lib + 'backends'
-        self.networks = '/var/lib/wicd/configurations/'
+        self.varlib = '/var/lib/wicd/'
+        self.networks = self.varlib + 'configurations/'
         self.log = '/var/log/wicd/'
         self.resume = '/etc/acpi/resume.d/'
         self.suspend = '/etc/acpi/suspend.d/'
@@ -160,9 +162,11 @@ class configure(Command):
             self.initfile = 'init/pld/wicd'
         elif os.path.exists('/usr/bin/crux'):
             self.init = '/etc/rc.d/'
+        elif os.path.exists('/etc/lunar.release'):
+            self.init='/etc/init.d/'
+            self.initfile = 'init/lunar/wicd'
         else:
             self.init = 'FAIL'
-            self.initfile = 'FAIL'
             self.no_install_init = True
             self.distro_detect_failed = True
             print 'WARNING: Unable to detect the distribution in use.  ' + \
@@ -253,7 +257,7 @@ class configure(Command):
                 cur_arg = argument[0][:-1]
                 cur_arg_value = getattr(self, cur_arg)
                 print "%s is %s" % (cur_arg, cur_arg_value)
-                values.append((cur_arg, cur_arg_value.replace('-', '_')))
+                values.append((cur_arg, getattr(self, cur_arg.replace('-','_'))))
             else:
                 cur_arg = argument[0]
                 cur_arg_value = getattr(self, cur_arg.replace('-', '_'))
@@ -439,7 +443,8 @@ try:
     data.append (( piddir, [] ))
     if not wpath.no_install_docs:
         data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
-                                     'README', 'CHANGES', 'other/WHEREAREMYFILES']))
+                                     'README', 'CHANGES', ]))
+        data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
     if not wpath.no_install_kde:
         data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
     if not wpath.no_install_init:
@@ -490,16 +495,17 @@ Wicd supports wired and wireless networks, and capable of
 creating and tracking profiles for both.  It has a 
 template-based wireless encryption system, which allows the user
 to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicd will automatically
+encryption types, such as WPA and WEP. Wicdl will automatically
 connect at startup to any preferred network within range.
 """,
       author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@users.sourceforge.net, oreilldf@gmail.com",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      py_modules=['wicd.networking', 'wicd.misc', 'wicd.gui', 'wicd.wnettools',
-                  'wicd.wpath', 'wicd.prefs', 'wicd.netentry', 'wicd.dbusmanager', 
-                  'wicd.logfile', 'wicd.backend', 'wicd.configmanager', 'wicd.guiutil'], 
+      py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
+                  'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+                  'wicd.logfile','wicd.backend','wicd.configmanager',
+                  'wicd.guiutil','wicd.translations'], 
       ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )

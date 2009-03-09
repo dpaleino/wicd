@@ -1,2 +1,9 @@
 #!/bin/bash
+if [ ! -d "$HOME/.wicd" ]; then
+    mkdir -p "$HOME/.wicd"
+fi
+if [ -e "%VARLIB%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; then
+    ln -s "%VARLIB%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
+fi
+
 exec python -O %LIB%wicd-curses.py $@

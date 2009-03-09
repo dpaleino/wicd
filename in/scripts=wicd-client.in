@@ -7,21 +7,22 @@ if [ ! -d "$HOME/.wicd" ]; then
     mkdir -p "$HOME/.wicd"
 fi
 # Make sure the user knows WHEREAREMYFILES ;-)
-if [ -e "%DOCDIR%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; then
-    ln -s "%DOCDIR%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
+if [ -e "%VARLIB%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; then
+    ln -s "%VARLIB%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
 fi
-if [ "$DISPLAY" = "" ] && [ -x "%BIN%wicd-curses" ]; then
-    if [ ! -f "$HOME/.wicd/CLIENT_CURSES_WARNING" ]; then
-        printf "NOTICE: You do not have an X server active on this console, \n"
-        printf "so ${BOLD}${BLUE}wicd-curses${NC} will be started instead. \n"
-        printf "Please see the wicd-client and/or wicd-curses manual pages \n"
-        printf "for more information about this error and resulting message. \n"
-        printf "\n" 
-        printf "This message will not be displayed again. \n"
-        printf "Press enter to continue... \n"
+if [ "$DISPLAY" = "" ]; then
+    if [ -x "%BIN%wicd-curses" ]; then
+        if [ ! -f "$HOME/.wicd/CLIENT_CURSES_WARNING" ]; then
+            printf "NOTICE: You do not have an X server active on this console, \n"
+            printf "so ${BOLD}${BLUE}wicd-curses${NC} will be started instead. \n"
+            printf "Please see the wicd-client and/or wicd-curses manual pages \n"
+            printf "for more information about this error and resulting message. \n"
+            printf "\n" 
+            printf "This message will not be displayed again. \n"
+            printf "Press enter to continue... \n"
 
-        read _junk
-        cat >> "$HOME/.wicd/CLIENT_CURSES_WARNING" << EOF 
+            read _junk
+            cat >> "$HOME/.wicd/CLIENT_CURSES_WARNING" << EOF 
 The wicd-client script checks for the existence of this file to determine
 whether it should warn the user before launching wicd-curses instead, in 
 the event of the gui client being launched outside of the X Window environment.
@@ -29,8 +30,16 @@ the event of the gui client being launched outside of the X Window environment.
 If you delete this file, then wicd-client will print the warning if it is 
 launched outside of X (and then recreate this file again).
 EOF
-    fi
-    exec %BIN%wicd-curses
-fi
+        fi
+        exec %BIN%wicd-curses
+    
+    else
+        printf "NOTICE: You do not have an X server active on this console, \n"
+        printf "but you do not appear to have ${BOLD}${BLUE}wicd-curses${NC}\n"
+        printf "installed on this system.  We'd normally be running it here.\n"
+        printf "Please see the wicd-client manual page for more information.\n"
 
-exec python -O %LIB%wicd-client.py $@
+    fi
+else
+    exec python -O %LIB%wicd-client.py $@
+fi

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ networking - Provides wrappers for common network operations
 
@@ -628,6 +629,36 @@ class Wireless(Controller):
         
         """
         return self.wiface.GetBSSID()
+
+    def GetCurrentBitrate(self, iwconfig):
+        """ Get the current bitrate of the interface. 
+        
+        Returns:
+        The bitrate of the active access point as a string, or
+        None the bitrate can't be found.
+        
+        """
+        return self.wiface.GetCurrentBitrate(iwconfig)
+
+    def GetOperationalMode(self, iwconfig):
+        """ Get the current operational mode of the interface. 
+        
+        Returns:
+        The operational mode of the interface as a string, or
+        None if the operational mode can't be found.
+        
+        """
+        return self.wiface.GetOperationalMode(iwconfig)
+
+    def GetAvailableAuthMethods(self, iwlistauth):
+        """ Get the available authentication methods for the interface. 
+        
+        Returns:
+        The available authentication methods of the interface as a string, or
+        None if the auth methods can't be found.
+        
+        """
+        return self.wiface.GetAvailableAuthMethods(iwlistauth)
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """

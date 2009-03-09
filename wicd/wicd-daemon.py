@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ wicd - wireless connection daemon implementation.
 
@@ -993,7 +994,23 @@ class WirelessDaemon(dbus.service.Object):
     
     @dbus.service.method('org.wicd.daemon.wireless')
     def GetApBssid(self):
+        """ Gets the MAC address for the active network. """
         return self.wifi.GetBSSID()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetCurrentBitrate(self, iwconfig):
+        """ Returns the current bitrate for the active network. """
+        return self.wifi.GetCurrentBitrate(iwconfig)
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetOperationalMode(self, iwconfig):
+        """ Returns the operational mode for the iwconfig parameter """
+        return misc.to_unicode(self.wifi.GetOperationalMode(iwconfig))
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetAvailableAuthMethods(self, iwlistauth):
+        """ Returns the operational mode for the iwlistauth parameter """
+        return misc.to_unicode(self.wifi.GetAvailableAuthMethods(iwlistauth))
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
@@ -1123,6 +1140,12 @@ class WirelessDaemon(dbus.service.Object):
     def GetWirelessIP(self, ifconfig=""):
         """ Returns the IP associated with the wireless interface. """
         ip = self.wifi.GetIP(ifconfig)
+        return ip
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetOperationalMode(self, ifconfig=""):
+        """ Returns the IP associated with the wireless interface. """
+        ip = self.wifi.GetOperationalMode(ifconfig)
         return ip
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -1677,3 +1700,4 @@ if __name__ == '__main__':
         sys.exit(1)
     gobject.threads_init()
     main(sys.argv)
+

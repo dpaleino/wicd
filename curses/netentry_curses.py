@@ -26,9 +26,7 @@ from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-
-
-language = misc.get_language_list_gui()
+from wicd.translations import language
 
 daemon = None
 wired = None
@@ -56,9 +54,9 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         use_global_dns_t = language['use_global_dns']
         dns_dom_t    = ('editcp',language['dns_domain']+':   ')
         search_dom_t = ('editcp',language['search_domain']+':')
-        dns1_t       = ('editcp',language['dns']+ ' ' + language['1']+':'+' '*8)
-        dns2_t       = ('editcp',language['dns']+ ' ' + language['2']+':'+' '*8)
-        dns3_t       = ('editcp',language['dns']+ ' ' + language['3']+':'+' '*8)
+        dns1_t       = ('editcp',language['dns']+ ' 1'+':'+' '*8)
+        dns2_t       = ('editcp',language['dns']+ ' 2'+':'+' '*8)
+        dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
 
         cancel_t = 'Cancel'
         ok_t = 'OK'
@@ -192,11 +190,16 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                     self.overlay.mouse_event( dim,
                             event, button, col, row,
                             focus=True)
-                k = self.overlay.keypress(dim, k)
-                if k in ('up','page up'):
-                    self._w.set_focus('body')
-                elif k in ('down','page down'):
-                    self._w.set_focus('footer')
+                else:
+                    k = self.overlay.keypress(dim, k)
+                    if k in ('up','page up'):
+                        self._w.set_focus('body')
+                        # Until I figure out a better way to do this, then this will
+                        # have to do.
+                        self._w.body.get_focus()[0].get_focus()._invalidate()
+                        #self._w.body.keypress(dim,'down')
+                    elif k in ('down','page down'):
+                        self._w.set_focus('footer')
 
             if "window resize" in keys:
                 dim = ui.get_cols_rows()

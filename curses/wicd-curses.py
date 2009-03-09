@@ -67,9 +67,10 @@ from optparse import OptionParser
 
 CURSES_REVNO=wpath.curses_revision
 
-language = misc.get_language_list_gui()
-# We need 'Connecting' without the '...'
-language['connecting']=misc.get_language_list_tray()['connecting']
+# Fix strings in wicd-curses
+from wicd.translations import language
+for i in language.keys():
+    language[i] = language[i].decode('utf8')
 
 ########################################
 ##### SUPPORT CLASSES
@@ -865,12 +866,13 @@ def main():
     # Import the screen based on whatever the user picked.
     # The raw_display will have some features that may be useful to users
     # later
-    if options.rawscreen:
+    if options.screen == 'raw':
         import urwid.raw_display
         ui = urwid.raw_display.Screen()
-    else:
+    elif options.screen is 'curses':
         import urwid.curses_display
         ui = urwid.curses_display.Screen()
+
     # Default Color scheme.
     # Other potential color schemes can be found at:
     # http://excess.org/urwid/wiki/RecommendedPalette
@@ -952,8 +954,10 @@ setup_dbus()
 ########################################
 if __name__ == '__main__':
     parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
-    parser.add_option("-r", "--raw-screen",action="store_true",dest='rawscreen',
-            help="use urwid's raw screen controller")
+    parser.set_defaults(screen='raw')
+    parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
+            ,dest='screen',help="use urwid's raw screen controller (default)")
+    parser.add_option("-c", "--curses-screen",action="store_const",const='curses',dest='screen',help="use urwid's curses screen controller")
     (options,args) = parser.parse_args()
     main()
     # Make sure that the terminal does not try to overwrite the last line of

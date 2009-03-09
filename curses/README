@@ -44,8 +44,7 @@ What is wicd-curses?
 Why didn't you call it wicd-urwid?  There is a hachoir-urwid package out there.
     I first called this "urwicd".  However, due to the relative obscurity of
     the urwid package, and the fact that many more people know what "curses"
-    is, I named it wicd-curses.  After all, it _does_ use curses (by default,
-    anyway).
+    is, I named it wicd-curses.
 
 Why don't you support lower-case keybindings for most of the commands?
     I was trying to prevent mass chaos from happening because of mashing keys.

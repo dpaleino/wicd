@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Startup script for wicd
+#
+# chkconfig:	345 99 01
+#
+# description:	wicd wireless/wired internet connection daemon
+#
+# processname:	wicd
+# pidfile: %PIDFILE%
+#
+
+. /lib/lsb/init-functions $1

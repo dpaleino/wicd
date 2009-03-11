@@ -206,7 +206,7 @@ def help_dialog(body):
 
     text1 = urwid.Text([
 ('bold','H h ?'),": Display this help dialog\n",
-('bold','enter'),": Connect to selected network\n",
+('bold','    C'),": Connect to selected network\n",
 ('bold','    D'),": Disconnect from all networks\n",
 ('bold','  ESC'),": Stop a network connection in progress\n",
 ('bold',' F5 R'),": Refresh network list\n",
@@ -596,7 +596,7 @@ class appGUI():
                                   ('meta ]','Tab Right')],self.handle_keys
                                   )
         self.confCols = OptCols( [
-                                  ('left','OK'),
+                                  ('meta enter','OK'),
                                   ('esc','Cancel')
                                   ],self.handle_keys)
 
@@ -831,14 +831,15 @@ class appGUI():
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option
-                    wid,pos  =  self.thePile.get_focus().get_focus()
-                    self.connect("wireless",pos)
+                pass
+                #focus = self.frame.body.get_focus()
+                #if focus == self.wiredCB:
+                #    self.special = focus
+                #    self.connect("wired",0)
+                #else:
+                #    # wless list only other option
+                #    wid,pos  =  self.thePile.get_focus().get_focus()
+                #    self.connect("wireless",pos)
 
             if "esc" in keys:
                 # Force disconnect here if connection in progress
@@ -898,7 +899,7 @@ class appGUI():
         if self.diag:
             if 'esc' in keys:
                 self.restore_primary()
-            if ('left' in keys and issubclass(self.diag.__class__,AdvancedSettingsDialog))  or 'meta enter' in keys:
+            if 'meta enter' in keys:
                 self.diag.save_settings()
                 self.restore_primary()
         for k in keys:
@@ -976,7 +977,7 @@ def main():
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
         ('editfc', 'white','dark blue', 'bold'),
-        ('editnfc','dark gray','default','bold'),
+        ('editnfc','brown','default','bold'),
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
         ('timebar','dark gray','default'),

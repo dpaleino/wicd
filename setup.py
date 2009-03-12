@@ -162,6 +162,9 @@ class configure(Command):
             self.initfile = 'init/pld/wicd'
         elif os.path.exists('/usr/bin/crux'):
             self.init = '/etc/rc.d/'
+        elif os.path.exists('/etc/lunar.release'):
+            self.init='/etc/init.d/'
+            self.initfile = 'init/lunar/wicd'
         else:
             self.init = 'FAIL'
             self.no_install_init = True

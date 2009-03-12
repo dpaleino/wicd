@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ Network interface control tools for wicd.
 
@@ -49,6 +50,7 @@ channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
+bitrates_pattern = re.compile('.*Bit Rates:(.*?)E', __re_mode)
 mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
 freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
 wep_pattern = re.compile('.*Encryption key:(.*?)\n', __re_mode)
@@ -59,6 +61,9 @@ wpa2_pattern = re.compile('(WPA2)', __re_mode)
 #iwconfig-only regular expressions.
 ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
 bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
+bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', __re_mode)
+opmode_pattern = re.compile('.*Mode:(.*?) ', __re_mode)
+authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', __re_mode)
 
 # Regular expressions for wpa_cli output
 auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
@@ -1035,7 +1040,6 @@ class BaseWirelessInterface(BaseInterface):
         A dictionary containing the cell networks properties.
 
         """
-
         ap = {}
         ap['essid'] = misc.RunRegex(essid_pattern, cell)
         try:
@@ -1056,6 +1060,10 @@ class BaseWirelessInterface(BaseInterface):
             freq = misc.RunRegex(freq_pattern, cell)
             ap['channel'] = self._FreqToChannel(freq)
 
+        # Bit Rate
+        ap['bitrates'] = misc.RunRegex(bitrates_pattern, cell).split('\n')
+        ap['bitrates'] = '; '.join(m.strip() for m in ap['bitrates']).rstrip('; ')
+        
         # BSSID
         ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)
 
@@ -1180,6 +1188,45 @@ class BaseWirelessInterface(BaseInterface):
         bssid = misc.RunRegex(bssid_pattern, output)
         return bssid
 
+    def GetCurrentBitrate(self, iwconfig=None):
+        """ Get the current bitrate for the interface. """
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+            
+        bitrate = misc.RunRegex(bitrate_pattern, output)
+        return bitrate
+
+    def GetOperationalMode(self, iwconfig=None):
+        """ Get the operational mode for the interface. """
+        if not iwconfig:
+            cmd = 'iwconfig ' + self.iface
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwconfig
+            
+        opmode = misc.RunRegex(opmode_pattern, output)
+        if opmode:
+            opmode = opmode.strip()
+        return opmode
+
+    def GetAvailableAuthMethods(self, iwlistauth=None):
+        """ Get the available authentication methods for the interface. """
+        if not iwlistauth:
+            cmd = 'iwlist ' + self.iface + ' auth'
+            if self.verbose: print cmd
+            output = misc.Run(cmd)
+        else:
+            output = iwlistauth
+            
+        authm = misc.RunRegex(authmethods_pattern, output)
+        authm_list = [m.strip() for m in authm.split('\n') if m.strip()]
+        return ';'.join(authm_list)
+
     def _get_link_quality(self, output):
         """ Parse out the link quality from iwlist scan or iwconfig output. """
         try:
@@ -1247,3 +1294,4 @@ class BaseWirelessInterface(BaseInterface):
         if network:
             network = misc.to_unicode(network)
         return network
+

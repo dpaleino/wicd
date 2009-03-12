@@ -26,9 +26,7 @@ from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-
-
-language = misc.get_language_list_gui()
+from wicd.translations import language
 
 daemon = None
 wired = None
@@ -56,9 +54,9 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         use_global_dns_t = language['use_global_dns']
         dns_dom_t    = ('editcp',language['dns_domain']+':   ')
         search_dom_t = ('editcp',language['search_domain']+':')
-        dns1_t       = ('editcp',language['dns']+ ' ' + language['1']+':'+' '*8)
-        dns2_t       = ('editcp',language['dns']+ ' ' + language['2']+':'+' '*8)
-        dns3_t       = ('editcp',language['dns']+ ' ' + language['3']+':'+' '*8)
+        dns1_t       = ('editcp',language['dns']+ ' 1'+':'+' '*8)
+        dns2_t       = ('editcp',language['dns']+ ' 2'+':'+' '*8)
+        dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
 
         cancel_t = 'Cancel'
         ok_t = 'OK'

@@ -79,7 +79,11 @@ def catchdbus(func):
         try:
             return func(*args, **kwargs)
         except DBusException, e:
-            print "warning: ignoring exception %s" % e
+            if "DBus.Error.AccessDenied" in e:
+                error(None, language['access_denied'])
+                raise DBusException(e)
+            else:
+                print "warning: ignoring exception %s" % e
             return None
     wrapper.__name__ = func.__name__
     wrapper.__module__ = func.__module__
@@ -693,6 +697,7 @@ def handle_no_dbus():
                                                     block=False))
     return False
 
+@catchdbus
 def main(argv):
     """ The main frontend program.
 

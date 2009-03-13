@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """ ioctl Network interface control tools for wicd.
 
@@ -66,6 +67,7 @@ SIOCGIWESSID = 0x8B1B
 SIOCGIWRANGE = 0x8B0B
 SIOCGIWAP = 0x8B15
 SIOCGIWSTATS = 0x8B0F
+SIOCGIWRATE = 0x8B21
 
 # Got these from /usr/include/sockios.h
 SIOCGIFADDR = 0x8915
@@ -295,6 +297,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         
         ap["bssid"] = cell["bssid"]
         ap["mode"] = cell["mode"]
+        ap["bitrates"] = cell["bitrate"]
         
         if cell["enc"]:
             ap["encryption"] = True
@@ -479,6 +482,31 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         raw_addr = struct.unpack("xxBBBBBB", result[:8])
         return "%02X:%02X:%02X:%02X:%02X:%02X" % raw_addr
 
+    def GetCurrentBitrate(self, iwconfig=None):
+        """ Get the current bitrate for the interface. """
+        if not self.iface: return ""
+        data = (self.iface + '\0' * 32)[:32]
+        fmt = "ihbb"
+        size = struct.calcsize(fmt)
+        try:
+            result = fcntl.ioctl(self.sock.fileno(), SIOCGIWRATE, data)[16:]
+        except IOError, e:
+            if self.verbose:
+                print "SIOCGIWRATE failed: " + str(e)
+            return ""
+        f, e, x, x = struct.unpack(fmt, result[:size])
+	return "%s %s" % ((f / 1000000), 'Mb/s')
+
+    #def GetOperationalMode(self, iwconfig=None):
+    #    """ Get the operational mode for the interface. """
+    #    TODO: implement me
+    #    return ''
+
+    #def GetAvailableAuthMethods(self, iwlistauth=None):
+    #    """ Get the authentication methods for the interface. """
+    #    TODO: Implement me
+    #    return ''
+
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
@@ -544,3 +572,4 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             return None
 
         return buff.strip('\x00')
+

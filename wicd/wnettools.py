@@ -511,29 +511,30 @@ class BaseInterface(object):
         search_dom -- DNS search domain
 
         """
+        if not self.iface: return False
         resolv_params = ""
         if dns_dom:
-            resolv_params = ''.join([resolv_params, 'domain ', dns_dom, '\n'])
+            resolv_params += 'domain %s\n' % dns_dom
         if search_dom:
-            resolv_params = ''.join([resolv_params, 'search ', search_dom,
-                                     '\n'])
-        valid_dns_list = ['nameserver']
-        for dns in [dns1, dns2, dns3]:
+            resolv_params += 'search %s\n' % search_dom
+
+        valid_dns_list = []
+        for dns in (dns1, dns2, dns3):
             if dns:
                 if misc.IsValidIP(dns):
                     print 'Setting DNS : ' + dns
-                    valid_dns_list.append(dns)
+                    valid_dns_list.append("nameserver %s\n" % dns)
                 else:
-                    print 'DNS IP is not a valid IP address, skipping'
-        # Make sure we have more than just 'nameserver' in the list.
-        if len(valid_dns_list) > 1:
-            resolv_params +=  ' '.join(valid_dns_list) + '\n'
+                    print 'DNS IP %s is not a valid IP address, skipping' % dns
+
+        if valid_dns_list:
+            resolv_params += ''.join(valid_dns_list)
 
         if self.resolvconf_cmd:
-            print "running resolvconf"
-            p = misc.Run(' '.join([self.resolvconf_cmd, '-a', self.iface]),
-                         include_stderr=True, return_obj=True)
-            p.communicate(input=resolv_params)[0]
+            cmd = [self.resolvconf_cmd, '-a', self.iface]
+            if self.verbose: print cmd
+            p = misc.Run(cmd, include_stderr=True, return_obj=True)
+            p.communicate(input=resolv_params)
         else:
             resolv = open("/etc/resolv.conf", "w")
             resolv.write(resolv_params + "\n")

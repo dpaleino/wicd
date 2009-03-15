@@ -896,20 +896,22 @@ class appGUI():
                                                 data[5],
                                                 data[4], False)
             
-        if self.diag:
-            if 'esc' in keys:
-                self.restore_primary()
-            if 'meta enter' in keys:
-                self.diag.save_settings()
-                self.restore_primary()
         for k in keys:
-            self.frame.keypress(self.size,k)
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
                 self.frame.mouse_event( self.size,
                         event, button, col, row,
                         focus=True)
                 continue
+            if self.diag:
+                if  k == 'esc':
+                    self.restore_primary()
+                    break
+                if k == 'meta enter':
+                    self.diag.save_settings()
+                    self.restore_primary()
+                    break
+            self.frame.keypress(self.size,k)
             if k == "window resize":
                 self.size = ui.get_cols_rows()
                 continue

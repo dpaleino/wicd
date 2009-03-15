@@ -224,6 +224,17 @@ class TabColumns(urwid.WidgetWrap):
         
         return key
         #    self.listbox.body = lw
+    def mouse_event(self,size,event,button,x,y,focus):
+        wid = self.pile.get_focus().get_body()
+        if wid == self.columns:
+            self.active_tab.set_attr('body')
+
+        self._w.mouse_event(size,event,button,x,y,focus)
+        if wid == self.columns:
+            self.active_tab.set_attr('body')
+            self.columns.get_focus().set_attr('tab active')
+            self.active_tab = self.columns.get_focus()
+            self.gen_pile(self.tab_map[self.active_tab])
 
 
 ### Combo box code begins here
@@ -531,7 +542,8 @@ class ClickCols(urwid.WidgetWrap):
         self.args = args
     def mouse_event(self,size,event,button,x,y,focus):
         if event == "mouse press":
-            self.callback(self.args)
+            # The keypress dealie in wicd-curses.py expects a list of keystrokes
+            self.callback([self.args])
 
 # htop-style menu menu-bar on the bottom of the screen
 class OptCols(urwid.WidgetWrap):

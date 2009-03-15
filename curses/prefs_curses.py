@@ -68,8 +68,8 @@ class PrefsDialog(urwid.WidgetWrap):
 
         global_dns_cat_t = ('header',language['global_dns_servers'])
         global_dns_t     = ('editcp',language['use_global_dns'])
-        dns_dom_t        = ('editcp','    DNS Domain:   ')
-        search_dom_t     = ('editcp','    Search domain:')
+        dns_dom_t        = ('editcp','    '+language['dns_domain']+':   ')
+        search_dom_t     = ('editcp','    '+language['search_domain']+':')
         dns1_t           = ('editcp','    DNS server 1: ')
         dns2_t           = ('editcp','    DNS server 2: ')
         dns3_t           = ('editcp','    DNS server 3: ')

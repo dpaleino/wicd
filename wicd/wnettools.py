@@ -74,7 +74,7 @@ blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
-__all__ = ["SetDNS", "GetDefaultGateway", "GetWiredInterfaces",
+__all__ = ["GetDefaultGateway", "GetWiredInterfaces",
            "GetWirelessInterfaces", "IsValidWpaSuppDriver"]
 
 def _sanitize_string(string):
@@ -88,33 +88,6 @@ def _sanitize_string_strict(string):
         return translate(str(string), blank_trans, blacklist_strict)
     else:
         return string
-
-def SetDNS(dns1=None, dns2=None, dns3=None, dns_dom=None, search_dom=None):
-    """ Set the DNS of the system to the specified DNS servers.
-
-    Opens up resolv.conf and writes in the nameservers.
-
-    Keyword arguments:
-    dns1 -- IP address of DNS server 1
-    dns2 -- IP address of DNS server 2
-    dns3 -- IP address of DNS server 3
-    dns_dom -- DNS domain
-    search_dom -- DNS search domain
-
-    """
-    resolv = open("/etc/resolv.conf", "w")
-    if dns_dom:
-        resolv.write("domain %s\n" % dns_dom)
-    if search_dom:
-        resolv.write('search %s\n' % search_dom)
-    for dns in [dns1, dns2, dns3]:
-        if dns:
-            if misc.IsValidIP(dns):
-                print 'Setting DNS : ' + dns
-                resolv.write('nameserver ' + dns + '\n')
-            else:
-                print 'DNS IP is not a valid IP address, not writing to resolv.conf'
-    resolv.close()
 
 def GetDefaultGateway():
     """ Attempts to determine the default gateway by parsing route -n. """
@@ -291,6 +264,11 @@ class BaseInterface(object):
         self.CheckWirelessTools()
         self.CheckSudoApplications()
         self.CheckRouteFlushTool()
+        self.CheckResolvConf()
+
+    def CheckResolvConf(self):
+        """ Checks for the existence of resolvconf."""
+        self.resolvconf_cmd = self._find_program_path("resolvconf")
         
     def CheckDHCP(self):
         """ Check for the existence of valid DHCP clients. 
@@ -518,7 +496,50 @@ class BaseInterface(object):
             return 
         if self.verbose: print cmd
         misc.Run(cmd)
-            
+
+    def SetDNS(self, dns1=None, dns2=None, dns3=None, 
+               dns_dom=None, search_dom=None):
+        """ Set the DNS of the system to the specified DNS servers.
+
+        Opens up resolv.conf and writes in the nameservers.
+
+        Keyword arguments:
+        dns1 -- IP address of DNS server 1
+        dns2 -- IP address of DNS server 2
+        dns3 -- IP address of DNS server 3
+        dns_dom -- DNS domain
+        search_dom -- DNS search domain
+
+        """
+        if not self.iface: return False
+        resolv_params = ""
+        if dns_dom:
+            resolv_params += 'domain %s\n' % dns_dom
+        if search_dom:
+            resolv_params += 'search %s\n' % search_dom
+
+        valid_dns_list = []
+        for dns in (dns1, dns2, dns3):
+            if dns:
+                if misc.IsValidIP(dns):
+                    if self.verbose:
+                        print 'Setting DNS : ' + dns
+                    valid_dns_list.append("nameserver %s\n" % dns)
+                else:
+                    print 'DNS IP %s is not a valid IP address, skipping' % dns
+
+        if valid_dns_list:
+            resolv_params += ''.join(valid_dns_list)
+
+        if self.resolvconf_cmd:
+            cmd = [self.resolvconf_cmd, '-a', self.iface]
+            if self.verbose: print cmd
+            p = misc.Run(cmd, include_stderr=True, return_obj=True)
+            p.communicate(input=resolv_params)
+        else:
+            resolv = open("/etc/resolv.conf", "w")
+            resolv.write(resolv_params + "\n")
+            resolv.close()
         
     def FlushRoutes(self):
         """ Flush network routes for this device. """

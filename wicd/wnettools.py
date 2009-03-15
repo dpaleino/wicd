@@ -522,7 +522,8 @@ class BaseInterface(object):
         for dns in (dns1, dns2, dns3):
             if dns:
                 if misc.IsValidIP(dns):
-                    print 'Setting DNS : ' + dns
+                    if self.verbose:
+                        print 'Setting DNS : ' + dns
                     valid_dns_list.append("nameserver %s\n" % dns)
                 else:
                     print 'DNS IP %s is not a valid IP address, skipping' % dns

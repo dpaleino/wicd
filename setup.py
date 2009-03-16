@@ -441,7 +441,6 @@ try:
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'
-    data.append (( piddir, [] ))
     if not wpath.no_install_docs:
         data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
                                      'README', 'CHANGES', ]))

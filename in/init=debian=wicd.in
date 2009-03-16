@@ -18,13 +18,17 @@
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 DESC="Network connection manager"
 NAME=wicd
+RUNDIR=/var/run/$NAME
 DAEMON=%SBIN%$NAME
 DAEMON_ARGS=""
-PIDFILE=%PIDFILE%
+PIDFILE=$RUNDIR/wicd.pid
 SCRIPTNAME=%INIT%%INITFILENAME%
 
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
+
+# Create RUNDIR if it doesn't exist
+[ -d "$RUNDIR" ] || mkdir -p "$RUNDIR"
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME

@@ -8,7 +8,7 @@
 #
 # processname:	wicd
 # config:
-# pidfile: /var/run/wicd.pid
+# pidfile: %PIDFILE%
 #
 # $Id: template.init 9689 2008-03-27 16:15:39Z patrys $
 

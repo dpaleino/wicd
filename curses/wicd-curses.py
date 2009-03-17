@@ -90,13 +90,13 @@ class wrap_exceptions:
                 #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
-                print "\n"+language['terminated']
+                print >> sys.stderr, "\n"+language['terminated']
                 #raise
             except DBusException:
                 #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
-                print "\n"+language['dbus_fail']
+                print >> sys.stderr,"\n"+language['dbus_fail']
                 raise
             except :
                 # Quit the loop
@@ -105,7 +105,7 @@ class wrap_exceptions:
                 # Zap the screen
                 ui.stop()
                 # Print out standard notification:
-                print "\n" + language['exception']
+                print >> sys.stderr, "\n" + language['exception']
                 # Flush the buffer so that the notification is always above the
                 # backtrace
                 sys.stdout.flush()
@@ -933,7 +933,7 @@ def setup_dbus(force=True):
     except DBusException:
         # I may need to be a little more verbose here.
         # Suggestions as to what should go here, please?
-        print language['cannot_connect_to_daemon']
+        print >> sys.stderr, language['cannot_connect_to_daemon']
         #raise
         # return False # <- Will need soon.
     bus = dbusmanager.get_bus()

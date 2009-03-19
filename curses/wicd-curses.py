@@ -831,15 +831,15 @@ class appGUI():
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:
-                pass
-                #focus = self.frame.body.get_focus()
-                #if focus == self.wiredCB:
-                #    self.special = focus
-                #    self.connect("wired",0)
-                #else:
-                #    # wless list only other option
-                #    wid,pos  =  self.thePile.get_focus().get_focus()
-                #    self.connect("wireless",pos)
+                #pass
+                focus = self.frame.body.get_focus()
+                if focus == self.wiredCB:
+                    self.special = focus
+                    self.connect("wired",0)
+                else:
+                    # wless list only other option
+                    wid,pos  =  self.thePile.get_focus().get_focus()
+                    self.connect("wireless",pos)
 
             if "esc" in keys:
                 # Force disconnect here if connection in progress

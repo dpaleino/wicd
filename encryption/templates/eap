@@ -1,7 +1,8 @@
 name = EAP-FAST
 author = Adam Blackburn
 version = 2
-require username *Username password *Password pac_file *Path_To_PAC_File
+require username *Username password *Password 
+optional pac_file *Path_To_PAC_File
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

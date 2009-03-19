@@ -427,7 +427,7 @@ class ConnectThread(threading.Thread):
                 return
         
     @abortable
-    def set_dns_addresses(self):
+    def set_dns_addresses(self, iface):
         """ Set the DNS address(es).
 
         If static DNS servers or global DNS servers are specified, set them.
@@ -435,19 +435,19 @@ class ConnectThread(threading.Thread):
         
         """
         if self.network.get('use_global_dns'):
-            BACKEND.SetDNS(misc.Noneify(self.global_dns_1),
-                           misc.Noneify(self.global_dns_2), 
-                           misc.Noneify(self.global_dns_3),
-                           misc.Noneify(self.global_dns_dom),
-                           misc.Noneify(self.global_search_dom))
+            iface.SetDNS(misc.Noneify(self.global_dns_1),
+                         misc.Noneify(self.global_dns_2), 
+                         misc.Noneify(self.global_dns_3),
+                         misc.Noneify(self.global_dns_dom),
+                         misc.Noneify(self.global_search_dom))
         elif self.network.get('use_static_dns') and (self.network.get('dns1') or
                     self.network.get('dns2') or self.network.get('dns3')):
             self.SetStatus('setting_static_dns')
-            BACKEND.SetDNS(self.network.get('dns1'),
-                           self.network.get('dns2'),
-                           self.network.get('dns3'),
-                           self.network.get('dns_domain'),
-                           self.network.get('search_domain'))
+            iface.SetDNS(self.network.get('dns1'),
+                         self.network.get('dns2'),
+                         self.network.get('dns3'),
+                         self.network.get('dns_domain'),
+                         self.network.get('search_domain'))
 
     @abortable
     def release_dhcp_clients(self, iface):
@@ -837,7 +837,7 @@ class WirelessConnectThread(ConnectThread):
         # Set up gateway, IP address, and DNS servers.
         self.set_broadcast_address(wiface)
         self.set_ip_address(wiface)
-        self.set_dns_addresses()
+        self.set_dns_addresses(wiface)
         
         # Run post-connection script.
         self.run_global_scripts_if_needed(wpath.postconnectscripts)
@@ -1025,7 +1025,7 @@ class WiredConnectThread(ConnectThread):
         # Set gateway, IP adresses, and DNS servers.
         self.set_broadcast_address(liface)
         self.set_ip_address(liface)
-        self.set_dns_addresses()
+        self.set_dns_addresses(liface)
         
         # Run post-connection script.
         self.run_global_scripts_if_needed(wpath.postconnectscripts)

@@ -577,6 +577,7 @@ class BaseInterface(object):
         The IP address of the interface in dotted quad form.
 
         """
+        if not self.iface: return ""
         if not ifconfig:
             cmd = 'ifconfig ' + self.iface
             if self.verbose: print cmd

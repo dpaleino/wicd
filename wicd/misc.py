@@ -69,7 +69,8 @@ class WicdError(Exception):
     
 
 __LANG = None
-def Run(cmd, include_stderr=False, return_pipe=False, return_obj=False):
+def Run(cmd, include_stderr=False, return_pipe=False,
+        return_obj=False, return_retcode=True):
     """ Run a command.
 
     Runs the given command, returning either the output
@@ -81,8 +82,10 @@ def Run(cmd, include_stderr=False, return_pipe=False, return_obj=False):
                       be included in the pipe to the cmd.
     return_pipe - Boolean specifying if a pipe to the
                   command should be returned.  If it is
-                  false, all that will be returned is
+                  False, all that will be returned is
                   one output string from the command.
+    return_obj - If True, Run will return the Popen object
+                 for the command that was run.
 
     """
     global __LANG
@@ -135,9 +138,15 @@ def LaunchAndWait(cmd):
     """ Launches the given program with the given arguments, then blocks.
 
     cmd : A list contained the program name and its arguments.
+
+    returns: The exit code of the process.
     
     """
-    call(cmd, shell=False)
+    if not isinstance(cmd, list):
+        cmd = to_unicode(str(cmd))
+        cmd = cmd.split()
+    p = Popen(cmd, shell=False, stdout=PIPE, stderr=STDOUT, stdin=None)
+    return p.wait()
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid. """

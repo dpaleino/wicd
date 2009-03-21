@@ -425,7 +425,30 @@ class ConnectThread(threading.Thread):
                 if self.connect_result != "aborted":
                     self.abort_connection(dhcp_status)
                 return
+
+    @abortable
+    def verify_association(self, iface):
+        """ Verify that our association the AP is valid.
         
+        Try to ping the gateway we have set to see if we're
+        really associated with it.  This is only done if
+        we're using a static IP.
+        
+        """
+        if self.network.get('gateway'):
+            self.SetStatus('verifying_association')
+            print "Verifying AP association"
+            retcode = self.iface.VerifyAPAssociation(self.network['gateway'])
+            #TODO this should be in wnettools.py
+            if retcode:
+                print "Connection Failed: Failed to ping the access point!"
+                # Clean up before aborting.
+                iface.SetAddress('0.0.0.0')
+                iface.FlushRoutes()
+                if hasattr(iface, "StopWPA"):
+                    iface.StopWPA()
+                self.abort_connection("association_failed")
+
     @abortable
     def set_dns_addresses(self, iface):
         """ Set the DNS address(es).
@@ -838,6 +861,7 @@ class WirelessConnectThread(ConnectThread):
         self.set_broadcast_address(wiface)
         self.set_ip_address(wiface)
         self.set_dns_addresses(wiface)
+        self.verify_association(wiface)
         
         # Run post-connection script.
         self.run_global_scripts_if_needed(wpath.postconnectscripts)

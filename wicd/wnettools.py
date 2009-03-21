@@ -585,6 +585,17 @@ class BaseInterface(object):
             output = ifconfig
         return misc.RunRegex(ip_pattern, output)
     
+    def VerifyAPAssociation(self, gateway):
+        """ Verify assocation with an access point. 
+        
+        Verifies that an access point can be contacted by
+        trying to ping it.
+        
+        """
+        cmd = "ping -q -w 3 -c 1 %s" % gateway
+        if self.verbose: print cmd
+        return misc.LaunchAndWait(cmd)
+
     def IsUp(self, ifconfig=None):
         """ Determines if the interface is up.
 

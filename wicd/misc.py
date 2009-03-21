@@ -295,12 +295,10 @@ def __parse_field_ent(fields, field_type='require'):
     ret = []
     # We need an even number of entries in the line for it to be valid.
     if (len(fields) % 2) != 0:
-        print "Invalid '%s' line found in template %s" % (field_type, enctype)
         return None
     else:
         for val, disp_val in grouper(2, fields, fillvalue=None):
             if val.startswith("*") or not disp_val.startswith("*"):
-                print "Invalid '%s' line found in template %s" % (field_type, enctype)
                 return None
             ret.append([val, disp_val[1:]])
         return ret
@@ -321,14 +319,15 @@ def _parse_enc_template(enctype):
     cur_type["fields"] = []
     cur_type['optional'] = []
     cur_type['required'] = []
+    cur_type['name'] = ""
     for index, line in enumerate(f):
-        if line.startswith("name") and not "name" in cur_type:
+        if line.startswith("name") and not cur_type["name"]:
             cur_type["name"] = parse_ent(line, "name")
         elif line.startswith("require"):
-            cur_type["required"] = __parse_field_ent(parse_ent(line,
-                                                               "require"))
+            cur_type["required"] = __parse_field_ent(parse_ent(line, "require"))
             if not cur_type["required"]:
                 # An error occured parsing the require line.
+                print "Invalid 'required' line found in template %s" % enctype
                 continue
         elif line.startswith("optional"):
             cur_type["optional"] = __parse_field_ent(parse_ent(line,
@@ -336,6 +335,7 @@ def _parse_enc_template(enctype):
                                                      field_type="optional")
             if not cur_type["optional"]:
                 # An error occured parsing the optional line.
+                print "Invalid 'optional' line found in template %s" % enctype
                 continue
         elif line.startswith("----"):
             # We're done.

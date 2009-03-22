@@ -1,8 +1,13 @@
-""" Misc - miscellaneous functions for wicd """
+""" misc - miscellaneous functions for wicd
+
+This module contains a large variety of utility functions used
+throughout wicd.
+
+"""
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as

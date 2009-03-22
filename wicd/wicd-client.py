@@ -14,14 +14,12 @@ class TrayIcon() -- Parent class of TrayIconGUI and IconConnectionInfo.
     class StatusTrayIconGUI() -- Implements the tray icon using a 
                                  gtk.StatusIcon.
     class EggTrayIconGUI() -- Implements the tray icon using egg.trayicon.
-def usage() -- Prints usage information.
-def main() -- Runs the wicd frontend main loop.
 
 """
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -464,7 +462,6 @@ class TrayIcon(object):
                     signal_img = 'signal-25.png'
             return wpath.images + signal_img
             
-        @catchdbus
         def on_net_menu_activate(self, item):
             """ Trigger a background scan to populate the network menu. 
             
@@ -475,18 +472,20 @@ class TrayIcon(object):
             mousing past the menu to select another menu item.
             
             """
-            def dummy(x=None): pass
-            
             if self._is_scanning:
                 return True
             
             self.init_network_menu()
-            time.sleep(.4)
+            gobject.timeout_add(800, self._trigger_scan_if_needed, item)
+            
+        @catchdbus
+        def _trigger_scan_if_needed(self, item):
             while gtk.events_pending():
                 gtk.main_iteration()
             if item.state != gtk.STATE_PRELIGHT:
-                return True
+                return False
             wireless.Scan(False)
+            return False
         
         @catchdbus
         def populate_network_menu(self, data=None):
@@ -535,7 +534,7 @@ class TrayIcon(object):
             net_menuitem.show()
         
         def init_network_menu(self):
-            """ Set the right-click menu for to the scanning state. """
+            """ Set the right-click network menu to the scanning state. """
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             submenu = net_menuitem.get_submenu()
             self._clear_menu(submenu)
@@ -592,6 +591,7 @@ class TrayIcon(object):
                 if event.button == 1:
                     self.toggle_wicd_gui()
                 elif event.button == 3:
+                    self._menu_just_opened = True
                     self.init_network_menu()
                     self.menu.popup(None, None, None, event.button, event.time)
 
@@ -629,6 +629,7 @@ class TrayIcon(object):
 
             def on_popup_menu(self, status, button, timestamp):
                 """ Opens the right click menu for the tray icon. """
+                self._menu_just_opened = True
                 self.init_network_menu()
                 self.menu.popup(None, None, None, button, timestamp)
 

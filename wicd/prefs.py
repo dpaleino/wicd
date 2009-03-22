@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" Wicd Preferences Dialog.
+""" prefs -- Wicd Preferences Dialog.
 
 Displays the main settings dialog window for wicd and
 handles recieving/sendings the settings from/to the daemon.
@@ -8,8 +8,8 @@ handles recieving/sendings the settings from/to the daemon.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2008-2009 Adam Blackburn
+#   Copyright (C) 2008-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as

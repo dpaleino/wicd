@@ -549,6 +549,7 @@ class WicdDaemon(dbus.service.Object):
                    info[1] = essid
                    info[2] = signal strength
                    info[3] = internal networkid
+                   info[4] = bitrate
         SUSPENDED - info[0] = ""
                 
         

@@ -259,7 +259,8 @@ class ConnectionStatus(object):
             self.reconnect_tries = 0
             info = [str(wifi_ip), str(wireless.GetCurrentNetwork(iwconfig)),
                     str(self._get_printable_sig_strength()),
-                    str(wireless.GetCurrentNetworkID(iwconfig))]
+                    str(wireless.GetCurrentNetworkID(iwconfig)),
+                    wireless.GetCurrentGitrate(iwconfig)]
         elif state == misc.WIRED:
             self.reconnect_tries = 0
             info = [str(wired_ip)]

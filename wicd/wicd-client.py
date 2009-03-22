@@ -146,7 +146,7 @@ class TrayIcon(object):
             self.cur_sndbytes = int(open(dev_dir + "tx_bytes", "r").read().strip())
         except:
            self.cur_sndbytes = -1
-           self.cur.rcvbytes = -1
+           self.cur_rcvbytes = -1
 
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
@@ -176,7 +176,7 @@ class TrayIcon(object):
 
         def update_tooltip(self):
             if (self.network_type == "none"):
-                self.tr.set_tooltip(language['not_Connected'])
+                self.tr.set_tooltip(language['not_connected'])
             elif (self.network_type == "wireless"):
                 self.tr.set_tooltip(language['tray_connected_to_wireless']
                         .replace('$A', self.network_name)

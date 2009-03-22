@@ -202,23 +202,23 @@ def help_dialog(body):
 
     textH = urwid.Text([
 "For more detailed help, consult the wicd-curses(8) man page.\n",
-('bold','->'),' and ',('bold','<-')," are the right and left arrows respectively\n"])
+('bold','->'),' and ',('bold','<-')," are the right and left arrows respectively.\n"])
 
     text1 = urwid.Text([
-('bold','H h ?'),": Display this help dialog\n",
-('bold','    C'),": Connect to selected network\n",
-('bold','    D'),": Disconnect from all networks\n",
-('bold','  ESC'),": Stop a network connection in progress\n",
-('bold',' F5 R'),": Refresh network list\n",
-('bold','    P'),": Prefrences dialog\n",
+('bold','  H h ?'),": Display this help dialog\n",
+('bold','enter C'),": Connect to selected network\n",
+('bold','      D'),": Disconnect from all networks\n",
+('bold','    ESC'),": Stop a network connection in progress\n",
+('bold','   F5 R'),": Refresh network list\n",
+('bold','      P'),": Prefrences dialog\n",
     ])
     text2 = urwid.Text([
-('bold','    I'),": Scan for hidden networks\n",
-('bold','    S'),": Select scripts\n",
-('bold','    O'),": Set up Ad-hoc network\n",
-('bold','   ->'),": Configure selected network\n",
-('bold','    A'),": Display 'about' dialog\n",
-('bold','    Q'),": Quit wicd-curses\n",
+('bold','      I'),": Scan for hidden networks\n",
+('bold','      S'),": Select scripts\n",
+('bold','      O'),": Set up Ad-hoc network\n",
+('bold','     ->'),": Configure selected network\n",
+('bold','      A'),": Display 'about' dialog\n",
+('bold','      Q'),": Quit wicd-curses\n",
     ])
     textF = urwid.Text('Press any key to return.')
     

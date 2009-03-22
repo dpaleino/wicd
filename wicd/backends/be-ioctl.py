@@ -34,7 +34,7 @@ from wicd import misc
 from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import *
-from wicd.wnettools import wep_pattern, signaldbm_pattern
+from wicd.wnettools import wep_pattern, signaldbm_pattern, neediface
 
 import iwscan
 import wpactrl
@@ -79,13 +79,13 @@ SIOCGIFFLAGS = 0x8913
 
 def get_iw_ioctl_result(iface, call):
     """ Makes the given ioctl call and returns the results.
-    
+
     Keyword arguments:
     call -- The ioctl call to make
-    
+
     Returns:
     The results of the ioctl call.
-    
+
     """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     buff = array.array('c', '\0' * 32)
@@ -118,12 +118,13 @@ class Interface(wnettools.BaseInterface):
         wnettools.BaseInterface.__init__(self, iface, verbose)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.Check()
-            
+
     def CheckWirelessTools(self):
         """ Check for the existence needed wireless tools """
         # We don't need any external apps so just return
         pass
 
+    @neediface("")
     def GetIP(self, ifconfig=""):
         """ Get the IP address of the interface.
 
@@ -138,17 +139,17 @@ class Interface(wnettools.BaseInterface):
             return None
         except OSError:
             return None
-        
+
         return socket.inet_ntoa(raw_ip[20:24])
-    
+
+    @neediface(False)
     def IsUp(self):
         """ Determines if the interface is up.
-        
+
         Returns:
         True if the interface is up, False otherwise.
-        
+
         """
-        if not self.iface: return False
         data = (self.iface + '\0' * 16)[:18]
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGIFFLAGS, data)
@@ -156,7 +157,7 @@ class Interface(wnettools.BaseInterface):
             if self.verbose:
                 print "SIOCGIFFLAGS failed: " + str(e)
             return False
-            
+
         flags, = struct.unpack('H', result[16:18])
         return bool(flags & 1)
 
@@ -174,18 +175,18 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         wnettools.BaseWiredInterface.__init__(self, iface, verbose)
         Interface.__init__(self, iface, verbose)
 
+    @neediface(False)
     def GetPluggedIn(self):
         """ Get the current physical connection state.
-        
+
         The method will first attempt to use ethtool do determine
         physical connection state.  Should ethtool fail to run properly,
         mii-tool will be used instead.
-        
+
         Returns:
         True if a link is detected, False otherwise.
-        
+
         """
-        if not self.iface: return False
         if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
             return self._eth_get_plugged_in()
         elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
@@ -197,10 +198,10 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
 
     def _eth_get_plugged_in(self):
         """ Use ethtool to determine the physical connection state.
-        
+
         Returns:
         True if a link is detected, False otherwise.
-        
+
         """
         if not self.IsUp():
             self.Up()
@@ -216,19 +217,19 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
                 print 'SIOCETHTOOL failed: ' + str(e)
             return False
         return bool(buff.tolist()[1])
-    
+
     def _mii_get_plugged_in(self):
         """ Use mii-tool to determine the physical connection state. 
-                
+
         Returns:
         True if a link is detected, False otherwise.
-        
+
         """
         if not self.IsUp():
             self.Up()
             time.sleep(2.5)
         buff = struct.pack('16shhhh', (self.iface + '\0' * 16)[:16], 0, 1,
-                                       0x0004, 0)
+                           0x0004, 0)
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGMIIPHY, buff)
         except IOError, e:
@@ -253,7 +254,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                                                  wpa_driver)
         Interface.__init__(self, iface, verbose)
         self.scan_iface = None
-        
+
+    @neediface([])
     def GetNetworks(self):
         """ Get a list of available wireless networks.
 
@@ -267,14 +269,14 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             except iwscan.error, e:
                 print "GetNetworks caught an exception: %s" % e
                 return []
-                
+
         try:
             results = self.scan_iface.Scan()
         except iwscan.error, e:
             print "ERROR: %s"
             return []
         return filter(None, [self._parse_ap(cell) for cell in results])
-    
+
     def _parse_ap(self, cell):
         """ Parse a single cell from the python-iwscan list. """
         ap = {}
@@ -283,22 +285,22 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         except UnicodeError:
             print 'Unicode problem with the current network essid, ignoring!!'
             return None
-        
+
         if ap['essid'] in [ "", '<hidden>']:
             ap['essid'] = '<hidden>'
             ap['hidden'] = True
         else:
             ap['hidden'] = False
-        
+
         if cell["channel"]:
             ap["channel"] = cell["channel"]
         else:
             ap["channel"] = self._FreqToChannel(cell["frequency"])
-        
+
         ap["bssid"] = cell["bssid"]
         ap["mode"] = cell["mode"]
         ap["bitrates"] = cell["bitrate"]
-        
+
         if cell["enc"]:
             ap["encryption"] = True
             if cell["ie"] and cell["ie"].get('type'):
@@ -310,7 +312,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                 ap['encryption_method'] = 'WEP'
         else:
             ap["encryption"] = False
-            
+
         # Link Quality
         ap['qual_found'] = True
         ap['quality'] = self._get_link_quality(cell['stats'])
@@ -324,9 +326,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             ap['strength'] = misc.RunRegex(signaldbm_pattern, cell["stats"])
         elif self.wpa_driver != RALINK_DRIVER:  # This is already set for ralink
             ap['strength'] = -1  
-            
+
         return ap
-            
+
     def _connect_to_wpa_ctrl_iface(self):
         """ Connect to the wpa ctrl interface. """
         ctrl_iface = '/var/run/wpa_supplicant'
@@ -340,7 +342,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         else:
             print "Couldn't find a wpa_supplicant ctrl_interface for iface %s" % self.iface
             return None
-    
+
     def ValidateAuthentication(self, auth_time):
         """ Validate WPA authentication.
 
@@ -350,27 +352,27 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             NOTE: It's possible this could return False,
             though in reality wpa_supplicant just isn't
             finished yet.
-            
+
             Keyword arguments:
             auth_time -- The time at which authentication began.
-            
+
             Returns:
             True if wpa_supplicant authenticated succesfully,
             False otherwise.
 
         """
         error= "Unable to find ctrl_interface for wpa_supplicant.  " + \
-                   "Could not validate authentication."
-        
+             "Could not validate authentication."
+
         # Right now there's no way to do this for ralink drivers
         if self.wpa_driver == RALINK_DRIVER:
             return True
-            
+
         wpa = self._connect_to_wpa_ctrl_iface()
         if not wpa:
             print "Failed to open ctrl interface"
             return False
-        
+
         MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
         disconnected_time = 0
@@ -380,15 +382,15 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             except:
                 print "wpa_supplicant status query failed."
                 return False
-            
+
             if self.verbose:
                 print 'wpa_supplicant ctrl_interface status query is %s' % str(status)
-                
+
             try:
                 [result] = [l for l in status if l.startswith("wpa_state=")]
             except ValueError:
                 return False
-            
+
             result = result
             if result.endswith("COMPLETED"):
                 return True
@@ -404,7 +406,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
 
         print 'wpa_supplicant authentication may have failed.'
         return False
-    
+
+    @neediface(False)
     def StopWPA(self):
         """ Terminates wpa_supplicant using its ctrl interface. """
         wpa = self._connect_to_wpa_ctrl_iface()
@@ -433,7 +436,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                                             info[4] == 'WEP'):
                         print 'Setting up WEP'
                         cmd = ''.join(['iwconfig ', self.iface, ' key ',
-                                      network.get('key')])
+                                       network.get('key')])
                         if self.verbose: print cmd
                         misc.Run(cmd)
                     else:
@@ -451,7 +454,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                             key_name = 'WPAPSK'
                         else:
                             print 'Unknown AuthMode, can\'t complete ' + \
-                            'connection process!'
+                                  'connection process!'
                             return
 
                         cmd_list = []
@@ -469,9 +472,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                             if self.verbose: print cmd
                             misc.Run(cmd)
 
+    @neediface("")
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
-        if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGIWAP, data)[16:]
@@ -482,9 +485,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         raw_addr = struct.unpack("xxBBBBBB", result[:8])
         return "%02X:%02X:%02X:%02X:%02X:%02X" % raw_addr
 
+    @neediface("")
     def GetCurrentBitrate(self, iwconfig=None):
         """ Get the current bitrate for the interface. """
-        if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
         fmt = "ihbb"
         size = struct.calcsize(fmt)
@@ -495,7 +498,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                 print "SIOCGIWRATE failed: " + str(e)
             return ""
         f, e, x, x = struct.unpack(fmt, result[:size])
-	return "%s %s" % ((f / 1000000), 'Mb/s')
+        return "%s %s" % ((f / 1000000), 'Mb/s')
 
     #def GetOperationalMode(self, iwconfig=None):
     #    """ Get the operational mode for the interface. """
@@ -507,6 +510,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
     #    TODO: Implement me
     #    return ''
 
+    @neediface(-1)
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
@@ -514,7 +518,6 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The signal strength.
 
         """
-        if not self.iface: return -1
         buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         strength = ord(buff[2])
         max_strength = self._get_max_strength()
@@ -524,7 +527,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             return int(strength)
         else:
             return None
-    
+
     def _get_max_strength(self):
         """ Gets the maximum possible strength from the wireless driver. """
         buff = array.array('c', '\0' * 700)
@@ -544,7 +547,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         data = data[0:size]
         values = struct.unpack(fmt, data)
         return values[12]
-    
+
+    @neediface(-100)
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
 
@@ -552,13 +556,13 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The dBm signal strength.
 
         """
-        if not self.iface: return -100
         buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         if not buff:
             return None
 
         return str((ord(buff[3]) - 256))
 
+    @neediface("")
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
 
@@ -566,10 +570,8 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The current network essid.
 
         """
-        if not self.iface: return ""
         buff = get_iw_ioctl_result(self.iface, SIOCGIWESSID)
         if not buff:
             return None
 
         return buff.strip('\x00')
-

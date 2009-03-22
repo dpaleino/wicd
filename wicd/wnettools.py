@@ -143,6 +143,25 @@ def IsValidWpaSuppDriver(driver):
         return False
     else:
         return True
+    
+def neediface(default_response):
+    """ A decorator for only running a method if self.iface is defined.
+    
+    This decorator is wrapped around Interface methods, and will
+    return a provided default_response value if self.iface is not
+    defined.
+    
+    """
+    def wrapper(func):
+        def newfunc(self, *args, **kwargs):
+            if not self.iface:
+                return default_response
+            return func(self, *args, **kwargs)
+        newfunc.__dict__ = func.__dict__
+        newfunc.__doc__ = func.__doc__
+        newfunc.__module__ = func.__module__
+        return newfunc
+    return wrapper
 
 
 class BaseInterface(object):
@@ -304,6 +323,7 @@ class BaseInterface(object):
         self.kdesu_cmd = self._find_program_path("kdesu")
         self.ktsuss_cmd = self._find_program_path("ktsuss")
 
+    @neediface(False)
     def Up(self):
         """ Bring the network interface up.
         
@@ -311,12 +331,12 @@ class BaseInterface(object):
         True
         
         """
-        if not self.iface: return False
         cmd = 'ifconfig ' + self.iface + ' up'
         if self.verbose: print cmd
         misc.Run(cmd)
         return True
 
+    @neediface(False)
     def Down(self):
         """ Take down the network interface. 
         
@@ -324,12 +344,12 @@ class BaseInterface(object):
         True
         
         """
-        if not self.iface: return False
         cmd = 'ifconfig ' + self.iface + ' down'
         if self.verbose: print cmd
         misc.Run(cmd)
         return True
 
+    @neediface("")
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
         """ Set the IP addresses of an interface.
 
@@ -339,9 +359,6 @@ class BaseInterface(object):
         broadcast -- broadcast address in dotted quad form
 
         """
-        if not self.iface:
-            return
-        
         for val in [ip, netmask, broadcast]:
             if not val:
                 continue
@@ -452,6 +469,7 @@ class BaseInterface(object):
             print 'DHCP connection failed'
             return 'dhcp_failed'
             
+    @neediface
     def StartDHCP(self):
         """ Start the DHCP client to obtain an IP address.
         
@@ -460,8 +478,6 @@ class BaseInterface(object):
         _check_dhcp_result for the possible values.
         
         """
-        if not self.iface: return False
-        
         cmd = self._get_dhcp_command('connect')
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
@@ -477,16 +493,16 @@ class BaseInterface(object):
         else:
             print 'ERROR no dhclient found!'
     
+    @neediface
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
-        if not self.iface: return False
         cmd = self._get_dhcp_command("release")
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface
     def DelDefaultRoute(self):
         """ Delete only the default route for a device. """
-        if not self.iface: return False
         if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
             cmd = '%s route del default dev %s' % (self.ip_cmd, self.iface)
         elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
@@ -497,6 +513,7 @@ class BaseInterface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface
     def SetDNS(self, dns1=None, dns2=None, dns3=None, 
                dns_dom=None, search_dom=None):
         """ Set the DNS of the system to the specified DNS servers.
@@ -511,7 +528,6 @@ class BaseInterface(object):
         search_dom -- DNS search domain
 
         """
-        if not self.iface: return False
         resolv_params = ""
         if dns_dom:
             resolv_params += 'domain %s\n' % dns_dom
@@ -541,9 +557,9 @@ class BaseInterface(object):
             resolv.write(resolv_params + "\n")
             resolv.close()
         
+    @neediface
     def FlushRoutes(self):
         """ Flush network routes for this device. """
-        if not self.iface: return False
         if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
             cmds = ['%s route flush dev %s' % (self.ip_cmd, self.iface)]
         elif self.route_cmd and self.flush_tool in [misc.AUTO, misc.ROUTE]:
@@ -555,6 +571,7 @@ class BaseInterface(object):
             if self.verbose: print cmd
             misc.Run(cmd)
 
+    @neediface
     def SetDefaultRoute(self, gw):
         """ Add a default route with the specified gateway.
 
@@ -562,7 +579,6 @@ class BaseInterface(object):
         gw -- gateway of the default route in dotted quad form
 
         """
-        if not self.iface: return
         if not misc.IsValidIP(gw):
             print 'WARNING: Invalid gateway found.  Aborting!'
             return False
@@ -570,6 +586,7 @@ class BaseInterface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface("")
     def GetIP(self, ifconfig=""):
         """ Get the IP address of the interface.
 
@@ -585,6 +602,19 @@ class BaseInterface(object):
             output = ifconfig
         return misc.RunRegex(ip_pattern, output)
     
+    @neediface(False)
+    def VerifyAPAssociation(self, gateway):
+        """ Verify assocation with an access point. 
+        
+        Verifies that an access point can be contacted by
+        trying to ping it.
+        
+        """
+        cmd = "ping -q -w 3 -c 1 %s" % gateway
+        if self.verbose: print cmd
+        return misc.LaunchAndWait(cmd)
+
+    @neediface(False)
     def IsUp(self, ifconfig=None):
         """ Determines if the interface is up.
 
@@ -592,7 +622,6 @@ class BaseInterface(object):
         True if the interface is up, False otherwise.
 
         """
-        if not self.iface: return False
         flags_file = '/sys/class/net/%s/flags' % self.iface
         try:
             flags = open(flags_file, "r").read().strip()
@@ -631,6 +660,7 @@ class BaseWiredInterface(BaseInterface):
         """
         BaseInterface.__init__(self, iface, verbose)
 
+    @neediface(False)
     def GetPluggedIn(self):
         """ Get the current physical connection state.
 
@@ -642,8 +672,6 @@ class BaseWiredInterface(BaseInterface):
         True if a link is detected, False otherwise.
 
         """
-        if not self.iface:
-            return False
         # check for link using /sys/class/net/iface/carrier
         # is usually more accurate
         sys_device = '/sys/class/net/%s/' % self.iface
@@ -741,6 +769,7 @@ class BaseWirelessInterface(BaseInterface):
         """ Sets the wpa_driver. """
         self.wpa_driver = _sanitize_string(driver)
 
+    @neediface(False)
     def SetEssid(self, essid):
         """ Set the essid of the wireless interface.
 
@@ -752,6 +781,7 @@ class BaseWirelessInterface(BaseInterface):
         if self.verbose: print str(cmd)
         misc.Run(cmd)
 
+    @neediface(False)
     def GetKillSwitchStatus(self):
         """ Determines if the wireless killswitch is enabled.
         
@@ -759,7 +789,6 @@ class BaseWirelessInterface(BaseInterface):
         True if the killswitch is enabled, False otherwise.
         
         """
-        if not self.iface: return False
         output = self.GetIwconfig()
 
         killswitch_pattern = re.compile('.*radio off', re.I | re.M | re.S)
@@ -770,9 +799,9 @@ class BaseWirelessInterface(BaseInterface):
 
         return radiostatus
     
+    @neediface(False)
     def GetIwconfig(self):
         """ Returns the output of iwconfig for this interface. """
-        if not self.iface: return ""
         cmd = "iwconfig " + self.iface
         if self.verbose: print cmd
         return misc.Run(cmd)
@@ -881,6 +910,7 @@ class BaseWirelessInterface(BaseInterface):
                 ap['encryption'] = False
         return ap
 
+    @neediface(False)
     def SetMode(self, mode):
         """ Set the mode of the wireless interface.
 
@@ -888,7 +918,6 @@ class BaseWirelessInterface(BaseInterface):
         mode -- mode to set the interface to
 
         """
-        if not self.iface: return False
         mode = _sanitize_string_strict(mode)
         if mode.lower() == 'master':
             mode = 'managed'
@@ -896,6 +925,7 @@ class BaseWirelessInterface(BaseInterface):
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface(False)
     def SetChannel(self, channel):
         """ Set the channel of the wireless interface.
 
@@ -903,7 +933,6 @@ class BaseWirelessInterface(BaseInterface):
         channel -- channel to set the interface to
 
         """
-        if not self.iface: return False
         if not channel.isdigit():
             print 'WARNING: Invalid channel found.  Aborting!'
             return False
@@ -912,6 +941,7 @@ class BaseWirelessInterface(BaseInterface):
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface(False)
     def SetKey(self, key):
         """ Set the encryption key of the wireless interface.
 
@@ -919,11 +949,11 @@ class BaseWirelessInterface(BaseInterface):
         key -- encryption key to set
 
         """
-        if not self.iface: return False
         cmd = 'iwconfig %s key %s' % (self.iface, key)
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface(False)
     def Associate(self, essid, channel=None, bssid=None):
         """ Associate with the specified wireless network.
 
@@ -933,7 +963,6 @@ class BaseWirelessInterface(BaseInterface):
         bssid -- bssid of the network
 
         """
-        if not self.iface: return False
         cmd = ['iwconfig', self.iface, 'essid', essid]
         if channel and str(channel).isdigit():
             cmd.extend(['channel', str(channel)])
@@ -957,6 +986,7 @@ class BaseWirelessInterface(BaseInterface):
         if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 
+    @neediface(False)
     def Authenticate(self, network):
         """ Authenticate with the specified wireless network.
 
@@ -1014,6 +1044,7 @@ class BaseWirelessInterface(BaseInterface):
                     if self.verbose: print ' '.join(cmd)
                     misc.Run(cmd)
 
+    @neediface([])
     def GetNetworks(self):
         """ Get a list of available wireless networks.
 
@@ -1191,12 +1222,14 @@ class BaseWirelessInterface(BaseInterface):
         cmd = 'wpa_cli -i' + self.iface + ' scan'
         misc.Run(cmd)
         
+    @neediface(False)
     def StopWPA(self):
         """ Terminates wpa using wpa_cli"""
         cmd = 'wpa_cli -i %s terminate' % self.iface
         if self.verbose: print cmd
         misc.Run(cmd)
 
+    @neediface("")
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
         if not iwconfig:
@@ -1209,6 +1242,7 @@ class BaseWirelessInterface(BaseInterface):
         bssid = misc.RunRegex(bssid_pattern, output)
         return bssid
 
+    @neediface("")
     def GetCurrentBitrate(self, iwconfig=None):
         """ Get the current bitrate for the interface. """
         if not iwconfig:
@@ -1221,6 +1255,7 @@ class BaseWirelessInterface(BaseInterface):
         bitrate = misc.RunRegex(bitrate_pattern, output)
         return bitrate
 
+    @neediface("")
     def GetOperationalMode(self, iwconfig=None):
         """ Get the operational mode for the interface. """
         if not iwconfig:
@@ -1235,6 +1270,7 @@ class BaseWirelessInterface(BaseInterface):
             opmode = opmode.strip()
         return opmode
 
+    @neediface("")
     def GetAvailableAuthMethods(self, iwlistauth=None):
         """ Get the available authentication methods for the interface. """
         if not iwlistauth:
@@ -1264,6 +1300,7 @@ class BaseWirelessInterface(BaseInterface):
         else:
             return None
 
+    @neediface(-1)
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
@@ -1279,6 +1316,7 @@ class BaseWirelessInterface(BaseInterface):
             output = iwconfig
         return self._get_link_quality(output)
     
+    @neediface(-100)
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
 
@@ -1297,6 +1335,7 @@ class BaseWirelessInterface(BaseInterface):
         dbm_strength = misc.RunRegex(signaldbm_pattern, output)
         return dbm_strength
 
+    @neediface("")
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
 
@@ -1315,4 +1354,3 @@ class BaseWirelessInterface(BaseInterface):
         if network:
             network = misc.to_unicode(network)
         return network
-

@@ -218,7 +218,7 @@ def help_dialog(body):
 ('bold','      O'),": Set up Ad-hoc network\n",
 ('bold','     ->'),": Configure selected network\n",
 ('bold','      A'),": Display 'about' dialog\n",
-('bold','      Q'),": Quit wicd-curses\n",
+('bold',' F8 q Q'),": Quit wicd-curses\n",
     ])
     textF = urwid.Text('Press any key to return.')
     
@@ -1013,7 +1013,8 @@ def run():
     gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(2000,app.update_status)
-    gobject.timeout_add(1000,app.update_time)
+    # This will make sure that it is updated on the second.
+    gobject.timeout_add(900,app.update_time)
     # DEFUNCT: Terminate the loop if the UI is terminated.
     #gobject.idle_add(app.stop_loop)
     loop.run()

@@ -1,4 +1,4 @@
-name = WEP (Hex)
+name = WEP (Hex [0-9/A-F])
 author = Adam Blackburn
 version = 1
 require key *Key

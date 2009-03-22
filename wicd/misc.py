@@ -285,10 +285,6 @@ def LoadEncryptionMethods():
     loaded, the template must be listed in the "active" file.
 
     """
-    def parse_ent(line, key):
-        return line.replace(key, "").replace("=", "").strip()
-    
-    encryptionTypes = []
     try:
         enctypes = open(wpath.encryption + "active","r").readlines()
     except IOError, e:
@@ -296,48 +292,72 @@ def LoadEncryptionMethods():
         raise IOError(e)
     
     # Parse each encryption method
-    for x in enctypes:
-        x = x.strip()
-        try:
-            f = open(wpath.encryption + x, "r")
-        except IOError:
-            print 'Failed to load encryption type ' + str(x)
-            continue
-        line = f.readlines()
-        f.close()
-        
-        cur_type = {}
-        cur_type[0] = parse_ent(line[0], "name")
-        cur_type[1] = x
-        cur_type[2] = {}
-        
-        # Find the line containing our required fields.
-        i = 1
-        try:
-            while not line[i].startswith("require"):
-                i += 1
-        except IndexError:
-            print "Bad encryption template: Couldn't find 'require' line"
-        requiredFields = parse_ent(line[i], "require")
-        requiredFields = requiredFields.split(" ")
-
-        # Get the required fields.
-        index = -1
-        for current in requiredFields:
-            # The pretty names will start with an * so we can
-            # separate them with that.
-            if current[0] == "*":
-                # Make underscores spaces
-                # and remove the *
-                cur_type[2][index][0] = current.replace("_", " ").lstrip("*")
-            else:
-                # Add to the list of things that are required.
-                index = len(cur_type[2])
-                cur_type[2][index] = {}
-                cur_type[2][index][1] = current
-        # Add the current type to the dict of encryption types.
-        encryptionTypes.append(cur_type)
+    encryptionTypes = []
+    for enctype in enctypes:
+        parsed_template = _parse_enc_template(enctype.strip())
+        if parsed_template:
+            encryptionTypes.append(parsed_template)
     return encryptionTypes
+
+def __parse_field_ent(fields, field_type='require'):
+    fields = fields.split(" ")
+    ret = []
+    # We need an even number of entries in the line for it to be valid.
+    if (len(fields) % 2) != 0:
+        return None
+    else:
+        for val, disp_val in grouper(2, fields, fillvalue=None):
+            if val.startswith("*") or not disp_val.startswith("*"):
+                return None
+            ret.append([val, disp_val[1:]])
+        return ret
+
+def _parse_enc_template(enctype):
+    """ Parse an encryption template. """
+    def parse_ent(line, key):
+        return line.replace(key, "").replace("=", "").strip()
+
+    try:
+        f = open(os.path.join(wpath.encryption, enctype), "r")
+    except IOError:
+        print "Failed to open template file %s" % enctype
+        return None
+
+    cur_type = {}
+    cur_type["type"] = enctype
+    cur_type["fields"] = []
+    cur_type['optional'] = []
+    cur_type['required'] = []
+    cur_type['name'] = ""
+    for index, line in enumerate(f):
+        if line.startswith("name") and not cur_type["name"]:
+            cur_type["name"] = parse_ent(line, "name")
+        elif line.startswith("require"):
+            cur_type["required"] = __parse_field_ent(parse_ent(line, "require"))
+            if not cur_type["required"]:
+                # An error occured parsing the require line.
+                print "Invalid 'required' line found in template %s" % enctype
+                continue
+        elif line.startswith("optional"):
+            cur_type["optional"] = __parse_field_ent(parse_ent(line,
+                                                               "optional"),
+                                                     field_type="optional")
+            if not cur_type["optional"]:
+                # An error occured parsing the optional line.
+                print "Invalid 'optional' line found in template %s" % enctype
+                continue
+        elif line.startswith("----"):
+            # We're done.
+            break
+    f.close()
+    if not cur_type["required"]:
+        print "Failed to find a 'require' line in template %s" % enctype
+        return None
+    if not cur_type["name"]:
+        print "Failed to find a 'name' line in template %s" % enctype
+        return None
+    else:
+        return cur_type
 
 def noneToString(text):
     """ Convert None, "None", or "" to string type "None"

@@ -308,8 +308,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Build the encryption menu
         activeID = -1  # Set the menu to this item when we are done
         for x, enc_type in enumerate(self.encrypt_types):
-            self.combo_encryption.append_text(enc_type[0])
-            if enc_type[1] == wireless.GetWirelessProperty(networkID, "enctype"):
+            self.combo_encryption.append_text(enc_type['name'])
+            if enc_type['type'] == wireless.GetWirelessProperty(networkID, "enctype"):
                 activeID = x
         self.combo_encryption.set_active(activeID)
         if activeID != -1:
@@ -384,7 +384,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
         for x, enc_type in enumerate(self.encrypt_types):
-            if enc_type[1] == user_enctype:
+            if enc_type['type'] == user_enctype:
                 activeID = x
         
         self.combo_encryption.set_active(activeID)
@@ -400,24 +400,32 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Check encryption info
         if self.chkbox_encryption.get_active():
             print "setting encryption info..."
-            encryption_info = self.encryption_info
-            encrypt_methods = misc.LoadEncryptionMethods()
+            encrypt_info = self.encryption_info
+            encrypt_methods = self.encrypt_types
             self.set_net_prop("enctype",
-                               encrypt_methods[self.combo_encryption.get_active()][1])
-            for x in encryption_info:
-                if encryption_info[x].get_text() == "":
-                    error(self, language['encrypt_info_missing'])
+                               encrypt_methods[self.combo_encryption.get_active()]['type'])
+            # Make sure all required fields are filled in.
+            for entry_info in encrypt_info.itervalues():
+                if entry_info[0].entry.get_text() == "" and \
+                   entry_info[1] == 'required':
+                    error(self, "%s (%s)" % (language['encrypt_info_missing'], 
+                                             entry_info[0].label.get_label())
+                          )
                     return False
-                self.set_net_prop(x, noneToString(encryption_info[x].get_text()))
+            # Now save all the entries.
+            for entry_key, entry_info in encrypt_info.iteritems():
+                self.set_net_prop(entry_key, 
+                                  noneToString(entry_info[0].entry.get_text()))
         elif not self.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
+            # Encrypt checkbox is off, but the network needs it.
             error(self, language['enable_encryption'])
             return False
         else:
             print "no encryption specified..."
             self.set_net_prop("enctype", "None")
-            for x in self.encryption_info:
-                self.set_net_prop(x, "")
+            for entry in encrypt_info.iterkeys():
+                self.set_net_prop(entry[0].entry, "")
         AdvancedSettingsDialog.save_settings(self)
         
         if self.chkbox_global_settings.get_active():
@@ -444,7 +452,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         for z in self.vbox_encrypt_info:
             z.destroy()  # Remove stuff in there already
         ID = self.combo_encryption.get_active()
-        methods = misc.LoadEncryptionMethods()
+        methods = self.encrypt_types
         self.encryption_info = {}
         
         # If nothing is selected, select the first entry.
@@ -452,22 +460,22 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.combo_encryption.set_active(0)
             ID = 0
 
-        opts = methods[ID][2]
-        for x in opts:
-            box = None
-            if language.has_key(opts[x][0]):
-                box = LabelEntry(language[opts[x][0].lower().replace(' ','_')])
-            else:
-                box = LabelEntry(opts[x][0].replace('_',' '))
-            box.set_auto_hidden(True)
-            self.vbox_encrypt_info.pack_start(box)
-            # Add the data to any array, so that the information
-            # can be easily accessed by giving the name of the wanted
-            # data.
-            self.encryption_info[opts[x][1]] = box.entry
+        for type_ in ['required', 'optional']:
+            fields = methods[ID][type_]
+            for field in fields:
+                if language.has_key(field[1]):
+                    box = LabelEntry(language[field[1].lower().replace(' ','_')])
+                else:
+                    box = LabelEntry(field[1].replace('_',' '))
+                box.set_auto_hidden(True)
+                self.vbox_encrypt_info.pack_start(box)
+                # Add the data to a dict, so that the information
+                # can be easily accessed by giving the name of the wanted
+                # data.
+                self.encryption_info[field[0]] = [box, type_]
 
-            box.entry.set_text(noneToBlankString(
-                wireless.GetWirelessProperty(self.networkID, opts[x][1])))
+                box.entry.set_text(noneToBlankString(
+                    wireless.GetWirelessProperty(self.networkID, field[0])))
         self.vbox_encrypt_info.show_all()
         
         
@@ -740,7 +748,7 @@ class WirelessNetworkEntry(NetworkEntry):
         self.set_encryption(wireless.GetWirelessProperty(networkID, 
                                                          'encryption'),
                             wireless.GetWirelessProperty(networkID, 
- 		                                         'encryption_method')) 
+                                                 'encryption_method')) 
         self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
         self.name_label.set_use_markup(True)
         self.name_label.set_label("%s    %s    %s    %s" % (self._escape(self.essid),

@@ -1,7 +1,8 @@
-name = PEAP with TKIP
+name = PEAP with TKIP/MSCHAPV2
 author = Fralaltro
 version = 1
-require identity *Identity password *Password ca_cert *Path_to_CA_Cert
+require identity *Identity password *Password 
+optional ca_cert *Path_to_CA_Cert
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

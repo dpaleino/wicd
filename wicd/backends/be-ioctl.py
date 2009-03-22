@@ -34,7 +34,7 @@ from wicd import misc
 from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import *
-from wicd.wnettools import wep_pattern, signaldbm_pattern
+from wicd.wnettools import wep_pattern, signaldbm_pattern, neediface
 
 import iwscan
 import wpactrl
@@ -124,6 +124,7 @@ class Interface(wnettools.BaseInterface):
         # We don't need any external apps so just return
         pass
 
+    @neediface("")
     def GetIP(self, ifconfig=""):
         """ Get the IP address of the interface.
 
@@ -141,6 +142,7 @@ class Interface(wnettools.BaseInterface):
 
         return socket.inet_ntoa(raw_ip[20:24])
 
+    @neediface(False)
     def IsUp(self):
         """ Determines if the interface is up.
 
@@ -148,7 +150,6 @@ class Interface(wnettools.BaseInterface):
         True if the interface is up, False otherwise.
 
         """
-        if not self.iface: return False
         data = (self.iface + '\0' * 16)[:18]
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGIFFLAGS, data)
@@ -174,6 +175,7 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         wnettools.BaseWiredInterface.__init__(self, iface, verbose)
         Interface.__init__(self, iface, verbose)
 
+    @neediface(False)
     def GetPluggedIn(self):
         """ Get the current physical connection state.
 
@@ -185,7 +187,6 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         True if a link is detected, False otherwise.
 
         """
-        if not self.iface: return False
         if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
             return self._eth_get_plugged_in()
         elif self.miitool_cmd and self.link_detect in [misc.MIITOOL, misc.AUTO]:
@@ -254,6 +255,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         Interface.__init__(self, iface, verbose)
         self.scan_iface = None
 
+    @neediface([])
     def GetNetworks(self):
         """ Get a list of available wireless networks.
 
@@ -405,6 +407,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         print 'wpa_supplicant authentication may have failed.'
         return False
 
+    @neediface(False)
     def StopWPA(self):
         """ Terminates wpa_supplicant using its ctrl interface. """
         wpa = self._connect_to_wpa_ctrl_iface()
@@ -469,9 +472,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
                             if self.verbose: print cmd
                             misc.Run(cmd)
 
+    @neediface("")
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
-        if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
         try:
             result = fcntl.ioctl(self.sock.fileno(), SIOCGIWAP, data)[16:]
@@ -482,9 +485,9 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         raw_addr = struct.unpack("xxBBBBBB", result[:8])
         return "%02X:%02X:%02X:%02X:%02X:%02X" % raw_addr
 
+    @neediface("")
     def GetCurrentBitrate(self, iwconfig=None):
         """ Get the current bitrate for the interface. """
-        if not self.iface: return ""
         data = (self.iface + '\0' * 32)[:32]
         fmt = "ihbb"
         size = struct.calcsize(fmt)
@@ -507,6 +510,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
     #    TODO: Implement me
     #    return ''
 
+    @neediface(-1)
     def GetSignalStrength(self, iwconfig=None):
         """ Get the signal strength of the current network.
 
@@ -514,7 +518,6 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The signal strength.
 
         """
-        if not self.iface: return -1
         buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         strength = ord(buff[2])
         max_strength = self._get_max_strength()
@@ -545,6 +548,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         values = struct.unpack(fmt, data)
         return values[12]
 
+    @neediface(-100)
     def GetDBMStrength(self, iwconfig=None):
         """ Get the dBm signal strength of the current network.
 
@@ -552,13 +556,13 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The dBm signal strength.
 
         """
-        if not self.iface: return -100
         buff = get_iw_ioctl_result(self.iface, SIOCGIWSTATS)
         if not buff:
             return None
 
         return str((ord(buff[3]) - 256))
 
+    @neediface("")
     def GetCurrentNetwork(self, iwconfig=None):
         """ Get the essid of the current network.
 
@@ -566,7 +570,6 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         The current network essid.
 
         """
-        if not self.iface: return ""
         buff = get_iw_ioctl_result(self.iface, SIOCGIWESSID)
         if not buff:
             return None

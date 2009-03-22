@@ -465,11 +465,9 @@ class TrayIcon(object):
         def on_net_menu_activate(self, item):
             """ Trigger a background scan to populate the network menu. 
             
-            Called when the network submenu is moused over.  We
-            sleep briefly, clear pending gtk events, and if
-            we're still being moused over we trigger a scan.
-            This is to prevent scans when the user is just
-            mousing past the menu to select another menu item.
+            Clear the network menu, and schedule a method to be
+            called in .8 seconds to trigger a scan if the menu
+            is still being moused over.
             
             """
             if self._is_scanning:
@@ -480,6 +478,7 @@ class TrayIcon(object):
             
         @catchdbus
         def _trigger_scan_if_needed(self, item):
+            """ Trigger a scan if the network menu is being hovered over. """
             while gtk.events_pending():
                 gtk.main_iteration()
             if item.state != gtk.STATE_PRELIGHT:

@@ -469,7 +469,7 @@ class BaseInterface(object):
             print 'DHCP connection failed'
             return 'dhcp_failed'
             
-    @neediface
+    @neediface(False)
     def StartDHCP(self):
         """ Start the DHCP client to obtain an IP address.
         
@@ -493,14 +493,14 @@ class BaseInterface(object):
         else:
             print 'ERROR no dhclient found!'
     
-    @neediface
+    @neediface(False)
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         cmd = self._get_dhcp_command("release")
         if self.verbose: print cmd
         misc.Run(cmd)
 
-    @neediface
+    @neediface(False)
     def DelDefaultRoute(self):
         """ Delete only the default route for a device. """
         if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
@@ -513,7 +513,7 @@ class BaseInterface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
 
-    @neediface
+    @neediface(False)
     def SetDNS(self, dns1=None, dns2=None, dns3=None, 
                dns_dom=None, search_dom=None):
         """ Set the DNS of the system to the specified DNS servers.
@@ -557,7 +557,7 @@ class BaseInterface(object):
             resolv.write(resolv_params + "\n")
             resolv.close()
         
-    @neediface
+    @neediface(False)
     def FlushRoutes(self):
         """ Flush network routes for this device. """
         if self.ip_cmd and self.flush_tool in [misc.AUTO, misc.IP]:
@@ -571,7 +571,7 @@ class BaseInterface(object):
             if self.verbose: print cmd
             misc.Run(cmd)
 
-    @neediface
+    @neediface(False)
     def SetDefaultRoute(self, gw):
         """ Add a default route with the specified gateway.
 

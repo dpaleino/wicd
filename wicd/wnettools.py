@@ -41,30 +41,30 @@ import misc
 from misc import find_path 
 
 # Regular expressions.
-__re_mode = (re.I | re.M | re.S)
-essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', __re_mode)
-ap_mac_pattern = re.compile('.*Address: (.*?)\n', __re_mode)
-channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
-strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
-signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
-bitrates_pattern = re.compile('.*Bit Rates:(.*?)E', __re_mode)
-mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
-freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
-wep_pattern = re.compile('.*Encryption key:(.*?)\n', __re_mode)
-altwpa_pattern = re.compile('(wpa_ie)', __re_mode)
-wpa1_pattern = re.compile('(WPA Version 1)', __re_mode)
-wpa2_pattern = re.compile('(WPA2)', __re_mode)
+_re_mode = (re.I | re.M | re.S)
+essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', _re_mode)
+ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
+channel_pattern = re.compile('.*Channel:? ?(\d\d?)', _re_mode)
+strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
+signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
+bitrates_pattern = re.compile('.*Bit Rates:(.*?)E', _re_mode)
+mode_pattern = re.compile('.*Mode:(.*?)\n', _re_mode)
+freq_pattern = re.compile('.*Frequency:(.*?)\n', _re_mode)
+wep_pattern = re.compile('.*Encryption key:(.*?)\n', _re_mode)
+altwpa_pattern = re.compile('(wpa_ie)', _re_mode)
+wpa1_pattern = re.compile('(WPA Version 1)', _re_mode)
+wpa2_pattern = re.compile('(WPA2)', _re_mode)
 
 #iwconfig-only regular expressions.
-ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
-bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
-bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', __re_mode)
-opmode_pattern = re.compile('.*Mode:(.*?) ', __re_mode)
-authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', __re_mode)
+ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
+bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', _re_mode)
+bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', _re_mode)
+opmode_pattern = re.compile('.*Mode:(.*?) ', _re_mode)
+authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', _re_mode)
 
 # Regular expressions for wpa_cli output
-auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
+auth_pattern = re.compile('.*wpa_state=(.*?)\n', _re_mode)
 
 RALINK_DRIVER = 'ralink legacy'
 

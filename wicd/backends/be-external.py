@@ -29,17 +29,10 @@ class WirelessInterface() -- Control a wireless network interface.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from wicd import misc
-from wicd import wnettools
 from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
 GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
 BaseWiredInterface, BaseInterface
-import re
-import os
-import os.path
 
-# Regular expressions for wpa_cli output
-auth_patten = re.compile('.*wpa_state=(.*?)\n', wnettools.__re_mode)
 NAME = "external"
 UPDATE_INTERVAL = 5
 DESCRIPTION = """External app (original) backend
@@ -50,8 +43,6 @@ slower and more CPU intensive than the ioctl backend, but
 it doesn't require any third party libraries and may be
 more stable for some set ups.
 """
-
-RALINK_DRIVER = 'ralink legacy'
 
 
 def NeedsExternalCalls(*args, **kargs):
@@ -99,4 +90,3 @@ class WirelessInterface(Interface, BaseWirelessInterface):
         """
         BaseWirelessInterface.__init__(self, iface, verbose, wpa_driver)
         Interface.__init__(self, iface, verbose)
-

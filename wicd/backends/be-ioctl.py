@@ -31,7 +31,6 @@ class WirelessInterface() -- Control a wireless network interface.
 #
 
 from wicd import misc
-from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
 GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \

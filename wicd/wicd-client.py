@@ -590,7 +590,6 @@ class TrayIcon(object):
                 if event.button == 1:
                     self.toggle_wicd_gui()
                 elif event.button == 3:
-                    self._menu_just_opened = True
                     self.init_network_menu()
                     self.menu.popup(None, None, None, event.button, event.time)
 
@@ -628,7 +627,6 @@ class TrayIcon(object):
 
             def on_popup_menu(self, status, button, timestamp):
                 """ Opens the right click menu for the tray icon. """
-                self._menu_just_opened = True
                 self.init_network_menu()
                 self.menu.popup(None, None, None, button, timestamp)
 

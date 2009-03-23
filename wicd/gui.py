@@ -1,15 +1,14 @@
 #!/usr/bin/python
 
-""" Wicd GUI module.
+""" gui -- The main wicd GUI module.
 
-Module containg all the code (other than the tray icon) related to the 
-Wicd user interface.
+Module containing the code for the main wicd GUI.
 
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007-2009 Adam Blackburn
+#   Copyright (C) 2007-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as

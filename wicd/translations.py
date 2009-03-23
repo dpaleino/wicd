@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -* coding: utf-8 -*-
 
+""" translations -- module for handling the translation strings for wicd. """
 #
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly

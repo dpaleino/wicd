@@ -6,18 +6,16 @@
 This module implements functions to control and obtain information from
 network interfaces.
 
-def SetDNS() -- Set the DNS servers of the system.
-def GetWirelessInterfaces() -- Get the wireless interfaces available.
-class Interface() -- Control a network interface.
-class WiredInterface() -- Control a wired network interface.
-class WirelessInterface() -- Control a wireless network interface.
+class BaseInterface() -- Control a network interface.
+class BaseWiredInterface() -- Control a wired network interface.
+class BaseWirelessInterface() -- Control a wireless network interface.
 
 """
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
-#   Copyright (C) 2007 - 2008 Byron Hillis
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -73,9 +71,6 @@ RALINK_DRIVER = 'ralink legacy'
 blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
-
-__all__ = ["GetDefaultGateway", "GetWiredInterfaces",
-           "GetWirelessInterfaces", "IsValidWpaSuppDriver"]
 
 def _sanitize_string(string):
     if string:

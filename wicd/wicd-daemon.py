@@ -8,19 +8,16 @@ connection management, for both wireless and wired networks. The daemon
 must be run as root to control the networks, however the user interface
 components should be run as a normal user.
 
-class LogWriter() -- Class to redirect stdout and stderr to a log file.
-class ConnectionWizard() -- DBUS interface to manage the network.
-class ConnectionStatus() -- Updates the current connection state
-def usage() -- Print usage information.
-def daemonize() -- Daemonize the current process with a double fork.
-def main() -- The wicd daemon main loop.
+class WicdDaemon() -- DBus interface to manage general wicd processes.
+class WiredDaemon() -- DBus interface to managed the wired network.
+class WirelessDaemon() -- DBus interface to managed the wireless network.
 
 """
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
-#   Copyright (C) 2007 - 2008 Byron Hillis
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as

@@ -33,11 +33,23 @@ class WirelessInterface() -- Control a wireless network interface.
 from wicd import misc
 from wicd import wnettools
 from wicd import wpath
-from wicd.wnettools import *
+from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
+GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
+BaseWiredInterface, BaseInterface
 from wicd.wnettools import wep_pattern, signaldbm_pattern, neediface
 
-import iwscan
-import wpactrl
+try:
+    import iwscan
+    IWSCAN_AVAIL = True
+except ImportError:
+    print "WARNING: python-iwscan not found, falling back to using iwlist scan."
+    IWSCAN_AVAIL = False
+try:
+    import wpactrl
+    WPACTRL_AVAIL = True
+except ImportError:
+    print "WARNING: python-wpactrl not found, falling back to using wpa_cli."
+    WPACTRL_AVAIL = False
 
 import re
 import os
@@ -56,7 +68,7 @@ This backend uses IOCTL calls and python libraries to query
 network information whenever possible.  This makes it fast,
 but it may not work properly on all systems.
 
-Dependencies:
+(Optional) Dependencies:
 python-wpactrl (http://projects.otaku42.de/wiki/PythonWpaCtrl)
 python-iwscan (http://projects.otaku42.de/browser/python-iwscan/)"""
 
@@ -105,7 +117,7 @@ def NeedsExternalCalls(*args, **kargs):
     return False
 
 
-class Interface(wnettools.BaseInterface):
+class Interface(BaseInterface):
     """ Control a network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialise the object.
@@ -115,7 +127,7 @@ class Interface(wnettools.BaseInterface):
         verbose -- whether to print every command run
 
         """
-        wnettools.BaseInterface.__init__(self, iface, verbose)
+        BaseInterface.__init__(self, iface, verbose)
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.Check()
 
@@ -162,7 +174,7 @@ class Interface(wnettools.BaseInterface):
         return bool(flags & 1)
 
 
-class WiredInterface(Interface, wnettools.BaseWiredInterface):
+class WiredInterface(Interface, BaseWiredInterface):
     """ Control a wired network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialise the wired network interface class.
@@ -172,7 +184,7 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWiredInterface.__init__(self, iface, verbose)
+        BaseWiredInterface.__init__(self, iface, verbose)
         Interface.__init__(self, iface, verbose)
 
     @neediface(False)
@@ -240,7 +252,7 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         return bool(reg & 0x0004)
 
 
-class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
+class WirelessInterface(Interface, BaseWirelessInterface):
     """ Control a wireless network interface. """
     def __init__(self, iface, verbose=False, wpa_driver='wext'):
         """ Initialise the wireless network interface class.
@@ -250,7 +262,7 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWirelessInterface.__init__(self, iface, verbose,
+        BaseWirelessInterface.__init__(self, iface, verbose,
                                                  wpa_driver)
         Interface.__init__(self, iface, verbose)
         self.scan_iface = None
@@ -263,6 +275,10 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         A list containing available wireless networks.
 
         """
+        if not IWSCAN_AVAIL:
+            # Use the slow version if python-iwscan isn't available.
+            return BaseWirelessInterface.GetNetworks(self)
+        
         if not self.scan_iface:
             try:
                 self.scan_iface = iwscan.WirelessInterface(self.iface)
@@ -361,9 +377,10 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
             False otherwise.
 
         """
-        error= "Unable to find ctrl_interface for wpa_supplicant.  " + \
-             "Could not validate authentication."
-
+        if not WPACTRL_AVAIL:
+            # If we don't have python-wpactrl, use the slow version.
+            return BaseWirelessInterface.ValidateAuthentication(self, auth_time)
+        
         # Right now there's no way to do this for ralink drivers
         if self.wpa_driver == RALINK_DRIVER:
             return True

@@ -72,9 +72,6 @@ blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
-__all__ = ["GetDefaultGateway", "GetWiredInterfaces",
-           "GetWirelessInterfaces", "IsValidWpaSuppDriver"]
-
 def _sanitize_string(string):
     if string:
         return translate(str(string), blank_trans, blacklist_norm)

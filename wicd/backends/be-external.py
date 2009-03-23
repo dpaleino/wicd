@@ -31,7 +31,9 @@ class WirelessInterface() -- Control a wireless network interface.
 
 from wicd import misc
 from wicd import wnettools
-from wicd.wnettools import *
+from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
+GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
+BaseWiredInterface, BaseInterface
 import re
 import os
 import os.path
@@ -53,11 +55,11 @@ RALINK_DRIVER = 'ralink legacy'
 
 
 def NeedsExternalCalls(*args, **kargs):
-    """ Return True, since this backend using iwconfig/ifconfig. """
+    """ Return True, since this backend uses iwconfig/ifconfig. """
     return True
 
 
-class Interface(wnettools.BaseInterface):
+class Interface(BaseInterface):
     """ Control a network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialize the object.
@@ -67,11 +69,11 @@ class Interface(wnettools.BaseInterface):
         verbose -- whether to print every command run
 
         """
-        wnettools.BaseInterface.__init__(self, iface, verbose)
+        BaseInterface.__init__(self, iface, verbose)
         self.Check()
     
 
-class WiredInterface(Interface, wnettools.BaseWiredInterface):
+class WiredInterface(Interface, BaseWiredInterface):
     """ Control a wired network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialise the wired network interface class.
@@ -81,11 +83,11 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWiredInterface.__init__(self, iface, verbose)
+        BaseWiredInterface.__init__(self, iface, verbose)
         Interface.__init__(self, iface, verbose)
 
 
-class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
+class WirelessInterface(Interface, BaseWirelessInterface):
     """ Control a wireless network interface. """
     def __init__(self, iface, verbose=False, wpa_driver='wext'):
         """ Initialise the wireless network interface class.
@@ -95,7 +97,6 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWirelessInterface.__init__(self, iface, verbose, 
-                                                 wpa_driver)
+        BaseWirelessInterface.__init__(self, iface, verbose, wpa_driver)
         Interface.__init__(self, iface, verbose)
 

@@ -702,6 +702,7 @@ class appGUI():
                 self.wiredCB.get_body().set_focus(wired.GetWiredProfileList().index(wired.GetDefaultWiredNetwork()))
 
     # Update the footer/status bar
+    conn_status = False
     @wrap_exceptions()
     def update_status(self):
         wired_connecting = wired.CheckIfWiredConnecting()
@@ -709,26 +710,13 @@ class appGUI():
         self.connecting = wired_connecting or wireless_connecting
         
         fast = not daemon.NeedsExternalCalls()
-        if self.connecting:
-            #self.lock_screen()
-            #if self.statusID:
-            #    gobject.idle_add(self.status_bar.remove, 1, self.statusID)
-            if wireless_connecting:
-                if not fast:
-                    iwconfig = wireless.GetIwconfig()
-                else:
-                    iwconfig = ''
-                # set_status is rigged to return false when it is not
-                # connecting to anything, so this should work.
-                gobject.idle_add(self.set_status, wireless.GetCurrentNetwork(iwconfig) +
-                        ': ' +
-                        language[str(wireless.CheckWirelessConnectingMessage())],
-                        True )
-            if wired_connecting:
-                gobject.idle_add(self.set_status, language['wired_network'] +
-                        ': ' +
-                        language[str(wired.CheckWiredConnectingMessage())],
-                        True)
+        if self.connecting: 
+            if not self.conn_status:
+                #self.lock_screen()
+                #if self.statusID:
+                #    gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+                self.conn_status = True
+                gobject.idle_add(self.set_connecting_status,fast)
             return True
         else:
             if check_for_wired(wired.GetWiredIP(''),self.set_status):
@@ -745,6 +733,29 @@ class appGUI():
                 self.update_ui()
                 return True
 
+    def set_connecting_status(self,fast):
+        wired_connecting = wired.CheckIfWiredConnecting()
+        wireless_connecting = wireless.CheckIfWirelessConnecting()
+        if wireless_connecting:
+            if not fast:
+                iwconfig = wireless.GetIwconfig()
+            else:
+                iwconfig = ''
+            # set_status is rigged to return false when it is not
+            # connecting to anything, so this should work.
+            return self.set_status(wireless.GetCurrentNetwork(iwconfig) +
+                    ': ' +
+                    language[str(wireless.CheckWirelessConnectingMessage())],
+                    True)
+        if wired_connecting:
+            return self.set_status( language['wired_network'] +
+                    ': ' +
+                    language[str(wired.CheckWiredConnectingMessage())],
+                    True)
+        else:
+            self.conn_status=False
+            return False
+
     # Cheap little indicator stating that we are actually connecting
     twirl = ['|','/','-','\\']
     tcount = 0 # Counter for said indicator
@@ -758,7 +769,8 @@ class appGUI():
         if from_idle and not self.connecting:
             #self.update_netlist()
             self.update_status()
-            self.tcount = 0
+            self.conn_status=False
+            #self.tcount = 0
             #self.update_ui()
             return False
         toAppend = ''
@@ -766,8 +778,8 @@ class appGUI():
         # the wheel.
         if from_idle and self.connecting:
             # This is probably the wrong way to do this, but it works for now.
-            toAppend=self.twirl[self.tcount % 4]
             self.tcount+=1
+            toAppend=self.twirl[self.tcount % 4]
         #self.footer2 = urwid.Columns([
         #    urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important'),
         #    ('fixed',8,urwid.Text(str(self.time),align='right'))])
@@ -1012,9 +1024,9 @@ def run():
     # Update what the interface looks like as an idle function
     gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
-    gobject.timeout_add(2000,app.update_status)
+    gobject.timeout_add(1500,app.update_status)
     # This will make sure that it is updated on the second.
-    gobject.timeout_add(900,app.update_time)
+    gobject.timeout_add(500,app.update_time)
     # DEFUNCT: Terminate the loop if the UI is terminated.
     #gobject.idle_add(app.stop_loop)
     loop.run()

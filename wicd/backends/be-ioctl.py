@@ -35,8 +35,7 @@ from wicd import wnettools
 from wicd import wpath
 from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
 GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
-BaseWiredInterface, BaseInterface
-from wicd.wnettools import wep_pattern, signaldbm_pattern, neediface
+BaseWiredInterface, BaseInterface, wep_pattern, signaldbm_pattern, neediface
 
 try:
     import iwscan

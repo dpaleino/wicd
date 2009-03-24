@@ -14,15 +14,15 @@ All features that I plan on implementing (that are not mentioned above) are
 listed the TODO file in this same directory.  If you want any other features,
 ask me.  I try to be on the #wicd Freenode IRC channel most of the time.
 
-Controls:
+Controls (most of these should be viewable in wicd-curses itself):
 
 F5          : refresh wireless networks
-F8 or Q or q: quit 
+F8 Q q      : quit 
 D           : disconnect from all active networks
 ESC         : if connecting to a network, stop doing so
-ENTER       : Attempt connection to selected network
+ENTER C     : Attempt connection to selected network
 P           : Display preferences dialog
-C           : Display network configuration for selected network 
+right arrow : Display network configuration for selected network 
 A           : Display "About" dialog
 I           : Raise the "Scan for hidden networks" dialog
 H or h or ? : Raise help dialog
@@ -33,7 +33,7 @@ O           : Raise ad-hoc network dialog
 
 IN DIALOGS (Meta usually is "Alt"):
 ESC or Q: Quit dialog without saving information (if present)
-Meta+Left/Right: Change tabs Left/Right (if tabs present)
+Meta+[/]: Change tabs Left/Right (if tabs present)
 Meta+Enter : Quit dialog and save information
 
 FAQ (WIP):

@@ -68,8 +68,8 @@ class PrefsDialog(urwid.WidgetWrap):
 
         global_dns_cat_t = ('header',language['global_dns_servers'])
         global_dns_t     = ('editcp',language['use_global_dns'])
-        dns_dom_t        = ('editcp','    DNS Domain:   ')
-        search_dom_t     = ('editcp','    Search domain:')
+        dns_dom_t        = ('editcp','    '+language['dns_domain']+':   ')
+        search_dom_t     = ('editcp','    '+language['search_domain']+':')
         dns1_t           = ('editcp','    DNS server 1: ')
         dns2_t           = ('editcp','    DNS server 2: ')
         dns3_t           = ('editcp','    DNS server 3: ')
@@ -237,27 +237,10 @@ class PrefsDialog(urwid.WidgetWrap):
                         self.header2 : advancedLB}
         #self.load_settings()
 
-        # Now for the buttons:
-        ok_t = 'OK'
-        cancel_t = 'Cancel'
-        
-        ok_button = urwid.AttrWrap(urwid.Button('OK',self.ok_callback),'body','focus')
-        cancel_button = urwid.AttrWrap(urwid.Button('Cancel',self.cancel_callback),'body','focus')
-        # Variables set by the buttons' callback functions
-        self.CANCEL_PRESSED = False
-        self.OK_PRESSED = False
-
-
-        self.button_cols = urwid.Columns([ok_button,cancel_button],
-                dividechars=1)
-
-        self.tabs = TabColumns(headerList,lbList,language['preferences'],self.button_cols)
+        self.tabs = TabColumns(headerList,lbList,language['preferences'])
         self.__super.__init__(self.tabs)
         
     def load_settings(self):
-        # Reset the buttons
-        self.CANCEL_PRESSED = False
-        self.OK_PRESSED = False
 
         ### General Settings
         # ComboBox does not like dbus.Strings as text markups.  My fault. :/
@@ -322,7 +305,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
 
-    def save_results(self):
+    def save_settings(self):
         """ Pushes the selected settings to the daemon.
             This exact order is found in prefs.py"""
         daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())
@@ -378,45 +361,6 @@ class PrefsDialog(urwid.WidgetWrap):
         for w in self.dns1,self.dns2,self.dns3,self.dns_dom,self.search_dom:
             w.set_sensitive(new_state)
 
-    # Button callbacks
-    def ok_callback(self,button_object,user_data=None):
-        self.OK_PRESSED = True
-    def cancel_callback(self,button_object,user_data=None):
-        self.CANCEL_PRESSED = True
-
-    def ready_comboboxes(self,ui,body):
+    def ready_widgets(self,ui,body):
         self.wpa_cbox.build_combobox(body,ui,4)
         self.backend_cbox.build_combobox(body,ui,8)
-
-    # Put the widget into an overlay, and run!
-    def run(self,ui, dim, display):
-        width,height = ui.get_cols_rows()
-        self.load_settings()
-
-        overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
-                                , ('fixed top',1), height-3)
-        self.ready_comboboxes(ui,overlay)
-
-        keys = True
-        while True:
-            if keys:
-                ui.draw_screen(dim, overlay.render(dim, True))
-            keys = ui.get_input()
-
-            if "window resize" in keys:
-                dim = ui.get_cols_rows()
-            if "esc" in keys or 'Q' in keys:
-                return False
-            for k in keys:
-                #Send key to underlying widget:
-                overlay.keypress(dim, k)
-                if urwid.is_mouse_event(k):
-                    event, button, col, row = k
-                    overlay.mouse_event( dim,
-                            event, button, col, row,
-                            focus=True)
-            # Check if buttons are pressed.
-            if self.CANCEL_PRESSED:
-                return False
-            if self.OK_PRESSED or 'meta enter' in keys:
-                return True

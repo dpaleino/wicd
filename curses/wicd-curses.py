@@ -208,7 +208,7 @@ def help_dialog(body):
 ('bold','  H h ?'),": Display this help dialog\n",
 ('bold','enter C'),": Connect to selected network\n",
 ('bold','      D'),": Disconnect from all networks\n",
-('bold','    ESC'),": Stop a network connection in progress\n",
+('bold','    ESC'),": Stop a connection in progress\n",
 ('bold','   F5 R'),": Refresh network list\n",
 ('bold','      P'),": Prefrences dialog\n",
     ])

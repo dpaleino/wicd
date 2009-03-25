@@ -316,6 +316,7 @@ class ComboBox(urwid.WidgetWrap):
         user_args : user_args in the callback
         """
         
+        self.DOWN_ARROW = '    vvv'
         self.label = urwid.Text(label)
         self.attrs = attrs
         self.focus_attr = focus_attr
@@ -325,7 +326,7 @@ class ComboBox(urwid.WidgetWrap):
 
         self.overlay = None
         #w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc')
-        self.cbox  = DynWrap(SelText('    vvv'),attrs=attrs,focus_attr=focus_attr)
+        self.cbox  = DynWrap(SelText(self.DOWN_ARROW),attrs=attrs,focus_attr=focus_attr)
         # Unicode will kill me sooner or later.  ^_^
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
@@ -351,7 +352,7 @@ class ComboBox(urwid.WidgetWrap):
 
     def set_focus(self,index):
         self.focus = index
-        self.cbox.set_w(SelText(self.list[index]+'    vvv'))
+        self.cbox.set_w(SelText(self.list[index]+self.DOWN_ARROW))
         if self.overlay:
             self.overlay._listbox.set_focus(index)
 
@@ -360,7 +361,7 @@ class ComboBox(urwid.WidgetWrap):
     def build_combobox(self,parent,ui,row):
         str,trash =  self.label.get_text()
 
-        self.cbox = DynWrap(SelText([self.list[self.focus]+'    vvv']),
+        self.cbox = DynWrap(SelText([self.list[self.focus]+self.DOWN_ARROW]),
                 attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],

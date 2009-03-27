@@ -556,6 +556,7 @@ class appGUI():
                 ('R' ,'Refresh',None),
                 ('P' ,'Prefs',None),
                 ('I' ,'Hidden',None),
+                ('A' ,'About',None),
                 ('Q' ,'Quit',loop.quit)
                ]
 
@@ -994,7 +995,7 @@ def main():
     # Thanks to nanotube on #wicd for helping with this
     ui.register_palette([
         ('body','default','default'),
-        ('focus','dark magenta','light gray'),
+        ('focus','black','light gray'),
         ('header','light blue','default'),
         ('important','light red','default'),
         ('connected','dark green','default'),
@@ -1006,7 +1007,7 @@ def main():
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
         ('timebar','dark gray','default'),
-        ('listbar','dark gray','default'),
+        ('listbar','light blue','default'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','light blue','default'),

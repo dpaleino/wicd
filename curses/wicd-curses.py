@@ -556,6 +556,7 @@ class appGUI():
                 ('R' ,'Refresh',None),
                 ('P' ,'Prefs',None),
                 ('I' ,'Hidden',None),
+                ('A' ,'About',None),
                 ('Q' ,'Quit',loop.quit)
                ]
 
@@ -581,6 +582,7 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
+        self.do_diag_lock = False
 
         self.pref = None
 
@@ -602,11 +604,17 @@ class appGUI():
 
     # Does what it says it does
     def lock_screen(self):
+        if self.diag:
+            self.do_diag_lock = True
+            return True
         self.frame.set_body(self.screen_locker)
         self.screen_locked = True
         self.update_ui()
 
     def unlock_screen(self):
+        if self.do_diag_lock:
+            self.do_diag_lock = False
+            return True
         self.update_netlist(force_check=True)
         self.frame.set_body(self.thePile)
         self.screen_locked = False
@@ -810,7 +818,11 @@ class appGUI():
         self.lock_screen()
 
     def restore_primary(self):
-        self.frame.set_body(self.thePile)
+        if self.do_diag_lock:
+            self.frame.set_body(self.screen_locker)
+            self.do_diag_lock = False
+        else:
+            self.frame.set_body(self.thePile)
         self.diag = None
         self.frame.set_footer(urwid.Pile([self.primaryCols,self.footer2]))
         self.update_ui()
@@ -916,7 +928,7 @@ class appGUI():
                         focus=True)
                 continue
             if self.diag:
-                if  k == 'esc':
+                if  k == 'esc' or k == 'q' or k == 'Q':
                     self.restore_primary()
                     break
                 if k == 'meta enter':
@@ -983,7 +995,7 @@ def main():
     # Thanks to nanotube on #wicd for helping with this
     ui.register_palette([
         ('body','default','default'),
-        ('focus','dark magenta','light gray'),
+        ('focus','black','light gray'),
         ('header','light blue','default'),
         ('important','light red','default'),
         ('connected','dark green','default'),
@@ -995,7 +1007,7 @@ def main():
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
         ('timebar','dark gray','default'),
-        ('listbar','dark gray','default'),
+        ('listbar','light blue','default'),
         # Simple colors around text
         ('green','dark green','default'),
         ('blue','light blue','default'),

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""prefs_curses.py -- Pretty, tabbable, console preferences dialog"""
+
 #       Copyright (C) 2008-2009 Andrew Psaltis
 
 #       This program is free software; you can redistribute it and/or modify

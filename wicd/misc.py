@@ -261,7 +261,8 @@ def ParseEncryption(network):
                     else:
                         rep_val = network.get(cur_val[0].lower())
                         if rep_val:
-                            line = line.replace("$_%s" % cur_val[0], rep_val)
+                            line = line.replace("$_%s" % cur_val[0], 
+                                                str(rep_val))
                             config_file = ''.join([config_file, line])
                         else:
                             print "Ignoring template line: '%s'" % line

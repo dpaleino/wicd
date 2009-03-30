@@ -28,6 +28,7 @@ from ConfigParser import RawConfigParser
 
 from wicd.misc import Noneify, to_unicode
 
+from dbus import Int32
 
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
@@ -108,6 +109,12 @@ class ConfigManager(RawConfigParser):
             ret = int(ret)
         except (ValueError, TypeError):
             ret = Noneify(ret)
+        # This is a workaround for a python-dbus issue on 64-bit systems.
+        if isinstance(ret, (int)):
+            try:
+                Int32(ret)
+            except OverflowError:
+                ret = long(ret)
         return ret
     
     def get(self, *args, **kargs):

@@ -977,7 +977,7 @@ class BaseWirelessInterface(BaseInterface):
         if not wpa_pass_path: return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
-        cmd = [wpa_pass_path, network['essid'], network['key']]
+        cmd = [wpa_pass_path, network['essid'], str(network['key'])]
         if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 

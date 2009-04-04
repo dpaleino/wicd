@@ -1170,18 +1170,17 @@ class WirelessDaemon(dbus.service.Object):
 
         cur_network["has_profile"] = True
 
-        # Read the essid because we need to name those hidden
-        # wireless networks now - but only read it if it is hidden.
-        if cur_network["hidden"]:
-            cur_network["essid"] = self.config.get(section, "essid")
-            if cur_network["essid"] in ["", "Hidden", "<hidden>"]:
-                cur_network["essid"] = "<hidden>"
         for x in self.config.options(section):
             if not cur_network.has_key(x) or x.endswith("script"):
                 cur_network[x] = misc.Noneify(self.config.get(section, x))
         for option in ['use_static_dns', 'use_global_dns', 'encryption',
                        'use_settings_globally']:
             cur_network[option] = bool(cur_network.get(option))
+        # Read the essid because we need to name those hidden
+        # wireless networks now - but only read it if it is hidden.
+        if cur_network["hidden"]:
+            if cur_network.get("essid") in ["", "Hidden", "<hidden>", None]:
+                cur_network["essid"] = "<hidden>"
         return "100: Loaded Profile"
 
     @dbus.service.method('org.wicd.daemon.wireless')

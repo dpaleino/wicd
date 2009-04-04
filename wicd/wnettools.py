@@ -1094,7 +1094,8 @@ class BaseWirelessInterface(BaseInterface):
         except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
-        if ap['essid'] in ['<hidden>', ""]:
+        if ap['essid'] in ['<hidden>', "", None]:
+            print 'hidden'
             ap['hidden'] = True
             ap['essid'] = "<hidden>"
         else:
@@ -1176,6 +1177,7 @@ class BaseWirelessInterface(BaseInterface):
         MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
         disconnected_time = 0
+        forced_rescan = False
         while (time.time() - auth_time) < MAX_TIME:
             cmd = '%s -i %s status' % (self.wpa_cli_cmd, self.iface)
             output = misc.Run(cmd)
@@ -1187,11 +1189,12 @@ class BaseWirelessInterface(BaseInterface):
                 return False
             if result == "COMPLETED":
                 return True
-            elif result == "DISCONNECTED":
+            elif result == "DISCONNECTED" and not forced_rescan:
                 disconnected_time += 1
                 if disconnected_time > MAX_DISCONNECTED_TIME:
                     disconnected_time = 0
                     # Force a rescan to get wpa_supplicant moving again.
+                    forced_rescan = True
                     self._ForceSupplicantScan()
                     MAX_TIME += 5
             else:

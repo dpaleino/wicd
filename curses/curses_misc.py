@@ -128,6 +128,8 @@ class MaskingEdit(urwid.Edit):
         self.mask_char = mask_char
         self.__super.__init__(caption,edit_text,multiline,align,wrap,allow_tab,edit_pos,layout)
 
+    def get_caption(self):
+        return self.caption
     def get_mask_mode(self):
         return self.mask_mode
     def set_mask_mode(self,mode):

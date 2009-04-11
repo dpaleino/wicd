@@ -32,8 +32,8 @@ F2          : Rename selected wired network profile (from the wired ComboBox)
 O           : Raise ad-hoc network dialog
 
 IN DIALOGS (Meta usually is "Alt"):
-ESC or Q: Quit dialog without saving information (if present)
-Meta+[/]: Change tabs Left/Right (if tabs present)
+ESC or Q or q: Quit dialog without saving information (if present)
+Meta+[ / Meta+]: Change tabs Left/Right (if tabs present)
 Meta+Enter : Quit dialog and save information
 
 FAQ (WIP):

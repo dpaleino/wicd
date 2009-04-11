@@ -133,11 +133,11 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
            not self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
-            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_text()))
-            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_text()))
-            self.set_net_prop("dns1", noneToString(self.dns1.get_text()))
-            self.set_net_prop("dns2", noneToString(self.dns2.get_text()))
-            self.set_net_prop("dns3", noneToString(self.dns3.get_text()))
+            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_edit_text()))
+            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_edit_text()))
+            self.set_net_prop("dns1", noneToString(self.dns1.get_edit_text()))
+            self.set_net_prop("dns2", noneToString(self.dns2.get_edit_text()))
+            self.set_net_prop("dns3", noneToString(self.dns3.get_edit_text()))
         elif self.static_dns_cb.get_state() and \
              self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
@@ -208,10 +208,11 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 ########################################
 
 class WirelessSettingsDialog(AdvancedSettingsDialog):
-    def __init__(self,networkID):
+    def __init__(self,networkID,parent):
         global wireless, daemon
         AdvancedSettingsDialog.__init__(self)
         self.networkid = networkID
+        self.parent = parent
         global_settings_t = language['global_settings']
         encryption_t = language['use_encryption']
         autoconnect_t = language['automatic_connect']
@@ -307,9 +308,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             for entry_info in encrypt_info.itervalues():
                 if entry_info[0].get_edit_text() == "" \
                     and entry_info[1] == 'required':
-                    error(self.ui, self.overlay,"%s (%s)" \
+                    error(self.ui, self.parent,"%s (%s)" \
                             % (language['encrypt_info_missing'], 
-                               entry_info[0].get_captionabel() )
+                                entry_info[0].get_caption()[0:-2] )
                           )
                     return False
 
@@ -319,7 +320,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         elif not self.encryption_chkbox.get_state() and \
              wireless.GetWirelessProperty(self.networkid, "encryption"):
             # Encrypt checkbox is off, but the network needs it.
-            error(self.ui, self.overlay, language['enable_encryption'])
+            error(self.ui, self.parent, language['enable_encryption'])
             return False
         else:
             self.set_net_prop("enctype", "None")

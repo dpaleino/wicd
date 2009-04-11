@@ -197,7 +197,7 @@ def about_dialog(body):
 
 # Modeled after htop's help
 def help_dialog(body):
-    textT  = urwid.Text(('header','Wicd-curses help'),'right') 
+    textT  = urwid.Text(('header','wicd-curses help'),'right') 
     textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REVNO),' using wicd ',unicode(daemon.Hello()),'\n'])
 
     textH = urwid.Text([
@@ -849,7 +849,7 @@ class appGUI():
                 else:
                     # wireless list only other option
                     wid,pos  = self.thePile.get_focus().get_focus()
-                    self.diag = WirelessSettingsDialog(pos)
+                    self.diag = WirelessSettingsDialog(pos,self.frame)
                     self.diag.ready_widgets(ui,self.frame)
                     self.frame.set_body(self.diag)
             # Guess what!  I actually need to put this here, else I'll have

@@ -131,8 +131,8 @@ class Interface(BaseInterface):
 
     def CheckWirelessTools(self):
         """ Check for the existence needed wireless tools """
-        # We don't need any external apps so just return
-        pass
+        if not WPACTRL_AVAIL:
+            BaseInterface.CheckWirelessTools(self)
 
     @neediface("")
     def GetIP(self, ifconfig=""):

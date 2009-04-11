@@ -57,7 +57,9 @@ def setup_dbus(force=True):
     except DBusException:
         if force:
             print "Can't connect to the daemon, trying to start it automatically..."
-            misc.PromptToStartDaemon()
+            if not misc.PromptToStartDaemon():
+                print "Failed to find a graphical sudo program, cannot continue."
+                return False
             try:
                 dbusmanager.connect_to_dbus()
             except DBusException:

@@ -133,11 +133,11 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
            not self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
-            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_text()))
-            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_text()))
-            self.set_net_prop("dns1", noneToString(self.dns1.get_text()))
-            self.set_net_prop("dns2", noneToString(self.dns2.get_text()))
-            self.set_net_prop("dns3", noneToString(self.dns3.get_text()))
+            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_edit_text()))
+            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_edit_text()))
+            self.set_net_prop("dns1", noneToString(self.dns1.get_edit_text()))
+            self.set_net_prop("dns2", noneToString(self.dns2.get_edit_text()))
+            self.set_net_prop("dns3", noneToString(self.dns3.get_edit_text()))
         elif self.static_dns_cb.get_state() and \
              self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)

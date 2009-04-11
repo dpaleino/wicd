@@ -927,6 +927,7 @@ class appGUI():
                         event, button, col, row,
                         focus=True)
                 continue
+            k = self.frame.keypress(self.size,k)
             if self.diag:
                 if  k == 'esc' or k == 'q' or k == 'Q':
                     self.restore_primary()
@@ -935,7 +936,6 @@ class appGUI():
                     self.diag.save_settings()
                     self.restore_primary()
                     break
-            self.frame.keypress(self.size,k)
             if k == "window resize":
                 self.size = ui.get_cols_rows()
                 continue

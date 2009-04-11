@@ -20,7 +20,6 @@ from distutils.core import setup, Command
 from distutils.extension import Extension
 import os
 import shutil
-import sys
 import subprocess
 
 # Be sure to keep this updated!
@@ -383,7 +382,6 @@ class uninstall(Command):
 
     def run(self):
         os.system("./uninstall.sh")
-
 try:
     import wpath
 except ImportError:
@@ -477,13 +475,13 @@ except Exception, e:
 python setup.py configure has not yet been run.'''
 
 
-wpactrl_ext = Extension(name = 'wpactrl', 
-                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
-                                   'depends/python-wpactrl/wpactrl.c'],
-                        extra_compile_args = ["-fno-strict-aliasing"])
+wpactrl_ext = Extension(name='wpactrl', 
+                        sources=['depends/python-wpactrl/wpa_ctrl.c',
+                                 'depends/python-wpactrl/wpactrl.c'],
+                        extra_compile_args=["-fno-strict-aliasing"])
 
-iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
-                       sources = ['depends/python-iwscan/pyiwscan.c'])
+iwscan_ext = Extension(name='iwscan', libraries=['iw'],
+                       sources=['depends/python-iwscan/pyiwscan.c'])
     
 setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
                 'uninstall' : uninstall, 'test' : test, 'clear_generated' : clear_generated},
@@ -506,6 +504,5 @@ connect at startup to any preferred network within range.
                   'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
                   'wicd.logfile','wicd.backend','wicd.configmanager',
                   'wicd.guiutil','wicd.translations'], 
-      ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )

@@ -426,6 +426,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
     @neediface(False)
     def StopWPA(self):
         """ Terminates wpa_supplicant using its ctrl interface. """
+        if not WPACTRL_AVAIL:
+            return BaseWirelessInterface.StopWPA(self)
         wpa = self._connect_to_wpa_ctrl_iface()
         if not wpa:
             return

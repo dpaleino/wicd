@@ -264,6 +264,7 @@ class WirelessInterface(Interface, BaseWirelessInterface):
                                                  wpa_driver)
         Interface.__init__(self, iface, verbose)
         self.scan_iface = None
+        self.CheckWirelessTools()
 
     @neediface([])
     def GetNetworks(self):

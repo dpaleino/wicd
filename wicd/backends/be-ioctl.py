@@ -131,8 +131,8 @@ class Interface(BaseInterface):
 
     def CheckWirelessTools(self):
         """ Check for the existence needed wireless tools """
-        # We don't need any external apps so just return
-        pass
+        if not WPACTRL_AVAIL:
+            BaseInterface.CheckWirelessTools(self)
 
     @neediface("")
     def GetIP(self, ifconfig=""):
@@ -264,6 +264,7 @@ class WirelessInterface(Interface, BaseWirelessInterface):
                                                  wpa_driver)
         Interface.__init__(self, iface, verbose)
         self.scan_iface = None
+        self.CheckWirelessTools()
 
     @neediface([])
     def GetNetworks(self):
@@ -425,6 +426,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
     @neediface(False)
     def StopWPA(self):
         """ Terminates wpa_supplicant using its ctrl interface. """
+        if not WPACTRL_AVAIL:
+            return BaseWirelessInterface.StopWPA(self)
         wpa = self._connect_to_wpa_ctrl_iface()
         if not wpa:
             return

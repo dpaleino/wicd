@@ -309,7 +309,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
         information_button = gtk.Button(stock=gtk.STOCK_INFO)
         self.button_hbox.pack_start(information_button, False, False)
-        information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID))
+        information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID, self))
         information_button.show()
         
         # Build the encryption menu
@@ -879,8 +879,8 @@ class WirelessNetworkEntry(NetworkEntry):
 
         
 class WirelessInformationDialog(gtk.Dialog):
-    def __init__(self, networkID):
-        gtk.Dialog.__init__(self)
+    def __init__(self, networkID, parent):
+        gtk.Dialog.__init__(self,parent=parent)
         
         # Make the combo box.
         self.lbl_strength = gtk.Label()

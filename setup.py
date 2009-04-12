@@ -20,7 +20,6 @@ from distutils.core import setup, Command
 from distutils.extension import Extension
 import os
 import shutil
-import sys
 import subprocess
 
 # Be sure to keep this updated!
@@ -31,11 +30,10 @@ REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
 
 try:
-    if not os.path.exists('vcsinfo.py'):
-        try:
-            os.system('bzr version-info --python > vcsinfo.py')
-        except:
-            pass
+    try:
+        os.system('bzr version-info --python > vcsinfo.py')
+    except:
+        pass
     import vcsinfo
     REVISION_NUM = vcsinfo.version_info['revno']
 except Exception, e:
@@ -383,7 +381,6 @@ class uninstall(Command):
 
     def run(self):
         os.system("./uninstall.sh")
-
 try:
     import wpath
 except ImportError:
@@ -477,13 +474,13 @@ except Exception, e:
 python setup.py configure has not yet been run.'''
 
 
-wpactrl_ext = Extension(name = 'wpactrl', 
-                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
-                                   'depends/python-wpactrl/wpactrl.c'],
-                        extra_compile_args = ["-fno-strict-aliasing"])
+wpactrl_ext = Extension(name='wpactrl', 
+                        sources=['depends/python-wpactrl/wpa_ctrl.c',
+                                 'depends/python-wpactrl/wpactrl.c'],
+                        extra_compile_args=["-fno-strict-aliasing"])
 
-iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
-                       sources = ['depends/python-iwscan/pyiwscan.c'])
+iwscan_ext = Extension(name='iwscan', libraries=['iw'],
+                       sources=['depends/python-iwscan/pyiwscan.c'])
     
 setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
                 'uninstall' : uninstall, 'test' : test, 'clear_generated' : clear_generated},
@@ -498,14 +495,13 @@ to easily add encryption methods used.  It ships with some common
 encryption types, such as WPA and WEP. Wicdl will automatically
 connect at startup to any preferred network within range.
 """,
-      author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
+      author="Adam Blackburn, Dan O'Reilly, Andrew Psaltis",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
                   'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
                   'wicd.logfile','wicd.backend','wicd.configmanager',
                   'wicd.guiutil','wicd.translations'], 
-      ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )

@@ -155,6 +155,8 @@ def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.sbin + 'wicd'
     sudo_prog = choose_sudo_prog()
+    if not sudo_prog:
+        return False
     if "gksu" in sudo_prog or "ktsuss" in sudo_prog:
         msg = '--message'
     else:
@@ -163,6 +165,7 @@ def PromptToStartDaemon():
                  'Wicd needs to access your computer\'s network cards.',
                  daemonloc]
     os.spawnvpe(os.P_WAIT, sudo_prog, sudo_args, os.environ)
+    return True
 
 def RunRegex(regex, string):
     """ runs a regex search on a string """
@@ -189,7 +192,7 @@ def ExecuteScript(script, verbose=False):
         print "Executing %s" % script
     ret = call("%s > /dev/null 2>&1" % script, shell=True)
     if verbose:
-        "%s returned %s" % (script, ret)
+        print "%s returned %s" % (script, ret)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """
@@ -453,8 +456,7 @@ def choose_sudo_prog(prog_num=0):
     for path in paths:
         if os.path.exists(path):
             return path
-    
-    return None
+    return ""
 
 def find_path(cmd):
     """ Try to find a full path for a given file name. 

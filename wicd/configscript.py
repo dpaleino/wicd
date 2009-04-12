@@ -33,10 +33,10 @@ import ConfigParser
 import gtk.glade
 
 from wicd import wpath
-from wicd import misc
+from wicd import translations
 from wicd import dbusmanager
 
-_ = misc.get_gettext()
+_ = translations.get_gettext()
 
 language = {}
 language['configure_scripts'] = _("Configure Scripts")

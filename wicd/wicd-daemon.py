@@ -1139,12 +1139,6 @@ class WirelessDaemon(dbus.service.Object):
         return ip
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetOperationalMode(self, ifconfig=""):
-        """ Returns the IP associated with the wireless interface. """
-        ip = self.wifi.GetOperationalMode(ifconfig)
-        return ip
-
-    @dbus.service.method('org.wicd.daemon.wireless')
     def CheckWirelessConnectingMessage(self):
         """ Returns the wireless interface's status message. """
         if not self.wifi.connecting_thread == None:

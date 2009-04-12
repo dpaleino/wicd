@@ -192,7 +192,7 @@ def ExecuteScript(script, verbose=False):
         print "Executing %s" % script
     ret = call("%s > /dev/null 2>&1" % script, shell=True)
     if verbose:
-        "%s returned %s" % (script, ret)
+        print "%s returned %s" % (script, ret)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """

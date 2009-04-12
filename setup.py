@@ -495,8 +495,8 @@ to easily add encryption methods used.  It ships with some common
 encryption types, such as WPA and WEP. Wicdl will automatically
 connect at startup to any preferred network within range.
 """,
-      author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
+      author="Adam Blackburn, Dan O'Reilly, Andrew Psaltis",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',

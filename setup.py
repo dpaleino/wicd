@@ -30,11 +30,10 @@ REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
 
 try:
-    if not os.path.exists('vcsinfo.py'):
-        try:
-            os.system('bzr version-info --python > vcsinfo.py')
-        except:
-            pass
+    try:
+        os.system('bzr version-info --python > vcsinfo.py')
+    except:
+        pass
     import vcsinfo
     REVISION_NUM = vcsinfo.version_info['revno']
 except Exception, e:

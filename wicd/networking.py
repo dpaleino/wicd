@@ -831,17 +831,17 @@ class WirelessConnectThread(ConnectThread):
         self.reset_ip_addresses(wiface)
         self.stop_wpa(wiface)
         self.flush_routes(wiface)
-
-        # Generate PSK and authenticate if needed.
-        if self.wpa_driver != 'ralink legacy':
-            self.generate_psk_and_authenticate(wiface)
+        wiface.SetMode(self.network['mode'])
 
         # Put interface up.
         self.SetStatus('configuring_interface')
         self.put_iface_up(wiface)
         
+        # Generate PSK and authenticate if needed.
+        if self.wpa_driver != 'ralink legacy':
+            self.generate_psk_and_authenticate(wiface)
+            
         # Associate.
-        wiface.SetMode(self.network['mode'])
         wiface.Associate(self.network['essid'], self.network['channel'],
                          self.network['bssid'])
 

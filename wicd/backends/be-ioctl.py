@@ -407,7 +407,6 @@ class WirelessInterface(Interface, BaseWirelessInterface):
             except ValueError:
                 return False
 
-            result = result
             if result.endswith("COMPLETED"):
                 return True
             elif result.endswith("DISCONNECTED"):

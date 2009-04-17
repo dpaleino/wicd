@@ -492,7 +492,7 @@ Wicd supports wired and wireless networks, and capable of
 creating and tracking profiles for both.  It has a 
 template-based wireless encryption system, which allows the user
 to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicdl will automatically
+encryption types, such as WPA and WEP. Wicd will automatically
 connect at startup to any preferred network within range.
 """,
       author="Adam Blackburn, Dan O'Reilly, Andrew Psaltis",

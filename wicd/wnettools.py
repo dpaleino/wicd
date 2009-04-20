@@ -220,6 +220,8 @@ class BaseInterface(object):
             if self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
                 client = "dhclient"
                 cmd = self.dhclient_cmd
+                if self.dhclient_needs_verbose:
+                    cmd += ' -v'
             elif self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
                 client = "dhcpcd"
                 cmd = self.dhcpcd_cmd
@@ -294,6 +296,11 @@ class BaseInterface(object):
         
         """
         self.dhclient_cmd = self._find_program_path("dhclient")
+        output = misc.Run(self.dhclient_cmd + " --version", include_stderr=True)
+        if '4.' in output:
+            self.dhclient_needs_verbose = True
+        else:
+            self.dhclient_needs_verbose = False
         self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
         

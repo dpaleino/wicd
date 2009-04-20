@@ -3,7 +3,7 @@
 ### BEGIN INIT INFO
 # Provides:       wicd-daemon
 # Required-Start: dbus
-# Required-Stop: 
+# Required-Stop:  $null
 # Default-Start:  3 4 5
 # Default-Stop:
 # Description: wicd, a wired and wireless connection manager.

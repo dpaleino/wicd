@@ -116,7 +116,9 @@ def expand_script_macros(script, msg, bssid, essid):
     script -- the script to execute.
     msg -- the name of the script, %{script} will be expanded to this.
     bssid -- the bssid of the network we connect to, defaults to 'wired'.
-    essid -- the essid of the network we connect to, defaults to 'wired'."""
+    essid -- the essid of the network we connect to, defaults to 'wired'.
+    
+    """
     def repl(match):
         macro = match.group(1).lower()
         if macro_dict.has_key(macro):
@@ -564,23 +566,13 @@ class Wireless(Controller):
 
         """
         def comp(x, y):
-            if x.has_key('quality'):
-                if x['quality'] > y['quality']:
-                    return 1
-                elif x['quality'] < y['quality']:
-                    return -1
-                else:
-                    return 0
+            if 'quality' in x:
+                key = 'quality'
             else:
-                if x['strength'] < y['strength']:
-                    return 1
-                elif x['strength'] > y['strength']:
-                    return -1
-                else:
-                    return 0
+                key = 'strength'
+            return cmp(x[key], y[key])
                 
         if not self.wiface: return []
-        
         wiface = self.wiface
 
         # Prepare the interface for scanning
@@ -771,6 +763,7 @@ class Wireless(Controller):
         """ Sets the wpa_supplicant driver associated with the interface. """
         self.wiface.SetWpaDriver(driver)
 
+ 
 class WirelessConnectThread(ConnectThread):
     """ A thread class to perform the connection to a wireless network.
 
@@ -1063,4 +1056,3 @@ class WiredConnectThread(ConnectThread):
         
         self.connect_result = "Success"
         self.is_connecting = False
-

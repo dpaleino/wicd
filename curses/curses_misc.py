@@ -107,6 +107,12 @@ class DynIntEdit(DynWrap):
         edit = urwid.IntEdit(caption,edit_text)
         self.__super.__init__(edit,sensitive,attrs,focus_attr)
 
+class DynRadioButton(DynWrap):
+    def __init__(self,group,label,state='first True',on_state_change=None, user_data=None, sensitive=True, attrs=('body','editnfc'),focus_attr='body'):
+        #caption = ('editcp',caption + ':')
+        button = urwid.RadioButton(group,label,state,on_state_change,user_data)
+        self.__super.__init__(button,sensitive,attrs,focus_attr)
+
 class MaskingEditException(Exception):
     pass
 

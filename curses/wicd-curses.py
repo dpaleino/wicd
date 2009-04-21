@@ -616,7 +616,8 @@ class appGUI():
             self.do_diag_lock = False
             return True
         self.update_netlist(force_check=True)
-        self.frame.set_body(self.thePile)
+        if not self.diag:
+            self.frame.set_body(self.thePile)
         self.screen_locked = False
         self.update_ui()
 

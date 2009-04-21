@@ -296,11 +296,13 @@ class BaseInterface(object):
         
         """
         self.dhclient_cmd = self._find_program_path("dhclient")
-        output = misc.Run(self.dhclient_cmd + " --version", include_stderr=True)
-        if '4.' in output:
-            self.dhclient_needs_verbose = True
-        else:
-            self.dhclient_needs_verbose = False
+        if self.dhclient_cmd != None:
+            output = misc.Run(self.dhclient_cmd + " --version",
+                    include_stderr=True)
+            if '4.' in output:
+                self.dhclient_needs_verbose = True
+            else:
+                self.dhclient_needs_verbose = False
         self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
         

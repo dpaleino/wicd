@@ -24,7 +24,7 @@ import urwid.curses_display
 
 from wicd import misc
 from wicd import dbusmanager
-from curses_misc import SelText,DynWrap,ComboBox,TabColumns
+from curses_misc import SelText,DynWrap,DynRadioButton,ComboBox,TabColumns
 
 daemon = None
 wireless = None
@@ -179,21 +179,24 @@ class PrefsDialog(urwid.WidgetWrap):
         self.dhcp_l = []
         # Automatic
         self.dhcp0  = urwid.RadioButton(self.dhcp_l,automatic_t)
-        self.dhcp1  = urwid.RadioButton(self.dhcp_l,dhcp1_t)
-        self.dhcp2  = urwid.RadioButton(self.dhcp_l,dhcp2_t)
-        self.dhcp3  = urwid.RadioButton(self.dhcp_l,dhcp3_t)
+        self.dhcp1  = DynRadioButton(self.dhcp_l,dhcp1_t)
+        self.dhcp2  = DynRadioButton(self.dhcp_l,dhcp2_t)
+        self.dhcp3  = DynRadioButton(self.dhcp_l,dhcp3_t)
+        self.dhcp_l = [self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3]
 
         self.wired_l = []
         self.wired_detect_header = urwid.Text(wired_detect_header_t)
         self.wired0         = urwid.RadioButton(self.wired_l,automatic_t)
-        self.wired1         = urwid.RadioButton(self.wired_l,wired1_t)
-        self.wired2         = urwid.RadioButton(self.wired_l,wired2_t)
+        self.wired1         = DynRadioButton(self.wired_l,wired1_t)
+        self.wired2         = DynRadioButton(self.wired_l,wired2_t)
+        self.wired_l = [self.wired0,self.wired1,self.wired2]
 
         self.flush_l = []
         self.flush_header   = urwid.Text(flush_header_t)
         self.flush0         = urwid.RadioButton(self.flush_l,automatic_t)
-        self.flush1         = urwid.RadioButton(self.flush_l,flush1_t)
-        self.flush2         = urwid.RadioButton(self.flush_l,flush2_t)
+        self.flush1         = DynRadioButton(self.flush_l,flush1_t)
+        self.flush2         = DynRadioButton(self.flush_l,flush2_t)
+        self.flush_l = [self.flush0,self.flush1,self.flush2]
 
         externalLB = urwid.ListBox([self.dhcp_header,
                                     self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
@@ -267,13 +270,20 @@ class PrefsDialog(urwid.WidgetWrap):
         self.wired_auto_l[daemon.GetWiredAutoConnectMethod()-1]
         self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
 
+        def find_avail(apps):
+            for app in apps[1:]:
+                app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
+
         ### External Programs
+        find_avail(self.dhcp_l)
         dhcp_method = daemon.GetDHCPClient()
         self.dhcp_l[dhcp_method].set_state(True)
         
+        find_avail(self.wired_l)
         wired_link_method = daemon.GetLinkDetectionTool()
         self.wired_l[wired_link_method].set_state(True)
 
+        find_avail(self.flush_l)
         flush_method = daemon.GetFlushTool()
         self.flush_l[flush_method].set_state(True)
 

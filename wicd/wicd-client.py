@@ -660,7 +660,7 @@ def setup_dbus(force=True):
             misc.PromptToStartDaemon()
             try:
                 dbusmanager.connect_to_dbus()
-            except dbusmanager.DBusException:
+            except DBusException:
                 error(None, "Could not connect to wicd's D-Bus interface.  " +
                           "Check the wicd log for error messages.")
                 return False

@@ -37,6 +37,8 @@ import sys
 import time
 import getopt
 import signal
+import atexit
+from subprocess import Popen
 
 # DBUS
 import gobject
@@ -1601,8 +1603,6 @@ def daemonize():
     os.dup2(0, 2)
 
 
-child_pid = None
-
 def main(argv):
     """ The main daemon program.
 
@@ -1610,7 +1610,6 @@ def main(argv):
     argv -- The arguments passed to the script.
 
     """
-    global child_pid
     do_daemonize = True
     redirect_stderr = True
     redirect_stdout = True
@@ -1667,9 +1666,10 @@ def main(argv):
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     if not no_poll:
-        (child_pid, x, y, z) = gobject.spawn_async(
-            [misc.find_path("python"), "-O", os.path.join(wpath.lib, "monitor.py")])
-    signal.signal(signal.SIGTERM, sigterm_caught)
+        child_pid = Popen([misc.find_path("python"), "-O", 
+                          os.path.join(wpath.lib, "monitor.py")],
+                          shell=False, close_fds=True).pid
+    atexit.register(on_exit, child_pid)
 
     # Enter the main loop
     mainloop = gobject.MainLoop()
@@ -1678,11 +1678,9 @@ def main(argv):
     except KeyboardInterrupt:
         pass
     daemon.DaemonClosing()
-    sigterm_caught()
 
-def sigterm_caught(sig=None, frame=None):
+def on_exit(child_pid):
     """ Called when a SIGTERM is caught, kills monitor.py before exiting. """
-    global child_pid
     if child_pid:
         print 'Daemon going down, killing wicd-monitor...'
         try:

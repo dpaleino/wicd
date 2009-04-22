@@ -45,7 +45,7 @@ daemon = dbus_dict["daemon"]
 wired = dbus_dict["wired"]
 wireless = dbus_dict["wireless"]
 
-monitor = to_time = update_callback = mainloop = None
+mainloop = None
 
 def diewithdbus(func):
     def wrapper(self, *__args, **__kargs):
@@ -86,11 +86,42 @@ class ConnectionStatus(object):
         self.iwconfig = ""
         self.trigger_reconnect = False
         self.__lost_dbus_count = 0
-
+        self._to_time = daemon.GetBackendUpdateInterval()
+        
+        self.add_poll_callback()
         bus = dbusmanager.get_bus()
         bus.add_signal_receiver(self._force_update_connection_status, 
                                 "UpdateState", "org.wicd.daemon")
+        bus.add_signal_receiver(self._update_timeout_interval,
+                                "SignalBackendChanged", "org.wicd.daemon")
 
+    def _update_timeout_interval(self, interval):
+        """ Update the callback interval when signaled by the daemon. """
+        self._to_time = interval
+        gobject.source_remove(self.update_callback)
+        self.add_poll_callback()
+
+    def _force_update_connection_status(self):
+        """ Run a connection status update on demand.
+
+        Removes the scheduled update_connection_status()
+        call, explicitly calls the function, and reschedules
+        it.
+
+        """
+        gobject.source_remove(self.update_callback)
+        self.update_connection_status()
+        self.add_poll_callback()
+        
+    def add_poll_callback(self):
+        """ Registers a polling call at a predetermined interval.
+        
+        The polling interval is determined by the backend in use.
+        
+        """
+        self.update_callback = misc.timeout_add(self._to_time,
+                                                self.update_connection_status)
+    
     def check_for_wired_connection(self, wired_ip):
         """ Checks for a wired connection.
 
@@ -229,19 +260,6 @@ class ConnectionStatus(object):
             self.auto_reconnect(from_wireless)
         return self.update_state(state)
 
-    def _force_update_connection_status(self):
-        """ Run a connection status update on demand.
-
-        Removes the scheduled update_connection_status()
-        call, explicitly calls the function, and reschedules
-        it.
-
-        """
-        global update_callback
-        gobject.source_remove(update_callback)
-        self.update_connection_status()
-        add_poll_callback()
-
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
         # Set our connection state/info.
@@ -333,12 +351,6 @@ def err_handle(error):
     """ Just a dummy function needed for asynchronous dbus calls. """
     pass
 
-def add_poll_callback():
-    global monitor, to_time, update_callback
-
-    update_callback = misc.timeout_add(to_time, 
-                                       monitor.update_connection_status)
-
 def main():
     """ Starts the connection monitor. 
 
@@ -346,11 +358,8 @@ def main():
     an amount of time determined by the active backend.
 
     """
-    global monitor, to_time, mainloop
-
+    global mainloop
     monitor = ConnectionStatus()
-    to_time = daemon.GetBackendUpdateInterval()
-    add_poll_callback()
     mainloop = gobject.MainLoop()
     mainloop.run()
 

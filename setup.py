@@ -24,22 +24,25 @@ import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0a1'
+VERSION_NUM = '1.6.0a2'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
 
+# change to the directory setup.py is contained in
+os.chdir(os.path.abspath(os.path.split(__file__)[0]))
+
 try:
-    try:
-        os.system('bzr version-info --python > vcsinfo.py')
-    except:
-        pass
+    if os.path.exists('.bzr') and os.system('bzr') == 0:
+        try:
+            os.system('bzr version-info --python > vcsinfo.py')
+        except:
+            pass
     import vcsinfo
     REVISION_NUM = vcsinfo.version_info['revno']
 except Exception, e:
     print 'failed to find revision number:'
     print e
-
 
 class configure(Command):
     description = "configure the paths that Wicd will be installed to"

@@ -178,6 +178,9 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.global_dns_cb.set_state(bool(wired.GetWiredProperty('use_global_dns')))
         self.static_dns_cb.set_state(bool(wired.GetWiredProperty('use_static_dns')))
         
+        # Set static ip checkbox.  Forgot to do this the first time.
+        if stringToNone(self.ip_edit.get_edit_text()):
+            self.static_ip_cb.set_state(True)
         self.dns1.set_edit_text(self.format_entry( "dns1"))
         self.dns2.set_edit_text(self.format_entry( "dns2"))
         self.dns3.set_edit_text(self.format_entry( "dns3"))

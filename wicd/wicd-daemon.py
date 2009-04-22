@@ -208,6 +208,7 @@ class WicdDaemon(dbus.service.Object):
             self.suspended = True
             self.wifi.LoadBackend(backend)
             self.wired.LoadBackend(backend)
+            self.SignalBackendChanged(self.GetBackendUpdateInterval())
             self.SetSuspend(False)
 
     @dbus.service.method('org.wicd.daemon')
@@ -823,6 +824,11 @@ class WicdDaemon(dbus.service.Object):
         This signal can be hooked to monitor the network state.
 
         """
+        pass
+    
+    @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='i')
+    def SignalBackendChanged(self, interval):
+        """ Emits a signal when the current backend changes. """
         pass
 
     def ReadConfig(self):

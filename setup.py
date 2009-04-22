@@ -30,7 +30,7 @@ REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
 
 # change to the directory setup.py is contained in
-os.chdir(os.path.abspath(__file))
+os.chdir(os.path.abspath(__file__))
 
 try:
     if os.path.exists('.bzr') and os.system('bzr') == 0:

@@ -133,6 +133,7 @@ class TrayIcon(object):
             return self.tr.is_embedded()
    
     def get_bandwidth_bytes(self):
+        """ Gets the amount of byte sent sine the last time I checked """
         dev_dir = '/sys/class/net/'
         iface = daemon.GetCurrentInterface()
 
@@ -151,7 +152,7 @@ class TrayIcon(object):
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
         def __init__(self, parent, tr, animate=True):
-            """ Initialize variables needed for the icon status methods. """
+            # Initialize variables needed for the icon status methods.
             self.last_strength = -2
             self.tried_reconnect = False
             self.connection_lost_counter = 0
@@ -171,10 +172,13 @@ class TrayIcon(object):
                 handle_no_dbus()
                 self.set_not_connected_state()
 
-            """ Initial update of the tooltip """
-            self.update_tooltip
+            # Initial update of the tooltip
+            self.update_tooltip()
 
         def update_tooltip(self):
+            """
+            Updates the trayicon tooltip based on current connection status
+            """
             if (self.network_type == "none"):
                 self.tr.set_tooltip(language['not_connected'])
             elif (self.network_type == "wireless"):
@@ -405,7 +409,7 @@ class TrayIcon(object):
             net_menuitem.connect("activate", self.on_net_menu_activate)
             
             self.parent = parent
-            self.time = 2
+            self.time = 2           # Time between updates
             self.cont = 'Stop'
             self.conn_info_txt = ''
             
@@ -450,24 +454,24 @@ class TrayIcon(object):
             msg = gtk.Label()
             msg.show()
             
-            """ Start updates """
+            # Start updates
             self.cont = 'Go'
             gobject.timeout_add(5000, self.update_conn_info_win, msg)
             self.update_conn_info_win(msg)
             
-            """ Setup Window """
+            # Setup Window
             content = window.get_content_area()
             content.pack_start(msg, True, True, 0)
             content.visible = True
 
             window.run()
     
-            """ Destroy window and stop updates """
+            # Destroy window and stop updates
             window.destroy()
             self.cont = 'Stop'
     
         def update_conn_info_win(self, msg): 
-        
+            """ Updates the information in the connection summary window """
             if (self.cont == "Stop"):
                 return False
             
@@ -496,6 +500,10 @@ class TrayIcon(object):
             return True 
                             
         def get_current_bandwidth(self):
+            """ 
+            Calculates the current bandwidth based on sent/received bytes
+            divided over time. Unit is in KB/s
+            """
             self.parent.get_bandwidth_bytes()
             rxb = self.parent.cur_rcvbytes - self.parent.last_rcvbytes
             txb = self.parent.cur_sndbytes - self.parent.last_sndbytes

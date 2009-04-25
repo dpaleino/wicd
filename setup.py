@@ -463,14 +463,10 @@ try:
     print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):
-        if not language.startswith('.'):
-            codes = language.split('_')
-            short_language = language
-            if codes[0].lower() == codes[1].lower():
-                short_language = codes[0].lower()
-            print short_language,
-            data.append((wpath.translations + short_language + '/LC_MESSAGES/',
-                        ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+        print language,
+        data.append((wpath.translations + language + '/LC_MESSAGES/',
+                    ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+    print
 except Exception, e:
     print str(e)
     print '''Error setting up data array. This is normal if 

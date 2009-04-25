@@ -33,7 +33,7 @@ CURSES_REVNO = 'uimod'
 os.chdir(os.path.abspath(os.path.split(__file__)[0]))
 
 try:
-    if os.path.exists('.bzr') and os.system('bzr') == 0:
+    if os.path.exists('.bzr') and os.system('bzr > /dev/null 2>&1') == 0:
         try:
             os.system('bzr version-info --python > vcsinfo.py')
         except:

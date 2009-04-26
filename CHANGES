@@ -1,31 +1,59 @@
 ------------------------------------------------------------
-revno: 367
-committer: Andrew Psaltis <ampsaltis@gmail.com>
+revno: 369
+committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
-timestamp: Wed 2009-04-22 17:40:07 -0400
+timestamp: Sun 2009-04-26 08:00:33 +0900
 message:
-  Merged r318 of experimental-nacl, fixing yet another wicd-curses bug.
+  Redirected bzr output to /dev/null
+------------------------------------------------------------
+revno: 368
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-04-26 07:53:24 +0900
+message:
+  Fixed setup.py translations installation and made wicd-daemon.py +x
+------------------------------------------------------------
+revno: 367
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-04-23 19:41:10 +0800
+message:
+  Merged
     ------------------------------------------------------------
-    revno: 202.2.27
+    revno: 365.1.2
     committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-04-22 17:37:50 -0400
+    branch nick: 1.6
+    timestamp: Wed 2009-04-22 17:40:07 -0400
     message:
-      Made the network preferences dialogs save whether they are using static IPs or not.  Thanks to Adam for finding this one.
+      Merged r318 of experimental-nacl, fixing yet another wicd-curses bug.
+        ------------------------------------------------------------
+        revno: 202.2.27
+        committer: Andrew Psaltis <ampsaltis@gmail.com>
+        branch nick: experimental-nacl
+        timestamp: Wed 2009-04-22 17:37:50 -0400
+        message:
+          Made the network preferences dialogs save whether they are using static IPs or not.  Thanks to Adam for finding this one.
+        ------------------------------------------------------------
+        revno: 202.2.26
+        committer: Andrew Psaltis <ampsaltis@gmail.com>
+        branch nick: experimental-nacl
+        timestamp: Wed 2009-04-22 14:06:26 -0400
+        message:
+          Merged r366 of mainline 1.6.
     ------------------------------------------------------------
-    revno: 202.2.26
+    revno: 365.1.1
     committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-04-22 14:06:26 -0400
+    branch nick: 1.6
+    timestamp: Wed 2009-04-22 12:13:06 -0400
     message:
-      Merged r366 of mainline 1.6.
+      Set the SVG wicd icon as the window icon in wicd-client.
 ------------------------------------------------------------
 revno: 366
-committer: Andrew Psaltis <ampsaltis@gmail.com>
+committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
-timestamp: Wed 2009-04-22 12:13:06 -0400
+timestamp: Thu 2009-04-23 19:38:48 +0800
 message:
-  Set the SVG wicd icon as the window icon in wicd-client.
+  Updated CHANGES and added NEWS
 ------------------------------------------------------------
 revno: 365
 committer: Adam Blackburn <compwiz18@gmail.com>

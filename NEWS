@@ -12,7 +12,7 @@ Major Changes:
 - Added support for global scripts
 - Made it possible to have optional entries in encryption templates
 
-Enchancements:
+Minor Changes and Other Enchancements:
 - Better autoconnection behavior
 - Tray/GUI will survive the daemon being killed
 - Reasons for connection failures will now bubble back to the GUI

@@ -26,7 +26,7 @@ handles recieving/sendings the settings from/to the daemon.
 
 import gtk
 import gobject
-import pango
+#import pango
 import os
 import gtk.glade
 

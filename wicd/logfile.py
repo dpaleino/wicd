@@ -25,8 +25,6 @@ import sys
 import os
 import time
 
-import wicd.wpath as wpath
-
 class SizeError(IOError):
     pass
 

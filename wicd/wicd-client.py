@@ -40,7 +40,6 @@ import gobject
 import getopt
 import os
 import pango
-import time
 import atexit
 from dbus import DBusException
 

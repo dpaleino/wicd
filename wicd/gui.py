@@ -31,7 +31,6 @@ import pango
 import gtk
 import gtk.glade
 from dbus import DBusException
-from dbus import version as dbus_version
 
 from wicd import misc
 from wicd import wpath
@@ -41,7 +40,7 @@ from wicd import netentry
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
-from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
+from wicd.guiutil import error, LabelEntry
 from wicd.translations import language
 
 if __name__ == '__main__':
@@ -709,7 +708,7 @@ class appGui(object):
         try:
             daemon.WriteWindowSize(width, height, "main")
             daemon.SetGUIOpen(False)
-        except dbusmanager.DBusException:
+        except DBusException:
             pass
 
         if self.standalone:

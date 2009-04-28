@@ -24,7 +24,7 @@ import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0a2'
+VERSION_NUM = '1.6.0a3'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
@@ -33,7 +33,7 @@ CURSES_REVNO = 'uimod'
 os.chdir(os.path.abspath(os.path.split(__file__)[0]))
 
 try:
-    if os.path.exists('.bzr') and os.system('bzr') == 0:
+    if os.path.exists('.bzr') and os.system('bzr > /dev/null 2>&1') == 0:
         try:
             os.system('bzr version-info --python > vcsinfo.py')
         except:
@@ -463,14 +463,10 @@ try:
     print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):
-        if not language.startswith('.'):
-            codes = language.split('_')
-            short_language = language
-            if codes[0].lower() == codes[1].lower():
-                short_language = codes[0].lower()
-            print short_language,
-            data.append((wpath.translations + short_language + '/LC_MESSAGES/',
-                        ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+        print language,
+        data.append((wpath.translations + language + '/LC_MESSAGES/',
+                    ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+    print
 except Exception, e:
     print str(e)
     print '''Error setting up data array. This is normal if 

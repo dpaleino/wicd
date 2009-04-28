@@ -1,34 +1,25 @@
-Wicd 1.6.x Branch
+MAIN CHANGES:
+- New and improved tray icon and gui images.  (Thanks to Martin Sagastume).
+- Re-organized network list in the GUI to be easier to navigate.
+- Added new experimental ioctl backend, which is more CPU friendly than the previous one.
+- Added a curses client (Thanks to Andrew Psaltis).
+- Added a right-click connection menu to the tray icon.
+- Add options to specify a dns domain and search domain for static networks.
+- Re-worked Preferences menu to be more in line with GNOME standards.
+- Support for global scripts.
+- Make it possible to have optional entries in encryption templates.
 
-Major Changes:
-- Improved tray icon and gui images (thanks to Martin Sagastume)
-- Reorganized network list in the gui for easier navigation
-- New experimental ioctl backend, which is more cpu-friendly than the 
-  previous one 
-- Added a curses client (thanks to Andrew Psaltis)
-- Added a right-click connection menu to the tray icon
-- Added options to specify a dns domain and search domain for static networks
-- Reworked the Preferences menu to be more in line with GNOME standards
-- Added support for global scripts
-- Made it possible to have optional entries in encryption templates
-
-Minor Changes and Other Enchancements:
-- Better autoconnection behavior
-- Tray/GUI will survive the daemon being killed
-- Reasons for connection failures will now bubble back to the GUI
-- Add/Remove wired profile system is now more user-friendly
-- Support for using resolvconf instead of directly editing /etc/resolv.conf
-- Wicd won't blindly kill dhcp clients / wpa_supplicant any more
-- Added an option to automatically switch from a wireless network to a wired 
-  one as soon as a cable is plugged in
-- Moved scanning to its own thread, which makes GUI and daemon more responsive
-  during scans
-- Made it possible to specify macros in script entries
-- The gui will now display the encryption entry dialog if you attempt to 
-  connect to an encrypted network without entering a password
-- Static gateway entry is now optional
-- Passwords with leading or trailing whitespace are now stored properly
-- Many init/config script, man page, and setup.py fixes/updates, including
-  better autodetection of file placement with regard to sleep hooks and 
-  kde autostart files (thanks to Robby Workman)
-
+SMALL CHANGES:
+- Better autoconnection behavior.
+- Tray/GUI will survive the daemon going down.
+- Reasons for connection failures will now bubble back to the GUI.
+- Add/Remove wired profile system is now more user-friendly.
+- Support for using resolvconf instead of directly editing /etc/resolv.conf. 
+- Wicd won't blindly kill dhcp clients / wpa_supplicant anymore.
+- Added an option to automatically switch from a wireless network to a wired one as soon as a cable is plugged in.
+- Move scanning to its own thread, which makes GUI and daemon more responsive during scans. 
+- Make it possible to specify macros in script entries.
+- GUI will now display the encryption entry dialog if you attempt to connect to an encrypted network without entering a password.
+- Static gateway entry is now optional.
+- Passwords with leading or trailing whitespace are now stored properly.
+- Many init/config script, man page, and setup.py fixes/updates (Thanks to Robby Workman).

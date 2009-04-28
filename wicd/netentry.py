@@ -29,7 +29,7 @@ import misc
 import wpath
 import dbusmanager
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
+from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
 from translations import language
 

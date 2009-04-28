@@ -106,7 +106,8 @@ class ConfigManager(RawConfigParser):
         
         # Try to intelligently handle the type of the return value.
         try:
-            ret = int(ret)
+            if not ret.startswith('0') or len(ret) == 1:
+                ret = int(ret)
         except (ValueError, TypeError):
             ret = Noneify(ret)
         # This is a workaround for a python-dbus issue on 64-bit systems.

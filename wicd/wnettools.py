@@ -112,10 +112,9 @@ def GetWirelessInterfaces():
 
     """
     dev_dir = '/sys/class/net/'
-    ifnames = []
-    
-    ifnames = [iface for iface in os.listdir(dev_dir) if os.path.isdir(dev_dir + iface)
-               and 'wireless' in os.listdir(dev_dir + iface)]
+    ifnames = [iface for iface in os.listdir(dev_dir)
+               if os.path.isdir(dev_dir + iface) and 
+                  'wireless' in os.listdir(dev_dir + iface)]
     
     return ifnames
 
@@ -134,10 +133,7 @@ def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",
                        "-c/etc/abcd%sdefzz.zconfz" % random.randint(1, 1000)])
-    if re.match("Unsupported driver", output):
-        return False
-    else:
-        return True
+    return not "Unsupported driver" in output
     
 def neediface(default_response):
     """ A decorator for only running a method if self.iface is defined.

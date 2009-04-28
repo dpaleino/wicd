@@ -26,7 +26,6 @@ when appropriate.
 
 import gobject
 import time
-import sys
 
 from dbus import DBusException
 
@@ -53,7 +52,7 @@ def diewithdbus(func):
             ret = func(self, *__args, **__kargs)
             self.__lost_dbus_count = 0
             return ret
-        except dbusmanager.DBusException, e:
+        except DBusException, e:
             print  "Caught exception %s" % str(e)
             if not hasattr(self, "__lost_dbus_count"):
                 self.__lost_dbus_count = 0

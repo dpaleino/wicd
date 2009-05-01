@@ -1,11 +1,160 @@
-MAJOR CHANGES FROM 1.5:
- * Enhanced GUI
- * Console client (wicd-curses)
- * Support for multiple backends
- * Enhanced network setting properties
- * Bug fixes
-
-CHANGELOG:
+------------------------------------------------------------
+revno: 369
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-04-26 08:00:33 +0900
+message:
+  Redirected bzr output to /dev/null
+------------------------------------------------------------
+revno: 368
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-04-26 07:53:24 +0900
+message:
+  Fixed setup.py translations installation and made wicd-daemon.py +x
+------------------------------------------------------------
+revno: 367
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-04-23 19:41:10 +0800
+message:
+  Merged
+    ------------------------------------------------------------
+    revno: 365.1.2
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6
+    timestamp: Wed 2009-04-22 17:40:07 -0400
+    message:
+      Merged r318 of experimental-nacl, fixing yet another wicd-curses bug.
+        ------------------------------------------------------------
+        revno: 202.2.27
+        committer: Andrew Psaltis <ampsaltis@gmail.com>
+        branch nick: experimental-nacl
+        timestamp: Wed 2009-04-22 17:37:50 -0400
+        message:
+          Made the network preferences dialogs save whether they are using static IPs or not.  Thanks to Adam for finding this one.
+        ------------------------------------------------------------
+        revno: 202.2.26
+        committer: Andrew Psaltis <ampsaltis@gmail.com>
+        branch nick: experimental-nacl
+        timestamp: Wed 2009-04-22 14:06:26 -0400
+        message:
+          Merged r366 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 365.1.1
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6
+    timestamp: Wed 2009-04-22 12:13:06 -0400
+    message:
+      Set the SVG wicd icon as the window icon in wicd-client.
+------------------------------------------------------------
+revno: 366
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-04-23 19:38:48 +0800
+message:
+  Updated CHANGES and added NEWS
+------------------------------------------------------------
+revno: 365
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-04-22 22:17:39 +0800
+message:
+  fixed another typo
+------------------------------------------------------------
+revno: 364
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-04-22 22:11:33 +0800
+message:
+  fixed a typo
+------------------------------------------------------------
+revno: 363
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-04-22 22:02:31 +0800
+message:
+  Updated version number
+------------------------------------------------------------
+revno: 362
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-04-22 21:45:51 +0800
+message:
+  Updated vcsinfo.py generation logic
+------------------------------------------------------------
+revno: 361
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Tue 2009-04-21 21:25:59 -0400
+message:
+  Refactor monitor.py polling code to remove reliance on globals.
+  Make sure we update the polling rate in wicd-monitor when the backend changes.
+------------------------------------------------------------
+revno: 360
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Tue 2009-04-21 20:30:40 -0400
+message:
+  Use atexit instead of catching SIGTERM in wicd-daemon.
+  Use Popen to launch wicd-monitor instead of gobject.spawn_async.
+------------------------------------------------------------
+revno: 359
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-04-21 17:47:46 -0400
+message:
+  Merged r316 of experimental-nacl, providing some small feature additions and bufixes.
+    ------------------------------------------------------------
+    revno: 202.2.25
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-04-21 14:09:29 -0400
+    message:
+      Fixed a problem where if a scan is initiated externally, and wicd-curses doesn't see it, wicd-curses will half-drop a running big dialog.
+    ------------------------------------------------------------
+    revno: 202.2.24
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-04-21 13:34:01 -0400
+    message:
+      Fix bug introduced in r356 where wicd would crash upon not finding dhclient.
+    ------------------------------------------------------------
+    revno: 202.2.23
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-04-21 13:16:44 -0400
+    message:
+      Added support for disabling nonexistent external tools in the pref_curses.py.
+      Added a DynRadioButton in curses_misc.py.
+    ------------------------------------------------------------
+    revno: 202.2.22
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-04-21 13:15:30 -0400
+    message:
+      Merged with r358 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.21
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-04-17 08:04:02 -0400
+    message:
+      Merged r355 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.20
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sun 2009-04-12 12:12:38 -0400
+    message:
+      Merge r352 of mainline 1.6
+------------------------------------------------------------
+revno: 358
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-04-21 22:33:29 +0800
+message:
+  Updated CHANGES
 ------------------------------------------------------------
 revno: 357
 committer: Andrew Psaltis <ampsaltis@gmail.com>

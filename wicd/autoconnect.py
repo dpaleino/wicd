@@ -23,7 +23,6 @@ from wicd import dbusmanager
 
 import dbus
 import time
-import gobject
 import sys
 
 if getattr(dbus, 'version', (0, 0, 0)) < (0, 80, 0):

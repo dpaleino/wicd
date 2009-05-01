@@ -41,6 +41,8 @@ wired = None
 
 from translations import language
 
+USER_SETTINGS_DIR = os.path.expanduser('~/.wicd/')
+
 def setup_dbus():
     global daemon, wireless, wired
     daemon = dbusmanager.get_interface('daemon')
@@ -144,6 +146,11 @@ class PreferencesDialog(object):
             self.backendcombo.set_active(self.backends.index(cur_backend))
         except ValueError:
             self.backendcombo.set_active(0)
+
+        self.notificationscheckbox.set_active(
+                os.path.exists(
+                    os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+                ))
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         
@@ -224,6 +231,15 @@ class PreferencesDialog(object):
 
         [width, height] = self.dialog.get_size()
         daemon.WriteWindowSize(width, height, "pref")
+        
+        not_path = os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+        if self.notificationscheckbox.get_active():
+            if not os.path.exists(not_path):
+                open(not_path, 'w')
+        else:
+            if os.path.exists(not_path):
+                os.remove(not_path)
+
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
@@ -308,6 +324,9 @@ class PreferencesDialog(object):
                                                'use_last_used_profile')
 
             
+        self.notificationscheckbox = setup_label("pref_use_libnotify",
+                                             'display_notifications')
+
         # DHCP Clients
         self.dhcpautoradio = setup_label("dhcp_auto_radio", "wicd_auto_config")
         self.dhclientradio = self.wTree.get_widget("dhclient_radio")

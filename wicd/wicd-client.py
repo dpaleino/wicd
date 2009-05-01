@@ -53,6 +53,8 @@ try:
 except ImportError:
     HAS_NOTIFY = False
 
+USE_NOTIFY = os.path.exists(os.path.join(os.path.expanduser('~/.wicd'),
+                                                            'USE_NOTIFICATIONS'))
 
 # Wicd specific imports
 from wicd import wpath
@@ -245,9 +247,7 @@ class TrayIcon(object):
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
 
-            self._show_notification('hello!')
-
-            self.should_notify = (self.last_state != state) and HAS_NOTIFY
+            self.should_notify = (self.last_state != state) and HAS_NOTIFY and USE_NOTIFY
 
             self.last_state = state
             

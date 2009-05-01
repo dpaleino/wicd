@@ -43,6 +43,17 @@ import pango
 import atexit
 from dbus import DBusException
 
+HAS_NOTIFY = True
+try:
+    import pygtk
+    pygtk.require('2.0')
+    import pynotify
+    if not pynotify.init("Wicd"):
+        HAS_NOTIFY = False
+except ImportError:
+    HAS_NOTIFY = False
+
+
 # Wicd specific imports
 from wicd import wpath
 from wicd import misc
@@ -62,6 +73,8 @@ if not hasattr(gtk, "StatusIcon"):
     except ImportError:
         print 'Unable to load tray icon: Missing both egg.trayicon and gtk.StatusIcon modules.'
         ICON_AVAIL = False
+
+print "Has notifications support", HAS_NOTIFY
 
 misc.RenameProcess("wicd-client")
 
@@ -118,7 +131,7 @@ class TrayIcon(object):
         
     def is_embedded(self):
         if USE_EGG:
-            raise NotImplementedError
+            raise NotImplementedError()
         else:
             return self.tr.is_embedded()
     
@@ -138,11 +151,29 @@ class TrayIcon(object):
             self.max_snd_gain = 10000
             self.max_rcv_gain = 10000
             self.animate = animate
+
+            # keep track of the last state to provide appropriate
+            # notifications
+            self._last_bubble = None
+            self.last_state = None
+            self.should_notify = True
+
             if DBUS_AVAIL:
                 self.update_tray_icon()
             else:
                 handle_no_dbus()
                 self.set_not_connected_state()
+
+        def _show_notification(self, status_string):
+            if self.should_notify:
+                if not self._last_bubble:
+                    self._last_bubble = pynotify.Notification("Network status", status_string)
+                    self._last_bubble.show()
+                else:
+                    self._last_bubble.update("Network status", status_string)
+                    self._last_bubble.show()
+
+                self.should_notify = False
 
         @catchdbus
         def wired_profile_chooser(self):
@@ -154,8 +185,10 @@ class TrayIcon(object):
             """ Sets the icon info for a wired state. """
             wired_ip = info[0]
             self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
-            self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
-                                                                     wired_ip))
+            status_string = language['connected_to_wired'].replace('$A',
+                                                                     wired_ip)
+            self.tr.set_tooltip(status_string)
+            self._show_notification(status_string)
             
         @catchdbus
         def set_wireless_state(self, info):
@@ -169,12 +202,14 @@ class TrayIcon(object):
             
             if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                 lock = "-lock"
-                
-            self.tr.set_tooltip(language['connected_to_wireless']
+            status_string = (language['connected_to_wireless']
                                 .replace('$A', self.network)
                                 .replace('$B', sig_string)
-                                .replace('$C', str(wireless_ip)))
+                                .replace('$C', str(wireless_ip))) 
+            self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
+            self._show_notification(status_string)
+            
             
         def set_connecting_state(self, info):
             """ Sets the icon info for a connecting state. """
@@ -182,9 +217,11 @@ class TrayIcon(object):
                 cur_network = language['wired_network']
             else:
                 cur_network = info[1]
-            self.tr.set_tooltip(language['connecting'] + " to " + 
-                                cur_network + "...")
+            status_string = language['connecting'] + " to " + \
+                                cur_network + "..."
+            self.tr.set_tooltip(status_string)
             self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
+            self._show_notification(status_string)
             
         @catchdbus
         def set_not_connected_state(self, info=None):
@@ -198,6 +235,7 @@ class TrayIcon(object):
             else:
                 status = language['not_connected']
             self.tr.set_tooltip(status)
+            self._show_notification(status)
 
         @catchdbus
         def update_tray_icon(self, state=None, info=None):
@@ -206,6 +244,12 @@ class TrayIcon(object):
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
+
+            self._show_notification('hello!')
+
+            self.should_notify = (self.last_state != state) and HAS_NOTIFY
+
+            self.last_state = state
             
             if state == misc.WIRED:
                 self.set_wired_state(info)

@@ -166,13 +166,13 @@ class TrayIcon(object):
                 handle_no_dbus()
                 self.set_not_connected_state()
 
-        def _show_notification(self, status_string):
+        def _show_notification(self, title, details):
             if self.should_notify:
                 if not self._last_bubble:
-                    self._last_bubble = pynotify.Notification("Network status", status_string)
+                    self._last_bubble = pynotify.Notification(title, details)
                     self._last_bubble.show()
                 else:
-                    self._last_bubble.update("Network status", status_string)
+                    self._last_bubble.update(title, details)
                     self._last_bubble.show()
 
                 self.should_notify = False
@@ -190,7 +190,8 @@ class TrayIcon(object):
             status_string = language['connected_to_wired'].replace('$A',
                                                                      wired_ip)
             self.tr.set_tooltip(status_string)
-            self._show_notification(status_string)
+            self._show_notification(language['wired_network'],
+                                    language['connection_established'])
             
         @catchdbus
         def set_wireless_state(self, info):
@@ -210,7 +211,8 @@ class TrayIcon(object):
                                 .replace('$C', str(wireless_ip))) 
             self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
-            self._show_notification(status_string)
+            self._show_notification(self.network,
+                                    language['connection_established'])
             
             
         def set_connecting_state(self, info):
@@ -223,7 +225,8 @@ class TrayIcon(object):
                                 cur_network + "..."
             self.tr.set_tooltip(status_string)
             self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
-            self._show_notification(status_string)
+            self._show_notification(cur_network,
+                                    language['establishing_connection'])
             
         @catchdbus
         def set_not_connected_state(self, info=None):
@@ -237,7 +240,7 @@ class TrayIcon(object):
             else:
                 status = language['not_connected']
             self.tr.set_tooltip(status)
-            self._show_notification(status)
+            self._show_notification(language['disconnected'], None)
 
         @catchdbus
         def update_tray_icon(self, state=None, info=None):

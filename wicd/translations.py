@@ -226,4 +226,6 @@ language['raw_screen_arg'] = _('use urwid\'s raw screen controller')
 language['ok'] = _('OK')
 language['cancel'] = _('Cancel')
 
-
+language['disconnected'] = _('Disconnected')
+language['connection_established'] = _('Connection established')
+language['establishing_connection'] = _('Establishing connection...')

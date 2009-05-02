@@ -148,6 +148,13 @@ class PreferencesDialog(object):
                 os.path.exists(
                     os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
                 ))
+
+        # if pynotify isn't installed disable the option
+        try:
+            import pynotify
+        except ImportError:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.set_sensitive(False)
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         

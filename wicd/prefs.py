@@ -59,12 +59,9 @@ class PreferencesDialog(object):
         
     def _setup_external_app_radios(self, radio_list, get_method, set_method):
         """ Generic function for setting up external app radios. """
-        def set_available(apps):
-            for app in apps:
-                app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
-        
         # Disable radios for apps that aren't installed.
-        set_available(radio_list[1:])
+        for app in radio_list[1:]:
+            app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
         selected_app = get_method()
         # Make sure the app we want to select is actually available.
         if radio_list[selected_app].get_property("sensitive"):

@@ -108,7 +108,7 @@ class ConfigManager(RawConfigParser):
         try:
             if not ret.startswith('0') or len(ret) == 1:
                 ret = int(ret)
-        except (ValueError, TypeError):
+        except (ValueError, TypeError, AttributeError):
             ret = Noneify(ret)
         # This is a workaround for a python-dbus issue on 64-bit systems.
         if isinstance(ret, (int)):

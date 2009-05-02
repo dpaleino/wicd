@@ -1201,8 +1201,8 @@ class WirelessDaemon(dbus.service.Object):
 
         # We want to write the essid in addition to bssid
         # sections if global settings are enabled.
+        self.config.remove_section(essid_key)
         if cur_network["use_settings_globally"]:
-            self.config.remove_section(essid_key)
             self.config.add_section(essid_key)
 
         for x in cur_network:

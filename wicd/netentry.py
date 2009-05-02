@@ -405,9 +405,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
     def save_settings(self, networkid):
         # Check encryption info
+        encrypt_info = self.encryption_info
         if self.chkbox_encryption.get_active():
             print "setting encryption info..."
-            encrypt_info = self.encryption_info
             encrypt_methods = self.encrypt_types
             self.set_net_prop("enctype",
                                encrypt_methods[self.combo_encryption.get_active()]['type'])

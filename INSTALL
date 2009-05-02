@@ -12,8 +12,9 @@ are a few dependencies:
   7. urwid (if you want to use the curses client - needs version >=0.9.8.3)
   8. pm-utils (optional for suspend/resume integration - needs version >=1.2.4)
 
-If you are installing from a bzr pull or beta/rc tarball and you want 
+If you are installing from a bzr pull and you want 
 the native language translations, first run this:
+  python setup.py update_translations_py
   python setup.py get_translations
 You will not need to do this if you're installing from a release tarball.
 

@@ -431,8 +431,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             print "no encryption specified..."
             self.set_net_prop("enctype", "None")
-            for entry in encrypt_info.iterkeys():
-                self.set_net_prop(entry[0], "")
         AdvancedSettingsDialog.save_settings(self)
         
         if self.chkbox_global_settings.get_active():

@@ -62,17 +62,17 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         ok_t = 'OK'
         
         self.static_ip_cb = urwid.CheckBox(static_ip_t,
-                on_state_change=self.static_ip_set_state)
+                on_state_change=self.static_ip_toggle)
         self.ip_edit     =DynWrap(urwid.Edit(ip_t),False)
         self.netmask_edit=DynWrap(urwid.Edit(netmask_t),False)
         self.gateway_edit=DynWrap(urwid.Edit(gateway_t),False)
 
 
-        self.static_dns_cb = urwid.CheckBox(use_static_dns_t,
-                on_state_change=self.dns_toggle)
+        self.static_dns_cb = DynWrap(urwid.CheckBox(use_static_dns_t,
+                on_state_change=self.dns_toggle),True,('body','editnfc'),None)
         self.global_dns_cb = DynWrap(urwid.CheckBox(use_global_dns_t,
                 on_state_change=self.dns_toggle),False,('body','editnfc'),None)
-        checkb_cols = urwid.Columns([self.static_dns_cb,
+        self.checkb_cols = urwid.Columns([self.static_dns_cb,
                                      self.global_dns_cb])
         self.dns_dom_edit      = DynWrap(urwid.Edit(dns_dom_t)   ,False)
         self.search_dom_edit   = DynWrap(urwid.Edit(search_dom_t),False)
@@ -87,7 +87,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                                          self.netmask_edit,
                                          self.gateway_edit,
                                          _blank,
-                                         checkb_cols,
+                                         self.checkb_cols,
                                          self.dns_dom_edit,self.search_dom_edit,
                                          self.dns1,self.dns2,self.dns3
                                         ])
@@ -99,12 +99,19 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         self._frame = urwid.Frame(self._listbox)
         self.__super.__init__(self._frame)
     
-    def static_ip_set_state(self,checkb,new_state,user_data=None):
+    def static_ip_toggle(self,checkb,new_state,user_data=None):
         for w in [ self.ip_edit,self.netmask_edit,self.gateway_edit ]:
             w.set_sensitive(new_state)
+        self.static_dns_cb.set_state(new_state)
+        self.static_dns_cb.set_sensitive(not new_state)
+        if new_state:
+            self.checkb_cols.set_focus(self.global_dns_cb)
+        else:
+            self.checkb_cols.set_focus(self.static_dns_cb)
+
         
     def dns_toggle(self,checkb,new_state,user_data=None):
-        if checkb == self.static_dns_cb:
+        if checkb == self.static_dns_cb.get_w():
             for w in [ self.dns_dom_edit,self.search_dom_edit,
                     self.dns1,self.dns2,self.dns3 ]:
                 w.set_sensitive(new_state)
@@ -256,6 +263,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.static_dns_cb.set_state(bool(wireless.GetWirelessProperty(networkID,
                                                                   'use_static_dns')))
         
+        if stringToNone(self.ip_edit.get_edit_text()):
+            self.static_ip_cb.set_state(True)
         self.dns1.set_edit_text(self.format_entry(networkID, "dns1"))
         self.dns2.set_edit_text(self.format_entry(networkID, "dns2"))
         self.dns3.set_edit_text(self.format_entry(networkID, "dns3"))
@@ -327,8 +336,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             return False
         else:
             self.set_net_prop("enctype", "None")
-            for entry in encrypt_info.iterkeys():
-                self.set_net_prop(entry[0].entry, "")
         AdvancedSettingsDialog.save_settings(self)
 
         # Save the autoconnect setting.  This is not where it originally was
@@ -347,9 +354,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     # More or less ripped from netentry.py
     def change_encrypt_method(self):
         #self.lbox_encrypt = urwid.ListBox()
+        self.encryption_info = {}
         wid,ID = self.encryption_combo.get_focus()
         methods = misc.LoadEncryptionMethods()
-        self.encryption_info = {}
 
         if self._w.body.body.__contains__(self.pile_encrypt):
             self._w.body.body.pop(self._w.body.body.__len__()-1)

@@ -40,9 +40,14 @@
                               <widget class="GtkImageMenuItem" id="create_ad_hoc_button">
                                 <property name="label">Create an ad-hoc network</property>
                                 <property name="visible">True</property>
-                                <property name="use_underline">True</property>
-                                <property name="use_stock">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="create_adhoc_clicked"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image1">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-add</property>
+                                  </widget>
+                                </child>
                               </widget>
                             </child>
                             <child>
@@ -50,9 +55,14 @@
                                 <property name="label">Find a hidden network</property>
                                 <property name="visible">True</property>
                                 <property name="tooltip" translatable="yes">Enter a hidden network to try to locate.</property>
-                                <property name="use_underline">True</property>
-                                <property name="use_stock">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="hidden_clicked"/>
+                                <child internal-child="image">
+                                  <widget class="GtkImage" id="image2">
+                                    <property name="visible">True</property>
+                                    <property name="stock">gtk-find</property>
+                                  </widget>
+                                </child>
                               </widget>
                             </child>
                           </widget>

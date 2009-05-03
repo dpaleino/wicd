@@ -332,6 +332,26 @@ class test(Command):
         print 'running tests'
         tests.run_tests()
 
+class update_translations_py(Command):
+    description = "download new translations.py from the online translator"
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import urllib, shutil
+        # grab translations.py
+        filename, headers = urllib.urlretrieve('http://wicd.net/translator/generate/translations.py/')
+        # copy it into the right location
+        shutil.copyfile(filename,
+                        os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                     'wicd/translations.py'))
+
 class get_translations(Command):
     description = "download the translations from the online translator"
          
@@ -482,7 +502,9 @@ iwscan_ext = Extension(name='iwscan', libraries=['iw'],
                        sources=['depends/python-iwscan/pyiwscan.c'])
     
 setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
-                'uninstall' : uninstall, 'test' : test, 'clear_generated' : clear_generated},
+                'uninstall' : uninstall, 'test' : test, 'clear_generated' :
+                clear_generated, 'update_translations_py' :
+                update_translations_py},
       name="Wicd",
       version=VERSION_NUM,
       description="A wireless and wired network manager",

@@ -53,9 +53,6 @@ try:
 except ImportError:
     HAS_NOTIFY = False
 
-USE_NOTIFY = os.path.exists(os.path.join(os.path.expanduser('~/.wicd'),
-                                                            'USE_NOTIFICATIONS'))
-
 # Wicd specific imports
 from wicd import wpath
 from wicd import misc
@@ -130,6 +127,7 @@ class TrayIcon(object):
         else:
             self.tr = self.StatusTrayIconGUI()
         self.icon_info = self.TrayConnectionInfo(self.tr, animate)
+        self.tr.icon_info = self.icon_info
         
     def is_embedded(self):
         if USE_EGG:
@@ -159,6 +157,10 @@ class TrayIcon(object):
             self._last_bubble = None
             self.last_state = None
             self.should_notify = True
+
+            self.use_notify = os.path.exists(os.path.join(
+                os.path.expanduser('~/.wicd'),
+                        'USE_NOTIFICATIONS'))
 
             if DBUS_AVAIL:
                 self.update_tray_icon()
@@ -250,7 +252,8 @@ class TrayIcon(object):
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
 
-            self.should_notify = (self.last_state != state) and HAS_NOTIFY and USE_NOTIFY
+            self.should_notify = (self.last_state != state) and \
+                    HAS_NOTIFY and self.use_notify 
 
             self.last_state = state
             
@@ -599,7 +602,7 @@ class TrayIcon(object):
         def toggle_wicd_gui(self):
             """ Toggles the wicd GUI. """
             if not self.gui_win:
-                self.gui_win = gui.appGui()
+                self.gui_win = gui.appGui(tray=self)
             elif not self.gui_win.is_visible:
                 self.gui_win.show_win()
             else:

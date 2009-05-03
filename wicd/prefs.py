@@ -51,8 +51,9 @@ def setup_dbus():
 
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
-    def __init__(self, wTree):
+    def __init__(self, parent, wTree):
         setup_dbus()
+        self.parent = parent
         self.wTree = wTree
         self.prep_settings_diag()
         self.load_preferences_diag()
@@ -243,7 +244,11 @@ class PreferencesDialog(object):
         else:
             if os.path.exists(not_path):
                 os.remove(not_path)
-
+        # if this GUI was started by a tray icon,
+        # instantly change the notifications there
+        if self.parent.tray:
+            self.parent.tray.icon_info.use_notify = \
+                                self.notificationscheckbox.get_active()
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """

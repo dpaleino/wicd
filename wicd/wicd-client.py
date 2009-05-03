@@ -514,9 +514,9 @@ class TrayIcon(object):
             elif state == misc.WIRELESS:
                 self.list[1].set_text(language['conn_info_wireless_labels'])
             elif state == misc.CONNECTING:
-                self.list[1].set_text(language['connecting'])
+                self.list[1].set_text(language['conn_info_connecting'])
             elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
-                self.list[1].set_text(language['not_connected']) 
+                self.list[1].set_text(language['conn_info_not_connected']) 
                        
             return True 
                             

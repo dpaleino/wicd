@@ -451,52 +451,73 @@ class TrayIcon(object):
             """ Opens the Connection Information Dialog """
             window = gtk.Dialog("Wicd Connection Info", None, 0, (gtk.STOCK_OK, gtk.RESPONSE_CLOSE))
            
-            msg = gtk.Label()
-            msg.show()
+            # Create labels
+            self.label = gtk.Label()
+            self.data = gtk.Label()
+            self.label.show()
+            self.data.show()
+            self.list = []
+            self.list.append(self.data)
+            self.list.append(self.label)
+
+            # Setup table
+            table = gtk.Table(1,2)
+            table.set_col_spacings(12)
+            table.attach(self.label, 0, 1, 0, 1)
+            table.attach(self.data, 1, 2, 0 ,1)
+
+            # Setup Window
+            content = window.get_content_area()
+            content.pack_start(table, True, True, 0)
+            content.show_all()
             
             # Start updates
             self.cont = 'Go'
-            gobject.timeout_add(5000, self.update_conn_info_win, msg)
-            self.update_conn_info_win(msg)
+            gobject.timeout_add(5000, self.update_conn_info_win, self.list)
+            self.update_conn_info_win(self.list)
             
-            # Setup Window
-            content = window.get_content_area()
-            content.pack_start(msg, True, True, 0)
-            content.visible = True
-
             window.run()
     
             # Destroy window and stop updates
             window.destroy()
             self.cont = 'Stop'
     
-        def update_conn_info_win(self, msg): 
+        def update_conn_info_win(self, list): 
             """ Updates the information in the connection summary window """
             if (self.cont == "Stop"):
                 return False
             
             [state, info] = daemon.GetConnectionStatus()
             [rx, tx] = self.get_current_bandwidth()
-                    
+                   
+            # Choose info for the data
             if state == misc.WIRED:
                 text = (language['conn_info_wired']
-                        .replace('$A', str(info[0]))
-                        .replace('$B', str(rx))
-                        .replace('$C', str(tx)))
+                        .replace('$A', str(info[0]))    #IP
+                        .replace('$B', str(rx))         #RX
+                        .replace('$C', str(tx)))        #TX
             elif state == misc.WIRELESS:
                 text = (language['conn_info_wireless']
-                        .replace('$A', info[1])
-                        .replace('$B', info[4])
-                        .replace('$C', str(info[0]))
+                        .replace('$A', str(info[1]))    #SSID
+                        .replace('$B', str(info[4]))    #Speed
+                        .replace('$C', str(info[0]))    #IP
                         .replace('$D', daemon.FormatSignalForPrinting(str(info[2])))
                         .replace('$E', str(rx))
                         .replace('$F', str(tx)))
-            elif state == misc.CONNECTING:
-                text = (language['connecting'])
-            elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
-                text = (language['not_connected']) 
+            else:
+                text = ''
 
-            msg.set_text(text)
+            # Choose info for the labels
+            self.list[0].set_text(text)
+            if state == misc.WIRED:
+                self.list[1].set_text(language['conn_info_wired_labels'])
+            elif state == misc.WIRELESS:
+                self.list[1].set_text(language['conn_info_wireless_labels'])
+            elif state == misc.CONNECTING:
+                self.list[1].set_text(language['connecting'])
+            elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
+                self.list[1].set_text(language['not_connected']) 
+                       
             return True 
                             
         def get_current_bandwidth(self):

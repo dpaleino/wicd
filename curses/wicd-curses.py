@@ -33,7 +33,10 @@ at least get a network connection.  Or those who don't like using X.  ;-)
 
     Comments, criticisms, patches, bug reports all welcome!
 """
-
+# Filter out a confusing urwid warning in python 2.6.
+# This is valid as of urwid version 0.9.8.4
+import warnings 
+warnings.filterwarnings("ignore","The popen2 module is deprecated.  Use the subprocess module.") 
 # UI stuff
 # This library is the only reason why I wrote this program.
 import urwid

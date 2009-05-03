@@ -218,7 +218,8 @@ class TrayIcon(object):
             self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
             self._show_notification(self.network,
-                                    language['connection_established'])
+                                    language['connection_established'],
+                                    'network-wireless')
             
             
         def set_connecting_state(self, info):
@@ -239,7 +240,8 @@ class TrayIcon(object):
                                         'network-wired')
             else:
                 self._show_notification(cur_network,
-                                        language['establishing_connection'])
+                                        language['establishing_connection'],
+                                        'network-wireless')
 
             
         @catchdbus
@@ -254,7 +256,7 @@ class TrayIcon(object):
             else:
                 status = language['not_connected']
             self.tr.set_tooltip(status)
-            self._show_notification(language['disconnected'], None)
+            self._show_notification(language['disconnected'], None, 'stop')
 
         @catchdbus
         def update_tray_icon(self, state=None, info=None):

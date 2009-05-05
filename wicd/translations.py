@@ -55,7 +55,7 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-# Generated automatically on Sun, 03 May 2009 04:19:52 CDT
+# Generated automatically on Mon, 04 May 2009 23:56:04 CDT
 _ = get_gettext()
 language = {}
 language['resetting_ip_address'] = _('''Resetting IP address...''')
@@ -215,4 +215,3 @@ language['disconnected'] = _('''Disconnected''')
 language['establishing_connection'] = _('''Establishing connection...''')
 language['association_failed'] = _('''Connection failed: Could not contact the wireless access point.''')
 language['access_denied'] = _('''Unable to contact the wicd dameon due to an access denied error from DBus.  Please check your DBus configuration.''')
-language['script_settings'] = _('''Scripts''')

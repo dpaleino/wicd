@@ -41,6 +41,8 @@ wired = None
 
 from translations import language
 
+USER_SETTINGS_DIR = os.path.expanduser('~/.wicd/')
+
 def setup_dbus():
     global daemon, wireless, wired
     daemon = dbusmanager.get_interface('daemon')
@@ -49,8 +51,9 @@ def setup_dbus():
 
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
-    def __init__(self, wTree):
+    def __init__(self, parent, wTree):
         setup_dbus()
+        self.parent = parent
         self.wTree = wTree
         self.prep_settings_diag()
         self.load_preferences_diag()
@@ -141,6 +144,24 @@ class PreferencesDialog(object):
             self.backendcombo.set_active(self.backends.index(cur_backend))
         except ValueError:
             self.backendcombo.set_active(0)
+
+        self.notificationscheckbox.set_active(
+                os.path.exists(
+                    os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+                ))
+
+        # if pynotify isn't installed disable the option
+        try:
+            import pynotify
+        except ImportError:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.set_sensitive(False)
+
+        # if notifications were disabled with the configure flag
+        if wpath.no_use_notifications:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.hide()
+            self.wTree.get_widget('label2').hide()
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         
@@ -221,6 +242,19 @@ class PreferencesDialog(object):
 
         [width, height] = self.dialog.get_size()
         daemon.WriteWindowSize(width, height, "pref")
+        
+        not_path = os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+        if self.notificationscheckbox.get_active():
+            if not os.path.exists(not_path):
+                open(not_path, 'w')
+        else:
+            if os.path.exists(not_path):
+                os.remove(not_path)
+        # if this GUI was started by a tray icon,
+        # instantly change the notifications there
+        if self.parent.tray:
+            self.parent.tray.icon_info.use_notify = \
+                                self.notificationscheckbox.get_active()
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
@@ -305,6 +339,9 @@ class PreferencesDialog(object):
                                                'use_last_used_profile')
 
             
+        self.notificationscheckbox = setup_label("pref_use_libnotify",
+                                             'display_notifications')
+
         # DHCP Clients
         self.dhcpautoradio = setup_label("dhcp_auto_radio", "wicd_auto_config")
         self.dhclientradio = self.wTree.get_widget("dhclient_radio")

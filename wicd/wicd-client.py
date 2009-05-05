@@ -49,8 +49,10 @@ try:
     pygtk.require('2.0')
     import pynotify
     if not pynotify.init("Wicd"):
+        print 'could not initalize pynotify'
         HAS_NOTIFY = False
 except ImportError:
+    print 'import failed
     HAS_NOTIFY = False
 
 # Wicd specific imports

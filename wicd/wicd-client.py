@@ -75,6 +75,9 @@ if not hasattr(gtk, "StatusIcon"):
 
 print "Has notifications support", HAS_NOTIFY
 
+if wpath.no_use_notifications:
+    print 'Notifications disabled during setup.py configure'
+
 misc.RenameProcess("wicd-client")
 
 if __name__ == '__main__':
@@ -266,8 +269,11 @@ class TrayIcon(object):
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
 
-            self.should_notify = (self.last_state != state) and \
-                    HAS_NOTIFY and self.use_notify 
+            # should this state change display a notification?
+            self.should_notify = not wpath.no_use_notifications and \
+                    (self.last_state != state) and \
+                    HAS_NOTIFY and \
+                    self.use_notify
 
             self.last_state = state
             

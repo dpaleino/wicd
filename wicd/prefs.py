@@ -156,6 +156,12 @@ class PreferencesDialog(object):
         except ImportError:
             self.notificationscheckbox.set_active(False)
             self.notificationscheckbox.set_sensitive(False)
+
+        # if notifications were disabled with the configure flag
+        if wpath.no_use_notifications:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.hide()
+            self.wTree.get_widget('label2').hide()
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         

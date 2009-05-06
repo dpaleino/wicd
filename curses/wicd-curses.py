@@ -586,12 +586,18 @@ class appGUI():
         self.connecting    = False
         self.screen_locked = False
         self.do_diag_lock = False
+        self.scanning = False
 
         self.pref = None
 
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
+
+    def doScan(self, sync=False):
+        self.scanning = True
+        wireless.Scan(False)
+
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
@@ -631,7 +637,7 @@ class appGUI():
             # That dialog will sit there for a while if I don't get rid of it
             self.update_ui()
             wireless.SetHiddenNetworkESSID(misc.noneToString(hidden))
-            wireless.Scan(True)
+            wireless.Scan(False)
         wireless.SetHiddenNetworkESSID("")
         
     def update_focusloc(self):
@@ -815,14 +821,16 @@ class appGUI():
         #if not self.connecting:
         #    gobject.idle_add(self.refresh_networks, None, False, None)
         self.unlock_screen()
+        self.scanning = False
 
     # Same, same, same, same, same, same
     #@wrap_exceptions()
     def dbus_scan_started(self):
+        self.scanning = True
         self.lock_screen()
 
     def restore_primary(self):
-        if self.do_diag_lock:
+        if self.do_diag_lock or self.scanning:
             self.frame.set_body(self.screen_locker)
             self.do_diag_lock = False
         else:
@@ -839,23 +847,24 @@ class appGUI():
                 #return False
             if "f5" in keys or 'R' in keys:
                 self.lock_screen()
-                wireless.Scan(True)
+                self.doScan()
             if "D" in keys:
                 # Disconnect from all networks.
                 daemon.Disconnect()
                 self.update_netlist()
             if 'right' in keys:
-                focus = self.thePile.get_focus()
-                self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
-                if focus == self.wiredCB:
-                    self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile())
-                    self.frame.set_body(self.diag)
-                else:
-                    # wireless list only other option
-                    wid,pos  = self.thePile.get_focus().get_focus()
-                    self.diag = WirelessSettingsDialog(pos,self.frame)
-                    self.diag.ready_widgets(ui,self.frame)
-                    self.frame.set_body(self.diag)
+                if not self.scanning:
+                    focus = self.thePile.get_focus()
+                    self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
+                    if focus == self.wiredCB:
+                        self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile())
+                        self.frame.set_body(self.diag)
+                    else:
+                        # wireless list only other option
+                        wid,pos  = self.thePile.get_focus().get_focus()
+                        self.diag = WirelessSettingsDialog(pos,self.frame)
+                        self.diag.ready_widgets(ui,self.frame)
+                        self.frame.set_body(self.diag)
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:

@@ -52,7 +52,7 @@ try:
         print 'could not initalize pynotify'
         HAS_NOTIFY = False
 except ImportError:
-    print 'import failed
+    print 'import failed'
     HAS_NOTIFY = False
 
 # Wicd specific imports

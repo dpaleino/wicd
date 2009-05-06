@@ -141,9 +141,11 @@ class WiredProfileChooser:
 
 class appGui(object):
     """ The main wicd GUI class. """
-    def __init__(self, standalone=False):
+    def __init__(self, standalone=False, tray=None):
         """ Initializes everything needed for the GUI. """
         setup_dbus()
+
+        self.tray = tray
 
         gladefile = os.path.join(wpath.share, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
@@ -305,7 +307,7 @@ class appGui(object):
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         if not self.pref:
-            self.pref = PreferencesDialog(self.wTree)
+            self.pref = PreferencesDialog(self, self.wTree)
         else:
             self.pref.load_preferences_diag()
         if self.pref.run() == 1:

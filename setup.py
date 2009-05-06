@@ -92,7 +92,8 @@ class configure(Command):
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
         ('no-install-docs', None, 'do not install the auxiliary documentation'),
-        ('no-install-ncurses', None, 'do not install the ncurses client')
+        ('no-install-ncurses', None, 'do not install the ncurses client'),
+        ('no-use-notifications', None, 'do not ever allow the use of libnotify notifications')
         ]
         
     def initialize_options(self):
@@ -127,6 +128,7 @@ class configure(Command):
         self.no_install_pmutils = False
         self.no_install_docs = False
         self.no_install_ncurses = False
+        self.no_use_notifications = False
 
         # Determine the default init file location on several different distros
         

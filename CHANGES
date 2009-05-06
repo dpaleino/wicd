@@ -1,4 +1,269 @@
 ------------------------------------------------------------
+revno: 382
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-05 11:58:36 +0800
+message:
+  merged notifications branch
+    ------------------------------------------------------------
+    revno: 371.1.13
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Tue 2009-05-05 10:34:44 +0800
+    message:
+      added support for disabling notifications in setup.py
+    ------------------------------------------------------------
+    revno: 371.1.12
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Tue 2009-05-05 10:17:10 +0800
+    message:
+      merged latest 1.6
+    ------------------------------------------------------------
+    revno: 371.1.11
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 17:31:18 +0800
+    message:
+      Added icons for wireless networks and disconnect states
+    ------------------------------------------------------------
+    revno: 371.1.10
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 17:27:31 +0800
+    message:
+      merge latest 1.6
+    ------------------------------------------------------------
+    revno: 371.1.9
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 17:26:29 +0800
+    message:
+      added images to wired network connection notifications
+    ------------------------------------------------------------
+    revno: 371.1.8
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 10:32:10 +0800
+    message:
+      Added support for instantly enabling/disabling notifications when the preference is changed
+    ------------------------------------------------------------
+    revno: 371.1.7
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 09:50:09 +0800
+    message:
+      Fixed the libglade warnings when loading the GTK GUI
+    ------------------------------------------------------------
+    revno: 371.1.6
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sun 2009-05-03 09:33:32 +0800
+    message:
+      Merge latest 1.6
+    ------------------------------------------------------------
+    revno: 371.1.5
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sat 2009-05-02 14:01:30 +0800
+    message:
+      Disable the enable notification option if pynotify isn't installed
+    ------------------------------------------------------------
+    revno: 371.1.4
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sat 2009-05-02 12:47:05 +0800
+    message:
+      Merge latest 1.6
+    ------------------------------------------------------------
+    revno: 371.1.3
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Sat 2009-05-02 12:43:43 +0800
+    message:
+      Reworded notifications and added new entries to translations.py
+    ------------------------------------------------------------
+    revno: 371.1.2
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Fri 2009-05-01 14:32:09 +0800
+    message:
+      added support for enabling/disabling notifications
+    ------------------------------------------------------------
+    revno: 371.1.1
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: libnotify-support-ng
+    timestamp: Fri 2009-05-01 13:46:21 +0800
+    message:
+      Initial notification support
+------------------------------------------------------------
+revno: 381
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-05-03 22:00:24 +0800
+message:
+  print wicd's version number on daemon start
+    ------------------------------------------------------------
+    revno: 379.1.1
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: 1.6
+    timestamp: Sun 2009-05-03 17:20:02 +0800
+    message:
+      Updated translations.py to include all translations from old translations.py
+------------------------------------------------------------
+revno: 380
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-05-03 21:58:11 +0800
+message:
+  print wicd's version number on daemon start
+------------------------------------------------------------
+revno: 379
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-02 14:08:07 -0400
+message:
+  Merged bugfixes from r321 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.30
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-05-01 22:23:40 -0400
+    message:
+      Merge r375 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.29
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-05-01 22:13:15 -0400
+    message:
+      Some more bugfixes...
+      Fixed unencrypted network support in both UIs.
+      Fixed marking the Static IP checkbox in wicd-curses.
+      Made the checkboxes in the the network properties dialogs in wicd-curses act
+        like those in wicd-client.
+      Filter the urwid popen2 warning in wicd-curses.
+    ------------------------------------------------------------
+    revno: 202.2.28
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-05-01 13:02:44 -0400
+    message:
+      Merged with r272 of mainline 1.6.
+------------------------------------------------------------
+revno: 378
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-02 15:32:58 +0800
+message:
+  Updated INSTALL to use update_translations_py before get_translations
+------------------------------------------------------------
+revno: 377
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-02 15:30:09 +0800
+message:
+  Added automatically generated translations.py
+------------------------------------------------------------
+revno: 376
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-02 15:24:50 +0800
+message:
+  added support for automatically retrieving translations.py
+------------------------------------------------------------
+revno: 375
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Fri 2009-05-01 20:26:46 -0400
+message:
+  Fix bug where shared essid settings couldn't be disabled once they were turned on.
+------------------------------------------------------------
+revno: 374
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Fri 2009-05-01 20:20:40 -0400
+message:
+  Fix crash when saving settings for unencrypted networks.
+  Remove unneeded function in prefs.py
+------------------------------------------------------------
+revno: 373
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2009-05-01 21:58:53 +0800
+message:
+  Merge 1.6-rworkman (thanks!)
+    ------------------------------------------------------------
+    revno: 365.1.8
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Tue 2009-04-28 10:51:16 -0500
+    message:
+      Tweaks to NEWS file.
+    ------------------------------------------------------------
+    revno: 365.1.7
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Tue 2009-04-28 10:50:23 -0500
+    message:
+      Merged mainline.  This will require one more change to the NEWS file
+        to handle conflicts.
+    ------------------------------------------------------------
+    revno: 365.1.6
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Sun 2009-04-26 21:38:10 -0500
+    message:
+      Clarified some required versions in INSTALL
+    ------------------------------------------------------------
+    revno: 365.1.5
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Sat 2009-04-25 23:17:33 -0500
+    message:
+      Use set_icon_name() instead of set_icon_from_file() in gui.py ; this 
+        allows gtk to use the themed icons (and presumably the correct size
+        and all that good stuff).
+    ------------------------------------------------------------
+    revno: 365.1.4
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Sat 2009-04-25 22:55:12 -0500
+    message:
+      Synced CHANGES file with mainline.
+      Minor tweaks to NEWS file (mostly formatting).
+    ------------------------------------------------------------
+    revno: 365.1.3
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Wed 2009-04-22 19:53:08 -0500
+    message:
+      Added NEWS file with major changes since 1.5.x.
+      Updated CHANGES file with 'bzr log' output as of r367.
+------------------------------------------------------------
+revno: 372
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2009-05-01 13:41:13 +0800
+message:
+  Also catch AttributeErrors when guessing data types
+------------------------------------------------------------
+revno: 371
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Mon 2009-04-27 19:17:01 -0400
+message:
+  Correctly handle case where a key is all digits and starts with a '0'.
+  Remove some unused imports.
+  Simplfy code that checks for valid wpa_supplicant drivers.
+------------------------------------------------------------
+revno: 370
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-04-26 08:03:59 +0900
+message:
+  Updated version numbers
+------------------------------------------------------------
 revno: 369
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6

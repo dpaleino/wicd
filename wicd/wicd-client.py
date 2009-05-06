@@ -43,6 +43,18 @@ import pango
 import atexit
 from dbus import DBusException
 
+HAS_NOTIFY = True
+try:
+    import pygtk
+    pygtk.require('2.0')
+    import pynotify
+    if not pynotify.init("Wicd"):
+        print 'could not initalize pynotify'
+        HAS_NOTIFY = False
+except ImportError:
+    print 'import failed
+    HAS_NOTIFY = False
+
 # Wicd specific imports
 from wicd import wpath
 from wicd import misc
@@ -62,6 +74,11 @@ if not hasattr(gtk, "StatusIcon"):
     except ImportError:
         print 'Unable to load tray icon: Missing both egg.trayicon and gtk.StatusIcon modules.'
         ICON_AVAIL = False
+
+print "Has notifications support", HAS_NOTIFY
+
+if wpath.no_use_notifications:
+    print 'Notifications disabled during setup.py configure'
 
 misc.RenameProcess("wicd-client")
 
@@ -115,10 +132,11 @@ class TrayIcon(object):
         else:
             self.tr = self.StatusTrayIconGUI()
         self.icon_info = self.TrayConnectionInfo(self.tr, animate)
+        self.tr.icon_info = self.icon_info
         
     def is_embedded(self):
         if USE_EGG:
-            raise NotImplementedError
+            raise NotImplementedError()
         else:
             return self.tr.is_embedded()
     
@@ -138,11 +156,36 @@ class TrayIcon(object):
             self.max_snd_gain = 10000
             self.max_rcv_gain = 10000
             self.animate = animate
+
+            # keep track of the last state to provide appropriate
+            # notifications
+            self._last_bubble = None
+            self.last_state = None
+            self.should_notify = True
+
+            self.use_notify = os.path.exists(os.path.join(
+                os.path.expanduser('~/.wicd'),
+                        'USE_NOTIFICATIONS'))
+
             if DBUS_AVAIL:
                 self.update_tray_icon()
             else:
                 handle_no_dbus()
                 self.set_not_connected_state()
+
+        def _show_notification(self, title, details, image=None):
+            if self.should_notify:
+                if not self._last_bubble:
+                    self._last_bubble = pynotify.Notification(title, details,
+                                                              image)
+                    self._last_bubble.show()
+                else:
+                    self._last_bubble.clear_actions()
+                    self._last_bubble.clear_hints()
+                    self._last_bubble.update(title, details, image)
+                    self._last_bubble.show()
+
+                self.should_notify = False
 
         @catchdbus
         def wired_profile_chooser(self):
@@ -154,8 +197,12 @@ class TrayIcon(object):
             """ Sets the icon info for a wired state. """
             wired_ip = info[0]
             self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
-            self.tr.set_tooltip(language['connected_to_wired'].replace('$A',
-                                                                     wired_ip))
+            status_string = language['connected_to_wired'].replace('$A',
+                                                                     wired_ip)
+            self.tr.set_tooltip(status_string)
+            self._show_notification(language['wired_network'],
+                                    language['connection_established'],
+                                    'network-wired')
             
         @catchdbus
         def set_wireless_state(self, info):
@@ -169,22 +216,38 @@ class TrayIcon(object):
             
             if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                 lock = "-lock"
-                
-            self.tr.set_tooltip(language['connected_to_wireless']
+            status_string = (language['connected_to_wireless']
                                 .replace('$A', self.network)
                                 .replace('$B', sig_string)
-                                .replace('$C', str(wireless_ip)))
+                                .replace('$C', str(wireless_ip))) 
+            self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
+            self._show_notification(self.network,
+                                    language['connection_established'],
+                                    'network-wireless')
+            
             
         def set_connecting_state(self, info):
             """ Sets the icon info for a connecting state. """
+            wired = False
             if info[0] == 'wired' and len(info) == 1:
                 cur_network = language['wired_network']
+                wired = True
             else:
                 cur_network = info[1]
-            self.tr.set_tooltip(language['connecting'] + " to " + 
-                                cur_network + "...")
+            status_string = language['connecting'] + " to " + \
+                                cur_network + "..."
+            self.tr.set_tooltip(status_string)
             self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
+            if wired:
+                self._show_notification(cur_network,
+                                    language['establishing_connection'],
+                                        'network-wired')
+            else:
+                self._show_notification(cur_network,
+                                        language['establishing_connection'],
+                                        'network-wireless')
+
             
         @catchdbus
         def set_not_connected_state(self, info=None):
@@ -198,6 +261,7 @@ class TrayIcon(object):
             else:
                 status = language['not_connected']
             self.tr.set_tooltip(status)
+            self._show_notification(language['disconnected'], None, 'stop')
 
         @catchdbus
         def update_tray_icon(self, state=None, info=None):
@@ -206,6 +270,14 @@ class TrayIcon(object):
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
+
+            # should this state change display a notification?
+            self.should_notify = not wpath.no_use_notifications and \
+                    (self.last_state != state) and \
+                    HAS_NOTIFY and \
+                    self.use_notify
+
+            self.last_state = state
             
             if state == misc.WIRED:
                 self.set_wired_state(info)
@@ -552,7 +624,7 @@ class TrayIcon(object):
         def toggle_wicd_gui(self):
             """ Toggles the wicd GUI. """
             if not self.gui_win:
-                self.gui_win = gui.appGui()
+                self.gui_win = gui.appGui(tray=self)
             elif not self.gui_win.is_visible:
                 self.gui_win.show_win()
             else:

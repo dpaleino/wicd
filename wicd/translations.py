@@ -55,7 +55,7 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-# Generated automatically on Sat, 02 May 2009 02:29:29 CDT
+# Generated automatically on Mon, 04 May 2009 23:56:04 CDT
 _ = get_gettext()
 language = {}
 language['resetting_ip_address'] = _('''Resetting IP address...''')
@@ -64,6 +64,7 @@ language['no_dhcp_offers'] = _('''Connection Failed: No DHCP offers received.'''
 language['more_help'] = _('''For more detailed help, consult the wicd-curses(8) man page.''')
 language['bad_pass'] = _('''Connection Failed: Bad password''')
 language['cannot_start_daemon'] = _('''Unable to connect to wicd daemon DBus interface. This typically means there was a problem starting the daemon. Check the wicd log for more information.''')
+language['verifying_association'] = _('''Verifying access point association...''')
 language['wired_always_on'] = _('''Always show wired interface''')
 language['could_not_connect'] = _('''Could not connect to wicd's D-Bus interface. Check the wicd log for error messages.''')
 language['path_to_pac_file'] = _('''Path to PAC File''')
@@ -212,3 +213,5 @@ language['display_notifications'] = _('''Display notifications about connection 
 language['connection_established'] = _('''Connection established''')
 language['disconnected'] = _('''Disconnected''')
 language['establishing_connection'] = _('''Establishing connection...''')
+language['association_failed'] = _('''Connection failed: Could not contact the wireless access point.''')
+language['access_denied'] = _('''Unable to contact the wicd dameon due to an access denied error from DBus.  Please check your DBus configuration.''')

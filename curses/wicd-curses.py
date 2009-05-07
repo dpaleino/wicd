@@ -79,17 +79,11 @@ for i in language.keys():
 ########################################
 ##### SUPPORT CLASSES
 ########################################
-# A hack to get any errors that pop out of the program to appear ***AFTER*** the
-# program exits.
-# I also may have been a bit overkill about using this too, I guess I'll find
-# that out soon enough.
-# I learned about this from this example:
-# http://blog.lutzky.net/2007/09/16/exception-handling-decorators-and-python/
-class wrap_exceptions:
-    def __call__(self, f):
-        def wrap_exceptions(*args, **kargs):
+# Yay for decorators!
+def wrap_exceptions(func):
+    def wrapper(*args, **kargs):
             try:
-                return f(*args, **kargs)
+                return func(*args, **kargs)
             except KeyboardInterrupt:
                 #gobject.source_remove(redraw_tag)
                 loop.quit()
@@ -117,7 +111,11 @@ class wrap_exceptions:
                 #sleep(2)
                 raise
 
-        return wrap_exceptions
+    wrapper.__name__ = func.__name__
+    wrapper.__module__ = func.__module__
+    wrapper.__dict__ = func.__dict__
+    wrapper.__doc__ = func.__doc__
+    return wrapper
 
 ########################################
 ##### SUPPORT FUNCTIONS
@@ -125,7 +123,7 @@ class wrap_exceptions:
 
 # Look familiar?  These two functions are clones of functions found in wicd's
 # gui.py file, except that now set_status is a function passed to them.
-@wrap_exceptions()
+@wrap_exceptions
 def check_for_wired(wired_ip,set_status):
     """ Determine if wired is active, and if yes, set the status. """
     if wired_ip and wired.CheckPluggedIn():
@@ -134,7 +132,7 @@ def check_for_wired(wired_ip,set_status):
     else:
         return False
 
-@wrap_exceptions()
+@wrap_exceptions
 def check_for_wireless(iwconfig, wireless_ip, set_status):
     """ Determine if wireless is active, and if yes, set the status. """
     if not wireless_ip:
@@ -659,7 +657,7 @@ class appGUI():
     
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
         # Don't even try to do this if we are running a dialog
         if self.diag:
@@ -721,7 +719,7 @@ class appGUI():
 
     # Update the footer/status bar
     conn_status = False
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_status(self):
         wired_connecting = wired.CheckIfWiredConnecting()
         wireless_connecting = wireless.CheckIfWirelessConnecting()
@@ -809,13 +807,13 @@ class appGUI():
     # Make sure the screen is still working by providing a pretty counter.
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def update_time(self):
         self.time_label.set_text(strftime('%H:%M:%S'))
         return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def dbus_scan_finished(self):
         # I'm pretty sure that I'll need this later.
         #if not self.connecting:
@@ -824,7 +822,7 @@ class appGUI():
         self.scanning = False
 
     # Same, same, same, same, same, same
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def dbus_scan_started(self):
         self.scanning = True
         self.lock_screen()
@@ -954,7 +952,7 @@ class appGUI():
                 continue
 
     # Redraw the screen
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_ui(self):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )

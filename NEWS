@@ -11,6 +11,7 @@ Major Changes:
 - Reworked the Preferences menu to be more in line with GNOME standards
 - Added support for global scripts
 - Made it possible to have optional entries in encryption templates
+- Added ability to show libnotify notifications on status change
 
 Minor Changes and Other Enchancements:
 - Better autoconnection behavior

@@ -1667,6 +1667,8 @@ def main(argv):
     print 'wicd initializing...'
     print '---------------------------'
 
+    print 'wicd is version', wpath.version, wpath.revision
+
     # Open the DBUS session
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)

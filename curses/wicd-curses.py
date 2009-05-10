@@ -682,7 +682,7 @@ class appGUI():
                 else:
                     self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
-                self.wlessLB = self.no_wlan
+                self.wlesslb = self.no_wlan
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
                 #if firstrun:
@@ -698,7 +698,7 @@ class appGUI():
                 if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
                 else:
-                    if self.wlessLB is not self.no_wlan:
+                    if self.wlessLB != self.no_wlan:
                         self.thePile.get_focus().set_focus(self.focusloc[1])
                     else:
                         self.thePile.set_focus(self.wiredCB)
@@ -995,7 +995,7 @@ def main():
     if options.screen == 'raw':
         import urwid.raw_display
         ui = urwid.raw_display.Screen()
-    elif options.screen is 'curses':
+    elif options.screen == 'curses':
         import urwid.curses_display
         ui = urwid.curses_display.Screen()
 

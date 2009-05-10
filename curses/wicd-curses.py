@@ -79,17 +79,11 @@ for i in language.keys():
 ########################################
 ##### SUPPORT CLASSES
 ########################################
-# A hack to get any errors that pop out of the program to appear ***AFTER*** the
-# program exits.
-# I also may have been a bit overkill about using this too, I guess I'll find
-# that out soon enough.
-# I learned about this from this example:
-# http://blog.lutzky.net/2007/09/16/exception-handling-decorators-and-python/
-class wrap_exceptions:
-    def __call__(self, f):
-        def wrap_exceptions(*args, **kargs):
+# Yay for decorators!
+def wrap_exceptions(func):
+    def wrapper(*args, **kargs):
             try:
-                return f(*args, **kargs)
+                return func(*args, **kargs)
             except KeyboardInterrupt:
                 #gobject.source_remove(redraw_tag)
                 loop.quit()
@@ -117,7 +111,11 @@ class wrap_exceptions:
                 #sleep(2)
                 raise
 
-        return wrap_exceptions
+    wrapper.__name__ = func.__name__
+    wrapper.__module__ = func.__module__
+    wrapper.__dict__ = func.__dict__
+    wrapper.__doc__ = func.__doc__
+    return wrapper
 
 ########################################
 ##### SUPPORT FUNCTIONS
@@ -125,7 +123,7 @@ class wrap_exceptions:
 
 # Look familiar?  These two functions are clones of functions found in wicd's
 # gui.py file, except that now set_status is a function passed to them.
-@wrap_exceptions()
+@wrap_exceptions
 def check_for_wired(wired_ip,set_status):
     """ Determine if wired is active, and if yes, set the status. """
     if wired_ip and wired.CheckPluggedIn():
@@ -134,7 +132,7 @@ def check_for_wired(wired_ip,set_status):
     else:
         return False
 
-@wrap_exceptions()
+@wrap_exceptions
 def check_for_wireless(iwconfig, wireless_ip, set_status):
     """ Determine if wireless is active, and if yes, set the status. """
     if not wireless_ip:
@@ -586,12 +584,18 @@ class appGUI():
         self.connecting    = False
         self.screen_locked = False
         self.do_diag_lock = False
+        self.scanning = False
 
         self.pref = None
 
         self.update_status()
 
         #self.dialog = PrefOverlay(self.frame,self.size)
+
+    def doScan(self, sync=False):
+        self.scanning = True
+        wireless.Scan(False)
+
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
@@ -631,7 +635,7 @@ class appGUI():
             # That dialog will sit there for a while if I don't get rid of it
             self.update_ui()
             wireless.SetHiddenNetworkESSID(misc.noneToString(hidden))
-            wireless.Scan(True)
+            wireless.Scan(False)
         wireless.SetHiddenNetworkESSID("")
         
     def update_focusloc(self):
@@ -653,7 +657,7 @@ class appGUI():
     
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_netlist(self,state=None, x=None, force_check=False,firstrun=False):
         # Don't even try to do this if we are running a dialog
         if self.diag:
@@ -678,7 +682,7 @@ class appGUI():
                 else:
                     self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
-                self.wlessLB = self.no_wlan
+                self.wlesslb = self.no_wlan
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
                 #if firstrun:
@@ -694,7 +698,7 @@ class appGUI():
                 if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
                 else:
-                    if self.wlessLB is not self.no_wlan:
+                    if self.wlessLB != self.no_wlan:
                         self.thePile.get_focus().set_focus(self.focusloc[1])
                     else:
                         self.thePile.set_focus(self.wiredCB)
@@ -715,7 +719,7 @@ class appGUI():
 
     # Update the footer/status bar
     conn_status = False
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_status(self):
         wired_connecting = wired.CheckIfWiredConnecting()
         wireless_connecting = wireless.CheckIfWirelessConnecting()
@@ -803,26 +807,28 @@ class appGUI():
     # Make sure the screen is still working by providing a pretty counter.
     # Not necessary in the end, but I will be using footer1 for stuff in
     # the long run, so I might as well put something there.
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def update_time(self):
         self.time_label.set_text(strftime('%H:%M:%S'))
         return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def dbus_scan_finished(self):
         # I'm pretty sure that I'll need this later.
         #if not self.connecting:
         #    gobject.idle_add(self.refresh_networks, None, False, None)
         self.unlock_screen()
+        self.scanning = False
 
     # Same, same, same, same, same, same
-    #@wrap_exceptions()
+    #@wrap_exceptions
     def dbus_scan_started(self):
+        self.scanning = True
         self.lock_screen()
 
     def restore_primary(self):
-        if self.do_diag_lock:
+        if self.do_diag_lock or self.scanning:
             self.frame.set_body(self.screen_locker)
             self.do_diag_lock = False
         else:
@@ -839,23 +845,24 @@ class appGUI():
                 #return False
             if "f5" in keys or 'R' in keys:
                 self.lock_screen()
-                wireless.Scan(True)
+                self.doScan()
             if "D" in keys:
                 # Disconnect from all networks.
                 daemon.Disconnect()
                 self.update_netlist()
             if 'right' in keys:
-                focus = self.thePile.get_focus()
-                self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
-                if focus == self.wiredCB:
-                    self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile())
-                    self.frame.set_body(self.diag)
-                else:
-                    # wireless list only other option
-                    wid,pos  = self.thePile.get_focus().get_focus()
-                    self.diag = WirelessSettingsDialog(pos,self.frame)
-                    self.diag.ready_widgets(ui,self.frame)
-                    self.frame.set_body(self.diag)
+                if not self.scanning:
+                    focus = self.thePile.get_focus()
+                    self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
+                    if focus == self.wiredCB:
+                        self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile())
+                        self.frame.set_body(self.diag)
+                    else:
+                        # wireless list only other option
+                        wid,pos  = self.thePile.get_focus().get_focus()
+                        self.diag = WirelessSettingsDialog(pos,self.frame)
+                        self.diag.ready_widgets(ui,self.frame)
+                        self.frame.set_body(self.diag)
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:
@@ -945,7 +952,7 @@ class appGUI():
                 continue
 
     # Redraw the screen
-    @wrap_exceptions()
+    @wrap_exceptions
     def update_ui(self):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
@@ -988,7 +995,7 @@ def main():
     if options.screen == 'raw':
         import urwid.raw_display
         ui = urwid.raw_display.Screen()
-    elif options.screen is 'curses':
+    elif options.screen == 'curses':
         import urwid.curses_display
         ui = urwid.curses_display.Screen()
 

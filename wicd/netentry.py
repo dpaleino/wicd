@@ -555,7 +555,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.show()
         self.connect_button.show()
 
-        self.name_label.set_label(language['wired_network'])
+        self.name_label.set_label("<b>" + language['wired_network'] + "</b>")
         
         self.is_full_gui = True
         
@@ -756,7 +756,7 @@ class WirelessNetworkEntry(NetworkEntry):
                                                  'encryption_method')) 
         self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
         self.name_label.set_use_markup(True)
-        self.name_label.set_label("%s    %s    %s    %s" % (self._escape(self.essid),
+        self.name_label.set_label("<b>%s</b>    %s    %s    %s" % (self._escape(self.essid),
                                                          self.lbl_strength.get_label(),
                                                          self.lbl_encryption.get_label(),
                                                          self.lbl_channel.get_label(),

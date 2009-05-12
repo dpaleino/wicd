@@ -753,7 +753,7 @@ def on_exit():
     if DBUS_AVAIL:
         try:
             daemon.SetGUIOpen(False)
-        except dbusmanager.DBusException:
+        except DBusException:
             pass
 
 def handle_no_dbus():

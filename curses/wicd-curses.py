@@ -962,6 +962,10 @@ class appGUI():
         # the input.  I'll try to get that working at a later time, if people
         # want that "feature".
         #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
+        # If the screen is turned off for some reason, don't even try to do the
+        # rest of the stuff.
+        if not ui._started:
+            return False
         ui.draw_screen((self.size),canvas)
         keys = ui.get_input()
         self.handle_keys(keys)

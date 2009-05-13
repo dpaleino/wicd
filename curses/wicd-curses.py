@@ -682,7 +682,7 @@ class appGUI():
                 else:
                     self.wlessLB.body = urwid.SimpleListWalker(wlessL)
             else:
-                self.wlesslb = self.no_wlan
+                self.wlessLB = self.no_wlan
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
                 #if daemon.GetAlwaysShowWiredInterface():
                 #if firstrun:

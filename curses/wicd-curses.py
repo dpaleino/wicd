@@ -590,6 +590,8 @@ class appGUI():
 
         self.update_status()
 
+        self.update_tag = None
+        #self.max_wait = ui.max_wait
         #self.dialog = PrefOverlay(self.frame,self.size)
 
     def doScan(self, sync=False):
@@ -951,9 +953,13 @@ class appGUI():
                 self.size = ui.get_cols_rows()
                 continue
 
+    def call_update_ui(self,source,cb_condition):
+        self.update_ui(from_key=True)
+        return True
+
     # Redraw the screen
     @wrap_exceptions
-    def update_ui(self):
+    def update_ui(self,from_key=True,from_alarm=False):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
         ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
@@ -966,9 +972,29 @@ class appGUI():
         # rest of the stuff.
         if not ui._started:
             return False
+        # Update the screen
         ui.draw_screen((self.size),canvas)
-        keys = ui.get_input_nonblocking()[1]
+        # Get the input data
+        input_data = ui.get_input_nonblocking()
+        max_wait = input_data[0]
+        keys = input_data[1]
+
+        # Resolve any "alarms" in the waiting
+        if self.update_tag != None:
+            gobject.source_remove(self.update_tag)
+        self.update_tag = gobject.timeout_add(50, \
+                self.update_ui,True)
+
+        #self.update_tag = gobject.timeout_add(max_wait*1000.0, \
+        #        self.update_ui,from_alarm=true)
+        #print keys
+        #if keys == []:
+        #    return True
         self.handle_keys(keys)
+
+        # If we came from the "alarm", die.
+        if from_alarm:
+            return False
             
         return True
 
@@ -1040,6 +1066,7 @@ def run():
     ui.set_mouse_tracking()
     app = appGUI()
 
+
     # Connect signals and whatnot to UI screen control functions
     bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
                             'org.wicd.daemon.wireless')
@@ -1049,13 +1076,19 @@ def run():
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
     # Update what the interface looks like as an idle function
-    gobject.idle_add(app.update_ui)
+    #gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(1500,app.update_status)
     # This will make sure that it is updated on the second.
     gobject.timeout_add(500,app.update_time)
     # DEFUNCT: Terminate the loop if the UI is terminated.
     #gobject.idle_add(app.stop_loop)
+
+    app.update_ui()
+    # Get input file descriptors and add callbacks to the ui-updating function
+    fds = ui.get_input_descriptors()
+    for fd in fds:
+        gobject.io_add_watch(fd, gobject.IO_IN,app.call_update_ui)
     loop.run()
 
 # Mostly borrowed from gui.py

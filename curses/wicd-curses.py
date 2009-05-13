@@ -967,7 +967,7 @@ class appGUI():
         if not ui._started:
             return False
         ui.draw_screen((self.size),canvas)
-        keys = ui.get_input()
+        keys = ui.get_input_nonblocking()[1]
         self.handle_keys(keys)
             
         return True

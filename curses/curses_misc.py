@@ -208,7 +208,7 @@ class TabColumns(urwid.WidgetWrap):
             ])
         if not firstrun:
             self.frame.set_body(self.pile)
-            self.set_w(self.frame)
+            self._set_w(self.frame)
 
     def selectable(self):
         return True
@@ -381,7 +381,7 @@ class ComboBox(urwid.WidgetWrap):
             self.overlay = self.ComboSpace(self.list,parent,ui,self.focus,
                     pos=(0,row))
 
-        self.set_w(w)
+        self._set_w(w)
         self.parent = parent
         self.ui = ui
         self.row = row

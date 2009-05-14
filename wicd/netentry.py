@@ -555,6 +555,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.show()
         self.connect_button.show()
 
+        self.name_label.set_use_markup(True)
         self.name_label.set_label("<b>" + language['wired_network'] + "</b>")
         
         self.is_full_gui = True

@@ -844,6 +844,7 @@ class appGUI():
             # Handle keystrokes
             if "f8" in keys or 'Q' in keys or 'q' in keys:
                 loop.quit()
+                print "blah"
                 #return False
             if "f5" in keys or 'R' in keys:
                 self.lock_screen()
@@ -982,11 +983,13 @@ class appGUI():
         # Resolve any "alarms" in the waiting
         if self.update_tag != None:
             gobject.source_remove(self.update_tag)
-        self.update_tag = gobject.timeout_add(50, \
-                self.update_ui,True)
+        if max_wait == None:
+            max_wait = 50
+        else:
+            max_wait *= 1000
 
-        #self.update_tag = gobject.timeout_add(max_wait*1000.0, \
-        #        self.update_ui,from_alarm=true)
+        self.update_tag = gobject.timeout_add(max_wait, \
+                self.update_ui,False,True)
         #print keys
         #if keys == []:
         #    return True

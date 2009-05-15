@@ -146,5 +146,5 @@ class GreyLabel(gtk.Label):
         gtk.Label.__init__(self)
 
     def set_label(self, text):
-        self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
+        self.set_markup(text)
         self.set_alignment(0, 0)

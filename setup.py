@@ -2,6 +2,7 @@
 #
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2009        Andrew Psaltis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -24,7 +25,7 @@ import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0a3'
+VERSION_NUM = '1.6.0b1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
@@ -84,6 +85,7 @@ class configure(Command):
         ('initfile=', None, 'set the init file to use'),
         ('initfilename=', None, "set the name of the init file (don't use)"),
         ('wicdgroup=', None, "set the name of the group used for wicd"),
+        ('distro=', None, 'set the distribution for which wicd will be installed'),
 
         # Configure switches
         ('no-install-init', None, "do not install the init file"),
@@ -120,6 +122,7 @@ class configure(Command):
         self.docdir = '/usr/share/doc/wicd/'
         self.mandir = '/usr/share/man/'
         self.kdedir = '/usr/share/autostart/'
+        self.distro = 'auto'
         
         self.no_install_init = False
         self.no_install_man = False
@@ -131,49 +134,38 @@ class configure(Command):
         self.no_use_notifications = False
 
         # Determine the default init file location on several different distros
-        
         self.distro_detect_failed = False
         
         self.initfile = 'init/default/wicd'
+        # ddistro is the detected distro
         if os.path.exists('/etc/redhat-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/redhat/wicd'
+            self.ddistro = 'redhat'
         elif os.path.exists('/etc/SuSE-release'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/suse/wicd'
+            self.ddistro = 'suse'
         elif os.path.exists('/etc/fedora-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/redhat/wicd'
+            self.ddistro = 'redhat'
         elif os.path.exists('/etc/gentoo-release'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/gentoo/wicd'
+            self.ddistro = 'gentoo'
         elif os.path.exists('/etc/debian_version'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/debian/wicd'
+            self.ddistro = 'debian'
         elif os.path.exists('/etc/arch-release'):
-            self.init = '/etc/rc.d/'
-            self.initfile = 'init/arch/wicd'
+            self.ddistro = 'arch'
         elif os.path.exists('/etc/slackware-version') or \
-             os.path.exists('/etc/slamd64-version'):
-            self.init = '/etc/rc.d/'
-            self.initfile = 'init/slackware/rc.wicd'
-            self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
-            self.mandir = '/usr/man/'
-            self.no_install_acpi = True
+             os.path.exists('/etc/slamd64-version') or \
+             os.path.exists('/etc/bluewhite64-version'):
+            self.ddistro = 'slackware'
         elif os.path.exists('/etc/pld-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/pld/wicd'
+            self.ddistro = 'pld'
         elif os.path.exists('/usr/bin/crux'):
-            self.init = '/etc/rc.d/'
+            self.ddistro = 'crux'
         elif os.path.exists('/etc/lunar.release'):
-            self.init='/etc/init.d/'
-            self.initfile = 'init/lunar/wicd'
+            self.distro = 'lunar'
         else:
-            self.init = 'FAIL'
-            self.no_install_init = True
-            self.distro_detect_failed = True
+            self.ddistro = 'FAIL'
+            #self.no_install_init = True
+            #self.distro_detect_failed = True
             print 'WARNING: Unable to detect the distribution in use.  ' + \
-                  'If you have specified --init and --initfile, configure will continue.  ' + \
+                  'If you have specified --distro or --init and --initfile, configure will continue.  ' + \
                   'Please report this warning, along with the name of your ' + \
                   'distribution, to the wicd developers.'
 
@@ -229,7 +221,52 @@ class configure(Command):
         self.initfilename = os.path.basename(self.initfile)
         self.wicdgroup = 'users'
 
+    def distro_check(self):
+        print "Distro is: "+self.distro
+        if self.distro in ['sles','suse']:
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/suse/wicd'
+        elif self.distro in ['redhat','centos','fedora']:
+            self.init = '/etc/rc.d/init.d/'
+            self.initfile = 'init/redhat/wicd'
+        elif self.distro in ['slackware','slamd64','bluewhite64']:
+            self.init = '/etc/rc.d/'
+            self.initfile = 'init/slackware/rc.wicd'
+            self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
+            self.mandir = '/usr/man/'
+            self.no_install_acpi = True
+        elif self.distro in ['debian']:
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/debian/wicd'
+        elif self.distro in ['arch']:
+            self.init = '/etc/rc.d/'
+            self.initfile = 'init/arch/wicd'
+        elif self.distro in ['gentoo']:
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/gentoo/wicd'
+        elif self.distro in ['pld']:
+            self.init = '/etc/rc.d/init.d/'
+            self.initfile = 'init/pld/wicd'
+        elif self.distro in ['crux']:
+            self.init = '/etc/rc.d/'
+        elif self.distro in ['lunar']:
+            self.init='/etc/init.d/'
+            self.initfile = 'init/lunar/wicd'
+        else :
+            if self.distro == 'auto':
+                print "NOTICE: Automatic distro detection found: "+self.ddistro+", retrying with that..."
+                self.distro = self.ddistro
+                self.distro_check()
+            else:
+                print "WARNING: Distro detection failed!"
+                self.init='init/default/wicd'
+                self.no_install_init = True
+                self.distro_detect_failed = True
+        
+
+
     def finalize_options(self):
+        self.distro_check()
         if self.distro_detect_failed and not self.no_install_init and \
            'FAIL' in [self.init, self.initfile]:
             print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \

@@ -1,4 +1,159 @@
 ------------------------------------------------------------
+revno: 394
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-05-14 09:44:28 -0400
+message:
+  Merged typo fix from r331 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.40
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Wed 2009-05-13 19:03:29 -0400
+    message:
+      Fixed typo in wicd-curses.py.
+------------------------------------------------------------
+revno: 393
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-05-14 19:37:20 +0800
+message:
+  Fix <b>/</b> tags
+------------------------------------------------------------
+revno: 392
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-12 00:06:38 -0400
+message:
+  Merged r330 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.39
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-05-12 00:04:43 -0400
+    message:
+      If the screen in wicd-curses is not up and an ui update is requested, abort the
+      program.
+    ------------------------------------------------------------
+    revno: 202.2.38
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Mon 2009-05-11 23:52:43 -0400
+    message:
+      Merged with r391 of mainline 1.6.
+------------------------------------------------------------
+revno: 391
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Sun 2009-05-10 13:53:54 -0400
+message:
+  Don't use dbusmanager.DBusException--it doesn't exist.
+------------------------------------------------------------
+revno: 390
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-05-10 22:51:49 +0800
+message:
+  Made the GUI look better with dark themes
+------------------------------------------------------------
+revno: 389
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-05-10 22:03:52 +0800
+message:
+  Removed italicized text from the GTK GUI
+------------------------------------------------------------
+revno: 388
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-05-10 09:51:01 -0400
+message:
+  Merged with r328 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.37
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sun 2009-05-10 09:40:38 -0400
+    message:
+      Hopefully fixed bug 355693, related to focus positioning.
+    ------------------------------------------------------------
+    revno: 202.2.36
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Thu 2009-05-07 00:38:18 -0400
+    message:
+      Redid the decorator to look like the other exception-catching decorators in wicd.
+    ------------------------------------------------------------
+    revno: 202.2.35
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Thu 2009-05-07 00:37:28 -0400
+    message:
+      Remerge with mainline, doing nothing.
+    ------------------------------------------------------------
+    revno: 202.2.34
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Thu 2009-05-07 00:30:25 -0400
+    message:
+      Added support for manual distro detection in setup.py.
+    ------------------------------------------------------------
+    revno: 202.2.33
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Wed 2009-05-06 15:33:12 -0400
+    message:
+      Made scans asynchronous so that users can actually access preferences while the daemon is scanning.
+    ------------------------------------------------------------
+    revno: 202.2.32
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Wed 2009-05-06 15:19:46 -0400
+    message:
+      Merged r385 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.31
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-02 18:45:36 -0400
+    message:
+      Merged r379 of mainline 1.6.
+------------------------------------------------------------
+revno: 387
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: experimental
+timestamp: Sat 2009-05-09 20:53:49 -0400
+message:
+  Make bitrates regex work when it's the last entry in a cell.
+------------------------------------------------------------
+revno: 386
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-05-06 18:13:29 -0400
+message:
+  Fixed missing endquote in wicd-client.py.
+------------------------------------------------------------
+revno: 385
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-05 12:56:09 +0800
+message:
+  Updated translations.py
+------------------------------------------------------------
+revno: 384
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-05 12:55:35 +0800
+message:
+  Added code to debug why pynotify fails
+------------------------------------------------------------
+revno: 383
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-05 12:00:22 +0800
+message:
+  updated CHANGES/NEWS
+------------------------------------------------------------
 revno: 382
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6

@@ -236,6 +236,7 @@ class configure(Command):
             self.mandir = '/usr/man/'
             self.no_install_acpi = True
         elif self.distro in ['debian']:
+            self.wicdgroup = "netdev"
             self.init = '/etc/init.d/'
             self.initfile = 'init/debian/wicd'
         elif self.distro in ['arch']:

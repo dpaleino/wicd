@@ -213,17 +213,17 @@ class BaseInterface(object):
         """
         def get_client_name(cl):
             """ Converts the integer value for a dhcp client to a string. """
-            if self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
-                client = "dhclient"
-                cmd = self.dhclient_cmd
-                if self.dhclient_needs_verbose:
-                    cmd += ' -v'
-            elif self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
+            if self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
                 client = "dhcpcd"
                 cmd = self.dhcpcd_cmd
             elif self.pump_cmd and cl in [misc.PUMP, misc.AUTO]: 
                 client = "pump"
                 cmd = self.pump_cmd
+            elif self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
+                client = "dhclient"
+                cmd = self.dhclient_cmd
+                if self.dhclient_needs_verbose:
+                    cmd += ' -v'
             else:
                 client = None
                 cmd = ""

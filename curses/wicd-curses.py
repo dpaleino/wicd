@@ -1041,6 +1041,7 @@ def main():
     urwid.set_encoding('utf8')
     ui.run_wrapper(run)
 
+@wrap_exceptions
 def run():
     global loop
     loop = gobject.MainLoop()

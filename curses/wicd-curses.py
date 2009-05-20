@@ -69,8 +69,8 @@ from optparse import OptionParser
 #from grp import getgrgid
 #from os import getgroups,system
 
-import logging
-import logging.handler
+#import logging
+#import logging.handler
 
 CURSES_REVNO=wpath.curses_revision
 
@@ -1099,7 +1099,7 @@ if __name__ == '__main__':
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")
     parser.add_option("-c", "--curses-screen",action="store_const",const='curses',dest='screen',help="use urwid's curses screen controller")
-    parser.add_option("-d", "--debug",action="store_true",
+    parser.add_option("-d", "--debug",action="store_true"
             ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
     (options,args) = parser.parse_args()
     main()

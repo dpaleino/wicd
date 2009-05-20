@@ -69,6 +69,9 @@ from optparse import OptionParser
 #from grp import getgrgid
 #from os import getgroups,system
 
+#import logging
+#import logging.handler
+
 CURSES_REVNO=wpath.curses_revision
 
 # Fix strings in wicd-curses
@@ -989,7 +992,7 @@ class appGUI():
 ########################################
 
 def main():
-    global ui
+    global ui, dlogger
     # We are _not_ python.
     misc.RenameProcess('wicd-curses')
 
@@ -1002,6 +1005,11 @@ def main():
     elif options.screen == 'curses':
         import urwid.curses_display
         ui = urwid.curses_display.Screen()
+
+    #if options.debug:
+    #    dlogger = logging.getLogger("Debug")
+    #    dlogger.setLevel(logging.DEBUG)
+    #    dlogger.debug("wicd-curses debug logging started")
 
     # Default Color scheme.
     # Other potential color schemes can be found at:
@@ -1033,6 +1041,7 @@ def main():
     urwid.set_encoding('utf8')
     ui.run_wrapper(run)
 
+@wrap_exceptions
 def run():
     global loop
     loop = gobject.MainLoop()
@@ -1087,10 +1096,12 @@ setup_dbus()
 ########################################
 if __name__ == '__main__':
     parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
-    parser.set_defaults(screen='raw')
+    parser.set_defaults(screen='raw',debug=False)
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")
     parser.add_option("-c", "--curses-screen",action="store_const",const='curses',dest='screen',help="use urwid's curses screen controller")
+    parser.add_option("-d", "--debug",action="store_true"
+            ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
     (options,args) = parser.parse_args()
     main()
     # Make sure that the terminal does not try to overwrite the last line of

@@ -177,7 +177,10 @@ class PrefsDialog(urwid.WidgetWrap):
 
         self.dhcp_header = urwid.Text(dhcp_header_t)
         self.dhcp_l = []
-        # Automatic
+
+        # Order of these is flipped in the actual interface,
+        # (2,3,1 -> dhcpcd, pump, dhclient), because dhclient often doesn't like
+        # to work on several distros.
         self.dhcp0  = urwid.RadioButton(self.dhcp_l,automatic_t)
         self.dhcp1  = DynRadioButton(self.dhcp_l,dhcp1_t)
         self.dhcp2  = DynRadioButton(self.dhcp_l,dhcp2_t)
@@ -199,7 +202,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.flush_l = [self.flush0,self.flush1,self.flush2]
 
         externalLB = urwid.ListBox([self.dhcp_header,
-                                    self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
+                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,
                                     _blank,
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,

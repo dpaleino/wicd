@@ -86,6 +86,8 @@ class configure(Command):
         ('initfilename=', None, "set the name of the init file (don't use)"),
         ('wicdgroup=', None, "set the name of the group used for wicd"),
         ('distro=', None, 'set the distribution for which wicd will be installed'),
+        ('loggroup=', None, 'the group the log file belongs to'),
+        ('logperms=', None, 'the log file permissions'),
 
         # Configure switches
         ('no-install-init', None, "do not install the init file"),
@@ -220,6 +222,8 @@ class configure(Command):
         self.pidfile = '/var/run/wicd/wicd.pid'
         self.initfilename = os.path.basename(self.initfile)
         self.wicdgroup = 'users'
+        self.loggroup = ''
+        self.logperms = '0600'
 
     def distro_check(self):
         print "Distro is: "+self.distro
@@ -236,6 +240,7 @@ class configure(Command):
             self.mandir = '/usr/man/'
             self.no_install_acpi = True
         elif self.distro in ['debian']:
+            self.wicdgroup = "netdev"
             self.init = '/etc/init.d/'
             self.initfile = 'init/debian/wicd'
         elif self.distro in ['arch']:

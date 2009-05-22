@@ -1300,6 +1300,7 @@ class WiredDaemon(dbus.service.Object):
         self.daemon = daemon
         self.wired = wired
         self._debug_mode = debug
+        self._cur_wired_prof_name = ""
         self.WiredNetwork = {}
         self.config = ConfigManager(os.path.join(wpath.etc,
                                                  "wired-settings.conf"), 
@@ -1413,6 +1414,8 @@ class WiredDaemon(dbus.service.Object):
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")
         self.daemon.wireless_bus.wifi.Disconnect()
         self.daemon.SetForcedDisconnect(False)
+        self.UnsetWiredLastUsed()
+        self.config.set(self._cur_wired_prof_name, "lastused", True, write=True)
         self.wired.Connect(self.WiredNetwork, debug=self.debug_mode)
         self.daemon.UpdateState()
 
@@ -1511,8 +1514,10 @@ class WiredDaemon(dbus.service.Object):
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))
             profile['use_static_dns'] = bool(profile.get('use_static_dns'))
             self.WiredNetwork = profile
+            self._cur_wired_prof_name = profilename
             return "100: Loaded Profile"
         else:
+            self._cur_wired_prof_name = ""
             self.WiredNetwork = {}
             return "500: Profile Not Found"
 

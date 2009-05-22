@@ -286,7 +286,11 @@ class appGui(object):
 
     def disconnect_all(self, widget=None):
         """ Disconnects from any active network. """
-        daemon.Disconnect()
+        def handler(*args):
+            gobject.idle_add(self.network_list.set_sensitive, True)
+         
+        self.network_list.set_sensitive(False)
+        daemon.Disconnect(reply_handler=handler, error_handler=handler)
 
     def about_dialog(self, widget, event=None):
         """ Displays an about dialog. """
@@ -649,19 +653,41 @@ class appGui(object):
             return False
         return True
 
+    def _wait_for_connect_thread_start(self):
+        self.wTree.get_widget("progressbar").pulse()
+        if not self._connect_thread_started:
+            return True
+        else:
+            misc.timeout_add(2, self.update_statusbar)
+            self.update_statusbar()
+            return False
+        
     def connect(self, widget, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
+        def handler(*args):
+            self._connect_thread_started = True
+         
         cancel_button = self.wTree.get_widget("cancel_button")
         cancel_button.set_sensitive(True)
+        self.network_list.set_sensitive(False)
+        if self.statusID:
+            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+        gobject.idle_add(self.set_status, language["disconnecting_active"])
+        gobject.idle_add(self.status_area.show_all)
+        self.wait_for_events()
+        self._connect_thread_started = False
         if nettype == "wireless":
             if not self.check_encryption_valid(networkid,
                                                networkentry.advanced_dialog):
                 self.edit_advanced(None, None, nettype, networkid, networkentry)
                 return False
-            wireless.ConnectWireless(networkid)
+            wireless.ConnectWireless(networkid, reply_handler=handler,
+                                     error_handler=handler)
         elif nettype == "wired":
-            wired.ConnectWired()
-        self.update_statusbar()
+            wired.ConnectWired(reply_handler=handler, error_handler=handler)
+        
+        gobject.source_remove(self.update_cb)
+        misc.timeout_add(100, self._wait_for_connect_thread_start, milli=True)
         
     def disconnect(self, widget, nettype, networkid, networkentry):
         """ Disconnects from the given network.
@@ -674,13 +700,18 @@ class appGui(object):
         networkentry -- The NetworkEntry containing the disconnect button.
         
         """
+        def handler(*args):
+            gobject.idle_add(self.network_list.set_sensitive, True)
+            
         widget.hide()
         networkentry.connect_button.show()
         daemon.SetForcedDisconnect(True)
+        self.network_list.set_sensitive(False)
         if nettype == "wired":
-            wired.DisconnectWired()
+            wired.DisconnectWired(reply_handler=handler, error_handler=handler)
         else:
-            wireless.DisconnectWireless()
+            wireless.DisconnectWireless(reply_handler=handler, 
+                                        error_handler=handler)
         
     def wait_for_events(self, amt=0):
         """ Wait for any pending gtk events to finish before moving on. 

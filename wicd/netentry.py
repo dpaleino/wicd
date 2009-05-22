@@ -238,7 +238,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         """ Build the wired settings dialog. """
         AdvancedSettingsDialog.__init__(self)
         self.des = self.connect("destroy", self.destroy_called)
-        self.script_button.connect("button-press-event", self.edit_scripts)
+        self.script_button.connect("clicked", self.edit_scripts)
         self.prof_name = name
         
     def set_net_prop(self, option, value):
@@ -335,7 +335,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Connect signals.
         self.chkbox_encryption.connect("toggled", self.toggle_encryption)
         self.combo_encryption.connect("changed", self.change_encrypt_method)
-        self.script_button.connect("button-press-event", self.edit_scripts)
+        self.script_button.connect("clicked", self.edit_scripts)
         self.des = self.connect("destroy", self.destroy_called)
 
     def destroy_called(self, *args):

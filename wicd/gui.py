@@ -511,11 +511,11 @@ class appGui(object):
             printLine = True  # In this case we print a separator.
             wirednet = WiredNetworkEntry()
             self.network_list.pack_start(wirednet, False, False)
-            wirednet.connect_button.connect("button-press-event", self.connect,
+            wirednet.connect_button.connect("clicked", self.connect,
                                            "wired", 0, wirednet)
-            wirednet.disconnect_button.connect("button-press-event", self.disconnect,
+            wirednet.disconnect_button.connect("clicked", self.disconnect,
                                                "wired", 0, wirednet)
-            wirednet.advanced_button.connect("button-press-event",
+            wirednet.advanced_button.connect("clicked",
                                              self.edit_advanced, "wired", 0, 
                                              wirednet)
 
@@ -533,13 +533,13 @@ class appGui(object):
                     printLine = True
                 tempnet = WirelessNetworkEntry(x)
                 self.network_list.pack_start(tempnet, False, False)
-                tempnet.connect_button.connect("button-press-event",
+                tempnet.connect_button.connect("clicked",
                                                self.connect, "wireless", x,
                                                tempnet)
-                tempnet.disconnect_button.connect("button-press-event",
+                tempnet.disconnect_button.connect("clicked",
                                                   self.disconnect, "wireless",
                                                   x, tempnet)
-                tempnet.advanced_button.connect("button-press-event",
+                tempnet.advanced_button.connect("clicked",
                                                 self.edit_advanced, "wireless",
                                                 x, tempnet)
         else:
@@ -598,7 +598,7 @@ class appGui(object):
             
         return True
 
-    def edit_advanced(self, widget, event, ttype, networkid, networkentry):
+    def edit_advanced(self, widget, ttype, networkid, networkentry):
         """ Display the advanced settings dialog.
         
         Displays the advanced settings dialog and saves any changes made.
@@ -649,7 +649,7 @@ class appGui(object):
             return False
         return True
 
-    def connect(self, widget, event, nettype, networkid, networkentry):
+    def connect(self, widget, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
         cancel_button = self.wTree.get_widget("cancel_button")
         cancel_button.set_sensitive(True)
@@ -663,7 +663,7 @@ class appGui(object):
             wired.ConnectWired()
         self.update_statusbar()
         
-    def disconnect(self, widget, event, nettype, networkid, networkentry):
+    def disconnect(self, widget, nettype, networkid, networkentry):
         """ Disconnects from the given network.
         
         Keyword arguments:

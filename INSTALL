@@ -10,7 +10,9 @@ are a few dependencies:
   6. a graphical sudo application (gksu, kdesu, and ktsuss are supported),
      while optional, is strongly recommended
   7. urwid (if you want to use the curses client - needs version >=0.9.8.3)
-  8. pm-utils (optional for suspend/resume integration - needs version >=1.2.4)
+  8. pm-utils (optional for suspend/resume integration)
+     Wicd supports using versions >=1.2.4 -- earlier versions may work just
+     fine, but they are completely unsupported here.
 
 If you are installing from a bzr pull and you want 
 the native language translations, first run this:

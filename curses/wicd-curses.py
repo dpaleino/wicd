@@ -229,7 +229,7 @@ def help_dialog(body):
     # textJ = urwid.Text(('important','Nobody expects the Spanish Inquisition!'))
 
     blank = urwid.Text('')
-    # Pile containing a text and columns?
+
     cols = urwid.Columns([text1,text2])
     pile = urwid.Pile([textH,cols])
     fill = urwid.Filler(pile)
@@ -251,10 +251,6 @@ def help_dialog(body):
             dim = ui.get_cols_rows()
         elif keys:
             break
-        #elif keys != '':
-        #    break
-    #help = TextDialog(theText,18,62,header=('header',"Wicd-Curses Help"))
-    #help.run(ui,body)
 
 def run_configscript(parent,netname,nettype):
     configfile = wpath.etc+netname+'-settings.conf'
@@ -350,7 +346,6 @@ class NetLabel(urwid.WidgetWrap):
     def keypress(self,size,key):
         return self._w.keypress(size,key)
     def connect(self):
-        # This should work.
         wireless.ConnectWireless(self.id)
         
 class WiredComboBox(ComboBox):
@@ -361,7 +356,6 @@ class WiredComboBox(ComboBox):
         self.ADD_PROFILE = '---'+language["add_new_profile"]+'---'
         self.__super.__init__(use_enter=False)
         self.set_list(list)
-        #self.set_focus(self.theList.index(wired.GetDefaultProfile()))
 
     def set_list(self,list):
         self.theList = list
@@ -370,16 +364,10 @@ class WiredComboBox(ComboBox):
         is_active = wireless.GetWirelessIP('') == None and wired.GetWiredIP('') != None
         for profile in list:
             theString = '%4s   %25s' % (id, profile)
-            #### THIS IS wired.blah() in experimental
-            #print config.GetLastUsedWiredNetwork()
             # Tag if no wireless IP present, and wired one is
             if is_active:
                 theString = '>'+theString[1:]
                 
-                #wiredL.append(urwid.AttrWrap(SelText(theString),'connected',
-                #    'connected focus'))
-            #else:
-            #    wiredL.append(urwid.AttrWrap(SelText(theString),'body','focus'))
             wiredL.append(theString)
             id+=1
         wiredL.append(self.ADD_PROFILE)
@@ -393,8 +381,6 @@ class WiredComboBox(ComboBox):
         if self.theList != []:
             wired.ReadWiredNetworkProfile(self.get_selected_profile())
 
-    #def rebuild_combobox(self):
-    #    pass
     def keypress(self,size,key):
         prev_focus = self.get_focus()[1]
         key = self.__super.keypress(size,key)
@@ -513,23 +499,17 @@ class appGUI():
         self.size = ui.get_cols_rows()
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
-        # Will need a translation sooner or later
         self.screen_locker = urwid.Filler(urwid.Text(('important',language['scanning_stand_by']), align='center'))
         self.no_wlan = urwid.Filler(urwid.Text(('important',language['no_wireless_networks_found']), align='center'))
         self.TITLE = language['wicd_curses']
         self.WIRED_IDX = 1
         self.WLESS_IDX = 3
 
-        #wrap1 = urwid.AttrWrap(txt, 'black')
-        #fill = urwid.Filler(txt)
-
         header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
         self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
         self.list_header=urwid.AttrWrap(urwid.Text(gen_list_header()),'listbar')
         self.wlessH=NSelListBox([urwid.Text("Wireless Network(s)"),self.list_header])
 
-        #if wireless.GetNumberOfNetworks() == 0:
-        #    wireless.Scan()
         # FIXME: This should be two variables
         self.focusloc = [1,0]
 
@@ -543,14 +523,6 @@ class appGUI():
         self.wlessLB = urwid.ListBox(wlessL)
         self.update_netlist(force_check=True,firstrun=True)
         
-        # Stuff I used to simulate large lists
-        #spam = SelText('spam')
-        #spamL = [ urwid.AttrWrap( w, None, 'focus' ) for w in [spam,spam,spam,
-        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
-        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
-        #          spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,spam,
-        #          spam,spam,spam,spam] ]
-        #self.spamLB = urwid.ListBox(spamL)
         # Keymappings proposed by nanotube in #wicd
         keys = [
                 ('H' ,'Help'  ,None),
@@ -566,14 +538,12 @@ class appGUI():
                ]
 
         self.primaryCols = OptCols(keys,self.handle_keys)
-        #self.time_label = urwid.Text(strftime('%H:%M:%S'))
         self.time_label = \
                   urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
         self.status_label = urwid.AttrWrap(urwid.Text('blah'),'important')
         self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
         self.footerList = urwid.Pile([self.primaryCols,self.footer2])
-        # Pop takes a number!
-        #walker.pop(1)
+
         self.frame = urwid.Frame(self.thePile,
                                  header=header,
                                  footer=self.footerList)
@@ -593,8 +563,6 @@ class appGUI():
         self.pref = None
 
         self.update_status()
-
-        #self.dialog = PrefOverlay(self.frame,self.size)
 
     def doScan(self, sync=False):
         self.scanning = True
@@ -646,7 +614,6 @@ class appGUI():
         # Location of last known focus is remapped to current location.
         # This might need to be cleaned up later.
 
-        #self.set_status(str(self.frame.get_body().get_focus())+ ' '+ str(self.wiredCB))
         if self.thePile.get_focus() == self.wiredCB: 
             wlessorwired = self.WIRED_IDX
             where = self.thePile.get_focus().get_body().get_focus()[1]
@@ -676,8 +643,7 @@ class appGUI():
             state, x = daemon.GetConnectionStatus()
         if force_check or self.prev_state != state:
             wiredL,wlessL = gen_network_list()
-            #self.wiredCB = urwid.Filler(ComboBox(wiredL,self.frame,ui,3,
-            #    use_enter=False))
+
             self.wiredCB.get_body().set_list(wiredL)
             self.wiredCB.get_body().build_combobox(self.frame,ui,3)
             if len(wlessL) != 0:
@@ -688,16 +654,13 @@ class appGUI():
             else:
                 self.wlessLB = self.no_wlan
             if daemon.GetAlwaysShowWiredInterface() or wired.CheckPluggedIn():
-                #if daemon.GetAlwaysShowWiredInterface():
-                #if firstrun:
                 self.thePile = urwid.Pile([('fixed',1,self.wiredH),
                                            ('fixed',1,self.wiredCB),
                                            ('fixed',2,self.wlessH),
                                                       self.wlessLB] )
                 if not firstrun:
                     self.frame.body = self.thePile
-                #self.focusloc = (self.thePile.get_focus(),
-                #    self.thePile.get_focus().get_focus()[1])
+
                 self.thePile.set_focus(self.focusloc[0])
                 if self.focusloc[0] == self.WIRED_IDX:
                     self.thePile.get_focus().get_body().set_focus(self.focusloc[1])
@@ -710,13 +673,11 @@ class appGUI():
                 self.thePile = urwid.Pile([('fixed',2,self.wlessH),self.wlessLB] )
                 if not firstrun:
                     self.frame.body = self.thePile
-                #if self.focusloc[0] == self.wlessLB:
                 if self.focusloc[1] == None:
                     self.focusloc[1] = 0
                 if self.wlessLB != self.no_wlan:
                     self.wlessLB.set_focus(self.focusloc[1])
-                #self.thePile.get_focus().set_focus(self.focusloc[1])
-                #self.always_show_wired = not self.always_show_wired
+
         self.prev_state = state
         if not firstrun:
             self.update_ui()
@@ -735,9 +696,6 @@ class appGUI():
         fast = not daemon.NeedsExternalCalls()
         if self.connecting: 
             if not self.conn_status:
-                #self.lock_screen()
-                #if self.statusID:
-                #    gobject.idle_add(self.status_bar.remove, 1, self.statusID)
                 self.conn_status = True
                 gobject.idle_add(self.set_connecting_status,fast)
             return True
@@ -790,11 +748,8 @@ class appGUI():
         # something, and we aren't connecting to something, return False
         # immediately.
         if from_idle and not self.connecting:
-            #self.update_netlist()
             self.update_status()
             self.conn_status=False
-            #self.tcount = 0
-            #self.update_ui()
             return False
         toAppend = ''
         # If we are connecting and being called from the idle function, spin
@@ -803,12 +758,7 @@ class appGUI():
             # This is probably the wrong way to do this, but it works for now.
             self.tcount+=1
             toAppend=self.twirl[self.tcount % 4]
-        #self.footer2 = urwid.Columns([
-        #    urwid.AttrWrap(urwid.Text(text+' '+toAppend),'important'),
-        #    ('fixed',8,urwid.Text(str(self.time),align='right'))])
         self.status_label.set_text(text+' '+toAppend)
-        #self.frame.set_footer(urwid.BoxAdapter(
-        #    urwid.ListBox([self.footer1,self.footer2]),2))
         return True
 
     # Make sure the screen is still working by providing a pretty counter.
@@ -873,7 +823,6 @@ class appGUI():
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:
-                #pass
                 focus = self.frame.body.get_focus()
                 if focus == self.wiredCB:
                     self.special = focus
@@ -1067,8 +1016,6 @@ def run():
     gobject.timeout_add(1500,app.update_status)
     # This will make sure that it is updated on the second.
     gobject.timeout_add(500,app.update_time)
-    # DEFUNCT: Terminate the loop if the UI is terminated.
-    #gobject.idle_add(app.stop_loop)
     loop.run()
 
 # Mostly borrowed from gui.py

@@ -1,4 +1,192 @@
 ------------------------------------------------------------
+revno: 402
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-23 00:40:52 -0400
+message:
+  Merged r340 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.49
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-23 00:36:54 -0400
+    message:
+      Merged r401 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.48
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-23 00:32:29 -0400
+    message:
+      Made M^ and C^ into Alt+ and Ctrl+ respectively in OptCols.
+      Rearranged the OptCols for the preferences dialog to match those in the others.
+    ------------------------------------------------------------
+    revno: 202.2.47
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-23 00:23:11 -0400
+    message:
+      Removed some comments from wicd-curses.py.
+    ------------------------------------------------------------
+    revno: 202.2.46
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-23 00:02:58 -0400
+    message:
+      Really fixed bug 355693. :)
+------------------------------------------------------------
+revno: 401
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2009-05-22 11:29:12 +0800
+message:
+  Buttons are now activated correctly when using the keyboard
+------------------------------------------------------------
+revno: 400
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-05-21 23:18:48 +0800
+message:
+  merged 1.6-rworkman
+    ------------------------------------------------------------
+    revno: 365.1.15
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Thu 2009-05-21 10:12:03 -0500
+    message:
+      Clarify intent of INSTALL with respect to pm-utils version.
+    ------------------------------------------------------------
+    revno: 365.1.14
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Tue 2009-05-19 23:40:13 -0500
+    message:
+      Merged mainline back in; no other changes.
+------------------------------------------------------------
+revno: 399
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-05-19 21:25:09 -0400
+message:
+  Merged r336 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.45
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-05-19 21:20:29 -0400
+    message:
+      Added wrap_exceptions to wicd-curses.py's run() function.
+    ------------------------------------------------------------
+    revno: 202.2.44
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-05-19 21:18:30 -0400
+    message:
+      Flipped the order of the dhcp clients in the prefs dialog and fixed a syntax
+      error in wicd-curses.py.
+    ------------------------------------------------------------
+    revno: 202.2.43
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Tue 2009-05-19 21:06:38 -0400
+    message:
+      Merge r398 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.42
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-05-15 01:05:36 -0400
+    message:
+      Merge r395 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.41
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Fri 2009-05-15 01:05:04 -0400
+    message:
+      Added some deactivated options for enabling debug logs.
+------------------------------------------------------------
+revno: 398
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-05-20 07:12:58 +0800
+message:
+  Merged 1.6-rworkman
+    ------------------------------------------------------------
+    revno: 365.1.13
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Tue 2009-05-19 15:44:52 -0500
+    message:
+      Make sure the /sys/class/net/whatever is actually a directory in
+        GetWiredInterfaces() (similar to the check in GetWireless)
+    ------------------------------------------------------------
+    revno: 365.1.12
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Fri 2009-05-15 12:25:58 -0500
+    message:
+      Merged mainline. No other changes to this branch; no need to merge 
+        into mainline.
+    ------------------------------------------------------------
+    revno: 365.1.11
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Fri 2009-05-08 14:27:46 -0500
+    message:
+      Merged mainline; no other changes.
+    ------------------------------------------------------------
+    revno: 365.1.10
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Sat 2009-05-02 20:25:25 -0500
+    message:
+      Merged mainline back in to sync up this branch.
+        No need to re-merge into mainline, as there are no other changes 
+        at this point.
+    ------------------------------------------------------------
+    revno: 365.1.9
+    committer: Robby Workman <rworkman@slackware.com>
+    branch nick: 1.6-rworkman
+    timestamp: Fri 2009-05-01 09:15:18 -0500
+    message:
+      Merged mainline.
+------------------------------------------------------------
+revno: 397
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-05-20 07:10:49 +0800
+message:
+  merge
+    ------------------------------------------------------------
+    revno: 395.1.2
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: 1.6
+    timestamp: Wed 2009-05-20 07:01:31 +0800
+    message:
+      Changed DHCP client order to dhcpcd -> pump -> dhclient
+    ------------------------------------------------------------
+    revno: 395.1.1
+    committer: Adam Blackburn <compwiz18@gmail.com>
+    branch nick: 1.6
+    timestamp: Sat 2009-05-16 20:50:20 +0800
+    message:
+      Apply .desktop file patch from Debian (remove deprecated encoding line)
+------------------------------------------------------------
+revno: 396
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-05-20 07:09:42 +0800
+message:
+  changed DHCP client order in preferences dialog
+------------------------------------------------------------
+revno: 395
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-05-14 21:55:59 +0800
+message:
+  update CHANGES and NEWS
+------------------------------------------------------------
 revno: 394
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6

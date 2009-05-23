@@ -571,15 +571,12 @@ class appGUI():
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
-        self.prefCols = OptCols( [('meta enter','OK'),
-                                  ('esc','Cancel'),
-                                  ('meta [','Tab Left',),
-                                  ('meta ]','Tab Right')],self.handle_keys
-                                  )
-        self.confCols = OptCols( [
-                                  ('meta enter','OK'),
-                                  ('esc','Cancel')
-                                  ],self.handle_keys)
+        self.prefCols = OptCols( [ ('meta enter','OK'),
+                                   ('meta [','Tab Left',),
+                                   ('meta ]','Tab Right'),
+                                   ('esc','Cancel') ], self.handle_keys)
+        self.confCols = OptCols( [ ('meta enter','OK'),
+                                   ('esc','Cancel') ],self.handle_keys)
 
     # Does what it says it does
     def lock_screen(self):

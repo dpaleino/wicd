@@ -558,6 +558,7 @@ class ClickCols(urwid.WidgetWrap):
 class OptCols(urwid.WidgetWrap):
     # tuples = [(key,desc)], on_event gets passed a key
     # attrs = (attr_key,attr_desc)
+    # handler = function passed the key of the "button" pressed
     # mentions of 'left' and right will be converted to <- and -> respectively
     def __init__(self,tuples,handler,attrs=('body','infobar'),debug=False):
         # Find the longest string.  Keys for this bar should be no greater than
@@ -578,9 +579,11 @@ class OptCols(urwid.WidgetWrap):
             key = ''
             for part in splitcmd:
                 if part == 'ctrl':
-                    key+='C^'
+                    key+='Ctrl+'
                 elif part == 'meta':
-                    key+='M^'
+                    # If anyone has a problem with this, they can bother me
+                    # about it.
+                    key+='Alt+'
                 else:
                    if part == 'left':
                        key += '<-'
@@ -588,6 +591,8 @@ class OptCols(urwid.WidgetWrap):
                        key += '->'
                    elif part == 'esc':
                        key += 'ESC'
+                   elif part == 'enter':
+                       key += 'Enter'
                    else:
                        key += part
             

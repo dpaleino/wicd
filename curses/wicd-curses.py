@@ -530,7 +530,8 @@ class appGUI():
 
         #if wireless.GetNumberOfNetworks() == 0:
         #    wireless.Scan()
-        self.focusloc = (1,0)
+        # FIXME: This should be two variables
+        self.focusloc = [1,0]
 
         # These are empty to make sure that things go my way.
         wiredL,wlessL = [],[]# = gen_network_list()
@@ -656,7 +657,7 @@ class appGUI():
             else: 
                 where = self.thePile.get_focus().get_focus()[1]
                 #where = self.wlessLB.get_focus()[1]
-        self.focusloc = (wlessorwired,where)
+        self.focusloc = [wlessorwired,where]
     
     # Be clunky until I get to a later stage of development.
     # Update the list of networks.  Usually called by DBus.
@@ -710,7 +711,10 @@ class appGUI():
                 if not firstrun:
                     self.frame.body = self.thePile
                 #if self.focusloc[0] == self.wlessLB:
-                self.wlessLB.set_focus(self.focusloc[1])
+                if self.focusloc[1] == None:
+                    self.focusloc[1] = 0
+                if self.wlessLB != self.no_wlan:
+                    self.wlessLB.set_focus(self.focusloc[1])
                 #self.thePile.get_focus().set_focus(self.focusloc[1])
                 #self.always_show_wired = not self.always_show_wired
         self.prev_state = state

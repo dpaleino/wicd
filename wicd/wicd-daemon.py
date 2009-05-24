@@ -203,6 +203,16 @@ class WicdDaemon(dbus.service.Object):
     def SetBackend(self, backend):
         """ Sets a new backend. """
         print "setting backend to %s" % backend
+        backends = networking.BACKEND_MGR.get_available_backends()
+        if backend not in backends:
+            print "backend %s not available, trying to fallback to another" % backend
+            try:
+                backend = backends[0]
+            except IndexError:
+                print "ERROR: no backends available!"
+                return
+            else:
+                print "Fell back to backend %s" % backend
         self.config.set("Settings", "backend", backend, write=True)
         if backend != self.GetCurrentBackend():
             self.suspended = True

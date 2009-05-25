@@ -510,6 +510,9 @@ class appGUI():
         self.list_header=urwid.AttrWrap(urwid.Text(gen_list_header()),'listbar')
         self.wlessH=NSelListBox([urwid.Text("Wireless Network(s)"),self.list_header])
 
+        # Init this earlier to make update_status happy
+        self.update_tag = None
+
         # FIXME: This should be two variables
         self.focusloc = [1,0]
 
@@ -564,7 +567,6 @@ class appGUI():
 
         self.update_status()
 
-        self.update_tag = None
         #self.max_wait = ui.max_wait
 
     def doScan(self, sync=False):
@@ -799,7 +801,6 @@ class appGUI():
             # Handle keystrokes
             if "f8" in keys or 'Q' in keys or 'q' in keys:
                 loop.quit()
-                print "blah"
                 #return False
             if "f5" in keys or 'R' in keys:
                 self.lock_screen()

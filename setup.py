@@ -25,7 +25,7 @@ import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0b2'
+VERSION_NUM = '1.6.0b3'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'

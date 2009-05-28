@@ -1,4 +1,55 @@
 ------------------------------------------------------------
+revno: 404
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-05-27 22:25:32 -0400
+message:
+  Merge 1.6-dan
+    ------------------------------------------------------------
+    revno: 401.1.3
+    committer: Dan O'Reilly <oreilldf@gmail.com>
+    branch nick: experimental
+    timestamp: Sun 2009-05-24 17:11:14 -0400
+    message:
+      Try to recover if we attempt to load a non-existent backend.
+    ------------------------------------------------------------
+    revno: 401.1.2
+    committer: Dan O'Reilly <oreilldf@gmail.com>
+    branch nick: experimental
+    timestamp: Fri 2009-05-22 15:43:14 -0400
+    message:
+      Merge
+        ------------------------------------------------------------
+        revno: 401.2.1
+        committer: Dan O'Reilly <oreilldf@gmail.com>
+        branch nick: experimental
+        timestamp: Fri 2009-05-22 15:33:03 -0400
+        message:
+          - Make the GUI behave better when a disconnect button is pushed.
+          - Move some of the libnotify logic to guiutil.py and add support for displaying some error messages in a libnotify pop-up.
+          - Apply some patches provided by sunseraph.  Tweak to the channel regex and checking for a valid AP bssid when monitoring a wireless connection.  Set essid, bssid, and channel in separate calls to iwconfig.
+          - Add caching for ifconfig and iwconfig results in wnettools.py.  That way we're not needlessly calling the same command a bunch of times in a short period of time (2 seconds).  This removes the need for us to pass around iwconfig/ifconfig output elsewhere, though I've left it in for now.
+          - Remove unneeded BackendManager instance from networking.py
+    ------------------------------------------------------------
+    revno: 401.1.1
+    committer: Dan O'Reilly <oreilldf@gmail.com>
+    branch nick: experimental
+    timestamp: Fri 2009-05-22 15:40:35 -0400
+    message:
+      - Make the GUI behave better when a disconnect button is pushed.
+      - Move some of the libnotify logic to guiutil.py and add support for displaying some error messages in a libnotify pop-up.
+      - Apply some patches provided by sunseraph.  Tweak to the channel regex and checking for a valid AP bssid when monitoring a wireless connection.  Set essid, bssid, and channel in separate calls to iwconfig.
+      - Add caching for ifconfig and iwconfig results in wnettools.py.  That way we're not needlessly calling the same command a bunch of times in a short period of time (2 seconds).  This removes the need for us to pass around iwconfig/ifconfig output elsewhere, though I've left it in for now.
+      - Remove unneeded BackendManager instance from networking.py
+      - Fix last used wired networking autoconnection method
+------------------------------------------------------------
+revno: 403
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-23 12:51:02 +0800
+message:
+  Updated version numbers and CHANGES
+------------------------------------------------------------
 revno: 402
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6

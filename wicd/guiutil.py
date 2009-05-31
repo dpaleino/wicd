@@ -17,11 +17,39 @@
 #
 
 import gtk
+import os.path
 
+import wpath
+
+HAS_NOTIFY = True
+try:
+    import pynotify
+    if not pynotify.init("Wicd"):
+        print 'Could not initalize pynotify'
+        HAS_NOTIFY = False
+except ImportError:
+    print "Importing pynotify failed, notifications disabled."
+    HAS_NOTIFY = False
+ 
+print "Has notifications support", HAS_NOTIFY
+
+if wpath.no_use_notifications:
+    print 'Notifications disabled during setup.py configure'
+    
+def can_use_notify():
+    use_notify = os.path.exists(os.path.join(os.path.expanduser('~/.wicd'),
+                                             'USE_NOTIFICATIONS')
+                                )
+    return use_notify and HAS_NOTIFY and not wpath.no_use_notifications
+    
 def error(parent, message, block=True): 
     """ Shows an error dialog. """
     def delete_event(dialog, id):
         dialog.destroy()
+    if can_use_notify() and not block:
+        notification = pynotify.Notification("ERROR", message, "error")
+        notification.show()
+        return
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)

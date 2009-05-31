@@ -44,7 +44,7 @@ from misc import find_path
 _re_mode = (re.I | re.M | re.S)
 essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', _re_mode)
 ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
-channel_pattern = re.compile('.*Channel:? ?(\d\d?)', _re_mode)
+channel_pattern = re.compile('.*Channel:?=? ?(\d\d?)', _re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
@@ -83,6 +83,31 @@ def _sanitize_string_strict(string):
         return translate(str(string), blank_trans, blacklist_strict)
     else:
         return string
+  
+_cache = {}
+def timedcache(duration=5):
+    """ A caching decorator for use with wnettools methods.
+    
+    Caches the results of a function for a given number of
+    seconds (defaults to 5).
+    
+    """
+    def _timedcache(f):
+        def __timedcache(self, *args, **kwargs):
+            key = str(args) + str(kwargs) + str(f)
+            if hasattr(self, 'iface'):
+                key += self.iface
+            if (key in _cache and 
+                (time.time() - _cache[key]['time']) < duration):
+                return _cache[key]['value']
+            else:
+                value = f(self, *args, **kwargs)
+                _cache[key] = { 'time' : time.time(), 'value' : value }
+                return value
+            
+        return __timedcache
+    
+    return _timedcache
 
 def GetDefaultGateway():
     """ Attempts to determine the default gateway by parsing route -n. """
@@ -349,6 +374,14 @@ class BaseInterface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
         return True
+    
+    @timedcache(2)
+    @neediface("")
+    def GetIfconfig(self):
+        """ Runs ifconfig and returns the output. """
+        cmd = "ifconfig %s" % self.iface
+        if self.verbose: print cmd
+        return misc.Run(cmd)
 
     @neediface("")
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
@@ -596,9 +629,7 @@ class BaseInterface(object):
 
         """
         if not ifconfig:
-            cmd = 'ifconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIfconfig()
         else:
             output = ifconfig
         return misc.RunRegex(ip_pattern, output)
@@ -635,9 +666,7 @@ class BaseInterface(object):
     def _slow_is_up(self, ifconfig=None):
         """ Determine if an interface is up using ifconfig. """
         if not ifconfig:
-            cmd = "ifconfig " + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIfconfig()
         else:
             output = ifconfig
         lines = output.split('\n')
@@ -800,6 +829,7 @@ class BaseWirelessInterface(BaseInterface):
 
         return radiostatus
     
+    @timedcache(2)
     @neediface(False)
     def GetIwconfig(self):
         """ Returns the output of iwconfig for this interface. """
@@ -965,12 +995,17 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         cmd = ['iwconfig', self.iface, 'essid', essid]
-        if channel and str(channel).isdigit():
-            cmd.extend(['channel', str(channel)])
-        if bssid:
-            cmd.extend(['ap', bssid])
         if self.verbose: print str(cmd)
         misc.Run(cmd)
+        base = "iwconfig %s" % self.iface
+        if channel and str(channel).isdigit():
+            cmd = "%s channel %s" % (base, str(channel))
+            if self.verbose: print cmd
+            misc.Run(cmd)
+        if bssid:
+            cmd = "%s ap %s" % (base, bssid)
+            if self.verbose: print cmd
+            misc.Run(cmd)
         
     def GeneratePSK(self, network):
         """ Generate a PSK using wpa_passphrase. 
@@ -1237,9 +1272,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1250,9 +1283,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetCurrentBitrate(self, iwconfig=None):
         """ Get the current bitrate for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1263,9 +1294,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetOperationalMode(self, iwconfig=None):
         """ Get the operational mode for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1313,9 +1342,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         return self._get_link_quality(output)
@@ -1329,9 +1356,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)',
@@ -1348,9 +1373,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',

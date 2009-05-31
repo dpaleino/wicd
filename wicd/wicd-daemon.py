@@ -203,6 +203,16 @@ class WicdDaemon(dbus.service.Object):
     def SetBackend(self, backend):
         """ Sets a new backend. """
         print "setting backend to %s" % backend
+        backends = networking.BACKEND_MGR.get_available_backends()
+        if backend not in backends:
+            print "backend %s not available, trying to fallback to another" % backend
+            try:
+                backend = backends[0]
+            except IndexError:
+                print "ERROR: no backends available!"
+                return
+            else:
+                print "Fell back to backend %s" % backend
         self.config.set("Settings", "backend", backend, write=True)
         if backend != self.GetCurrentBackend():
             self.suspended = True
@@ -1300,6 +1310,7 @@ class WiredDaemon(dbus.service.Object):
         self.daemon = daemon
         self.wired = wired
         self._debug_mode = debug
+        self._cur_wired_prof_name = ""
         self.WiredNetwork = {}
         self.config = ConfigManager(os.path.join(wpath.etc,
                                                  "wired-settings.conf"), 
@@ -1413,6 +1424,8 @@ class WiredDaemon(dbus.service.Object):
         self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")
         self.daemon.wireless_bus.wifi.Disconnect()
         self.daemon.SetForcedDisconnect(False)
+        self.UnsetWiredLastUsed()
+        self.config.set(self._cur_wired_prof_name, "lastused", True, write=True)
         self.wired.Connect(self.WiredNetwork, debug=self.debug_mode)
         self.daemon.UpdateState()
 
@@ -1511,8 +1524,10 @@ class WiredDaemon(dbus.service.Object):
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))
             profile['use_static_dns'] = bool(profile.get('use_static_dns'))
             self.WiredNetwork = profile
+            self._cur_wired_prof_name = profilename
             return "100: Loaded Profile"
         else:
+            self._cur_wired_prof_name = ""
             self.WiredNetwork = {}
             return "500: Profile Not Found"
 

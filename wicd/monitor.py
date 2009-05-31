@@ -174,6 +174,9 @@ class ConnectionStatus(object):
             self.iwconfig = ''
         # Reset this, just in case.
         self.tried_reconnect = False
+        bssid = wireless.GetApBssid()
+        if not bssid:
+            return False
 
         wifi_signal = self._get_printable_sig_strength()
         if wifi_signal == 0:

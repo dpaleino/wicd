@@ -43,16 +43,15 @@ import pango
 import atexit
 from dbus import DBusException
 
+import pygtk
+pygtk.require('2.0')
+
 HAS_NOTIFY = True
 try:
-    import pygtk
-    pygtk.require('2.0')
     import pynotify
     if not pynotify.init("Wicd"):
-        print 'could not initalize pynotify'
         HAS_NOTIFY = False
 except ImportError:
-    print 'import failed'
     HAS_NOTIFY = False
 
 # Wicd specific imports
@@ -60,7 +59,7 @@ from wicd import wpath
 from wicd import misc
 from wicd import gui
 from wicd import dbusmanager
-from wicd.guiutil import error
+from wicd.guiutil import error, can_use_notify
 
 from wicd.translations import language
 
@@ -74,11 +73,6 @@ if not hasattr(gtk, "StatusIcon"):
     except ImportError:
         print 'Unable to load tray icon: Missing both egg.trayicon and gtk.StatusIcon modules.'
         ICON_AVAIL = False
-
-print "Has notifications support", HAS_NOTIFY
-
-if wpath.no_use_notifications:
-    print 'Notifications disabled during setup.py configure'
 
 misc.RenameProcess("wicd-client")
 
@@ -162,10 +156,6 @@ class TrayIcon(object):
             self._last_bubble = None
             self.last_state = None
             self.should_notify = True
-
-            self.use_notify = os.path.exists(os.path.join(
-                os.path.expanduser('~/.wicd'),
-                        'USE_NOTIFICATIONS'))
 
             if DBUS_AVAIL:
                 self.update_tray_icon()
@@ -272,10 +262,8 @@ class TrayIcon(object):
                 [state, info] = daemon.GetConnectionStatus()
 
             # should this state change display a notification?
-            self.should_notify = not wpath.no_use_notifications and \
-                    (self.last_state != state) and \
-                    HAS_NOTIFY and \
-                    self.use_notify
+            self.should_notify = (can_use_notify() and 
+                                  self.last_state != state)
 
             self.last_state = state
             

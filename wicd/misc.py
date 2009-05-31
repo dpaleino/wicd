@@ -492,7 +492,7 @@ def stringToNone(text):
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())
-        
+
 def threaded(f):
     """ A decorator that will make any function run in a new thread. """
 

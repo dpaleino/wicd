@@ -1010,7 +1010,7 @@ def run():
     # Update what the interface looks like as an idle function
     gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
-    gobject.timeout_add(1500,app.update_status)
+    gobject.timeout_add(2000,app.update_status)
     # This will make sure that it is updated on the second.
     gobject.timeout_add(500,app.update_time)
     loop.run()

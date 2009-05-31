@@ -939,7 +939,7 @@ class appGUI():
         if self.update_tag != None:
             gobject.source_remove(self.update_tag)
         if max_wait == None:
-            max_wait = 50
+            max_wait = 100
         else:
             max_wait *= 1000
 

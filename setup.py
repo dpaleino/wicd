@@ -20,6 +20,7 @@
 from distutils.core import setup, Command
 from distutils.extension import Extension
 import os
+import sys
 import shutil
 import subprocess
 
@@ -411,28 +412,26 @@ class get_translations(Command):
         import urllib, shutil
         shutil.rmtree('translations/')
         os.makedirs('translations')
-        filename, headers = urllib.urlretrieve('http://wicd.net/translator/idlist')
+        filename, headers = urllib.urlretrieve('http://wicd.sourceforge.net/translator/idlist/')
         id_file = open(filename, 'r')
         lines = id_file.readlines()
         # remove the \n from the end of lines, and remove blank entries
         lines = [ x.strip() for x in lines if not x.strip() is '' ]
         for id in lines:
-            # http://wicd.net/translator/download_po.php?language=11
-            pofile, poheaders = urllib.urlretrieve('http://wicd.net/translator/download/'+str(id))
-            #for i in `cat ids`; do
-            #wget "http://wicd.sourceforge.net/translator/download_po.php?language=$i&version=$1" -O "language_$i"
-            #iden=`python -c "import sys; print open('language_$i','r').readlines()[1].strip()[2:]"`
-            #mv "language_$i" po/$iden.po
-            #mkdir -p $iden/LC_MESSAGES/
-            #msgfmt --output-file=$iden/LC_MESSAGES/wicd.mo po/$iden.po
-            lang_identifier = open(pofile,'r').readlines()[0].strip()
-            lang_identifier = lang_identifier[lang_identifier.rindex('(')+1:lang_identifier.rindex(')')]
-            shutil.move(pofile, lang_identifier+'.po')
-            print 'Got',lang_identifier
-            os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
-            os.system('msgfmt --output-file=translations/' + lang_identifier +
-                      '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
-            os.remove(lang_identifier+'.po')
+            pofile, poheaders = urllib.urlretrieve('http://wicd.sourceforge.net/translator/download/'+str(id)+'/')
+            try:
+                lang_identifier = open(pofile,'r').readlines()[0].strip()
+                first_line = lang_identifier
+                lang_identifier = lang_identifier[lang_identifier.rindex('(')+1:lang_identifier.rindex(')')]
+                print first_line
+            except:
+                print >> sys.stderr, 'error downloading language %s' % id
+            else:
+                shutil.move(pofile, lang_identifier+'.po')
+                os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
+                os.system('msgfmt --output-file=translations/' + lang_identifier +
+                          '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
+                os.remove(lang_identifier+'.po')
 
 
 class uninstall(Command):

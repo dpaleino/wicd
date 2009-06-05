@@ -557,7 +557,8 @@ class appGUI():
         self.prev_state    = False
         self.connecting    = False
         self.screen_locked = False
-        self.do_diag_lock = False
+        self.do_diag_lock = False #Whether the screen is locked beneath a dialog
+        self.diag_type = 'none' # The type of dialog that is up
         self.scanning = False
 
         self.pref = None
@@ -567,7 +568,6 @@ class appGUI():
     def doScan(self, sync=False):
         self.scanning = True
         wireless.Scan(False)
-
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
@@ -580,7 +580,7 @@ class appGUI():
 
     # Does what it says it does
     def lock_screen(self):
-        if self.diag:
+        if self.diag_type == 'pref':
             self.do_diag_lock = True
             return True
         self.frame.set_body(self.screen_locker)
@@ -779,9 +779,12 @@ class appGUI():
     #@wrap_exceptions
     def dbus_scan_started(self):
         self.scanning = True
+        if self.diag_type == 'conf':
+            self.restore_primary()
         self.lock_screen()
 
     def restore_primary(self):
+        self.diag_type = 'none'
         if self.do_diag_lock or self.scanning:
             self.frame.set_body(self.screen_locker)
             self.do_diag_lock = False
@@ -817,6 +820,7 @@ class appGUI():
                         self.diag = WirelessSettingsDialog(pos,self.frame)
                         self.diag.ready_widgets(ui,self.frame)
                         self.frame.set_body(self.diag)
+                    self.diag_type = 'conf'
             # Guess what!  I actually need to put this here, else I'll have
             # tons of references to self.frame lying around. ^_^
             if "enter" in keys:
@@ -843,13 +847,13 @@ class appGUI():
                 self.pref.ready_widgets(ui,self.frame)
                 self.frame.set_footer(urwid.Pile([self.prefCols,self.footer2]))
                 self.diag = self.pref
+                self.diag_type = 'pref'
                 self.frame.set_body(self.diag)
                 # Halt here, keypress gets passed to the dialog otherwise
                 return True
             if "A" in keys:
                 about_dialog(self.frame)
             if "C" in keys:
-                # Same as "enter" for now
                 focus = self.frame.body.get_focus()
                 if focus == self.wiredCB:
                     self.special = focus

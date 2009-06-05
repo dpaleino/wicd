@@ -17,7 +17,7 @@ Minor Changes and Other Enhancements:
 - Better autoconnection behavior
 - Tray/GUI will survive the daemon being killed
 - Reasons for connection failures will now bubble back to the GUI
-- Add/Remove wired profile system is now more user-friendly
+- Add/remove wired profile system is now more user-friendly
 - Support for using resolvconf instead of directly editing /etc/resolv.conf
 - Wicd won't blindly kill dhcp clients / wpa_supplicant any more
 - Added an option to automatically switch from a wireless network to a wired 

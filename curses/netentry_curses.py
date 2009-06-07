@@ -171,7 +171,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self._w.body.body.append(self.set_default)
         
         self.prof_name = name
-        title = ">"+language['configuring_wired'].replace('$A',self.prof_name)
+        title = language['configuring_wired'].replace('$A',self.prof_name)
         self._w.header = urwid.Text( ('header',title),align='right' )
 
         self.set_values()
@@ -241,7 +241,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
 
-        title = ">"+language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
+        title = language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
         self._w.header = urwid.Text(('header',title),align='right' )
     
     def encryption_toggle(self,chkbox,new_state,user_data=None):

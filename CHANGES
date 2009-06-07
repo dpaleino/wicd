@@ -1,4 +1,67 @@
 ------------------------------------------------------------
+revno: 409
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2009-06-05 15:08:47 +0800
+message:
+  merged experimental-nacl
+    ------------------------------------------------------------
+    revno: 202.2.53
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Thu 2009-06-04 22:19:33 -0400
+    message:
+      If a network dialog is up when a scan is initiated externally, drop the dialog.
+    ------------------------------------------------------------
+    revno: 202.2.52
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Thu 2009-06-04 22:10:05 -0400
+    message:
+      Merge r408 of mainline 1.6.
+------------------------------------------------------------
+revno: 408
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-06-04 22:24:14 +0800
+message:
+  add .sourceforge.net to the URLs in the translator
+------------------------------------------------------------
+revno: 407
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-06-04 21:39:36 +0800
+message:
+  updated CHANGES, setup.py version, and NEWS
+------------------------------------------------------------
+revno: 406
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-05-30 23:18:22 -0400
+message:
+  Merge r342 of experimental-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.51
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-30 23:12:53 -0400
+    message:
+      Increased time between wireless scans to 2 seconds.
+    ------------------------------------------------------------
+    revno: 202.2.50
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: experimental-nacl
+    timestamp: Sat 2009-05-30 23:11:37 -0400
+    message:
+      Merged with r405 of mainline 1.6
+------------------------------------------------------------
+revno: 405
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-05-28 11:10:10 +0800
+message:
+  updated CHANGES and setup.py version
+------------------------------------------------------------
 revno: 404
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: 1.6

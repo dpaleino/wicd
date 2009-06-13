@@ -1671,9 +1671,13 @@ def main(argv):
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:
-                os.chmod(logpath, 0600)
+                os.chmod(logpath, %LOGPERMS%)
+                if "%LOGGROUP%":
+                    import grp
+                    group = grp.getgrnam("%LOGGROUP%")
+                    os.chown(logpath, 0, group[2])
             except:
-                print 'unable to chmod log file to 0600'
+                print 'unable to chmod log file to %LOGPERMS%'
 
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output

@@ -242,6 +242,8 @@ class configure(Command):
             self.no_install_acpi = True
         elif self.distro in ['debian']:
             self.wicdgroup = "netdev"
+            self.loggroup = "adm"
+            self.logperms = "0640"
             self.init = '/etc/init.d/'
             self.initfile = 'init/debian/wicd'
         elif self.distro in ['arch']:

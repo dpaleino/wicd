@@ -22,5 +22,6 @@ scripts/wicd
 scripts/wicd-client
 scripts/wicd-curses
 translations/*
+wicd/wicd-daemon.py
 wicd/wpath.py
 *tags

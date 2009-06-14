@@ -93,6 +93,7 @@ class PrefsDialog(urwid.WidgetWrap):
         dhcp1_t  = 'dhclient'
         dhcp2_t  = 'dhcpcd'
         dhcp3_t  = 'pump'
+        dhcp4_t  = 'udhcpc'
 
         wired_detect_header_t = ('header',language["wired_detect"])
         wired1_t              = 'ethtool'
@@ -185,7 +186,8 @@ class PrefsDialog(urwid.WidgetWrap):
         self.dhcp1  = DynRadioButton(self.dhcp_l,dhcp1_t)
         self.dhcp2  = DynRadioButton(self.dhcp_l,dhcp2_t)
         self.dhcp3  = DynRadioButton(self.dhcp_l,dhcp3_t)
-        self.dhcp_l = [self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3]
+        self.dhcp4  = DynRadioButton(self.dhcp_l,dhcp4_t)
+        self.dhcp_l = [self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,self.dhcp4]
 
         self.wired_l = []
         self.wired_detect_header = urwid.Text(wired_detect_header_t)
@@ -202,7 +204,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.flush_l = [self.flush0,self.flush1,self.flush2]
 
         externalLB = urwid.ListBox([self.dhcp_header,
-                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,
+                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,self.dhcp4,
                                     _blank,
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,
@@ -351,8 +353,10 @@ class PrefsDialog(urwid.WidgetWrap):
             dhcp_client = misc.DHCLIENT
         elif self.dhcp2.get_state():
             dhcp_client = misc.DHCPCD
-        else:
+        elif self.dhcp3.get_state():
             dhcp_client = misc.PUMP
+        else:
+            dhcp_client = misc.UDHCPC
         daemon.SetDHCPClient(dhcp_client)
         
         if self.wired0.get_state():

@@ -49,6 +49,7 @@ AUTO = 0
 DHCLIENT = 1
 DHCPCD = 2
 PUMP = 3
+UDHCPC = 4
 
 # Link detection tools
 ETHTOOL = 1

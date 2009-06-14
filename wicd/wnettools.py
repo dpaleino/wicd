@@ -431,7 +431,7 @@ class BaseInterface(object):
             if line == '':  # Empty string means dhclient is done.
                 dhclient_complete = True
             else:
-                print line.strip('\n')
+                print misc.to_unicode(line.strip('\n'))
             if line.startswith('bound'):
                 dhclient_success = True
                 dhclient_complete = True
@@ -458,7 +458,7 @@ class BaseInterface(object):
             elif line.strip().lower().startswith('Operation failed.'):
                 pump_success = False
                 pump_complete = True
-            print line
+            print misc.to_unicode(line)
     
         return self._check_dhcp_result(pump_success)
 
@@ -482,7 +482,7 @@ class BaseInterface(object):
                 dhcpcd_complete = True
             elif line == '':
                 dhcpcd_complete = True
-            print line
+            print misc.to_unicode(line)
             
         return self._check_dhcp_result(dhcpcd_success)
         
@@ -1106,15 +1106,21 @@ class BaseWirelessInterface(BaseInterface):
 
         # An array for the access points
         access_points = []
+        access_points = {}
         for cell in networks:
             # Only use sections where there is an ESSID.
             if 'ESSID:' in cell:
                 # Add this network to the list of networks
                 entry = self._ParseAccessPoint(cell, ralink_info)
                 if entry is not None:
-                    access_points.append(entry)
+                    # Normally we only get duplicate bssids with hidden
+                    # networks.  If we hit this, we only want the entry
+                    # with the real essid to be in the network list.
+                    if (entry['bssid'] not in access_points 
+                        or not entry['hidden']):
+                        access_points[entry['bssid']] = entry
 
-        return access_points
+        return access_points.values()
     
     def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.

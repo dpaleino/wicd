@@ -1,6 +1,5 @@
 [Desktop Entry]
 Categories=Application;Network;
-Encoding=UTF-8
 Exec=wicd-client --no-tray
 GenericName=Network Manager
 Icon=wicd-client

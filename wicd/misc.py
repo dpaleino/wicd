@@ -447,7 +447,7 @@ def choose_sudo_prog(prog_num=0):
     paths = []
     
     if desktop_env == "kde":
-        progs = ["kdesu", "kdesudo", "ktusss"]
+        progs = ["kdesu", "kdesudo", "ktsuss"]
     else:
         progs = ["gksudo", "gksu", "ktsuss"]
         

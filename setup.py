@@ -488,7 +488,8 @@ try:
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
     (wpath.scripts, []),
-    (wpath.disconnectscripts, []),
+    (wpath.predisconnectscripts, []),
+    (wpath.postdisconnectscripts, []),
     (wpath.preconnectscripts, []),
     (wpath.postconnectscripts, []),
     ]

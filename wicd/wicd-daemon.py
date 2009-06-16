@@ -1671,13 +1671,13 @@ def main(argv):
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:
-                os.chmod(logpath, wpath.logperms)
-                if wpath.loggroup:
+                os.chmod(logpath, wpath.log_perms)
+                if wpath.log_group:
                     import grp
-                    group = grp.getgrnam(wpath.loggroup)
+                    group = grp.getgrnam(wpath.log_group)
                     os.chown(logpath, 0, group[2])
             except:
-                print 'unable to chmod log file to %s' % wpath.logperms
+                print 'unable to chmod log file to %s' % wpath.log_perms
 
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output

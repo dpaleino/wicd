@@ -679,7 +679,7 @@ class appGui(object):
         if nettype == "wireless":
             if not self.check_encryption_valid(networkid,
                                                networkentry.advanced_dialog):
-                self.edit_advanced(None, None, nettype, networkid, networkentry)
+                self.edit_advanced(None, nettype, networkid, networkentry)
                 return False
             wireless.ConnectWireless(networkid, reply_handler=handler,
                                      error_handler=handler)

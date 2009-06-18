@@ -45,14 +45,20 @@ def setup_dbus():
     wired = dbusmanager.get_interface('wired')
     
 class AdvancedSettingsDialog(gtk.Dialog):
-    def __init__(self):
+    def __init__(self, network_name=None):
         """ Build the base advanced settings dialog.
         
         This class isn't used by itself, instead it is used as a parent for
         the WiredSettingsDialog and WirelessSettingsDialog.
         
         """
-        gtk.Dialog.__init__(self, title=language['properties'],
+        # if no network name was passed, just use Properties as the title
+        if network_name:
+            title = '%s - %s' % (network_name, language['properties'])
+        else:
+            title = language['properties']	
+
+        gtk.Dialog.__init__(self, title=title,
                             flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CANCEL,
                                                            gtk.RESPONSE_REJECT,
                                                            gtk.STOCK_OK,
@@ -236,7 +242,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
 class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, name):
         """ Build the wired settings dialog. """
-        AdvancedSettingsDialog.__init__(self)
+        AdvancedSettingsDialog.__init__(self, language['wired_network'])
         self.des = self.connect("destroy", self.destroy_called)
         self.script_button.connect("clicked", self.edit_scripts)
         self.prof_name = name
@@ -294,7 +300,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, networkID):
         """ Build the wireless settings dialog. """
-        AdvancedSettingsDialog.__init__(self)
+        AdvancedSettingsDialog.__init__(self, wireless.GetWirelessProperty(networkID, 'essid'))
         # Set up encryption stuff
         self.networkID = networkID
         self.combo_encryption = gtk.combo_box_new_text()

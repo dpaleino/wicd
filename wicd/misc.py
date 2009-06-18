@@ -49,6 +49,7 @@ AUTO = 0
 DHCLIENT = 1
 DHCPCD = 2
 PUMP = 3
+UDHCPC = 4
 
 # Link detection tools
 ETHTOOL = 1
@@ -446,7 +447,7 @@ def choose_sudo_prog(prog_num=0):
     paths = []
     
     if desktop_env == "kde":
-        progs = ["kdesu", "kdesudo", "ktusss"]
+        progs = ["kdesu", "kdesudo", "ktsuss"]
     else:
         progs = ["gksudo", "gksu", "ktsuss"]
         

@@ -315,6 +315,13 @@ class ConnectThread(threading.Thread):
         
         self.SetStatus('interface_down')
         
+    def run(self):
+        self.connect_result = "Failed"
+        try:
+            self._connect()
+        finally:
+            self.is_connecting = False
+        
     def set_should_die(self, val):
         self.lock.acquire()
         try:
@@ -794,7 +801,7 @@ class WirelessConnectThread(ConnectThread):
         self.wpa_driver = wpa_driver
 
 
-    def run(self):
+    def _connect(self):
         """ The main function of the connection thread.
 
         This function performs the necessary calls to connect to the
@@ -1006,7 +1013,7 @@ class WiredConnectThread(ConnectThread):
                                after_script, disconnect_script, gdns1, gdns2, 
                                gdns3, gdns_dom, gsearch_dom, liface, debug)
 
-    def run(self):
+    def _connect(self):
         """ The main function of the connection thread.
 
         This function performs the necessary calls to connect to the

@@ -250,6 +250,9 @@ class BaseInterface(object):
                 cmd = self.dhclient_cmd
                 if self.dhclient_needs_verbose:
                     cmd += ' -v'
+            elif self.udhcpc_cmd and cl in [misc.UDHCPC, misc.AUTO]:
+                client = "udhcpc"
+                cmd = self.udhcpc_cmd
             else:
                 client = None
                 cmd = ""
@@ -257,19 +260,24 @@ class BaseInterface(object):
         
         client_dict = {
             "dhclient" : 
-                {'connect' : r"%s %s", 
-                 'release' : r"%s -r %s",
+                {'connect' : r"%(cmd)s %(iface)s",
+                 'release' : r"%(cmd)s -r %(iface)s",
                  'id' : misc.DHCLIENT, 
                  },
             "pump" : 
-                { 'connect' : r"%s -i %s", 
-                  'release' : r"%s -r -i %s",
+                { 'connect' : r"%(cmd)s -i %(iface)s",
+                  'release' : r"%(cmd)s -r -i %(iface)s",
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%s %s",
-                 'release' : r"%s -k %s",
+                {'connect' : r"%(cmd)s %(iface)s",
+                 'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
+                },
+            "udhcpc":
+                {'connect' : r"%(cmd)s -n -i %(iface)s",
+                 'release' : r"killall -SIGUSR2 %(cmd)s",
+                 'id' : misc.UDHCPC,
                 },
         }
         (client_name, cmd) = get_client_name(self.DHCP_CLIENT)
@@ -278,9 +286,9 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
-            return client_dict[client_name]['connect'] % (cmd, self.iface)
+            return client_dict[client_name]['connect'] % {"cmd":cmd, "iface":self.iface}
         elif flavor == "release":
-            return client_dict[client_name]['release'] % (cmd, self.iface)
+            return client_dict[client_name]['release'] % {"cmd":cmd, "iface":self.iface}
         else:
             return client_dict[client_name]['id']
     
@@ -327,6 +335,7 @@ class BaseInterface(object):
                 self.dhclient_needs_verbose = False
         self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
+        self.udhcpc_cmd = self._find_program_path("udhcpc")
         
     def CheckWiredTools(self):
         """ Check for the existence of ethtool and mii-tool. """
@@ -431,7 +440,7 @@ class BaseInterface(object):
             if line == '':  # Empty string means dhclient is done.
                 dhclient_complete = True
             else:
-                print line.strip('\n')
+                print misc.to_unicode(line.strip('\n'))
             if line.startswith('bound'):
                 dhclient_success = True
                 dhclient_complete = True
@@ -458,7 +467,7 @@ class BaseInterface(object):
             elif line.strip().lower().startswith('Operation failed.'):
                 pump_success = False
                 pump_complete = True
-            print line
+            print misc.to_unicode(line)
     
         return self._check_dhcp_result(pump_success)
 
@@ -482,10 +491,34 @@ class BaseInterface(object):
                 dhcpcd_complete = True
             elif line == '':
                 dhcpcd_complete = True
-            print line
+            print misc.to_unicode(line)
             
         return self._check_dhcp_result(dhcpcd_success)
-        
+
+    def _parse_udhcpc(self, pipe):
+        """ Determines if obtaining an IP using udhcpc succeeded.
+
+        Keyword arguments:
+        pipe -- stdout pipe to the dhcpcd process.
+
+        Returns:
+        'success' if successful, an error code string otherwise.
+
+        """
+        udhcpc_complete = False
+        udhcpc_success = True
+
+        while not udhcpc_complete:
+            line = pipe.readline()
+            if line.endswith("failing"):
+                udhcpc_success = False
+                udhcpc_complete = True
+            elif line == '':
+                udhcpc_complete = True
+            print line
+
+        return self._check_dhcp_result(udhcpc_success)
+
     def _check_dhcp_result(self, success):
         """ Print and return the correct DHCP connection result. 
         
@@ -524,6 +557,8 @@ class BaseInterface(object):
             return self._parse_pump(pipe)
         elif DHCP_CLIENT == misc.DHCPCD:
             return self._parse_dhcpcd(pipe)
+        elif DHCP_CLIENT == misc.UDHCPC:
+            return self._parse_udhcpc(pipe)
         else:
             print 'ERROR no dhclient found!'
     
@@ -1106,15 +1141,21 @@ class BaseWirelessInterface(BaseInterface):
 
         # An array for the access points
         access_points = []
+        access_points = {}
         for cell in networks:
             # Only use sections where there is an ESSID.
             if 'ESSID:' in cell:
                 # Add this network to the list of networks
                 entry = self._ParseAccessPoint(cell, ralink_info)
                 if entry is not None:
-                    access_points.append(entry)
+                    # Normally we only get duplicate bssids with hidden
+                    # networks.  If we hit this, we only want the entry
+                    # with the real essid to be in the network list.
+                    if (entry['bssid'] not in access_points 
+                        or not entry['hidden']):
+                        access_points[entry['bssid']] = entry
 
-        return access_points
+        return access_points.values()
     
     def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.

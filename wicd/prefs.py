@@ -82,7 +82,7 @@ class PreferencesDialog(object):
         self.preferwiredcheckbox.set_active(daemon.GetPreferWiredNetwork())
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
-                     self.pumpradio]
+                     self.pumpradio, self.udhcpcradio]
         self._setup_external_app_radios(dhcp_list, daemon.GetDHCPClient,
                                         daemon.SetDHCPClient)
         
@@ -210,8 +210,10 @@ class PreferencesDialog(object):
             dhcp_client = misc.DHCLIENT
         elif self.dhcpcdradio.get_active():
             dhcp_client = misc.DHCPCD
-        else:
+        elif self.pumpradio.get_active():
             dhcp_client = misc.PUMP
+        else:
+            dhcp_client = misc.UDHCPC
         daemon.SetDHCPClient(dhcp_client)
         
         if self.linkautoradio.get_active():
@@ -347,6 +349,7 @@ class PreferencesDialog(object):
         self.dhclientradio = self.wTree.get_widget("dhclient_radio")
         self.pumpradio = self.wTree.get_widget("pump_radio")
         self.dhcpcdradio = self.wTree.get_widget("dhcpcd_radio")
+        self.udhcpcradio = self.wTree.get_widget("udhcpc_radio")
         
         # Wired Link Detection Apps
         self.linkautoradio = setup_label("link_auto_radio", 'wicd_auto_config')

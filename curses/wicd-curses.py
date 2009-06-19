@@ -1049,11 +1049,11 @@ setup_dbus()
 if __name__ == '__main__':
     try:
         parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()))
-    except Exception as ex:
-        if "Rejected send message" in ex.args[0]:
+    except Exception as e:
+        if "DBus.Error.AccessDenied" in e.get_dbus_name():
             print ""
             system("\
-echo ERROR: wicd-curses was denied access to the wicd daemon, make sure that \
+echo ERROR: wicd-curses was denied access to the wicd daemon, please check that \
 your user is in the group \\'$(tput bold)$(tput setaf 4)"+ wpath.wicd_group+"$(tput sgr0)\\'.")
             sys.exit(1)
         else:

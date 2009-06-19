@@ -86,9 +86,10 @@ def catchdbus(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except DBusException, e:
-            if "DBus.Error.AccessDenied" in e:
+        except DBusException as e:
+            if e.get_dbus_name() != None and "DBus.Error.AccessDenied" in e.get_dbus_name():
                 error(None, language['access_denied'])
+                #raise
                 raise DBusException(e)
             else:
                 print "warning: ignoring exception %s" % e

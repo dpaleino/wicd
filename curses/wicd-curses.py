@@ -1051,10 +1051,9 @@ if __name__ == '__main__':
         parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()))
     except Exception as e:
         if "DBus.Error.AccessDenied" in e.get_dbus_name():
-            print ""
-            system("\
+            print "\
 echo ERROR: wicd-curses was denied access to the wicd daemon, please check that \
-your user is in the group \\'$(tput bold)$(tput setaf 4)"+ wpath.wicd_group+"$(tput sgr0)\\'.")
+your user is in the group \'\033[1;34m"+ wpath.wicd_group+"\033[0m\'."
             sys.exit(1)
         else:
             raise

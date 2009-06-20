@@ -309,7 +309,13 @@ class WicdDaemon(dbus.service.Object):
         if self.GetSignalDisplayType() == 1:
             return (signal + " dBm")
         else:
-            return (signal + "%")
+            try:
+                if int(signal) == 101:
+                    return '??%'
+                else:
+                    return (signal + "%")
+            except ValueError:
+                return (signal + "%")
 
     @dbus.service.method('org.wicd.daemon')
     def SetSuspend(self, val):

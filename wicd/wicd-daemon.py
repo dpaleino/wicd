@@ -1672,12 +1672,16 @@ def main(argv):
         if os.path.exists(logpath):
             try:
                 os.chmod(logpath, wpath.log_perms)
+            except:
+                print 'unable to chmod log file to %s' % wpath.log_perms
+
+            try:
                 if wpath.log_group:
                     import grp
                     group = grp.getgrnam(wpath.log_group)
                     os.chown(logpath, 0, group[2])
             except:
-                print 'unable to chmod log file to %s' % wpath.log_perms
+                print 'unable to chown log file to %s' % group[2]
 
     if redirect_stdout: sys.stdout = output
     if redirect_stderr: sys.stderr = output

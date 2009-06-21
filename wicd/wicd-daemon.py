@@ -1134,8 +1134,10 @@ class WirelessDaemon(dbus.service.Object):
         # is done.
         self.wifi.before_script = self.GetWirelessProperty(id, 'beforescript')
         self.wifi.after_script = self.GetWirelessProperty(id, 'afterscript')
-        self.wifi.disconnect_script = self.GetWirelessProperty(id,
-                                                               'disconnectscript')
+        self.wifi.pre_disconnect_script = self.GetWirelessProperty(id,
+                                                               'predisconnectscript')
+        self.wifi.post_disconnect_script = self.GetWirelessProperty(id,
+                                                               'postdisconnectscript')
         print 'Connecting to wireless network ' + self.LastScan[id]['essid']
         self.daemon.wired_bus.wired.Disconnect()
         self.daemon.SetForcedDisconnect(False)
@@ -1222,12 +1224,14 @@ class WirelessDaemon(dbus.service.Object):
 
         write_script_ent(bssid_key, "beforescript")
         write_script_ent(bssid_key, "afterscript")
-        write_script_ent(bssid_key, "disconnectscript")
+        write_script_ent(bssid_key, "predisconnectscript")
+        write_script_ent(bssid_key, "postdisconnectscript")
 
         if cur_network["use_settings_globally"]:
             write_script_ent(essid_key, "beforescript")
             write_script_ent(essid_key, "afterscript")
-            write_script_ent(essid_key, "disconnectscript")
+            write_script_ent(essid_key, "predisconnectscript")
+            write_script_ent(essid_key, "postdisconnectscript")
 
         self.config.write()
 
@@ -1421,7 +1425,8 @@ class WiredDaemon(dbus.service.Object):
         """ Connects to a wired network. """
         self.wired.before_script = self.GetWiredProperty("beforescript")
         self.wired.after_script = self.GetWiredProperty("afterscript")
-        self.wired.disconnect_script = self.GetWiredProperty("disconnectscript")
+        self.wired.pre_disconnect_script = self.GetWiredProperty("predisconnectscript")
+        self.wired.post_disconnect_script = self.GetWiredProperty("postdisconnectscript")
         self.daemon.wireless_bus.wifi.Disconnect()
         self.daemon.SetForcedDisconnect(False)
         self.UnsetWiredLastUsed()
@@ -1439,7 +1444,8 @@ class WiredDaemon(dbus.service.Object):
 
         for option in ["ip", "broadcast", "netmask","gateway", "search_domain", 
                        "dns_domain", "dns1", "dns2", "dns3", "beforescript", 
-                       "afterscript", "disconnectscript"]:
+                       "afterscript", "predisconnectscript",
+                       "postdisconnectscript"]:
             self.config.set(profilename, option, None)
         self.config.set(profilename, "default", default)
         self.config.write()
@@ -1507,7 +1513,8 @@ class WiredDaemon(dbus.service.Object):
 
         write_script_ent(profilename, "beforescript")
         write_script_ent(profilename, "afterscript")
-        write_script_ent(profilename, "disconnectscript")
+        write_script_ent(profilename, "predisconnectscript")
+        write_script_ent(profilename, "postdisconnectscript")
         self.config.write()
         return "100: Profile Written"
 

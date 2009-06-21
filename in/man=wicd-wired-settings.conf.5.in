@@ -33,8 +33,12 @@ The script should be a Bourne-compatible script and should be executable.
 IMPORTANT - scripts should ONLY be writable by root and located in a
 directory that is only writable by root.
 .TP
-.BI "disconnectscript = " <None|arbitrary_script>
-This defines a script to run when Wicd disconnects the interface.
+.BI "predisconnectscript = " <None|arbitrary_script>
+This defines a script to run before Wicd disconnects the interface.
+The script should be a Bourne-compatible script and should be executable.
+.TP
+.BI "postdisconnectscript = " <None|arbitrary_script>
+This defines a script to run after Wicd disconnects the interface.
 The script should be a Bourne-compatible script and should be executable.
 .br
 IMPORTANT - scripts should ONLY be writable by root and located in a

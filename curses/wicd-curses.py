@@ -263,7 +263,7 @@ def run_configscript(parent,netname,nettype):
 # Translation needs to be changed to accomidate this text below.
 """You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
 
-Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
+Once there, you can adjust (or add) the "beforescript", "afterscript", "predisconnectscript" and "postdisconnectscript" variables as needed, to change the preconnect, postconnect, predisconnect and postdisconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
     dialog = TextDialog(theText,20,80)
     dialog.run(ui,parent)
     # This code works with many distributions, but not all of them.  So, to

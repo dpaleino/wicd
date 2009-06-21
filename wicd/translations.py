@@ -55,7 +55,7 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-# Generated automatically on Sat, 20 Jun 2009 21:40:39 CDT
+# Generated automatically on Sat, 20 Jun 2009 21:58:21 CDT
 _ = get_gettext()
 language = {}
 language['resetting_ip_address'] = _('''Resetting IP address...''')
@@ -74,7 +74,7 @@ language['wired_networks'] = _('''Wired Networks''')
 language['backend_alert'] = _('''Changes to your backend won't occur until the daemon is restarted.''')
 language['about_help'] = _('''Stop a network connection in progress''')
 language['connecting'] = _('''Connecting''')
-language['disconnect_script'] = _('''Run disconnect script''')
+language['pre_disconnect_script'] = _('''Run pre-disconnect script''')
 language['cannot_edit_scripts_1'] = _('''To avoid various complications, wicd-curses does not support directly editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:''')
 language['cannot_edit_scripts_3'] = _('''You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.''')
 language['cannot_edit_scripts_2'] = _('''Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information.''')
@@ -217,3 +217,4 @@ language['association_failed'] = _('''Connection failed: Could not contact the w
 language['access_denied'] = _('''Unable to contact the Wicd daemon due to an access denied error from DBus.  Please check your DBus configuration.''')
 language['disconnecting_active'] = _('''Disconnecting active connections...''')
 language['access_denied_wc'] = _('''ERROR: wicd-curses was denied access to the wicd daemon: please check that your user is in the "$A" group.''')
+language['post_disconnect_script'] = _('''Run post-disconnect script''')

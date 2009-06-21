@@ -26,7 +26,7 @@ import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0'
+VERSION_NUM = '1.6.1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
@@ -242,6 +242,8 @@ class configure(Command):
             self.no_install_acpi = True
         elif self.distro in ['debian']:
             self.wicdgroup = "netdev"
+            self.loggroup = "adm"
+            self.logperms = "0640"
             self.init = '/etc/init.d/'
             self.initfile = 'init/debian/wicd'
         elif self.distro in ['arch']:
@@ -488,7 +490,8 @@ try:
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
     (wpath.scripts, []),
-    (wpath.disconnectscripts, []),
+    (wpath.predisconnectscripts, []),
+    (wpath.postdisconnectscripts, []),
     (wpath.preconnectscripts, []),
     (wpath.postconnectscripts, []),
     ]

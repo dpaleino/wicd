@@ -99,8 +99,11 @@ This defines a script to run after Wicd brings up the connection.
 IMPORTANT - scripts should ONLY be writable by root and located 
 in a directory that is writable by only root.
 .TP
-.BI "disconnectscript = " <None|arbitrary_script>
-This defines a script to run when Wicd disconnects the interface.
+.BI "predisconnectscript = " <None|arbitrary_script>
+This defines a script to run before Wicd disconnects the interface.
+.TP
+.BI "postdisconnectscript = " <None|arbitrary_script>
+This defines a script to run after Wicd disconnects the interface.
 .br
 IMPORTANT - scripts should ONLY be writable by root and located 
 in a directory that is writable by only root.

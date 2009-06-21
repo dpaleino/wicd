@@ -1684,7 +1684,7 @@ def main(argv):
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:
-                os.chmod(logpath, wpath.log_perms)
+                os.chmod(logpath, int(wpath.log_perms,8))
             except:
                 print 'unable to chmod log file to %s' % wpath.log_perms
 

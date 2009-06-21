@@ -62,6 +62,8 @@ initfile = '%INITFILE%'
 # stores only the file name, i.e. wicd
 initfilename = '%INITFILENAME%'
 wicd_group = '%WICDGROUP%'
+log_group = '%LOGGROUP%'
+log_perms = '%LOGPERMS%'
 
 # BOOLEANS
 no_install_pmutils = %NO_INSTALL_PMUTILS%

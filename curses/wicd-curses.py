@@ -202,7 +202,7 @@ def about_dialog(body):
 # Modeled after htop's help
 def help_dialog(body):
     textT  = urwid.Text(('header','wicd-curses help'),'right') 
-    textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REVNO),' using wicd ',unicode(daemon.Hello()),'\n'])
+    textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REV),' using wicd ',unicode(daemon.Hello()),'\n'])
 
     textH = urwid.Text([
 "For more detailed help, consult the wicd-curses(8) man page.\n",

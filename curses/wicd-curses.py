@@ -1049,7 +1049,7 @@ setup_dbus()
 if __name__ == '__main__':
     try:
         parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()))
-    except Exception as e:
+    except Exception, e:
         if "DBus.Error.AccessDenied" in e.get_dbus_name():
             print language['access_denied_wc'].replace('$A','\033[1;34m'+wpath.wicd_group+'\033[0m')
             sys.exit(1)

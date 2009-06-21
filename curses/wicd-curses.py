@@ -38,7 +38,6 @@ at least get a network connection.  Or those who don't like using X.  ;-)
 import warnings 
 warnings.filterwarnings("ignore","The popen2 module is deprecated.  Use the subprocess module.") 
 # UI stuff
-# This library is the only reason why I wrote this program.
 import urwid
 
 # DBus communication stuff
@@ -64,6 +63,7 @@ import netentry_curses
 from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog,AdvancedSettingsDialog
 
 from optparse import OptionParser
+from os import system
 
 # Stuff about getting the script configurer running
 #from grp import getgrgid
@@ -72,7 +72,7 @@ from optparse import OptionParser
 #import logging
 #import logging.handler
 
-CURSES_REVNO=wpath.curses_revision
+CURSES_REV=wpath.curses_revision
 
 # Fix strings in wicd-curses
 from wicd.translations import language
@@ -1047,7 +1047,14 @@ setup_dbus()
 ##### MAIN ENTRY POINT
 ########################################
 if __name__ == '__main__':
-    parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
+    try:
+        parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()))
+    except Exception, e:
+        if "DBus.Error.AccessDenied" in e.get_dbus_name():
+            print language['access_denied_wc'].replace('$A','\033[1;34m'+wpath.wicd_group+'\033[0m')
+            sys.exit(1)
+        else:
+            raise
     parser.set_defaults(screen='raw',debug=False)
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")

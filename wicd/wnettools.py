@@ -1366,7 +1366,14 @@ class BaseWirelessInterface(BaseInterface):
             (strength, max_strength) = (None, None)
 
         if strength in ['', None]:
-            [(strength, max_strength)] = altstrength_pattern.findall(output)
+            try:
+                [(strength, max_strength)] = altstrength_pattern.findall(output)
+            except ValueError:
+                # if the pattern was unable to match anything
+                # we'll return 101, which will allow us to stay
+                # connected even though we don't know the strength
+                # it also allows us to tell if 
+                return 101
         if strength not in ['', None] and max_strength:
             return (100 * int(strength) // int(max_strength))
         elif strength not in ["", None]:

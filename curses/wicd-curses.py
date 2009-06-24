@@ -822,15 +822,16 @@ class appGUI():
                         self.frame.set_body(self.diag)
                     self.diag_type = 'conf'
             if "enter" in keys or 'C' in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option, if it is around
-                    if self.wlessLB != self.no_wlan:
-                        wid,pos = self.thePile.get_focus().get_focus()
-                        self.connect("wireless",pos)
+                if not self.scanning:
+                    focus = self.frame.body.get_focus()
+                    if focus == self.wiredCB:
+                        self.special = focus
+                        self.connect("wired",0)
+                    else:
+                        # wless list only other option, if it is around
+                        if self.wlessLB != self.no_wlan:
+                            wid,pos = self.thePile.get_focus().get_focus()
+                            self.connect("wireless",pos)
             if "esc" in keys:
                 # Force disconnect here if connection in progress
                 if self.connecting:

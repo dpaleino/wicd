@@ -821,18 +821,17 @@ class appGUI():
                         self.diag.ready_widgets(ui,self.frame)
                         self.frame.set_body(self.diag)
                     self.diag_type = 'conf'
-            # Guess what!  I actually need to put this here, else I'll have
-            # tons of references to self.frame lying around. ^_^
-            if "enter" in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option
-                    wid,pos  =  self.thePile.get_focus().get_focus()
-                    self.connect("wireless",pos)
-
+            if "enter" in keys or 'C' in keys:
+                if not self.scanning:
+                    focus = self.frame.body.get_focus()
+                    if focus == self.wiredCB:
+                        self.special = focus
+                        self.connect("wired",0)
+                    else:
+                        # wless list only other option, if it is around
+                        if self.wlessLB != self.no_wlan:
+                            wid,pos = self.thePile.get_focus().get_focus()
+                            self.connect("wireless",pos)
             if "esc" in keys:
                 # Force disconnect here if connection in progress
                 if self.connecting:
@@ -853,15 +852,6 @@ class appGUI():
                 return True
             if "A" in keys:
                 about_dialog(self.frame)
-            if "C" in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option
-                    wid,pos  =  self.thePile.get_focus().get_focus()
-                    self.connect("wireless",pos)
             if "I" in keys:
                 self.raise_hidden_network_dialog()
             if "H" in keys or 'h' in keys or '?' in keys:

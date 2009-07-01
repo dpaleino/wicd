@@ -145,7 +145,7 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
     if not network:
         return False
 
-    network = str(network)
+    network = unicode(network)
     if daemon.GetSignalDisplayType() == 0:
         strength = wireless.GetCurrentSignalStrength(iwconfig)
     else:

@@ -16,8 +16,8 @@ wicd_start() {
     echo "$PIDFILE and try again..."
     exit 1
   else
-    echo "Starting wicd daemon: $DAEMON"
-    wicd 2>/dev/null 1>&2
+    echo "Starting wicd daemon: $DAEMON &"
+    wicd 2>/dev/null 1>&2 &
   fi
 }
 

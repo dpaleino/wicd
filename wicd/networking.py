@@ -719,7 +719,7 @@ class Wireless(Controller):
         wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Stopping dhcp client and wpa_supplicant'
-        BACKEND.ReleaseDHCP()
+        wiface.ReleaseDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()

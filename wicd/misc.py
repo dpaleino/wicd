@@ -182,6 +182,8 @@ def WriteLine(my_file, text):
 
 def ExecuteScripts(scripts_dir, verbose=False):
     """ Execute every executable file in a given directory. """
+    if not os.path.exists(scripts_dir):
+        return
     for obj in os.listdir(scripts_dir):
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):

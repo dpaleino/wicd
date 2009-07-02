@@ -1055,14 +1055,14 @@ class WirelessDaemon(dbus.service.Object):
         return value
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def SetWirelessProperty(self, networkid, property, value):
+    def SetWirelessProperty(self, netid, prop, value):
         """ Sets property to value in network specified. """
         # We don't write script settings here.
-        if (property.strip()).endswith("script"):
+        if (prop.strip()).endswith("script"):
             print "Setting script properties through the daemon is not" \
                   + " permitted."
             return False
-        self.LastScan[networkid][property] = misc.Noneify(value)
+        self.LastScan[netid][prop] = misc.to_unicode(misc.Noneify(value))
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def DetectWirelessInterface(self):
@@ -1373,7 +1373,7 @@ class WiredDaemon(dbus.service.Object):
                 print "Setting script properties through the daemon" \
                       + " is not permitted."
                 return False
-            self.WiredNetwork[property] = misc.Noneify(value)
+            self.WiredNetwork[property] = misc.to_unicode(misc.Noneify(value))
             return True
         else:
             print 'SetWiredProperty: WiredNetwork does not exist'

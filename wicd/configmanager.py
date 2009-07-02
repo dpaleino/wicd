@@ -116,7 +116,7 @@ class ConfigManager(RawConfigParser):
                 Int32(ret)
             except OverflowError:
                 ret = long(ret)
-        return ret
+        return to_unicode(ret)
     
     def get(self, *args, **kargs):
         """ Calls the get_option method """

@@ -412,7 +412,8 @@ class get_translations(Command):
 
     def run(self):
         import urllib, shutil
-        shutil.rmtree('translations/')
+        if os.path.exists('translations'):
+            shutil.rmtree('translations/')
         os.makedirs('translations')
         filename, headers = urllib.urlretrieve('http://wicd.sourceforge.net/translator/idlist/')
         id_file = open(filename, 'r')

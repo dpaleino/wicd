@@ -171,7 +171,8 @@ def neediface(default_response):
     """
     def wrapper(func):
         def newfunc(self, *args, **kwargs):
-            if not self.iface:
+            if not self.iface or \
+               not os.path.exists('/sys/class/net/%s' % self.iface):
                 return default_response
             return func(self, *args, **kwargs)
         newfunc.__dict__ = func.__dict__

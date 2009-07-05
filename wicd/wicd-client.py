@@ -88,7 +88,7 @@ def catchdbus(func):
             return func(*args, **kwargs)
         except DBusException, e:
             if e.get_dbus_name() != None and "DBus.Error.AccessDenied" in e.get_dbus_name():
-                error(None, language['access_denied'])
+                error(None, language['access_denied'].replace("$A","<b>"+wpath.wicd_group+"</b>"))
                 #raise
                 raise DBusException(e)
             else:

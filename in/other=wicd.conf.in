@@ -17,6 +17,16 @@
                 <deny own="org.wicd.daemon"/>
         </policy>
 
+	<!-- This Unix group will have permission to use Wicd's gui -->
+        <policy group="%WICDGROUP%">
+                <allow send_destination="org.wicd.daemon"/>
+                <allow send_interface="org.wicd.daemon"/>
+                <allow send_interface="org.freedesktop.DBus.Introspectable"/>
+                <!-- The Introspectable allow shouldn't be needed here, but
+                     it seems that a few distributions aren't yet allowing
+                     it in their hal configs, and we need it here, so... -->
+        </policy>
+
        <!-- Comment the block below if you do not want all users logged in 
             locally to have permission to use wicd-client.  This ignores the 
             group based permission model defined above for the "%WICDGROUP%"
@@ -32,13 +42,6 @@
 		<allow send_destination="org.wicd.daemon.wired"/>
 		<allow send_interface="org.wicd.daemon.wired"/>
 		<allow send_interface="org.freedesktop.DBus.Introspectable"/>
-        </policy>
-
-	<!-- This Unix group will have permission to use Wicd's gui -->
-        <policy group="%WICDGROUP%">
-                <allow send_interface="org.freedesktop.DBus.Introspectable"/>
-                <allow send_destination="org.wicd.daemon"/>
-                <allow send_interface="org.wicd.daemon"/>
         </policy>
 
 </busconfig>

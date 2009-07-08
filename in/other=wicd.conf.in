@@ -11,8 +11,6 @@
 		<allow send_interface="org.wicd.daemon.wireless"/>
 		<allow send_destination="org.wicd.daemon.wired"/>
 		<allow send_interface="org.wicd.daemon.wired"/>
-		<allow send_destination="org.wicd.daemon.config"/>
-		<allow send_interface="org.wicd.daemon.config"/>
         </policy>
 
         <policy at_console="true">
@@ -22,8 +20,6 @@
 		<allow send_interface="org.wicd.daemon.wireless"/>
 		<allow send_destination="org.wicd.daemon.wired"/>
 		<allow send_interface="org.wicd.daemon.wired"/>
-		<allow send_destination="org.wicd.daemon.config"/>
-		<allow send_interface="org.wicd.daemon.config"/>
 		<allow send_interface="org.freedesktop.DBus.Introspectable"/>
         </policy>
 

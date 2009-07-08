@@ -13,6 +13,10 @@
 		<allow send_interface="org.wicd.daemon.wired"/>
         </policy>
 
+        <policy context="default">
+                <deny own="org.wicd.daemon"/>
+        </policy>
+
         <policy at_console="true">
                 <allow send_destination="org.wicd.daemon"/>
                 <allow send_interface="org.wicd.daemon"/>
@@ -21,10 +25,6 @@
 		<allow send_destination="org.wicd.daemon.wired"/>
 		<allow send_interface="org.wicd.daemon.wired"/>
 		<allow send_interface="org.freedesktop.DBus.Introspectable"/>
-        </policy>
-
-        <policy context="default">
-                <deny own="org.wicd.daemon"/>
         </policy>
 
 	<!-- This Unix group will have permission to use Wicd's gui -->

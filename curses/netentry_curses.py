@@ -140,6 +140,10 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
            not self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
+            # Strip addressses before checking them in the daemon.
+            for i in [self.dns1, self.dns2,
+                      self.dns3,self.dns_dom, self.search_dom, self.dns_dom]:
+                i.set_edit_text(i.get_edit_text().strip())
             self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_edit_text()))
             self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_edit_text()))
             self.set_net_prop("dns1", noneToString(self.dns1.get_edit_text()))

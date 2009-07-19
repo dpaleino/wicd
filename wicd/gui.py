@@ -274,7 +274,8 @@ class appGui(object):
         if response == 1:
             wireless.CreateAdHocNetwork(essid_entry.entry.get_text(),
                                         channel_entry.entry.get_text(),
-                                        ip_entry.entry.get_text(), "WEP",
+                                        ip_entry.entry.get_text().strip(),
+                                        "WEP",
                                         self.key_entry.entry.get_text(),
                                         self.chkbox_use_encryption.get_active(),
                                         False) #chkbox_use_ics.get_active())

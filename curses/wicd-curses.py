@@ -480,7 +480,7 @@ class AdHocDialog(Dialog2):
             self.view.keypress( size, k )
     def on_exit(self,exitcode):
         data = ( self.essid_edit.get_edit_text(),
-                 self.ip_edit.get_edit_text(),
+                 self.ip_edit.get_edit_text().strip(),
                  self.channel_edit.get_edit_text(),
                  self.use_ics_chkb.get_state(),
                  self.use_encrypt_chkb.get_state(),

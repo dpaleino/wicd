@@ -579,6 +579,7 @@ class appGui(object):
         
         # Required entries.
         for lblent in req_entlist:
+            lblent.set_text(lblent.get_text().strip())
             if not misc.IsValidIP(lblent.get_text()):
                 error(self.window, language['invalid_address'].
                                     replace('$A', lblent.label.get_label()))
@@ -586,6 +587,7 @@ class appGui(object):
         
         # Optional entries, only check for validity if they're entered.
         for lblent in opt_entlist:
+            lblent.set_text(lblent.get_text().strip())
             if lblent.get_text() and not misc.IsValidIP(lblent.get_text()):
                 error(self.window, language['invalid_address'].
                                     replace('$A', lblent.label.get_label()))

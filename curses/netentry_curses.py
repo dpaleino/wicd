@@ -128,6 +128,9 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
     def save_settings(self):
         """ Save settings common to wired and wireless settings dialogs. """
         if self.static_ip_cb.get_state():
+            for i in [self.ip_edit,self.netmask_edit,self.gateway_edit]:
+                i.set_edit_text(i.get_edit_text().strip())
+
             self.set_net_prop("ip", noneToString(self.ip_edit.get_edit_text()))
             self.set_net_prop("netmask", noneToString(self.netmask_edit.get_edit_text()))
             self.set_net_prop("gateway", noneToString(self.gateway_edit.get_edit_text()))
@@ -142,7 +145,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop('use_global_dns', False)
             # Strip addressses before checking them in the daemon.
             for i in [self.dns1, self.dns2,
-                      self.dns3,self.dns_dom, self.search_dom, self.dns_dom]:
+                      self.dns3,self.dns_dom_edit, self.search_dom_edit]:
                 i.set_edit_text(i.get_edit_text().strip())
             self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_edit_text()))
             self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_edit_text()))

@@ -209,9 +209,6 @@ class AdvancedSettingsDialog(gtk.Dialog):
     def save_settings(self):
         """ Save settings common to wired and wireless settings dialogs. """
         if self.chkbox_static_ip.get_active():
-        #    for i in [self.txt_ip,self.txt_netmask,self.txt_gateway ]:
-        #        i.set_text(i.get_text().strip())
-
             self.set_net_prop("ip", noneToString(self.txt_ip.get_text()))
             self.set_net_prop("netmask", noneToString(self.txt_netmask.get_text()))
             self.set_net_prop("gateway", noneToString(self.txt_gateway.get_text()))
@@ -224,10 +221,6 @@ class AdvancedSettingsDialog(gtk.Dialog):
            not self.chkbox_global_dns.get_active():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
-            # Strip whitespace from DNS entries
-            #for i in [self.txt_domain, self.txt_search_dom,self.txt_dns_1,
-            #          self.txt_dns2,self.txt_dns3]:
-            #    i.set_text(i.get_text().strip())
             self.set_net_prop('dns_domain', noneToString(self.txt_domain.get_text()))
             self.set_net_prop("search_domain", noneToString(self.txt_search_dom.get_text()))
             self.set_net_prop("dns1", noneToString(self.txt_dns_1.get_text()))

@@ -729,6 +729,7 @@ Arguments:
 \t-n\t--no-tray\tRun wicd without the tray icon.
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
+\t-o\t--only-notifications\tDon't display anything except notifications.
 """ % wpath.version
 
 def setup_dbus(force=True):

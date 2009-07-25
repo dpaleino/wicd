@@ -1,35 +1,49 @@
-Wicd 1.6.x Branch
+Wicd 1.6.0 Branch
+1.6.2:
+	Minor Changes:
+	- Now deals better if the interface disappears while running
+	- Will now start if the global script directories don't exist
+	- Adhoc window will now work correctly
+	- PSK can be generated from non-ASCII characters
+	- Fix a minor wicd-curses crash while connecting during a scan
 
-Major Changes:
-- Improved tray icon and GUI images (thanks to Martin Sagastume)
-- Reorganized network list in the GUI for easier navigation
-- New experimental ioctl backend, which is more cpu-friendly than the 
-  previous one 
-- Added a curses client (thanks to Andrew Psaltis)
-- Added a right-click connection menu to the tray icon
-- Added options to specify a DNS domain and search domain for static networks
-- Reworked the Preferences menu to be more in line with GNOME standards
-- Added support for global scripts
-- Made it possible to have optional entries in encryption templates
-- Added ability to show libnotify notifications on status change
+1.6.1:
+	Minor Changes:
+	- User is told if the lack permission to access the daemon
+	- Support for wireless cards that don't report signal strength added
+	- Enhanced network configuration dialog title
 
-Minor Changes and Other Enhancements:
-- Better autoconnection behavior
-- Tray/GUI will survive the daemon being killed
-- Reasons for connection failures will now bubble back to the GUI
-- Add/remove wired profile system is now more user-friendly
-- Support for using resolvconf instead of directly editing /etc/resolv.conf
-- Wicd won't blindly kill dhcp clients / wpa_supplicant any more
-- Added an option to automatically switch from a wireless network to a wired 
-  one as soon as a cable is plugged in
-- Moved scanning to its own thread, which makes GUI and daemon more responsive
-  during scans
-- Made it possible to specify macros in script entries
-- The GUI will now display the encryption entry dialog if you attempt to 
-  connect to an encrypted network without entering a password
-- Static gateway entry is now optional
-- Passwords with leading or trailing whitespace are now stored properly
-- Many init/config script, man page, and setup.py fixes/updates, including
-  better autodetection of file placement with regard to sleep hooks and 
-  KDE autostart files (thanks to Robby Workman)
+1.6.0:
+	Major Changes:
+	- Improved tray icon and GUI images (thanks to Martin Sagastume)
+	- Reorganized network list in the GUI for easier navigation
+	- New experimental ioctl backend, which is more cpu-friendly than the 
+	  previous one 
+	- Added a curses client (thanks to Andrew Psaltis)
+	- Added a right-click connection menu to the tray icon
+	- Added options to specify a DNS domain and search domain for static networks
+	- Reworked the Preferences menu to be more in line with GNOME standards
+	- Added support for global scripts
+	- Made it possible to have optional entries in encryption templates
+	- Added ability to show libnotify notifications on status change
+
+	Minor Changes and Other Enhancements:
+	- Better autoconnection behavior
+	- Tray/GUI will survive the daemon being killed
+	- Reasons for connection failures will now bubble back to the GUI
+	- Add/remove wired profile system is now more user-friendly
+	- Support for using resolvconf instead of directly editing /etc/resolv.conf
+	- Wicd won't blindly kill dhcp clients / wpa_supplicant any more
+	- Added an option to automatically switch from a wireless network to a wired 
+	  one as soon as a cable is plugged in
+	- Moved scanning to its own thread, which makes GUI and daemon more responsive
+	  during scans
+	- Made it possible to specify macros in script entries
+	- The GUI will now display the encryption entry dialog if you attempt to 
+	  connect to an encrypted network without entering a password
+	- Static gateway entry is now optional
+	- Passwords with leading or trailing whitespace are now stored properly
+	- Many init/config script, man page, and setup.py fixes/updates, including
+	  better autodetection of file placement with regard to sleep hooks and 
+	  KDE autostart files (thanks to Robby Workman)
 

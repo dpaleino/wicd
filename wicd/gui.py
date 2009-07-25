@@ -642,7 +642,7 @@ class appGui(object):
             for entry_info in encryption_info.itervalues():
                 if entry_info[0].entry.get_text() == "" and \
                    entry_info[1] == 'required':
-                    error(self, "%s (%s)" % (language['encrypt_info_missing'], 
+                    error(self.window, "%s (%s)" % (language['encrypt_info_missing'], 
                                              entry_info[0].label.get_label())
                           )
                     return False
@@ -666,24 +666,28 @@ class appGui(object):
         """ Initiates the connection process in the daemon. """
         def handler(*args):
             self._connect_thread_started = True
-         
-        cancel_button = self.wTree.get_widget("cancel_button")
-        cancel_button.set_sensitive(True)
-        self.network_list.set_sensitive(False)
-        if self.statusID:
-            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
-        gobject.idle_add(self.set_status, language["disconnecting_active"])
-        gobject.idle_add(self.status_area.show_all)
-        self.wait_for_events()
-        self._connect_thread_started = False
+
+        def setup_interface_for_connection():
+            cancel_button = self.wTree.get_widget("cancel_button")
+            cancel_button.set_sensitive(True)
+            self.network_list.set_sensitive(False)
+            if self.statusID:
+                gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+            gobject.idle_add(self.set_status, language["disconnecting_active"])
+            gobject.idle_add(self.status_area.show_all)
+            self.wait_for_events()
+            self._connect_thread_started = False
+
         if nettype == "wireless":
             if not self.check_encryption_valid(networkid,
                                                networkentry.advanced_dialog):
-                self.edit_advanced(None, None, nettype, networkid, networkentry)
+                self.edit_advanced(None, nettype, networkid, networkentry)
                 return False
+            setup_interface_for_connection()
             wireless.ConnectWireless(networkid, reply_handler=handler,
                                      error_handler=handler)
         elif nettype == "wired":
+            setup_interface_for_connection()
             wired.ConnectWired(reply_handler=handler, error_handler=handler)
         
         gobject.source_remove(self.update_cb)

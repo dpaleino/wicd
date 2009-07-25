@@ -185,7 +185,7 @@ class ConnectionStatus(object):
             # try to reconnect.
             self.connection_lost_counter += 1
             print self.connection_lost_counter
-            if self.connection_lost_counter >= 4:
+            if self.connection_lost_counter >= 4 and daemon.GetAutoReconnect():
                 wireless.DisconnectWireless()
                 self.connection_lost_counter = 0
                 return False

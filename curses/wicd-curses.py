@@ -38,7 +38,6 @@ at least get a network connection.  Or those who don't like using X.  ;-)
 import warnings 
 warnings.filterwarnings("ignore","The popen2 module is deprecated.  Use the subprocess module.") 
 # UI stuff
-# This library is the only reason why I wrote this program.
 import urwid
 
 # DBus communication stuff
@@ -64,6 +63,7 @@ import netentry_curses
 from netentry_curses import WirelessSettingsDialog, WiredSettingsDialog,AdvancedSettingsDialog
 
 from optparse import OptionParser
+from os import system
 
 # Stuff about getting the script configurer running
 #from grp import getgrgid
@@ -72,7 +72,7 @@ from optparse import OptionParser
 #import logging
 #import logging.handler
 
-CURSES_REVNO=wpath.curses_revision
+CURSES_REV=wpath.curses_revision
 
 # Fix strings in wicd-curses
 from wicd.translations import language
@@ -145,7 +145,7 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
     if not network:
         return False
 
-    network = str(network)
+    network = unicode(network)
     if daemon.GetSignalDisplayType() == 0:
         strength = wireless.GetCurrentSignalStrength(iwconfig)
     else:
@@ -202,7 +202,7 @@ def about_dialog(body):
 # Modeled after htop's help
 def help_dialog(body):
     textT  = urwid.Text(('header','wicd-curses help'),'right') 
-    textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REVNO),' using wicd ',unicode(daemon.Hello()),'\n'])
+    textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REV),' using wicd ',unicode(daemon.Hello()),'\n'])
 
     textH = urwid.Text([
 "For more detailed help, consult the wicd-curses(8) man page.\n",
@@ -263,7 +263,7 @@ def run_configscript(parent,netname,nettype):
 # Translation needs to be changed to accomidate this text below.
 """You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
 
-Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
+Once there, you can adjust (or add) the "beforescript", "afterscript", "predisconnectscript" and "postdisconnectscript" variables as needed, to change the preconnect, postconnect, predisconnect and postdisconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
     dialog = TextDialog(theText,20,80)
     dialog.run(ui,parent)
     # This code works with many distributions, but not all of them.  So, to
@@ -826,18 +826,17 @@ class appGUI():
                         self.diag.ready_widgets(ui,self.frame)
                         self.frame.set_body(self.diag)
                     self.diag_type = 'conf'
-            # Guess what!  I actually need to put this here, else I'll have
-            # tons of references to self.frame lying around. ^_^
-            if "enter" in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option
-                    wid,pos  =  self.thePile.get_focus().get_focus()
-                    self.connect("wireless",pos)
-
+            if "enter" in keys or 'C' in keys:
+                if not self.scanning:
+                    focus = self.frame.body.get_focus()
+                    if focus == self.wiredCB:
+                        self.special = focus
+                        self.connect("wired",0)
+                    else:
+                        # wless list only other option, if it is around
+                        if self.wlessLB != self.no_wlan:
+                            wid,pos = self.thePile.get_focus().get_focus()
+                            self.connect("wireless",pos)
             if "esc" in keys:
                 # Force disconnect here if connection in progress
                 if self.connecting:
@@ -858,15 +857,6 @@ class appGUI():
                 return True
             if "A" in keys:
                 about_dialog(self.frame)
-            if "C" in keys:
-                focus = self.frame.body.get_focus()
-                if focus == self.wiredCB:
-                    self.special = focus
-                    self.connect("wired",0)
-                else:
-                    # wless list only other option
-                    wid,pos  =  self.thePile.get_focus().get_focus()
-                    self.connect("wireless",pos)
             if "I" in keys:
                 self.raise_hidden_network_dialog()
             if "H" in keys or 'h' in keys or '?' in keys:
@@ -1085,7 +1075,14 @@ setup_dbus()
 ##### MAIN ENTRY POINT
 ########################################
 if __name__ == '__main__':
-    parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REVNO,daemon.Hello()))
+    try:
+        parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()))
+    except Exception, e:
+        if "DBus.Error.AccessDenied" in e.get_dbus_name():
+            print language['access_denied_wc'].replace('$A','\033[1;34m'+wpath.wicd_group+'\033[0m')
+            sys.exit(1)
+        else:
+            raise
     parser.set_defaults(screen='raw',debug=False)
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")

@@ -49,6 +49,7 @@ AUTO = 0
 DHCLIENT = 1
 DHCPCD = 2
 PUMP = 3
+UDHCPC = 4
 
 # Link detection tools
 ETHTOOL = 1
@@ -181,6 +182,8 @@ def WriteLine(my_file, text):
 
 def ExecuteScripts(scripts_dir, verbose=False):
     """ Execute every executable file in a given directory. """
+    if not os.path.exists(scripts_dir):
+        return
     for obj in os.listdir(scripts_dir):
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):
@@ -446,7 +449,7 @@ def choose_sudo_prog(prog_num=0):
     paths = []
     
     if desktop_env == "kde":
-        progs = ["kdesu", "kdesudo", "ktusss"]
+        progs = ["kdesu", "kdesudo", "ktsuss"]
     else:
         progs = ["gksudo", "gksu", "ktsuss"]
         

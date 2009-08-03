@@ -33,10 +33,6 @@ def error(ui,parent,message):
     dialog = TextDialog(message,6,40,('important',"ERROR"))
     return dialog.run(ui,parent)
 
-# My savior.  :-)
-# Although I could have made this myself pretty easily, just want to give credit
-# where it's due.
-# http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
 class SelText(urwid.Text):
     """A selectable text widget. See urwid.Text."""
 
@@ -253,7 +249,7 @@ class ComboBoxException(Exception):
 # I based this off of the code found here:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
 # This is a hack/kludge.  It isn't without quirks, but it more or less works.
-# We need to wait for changes in urwid's Canvas controls before we can actually
+# We need to wait for changes in urwid's Canvas API before we can actually
 # make a real ComboBox.
 class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
@@ -333,9 +329,8 @@ class ComboBox(urwid.WidgetWrap):
         str,trash =  self.label.get_text()
 
         self.overlay = None
-        #w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc')
         self.cbox  = DynWrap(SelText(self.DOWN_ARROW),attrs=attrs,focus_attr=focus_attr)
-        # Unicode will kill me sooner or later.  ^_^
+        # Unicode will kill me sooner or later.
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
         else:
@@ -344,10 +339,9 @@ class ComboBox(urwid.WidgetWrap):
 
         # We need this to pick our keypresses
         self.use_enter = use_enter
-        # The Focus
+
         self.focus = focus
 
-        # The callback and friends
         self.callback = callback
         self.user_args = user_args
 
@@ -442,11 +436,6 @@ class Dialog2(urwid.WidgetWrap):
                        urwid.Divider()] )
        w = self.frame
        self.view = w
-       
-       # pad area around listbox
-       #w = urwid.Padding(w, ('fixed left',2), ('fixed right',2))
-       #w = urwid.Filler(w, ('fixed top',1), ('fixed bottom',1))
-       #w = urwid.AttrWrap(w, 'body')
 
     # buttons: tuple of name,exitcode
     def add_buttons(self, buttons):
@@ -503,8 +492,6 @@ class Dialog2(urwid.WidgetWrap):
 class TextDialog(Dialog2):
     def __init__(self, text, height, width, header=None,align='left'):
         l = [urwid.Text(text)]
-        #for line in text:
-        #    l.append( urwid.Text( line,align=align))
         body = urwid.ListBox(l)
         body = urwid.AttrWrap(body, 'body')
 
@@ -596,7 +583,6 @@ class OptCols(urwid.WidgetWrap):
                    else:
                        key += part
             
-            #theText = urwid.Text([(attrs[0],cmd[0]),(attrs[1],cmd[1])])
             if debug:
                 callback = self.debugClick
                 args = cmd[1]
@@ -608,9 +594,6 @@ class OptCols(urwid.WidgetWrap):
                 ('fixed',len(key)+1,urwid.Text((attrs[0],key+':')) ),
                               urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])],
                               callback,args)
-            #if i != len(tuples)-1:
-            #    textList.append(('fixed',maxlen,col))
-            #else: # The last one
             textList.append(col)
             i+=1
         if debug:
@@ -625,19 +608,3 @@ class OptCols(urwid.WidgetWrap):
     def mouse_event(self,size,event,button,x,y,focus):
         # Widgets are evenly long (as of current), so...
         return self._w.mouse_event(size,event,button,x,y,focus)
-        """
-        if self.debug:
-            if x > size[0]-10:
-                return
-            widsize = (size[0]-10)/len(self.callbacks)
-        else:
-            widsize = size[0]/len(self.callbacks)
-        widnum = x/widsize
-        if self.debug:
-            text = str(widnum)
-            if self.callbacks[widnum] == None:
-                text += " None"
-            self.debug.set_text(text)
-        elif self.callbacks[widnum] != None:
-            self.callbacks[widnum]()
-        """

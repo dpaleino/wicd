@@ -383,18 +383,25 @@ class WiredComboBox(ComboBox):
 
     def keypress(self,size,key):
         prev_focus = self.get_focus()[1]
-        key = self.__super.keypress(size,key)
-        if self.get_focus()[1] == len(self.list)-1:
-            dialog = InputDialog(('header',language["add_new_wired_profile"]),7,30)
-            
-            exitcode,name = dialog.run(ui,self.parent)
-            if exitcode == 0:
-                wired.CreateWiredNetworkProfile(name,False)
-                self.set_list(wired.GetWiredProfileList())
-                self.rebuild_combobox()
-            self.set_focus(prev_focus)
-        else:
-            wired.ReadWiredNetworkProfile(self.get_selected_profile())
+        key = ComboBox.keypress(self,size,key)
+        if key == ' ':
+            if self.get_focus()[1] == len(self.list)-1:
+                dialog = InputDialog(('header',language["add_new_wired_profile"]),7,30)
+                exitcode,name = dialog.run(ui,self.parent)
+                if exitcode == 0:
+                    name = name.strip()
+                    if not name:
+                        error(ui,self.parent,'Invalid profile name')
+                        self.set_focus(prev_focus)
+                        return key
+
+                    wired.CreateWiredNetworkProfile(name,False)
+                    self.set_list(wired.GetWiredProfileList())
+                    self.rebuild_combobox()
+                self.set_focus(prev_focus)
+            else:
+                print "updating..."
+                wired.ReadWiredNetworkProfile(self.get_selected_profile())
         if key == 'delete':
             if len(self.theList) == 1:
                 error(self.ui,self.parent,language["no_delete_last_profile"])

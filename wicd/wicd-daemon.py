@@ -1201,6 +1201,8 @@ class WirelessDaemon(dbus.service.Object):
         if cur_network["hidden"]:
             if cur_network.get("essid") in ["", "Hidden", "<hidden>", None]:
                 cur_network["essid"] = "<hidden>"
+            else:
+                cur_network['essid'] = self.config.get(section, 'essid')
         return "100: Loaded Profile"
 
     @dbus.service.method('org.wicd.daemon.wireless')

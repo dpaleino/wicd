@@ -84,7 +84,7 @@ class WicdDaemon(dbus.service.Object):
         self._debug_mode = bool(self.config.get("Settings", "debug_mode"))
         self.wifi = networking.Wireless(debug=self._debug_mode)
         self.wired = networking.Wired(debug=self._debug_mode)
-        self.wired_bus= WiredDaemon(bus_name, self, wired=self.wired)
+        self.wired_bus = WiredDaemon(bus_name, self, wired=self.wired)
         self.wireless_bus = WirelessDaemon(bus_name, self, wifi=self.wifi)
         self.forced_disconnect = False
         self.need_profile_chooser = False
@@ -518,7 +518,7 @@ class WicdDaemon(dbus.service.Object):
         # 1 = default profile
         # 2 = show list
         # 3 = last used profile
-        self.config.set("Settings","wired_connect_mode", int(method),
+        self.config.set("Settings", "wired_connect_mode", int(method),
                         write=True)
         self.wired_connect_mode = int(method)
         self.wired_bus.connect_mode = int(method)
@@ -856,7 +856,7 @@ class WicdDaemon(dbus.service.Object):
         """
         b_wired = self.wired_bus
         b_wifi = self.wireless_bus
-        app_conf= self.config
+        app_conf = self.config
         # Load the backend.
         be_def = 'external'
         self.SetBackend(app_conf.get("Settings", "backend", default=be_def))
@@ -880,7 +880,7 @@ class WicdDaemon(dbus.service.Object):
         dns1 = app_conf.get("Settings", "global_dns_1", default='None')
         dns2 = app_conf.get("Settings", "global_dns_2", default='None')
         dns3 = app_conf.get("Settings", "global_dns_3", default='None')
-        dns_dom =app_conf.get("Settings", "global_dns_dom", default='None')
+        dns_dom = app_conf.get("Settings", "global_dns_dom", default='None')
         search_dom = app_conf.get("Settings", "global_search_dom", default='None')
         self.SetGlobalDNS(dns1, dns2, dns3, dns_dom, search_dom)
         self.SetAutoReconnect(app_conf.get("Settings", "auto_reconnect",
@@ -1201,6 +1201,8 @@ class WirelessDaemon(dbus.service.Object):
         if cur_network["hidden"]:
             if cur_network.get("essid") in ["", "Hidden", "<hidden>", None]:
                 cur_network["essid"] = "<hidden>"
+            else:
+                cur_network['essid'] = self.config.get(section, 'essid')
         return "100: Loaded Profile"
 
     @dbus.service.method('org.wicd.daemon.wireless')
@@ -1448,7 +1450,7 @@ class WiredDaemon(dbus.service.Object):
         if self.config.has_section(profilename):
             return False
 
-        for option in ["ip", "broadcast", "netmask","gateway", "search_domain", 
+        for option in ["ip", "broadcast", "netmask", "gateway", "search_domain", 
                        "dns_domain", "dns1", "dns2", "dns3", "beforescript", 
                        "afterscript", "predisconnectscript",
                        "postdisconnectscript"]:
@@ -1506,8 +1508,10 @@ class WiredDaemon(dbus.service.Object):
             if not self.config.has_option(prof, script):
                 self.config.set(prof, script, None)
 
-        if profilename == "":
+        profilename = profilename.strip()
+        if not profilename:
             self.config.write()
+            print "Warning: Bad wired profile name given, ignoring."
             return "500: Bad Profile name"
         if self.debug_mode:
             print "saving wired profile %s" % profilename

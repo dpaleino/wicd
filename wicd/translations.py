@@ -44,11 +44,10 @@ def get_gettext():
         lc, encoding = locale.getdefaultlocale(envvars=('LC_MESSAGES', 
                                                         'LC_ALL', 'LANG', 
                                                         'LANGUAGE'))
+        langs += [lc]
     except ValueError, e:
         print str(e)
         print "Default locale unavailable, falling back to en_US"
-    if (lc):
-        langs += [lc]
     langs += ["en_US"]
     lang = gettext.translation('wicd', local_path, languages=langs, 
                                fallback=True)

@@ -288,7 +288,7 @@ class WirelessInterface(Interface, BaseWirelessInterface):
         try:
             results = self.scan_iface.Scan()
         except iwscan.error, e:
-            print "ERROR: %s"
+            print "ERROR: %s" % e
             return []
         return filter(None, [self._parse_ap(cell) for cell in results])
 

@@ -919,14 +919,7 @@ class appGUI():
     def update_ui(self,from_key=True,from_alarm=False):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
-        ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
-        # It looks like if I want to get the statusbar to update itself
-        # continuously, I would have to use overlay the canvasses and redirect
-        # the input.  I'll try to get that working at a later time, if people
-        # want that "feature".
-        #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
-        # If the screen is turned off for some reason, don't even try to do the
-        # rest of the stuff.
+
         if not ui._started:
             return False
         # Update the screen
@@ -940,10 +933,11 @@ class appGUI():
         if self.update_tag != None:
             gobject.source_remove(self.update_tag)
         if max_wait == None:
-            max_wait = 100
+            max_wait = 25
         else:
-            max_wait *= 1000
+            max_wait *= 100
 
+        max_wait = int(max_wait)
         self.update_tag = gobject.timeout_add(max_wait, \
                 self.update_ui,False,True)
         #print keys

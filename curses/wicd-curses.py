@@ -706,7 +706,7 @@ class appGUI():
         if self.connecting: 
             if not self.conn_status:
                 self.conn_status = True
-                gobject.idle_add(self.set_connecting_status,fast)
+                gobject.timeout_add(250,self.set_connecting_status,fast)
             return True
         else:
             if check_for_wired(wired.GetWiredIP(''),self.set_status):

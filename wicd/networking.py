@@ -205,10 +205,10 @@ class Controller(object):
         """ Disconnect from the network. """
         iface = self.iface
         # mac and name need to be strings
-        if mac == None:
-            mac = ''
-        if name == None:
-            name = ''
+        if mac in (None, ''):
+            mac = 'X'
+        if name in (None, ''):
+            name = 'X'
         misc.ExecuteScripts(wpath.predisconnectscripts, self.debug,
                            extra_parameters=(nettype, name, mac))
         if self.pre_disconnect_script:

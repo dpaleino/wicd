@@ -194,7 +194,11 @@ def ExecuteScript(script, verbose=False, extra_parameters=()):
     """ Execute a command and send its output to the bit bucket. """
     if verbose:
         print "Executing %s with params %s" % (script, ' '.join(extra_parameters))
-    ret = call("%s %s > /dev/null 2>&1" % (script, ' '.join(extra_parameters)), shell=True)
+    extra_parameters = [ s.replace('"', '\\"') for s in extra_parameters ]
+    # escape characters
+    params = '" "'.join(extra_parameters)
+    script = script.replace(' ', '\\ ')
+    ret = call('%s "%s" > /dev/null 2>&1' % (script, params), shell=True)
     if verbose:
         print "%s returned %s" % (script, ret)
 

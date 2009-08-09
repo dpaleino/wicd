@@ -100,7 +100,7 @@ class PreferencesDialog(object):
         sudo_list = [self.sudoautoradio, self.gksudoradio, self.kdesuradio,
                      self.ktsussradio]
         self._setup_external_app_radios(sudo_list, daemon.GetSudoApp,
-                                        daemon.SetAudoApp)
+                                        daemon.SetSudoApp)
         
         auto_conn_meth = daemon.GetWiredAutoConnectMethod()
         if auto_conn_meth == 1:

@@ -88,7 +88,7 @@ def catchdbus(func):
             return func(*args, **kwargs)
         except DBusException, e:
             if e.get_dbus_name() != None and "DBus.Error.AccessDenied" in e.get_dbus_name():
-                error(None, language['access_denied'])
+                error(None, language['access_denied'].replace("$A","<b>"+wpath.wicd_group+"</b>"))
                 #raise
                 raise DBusException(e)
             else:
@@ -121,13 +121,15 @@ class TrayIcon(object):
     Base Class for implementing a tray icon to display network status.
     
     """
-    def __init__(self, animate):
+    def __init__(self, animate, displaytray=True):
         if USE_EGG:
             self.tr = self.EggTrayIconGUI()
         else:
             self.tr = self.StatusTrayIconGUI()
         self.icon_info = self.TrayConnectionInfo(self.tr, animate)
         self.tr.icon_info = self.icon_info
+        print 'displaytray %s' % displaytray
+        self.tr.visible(displaytray)
         
     def is_embedded(self):
         if USE_EGG:
@@ -666,6 +668,18 @@ class TrayIcon(object):
                 """
                 self.tooltip.set_tip(self.eb, val)
 
+            def visible(self, val):
+                """ Set if the icon is visible or not.
+
+                If val is True, makes the icon visible, if val is False,
+                hides the tray icon.
+
+                """
+                if val:
+                    self.tray.show_all()
+                else:
+                    self.tray.hide_all()
+
 
     if hasattr(gtk, "StatusIcon"):
         class StatusTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
@@ -696,6 +710,14 @@ class TrayIcon(object):
                     self.current_icon_path = path
                     gtk.StatusIcon.set_from_file(self, path)
 
+            def visible(self, val):
+                """ Set if the icon is visible or not.
+
+                If val is True, makes the icon visible, if val is False,
+                hides the tray icon.
+
+                """
+                self.set_visible(val)
 
 def usage():
     """ Print usage information. """
@@ -707,6 +729,7 @@ Arguments:
 \t-n\t--no-tray\tRun wicd without the tray icon.
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
+\t-o\t--only-notifications\tDon't display anything except notifications.
 """ % wpath.version
 
 def setup_dbus(force=True):
@@ -764,8 +787,9 @@ def main(argv):
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'nha', ['help', 'no-tray',
-                                                         'no-animate'])
+        opts, args = getopt.getopt(sys.argv[1:], 'nhao', ['help', 'no-tray',
+                                                         'no-animate',
+                                                         'only-notifications'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -773,6 +797,7 @@ def main(argv):
 
     use_tray = True
     animate = True
+    display_app = True
     for opt, a in opts:
         if opt in ('-h', '--help'):
             usage()
@@ -781,6 +806,10 @@ def main(argv):
             use_tray = False
         elif opt in ('-a', '--no-animate'):
             animate = False
+        elif opt in ('-o', '--only-notifications'):
+            print "only displaying notifications"
+            use_tray = False
+            display_app = False
         else:
             usage()
             sys.exit(2)
@@ -789,14 +818,14 @@ def main(argv):
     setup_dbus()
     atexit.register(on_exit)
     
-    if not use_tray or not ICON_AVAIL:
+    if display_app and not use_tray or not ICON_AVAIL:
         the_gui = gui.appGui(standalone=True)
         mainloop = gobject.MainLoop()
         mainloop.run()
         sys.exit(0)
 
     # Set up the tray icon GUI and backend
-    tray_icon = TrayIcon(animate)
+    tray_icon = TrayIcon(animate, displaytray=display_app)
 
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).

@@ -729,7 +729,7 @@ class Wireless(Controller):
         wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Stopping dhcp client and wpa_supplicant'
-        BACKEND.ReleaseDHCP()
+        wiface.ReleaseDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()
@@ -880,7 +880,8 @@ class WirelessConnectThread(ConnectThread):
         if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
             if not wiface.ValidateAuthentication(time.time()):
-                if not self.connect_result:
+                print "connect result is %s" % self.connect_result
+                if not self.connect_result or self.connect_result == 'Failed':
                     self.abort_connection('bad_pass')
 
         # Set up gateway, IP address, and DNS servers.

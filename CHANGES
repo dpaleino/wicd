@@ -1,4 +1,131 @@
 ------------------------------------------------------------
+revno: 434
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-07-05 08:51:39 -1000
+message:
+  updated translations.py
+------------------------------------------------------------
+revno: 433
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-07-05 14:42:39 -0400
+message:
+  Actually tell the user that he may need to be in wpath.wicd_group if wicd-clientgets an access-denied error.
+------------------------------------------------------------
+revno: 432
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-07-05 08:16:59 -1000
+message:
+  check to see if the interface exists in the decorator
+------------------------------------------------------------
+revno: 431
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Thu 2009-07-02 18:26:37 -0400
+message:
+  Make sure we run to_unicode on all properties we read from disk or get from the user (bug 390680).
+  Don't try to run global scripts of the global script directory doesn't exist (bug 386244).
+------------------------------------------------------------
+revno: 430
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Thu 2009-07-02 16:50:48 -0400
+message:
+  Fix crash when trying to create an ad-hoc network.
+------------------------------------------------------------
+revno: 429
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-06-30 22:58:44 -0400
+message:
+  Merged r353 of 1.6-nacl.
+    ------------------------------------------------------------
+    revno: 202.2.62
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Tue 2009-06-30 22:43:17 -0400
+    message:
+      Background wicd's startup in Slackware's initscript.
+    ------------------------------------------------------------
+    revno: 202.2.61
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Tue 2009-06-30 21:51:33 -0400
+    message:
+      Fix a small unicode problem in wicd-curses that caused a crash in Debian Lenny.
+------------------------------------------------------------
+revno: 428
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-06-24 19:14:43 -0400
+message:
+  Merge bugfixes from r351 of 1.6-nacl, thanks to comfrey in #wicd for noticing them.
+    ------------------------------------------------------------
+    revno: 202.2.60
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Wed 2009-06-24 19:10:30 -0400
+    message:
+      Do nothing if the user makes a connection attempt while scanning.
+    ------------------------------------------------------------
+    revno: 202.2.59
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Wed 2009-06-24 18:44:29 -0400
+    message:
+      Do nothing in wicd-curses if there are no networks present.
+    ------------------------------------------------------------
+    revno: 202.2.58
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Wed 2009-06-24 18:43:58 -0400
+    message:
+      Merged r417 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.57
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Sun 2009-06-21 14:07:22 -0400
+    message:
+      Merged r426 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.56
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Fri 2009-06-19 23:20:29 -0400
+    message:
+      Merge r417 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.55
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Wed 2009-06-17 20:52:59 -0400
+    message:
+      Merge r416 of mainline 1.6.
+    ------------------------------------------------------------
+    revno: 202.2.54
+    committer: Andrew Psaltis <ampsaltis@gmail.com>
+    branch nick: 1.6-nacl
+    timestamp: Sun 2009-06-07 14:53:04 -0400
+    message:
+      Merge 411 of mainline 1.6.
+------------------------------------------------------------
+revno: 427
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-06-21 14:45:44 -0400
+message:
+  Fix typo that crashes wicd-curses on attempting to bring up the help dialog.
+------------------------------------------------------------
+revno: 426
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-06-20 23:02:23 -0500
+message:
+  updated setup.py version and CHANGES
+------------------------------------------------------------
 revno: 425
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6

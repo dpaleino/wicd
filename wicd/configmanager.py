@@ -111,12 +111,12 @@ class ConfigManager(RawConfigParser):
         except (ValueError, TypeError, AttributeError):
             ret = Noneify(ret)
         # This is a workaround for a python-dbus issue on 64-bit systems.
-        if isinstance(ret, (int)):
+        if isinstance(ret, (int, long)):
             try:
                 Int32(ret)
             except OverflowError:
-                ret = long(ret)
-        return ret
+                ret = str(ret)
+        return to_unicode(ret)
     
     def get(self, *args, **kargs):
         """ Calls the get_option method """

@@ -655,17 +655,16 @@ class WiredNetworkEntry(NetworkEntry):
             
     def add_profile(self, widget):
         """ Add a profile to the profile list. """
-        print "adding profile"
-
         response = string_input("Enter a profile name", "The profile name " +
                                   "will not be used by the computer. It " +
                                   "allows you to " + 
                                   "easily distinguish between different network " +
-                                  "profiles.", "Profile name:")
+                                  "profiles.", "Profile name:").strip()
 
         # if response is "" or None
         if not response:
-            return
+            error(None, "Invalid profile name", block=True)
+            return False
 
         profile_name = response
         profile_list = wired.GetWiredProfileList()

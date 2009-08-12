@@ -178,8 +178,8 @@ class ConnectionStatus(object):
         if not bssid:
             return False
 
-        wifi_signal = self._get_printable_sig_strength()
-        if wifi_signal == 0:
+        wifi_signal = self._get_printable_sig_strength(always_positive=True)
+        if wifi_signal <= 0:
             # If we have no signal, increment connection loss counter.
             # If we haven't gotten any signal 4 runs in a row (12 seconds),
             # try to reconnect.
@@ -296,13 +296,20 @@ class ConnectionStatus(object):
         self.last_state = state
         return True
 
-    def _get_printable_sig_strength(self):
+    def _get_printable_sig_strength(self, always_positive=False):
         """ Get the correct signal strength format. """
         try:
             if daemon.GetSignalDisplayType() == 0:
                 wifi_signal = int(wireless.GetCurrentSignalStrength(self.iwconfig))
             else:
-                wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                if always_positive:
+                    # because dBm is negative, add 99 to the signal. This way, if
+                    # the signal drops below -99, wifi_signal will == 0, and
+                    # an automatic reconnect will be triggered
+                    # this is only used in check_for_wireless_connection
+                    wifi_signal = 99 + int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                else:
+                    wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
         except TypeError:
             wifi_signal = 0        
 

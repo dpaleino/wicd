@@ -59,7 +59,7 @@ wpa2_pattern = re.compile('(WPA2)', _re_mode)
 #iwconfig-only regular expressions.
 ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
 bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', _re_mode)
-bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', _re_mode)
+bitrate_pattern = re.compile('.*Bit Rate[=:](.*?/s)', _re_mode)
 opmode_pattern = re.compile('.*Mode:(.*?) ', _re_mode)
 authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', _re_mode)
 

@@ -13,8 +13,8 @@ class WirelessInterface() -- Control a wireless network interface.
 """
 
 #
-#   Copyright (C) 2008 Adam Blackburn
-#   Copyright (C) 2008 Dan O'Reilly
+#   Copyright (C) 2008-2009 Adam Blackburn
+#   Copyright (C) 2008-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -29,15 +29,10 @@ class WirelessInterface() -- Control a wireless network interface.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from wicd import misc
-from wicd import wnettools
-from wicd.wnettools import *
-import re
-import os
-import os.path
+from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
+GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
+BaseWiredInterface, BaseInterface
 
-# Regular expressions for wpa_cli output
-auth_patten = re.compile('.*wpa_state=(.*?)\n', wnettools.__re_mode)
 NAME = "external"
 UPDATE_INTERVAL = 5
 DESCRIPTION = """External app (original) backend
@@ -49,15 +44,13 @@ it doesn't require any third party libraries and may be
 more stable for some set ups.
 """
 
-RALINK_DRIVER = 'ralink legacy'
-
 
 def NeedsExternalCalls(*args, **kargs):
-    """ Return True, since this backend using iwconfig/ifconfig. """
+    """ Return True, since this backend uses iwconfig/ifconfig. """
     return True
 
 
-class Interface(wnettools.BaseInterface):
+class Interface(BaseInterface):
     """ Control a network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialize the object.
@@ -67,11 +60,11 @@ class Interface(wnettools.BaseInterface):
         verbose -- whether to print every command run
 
         """
-        wnettools.BaseInterface.__init__(self, iface, verbose)
+        BaseInterface.__init__(self, iface, verbose)
         self.Check()
     
 
-class WiredInterface(Interface, wnettools.BaseWiredInterface):
+class WiredInterface(Interface, BaseWiredInterface):
     """ Control a wired network interface. """
     def __init__(self, iface, verbose=False):
         """ Initialise the wired network interface class.
@@ -81,11 +74,11 @@ class WiredInterface(Interface, wnettools.BaseWiredInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWiredInterface.__init__(self, iface, verbose)
+        BaseWiredInterface.__init__(self, iface, verbose)
         Interface.__init__(self, iface, verbose)
 
 
-class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
+class WirelessInterface(Interface, BaseWirelessInterface):
     """ Control a wireless network interface. """
     def __init__(self, iface, verbose=False, wpa_driver='wext'):
         """ Initialise the wireless network interface class.
@@ -95,7 +88,5 @@ class WirelessInterface(Interface, wnettools.BaseWirelessInterface):
         verbose -- print all commands
 
         """
-        wnettools.BaseWirelessInterface.__init__(self, iface, verbose, 
-                                                 wpa_driver)
+        BaseWirelessInterface.__init__(self, iface, verbose, wpa_driver)
         Interface.__init__(self, iface, verbose)
-

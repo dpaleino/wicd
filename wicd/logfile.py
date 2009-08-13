@@ -2,7 +2,7 @@
 
 #
 #    Copyright (C) 1999-2006  Keith Dart <keith@kdart.com>
-#    Copyright (C) 2008       Dan O'Reilly <oreilldf@gmail.com>
+#    Copyright (C) 2008-2009  Dan O'Reilly <oreilldf@gmail.com>
 #
 #    This library is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU Lesser General Public
@@ -24,8 +24,6 @@ rotates itself when a maximum size is reached.
 import sys
 import os
 import time
-
-import wicd.wpath as wpath
 
 class SizeError(IOError):
     pass

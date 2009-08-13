@@ -38,7 +38,8 @@ language = {}
 language['configure_scripts'] = _("Configure Scripts")
 language['before_script'] = _("Pre-connection Script")
 language['after_script'] = _("Post-connection Script")
-language['disconnect_script'] = _("Disconnection Script")
+language['pre_disconnect_script'] = _("Pre-disconnection Script")
+language['post_disconnect_script'] = _("Post-disconnection Script")
 
 def main(argv):
     global ui,frame
@@ -62,16 +63,19 @@ def main(argv):
     blank = urwid.Text('')
     pre_entry_t = ('body',language['before_script']+': ')
     post_entry_t  = ('body',language['after_script']+': ')
-    disconnect_entry_t = ('body',language['disconnect_script']+': ')
+    pre_disconnect_entry_t = ('body',language['pre_disconnect_script']+': ')
+    post_disconnect_entry_t = ('body',language['post_disconnect_script']+': ')
 
-    global pre_entry,post_entry,disconnect_entry
+    global pre_entry,post_entry,pre_disconnect_entry,post_disconnect_entry
     pre_entry  = urwid.AttrWrap(urwid.Edit(pre_entry_t,
             none_to_blank(script_info.get('pre_entry'))),'editbx','editfc' )
     post_entry  = urwid.AttrWrap(urwid.Edit(post_entry_t,
             none_to_blank(script_info.get('post_entry'))),'editbx','editfc' )
 
-    disconnect_entry  = urwid.AttrWrap(urwid.Edit(disconnect_entry_t,
-            none_to_blank(script_info.get('disconnect_entry'))),'editbx','editfc' )
+    pre_disconnect_entry  = urwid.AttrWrap(urwid.Edit(pre_disconnect_entry_t,
+            none_to_blank(script_info.get('pre_disconnect_entry'))),'editbx','editfc' )
+    post_disconnect_entry  = urwid.AttrWrap(urwid.Edit(post_disconnect_entry_t,
+            none_to_blank(script_info.get('post_disconnect_entry'))),'editbx','editfc' )
 
     # The buttons
     ok_button = urwid.AttrWrap(urwid.Button('OK',ok_callback),'body','focus')
@@ -82,7 +86,8 @@ def main(argv):
     lbox = urwid.Pile([('fixed',2,urwid.Filler(pre_entry)),
                        #('fixed',urwid.Filler(blank),1),
                        ('fixed',2,urwid.Filler(post_entry)),
-                       ('fixed',2,urwid.Filler(disconnect_entry)),
+                       ('fixed',2,urwid.Filler(pre_disconnect_entry)),
+                       ('fixed',2,urwid.Filler(post_disconnect_entry)),
                        #blank,blank,blank,blank,blank,
                        urwid.Filler(button_cols,'bottom')
                        ])
@@ -92,7 +97,8 @@ def main(argv):
     if result == True:
         script_info["pre_entry"] = blank_to_none(pre_entry.get_edit_text())
         script_info["post_entry"] = blank_to_none(post_entry.get_edit_text())
-        script_info["disconnect_entry"] = blank_to_none(disconnect_entry.get_edit_text())
+        script_info["pre_disconnect_entry"] = blank_to_none(pre_disconnect_entry.get_edit_text())
+        script_info["post_disconnect_entry"] = blank_to_none(post_disconnect_entry.get_edit_text())
         write_scripts(network, network_type, script_info)
 
 OK_PRESSED = False

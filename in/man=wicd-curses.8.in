@@ -1,5 +1,5 @@
 .\" First revision was r203
-.TH WICD-CURSES "8" "February 2009" "wicd-curses-%CURSES_REVNO%"
+.TH WICD-CURSES "8" "April 2009" "wicd-curses-%CURSES_REVNO%"
 .SH NAME
 .B wicd-curses
 \- curses-based wicd(8) controller
@@ -23,7 +23,7 @@ language of choice only uses Latin characters.
 .SH CONTROLS
 All of these are case sensitive.
 .TP
-.BR enter
+.BR "C " or " enter"
 Connect to selected network
 .TP
 .BR "F8 " or " Q " or " q"
@@ -52,7 +52,7 @@ Raise the "About wicd-curses" dialog
 .\".PP
 .\"The following is a work in progress and might not be fully functional as of yet.
 .TP
-.BR C
+.BR "right-arrow"
 Bring up network configuration controller for the selected network
 .TP
 .BR delete

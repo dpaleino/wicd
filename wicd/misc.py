@@ -1,8 +1,13 @@
-""" Misc - miscellaneous functions for wicd """
+""" misc - miscellaneous functions for wicd
+
+This module contains a large variety of utility functions used
+throughout wicd.
+
+"""
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -44,6 +49,7 @@ AUTO = 0
 DHCLIENT = 1
 DHCPCD = 2
 PUMP = 3
+UDHCPC = 4
 
 # Link detection tools
 ETHTOOL = 1
@@ -68,7 +74,6 @@ class WicdError(Exception):
     pass
     
 
-__LANG = None
 def Run(cmd, include_stderr=False, return_pipe=False,
         return_obj=False, return_retcode=True):
     """ Run a command.
@@ -88,7 +93,6 @@ def Run(cmd, include_stderr=False, return_pipe=False,
                  for the command that was run.
 
     """
-    global __LANG
     if not isinstance(cmd, list):
         cmd = to_unicode(str(cmd))
         cmd = cmd.split()
@@ -105,11 +109,9 @@ def Run(cmd, include_stderr=False, return_pipe=False,
     
     # We need to make sure that the results of the command we run
     # are in English, so we set up a temporary environment.
-    if not __LANG:
-        __LANG = get_good_lang()
     tmpenv = os.environ.copy()
-    tmpenv["LC_ALL"] = __LANG
-    tmpenv["LANG"] = __LANG
+    tmpenv["LC_ALL"] = "C"
+    tmpenv["LANG"] = "C"
     
     try:
         f = Popen(cmd, shell=False, stdout=PIPE, stdin=std_in, stderr=err,
@@ -118,21 +120,12 @@ def Run(cmd, include_stderr=False, return_pipe=False,
         print "Running command %s failed: %s" % (str(cmd), str(e))
         return ""
         
-    
     if return_obj:
         return f
     if return_pipe:
         return f.stdout
     else:
         return f.communicate()[0]
-    
-def get_good_lang():
-    """ Check if en_US.utf8 is an available locale, if not use C. """
-    output = Popen(["locale", "-a"], shell=False, stdout=PIPE).communicate()[0]
-    if "en_US.utf8" in output:
-        return "en_US.utf8"
-    else:
-        return "C"
     
 def LaunchAndWait(cmd):
     """ Launches the given program with the given arguments, then blocks.
@@ -163,6 +156,8 @@ def PromptToStartDaemon():
     """ Prompt the user to start the daemon """
     daemonloc = wpath.sbin + 'wicd'
     sudo_prog = choose_sudo_prog()
+    if not sudo_prog:
+        return False
     if "gksu" in sudo_prog or "ktsuss" in sudo_prog:
         msg = '--message'
     else:
@@ -171,6 +166,7 @@ def PromptToStartDaemon():
                  'Wicd needs to access your computer\'s network cards.',
                  daemonloc]
     os.spawnvpe(os.P_WAIT, sudo_prog, sudo_args, os.environ)
+    return True
 
 def RunRegex(regex, string):
     """ runs a regex search on a string """
@@ -186,6 +182,8 @@ def WriteLine(my_file, text):
 
 def ExecuteScripts(scripts_dir, verbose=False):
     """ Execute every executable file in a given directory. """
+    if not os.path.exists(scripts_dir):
+        return
     for obj in os.listdir(scripts_dir):
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):
@@ -197,7 +195,7 @@ def ExecuteScript(script, verbose=False):
         print "Executing %s" % script
     ret = call("%s > /dev/null 2>&1" % script, shell=True)
     if verbose:
-        "%s returned %s" % (script, ret)
+        print "%s returned %s" % (script, ret)
 
 def ReadFile(filename):
     """ read in a file and return it's contents as a string """
@@ -256,7 +254,8 @@ def ParseEncryption(network):
                     else:
                         rep_val = network.get(cur_val[0].lower())
                         if rep_val:
-                            line = line.replace("$_%s" % cur_val[0], rep_val)
+                            line = line.replace("$_%s" % cur_val[0], 
+                                                str(rep_val))
                             config_file = ''.join([config_file, line])
                         else:
                             print "Ignoring template line: '%s'" % line
@@ -450,7 +449,7 @@ def choose_sudo_prog(prog_num=0):
     paths = []
     
     if desktop_env == "kde":
-        progs = ["kdesu", "kdesudo", "ktusss"]
+        progs = ["kdesu", "kdesudo", "ktsuss"]
     else:
         progs = ["gksudo", "gksu", "ktsuss"]
         
@@ -460,8 +459,7 @@ def choose_sudo_prog(prog_num=0):
     for path in paths:
         if os.path.exists(path):
             return path
-    
-    return None
+    return ""
 
 def find_path(cmd):
     """ Try to find a full path for a given file name. 
@@ -497,7 +495,7 @@ def stringToNone(text):
 def checkboxTextboxToggle(checkbox, textboxes):
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())
-        
+
 def threaded(f):
     """ A decorator that will make any function run in a new thread. """
 
@@ -547,4 +545,3 @@ def grouper(n, iterable, fillvalue=None):
     """
     args = [iter(iterable)] * n
     return izip_longest(fillvalue=fillvalue, *args)
-

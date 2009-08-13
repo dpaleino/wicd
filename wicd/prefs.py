@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-""" Wicd Preferences Dialog.
+""" prefs -- Wicd Preferences Dialog.
 
 Displays the main settings dialog window for wicd and
 handles recieving/sendings the settings from/to the daemon.
@@ -8,8 +8,8 @@ handles recieving/sendings the settings from/to the daemon.
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2008-2009 Adam Blackburn
+#   Copyright (C) 2008-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -26,7 +26,7 @@ handles recieving/sendings the settings from/to the daemon.
 
 import gtk
 import gobject
-import pango
+#import pango
 import os
 import gtk.glade
 
@@ -41,6 +41,8 @@ wired = None
 
 from translations import language
 
+USER_SETTINGS_DIR = os.path.expanduser('~/.wicd/')
+
 def setup_dbus():
     global daemon, wireless, wired
     daemon = dbusmanager.get_interface('daemon')
@@ -49,20 +51,18 @@ def setup_dbus():
 
 class PreferencesDialog(object):
     """ Class for handling the wicd preferences dialog window. """
-    def __init__(self, wTree):
+    def __init__(self, parent, wTree):
         setup_dbus()
+        self.parent = parent
         self.wTree = wTree
         self.prep_settings_diag()
         self.load_preferences_diag()
         
     def _setup_external_app_radios(self, radio_list, get_method, set_method):
         """ Generic function for setting up external app radios. """
-        def set_available(apps):
-            for app in apps:
-                app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
-        
         # Disable radios for apps that aren't installed.
-        set_available(radio_list[1:])
+        for app in radio_list[1:]:
+            app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
         selected_app = get_method()
         # Make sure the app we want to select is actually available.
         if radio_list[selected_app].get_property("sensitive"):
@@ -82,7 +82,7 @@ class PreferencesDialog(object):
         self.preferwiredcheckbox.set_active(daemon.GetPreferWiredNetwork())
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
-                     self.pumpradio]
+                     self.pumpradio, self.udhcpcradio]
         self._setup_external_app_radios(dhcp_list, daemon.GetDHCPClient,
                                         daemon.SetDHCPClient)
         
@@ -100,7 +100,7 @@ class PreferencesDialog(object):
         sudo_list = [self.sudoautoradio, self.gksudoradio, self.kdesuradio,
                      self.ktsussradio]
         self._setup_external_app_radios(sudo_list, daemon.GetSudoApp,
-                                        daemon.SetAudoApp)
+                                        daemon.SetSudoApp)
         
         auto_conn_meth = daemon.GetWiredAutoConnectMethod()
         if auto_conn_meth == 1:
@@ -144,6 +144,24 @@ class PreferencesDialog(object):
             self.backendcombo.set_active(self.backends.index(cur_backend))
         except ValueError:
             self.backendcombo.set_active(0)
+
+        self.notificationscheckbox.set_active(
+                os.path.exists(
+                    os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+                ))
+
+        # if pynotify isn't installed disable the option
+        try:
+            import pynotify
+        except ImportError:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.set_sensitive(False)
+
+        # if notifications were disabled with the configure flag
+        if wpath.no_use_notifications:
+            self.notificationscheckbox.set_active(False)
+            self.notificationscheckbox.hide()
+            self.wTree.get_widget('label2').hide()
         
         self.wTree.get_widget("notebook2").set_current_page(0)
         
@@ -192,8 +210,10 @@ class PreferencesDialog(object):
             dhcp_client = misc.DHCLIENT
         elif self.dhcpcdradio.get_active():
             dhcp_client = misc.DHCPCD
-        else:
+        elif self.pumpradio.get_active():
             dhcp_client = misc.PUMP
+        else:
+            dhcp_client = misc.UDHCPC
         daemon.SetDHCPClient(dhcp_client)
         
         if self.linkautoradio.get_active():
@@ -224,6 +244,19 @@ class PreferencesDialog(object):
 
         [width, height] = self.dialog.get_size()
         daemon.WriteWindowSize(width, height, "pref")
+        
+        not_path = os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
+        if self.notificationscheckbox.get_active():
+            if not os.path.exists(not_path):
+                open(not_path, 'w')
+        else:
+            if os.path.exists(not_path):
+                os.remove(not_path)
+        # if this GUI was started by a tray icon,
+        # instantly change the notifications there
+        if self.parent.tray:
+            self.parent.tray.icon_info.use_notify = \
+                                self.notificationscheckbox.get_active()
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
@@ -308,11 +341,15 @@ class PreferencesDialog(object):
                                                'use_last_used_profile')
 
             
+        self.notificationscheckbox = setup_label("pref_use_libnotify",
+                                             'display_notifications')
+
         # DHCP Clients
         self.dhcpautoradio = setup_label("dhcp_auto_radio", "wicd_auto_config")
         self.dhclientradio = self.wTree.get_widget("dhclient_radio")
         self.pumpradio = self.wTree.get_widget("pump_radio")
         self.dhcpcdradio = self.wTree.get_widget("dhcpcd_radio")
+        self.udhcpcradio = self.wTree.get_widget("udhcpc_radio")
         
         # Wired Link Detection Apps
         self.linkautoradio = setup_label("link_auto_radio", 'wicd_auto_config')

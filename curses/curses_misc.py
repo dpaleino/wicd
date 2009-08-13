@@ -33,10 +33,6 @@ def error(ui,parent,message):
     dialog = TextDialog(message,6,40,('important',"ERROR"))
     return dialog.run(ui,parent)
 
-# My savior.  :-)
-# Although I could have made this myself pretty easily, just want to give credit
-# where it's due.
-# http://excess.org/urwid/browser/contrib/trunk/rbreu_filechooser.py
 class SelText(urwid.Text):
     """A selectable text widget. See urwid.Text."""
 
@@ -49,7 +45,12 @@ class SelText(urwid.Text):
         """Don't handle any keys."""
         return key
 
-# This class is annoying.  ^_^
+# ListBox that can't be selected.
+class NSelListBox(urwid.ListBox):
+    def selectable(self):
+        return False
+
+# This class is annoying.  :/
 class DynWrap(urwid.AttrWrap):
     """
     Makes an object have mutable selectivity.  Attributes will change like
@@ -102,6 +103,12 @@ class DynIntEdit(DynWrap):
         edit = urwid.IntEdit(caption,edit_text)
         self.__super.__init__(edit,sensitive,attrs,focus_attr)
 
+class DynRadioButton(DynWrap):
+    def __init__(self,group,label,state='first True',on_state_change=None, user_data=None, sensitive=True, attrs=('body','editnfc'),focus_attr='body'):
+        #caption = ('editcp',caption + ':')
+        button = urwid.RadioButton(group,label,state,on_state_change,user_data)
+        self.__super.__init__(button,sensitive,attrs,focus_attr)
+
 class MaskingEditException(Exception):
     pass
 
@@ -123,6 +130,8 @@ class MaskingEdit(urwid.Edit):
         self.mask_char = mask_char
         self.__super.__init__(caption,edit_text,multiline,align,wrap,allow_tab,edit_pos,layout)
 
+    def get_caption(self):
+        return self.caption
     def get_mask_mode(self):
         return self.mask_mode
     def set_mask_mode(self,mode):
@@ -136,7 +145,8 @@ class MaskingEdit(urwid.Edit):
         Render edit widget and return canvas.  Include cursor when in
         focus.
         """
-        # If we aren't masking anything ATM, then act like an Edit.  No problems.
+        # If we aren't masking anything ATM, then act like an Edit.
+        # No problems.
         if self.mask_mode == "off" or (self.mask_mode == 'no_focus' and focus == True):
             canv = self.__super.render((maxcol,),focus)
             # The cache messes this thing up, because I am totally changing what
@@ -165,9 +175,10 @@ class TabColumns(urwid.WidgetWrap):
     attr = normal attributes
     attrsel = attribute when active
     """
-    def __init__(self,tab_str,tab_wid,title,bottom_part,attr=('body','focus'),
+    # FIXME Make the bottom_part optional
+    def __init__(self,tab_str,tab_wid,title,bottom_part=None,attr=('body','focus'),
             attrsel='tab active', attrtitle='header'):
-        self.bottom_part = bottom_part
+        #self.bottom_part = bottom_part
         #title_wid = urwid.Text((attrtitle,title),align='right')
         column_list = []
         for w in tab_str:
@@ -189,7 +200,7 @@ class TabColumns(urwid.WidgetWrap):
         self.pile = urwid.Pile([
             ('fixed',1,urwid.Filler(self.columns,'top')),
             urwid.Filler(lbox,'top',height=('relative',99)),
-            ('fixed',1,urwid.Filler(self.bottom_part,'bottom'))
+            #('fixed',1,urwid.Filler(self.bottom_part,'bottom'))
             ])
         if not firstrun:
             self.frame.set_body(self.pile)
@@ -199,12 +210,13 @@ class TabColumns(urwid.WidgetWrap):
         return True
 
     def keypress(self,size,key):
-        self._w.keypress(size,key)
-        if key == "meta left" or key == "meta right":
+        if key == "meta [" or key == "meta ]":
             self._w.get_body().set_focus(0)
-            self.keypress(size,key[5:])
+            newK = 'left' if key[-1] == '[' else 'right'
+            self.keypress(size,newK)
             self._w.get_body().set_focus(1)
         else:
+            key = self._w.keypress(size,key)
             wid = self.pile.get_focus().get_body()
             if wid == self.columns:
             #    lw = self.listbox.body
@@ -213,8 +225,20 @@ class TabColumns(urwid.WidgetWrap):
                 self.columns.get_focus().set_attr('tab active')
                 self.active_tab = self.columns.get_focus()
                 self.gen_pile(self.tab_map[self.active_tab])
-            return key
+        
+        return key
         #    self.listbox.body = lw
+    def mouse_event(self,size,event,button,x,y,focus):
+        wid = self.pile.get_focus().get_body()
+        if wid == self.columns:
+            self.active_tab.set_attr('body')
+
+        self._w.mouse_event(size,event,button,x,y,focus)
+        if wid == self.columns:
+            self.active_tab.set_attr('body')
+            self.columns.get_focus().set_attr('tab active')
+            self.active_tab = self.columns.get_focus()
+            self.gen_pile(self.tab_map[self.active_tab])
 
 
 ### Combo box code begins here
@@ -225,7 +249,7 @@ class ComboBoxException(Exception):
 # I based this off of the code found here:
 # http://excess.org/urwid/browser/contrib/trunk/rbreu_menus.py
 # This is a hack/kludge.  It isn't without quirks, but it more or less works.
-# We need to wait for changes in urwid's Canvas controls before we can actually
+# We need to wait for changes in urwid's Canvas API before we can actually
 # make a real ComboBox.
 class ComboBox(urwid.WidgetWrap):
     """A ComboBox of text objects"""
@@ -296,6 +320,7 @@ class ComboBox(urwid.WidgetWrap):
         user_args : user_args in the callback
         """
         
+        self.DOWN_ARROW = '    vvv'
         self.label = urwid.Text(label)
         self.attrs = attrs
         self.focus_attr = focus_attr
@@ -304,9 +329,8 @@ class ComboBox(urwid.WidgetWrap):
         str,trash =  self.label.get_text()
 
         self.overlay = None
-        #w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc')
-        self.cbox  = DynWrap(SelText('    vvv'),attrs=attrs,focus_attr=focus_attr)
-        # Unicode will kill me sooner or later.  ^_^
+        self.cbox  = DynWrap(SelText(self.DOWN_ARROW),attrs=attrs,focus_attr=focus_attr)
+        # Unicode will kill me sooner or later.
         if label != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],dividechars=1)
         else:
@@ -315,10 +339,9 @@ class ComboBox(urwid.WidgetWrap):
 
         # We need this to pick our keypresses
         self.use_enter = use_enter
-        # The Focus
+
         self.focus = focus
 
-        # The callback and friends
         self.callback = callback
         self.user_args = user_args
 
@@ -331,7 +354,7 @@ class ComboBox(urwid.WidgetWrap):
 
     def set_focus(self,index):
         self.focus = index
-        self.cbox.set_w(SelText(self.list[index]+'    vvv'))
+        self.cbox.set_w(SelText(self.list[index]+self.DOWN_ARROW))
         if self.overlay:
             self.overlay._listbox.set_focus(index)
 
@@ -340,8 +363,7 @@ class ComboBox(urwid.WidgetWrap):
     def build_combobox(self,parent,ui,row):
         str,trash =  self.label.get_text()
 
-
-        self.cbox = DynWrap(SelText([self.list[self.focus]+'    vvv']),
+        self.cbox = DynWrap(SelText([self.list[self.focus]+self.DOWN_ARROW]),
                 attrs=self.attrs,focus_attr=self.focus_attr)
         if str != '':
             w = urwid.Columns([('fixed',len(str),self.label),self.cbox],
@@ -414,11 +436,6 @@ class Dialog2(urwid.WidgetWrap):
                        urwid.Divider()] )
        w = self.frame
        self.view = w
-       
-       # pad area around listbox
-       #w = urwid.Padding(w, ('fixed left',2), ('fixed right',2))
-       #w = urwid.Filler(w, ('fixed top',1), ('fixed bottom',1))
-       #w = urwid.AttrWrap(w, 'body')
 
     # buttons: tuple of name,exitcode
     def add_buttons(self, buttons):
@@ -438,7 +455,8 @@ class Dialog2(urwid.WidgetWrap):
     def run(self,ui,parent):
         ui.set_mouse_tracking()
         size = ui.get_cols_rows()
-        overlay = urwid.Overlay(urwid.LineBox(self.view), parent, 'center', self.width,
+        overlay = urwid.Overlay(urwid.LineBox(self.view),
+                                parent, 'center', self.width,
                                 'middle', self.height)
         try:
             while True:
@@ -474,8 +492,6 @@ class Dialog2(urwid.WidgetWrap):
 class TextDialog(Dialog2):
     def __init__(self, text, height, width, header=None,align='left'):
         l = [urwid.Text(text)]
-        #for line in text:
-        #    l.append( urwid.Text( line,align=align))
         body = urwid.ListBox(l)
         body = urwid.AttrWrap(body, 'body')
 
@@ -512,3 +528,83 @@ class InputDialog(Dialog2):
        
     def on_exit(self, exitcode):
         return exitcode, self.edit.get_edit_text()
+
+
+class ClickCols(urwid.WidgetWrap):
+    def __init__(self,items,callback=None,args=None):
+        cols = urwid.Columns(items)
+        self.__super.__init__(cols)
+        self.callback = callback
+        self.args = args
+    def mouse_event(self,size,event,button,x,y,focus):
+        if event == "mouse press":
+            # The keypress dealie in wicd-curses.py expects a list of keystrokes
+            self.callback([self.args])
+
+# htop-style menu menu-bar on the bottom of the screen
+class OptCols(urwid.WidgetWrap):
+    # tuples = [(key,desc)], on_event gets passed a key
+    # attrs = (attr_key,attr_desc)
+    # handler = function passed the key of the "button" pressed
+    # mentions of 'left' and right will be converted to <- and -> respectively
+    def __init__(self,tuples,handler,attrs=('body','infobar'),debug=False):
+        # Find the longest string.  Keys for this bar should be no greater than
+        # 2 characters long (e.g., -> for left)
+        #maxlen = 6
+        #for i in tuples:
+        #    newmax = len(i[0])+len(i[1])
+        #    if newmax > maxlen:
+        #        maxlen = newmax
+        
+        # Construct the texts
+        textList = []
+        i = 0
+        # callbacks map the text contents to its assigned callback.
+        self.callbacks = []
+        for cmd in tuples:
+            splitcmd = cmd[0].split()
+            key = ''
+            for part in splitcmd:
+                if part == 'ctrl':
+                    key+='Ctrl+'
+                elif part == 'meta':
+                    # If anyone has a problem with this, they can bother me
+                    # about it.
+                    key+='Alt+'
+                else:
+                   if part == 'left':
+                       key += '<-'
+                   elif part == 'right':
+                       key += '->'
+                   elif part == 'esc':
+                       key += 'ESC'
+                   elif part == 'enter':
+                       key += 'Enter'
+                   else:
+                       key += part
+            
+            if debug:
+                callback = self.debugClick
+                args = cmd[1]
+            else:
+                callback = handler
+                args = cmd[0]
+            #self.callbacks.append(cmd[2])
+            col = ClickCols([
+                ('fixed',len(key)+1,urwid.Text((attrs[0],key+':')) ),
+                              urwid.AttrWrap(urwid.Text(cmd[1]),attrs[1])],
+                              callback,args)
+            textList.append(col)
+            i+=1
+        if debug:
+            self.debug = urwid.Text("DEBUG_MODE")
+            textList.append(('fixed',10,self.debug))
+            
+        cols = urwid.Columns(textList)
+        self.__super.__init__(cols)
+    def debugClick(self,args):
+        self.debug.set_text(args)
+
+    def mouse_event(self,size,event,button,x,y,focus):
+        # Widgets are evenly long (as of current), so...
+        return self._w.mouse_event(size,event,button,x,y,focus)

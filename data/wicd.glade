@@ -1,25 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Sun Feb  1 21:38:09 2009 -->
+<?xml version="1.0"?>
 <glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy toplevel-contextual -->
   <widget class="GtkWindow" id="window1">
     <property name="width_request">450</property>
     <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="title" translatable="yes">Wicd Network Manager</property>
-    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="window_position">center</property>
     <property name="default_width">550</property>
-    <property name="gravity">GDK_GRAVITY_CENTER</property>
-    <signal name="destroy" handler="exit"/>
-    <signal name="delete_event" handler="exit"/>
+    <property name="gravity">center</property>
     <child>
       <widget class="GtkVBox" id="background_vbox">
         <property name="visible">True</property>
         <child>
           <widget class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
-            <property name="toolbar_style">GTK_TOOLBAR_BOTH_HORIZ</property>
-            <property name="icon_size">GTK_ICON_SIZE_MENU</property>
+            <property name="toolbar_style">both-horiz</property>
+            <property name="icon_size">0</property>
             <property name="icon_size_set">True</property>
             <child>
               <widget class="GtkToolItem" id="menubar">
@@ -31,8 +29,8 @@
                     <property name="visible">True</property>
                     <child>
                       <widget class="GtkImageMenuItem" id="network_menu">
+                        <property name="label">gtk-network</property>
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">gtk-network</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <child>
@@ -40,12 +38,12 @@
                             <property name="visible">True</property>
                             <child>
                               <widget class="GtkImageMenuItem" id="create_ad_hoc_button">
+                                <property name="label">Create an ad-hoc network</property>
                                 <property name="visible">True</property>
-                                <property name="label" translatable="yes">Create an ad-hoc network</property>
-                                <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="create_adhoc_clicked"/>
                                 <child internal-child="image">
-                                  <widget class="GtkImage" id="menu-item-image10">
+                                  <widget class="GtkImage" id="image1">
                                     <property name="visible">True</property>
                                     <property name="stock">gtk-add</property>
                                   </widget>
@@ -54,15 +52,15 @@
                             </child>
                             <child>
                               <widget class="GtkImageMenuItem" id="find_hidden_button">
+                                <property name="label">Find a hidden network</property>
                                 <property name="visible">True</property>
                                 <property name="tooltip" translatable="yes">Enter a hidden network to try to locate.</property>
-                                <property name="label" translatable="yes">Find a hidden network</property>
-                                <property name="use_underline">True</property>
+                                <property name="use_stock">False</property>
                                 <signal name="activate" handler="hidden_clicked"/>
                                 <child internal-child="image">
-                                  <widget class="GtkImage" id="menu-item-image9">
+                                  <widget class="GtkImage" id="image2">
                                     <property name="visible">True</property>
-                                    <property name="icon_name">network-wireless</property>
+                                    <property name="stock">gtk-find</property>
                                   </widget>
                                 </child>
                               </widget>
@@ -74,6 +72,9 @@
                   </widget>
                 </child>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkToolButton" id="disconnect_button">
@@ -86,6 +87,7 @@
                 <signal name="clicked" handler="disconnect_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -99,6 +101,7 @@
                 <signal name="clicked" handler="refresh_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -112,6 +115,7 @@
                 <signal name="clicked" handler="preferences_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -125,6 +129,7 @@
                 <signal name="clicked" handler="about_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
@@ -139,12 +144,14 @@
                 <signal name="clicked" handler="quit_clicked"/>
               </widget>
               <packing>
+                <property name="expand">False</property>
                 <property name="homogeneous">True</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -165,12 +172,12 @@
           <widget class="GtkScrolledWindow" id="scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-            <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
             <child>
               <widget class="GtkViewport" id="viewport1">
                 <property name="visible">True</property>
-                <property name="shadow_type">GTK_SHADOW_NONE</property>
+                <property name="shadow_type">none</property>
                 <child>
                   <widget class="GtkVBox" id="network_list_vbox">
                     <property name="visible">True</property>
@@ -198,15 +205,17 @@
               </widget>
               <packing>
                 <property name="padding">3</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <widget class="GtkButton" id="cancel_button">
-                <property name="visible">True</property>
-                <property name="tooltip" translatable="yes">Cancel the current connection attempt</property>
                 <property name="label" translatable="yes">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip" translatable="yes">Cancel the current connection attempt</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
                 <signal name="clicked" handler="cancel_clicked"/>
               </widget>
               <packing>
@@ -238,8 +247,8 @@
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Configure Scripts</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox2">
@@ -259,6 +268,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -272,6 +282,9 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">Pre-connection Script:</property>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="pre_entry">
@@ -302,6 +315,9 @@
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="label" translatable="yes">Post-connection Script:</property>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
                   <widget class="GtkEntry" id="post_entry">
@@ -326,15 +342,18 @@
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
-                  <widget class="GtkLabel" id="disconnect_label">
+                  <widget class="GtkLabel" id="pre_disconnect_label">
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Disconnection Script:</property>
+                    <property name="label" translatable="yes">Pre-disconnection Script:</property>
                   </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="disconnect_entry">
+                  <widget class="GtkEntry" id="pre_disconnect_entry">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -351,6 +370,39 @@
                 <property name="position">3</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkHBox" id="hbox10">
+                <property name="visible">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <child>
+                  <widget class="GtkLabel" id="post_disconnect_label">
+                    <property name="width_request">150</property>
+                    <property name="visible">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="label" translatable="yes">Post-disconnection Script:</property>
+                  </widget>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="post_disconnect_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                  </widget>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
           </widget>
           <packing>
             <property name="position">1</property>
@@ -359,32 +411,41 @@
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area2">
             <property name="visible">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="button3">
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="label">gtk-cancel</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="button4">
+                <property name="label">gtk-ok</property>
+                <property name="response_id">1</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="label">gtk-ok</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">1</property>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>
@@ -392,8 +453,8 @@
   </widget>
   <widget class="GtkDialog" id="pref_dialog">
     <property name="border_width">5</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
       <widget class="GtkVBox" id="dialog-vbox5">
@@ -414,17 +475,17 @@
                   <widget class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
                     <child>
                       <widget class="GtkViewport" id="viewport3">
                         <property name="visible">True</property>
-                        <property name="resize_mode">GTK_RESIZE_QUEUE</property>
-                        <property name="shadow_type">GTK_SHADOW_NONE</property>
+                        <property name="resize_mode">queue</property>
+                        <property name="shadow_type">none</property>
                         <child>
                           <widget class="GtkTable" id="table1">
                             <property name="visible">True</property>
-                            <property name="n_rows">18</property>
+                            <property name="n_rows">20</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">4</property>
                             <property name="row_spacing">4</property>
@@ -433,14 +494,14 @@
                                 <property name="visible">True</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="pref_prefer_wired_check">
+                                    <property name="label" translatable="yes">Always switch to a wired connection when available</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="has_tooltip">True</property>
                                     <property name="tooltip" translatable="yes">If selected, wicd will automatically connect to a wired network
 as soon as a cable is plugged in, even if a wireless connection 
 is already active.</property>
-                                    <property name="label" translatable="yes">Always switch to a wired connection when available</property>
-                                    <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
                                   </widget>
                                 </child>
@@ -490,10 +551,10 @@ is already active.</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="pref_auto_check">
+                                    <property name="label" translatable="yes">Automatically reconnect on network connection loss</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Automatically reconnect on network connection loss</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
                                   </widget>
                                 </child>
@@ -525,10 +586,10 @@ is already active.</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkRadioButton" id="pref_use_last_radio">
+                                    <property name="label" translatable="yes">Use last wired network profile</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Use last wired network profile</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                   </widget>
@@ -547,10 +608,10 @@ is already active.</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkRadioButton" id="pref_prompt_radio">
+                                    <property name="label" translatable="yes">Prompt for wired network profile</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Prompt for wired network profile</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">pref_use_last_radio</property>
@@ -570,10 +631,10 @@ is already active.</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkRadioButton" id="pref_use_def_radio">
+                                    <property name="label" translatable="yes">Use default wired network profile</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Use default wired network profile</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">pref_use_last_radio</property>
@@ -766,10 +827,10 @@ is already active.</property>
                                 <property name="left_padding">12</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="pref_global_check">
+                                    <property name="label" translatable="yes">Use global DNS servers</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="label" translatable="yes">Use global DNS servers</property>
-                                    <property name="response_id">0</property>
+                                    <property name="receives_default">False</property>
                                     <property name="draw_indicator">True</property>
                                   </widget>
                                 </child>
@@ -840,11 +901,11 @@ is already active.</property>
                                 <property name="left_padding">24</property>
                                 <child>
                                   <widget class="GtkCheckButton" id="pref_always_check">
+                                    <property name="label" translatable="yes">Always show wired interface</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
                                     <property name="tooltip" translatable="yes">If enabled, the wired network interface will always be displayed in the main window. This can be useful if your wired network card does not detect when the interface is connected to a cable.</property>
-                                    <property name="label" translatable="yes">Always show wired interface</property>
-                                    <property name="response_id">0</property>
                                     <property name="draw_indicator">True</property>
                                   </widget>
                                 </child>
@@ -853,6 +914,41 @@ is already active.</property>
                                 <property name="right_attach">2</property>
                                 <property name="top_attach">3</property>
                                 <property name="bottom_attach">4</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkLabel" id="label2">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Notifications&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </widget>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">18</property>
+                                <property name="bottom_attach">19</property>
+                                <property name="y_options"></property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkAlignment" id="alignment26">
+                                <property name="visible">True</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <widget class="GtkCheckButton" id="pref_use_libnotify">
+                                    <property name="label" translatable="yes">Display notifications about connection status</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                  </widget>
+                                </child>
+                              </widget>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">19</property>
+                                <property name="bottom_attach">20</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
@@ -870,8 +966,8 @@ is already active.</property>
                 <property name="label" translatable="yes">General Settings</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -885,13 +981,13 @@ is already active.</property>
                   <widget class="GtkScrolledWindow" id="scrolledwindow3">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="hscrollbar_policy">automatic</property>
+                    <property name="vscrollbar_policy">automatic</property>
                     <child>
                       <widget class="GtkViewport" id="viewport4">
                         <property name="visible">True</property>
-                        <property name="resize_mode">GTK_RESIZE_QUEUE</property>
-                        <property name="shadow_type">GTK_SHADOW_NONE</property>
+                        <property name="resize_mode">queue</property>
+                        <property name="shadow_type">none</property>
                         <child>
                           <widget class="GtkTable" id="table2">
                             <property name="visible">True</property>
@@ -931,23 +1027,24 @@ is already active.</property>
                                     <property name="visible">True</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="flush_auto_radio">
+                                        <property name="label" translatable="yes">Automatic (recommended)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Automatic (recommended)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="ip_flush_radio">
+                                        <property name="label" translatable="yes">ip</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">ip</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">flush_auto_radio</property>
@@ -959,10 +1056,10 @@ is already active.</property>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="route_flush_radio">
+                                        <property name="label" translatable="yes">route</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">route</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">flush_auto_radio</property>
@@ -990,23 +1087,24 @@ is already active.</property>
                                     <property name="visible">True</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="link_auto_radio">
+                                        <property name="label" translatable="yes">Automatic (recommended)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Automatic (recommended)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="ethtool_radio">
+                                        <property name="label" translatable="yes">ethtool</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">ethtool</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">link_auto_radio</property>
@@ -1018,10 +1116,10 @@ is already active.</property>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="miitool_radio">
+                                        <property name="label" translatable="yes">mii-tool</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">mii-tool</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">link_auto_radio</property>
@@ -1049,26 +1147,42 @@ is already active.</property>
                                     <property name="visible">True</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="dhcp_auto_radio">
+                                        <property name="label" translatable="yes">Automatic (recommended)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Automatic (recommended)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">dhclient_radio</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="dhclient_radio">
+                                        <property name="label" translatable="yes">dhclient</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">dhclient</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">3</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkRadioButton" id="dhcpcd_radio">
+                                        <property name="label" translatable="yes">dhcpcd</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                        <property name="group">dhclient_radio</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1076,11 +1190,11 @@ is already active.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkRadioButton" id="dhcpcd_radio">
+                                      <widget class="GtkRadioButton" id="pump_radio">
+                                        <property name="label" translatable="yes">pump</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">dhcpcd</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">dhclient_radio</property>
@@ -1091,18 +1205,18 @@ is already active.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkRadioButton" id="pump_radio">
+                                      <widget class="GtkRadioButton" id="udhcpc_radio">
+                                        <property name="label" translatable="yes">udhcpc</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">pump</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">dhclient_radio</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
-                                        <property name="position">3</property>
+                                        <property name="position">4</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -1147,23 +1261,24 @@ is already active.</property>
                                     <property name="visible">True</property>
                                     <child>
                                       <widget class="GtkRadioButton" id="sudo_auto_radio">
+                                        <property name="label" translatable="yes">Automatic (recommended)</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">Automatic (recommended)</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>
+                                        <property name="position">0</property>
                                       </packing>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="gksudo_radio">
+                                        <property name="label" translatable="yes">gksudo</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">gksudo</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">sudo_auto_radio</property>
@@ -1175,10 +1290,10 @@ is already active.</property>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="kdesu_radio">
+                                        <property name="label" translatable="yes">kdesu</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">kdesu</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">sudo_auto_radio</property>
@@ -1190,10 +1305,10 @@ is already active.</property>
                                     </child>
                                     <child>
                                       <widget class="GtkRadioButton" id="ktsuss_radio">
+                                        <property name="label" translatable="yes">ktsuss</property>
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
-                                        <property name="label" translatable="yes">ktsuss</property>
-                                        <property name="response_id">0</property>
+                                        <property name="receives_default">False</property>
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <property name="group">sudo_auto_radio</property>
@@ -1228,9 +1343,9 @@ is already active.</property>
                 <property name="label" translatable="yes">External Programs</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">1</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
             <child>
@@ -1270,6 +1385,7 @@ to read its description.</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
+                            <property name="position">0</property>
                           </packing>
                         </child>
                       </widget>
@@ -1316,10 +1432,10 @@ to read its description.</property>
                         <property name="left_padding">12</property>
                         <child>
                           <widget class="GtkCheckButton" id="pref_dbm_check">
+                            <property name="label" translatable="yes">Use dBm to measure signal strength</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Use dBm to measure signal strength</property>
-                            <property name="response_id">0</property>
+                            <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
                           </widget>
                         </child>
@@ -1337,10 +1453,10 @@ to read its description.</property>
                         <property name="left_padding">12</property>
                         <child>
                           <widget class="GtkCheckButton" id="pref_debug_check">
+                            <property name="label" translatable="yes">Enable debug mode</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="label" translatable="yes">Enable debug mode</property>
-                            <property name="response_id">0</property>
+                            <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
                           </widget>
                         </child>
@@ -1477,9 +1593,9 @@ WPA supplicant driver.</property>
                 <property name="label" translatable="yes">Advanced Settings</property>
               </widget>
               <packing>
-                <property name="type">tab</property>
                 <property name="position">2</property>
                 <property name="tab_fill">False</property>
+                <property name="type">tab</property>
               </packing>
             </child>
           </widget>
@@ -1490,34 +1606,41 @@ WPA supplicant driver.</property>
         <child internal-child="action_area">
           <widget class="GtkHButtonBox" id="dialog-action_area5">
             <property name="visible">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <widget class="GtkButton" id="button2">
+                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-cancel</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
               </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
             <child>
               <widget class="GtkButton" id="button1">
+                <property name="label" translatable="yes">gtk-ok</property>
+                <property name="response_id">1</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">1</property>
               </widget>
               <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </widget>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </widget>

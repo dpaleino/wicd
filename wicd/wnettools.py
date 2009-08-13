@@ -6,18 +6,16 @@
 This module implements functions to control and obtain information from
 network interfaces.
 
-def SetDNS() -- Set the DNS servers of the system.
-def GetWirelessInterfaces() -- Get the wireless interfaces available.
-class Interface() -- Control a network interface.
-class WiredInterface() -- Control a wired network interface.
-class WirelessInterface() -- Control a wireless network interface.
+class BaseInterface() -- Control a network interface.
+class BaseWiredInterface() -- Control a wired network interface.
+class BaseWirelessInterface() -- Control a wireless network interface.
 
 """
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
-#   Copyright (C) 2007 - 2008 Byron Hillis
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -43,39 +41,36 @@ import misc
 from misc import find_path 
 
 # Regular expressions.
-__re_mode = (re.I | re.M | re.S)
-essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', __re_mode)
-ap_mac_pattern = re.compile('.*Address: (.*?)\n', __re_mode)
-channel_pattern = re.compile('.*Channel:? ?(\d\d?)', __re_mode)
-strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', __re_mode)
-signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', __re_mode)
-bitrates_pattern = re.compile('.*Bit Rates:(.*?)E', __re_mode)
-mode_pattern = re.compile('.*Mode:(.*?)\n', __re_mode)
-freq_pattern = re.compile('.*Frequency:(.*?)\n', __re_mode)
-wep_pattern = re.compile('.*Encryption key:(.*?)\n', __re_mode)
-altwpa_pattern = re.compile('(wpa_ie)', __re_mode)
-wpa1_pattern = re.compile('(WPA Version 1)', __re_mode)
-wpa2_pattern = re.compile('(WPA2)', __re_mode)
+_re_mode = (re.I | re.M | re.S)
+essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', _re_mode)
+ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
+channel_pattern = re.compile('.*Channel:?=? ?(\d\d?)', _re_mode)
+strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
+signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
+bitrates_pattern = re.compile('(\d+\s+\S+/s)', _re_mode)
+mode_pattern = re.compile('.*Mode:(.*?)\n', _re_mode)
+freq_pattern = re.compile('.*Frequency:(.*?)\n', _re_mode)
+wep_pattern = re.compile('.*Encryption key:(.*?)\n', _re_mode)
+altwpa_pattern = re.compile('(wpa_ie)', _re_mode)
+wpa1_pattern = re.compile('(WPA Version 1)', _re_mode)
+wpa2_pattern = re.compile('(WPA2)', _re_mode)
 
 #iwconfig-only regular expressions.
-ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',re.S)
-bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', __re_mode)
-bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', __re_mode)
-opmode_pattern = re.compile('.*Mode:(.*?) ', __re_mode)
-authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', __re_mode)
+ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
+bssid_pattern = re.compile('.*Access Point: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', _re_mode)
+bitrate_pattern = re.compile('.*Bit Rate=(.*?/s)', _re_mode)
+opmode_pattern = re.compile('.*Mode:(.*?) ', _re_mode)
+authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', _re_mode)
 
 # Regular expressions for wpa_cli output
-auth_pattern = re.compile('.*wpa_state=(.*?)\n', __re_mode)
+auth_pattern = re.compile('.*wpa_state=(.*?)\n', _re_mode)
 
 RALINK_DRIVER = 'ralink legacy'
 
 blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
-
-__all__ = ["GetDefaultGateway", "GetWiredInterfaces",
-           "GetWirelessInterfaces", "IsValidWpaSuppDriver"]
 
 def _sanitize_string(string):
     if string:
@@ -88,6 +83,31 @@ def _sanitize_string_strict(string):
         return translate(str(string), blank_trans, blacklist_strict)
     else:
         return string
+  
+_cache = {}
+def timedcache(duration=5):
+    """ A caching decorator for use with wnettools methods.
+    
+    Caches the results of a function for a given number of
+    seconds (defaults to 5).
+    
+    """
+    def _timedcache(f):
+        def __timedcache(self, *args, **kwargs):
+            key = str(args) + str(kwargs) + str(f)
+            if hasattr(self, 'iface'):
+                key += self.iface
+            if (key in _cache and 
+                (time.time() - _cache[key]['time']) < duration):
+                return _cache[key]['value']
+            else:
+                value = f(self, *args, **kwargs)
+                _cache[key] = { 'time' : time.time(), 'value' : value }
+                return value
+            
+        return __timedcache
+    
+    return _timedcache
 
 def GetDefaultGateway():
     """ Attempts to determine the default gateway by parsing route -n. """
@@ -117,18 +137,18 @@ def GetWirelessInterfaces():
 
     """
     dev_dir = '/sys/class/net/'
-    ifnames = []
-    
-    ifnames = [iface for iface in os.listdir(dev_dir) if os.path.isdir(dev_dir + iface)
-               and 'wireless' in os.listdir(dev_dir + iface)]
+    ifnames = [iface for iface in os.listdir(dev_dir)
+               if os.path.isdir(dev_dir + iface) and 
+                  'wireless' in os.listdir(dev_dir + iface)]
     
     return ifnames
 
 def GetWiredInterfaces():
     """ Returns a list of wired interfaces on the system. """
     basedir = '/sys/class/net/'
-    return [iface for iface in os.listdir(basedir) if not 'wireless' 
-            in os.listdir(basedir + iface) and 
+    return [iface for iface in os.listdir(basedir)
+            if os.path.isdir(basedir + iface) and not 'wireless'
+            in os.listdir(basedir + iface) and
             open(basedir + iface + "/type").readlines()[0].strip() == "1"]
 
 def NeedsExternalCalls():
@@ -139,10 +159,7 @@ def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",
                        "-c/etc/abcd%sdefzz.zconfz" % random.randint(1, 1000)])
-    if re.match("Unsupported driver", output):
-        return False
-    else:
-        return True
+    return not "Unsupported driver" in output
     
 def neediface(default_response):
     """ A decorator for only running a method if self.iface is defined.
@@ -154,7 +171,8 @@ def neediface(default_response):
     """
     def wrapper(func):
         def newfunc(self, *args, **kwargs):
-            if not self.iface:
+            if not self.iface or \
+               not os.path.exists('/sys/class/net/%s' % self.iface):
                 return default_response
             return func(self, *args, **kwargs)
         newfunc.__dict__ = func.__dict__
@@ -222,15 +240,20 @@ class BaseInterface(object):
         """
         def get_client_name(cl):
             """ Converts the integer value for a dhcp client to a string. """
-            if self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
-                client = "dhclient"
-                cmd = self.dhclient_cmd
-            elif self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
+            if self.dhcpcd_cmd and cl in [misc.DHCPCD, misc.AUTO]:
                 client = "dhcpcd"
                 cmd = self.dhcpcd_cmd
             elif self.pump_cmd and cl in [misc.PUMP, misc.AUTO]: 
                 client = "pump"
                 cmd = self.pump_cmd
+            elif self.dhclient_cmd and cl in [misc.DHCLIENT, misc.AUTO]:
+                client = "dhclient"
+                cmd = self.dhclient_cmd
+                if self.dhclient_needs_verbose:
+                    cmd += ' -v'
+            elif self.udhcpc_cmd and cl in [misc.UDHCPC, misc.AUTO]:
+                client = "udhcpc"
+                cmd = self.udhcpc_cmd
             else:
                 client = None
                 cmd = ""
@@ -238,19 +261,24 @@ class BaseInterface(object):
         
         client_dict = {
             "dhclient" : 
-                {'connect' : r"%s %s", 
-                 'release' : r"%s -r %s",
+                {'connect' : r"%(cmd)s %(iface)s",
+                 'release' : r"%(cmd)s -r %(iface)s",
                  'id' : misc.DHCLIENT, 
                  },
             "pump" : 
-                { 'connect' : r"%s -i %s", 
-                  'release' : r"%s -r -i %s",
+                { 'connect' : r"%(cmd)s -i %(iface)s",
+                  'release' : r"%(cmd)s -r -i %(iface)s",
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%s %s",
-                 'release' : r"%s -k %s",
+                {'connect' : r"%(cmd)s %(iface)s",
+                 'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
+                },
+            "udhcpc":
+                {'connect' : r"%(cmd)s -n -i %(iface)s",
+                 'release' : r"killall -SIGUSR2 %(cmd)s",
+                 'id' : misc.UDHCPC,
                 },
         }
         (client_name, cmd) = get_client_name(self.DHCP_CLIENT)
@@ -259,9 +287,9 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
-            return client_dict[client_name]['connect'] % (cmd, self.iface)
+            return client_dict[client_name]['connect'] % {"cmd":cmd, "iface":self.iface}
         elif flavor == "release":
-            return client_dict[client_name]['release'] % (cmd, self.iface)
+            return client_dict[client_name]['release'] % {"cmd":cmd, "iface":self.iface}
         else:
             return client_dict[client_name]['id']
     
@@ -299,8 +327,16 @@ class BaseInterface(object):
         
         """
         self.dhclient_cmd = self._find_program_path("dhclient")
+        if self.dhclient_cmd != None:
+            output = misc.Run(self.dhclient_cmd + " --version",
+                    include_stderr=True)
+            if '4.' in output:
+                self.dhclient_needs_verbose = True
+            else:
+                self.dhclient_needs_verbose = False
         self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
+        self.udhcpc_cmd = self._find_program_path("udhcpc")
         
     def CheckWiredTools(self):
         """ Check for the existence of ethtool and mii-tool. """
@@ -348,6 +384,14 @@ class BaseInterface(object):
         if self.verbose: print cmd
         misc.Run(cmd)
         return True
+    
+    @timedcache(2)
+    @neediface("")
+    def GetIfconfig(self):
+        """ Runs ifconfig and returns the output. """
+        cmd = "ifconfig %s" % self.iface
+        if self.verbose: print cmd
+        return misc.Run(cmd)
 
     @neediface("")
     def SetAddress(self, ip=None, netmask=None, broadcast=None):
@@ -397,7 +441,7 @@ class BaseInterface(object):
             if line == '':  # Empty string means dhclient is done.
                 dhclient_complete = True
             else:
-                print line.strip('\n')
+                print misc.to_unicode(line.strip('\n'))
             if line.startswith('bound'):
                 dhclient_success = True
                 dhclient_complete = True
@@ -424,7 +468,7 @@ class BaseInterface(object):
             elif line.strip().lower().startswith('Operation failed.'):
                 pump_success = False
                 pump_complete = True
-            print line
+            print misc.to_unicode(line)
     
         return self._check_dhcp_result(pump_success)
 
@@ -448,10 +492,34 @@ class BaseInterface(object):
                 dhcpcd_complete = True
             elif line == '':
                 dhcpcd_complete = True
-            print line
+            print misc.to_unicode(line)
             
         return self._check_dhcp_result(dhcpcd_success)
-        
+
+    def _parse_udhcpc(self, pipe):
+        """ Determines if obtaining an IP using udhcpc succeeded.
+
+        Keyword arguments:
+        pipe -- stdout pipe to the dhcpcd process.
+
+        Returns:
+        'success' if successful, an error code string otherwise.
+
+        """
+        udhcpc_complete = False
+        udhcpc_success = True
+
+        while not udhcpc_complete:
+            line = pipe.readline()
+            if line.endswith("failing"):
+                udhcpc_success = False
+                udhcpc_complete = True
+            elif line == '':
+                udhcpc_complete = True
+            print line
+
+        return self._check_dhcp_result(udhcpc_success)
+
     def _check_dhcp_result(self, success):
         """ Print and return the correct DHCP connection result. 
         
@@ -490,6 +558,8 @@ class BaseInterface(object):
             return self._parse_pump(pipe)
         elif DHCP_CLIENT == misc.DHCPCD:
             return self._parse_dhcpcd(pipe)
+        elif DHCP_CLIENT == misc.UDHCPC:
+            return self._parse_udhcpc(pipe)
         else:
             print 'ERROR no dhclient found!'
     
@@ -595,9 +665,7 @@ class BaseInterface(object):
 
         """
         if not ifconfig:
-            cmd = 'ifconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIfconfig()
         else:
             output = ifconfig
         return misc.RunRegex(ip_pattern, output)
@@ -634,9 +702,7 @@ class BaseInterface(object):
     def _slow_is_up(self, ifconfig=None):
         """ Determine if an interface is up using ifconfig. """
         if not ifconfig:
-            cmd = "ifconfig " + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIfconfig()
         else:
             output = ifconfig
         lines = output.split('\n')
@@ -799,6 +865,7 @@ class BaseWirelessInterface(BaseInterface):
 
         return radiostatus
     
+    @timedcache(2)
     @neediface(False)
     def GetIwconfig(self):
         """ Returns the output of iwconfig for this interface. """
@@ -964,12 +1031,17 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         cmd = ['iwconfig', self.iface, 'essid', essid]
-        if channel and str(channel).isdigit():
-            cmd.extend(['channel', str(channel)])
-        if bssid:
-            cmd.extend(['ap', bssid])
         if self.verbose: print str(cmd)
         misc.Run(cmd)
+        base = "iwconfig %s" % self.iface
+        if channel and str(channel).isdigit():
+            cmd = "%s channel %s" % (base, str(channel))
+            if self.verbose: print cmd
+            misc.Run(cmd)
+        if bssid:
+            cmd = "%s ap %s" % (base, bssid)
+            if self.verbose: print cmd
+            misc.Run(cmd)
         
     def GeneratePSK(self, network):
         """ Generate a PSK using wpa_passphrase. 
@@ -982,7 +1054,7 @@ class BaseWirelessInterface(BaseInterface):
         if not wpa_pass_path: return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
-        cmd = [wpa_pass_path, network['essid'], network['key']]
+        cmd = [wpa_pass_path, network['essid'], str(network['key'])]
         if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 
@@ -1070,15 +1142,21 @@ class BaseWirelessInterface(BaseInterface):
 
         # An array for the access points
         access_points = []
+        access_points = {}
         for cell in networks:
             # Only use sections where there is an ESSID.
             if 'ESSID:' in cell:
                 # Add this network to the list of networks
                 entry = self._ParseAccessPoint(cell, ralink_info)
                 if entry is not None:
-                    access_points.append(entry)
+                    # Normally we only get duplicate bssids with hidden
+                    # networks.  If we hit this, we only want the entry
+                    # with the real essid to be in the network list.
+                    if (entry['bssid'] not in access_points 
+                        or not entry['hidden']):
+                        access_points[entry['bssid']] = entry
 
-        return access_points
+        return access_points.values()
     
     def _ParseAccessPoint(self, cell, ralink_info):
         """ Parse a single cell from the output of iwlist.
@@ -1099,7 +1177,8 @@ class BaseWirelessInterface(BaseInterface):
         except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
-        if ap['essid'] in ['<hidden>', ""]:
+        if ap['essid'] in ['<hidden>', "", None]:
+            print 'hidden'
             ap['hidden'] = True
             ap['essid'] = "<hidden>"
         else:
@@ -1113,9 +1192,9 @@ class BaseWirelessInterface(BaseInterface):
             ap['channel'] = self._FreqToChannel(freq)
 
         # Bit Rate
-        ap['bitrates'] = misc.RunRegex(bitrates_pattern, cell).split('\n')
-        ap['bitrates'] = '; '.join(m.strip() for m in ap['bitrates']).rstrip('; ')
-        
+        ap['bitrates'] = misc.RunRegex(bitrates_pattern,
+                                       cell.split("Bit Rates")[-1])
+     
         # BSSID
         ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)
 
@@ -1181,6 +1260,7 @@ class BaseWirelessInterface(BaseInterface):
         MAX_TIME = 35
         MAX_DISCONNECTED_TIME = 3
         disconnected_time = 0
+        forced_rescan = False
         while (time.time() - auth_time) < MAX_TIME:
             cmd = '%s -i %s status' % (self.wpa_cli_cmd, self.iface)
             output = misc.Run(cmd)
@@ -1192,11 +1272,12 @@ class BaseWirelessInterface(BaseInterface):
                 return False
             if result == "COMPLETED":
                 return True
-            elif result == "DISCONNECTED":
+            elif result == "DISCONNECTED" and not forced_rescan:
                 disconnected_time += 1
                 if disconnected_time > MAX_DISCONNECTED_TIME:
                     disconnected_time = 0
                     # Force a rescan to get wpa_supplicant moving again.
+                    forced_rescan = True
                     self._ForceSupplicantScan()
                     MAX_TIME += 5
             else:
@@ -1233,9 +1314,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetBSSID(self, iwconfig=None):
         """ Get the MAC address for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1246,9 +1325,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetCurrentBitrate(self, iwconfig=None):
         """ Get the current bitrate for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1259,9 +1336,7 @@ class BaseWirelessInterface(BaseInterface):
     def GetOperationalMode(self, iwconfig=None):
         """ Get the operational mode for the interface. """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
             
@@ -1292,7 +1367,14 @@ class BaseWirelessInterface(BaseInterface):
             (strength, max_strength) = (None, None)
 
         if strength in ['', None]:
-            [(strength, max_strength)] = altstrength_pattern.findall(output)
+            try:
+                [(strength, max_strength)] = altstrength_pattern.findall(output)
+            except ValueError:
+                # if the pattern was unable to match anything
+                # we'll return 101, which will allow us to stay
+                # connected even though we don't know the strength
+                # it also allows us to tell if 
+                return 101
         if strength not in ['', None] and max_strength:
             return (100 * int(strength) // int(max_strength))
         elif strength not in ["", None]:
@@ -1309,9 +1391,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         return self._get_link_quality(output)
@@ -1325,9 +1405,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)',
@@ -1344,9 +1422,7 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         if not iwconfig:
-            cmd = 'iwconfig ' + self.iface
-            if self.verbose: print cmd
-            output = misc.Run(cmd)
+            output = self.GetIwconfig()
         else:
             output = iwconfig
         network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Configure the scripts for a particular network.
+""" configscript -- Configure the scripts for a particular network.
 
 Script for configuring the scripts for a network passed in as a
 command line argument.  This needs to run a separate process because
@@ -10,8 +10,8 @@ run as the current user.
 """
 
 #
-#   Copyright (C) 2007-2008 Adam Blackburn
-#   Copyright (C) 2007-2008 Dan O'Reilly
+#   Copyright (C) 2007-2009 Adam Blackburn
+#   Copyright (C) 2007-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -33,16 +33,17 @@ import ConfigParser
 import gtk.glade
 
 from wicd import wpath
-from wicd import misc
+from wicd import translations
 from wicd import dbusmanager
 
-_ = misc.get_gettext()
+_ = translations.get_gettext()
 
 language = {}
 language['configure_scripts'] = _("Configure Scripts")
 language['before_script'] = _("Pre-connection Script")
 language['after_script'] = _("Post-connection Script")
-language['disconnect_script'] = _("Disconnection Script")
+language['pre_disconnect_script'] = _("Pre-disconnection Script")
+language['post_disconnect_script'] = _("Post-disconnection Script")
 
 dbus = dbusmanager.DBusManager()
 dbus.connect_to_dbus()
@@ -100,14 +101,16 @@ def get_script_info(network, network_type):
         if con.has_section(network):
             info["pre_entry"] = get_val(con, network, "beforescript")
             info["post_entry"] = get_val(con, network, "afterscript")
-            info["disconnect_entry"] = get_val(con, network, "disconnectscript")
+            info["pre_disconnect_entry"] = get_val(con, network, "predisconnectscript")
+            info["post_disconnect_entry"] = get_val(con, network, "postdisconnectscript")
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con.read(wireless_conf)
         if con.has_section(bssid):
             info["pre_entry"] = get_val(con, bssid, "beforescript")
             info["post_entry"] = get_val(con, bssid, "afterscript")
-            info["disconnect_entry"] = get_val(con, bssid, "disconnectscript")
+            info["pre_disconnect_entry"] = get_val(con, bssid, "predisconnectscript")
+            info["post_disconnect_entry"] = get_val(con, bssid, "postdisconnectscript")
     return info
 
 def write_scripts(network, network_type, script_info):
@@ -120,7 +123,8 @@ def write_scripts(network, network_type, script_info):
             con.add_section(network)
         con.set(network, "beforescript", script_info["pre_entry"])
         con.set(network, "afterscript", script_info["post_entry"])
-        con.set(network, "disconnectscript", script_info["disconnect_entry"])
+        con.set(network, "predisconnectscript", script_info["pre_disconnect_entry"])
+        con.set(network, "postdisconnectscript", script_info["post_disconnect_entry"])
         con.write(open(wired_conf, "w"))
         wired.ReloadConfig()
         wired.ReadWiredNetworkProfile(network)
@@ -132,7 +136,8 @@ def write_scripts(network, network_type, script_info):
             con.add_section(bssid)
         con.set(bssid, "beforescript", script_info["pre_entry"])
         con.set(bssid, "afterscript", script_info["post_entry"])
-        con.set(bssid, "disconnectscript", script_info["disconnect_entry"])
+        con.set(bssid, "predisconnectscript", script_info["pre_disconnect_entry"])
+        con.set(bssid, "postdisconnectscript", script_info["post_disconnect_entry"])
         con.write(open(wireless_conf, "w"))
         wireless.ReloadConfig()
         wireless.ReadWirelessNetworkProfile(int(network))
@@ -155,25 +160,30 @@ def main (argv):
     dialog = wTree.get_widget("configure_script_dialog")
     wTree.get_widget("pre_label").set_label(language['before_script'] + ":")
     wTree.get_widget("post_label").set_label(language['after_script'] + ":")
-    wTree.get_widget("disconnect_label").set_label(language['disconnect_script'] 
+    wTree.get_widget("pre_disconnect_label").set_label(language['pre_disconnect_script']
+                                                   + ":")
+    wTree.get_widget("post_disconnect_label").set_label(language['post_disconnect_script']
                                                    + ":")
     wTree.get_widget("window1").hide()
     
     pre_entry = wTree.get_widget("pre_entry")
     post_entry = wTree.get_widget("post_entry")
-    disconnect_entry = wTree.get_widget("disconnect_entry")
+    pre_disconnect_entry = wTree.get_widget("pre_disconnect_entry")
+    post_disconnect_entry = wTree.get_widget("post_disconnect_entry")
     
     pre_entry.set_text(none_to_blank(script_info.get("pre_entry")))
     post_entry.set_text(none_to_blank(script_info.get("post_entry")))
-    disconnect_entry.set_text(none_to_blank(script_info.get("disconnect_entry")))
-    
+    pre_disconnect_entry.set_text(none_to_blank(script_info.get("pre_disconnect_entry")))
+    post_disconnect_entry.set_text(none_to_blank(script_info.get("post_disconnect_entry")))
+
     dialog.show_all()
     
     result = dialog.run()
     if result == 1:
         script_info["pre_entry"] = blank_to_none(pre_entry.get_text())
         script_info["post_entry"] = blank_to_none(post_entry.get_text())
-        script_info["disconnect_entry"] = blank_to_none(disconnect_entry.get_text())
+        script_info["pre_disconnect_entry"] = blank_to_none(pre_disconnect_entry.get_text())
+        script_info["post_disconnect_entry"] = blank_to_none(post_disconnect_entry.get_text())
         write_scripts(network, network_type, script_info)
     dialog.destroy()
  

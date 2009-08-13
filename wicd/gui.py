@@ -1,15 +1,14 @@
 #!/usr/bin/python
 
-""" Wicd GUI module.
+""" gui -- The main wicd GUI module.
 
-Module containg all the code (other than the tray icon) related to the 
-Wicd user interface.
+Module containing the code for the main wicd GUI.
 
 """
 
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2007-2009 Adam Blackburn
+#   Copyright (C) 2007-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -32,7 +31,6 @@ import pango
 import gtk
 import gtk.glade
 from dbus import DBusException
-from dbus import version as dbus_version
 
 from wicd import misc
 from wicd import wpath
@@ -42,7 +40,7 @@ from wicd import netentry
 from wicd.misc import noneToString
 from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
 from wicd.prefs import PreferencesDialog
-from wicd.guiutil import error, GreyLabel, LabelEntry, SmallLabel
+from wicd.guiutil import error, LabelEntry
 from wicd.translations import language
 
 if __name__ == '__main__':
@@ -58,7 +56,9 @@ def setup_dbus(force=True):
     except DBusException:
         if force:
             print "Can't connect to the daemon, trying to start it automatically..."
-            misc.PromptToStartDaemon()
+            if not misc.PromptToStartDaemon():
+                print "Failed to find a graphical sudo program, cannot continue."
+                return False
             try:
                 dbusmanager.connect_to_dbus()
             except DBusException:
@@ -141,13 +141,16 @@ class WiredProfileChooser:
 
 class appGui(object):
     """ The main wicd GUI class. """
-    def __init__(self, standalone=False):
+    def __init__(self, standalone=False, tray=None):
         """ Initializes everything needed for the GUI. """
         setup_dbus()
+
+        self.tray = tray
 
         gladefile = os.path.join(wpath.share, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
         self.window = self.wTree.get_widget("window1")
+        self.window.set_icon_name("wicd-client")
         size = daemon.ReadWindowSize("main")
         width = size[0]
         height = size[1]
@@ -283,7 +286,11 @@ class appGui(object):
 
     def disconnect_all(self, widget=None):
         """ Disconnects from any active network. """
-        daemon.Disconnect()
+        def handler(*args):
+            gobject.idle_add(self.network_list.set_sensitive, True)
+         
+        self.network_list.set_sensitive(False)
+        daemon.Disconnect(reply_handler=handler, error_handler=handler)
 
     def about_dialog(self, widget, event=None):
         """ Displays an about dialog. """
@@ -304,7 +311,7 @@ class appGui(object):
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         if not self.pref:
-            self.pref = PreferencesDialog(self.wTree)
+            self.pref = PreferencesDialog(self, self.wTree)
         else:
             self.pref.load_preferences_diag()
         if self.pref.run() == 1:
@@ -508,11 +515,11 @@ class appGui(object):
             printLine = True  # In this case we print a separator.
             wirednet = WiredNetworkEntry()
             self.network_list.pack_start(wirednet, False, False)
-            wirednet.connect_button.connect("button-press-event", self.connect,
+            wirednet.connect_button.connect("clicked", self.connect,
                                            "wired", 0, wirednet)
-            wirednet.disconnect_button.connect("button-press-event", self.disconnect,
+            wirednet.disconnect_button.connect("clicked", self.disconnect,
                                                "wired", 0, wirednet)
-            wirednet.advanced_button.connect("button-press-event",
+            wirednet.advanced_button.connect("clicked",
                                              self.edit_advanced, "wired", 0, 
                                              wirednet)
 
@@ -530,13 +537,13 @@ class appGui(object):
                     printLine = True
                 tempnet = WirelessNetworkEntry(x)
                 self.network_list.pack_start(tempnet, False, False)
-                tempnet.connect_button.connect("button-press-event",
+                tempnet.connect_button.connect("clicked",
                                                self.connect, "wireless", x,
                                                tempnet)
-                tempnet.disconnect_button.connect("button-press-event",
+                tempnet.disconnect_button.connect("clicked",
                                                   self.disconnect, "wireless",
                                                   x, tempnet)
-                tempnet.advanced_button.connect("button-press-event",
+                tempnet.advanced_button.connect("clicked",
                                                 self.edit_advanced, "wireless",
                                                 x, tempnet)
         else:
@@ -595,7 +602,7 @@ class appGui(object):
             
         return True
 
-    def edit_advanced(self, widget, event, ttype, networkid, networkentry):
+    def edit_advanced(self, widget, ttype, networkid, networkentry):
         """ Display the advanced settings dialog.
         
         Displays the advanced settings dialog and saves any changes made.
@@ -635,7 +642,7 @@ class appGui(object):
             for entry_info in encryption_info.itervalues():
                 if entry_info[0].entry.get_text() == "" and \
                    entry_info[1] == 'required':
-                    error(self, "%s (%s)" % (language['encrypt_info_missing'], 
+                    error(self.window, "%s (%s)" % (language['encrypt_info_missing'], 
                                              entry_info[0].label.get_label())
                           )
                     return False
@@ -646,21 +653,47 @@ class appGui(object):
             return False
         return True
 
-    def connect(self, widget, event, nettype, networkid, networkentry):
+    def _wait_for_connect_thread_start(self):
+        self.wTree.get_widget("progressbar").pulse()
+        if not self._connect_thread_started:
+            return True
+        else:
+            misc.timeout_add(2, self.update_statusbar)
+            self.update_statusbar()
+            return False
+        
+    def connect(self, widget, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
-        cancel_button = self.wTree.get_widget("cancel_button")
-        cancel_button.set_sensitive(True)
+        def handler(*args):
+            self._connect_thread_started = True
+
+        def setup_interface_for_connection():
+            cancel_button = self.wTree.get_widget("cancel_button")
+            cancel_button.set_sensitive(True)
+            self.network_list.set_sensitive(False)
+            if self.statusID:
+                gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+            gobject.idle_add(self.set_status, language["disconnecting_active"])
+            gobject.idle_add(self.status_area.show_all)
+            self.wait_for_events()
+            self._connect_thread_started = False
+
         if nettype == "wireless":
             if not self.check_encryption_valid(networkid,
                                                networkentry.advanced_dialog):
-                self.edit_advanced(None, None, nettype, networkid, networkentry)
+                self.edit_advanced(None, nettype, networkid, networkentry)
                 return False
-            wireless.ConnectWireless(networkid)
+            setup_interface_for_connection()
+            wireless.ConnectWireless(networkid, reply_handler=handler,
+                                     error_handler=handler)
         elif nettype == "wired":
-            wired.ConnectWired()
-        self.update_statusbar()
+            setup_interface_for_connection()
+            wired.ConnectWired(reply_handler=handler, error_handler=handler)
         
-    def disconnect(self, widget, event, nettype, networkid, networkentry):
+        gobject.source_remove(self.update_cb)
+        misc.timeout_add(100, self._wait_for_connect_thread_start, milli=True)
+        
+    def disconnect(self, widget, nettype, networkid, networkentry):
         """ Disconnects from the given network.
         
         Keyword arguments:
@@ -671,13 +704,18 @@ class appGui(object):
         networkentry -- The NetworkEntry containing the disconnect button.
         
         """
+        def handler(*args):
+            gobject.idle_add(self.network_list.set_sensitive, True)
+            
         widget.hide()
         networkentry.connect_button.show()
         daemon.SetForcedDisconnect(True)
+        self.network_list.set_sensitive(False)
         if nettype == "wired":
-            wired.DisconnectWired()
+            wired.DisconnectWired(reply_handler=handler, error_handler=handler)
         else:
-            wireless.DisconnectWireless()
+            wireless.DisconnectWireless(reply_handler=handler, 
+                                        error_handler=handler)
         
     def wait_for_events(self, amt=0):
         """ Wait for any pending gtk events to finish before moving on. 
@@ -707,7 +745,7 @@ class appGui(object):
         try:
             daemon.WriteWindowSize(width, height, "main")
             daemon.SetGUIOpen(False)
-        except dbusmanager.DBusException:
+        except DBusException:
             pass
 
         if self.standalone:

@@ -62,17 +62,17 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         ok_t = 'OK'
         
         self.static_ip_cb = urwid.CheckBox(static_ip_t,
-                on_state_change=self.static_ip_set_state)
+                on_state_change=self.static_ip_toggle)
         self.ip_edit     =DynWrap(urwid.Edit(ip_t),False)
         self.netmask_edit=DynWrap(urwid.Edit(netmask_t),False)
         self.gateway_edit=DynWrap(urwid.Edit(gateway_t),False)
 
 
-        self.static_dns_cb = urwid.CheckBox(use_static_dns_t,
-                on_state_change=self.dns_toggle)
+        self.static_dns_cb = DynWrap(urwid.CheckBox(use_static_dns_t,
+                on_state_change=self.dns_toggle),True,('body','editnfc'),None)
         self.global_dns_cb = DynWrap(urwid.CheckBox(use_global_dns_t,
                 on_state_change=self.dns_toggle),False,('body','editnfc'),None)
-        checkb_cols = urwid.Columns([self.static_dns_cb,
+        self.checkb_cols = urwid.Columns([self.static_dns_cb,
                                      self.global_dns_cb])
         self.dns_dom_edit      = DynWrap(urwid.Edit(dns_dom_t)   ,False)
         self.search_dom_edit   = DynWrap(urwid.Edit(search_dom_t),False)
@@ -82,19 +82,12 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
 
         _blank = urwid.Text('')
 
-        # Buttons.  These need to be added to the list in superclasses.
-        self.OK_PRESSED= False
-        self.CANCEL_PRESSED = False
-        self.ok_button = urwid.AttrWrap(urwid.Button('OK',self.ok_callback),'body','focus')
-        self.cancel_button = urwid.AttrWrap(urwid.Button('Cancel',self.cancel_callback),'body','focus')
-        self.button_cols = urwid.Columns([self.ok_button,self.cancel_button])
-        
         walker = urwid.SimpleListWalker([self.static_ip_cb,
                                          self.ip_edit,
                                          self.netmask_edit,
                                          self.gateway_edit,
                                          _blank,
-                                         checkb_cols,
+                                         self.checkb_cols,
                                          self.dns_dom_edit,self.search_dom_edit,
                                          self.dns1,self.dns2,self.dns3
                                         ])
@@ -103,22 +96,22 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
 
         self._listbox = urwid.ListBox(walker)
         #self._frame = urwid.Frame(self._listbox)
-        self._frame = urwid.Frame(self._listbox,footer=self.button_cols)
+        self._frame = urwid.Frame(self._listbox)
         self.__super.__init__(self._frame)
     
-
-    # Button callbacks
-    def ok_callback(self,button_object,user_data=None):
-        self.OK_PRESSED = True
-    def cancel_callback(self,button_object,user_data=None):
-        self.CANCEL_PRESSED = True
-
-    def static_ip_set_state(self,checkb,new_state,user_data=None):
+    def static_ip_toggle(self,checkb,new_state,user_data=None):
         for w in [ self.ip_edit,self.netmask_edit,self.gateway_edit ]:
             w.set_sensitive(new_state)
+        self.static_dns_cb.set_state(new_state)
+        self.static_dns_cb.set_sensitive(not new_state)
+        if new_state:
+            self.checkb_cols.set_focus(self.global_dns_cb)
+        else:
+            self.checkb_cols.set_focus(self.static_dns_cb)
+
         
     def dns_toggle(self,checkb,new_state,user_data=None):
-        if checkb == self.static_dns_cb:
+        if checkb == self.static_dns_cb.get_w():
             for w in [ self.dns_dom_edit,self.search_dom_edit,
                     self.dns1,self.dns2,self.dns3 ]:
                 w.set_sensitive(new_state)
@@ -147,11 +140,11 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
            not self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
             self.set_net_prop('use_global_dns', False)
-            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_text()))
-            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_text()))
-            self.set_net_prop("dns1", noneToString(self.dns1.get_text()))
-            self.set_net_prop("dns2", noneToString(self.dns2.get_text()))
-            self.set_net_prop("dns3", noneToString(self.dns3.get_text()))
+            self.set_net_prop('dns_domain', noneToString(self.dns_dom_edit.get_edit_text()))
+            self.set_net_prop("search_domain", noneToString(self.search_dom_edit.get_edit_text()))
+            self.set_net_prop("dns1", noneToString(self.dns1.get_edit_text()))
+            self.set_net_prop("dns2", noneToString(self.dns2.get_edit_text()))
+            self.set_net_prop("dns3", noneToString(self.dns3.get_edit_text()))
         elif self.static_dns_cb.get_state() and \
              self.global_dns_cb.get_state():
             self.set_net_prop('use_static_dns', True)
@@ -164,54 +157,9 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop("dns1", '')
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
-
-    def prerun(self,ui,dim,display):
+    # Prevent comboboxes from dying.
+    def ready_widgets(self,ui,body):
         pass
-    def run(self,ui,dim,display):
-        self.ui = ui
-        self.parent = display
-        width,height = ui.get_cols_rows()
-
-        self.overlay = urwid.Overlay(self, display, ('fixed left', 0),width
-                                , ('fixed top',1), height-3)
-        self.prerun(ui,dim,display)
-        #self.ready_comboboxes(ui,overlay)
-
-        keys = True
-        while True:
-            if keys:
-                ui.draw_screen(dim, self.overlay.render(dim, True))
-            keys = ui.get_input()
-
-            for k in keys:
-                #Send key to underlying widget:
-                if urwid.is_mouse_event(k):
-                    event, button, col, row = k
-                    self.overlay.mouse_event( dim,
-                            event, button, col, row,
-                            focus=True)
-                else:
-                    k = self.overlay.keypress(dim, k)
-                    if k in ('up','page up'):
-                        self._w.set_focus('body')
-                        # Until I figure out a better way to do this, then this will
-                        # have to do.
-                        self._w.body.get_focus()[0].get_focus()._invalidate()
-                        #self._w.body.keypress(dim,'down')
-                    elif k in ('down','page down'):
-                        self._w.set_focus('footer')
-
-            if "window resize" in keys:
-                dim = ui.get_cols_rows()
-            if "esc" in keys or 'Q' in keys:
-                return False
-            if "meta enter" in keys or self.OK_PRESSED:
-                self.OK_PRESSED = False
-                if self.save_settings():
-                    return True
-            if self.CANCEL_PRESSED:
-                return False
-
 
 class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,name):
@@ -223,7 +171,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self._w.body.body.append(self.set_default)
         
         self.prof_name = name
-        title = ">"+language['configuring_wired'].replace('$A',self.prof_name)
+        title = language['configuring_wired'].replace('$A',self.prof_name)
         self._w.header = urwid.Text( ('header',title),align='right' )
 
         self.set_values()
@@ -237,6 +185,9 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.global_dns_cb.set_state(bool(wired.GetWiredProperty('use_global_dns')))
         self.static_dns_cb.set_state(bool(wired.GetWiredProperty('use_static_dns')))
         
+        # Set static ip checkbox.  Forgot to do this the first time.
+        if stringToNone(self.ip_edit.get_edit_text()):
+            self.static_ip_cb.set_state(True)
         self.dns1.set_edit_text(self.format_entry( "dns1"))
         self.dns2.set_edit_text(self.format_entry( "dns2"))
         self.dns3.set_edit_text(self.format_entry( "dns3"))
@@ -267,10 +218,11 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 ########################################
 
 class WirelessSettingsDialog(AdvancedSettingsDialog):
-    def __init__(self,networkID):
+    def __init__(self,networkID,parent):
         global wireless, daemon
         AdvancedSettingsDialog.__init__(self)
         self.networkid = networkID
+        self.parent = parent
         global_settings_t = language['global_settings']
         encryption_t = language['use_encryption']
         autoconnect_t = language['automatic_connect']
@@ -289,7 +241,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
 
-        title = ">"+language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
+        title = language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
         self._w.header = urwid.Text(('header',title),align='right' )
     
     def encryption_toggle(self,chkbox,new_state,user_data=None):
@@ -311,6 +263,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.static_dns_cb.set_state(bool(wireless.GetWirelessProperty(networkID,
                                                                   'use_static_dns')))
         
+        if stringToNone(self.ip_edit.get_edit_text()):
+            self.static_ip_cb.set_state(True)
         self.dns1.set_edit_text(self.format_entry(networkID, "dns1"))
         self.dns2.set_edit_text(self.format_entry(networkID, "dns2"))
         self.dns3.set_edit_text(self.format_entry(networkID, "dns3"))
@@ -366,9 +320,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             for entry_info in encrypt_info.itervalues():
                 if entry_info[0].get_edit_text() == "" \
                     and entry_info[1] == 'required':
-                    error(self.ui, self.overlay,"%s (%s)" \
+                    error(self.ui, self.parent,"%s (%s)" \
                             % (language['encrypt_info_missing'], 
-                               entry_info[0].get_captionabel() )
+                                entry_info[0].get_caption()[0:-2] )
                           )
                     return False
 
@@ -378,12 +332,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         elif not self.encryption_chkbox.get_state() and \
              wireless.GetWirelessProperty(self.networkid, "encryption"):
             # Encrypt checkbox is off, but the network needs it.
-            error(self.ui, self.overlay, language['enable_encryption'])
+            error(self.ui, self.parent, language['enable_encryption'])
             return False
         else:
             self.set_net_prop("enctype", "None")
-            for entry in encrypt_info.iterkeys():
-                self.set_net_prop(entry[0].entry, "")
         AdvancedSettingsDialog.save_settings(self)
 
         # Save the autoconnect setting.  This is not where it originally was
@@ -402,9 +354,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     # More or less ripped from netentry.py
     def change_encrypt_method(self):
         #self.lbox_encrypt = urwid.ListBox()
+        self.encryption_info = {}
         wid,ID = self.encryption_combo.get_focus()
         methods = misc.LoadEncryptionMethods()
-        self.encryption_info = {}
 
         if self._w.body.body.__contains__(self.pile_encrypt):
             self._w.body.body.pop(self._w.body.body.__len__()-1)
@@ -438,6 +390,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self._w.body.body.insert(self._w.body.body.__len__(),self.pile_encrypt)
         #self._w.body.body.append(self.pile_encrypt)
 
-    def prerun(self,ui,dim,display):
-        self.encryption_combo.build_combobox(self.overlay,ui,14)
+    def ready_widgets(self,ui,body):
+        self.ui = ui
+        self.body = body
+        self.encryption_combo.build_combobox(body,ui,14)
         self.change_encrypt_method()

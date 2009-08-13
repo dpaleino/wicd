@@ -1,6 +1,13 @@
+""" netentry -- Network entry widgets for the GUI.
+
+This module provides GUI widgets used to represent wired and wireless
+entries in the GUI's network list, as well as any settings dialogs
+contained within them.
+
+"""
 #
-#   Copyright (C) 2007 Adam Blackburn
-#   Copyright (C) 2007 Dan O'Reilly
+#   Copyright (C) 2008-2009 Adam Blackburn
+#   Copyright (C) 2008-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -22,7 +29,7 @@ import misc
 import wpath
 import dbusmanager
 from misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, SmallLabel, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
+from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
 from translations import language
 
@@ -38,14 +45,20 @@ def setup_dbus():
     wired = dbusmanager.get_interface('wired')
     
 class AdvancedSettingsDialog(gtk.Dialog):
-    def __init__(self):
+    def __init__(self, network_name=None):
         """ Build the base advanced settings dialog.
         
         This class isn't used by itself, instead it is used as a parent for
         the WiredSettingsDialog and WirelessSettingsDialog.
         
         """
-        gtk.Dialog.__init__(self, title=language['properties'],
+        # if no network name was passed, just use Properties as the title
+        if network_name:
+            title = '%s - %s' % (network_name, language['properties'])
+        else:
+            title = language['properties']	
+
+        gtk.Dialog.__init__(self, title=title,
                             flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CANCEL,
                                                            gtk.RESPONSE_REJECT,
                                                            gtk.STOCK_OK,
@@ -229,9 +242,9 @@ class AdvancedSettingsDialog(gtk.Dialog):
 class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, name):
         """ Build the wired settings dialog. """
-        AdvancedSettingsDialog.__init__(self)
+        AdvancedSettingsDialog.__init__(self, language['wired_network'])
         self.des = self.connect("destroy", self.destroy_called)
-        self.script_button.connect("button-press-event", self.edit_scripts)
+        self.script_button.connect("clicked", self.edit_scripts)
         self.prof_name = name
         
     def set_net_prop(self, option, value):
@@ -287,7 +300,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, networkID):
         """ Build the wireless settings dialog. """
-        AdvancedSettingsDialog.__init__(self)
+        AdvancedSettingsDialog.__init__(self, wireless.GetWirelessProperty(networkID, 'essid'))
         # Set up encryption stuff
         self.networkID = networkID
         self.combo_encryption = gtk.combo_box_new_text()
@@ -302,7 +315,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
         information_button = gtk.Button(stock=gtk.STOCK_INFO)
         self.button_hbox.pack_start(information_button, False, False)
-        information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID))
+        information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID, self))
         information_button.show()
         
         # Build the encryption menu
@@ -328,7 +341,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         # Connect signals.
         self.chkbox_encryption.connect("toggled", self.toggle_encryption)
         self.combo_encryption.connect("changed", self.change_encrypt_method)
-        self.script_button.connect("button-press-event", self.edit_scripts)
+        self.script_button.connect("clicked", self.edit_scripts)
         self.des = self.connect("destroy", self.destroy_called)
 
     def destroy_called(self, *args):
@@ -398,9 +411,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
     def save_settings(self, networkid):
         # Check encryption info
+        encrypt_info = self.encryption_info
         if self.chkbox_encryption.get_active():
             print "setting encryption info..."
-            encrypt_info = self.encryption_info
             encrypt_methods = self.encrypt_types
             self.set_net_prop("enctype",
                                encrypt_methods[self.combo_encryption.get_active()]['type'])
@@ -424,8 +437,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             print "no encryption specified..."
             self.set_net_prop("enctype", "None")
-            for entry in encrypt_info.iterkeys():
-                self.set_net_prop(entry[0].entry, "")
         AdvancedSettingsDialog.save_settings(self)
         
         if self.chkbox_global_settings.get_active():
@@ -550,7 +561,8 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.show()
         self.connect_button.show()
 
-        self.name_label.set_label(language['wired_network'])
+        self.name_label.set_use_markup(True)
+        self.name_label.set_label("<b>" + language['wired_network'] + "</b>")
         
         self.is_full_gui = True
         
@@ -643,17 +655,16 @@ class WiredNetworkEntry(NetworkEntry):
             
     def add_profile(self, widget):
         """ Add a profile to the profile list. """
-        print "adding profile"
-
         response = string_input("Enter a profile name", "The profile name " +
                                   "will not be used by the computer. It " +
                                   "allows you to " + 
                                   "easily distinguish between different network " +
-                                  "profiles.", "Profile name:")
+                                  "profiles.", "Profile name:").strip()
 
         # if response is "" or None
         if not response:
-            return
+            error(None, "Invalid profile name", block=True)
+            return False
 
         profile_name = response
         profile_list = wired.GetWiredProfileList()
@@ -751,7 +762,7 @@ class WirelessNetworkEntry(NetworkEntry):
                                                  'encryption_method')) 
         self.set_channel(wireless.GetWirelessProperty(networkID, 'channel'))
         self.name_label.set_use_markup(True)
-        self.name_label.set_label("%s    %s    %s    %s" % (self._escape(self.essid),
+        self.name_label.set_label("<b>%s</b>    %s    %s    %s" % (self._escape(self.essid),
                                                          self.lbl_strength.get_label(),
                                                          self.lbl_encryption.get_label(),
                                                          self.lbl_channel.get_label(),
@@ -872,8 +883,8 @@ class WirelessNetworkEntry(NetworkEntry):
 
         
 class WirelessInformationDialog(gtk.Dialog):
-    def __init__(self, networkID):
-        gtk.Dialog.__init__(self)
+    def __init__(self, networkID, parent):
+        gtk.Dialog.__init__(self,parent=parent)
         
         # Make the combo box.
         self.lbl_strength = gtk.Label()

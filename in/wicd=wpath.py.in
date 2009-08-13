@@ -27,7 +27,8 @@ lib = '%LIB%'
 share = '%SHARE%'
 etc = '%ETC%'
 scripts = '%SCRIPTS%'
-disconnectscripts = '%SCRIPTS%disconnect'
+predisconnectscripts = '%SCRIPTS%predisconnect'
+postdisconnectscripts = '%SCRIPTS%postdisconnect'
 preconnectscripts = '%SCRIPTS%preconnect'
 postconnectscripts = '%SCRIPTS%postconnect'
 images = '%IMAGES%'
@@ -62,6 +63,8 @@ initfile = '%INITFILE%'
 # stores only the file name, i.e. wicd
 initfilename = '%INITFILENAME%'
 wicd_group = '%WICDGROUP%'
+log_group = '%LOGGROUP%'
+log_perms = '%LOGPERMS%'
 
 # BOOLEANS
 no_install_pmutils = %NO_INSTALL_PMUTILS%
@@ -71,6 +74,7 @@ no_install_kde = %NO_INSTALL_KDE%
 no_install_acpi = %NO_INSTALL_ACPI%
 no_install_docs = %NO_INSTALL_DOCS%
 no_install_ncurses = %NO_INSTALL_NCURSES%
+no_use_notifications = %NO_USE_NOTIFICATIONS%
 
 def chdir(file):
     """Change directory to the location of the specified file.

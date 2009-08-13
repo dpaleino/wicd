@@ -19,9 +19,9 @@ class WiredConnectThread() -- Connection thread for wired
 """
 
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
-#   Copyright (C) 2007 - 2008 Byron Hillis
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Byron Hillis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -116,7 +116,9 @@ def expand_script_macros(script, msg, bssid, essid):
     script -- the script to execute.
     msg -- the name of the script, %{script} will be expanded to this.
     bssid -- the bssid of the network we connect to, defaults to 'wired'.
-    essid -- the essid of the network we connect to, defaults to 'wired'."""
+    essid -- the essid of the network we connect to, defaults to 'wired'.
+    
+    """
     def repl(match):
         macro = match.group(1).lower()
         if macro_dict.has_key(macro):
@@ -149,10 +151,10 @@ class Controller(object):
         self.connecting_thread = None
         self.before_script = None
         self.after_script = None
-        self.disconnect_script = None
+        self.pre_disconnect_script = None
+        self.post_disconnect_script = None
         self.driver = None
         self.iface = None
-        self.backend_manager = BackendManager()
     
     def get_debug(self): return self._debug
     def set_debug(self, value):
@@ -202,17 +204,23 @@ class Controller(object):
     def Disconnect(self, *args, **kargs):
         """ Disconnect from the network. """
         iface = self.iface
-        misc.ExecuteScripts(wpath.disconnectscripts, self.debug)
-        if self.disconnect_script:
-            print 'Running disconnect script'
-            misc.ExecuteScript(expand_script_macros(self.disconnect_script,
-                                                    'disconnection', *args),
+        misc.ExecuteScripts(wpath.predisconnectscripts, self.debug)
+        if self.pre_disconnect_script:
+            print 'Running pre-disconnect script'
+            misc.ExecuteScript(expand_script_macros(self.pre_disconnect_script,
+                                                    'pre-disconnection', *args),
                                self.debug)
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.FlushRoutes()
         iface.Down()
         iface.Up()
+        misc.ExecuteScripts(wpath.postdisconnectscripts, self.debug)
+        if self.post_disconnect_script:
+            print 'Running post-disconnect script'
+            misc.ExecuteScript(expand_script_macros(self.post_disconnect_script,
+                                                    'post-disconnection', *args),
+                               self.debug)
         
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
@@ -272,8 +280,8 @@ class ConnectThread(threading.Thread):
     lock = threading.Lock()
 
     def __init__(self, network, interface_name, before_script, after_script, 
-                 disconnect_script, gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, 
-                 iface, debug):
+                 pre_disconnect_script, post_disconnect_script, gdns1,
+                 gdns2, gdns3, gdns_dom, gsearch_dom, iface, debug):
         """ Initialise the required object variables and the thread.
 
         Keyword arguments:
@@ -282,7 +290,8 @@ class ConnectThread(threading.Thread):
         wired -- name of the wired interface
         before_script -- script to run before bringing up the interface
         after_script -- script to run after bringing up the interface
-        disconnect_script -- script to run after disconnection
+        pre_disconnect_script -- script to run before disconnection
+        post_disconnect_script -- script to run after disconnection
         gdns1 -- global DNS server 1
         gdns2 -- global DNS server 2
         gdns3 -- global DNS server 3
@@ -296,7 +305,8 @@ class ConnectThread(threading.Thread):
         self.connect_result = None
         self.before_script = before_script
         self.after_script = after_script
-        self.disconnect_script = disconnect_script
+        self.pre_disconnect_script = pre_disconnect_script
+        self.post_disconnect_script = post_disconnect_script
         self._should_die = False
         self.abort_reason = ""
         self.connect_result = ""
@@ -313,6 +323,13 @@ class ConnectThread(threading.Thread):
         self.debug = debug
         
         self.SetStatus('interface_down')
+        
+    def run(self):
+        self.connect_result = "Failed"
+        try:
+            self._connect()
+        finally:
+            self.is_connecting = False
         
     def set_should_die(self, val):
         self.lock.acquire()
@@ -564,23 +581,13 @@ class Wireless(Controller):
 
         """
         def comp(x, y):
-            if x.has_key('quality'):
-                if x['quality'] > y['quality']:
-                    return 1
-                elif x['quality'] < y['quality']:
-                    return -1
-                else:
-                    return 0
+            if 'quality' in x:
+                key = 'quality'
             else:
-                if x['strength'] < y['strength']:
-                    return 1
-                elif x['strength'] > y['strength']:
-                    return -1
-                else:
-                    return 0
+                key = 'strength'
+            return cmp(x[key], y[key])
                 
         if not self.wiface: return []
-        
         wiface = self.wiface
 
         # Prepare the interface for scanning
@@ -609,7 +616,8 @@ class Wireless(Controller):
         
         self.connecting_thread = WirelessConnectThread(network,
             self.wireless_interface, self.wpa_driver, self.before_script,
-            self.after_script, self.disconnect_script, self.global_dns_1,
+            self.after_script, self.pre_disconnect_script,
+            self.post_disconnect_script, self.global_dns_1,
             self.global_dns_2, self.global_dns_3, self.global_dns_dom,
             self.global_search_dom, self.wiface, debug)
         self.connecting_thread.setDaemon(True)
@@ -711,7 +719,7 @@ class Wireless(Controller):
         wiface = self.wiface
         print 'Creating ad-hoc network'
         print 'Stopping dhcp client and wpa_supplicant'
-        BACKEND.ReleaseDHCP()
+        wiface.ReleaseDHCP()
         wiface.StopWPA()
         print 'Putting wireless interface down'
         wiface.Down()
@@ -771,6 +779,7 @@ class Wireless(Controller):
         """ Sets the wpa_supplicant driver associated with the interface. """
         self.wiface.SetWpaDriver(driver)
 
+ 
 class WirelessConnectThread(ConnectThread):
     """ A thread class to perform the connection to a wireless network.
 
@@ -780,8 +789,9 @@ class WirelessConnectThread(ConnectThread):
     """
 
     def __init__(self, network, wireless, wpa_driver, before_script,
-                 after_script, disconnect_script, gdns1, gdns2, gdns3, 
-                 gdns_dom, gsearch_dom, wiface, debug=False):
+                 after_script, pre_disconnect_script, post_disconnect_script,
+                 gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, wiface,
+                 debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -790,19 +800,21 @@ class WirelessConnectThread(ConnectThread):
         wpa_driver -- type of wireless interface
         before_script -- script to run before bringing up the interface
         after_script -- script to run after bringing up the interface
-        disconnect_script -- script to run after disconnection
+        pre_disconnect_script -- script to run before disconnection
+        post_disconnect_script -- script to run after disconnection
         gdns1 -- global DNS server 1
         gdns2 -- global DNS server 2
         gdns3 -- global DNS server 3
 
         """
         ConnectThread.__init__(self, network, wireless, before_script, 
-                               after_script, disconnect_script, gdns1, gdns2, 
+                               after_script, pre_disconnect_script,
+                               post_disconnect_script, gdns1, gdns2,
                                gdns3, gdns_dom, gsearch_dom, wiface, debug)
         self.wpa_driver = wpa_driver
 
 
-    def run(self):
+    def _connect(self):
         """ The main function of the connection thread.
 
         This function performs the necessary calls to connect to the
@@ -831,17 +843,17 @@ class WirelessConnectThread(ConnectThread):
         self.reset_ip_addresses(wiface)
         self.stop_wpa(wiface)
         self.flush_routes(wiface)
-
-        # Generate PSK and authenticate if needed.
-        if self.wpa_driver != 'ralink legacy':
-            self.generate_psk_and_authenticate(wiface)
+        wiface.SetMode(self.network['mode'])
 
         # Put interface up.
         self.SetStatus('configuring_interface')
         self.put_iface_up(wiface)
         
+        # Generate PSK and authenticate if needed.
+        if self.wpa_driver != 'ralink legacy':
+            self.generate_psk_and_authenticate(wiface)
+            
         # Associate.
-        wiface.SetMode(self.network['mode'])
         wiface.Associate(self.network['essid'], self.network['channel'],
                          self.network['bssid'])
 
@@ -854,7 +866,8 @@ class WirelessConnectThread(ConnectThread):
         if self.network.get('enctype'):
             self.SetStatus('validating_authentication')
             if not wiface.ValidateAuthentication(time.time()):
-                if not self.connect_result:
+                print "connect result is %s" % self.connect_result
+                if not self.connect_result or self.connect_result == 'Failed':
                     self.abort_connection('bad_pass')
 
         # Set up gateway, IP address, and DNS servers.
@@ -968,9 +981,10 @@ class Wired(Controller):
         if not self.liface: return False
         self.connecting_thread = WiredConnectThread(network,
             self.wired_interface, self.before_script, self.after_script,
-            self.disconnect_script, self.global_dns_1, self.global_dns_2, 
-            self.global_dns_3, self.global_dns_dom, self.global_search_dom, 
-            self.liface, debug)
+            self.pre_disconnect_script, self.post_disconnect_script,
+            self.global_dns_1, self.global_dns_2, self.global_dns_3,
+            self.global_dns_dom, self.global_search_dom, self.liface,
+            debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return self.connecting_thread
@@ -994,8 +1008,8 @@ class WiredConnectThread(ConnectThread):
 
     """
     def __init__(self, network, wired, before_script, after_script, 
-                 disconnect_script, gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, 
-                 liface, debug=False):
+                 pre_disconnect_script, post_disconnect_script, gdns1,
+                 gdns2, gdns3, gdns_dom, gsearch_dom, liface, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -1004,17 +1018,19 @@ class WiredConnectThread(ConnectThread):
         wired -- name of the wired interface
         before_script -- script to run before bringing up the interface
         after_script -- script to run after bringing up the interface
-        disconnect_script -- script to run after disconnection
+        pre_disconnect_script -- script to run before disconnection
+        post_disconnect_script -- script to run after disconnection
         gdns1 -- global DNS server 1
         gdns2 -- global DNS server 2
         gdns3 -- global DNS server 3
 
         """
         ConnectThread.__init__(self, network, wired, before_script, 
-                               after_script, disconnect_script, gdns1, gdns2, 
+                               after_script, pre_disconnect_script,
+                               post_disconnect_script, gdns1, gdns2,
                                gdns3, gdns_dom, gsearch_dom, liface, debug)
 
-    def run(self):
+    def _connect(self):
         """ The main function of the connection thread.
 
         This function performs the necessary calls to connect to the
@@ -1063,4 +1079,3 @@ class WiredConnectThread(ConnectThread):
         
         self.connect_result = "Success"
         self.is_connecting = False
-

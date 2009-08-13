@@ -8,8 +8,8 @@ when appropriate.
 
 """
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -26,7 +26,6 @@ when appropriate.
 
 import gobject
 import time
-import sys
 
 from dbus import DBusException
 
@@ -45,7 +44,7 @@ daemon = dbus_dict["daemon"]
 wired = dbus_dict["wired"]
 wireless = dbus_dict["wireless"]
 
-monitor = to_time = update_callback = mainloop = None
+mainloop = None
 
 def diewithdbus(func):
     def wrapper(self, *__args, **__kargs):
@@ -53,7 +52,7 @@ def diewithdbus(func):
             ret = func(self, *__args, **__kargs)
             self.__lost_dbus_count = 0
             return ret
-        except dbusmanager.DBusException, e:
+        except DBusException, e:
             print  "Caught exception %s" % str(e)
             if not hasattr(self, "__lost_dbus_count"):
                 self.__lost_dbus_count = 0
@@ -86,11 +85,42 @@ class ConnectionStatus(object):
         self.iwconfig = ""
         self.trigger_reconnect = False
         self.__lost_dbus_count = 0
-
+        self._to_time = daemon.GetBackendUpdateInterval()
+        
+        self.add_poll_callback()
         bus = dbusmanager.get_bus()
         bus.add_signal_receiver(self._force_update_connection_status, 
                                 "UpdateState", "org.wicd.daemon")
+        bus.add_signal_receiver(self._update_timeout_interval,
+                                "SignalBackendChanged", "org.wicd.daemon")
 
+    def _update_timeout_interval(self, interval):
+        """ Update the callback interval when signaled by the daemon. """
+        self._to_time = interval
+        gobject.source_remove(self.update_callback)
+        self.add_poll_callback()
+
+    def _force_update_connection_status(self):
+        """ Run a connection status update on demand.
+
+        Removes the scheduled update_connection_status()
+        call, explicitly calls the function, and reschedules
+        it.
+
+        """
+        gobject.source_remove(self.update_callback)
+        self.update_connection_status()
+        self.add_poll_callback()
+        
+    def add_poll_callback(self):
+        """ Registers a polling call at a predetermined interval.
+        
+        The polling interval is determined by the backend in use.
+        
+        """
+        self.update_callback = misc.timeout_add(self._to_time,
+                                                self.update_connection_status)
+    
     def check_for_wired_connection(self, wired_ip):
         """ Checks for a wired connection.
 
@@ -144,15 +174,18 @@ class ConnectionStatus(object):
             self.iwconfig = ''
         # Reset this, just in case.
         self.tried_reconnect = False
+        bssid = wireless.GetApBssid()
+        if not bssid:
+            return False
 
-        wifi_signal = self._get_printable_sig_strength()
-        if wifi_signal == 0:
+        wifi_signal = self._get_printable_sig_strength(always_positive=True)
+        if wifi_signal <= 0:
             # If we have no signal, increment connection loss counter.
             # If we haven't gotten any signal 4 runs in a row (12 seconds),
             # try to reconnect.
             self.connection_lost_counter += 1
             print self.connection_lost_counter
-            if self.connection_lost_counter >= 4:
+            if self.connection_lost_counter >= 4 and daemon.GetAutoReconnect():
                 wireless.DisconnectWireless()
                 self.connection_lost_counter = 0
                 return False
@@ -229,19 +262,6 @@ class ConnectionStatus(object):
             self.auto_reconnect(from_wireless)
         return self.update_state(state)
 
-    def _force_update_connection_status(self):
-        """ Run a connection status update on demand.
-
-        Removes the scheduled update_connection_status()
-        call, explicitly calls the function, and reschedules
-        it.
-
-        """
-        global update_callback
-        gobject.source_remove(update_callback)
-        self.update_connection_status()
-        add_poll_callback()
-
     def update_state(self, state, wired_ip=None, wifi_ip=None):
         """ Set the current connection state. """
         # Set our connection state/info.
@@ -277,13 +297,20 @@ class ConnectionStatus(object):
         self.last_state = state
         return True
 
-    def _get_printable_sig_strength(self):
+    def _get_printable_sig_strength(self, always_positive=False):
         """ Get the correct signal strength format. """
         try:
             if daemon.GetSignalDisplayType() == 0:
                 wifi_signal = int(wireless.GetCurrentSignalStrength(self.iwconfig))
             else:
-                wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                if always_positive:
+                    # because dBm is negative, add 99 to the signal. This way, if
+                    # the signal drops below -99, wifi_signal will == 0, and
+                    # an automatic reconnect will be triggered
+                    # this is only used in check_for_wireless_connection
+                    wifi_signal = 99 + int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                else:
+                    wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
         except TypeError:
             wifi_signal = 0        
 
@@ -334,12 +361,6 @@ def err_handle(error):
     """ Just a dummy function needed for asynchronous dbus calls. """
     pass
 
-def add_poll_callback():
-    global monitor, to_time, update_callback
-
-    update_callback = misc.timeout_add(to_time, 
-                                       monitor.update_connection_status)
-
 def main():
     """ Starts the connection monitor. 
 
@@ -347,11 +368,8 @@ def main():
     an amount of time determined by the active backend.
 
     """
-    global monitor, to_time, mainloop
-
+    global mainloop
     monitor = ConnectionStatus()
-    to_time = daemon.GetBackendUpdateInterval()
-    add_poll_callback()
     mainloop = gobject.MainLoop()
     mainloop.run()
 

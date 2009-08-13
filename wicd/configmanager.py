@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-""" Wicd Configuration Manager
+""" configmanager -- Wicd configuration file manager
 
 Wrapper around ConfigParser for wicd, though it should be
 reusable for other purposes as well.
@@ -8,8 +8,8 @@ reusable for other purposes as well.
 """
 
 #
-#   Copyright (C) 2008 Adam Blackburn
-#   Copyright (C) 2008 Dan O'Reilly
+#   Copyright (C) 2008-2009 Adam Blackburn
+#   Copyright (C) 2008-2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -28,6 +28,7 @@ from ConfigParser import RawConfigParser
 
 from wicd.misc import Noneify, to_unicode
 
+from dbus import Int32
 
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
@@ -105,10 +106,17 @@ class ConfigManager(RawConfigParser):
         
         # Try to intelligently handle the type of the return value.
         try:
-            ret = int(ret)
-        except (ValueError, TypeError):
+            if not ret.startswith('0') or len(ret) == 1:
+                ret = int(ret)
+        except (ValueError, TypeError, AttributeError):
             ret = Noneify(ret)
-        return ret
+        # This is a workaround for a python-dbus issue on 64-bit systems.
+        if isinstance(ret, (int, long)):
+            try:
+                Int32(ret)
+            except OverflowError:
+                ret = str(ret)
+        return to_unicode(ret)
     
     def get(self, *args, **kargs):
         """ Calls the get_option method """

@@ -2,6 +2,7 @@
 #
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly
+#   Copyright (C) 2009        Andrew Psaltis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -19,19 +20,22 @@
 from distutils.core import setup, Command
 from distutils.extension import Extension
 import os
-import shutil
 import sys
+import shutil
 import subprocess
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.6.0a1'
+VERSION_NUM = '1.6.2'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
-CURSES_REVNO = 'r279'
+CURSES_REVNO = 'uimod'
+
+# change to the directory setup.py is contained in
+os.chdir(os.path.abspath(os.path.split(__file__)[0]))
 
 try:
-    if not os.path.exists('vcsinfo.py'):
+    if os.path.exists('.bzr') and os.system('bzr > /dev/null 2>&1') == 0:
         try:
             os.system('bzr version-info --python > vcsinfo.py')
         except:
@@ -41,7 +45,6 @@ try:
 except Exception, e:
     print 'failed to find revision number:'
     print e
-
 
 class configure(Command):
     description = "configure the paths that Wicd will be installed to"
@@ -83,6 +86,9 @@ class configure(Command):
         ('initfile=', None, 'set the init file to use'),
         ('initfilename=', None, "set the name of the init file (don't use)"),
         ('wicdgroup=', None, "set the name of the group used for wicd"),
+        ('distro=', None, 'set the distribution for which wicd will be installed'),
+        ('loggroup=', None, 'the group the log file belongs to'),
+        ('logperms=', None, 'the log file permissions'),
 
         # Configure switches
         ('no-install-init', None, "do not install the init file"),
@@ -91,7 +97,8 @@ class configure(Command):
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
         ('no-install-docs', None, 'do not install the auxiliary documentation'),
-        ('no-install-ncurses', None, 'do not install the ncurses client')
+        ('no-install-ncurses', None, 'do not install the ncurses client'),
+        ('no-use-notifications', None, 'do not ever allow the use of libnotify notifications')
         ]
         
     def initialize_options(self):
@@ -118,6 +125,7 @@ class configure(Command):
         self.docdir = '/usr/share/doc/wicd/'
         self.mandir = '/usr/share/man/'
         self.kdedir = '/usr/share/autostart/'
+        self.distro = 'auto'
         
         self.no_install_init = False
         self.no_install_man = False
@@ -126,51 +134,41 @@ class configure(Command):
         self.no_install_pmutils = False
         self.no_install_docs = False
         self.no_install_ncurses = False
+        self.no_use_notifications = False
 
         # Determine the default init file location on several different distros
-        
         self.distro_detect_failed = False
         
         self.initfile = 'init/default/wicd'
+        # ddistro is the detected distro
         if os.path.exists('/etc/redhat-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/redhat/wicd'
+            self.ddistro = 'redhat'
         elif os.path.exists('/etc/SuSE-release'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/suse/wicd'
+            self.ddistro = 'suse'
         elif os.path.exists('/etc/fedora-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/redhat/wicd'
+            self.ddistro = 'redhat'
         elif os.path.exists('/etc/gentoo-release'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/gentoo/wicd'
+            self.ddistro = 'gentoo'
         elif os.path.exists('/etc/debian_version'):
-            self.init = '/etc/init.d/'
-            self.initfile = 'init/debian/wicd'
+            self.ddistro = 'debian'
         elif os.path.exists('/etc/arch-release'):
-            self.init = '/etc/rc.d/'
-            self.initfile = 'init/arch/wicd'
+            self.ddistro = 'arch'
         elif os.path.exists('/etc/slackware-version') or \
-             os.path.exists('/etc/slamd64-version'):
-            self.init = '/etc/rc.d/'
-            self.initfile = 'init/slackware/rc.wicd'
-            self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
-            self.mandir = '/usr/man/'
-            self.no_install_acpi = True
+             os.path.exists('/etc/slamd64-version') or \
+             os.path.exists('/etc/bluewhite64-version'):
+            self.ddistro = 'slackware'
         elif os.path.exists('/etc/pld-release'):
-            self.init = '/etc/rc.d/init.d/'
-            self.initfile = 'init/pld/wicd'
+            self.ddistro = 'pld'
         elif os.path.exists('/usr/bin/crux'):
-            self.init = '/etc/rc.d/'
+            self.ddistro = 'crux'
         elif os.path.exists('/etc/lunar.release'):
-            self.init='/etc/init.d/'
-            self.initfile = 'init/lunar/wicd'
+            self.distro = 'lunar'
         else:
-            self.init = 'FAIL'
-            self.no_install_init = True
-            self.distro_detect_failed = True
+            self.ddistro = 'FAIL'
+            #self.no_install_init = True
+            #self.distro_detect_failed = True
             print 'WARNING: Unable to detect the distribution in use.  ' + \
-                  'If you have specified --init and --initfile, configure will continue.  ' + \
+                  'If you have specified --distro or --init and --initfile, configure will continue.  ' + \
                   'Please report this warning, along with the name of your ' + \
                   'distribution, to the wicd developers.'
 
@@ -225,8 +223,58 @@ class configure(Command):
         self.pidfile = '/var/run/wicd/wicd.pid'
         self.initfilename = os.path.basename(self.initfile)
         self.wicdgroup = 'users'
+        self.loggroup = ''
+        self.logperms = '0600'
+
+    def distro_check(self):
+        print "Distro is: "+self.distro
+        if self.distro in ['sles','suse']:
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/suse/wicd'
+        elif self.distro in ['redhat','centos','fedora']:
+            self.init = '/etc/rc.d/init.d/'
+            self.initfile = 'init/redhat/wicd'
+        elif self.distro in ['slackware','slamd64','bluewhite64']:
+            self.init = '/etc/rc.d/'
+            self.initfile = 'init/slackware/rc.wicd'
+            self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
+            self.mandir = '/usr/man/'
+            self.no_install_acpi = True
+        elif self.distro in ['debian']:
+            self.wicdgroup = "netdev"
+            self.loggroup = "adm"
+            self.logperms = "0640"
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/debian/wicd'
+        elif self.distro in ['arch']:
+            self.init = '/etc/rc.d/'
+            self.initfile = 'init/arch/wicd'
+        elif self.distro in ['gentoo']:
+            self.init = '/etc/init.d/'
+            self.initfile = 'init/gentoo/wicd'
+        elif self.distro in ['pld']:
+            self.init = '/etc/rc.d/init.d/'
+            self.initfile = 'init/pld/wicd'
+        elif self.distro in ['crux']:
+            self.init = '/etc/rc.d/'
+        elif self.distro in ['lunar']:
+            self.init='/etc/init.d/'
+            self.initfile = 'init/lunar/wicd'
+        else :
+            if self.distro == 'auto':
+                print "NOTICE: Automatic distro detection found: "+self.ddistro+", retrying with that..."
+                self.distro = self.ddistro
+                self.distro_check()
+            else:
+                print "WARNING: Distro detection failed!"
+                self.init='init/default/wicd'
+                self.no_install_init = True
+                self.distro_detect_failed = True
+        
+
 
     def finalize_options(self):
+        self.distro_check()
         if self.distro_detect_failed and not self.no_install_init and \
            'FAIL' in [self.init, self.initfile]:
             print 'ERROR: Failed to detect distro. Configure cannot continue.  ' + \
@@ -331,6 +379,26 @@ class test(Command):
         print 'running tests'
         tests.run_tests()
 
+class update_translations_py(Command):
+    description = "download new translations.py from the online translator"
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import urllib, shutil
+        # grab translations.py
+        filename, headers = urllib.urlretrieve('http://wicd.net/translator/generate/translations.py/')
+        # copy it into the right location
+        shutil.copyfile(filename,
+                        os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                                     'wicd/translations.py'))
+
 class get_translations(Command):
     description = "download the translations from the online translator"
          
@@ -344,30 +412,29 @@ class get_translations(Command):
 
     def run(self):
         import urllib, shutil
-        shutil.rmtree('translations/')
+        if os.path.exists('translations'):
+            shutil.rmtree('translations/')
         os.makedirs('translations')
-        filename, headers = urllib.urlretrieve('http://wicd.net/translator/idlist')
+        filename, headers = urllib.urlretrieve('http://wicd.sourceforge.net/translator/idlist/')
         id_file = open(filename, 'r')
         lines = id_file.readlines()
         # remove the \n from the end of lines, and remove blank entries
         lines = [ x.strip() for x in lines if not x.strip() is '' ]
         for id in lines:
-            # http://wicd.net/translator/download_po.php?language=11
-            pofile, poheaders = urllib.urlretrieve('http://wicd.net/translator/download/'+str(id))
-            #for i in `cat ids`; do
-            #wget "http://wicd.sourceforge.net/translator/download_po.php?language=$i&version=$1" -O "language_$i"
-            #iden=`python -c "import sys; print open('language_$i','r').readlines()[1].strip()[2:]"`
-            #mv "language_$i" po/$iden.po
-            #mkdir -p $iden/LC_MESSAGES/
-            #msgfmt --output-file=$iden/LC_MESSAGES/wicd.mo po/$iden.po
-            lang_identifier = open(pofile,'r').readlines()[0].strip()
-            lang_identifier = lang_identifier[lang_identifier.rindex('(')+1:lang_identifier.rindex(')')]
-            shutil.move(pofile, lang_identifier+'.po')
-            print 'Got',lang_identifier
-            os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
-            os.system('msgfmt --output-file=translations/' + lang_identifier +
-                      '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
-            os.remove(lang_identifier+'.po')
+            pofile, poheaders = urllib.urlretrieve('http://wicd.sourceforge.net/translator/download/'+str(id)+'/')
+            try:
+                lang_identifier = open(pofile,'r').readlines()[0].strip()
+                first_line = lang_identifier
+                lang_identifier = lang_identifier[lang_identifier.rindex('(')+1:lang_identifier.rindex(')')]
+                print first_line
+            except:
+                print >> sys.stderr, 'error downloading language %s' % id
+            else:
+                shutil.move(pofile, lang_identifier+'.po')
+                os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
+                os.system('msgfmt --output-file=translations/' + lang_identifier +
+                          '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
+                os.remove(lang_identifier+'.po')
 
 
 class uninstall(Command):
@@ -383,7 +450,6 @@ class uninstall(Command):
 
     def run(self):
         os.system("./uninstall.sh")
-
 try:
     import wpath
 except ImportError:
@@ -425,7 +491,8 @@ try:
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.autostart, ['other/wicd-tray.desktop', ]),
     (wpath.scripts, []),
-    (wpath.disconnectscripts, []),
+    (wpath.predisconnectscripts, []),
+    (wpath.postdisconnectscripts, []),
     (wpath.preconnectscripts, []),
     (wpath.postconnectscripts, []),
     ]
@@ -459,34 +526,32 @@ try:
         data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))
     if not wpath.no_install_pmutils:
-        data.append((wpath.pmutils, ['other/55wicd' ]))
+        data.append((wpath.pmutils, ['other/91wicd' ]))
     print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):
-        if not language.startswith('.'):
-            codes = language.split('_')
-            short_language = language
-            if codes[0].lower() == codes[1].lower():
-                short_language = codes[0].lower()
-            print short_language,
-            data.append((wpath.translations + short_language + '/LC_MESSAGES/',
-                        ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+        print language,
+        data.append((wpath.translations + language + '/LC_MESSAGES/',
+                    ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+    print
 except Exception, e:
     print str(e)
     print '''Error setting up data array. This is normal if 
 python setup.py configure has not yet been run.'''
 
 
-wpactrl_ext = Extension(name = 'wpactrl', 
-                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
-                                   'depends/python-wpactrl/wpactrl.c'],
-                        extra_compile_args = ["-fno-strict-aliasing"])
+wpactrl_ext = Extension(name='wpactrl', 
+                        sources=['depends/python-wpactrl/wpa_ctrl.c',
+                                 'depends/python-wpactrl/wpactrl.c'],
+                        extra_compile_args=["-fno-strict-aliasing"])
 
-iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
-                       sources = ['depends/python-iwscan/pyiwscan.c'])
+iwscan_ext = Extension(name='iwscan', libraries=['iw'],
+                       sources=['depends/python-iwscan/pyiwscan.c'])
     
 setup(cmdclass={'configure' : configure, 'get_translations' : get_translations,
-                'uninstall' : uninstall, 'test' : test, 'clear_generated' : clear_generated},
+                'uninstall' : uninstall, 'test' : test, 'clear_generated' :
+                clear_generated, 'update_translations_py' :
+                update_translations_py},
       name="Wicd",
       version=VERSION_NUM,
       description="A wireless and wired network manager",
@@ -495,17 +560,16 @@ Wicd supports wired and wireless networks, and capable of
 creating and tracking profiles for both.  It has a 
 template-based wireless encryption system, which allows the user
 to easily add encryption methods used.  It ships with some common
-encryption types, such as WPA and WEP. Wicdl will automatically
+encryption types, such as WPA and WEP. Wicd will automatically
 connect at startup to any preferred network within range.
 """,
-      author="Adam Blackburn, Dan O'Reilly",
-      author_email="compwiz18@gmail.com, oreilldf@gmail.com",
+      author="Adam Blackburn, Dan O'Reilly, Andrew Psaltis",
+      author_email="compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
       py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
                   'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
                   'wicd.logfile','wicd.backend','wicd.configmanager',
                   'wicd.guiutil','wicd.translations'], 
-      ext_modules=[iwscan_ext, wpactrl_ext],
       data_files=data
       )

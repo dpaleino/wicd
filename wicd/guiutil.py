@@ -1,7 +1,7 @@
 """ guiutil - A collection of commonly used gtk/gui functions and classes. """
 #
-#   Copyright (C) 2007 - 2008 Adam Blackburn
-#   Copyright (C) 2007 - 2008 Dan O'Reilly
+#   Copyright (C) 2007 - 2009 Adam Blackburn
+#   Copyright (C) 2007 - 2009 Dan O'Reilly
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -17,11 +17,39 @@
 #
 
 import gtk
+import os.path
 
+import wpath
+
+HAS_NOTIFY = True
+try:
+    import pynotify
+    if not pynotify.init("Wicd"):
+        print 'Could not initalize pynotify'
+        HAS_NOTIFY = False
+except ImportError:
+    print "Importing pynotify failed, notifications disabled."
+    HAS_NOTIFY = False
+ 
+print "Has notifications support", HAS_NOTIFY
+
+if wpath.no_use_notifications:
+    print 'Notifications disabled during setup.py configure'
+    
+def can_use_notify():
+    use_notify = os.path.exists(os.path.join(os.path.expanduser('~/.wicd'),
+                                             'USE_NOTIFICATIONS')
+                                )
+    return use_notify and HAS_NOTIFY and not wpath.no_use_notifications
+    
 def error(parent, message, block=True): 
     """ Shows an error dialog. """
     def delete_event(dialog, id):
         dialog.destroy()
+    if can_use_notify() and not block:
+        notification = pynotify.Notification("ERROR", message, "error")
+        notification.show()
+        return
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_ERROR,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
@@ -146,5 +174,5 @@ class GreyLabel(gtk.Label):
         gtk.Label.__init__(self)
 
     def set_label(self, text):
-        self.set_markup("<span color=\"#666666\"><i>" + text + "</i></span>")
+        self.set_markup(text)
         self.set_alignment(0, 0)

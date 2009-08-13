@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+"""prefs_curses.py -- Pretty, tabbable, console preferences dialog"""
+
 #       Copyright (C) 2008-2009 Andrew Psaltis
 
 #       This program is free software; you can redistribute it and/or modify
@@ -22,7 +24,7 @@ import urwid.curses_display
 
 from wicd import misc
 from wicd import dbusmanager
-from curses_misc import SelText,DynWrap,ComboBox,TabColumns
+from curses_misc import SelText,DynWrap,DynRadioButton,ComboBox,TabColumns
 
 daemon = None
 wireless = None
@@ -68,8 +70,8 @@ class PrefsDialog(urwid.WidgetWrap):
 
         global_dns_cat_t = ('header',language['global_dns_servers'])
         global_dns_t     = ('editcp',language['use_global_dns'])
-        dns_dom_t        = ('editcp','    DNS Domain:   ')
-        search_dom_t     = ('editcp','    Search domain:')
+        dns_dom_t        = ('editcp','    '+language['dns_domain']+':   ')
+        search_dom_t     = ('editcp','    '+language['search_domain']+':')
         dns1_t           = ('editcp','    DNS server 1: ')
         dns2_t           = ('editcp','    DNS server 2: ')
         dns3_t           = ('editcp','    DNS server 3: ')
@@ -91,6 +93,7 @@ class PrefsDialog(urwid.WidgetWrap):
         dhcp1_t  = 'dhclient'
         dhcp2_t  = 'dhcpcd'
         dhcp3_t  = 'pump'
+        dhcp4_t  = 'udhcpc'
 
         wired_detect_header_t = ('header',language["wired_detect"])
         wired1_t              = 'ethtool'
@@ -175,26 +178,33 @@ class PrefsDialog(urwid.WidgetWrap):
 
         self.dhcp_header = urwid.Text(dhcp_header_t)
         self.dhcp_l = []
-        # Automatic
+
+        # Order of these is flipped in the actual interface,
+        # (2,3,1 -> dhcpcd, pump, dhclient), because dhclient often doesn't like
+        # to work on several distros.
         self.dhcp0  = urwid.RadioButton(self.dhcp_l,automatic_t)
-        self.dhcp1  = urwid.RadioButton(self.dhcp_l,dhcp1_t)
-        self.dhcp2  = urwid.RadioButton(self.dhcp_l,dhcp2_t)
-        self.dhcp3  = urwid.RadioButton(self.dhcp_l,dhcp3_t)
+        self.dhcp1  = DynRadioButton(self.dhcp_l,dhcp1_t)
+        self.dhcp2  = DynRadioButton(self.dhcp_l,dhcp2_t)
+        self.dhcp3  = DynRadioButton(self.dhcp_l,dhcp3_t)
+        self.dhcp4  = DynRadioButton(self.dhcp_l,dhcp4_t)
+        self.dhcp_l = [self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,self.dhcp4]
 
         self.wired_l = []
         self.wired_detect_header = urwid.Text(wired_detect_header_t)
         self.wired0         = urwid.RadioButton(self.wired_l,automatic_t)
-        self.wired1         = urwid.RadioButton(self.wired_l,wired1_t)
-        self.wired2         = urwid.RadioButton(self.wired_l,wired2_t)
+        self.wired1         = DynRadioButton(self.wired_l,wired1_t)
+        self.wired2         = DynRadioButton(self.wired_l,wired2_t)
+        self.wired_l = [self.wired0,self.wired1,self.wired2]
 
         self.flush_l = []
         self.flush_header   = urwid.Text(flush_header_t)
         self.flush0         = urwid.RadioButton(self.flush_l,automatic_t)
-        self.flush1         = urwid.RadioButton(self.flush_l,flush1_t)
-        self.flush2         = urwid.RadioButton(self.flush_l,flush2_t)
+        self.flush1         = DynRadioButton(self.flush_l,flush1_t)
+        self.flush2         = DynRadioButton(self.flush_l,flush2_t)
+        self.flush_l = [self.flush0,self.flush1,self.flush2]
 
         externalLB = urwid.ListBox([self.dhcp_header,
-                                    self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,
+                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,self.dhcp4,
                                     _blank,
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,
@@ -237,27 +247,10 @@ class PrefsDialog(urwid.WidgetWrap):
                         self.header2 : advancedLB}
         #self.load_settings()
 
-        # Now for the buttons:
-        ok_t = 'OK'
-        cancel_t = 'Cancel'
-        
-        ok_button = urwid.AttrWrap(urwid.Button('OK',self.ok_callback),'body','focus')
-        cancel_button = urwid.AttrWrap(urwid.Button('Cancel',self.cancel_callback),'body','focus')
-        # Variables set by the buttons' callback functions
-        self.CANCEL_PRESSED = False
-        self.OK_PRESSED = False
-
-
-        self.button_cols = urwid.Columns([ok_button,cancel_button],
-                dividechars=1)
-
-        self.tabs = TabColumns(headerList,lbList,language['preferences'],self.button_cols)
+        self.tabs = TabColumns(headerList,lbList,language['preferences'])
         self.__super.__init__(self.tabs)
         
     def load_settings(self):
-        # Reset the buttons
-        self.CANCEL_PRESSED = False
-        self.OK_PRESSED = False
 
         ### General Settings
         # ComboBox does not like dbus.Strings as text markups.  My fault. :/
@@ -282,13 +275,20 @@ class PrefsDialog(urwid.WidgetWrap):
         self.wired_auto_l[daemon.GetWiredAutoConnectMethod()-1]
         self.auto_reconn_checkb.set_state(daemon.GetAutoReconnect())
 
+        def find_avail(apps):
+            for app in apps[1:]:
+                app.set_sensitive(daemon.GetAppAvailable(app.get_label()))
+
         ### External Programs
+        find_avail(self.dhcp_l)
         dhcp_method = daemon.GetDHCPClient()
         self.dhcp_l[dhcp_method].set_state(True)
         
+        find_avail(self.wired_l)
         wired_link_method = daemon.GetLinkDetectionTool()
         self.wired_l[wired_link_method].set_state(True)
 
+        find_avail(self.flush_l)
         flush_method = daemon.GetFlushTool()
         self.flush_l[flush_method].set_state(True)
 
@@ -322,7 +322,7 @@ class PrefsDialog(urwid.WidgetWrap):
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
 
-    def save_results(self):
+    def save_settings(self):
         """ Pushes the selected settings to the daemon.
             This exact order is found in prefs.py"""
         daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())
@@ -353,8 +353,10 @@ class PrefsDialog(urwid.WidgetWrap):
             dhcp_client = misc.DHCLIENT
         elif self.dhcp2.get_state():
             dhcp_client = misc.DHCPCD
-        else:
+        elif self.dhcp3.get_state():
             dhcp_client = misc.PUMP
+        else:
+            dhcp_client = misc.UDHCPC
         daemon.SetDHCPClient(dhcp_client)
         
         if self.wired0.get_state():
@@ -378,45 +380,6 @@ class PrefsDialog(urwid.WidgetWrap):
         for w in self.dns1,self.dns2,self.dns3,self.dns_dom,self.search_dom:
             w.set_sensitive(new_state)
 
-    # Button callbacks
-    def ok_callback(self,button_object,user_data=None):
-        self.OK_PRESSED = True
-    def cancel_callback(self,button_object,user_data=None):
-        self.CANCEL_PRESSED = True
-
-    def ready_comboboxes(self,ui,body):
+    def ready_widgets(self,ui,body):
         self.wpa_cbox.build_combobox(body,ui,4)
         self.backend_cbox.build_combobox(body,ui,8)
-
-    # Put the widget into an overlay, and run!
-    def run(self,ui, dim, display):
-        width,height = ui.get_cols_rows()
-        self.load_settings()
-
-        overlay = urwid.Overlay(self.tabs, display, ('fixed left', 0),width
-                                , ('fixed top',1), height-3)
-        self.ready_comboboxes(ui,overlay)
-
-        keys = True
-        while True:
-            if keys:
-                ui.draw_screen(dim, overlay.render(dim, True))
-            keys = ui.get_input()
-
-            if "window resize" in keys:
-                dim = ui.get_cols_rows()
-            if "esc" in keys or 'Q' in keys:
-                return False
-            for k in keys:
-                #Send key to underlying widget:
-                overlay.keypress(dim, k)
-                if urwid.is_mouse_event(k):
-                    event, button, col, row = k
-                    overlay.mouse_event( dim,
-                            event, button, col, row,
-                            focus=True)
-            # Check if buttons are pressed.
-            if self.CANCEL_PRESSED:
-                return False
-            if self.OK_PRESSED or 'meta enter' in keys:
-                return True

@@ -118,6 +118,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         
     def set_defaults(self, widget=None, event=None):
         """ Put some default values into entries to help the user out. """
+        self.txt_ip.set_text(self.txt_ip.get_text().strip())
         ipAddress = self.txt_ip.get_text()  # For easy typing :)
         netmask = self.txt_netmask
         gateway = self.txt_gateway
@@ -130,7 +131,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             if stringToNone(netmask.get_text()) is None:  # Make sure the netmask is blank
                 netmask.set_text('255.255.255.0')  # Fill in the most common one
         elif ipAddress != "":
-            error(None, "Invalid IP Address Entered.")
+            error(None, language['invalid_ip_address'])
 
     def reset_static_checkboxes(self):
         # Enable the right stuff

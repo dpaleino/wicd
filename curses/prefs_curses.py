@@ -326,6 +326,11 @@ class PrefsDialog(urwid.WidgetWrap):
         """ Pushes the selected settings to the daemon.
             This exact order is found in prefs.py"""
         daemon.SetUseGlobalDNS(self.global_dns_checkb.get_state())
+
+        for i in [self.dns1, self.dns2,
+                  self.dns3,self.dns_dom, self.search_dom, self.dns_dom]:
+            i.set_edit_text(i.get_edit_text().strip())
+
         daemon.SetGlobalDNS(self.dns1.get_edit_text(), self.dns2.get_edit_text(),
                             self.dns3.get_edit_text(), self.dns_dom.get_edit_text(),
                             self.search_dom.get_edit_text())

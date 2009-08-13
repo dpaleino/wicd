@@ -183,6 +183,10 @@ class PreferencesDialog(object):
     def save_results(self):
         """ Pushes the selected settings to the daemon. """
         daemon.SetUseGlobalDNS(self.useGlobalDNSCheckbox.get_active())
+        # Strip whitespace from DNS entries
+        for i in [self.dns1Entry, self.dns2Entry, self.dns3Entry,
+                  self.dnsDomEntry, self.searchDomEntry]:
+            i.set_text(i.get_text().strip())
         daemon.SetGlobalDNS(self.dns1Entry.get_text(), self.dns2Entry.get_text(),
                             self.dns3Entry.get_text(), self.dnsDomEntry.get_text(),
                             self.searchDomEntry.get_text())

@@ -31,6 +31,7 @@ from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
 from itertools import repeat, chain, izip
+from pipes import quote
 
 # wicd imports
 import wpath
@@ -192,13 +193,13 @@ def ExecuteScripts(scripts_dir, verbose=False, extra_parameters=()):
 
 def ExecuteScript(script, verbose=False, extra_parameters=()):
     """ Execute a command and send its output to the bit bucket. """
+    extra_parameters = [ quote(s) for s in extra_parameters ]
+    params = ' '.join(extra_parameters)
+    # escape script name
+    script = quote(script)
     if verbose:
-        print "Executing %s with params %s" % (script, ' '.join(extra_parameters))
-    extra_parameters = [ s.replace('"', '\\"') for s in extra_parameters ]
-    # escape characters
-    params = '" "'.join(extra_parameters)
-    script = script.replace(' ', '\\ ')
-    ret = call('%s "%s" > /dev/null 2>&1' % (script, params), shell=True)
+        print "Executing %s with params %s" % (script, params)
+    ret = call('%s %s > /dev/null 2>&1' % (script, params), shell=True)
     if verbose:
         print "%s returned %s" % (script, ret)
 

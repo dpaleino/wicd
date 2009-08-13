@@ -253,7 +253,7 @@ class TrayIcon(object):
             self.network_type = "wired"
             self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
             # status_string = language['connected_to_wired'].replace('$A',
-                                                                     wired_ip)
+            #wired_ip)
             # self.tr.set_tooltip(status_string)
             self._show_notification(language['wired_network'],
                                     language['connection_established'],
@@ -280,9 +280,9 @@ class TrayIcon(object):
             if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                 lock = "-lock"
             # status_string = (language['connected_to_wireless']
-                                .replace('$A', self.network)
-                                .replace('$B', sig_string)
-                                .replace('$C', str(wireless_ip))) 
+            #.replace('$A', self.network)
+            #                    .replace('$B', sig_string)
+            #                    .replace('$C', str(wireless_ip))) 
             #self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
             self._show_notification(self.network,
@@ -361,7 +361,8 @@ class TrayIcon(object):
         def set_signal_image(self, wireless_signal, lock):
             """ Sets the tray icon image for an active wireless connection. """
             if self.animate:
-                prefix = self.get_bandwidth_state()
+                TrayIcon.get_bandwidth_bytes(self.parent)
+                prefix = self.get_bandwidth_activity()
             else:
                 prefix = 'idle-'
             if daemon.GetSignalDisplayType() == 0:
@@ -387,7 +388,7 @@ class TrayIcon(object):
             self.tr.set_from_file(img_file)
         
         @catchdbus
-        def get_bandwidth_state(self):
+        def get_bandwidth_activity(self):
             """ Determines what network activity state we are in. """
             transmitting = False
             receiving = False
@@ -409,18 +410,20 @@ class TrayIcon(object):
                 return 'idle-'
                     
             # Figure out receiving data info.
-            activity = self.is_network_active(rcvbytes, self.max_rcv_gain,
-                                              self.last_rcvbytes)
+            activity = self.is_network_active(self.parent.cur_rcvbytes, 
+                                              self.parent.max_rcv_gain,
+                                              self.parent.last_rcvbytes)
             receiving = activity[0]
-            self.max_rcv_gain = activity[1]
-            self.last_rcvbytes = activity[2]
+            self.parent.max_rcv_gain = activity[1]
+            self.parent.last_rcvbytes = activity[2]
                     
             # Figure out out transmitting data info.
-            activity = self.is_network_active(sndbytes, self.max_snd_gain,
-                                              self.last_sndbytes)
+            activity = self.is_network_active(self.parent.cur_sndbytes, 
+                                              self.parent.max_snd_gain,
+                                              self.parent.last_sndbytes)
             transmitting = activity[0]
-            self.max_snd_gain = activity[1]
-            self.last_sndbytes = activity[2]
+            self.parent.max_snd_gain = activity[1]
+            self.parent.last_sndbytes = activity[2]
                     
             if transmitting and receiving:
                 return 'both-'
@@ -466,7 +469,7 @@ class TrayIcon(object):
         tray icons.
 
         """
-        def __init__(self):
+        def __init__(self, parent):
             menu = """
                     <ui>
                         <menubar name="Menubar">
@@ -474,6 +477,7 @@ class TrayIcon(object):
                                 <menu action="Connect">
                                 </menu>
                                 <separator/>
+                                <menuitem action="Info"/>
                                 <menuitem action="About"/>
                                 <menuitem action="Quit"/>
                             </menu>
@@ -483,6 +487,9 @@ class TrayIcon(object):
             actions = [
                     ('Menu',  None, 'Menu'),
                     ('Connect', gtk.STOCK_CONNECT, "Connect"),
+                    ('Info', gtk.STOCK_INFO, "_Connection Info", None,
+                     'Information about the current connection',
+                     self.on_conn_info),
                     ('About', gtk.STOCK_ABOUT, '_About...', None,
                      'About wicd-tray-icon', self.on_about),
                     ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
@@ -500,6 +507,11 @@ class TrayIcon(object):
             self._is_scanning = False
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             net_menuitem.connect("activate", self.on_net_menu_activate)
+            
+            self.parent = parent
+            self.time = 2           # Time between updates
+            self.cont = 'Stop'
+            self.conn_info_txt = ''
             
         def tray_scan_started(self):
             """ Callback for when a wireless scan is started. """
@@ -534,6 +546,96 @@ class TrayIcon(object):
             dialog.set_website('http://wicd.net')
             dialog.run()
             dialog.destroy()
+
+        def on_conn_info(self, data=None):
+            """ Opens the Connection Information Dialog """
+            window = gtk.Dialog("Wicd Connection Info", None, 0, (gtk.STOCK_OK, gtk.RESPONSE_CLOSE))
+           
+            # Create labels
+            self.label = gtk.Label()
+            self.data = gtk.Label()
+            self.label.show()
+            self.data.show()
+            self.list = []
+            self.list.append(self.data)
+            self.list.append(self.label)
+
+            # Setup table
+            table = gtk.Table(1,2)
+            table.set_col_spacings(12)
+            table.attach(self.label, 0, 1, 0, 1)
+            table.attach(self.data, 1, 2, 0 ,1)
+
+            # Setup Window
+            content = window.get_content_area()
+            content.pack_start(table, True, True, 0)
+            content.show_all()
+            
+            # Start updates
+            self.cont = 'Go'
+            gobject.timeout_add(5000, self.update_conn_info_win, self.list)
+            self.update_conn_info_win(self.list)
+            
+            window.run()
+    
+            # Destroy window and stop updates
+            window.destroy()
+            self.cont = 'Stop'
+    
+        def update_conn_info_win(self, list): 
+            """ Updates the information in the connection summary window """
+            if (self.cont == "Stop"):
+                return False
+            
+            [state, info] = daemon.GetConnectionStatus()
+            [rx, tx] = self.get_current_bandwidth()
+                   
+            # Choose info for the data
+            if state == misc.WIRED:
+                text = (language['conn_info_wired']
+                        .replace('$A', str(info[0]))    #IP
+                        .replace('$B', str(rx))         #RX
+                        .replace('$C', str(tx)))        #TX
+            elif state == misc.WIRELESS:
+                text = (language['conn_info_wireless']
+                        .replace('$A', str(info[1]))    #SSID
+                        .replace('$B', str(info[4]))    #Speed
+                        .replace('$C', str(info[0]))    #IP
+                        .replace('$D', daemon.FormatSignalForPrinting(str(info[2])))
+                        .replace('$E', str(rx))
+                        .replace('$F', str(tx)))
+            else:
+                text = ''
+
+            # Choose info for the labels
+            self.list[0].set_text(text)
+            if state == misc.WIRED:
+                self.list[1].set_text(language['conn_info_wired_labels'])
+            elif state == misc.WIRELESS:
+                self.list[1].set_text(language['conn_info_wireless_labels'])
+            elif state == misc.CONNECTING:
+                self.list[1].set_text(language['conn_info_connecting'])
+            elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
+                self.list[1].set_text(language['conn_info_not_connected']) 
+                       
+            return True 
+                            
+        def get_current_bandwidth(self):
+            """ 
+            Calculates the current bandwidth based on sent/received bytes
+            divided over time. Unit is in KB/s
+            """
+            self.parent.get_bandwidth_bytes()
+            rxb = self.parent.cur_rcvbytes - self.parent.last_rcvbytes
+            txb = self.parent.cur_sndbytes - self.parent.last_sndbytes
+
+            self.parent.last_rcvbytes = self.parent.cur_rcvbytes
+            self.parent.last_sndbytes = self.parent.cur_sndbytes
+
+            rx_rate = float(rxb / (self.time * 1024))
+            tx_rate = float(txb / (self.time * 1024))
+                                
+            return (rx_rate, tx_rate)
         
         def _add_item_to_menu(self, net_menu, lbl, type_, n_id, is_connecting, 
                               is_active):
@@ -598,14 +700,19 @@ class TrayIcon(object):
                     signal_img = 'signal-25.png'
             return wpath.images + signal_img
             
+        @catchdbus
         def on_net_menu_activate(self, item):
             """ Trigger a background scan to populate the network menu. 
             
-            Clear the network menu, and schedule a method to be
-            called in .8 seconds to trigger a scan if the menu
-            is still being moused over.
+            Called when the network submenu is moused over.  We
+            sleep briefly, clear pending gtk events, and if
+            we're still being moused over we trigger a scan.
+            This is to prevent scans when the user is just
+            mousing past the menu to select another menu item.
             
             """
+            def dummy(x=None): pass
+            
             if self._is_scanning:
                 return True
             
@@ -618,7 +725,7 @@ class TrayIcon(object):
             while gtk.events_pending():
                 gtk.main_iteration()
             if item.state != gtk.STATE_PRELIGHT:
-                return False
+                return True
             wireless.Scan(False)
             return False
         
@@ -706,9 +813,9 @@ class TrayIcon(object):
             for machines running versions of GTK < 2.10.
             
             """
-            def __init__(self):
+            def __init__(self, parent):
                 """Initializes the tray icon"""
-                TrayIcon.TrayIconGUI.__init__(self)
+                TrayIcon.TrayIconGUI.__init__(self, parent)
                 self.tooltip = gtk.Tooltips()
                 self.eb = gtk.EventBox()
                 self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
@@ -762,8 +869,8 @@ class TrayIcon(object):
             Uses gtk.StatusIcon to implement a tray icon.
             
             """
-            def __init__(self):
-                TrayIcon.TrayIconGUI.__init__(self)
+            def __init__(self, parent):
+                TrayIcon.TrayIconGUI.__init__(self, parent)
                 gtk.StatusIcon.__init__(self)
 
                 self.current_icon_path = ''

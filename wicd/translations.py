@@ -57,7 +57,6 @@ def get_gettext():
 # Generated automatically on Sun, 05 Jul 2009 13:51:18 CDT
 _ = get_gettext()
 language = {}
-<<<<<<< TREE
 language['connect'] = _('Connect')
 language['ip'] = _('IP')
 language['netmask'] = _('Netmask')
@@ -236,7 +235,6 @@ language['ok'] = _('OK')
 language['cancel'] = _('Cancel')
 
 
-=======
 language['resetting_ip_address'] = _('''Resetting IP address...''')
 language['prefs_help'] = _('''Preferences dialog''')
 language['no_dhcp_offers'] = _('''Connection Failed: No DHCP offers received.''')
@@ -397,4 +395,3 @@ language['access_denied'] = _('''Unable to contact the Wicd daemon due to an acc
 language['disconnecting_active'] = _('''Disconnecting active connections...''')
 language['access_denied_wc'] = _('''ERROR: wicd-curses was denied access to the wicd daemon: please check that your user is in the "$A" group.''')
 language['post_disconnect_script'] = _('''Run post-disconnect script''')
->>>>>>> MERGE-SOURCE

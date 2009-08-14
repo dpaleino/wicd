@@ -517,6 +517,9 @@ class appGUI():
         self.list_header=urwid.AttrWrap(urwid.Text(gen_list_header()),'listbar')
         self.wlessH=NSelListBox([urwid.Text("Wireless Network(s)"),self.list_header])
 
+        # Init this earlier to make update_status happy
+        self.update_tag = None
+
         # FIXME: This should be two variables
         self.focusloc = [1,0]
 
@@ -571,6 +574,8 @@ class appGUI():
         self.pref = None
 
         self.update_status()
+
+        #self.max_wait = ui.max_wait
 
     def doScan(self, sync=False):
         self.scanning = True
@@ -701,7 +706,7 @@ class appGUI():
         if self.connecting: 
             if not self.conn_status:
                 self.conn_status = True
-                gobject.idle_add(self.set_connecting_status,fast)
+                gobject.timeout_add(250,self.set_connecting_status,fast)
             return True
         else:
             if check_for_wired(wired.GetWiredIP(''),self.set_status):
@@ -905,24 +910,44 @@ class appGUI():
                 self.size = ui.get_cols_rows()
                 continue
 
+    def call_update_ui(self,source,cb_condition):
+        self.update_ui(from_key=True)
+        return True
+
     # Redraw the screen
     @wrap_exceptions
-    def update_ui(self):
+    def update_ui(self,from_key=True,from_alarm=False):
         #self.update_status()
         canvas = self.frame.render( (self.size),True )
-        ###  GRRRRRRRRRRRRRRRRRRRRR           ->^^^^
-        # It looks like if I want to get the statusbar to update itself
-        # continuously, I would have to use overlay the canvasses and redirect
-        # the input.  I'll try to get that working at a later time, if people
-        # want that "feature".
-        #canvaso = urwid.CanvasOverlay(self.dialog.render( (80,20),True),canvas,0,1)
-        # If the screen is turned off for some reason, don't even try to do the
-        # rest of the stuff.
+
         if not ui._started:
             return False
+        # Update the screen
         ui.draw_screen((self.size),canvas)
-        keys = ui.get_input()
+        # Get the input data
+        input_data = ui.get_input_nonblocking()
+        max_wait = input_data[0]
+        keys = input_data[1]
+
+        # Resolve any "alarms" in the waiting
+        if self.update_tag != None:
+            gobject.source_remove(self.update_tag)
+        if max_wait == None:
+            max_wait = 25
+        else:
+            max_wait *= 100
+
+        max_wait = int(max_wait)
+        self.update_tag = gobject.timeout_add(max_wait, \
+                self.update_ui,False,True)
+        #print keys
+        #if keys == []:
+        #    return True
         self.handle_keys(keys)
+
+        # If we came from the "alarm", die.
+        if from_alarm:
+            return False
             
         return True
 
@@ -1000,6 +1025,7 @@ def run():
     ui.set_mouse_tracking()
     app = appGUI()
 
+
     # Connect signals and whatnot to UI screen control functions
     bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
                             'org.wicd.daemon.wireless')
@@ -1009,11 +1035,17 @@ def run():
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
     # Update what the interface looks like as an idle function
-    gobject.idle_add(app.update_ui)
+    #gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(2000,app.update_status)
     # This will make sure that it is updated on the second.
     gobject.timeout_add(500,app.update_time)
+
+    app.update_ui()
+    # Get input file descriptors and add callbacks to the ui-updating function
+    fds = ui.get_input_descriptors()
+    for fd in fds:
+        gobject.io_add_watch(fd, gobject.IO_IN,app.call_update_ui)
     loop.run()
 
 # Mostly borrowed from gui.py

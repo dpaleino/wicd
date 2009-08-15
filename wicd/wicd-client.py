@@ -210,11 +210,10 @@ class TrayIcon(object):
             if (self.network_type == "none"):
                 self.tr.set_tooltip(language['not_connected'])
             elif (self.network_type == "wireless"):
-                self.tr.set_tooltip(language['tray_connected_to_wireless']
+                self.tr.set_tooltip(language['connected_to_wireless']
                         .replace('$A', self.network_name)
                         .replace('$B', self.network_str)
-                        .replace('$C', self.network_br)
-                        .replace('$D', self.network_addr))
+                        .replace('$C', self.network_addr))
             elif (self.network_type == "wired"):
                 self.tr.set_tooltip(language['tray_connected_to_wired']
                         .replace('$A', self.network_addr))

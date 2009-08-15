@@ -1177,7 +1177,7 @@ class BaseWirelessInterface(BaseInterface):
         except (UnicodeDecodeError, UnicodeEncodeError):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
-        if ap['essid'] in ['<hidden>', "", None]:
+        if ap['essid'] in ['Hidden', '<hidden>', "", None]:
             print 'hidden'
             ap['hidden'] = True
             ap['essid'] = "<hidden>"

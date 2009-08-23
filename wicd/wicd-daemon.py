@@ -18,6 +18,7 @@ class WirelessDaemon() -- DBus interface to managed the wireless network.
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly
 #   Copyright (C) 2007 - 2009 Byron Hillis
+#   Copyright (C)        2009 Andrew Psaltis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -1457,6 +1458,7 @@ class WiredDaemon(dbus.service.Object):
                        "postdisconnectscript"]:
             self.config.set(profilename, option, None)
         self.config.set(profilename, "default", default)
+        self.config.set(profilename,"dhcphostname",os.uname()[1])
         self.config.write()
         return True
 

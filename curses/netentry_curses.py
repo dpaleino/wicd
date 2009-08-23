@@ -27,6 +27,7 @@ import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
 from wicd.translations import language
+import sys
 
 daemon = None
 wired = None
@@ -57,7 +58,9 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         dns1_t       = ('editcp',language['dns']+ ' 1'+':'+' '*8)
         dns2_t       = ('editcp',language['dns']+ ' 2'+':'+' '*8)
         dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
-
+        
+        dhcp_h_t     = ('editcp',"DHCP Hostname:")
+        
         cancel_t = 'Cancel'
         ok_t = 'OK'
         
@@ -80,6 +83,8 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         self.dns2              = DynWrap(urwid.Edit(dns2_t)      ,False)
         self.dns3              = DynWrap(urwid.Edit(dns3_t)      ,False)
 
+        self.dhcp_h            = urwid.AttrWrap(urwid.Edit(dhcp_h_t),'editbx','editfc')
+
         _blank = urwid.Text('')
 
         walker = urwid.SimpleListWalker([self.static_ip_cb,
@@ -89,7 +94,10 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                                          _blank,
                                          self.checkb_cols,
                                          self.dns_dom_edit,self.search_dom_edit,
-                                         self.dns1,self.dns2,self.dns3
+                                         self.dns1,self.dns2,self.dns3,
+                                         _blank,
+                                         self.dhcp_h,
+                                         _blank
                                         ])
 
 
@@ -164,6 +172,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop("dns1", '')
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
+        self.set_net_prop('dhcphostname',self.dhcp_h.get_edit_text())
     # Prevent comboboxes from dying.
     def ready_widgets(self,ui,body):
         pass
@@ -202,6 +211,12 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.search_dom_edit.set_edit_text(self.format_entry("search_domain"))
 
         self.set_default.set_state(to_bool(wired.GetWiredProperty("default")))
+
+        dhcphname = wired.GetWiredProperty("dhcphostname")
+        if dhcphname is None:
+            dhcphname = os.uname()[1]
+
+        self.dhcp_h.set_edit_text(unicode(dhcphname))
 
     def save_settings(self):
         AdvancedSettingsDialog.save_settings(self)
@@ -304,6 +319,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.encryption_combo.set_focus(0)
 
         self.change_encrypt_method()
+        dhcphname = wireless.GetWirelessProperty(networkID,"dhcphostname")
+        if dhcphname is None:
+            dhcphname = os.uname()[1]
+        self.dhcp_h.set_edit_text(unicode(dhcphname))
         
 
     def set_net_prop(self, option, value):

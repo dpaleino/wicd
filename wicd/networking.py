@@ -526,6 +526,14 @@ class ConnectThread(threading.Thread):
         print 'Putting interface up...'
         self.SetStatus('interface_up')
         iface.Up()
+        for x in range(0, 5):
+            time.sleep(2)
+            if iface.IsUp():
+                return
+            self.abort_if_needed()
+         
+        # If we get here, the interface never came up
+        print "WARNING: Timed out waiting for interface to come up"
 
 
 class Wireless(Controller):
@@ -769,7 +777,7 @@ class Wireless(Controller):
             iwconfig = self.GetIwconfig()
         else:
             iwconfig = None
-        bssid = self.wiface.GetBSSID(iwconfig),
+        bssid = self.wiface.GetBSSID(iwconfig)
         essid = self.wiface.GetCurrentNetwork(iwconfig) 
 
         Controller.Disconnect(self, bssid, essid)

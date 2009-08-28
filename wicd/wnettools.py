@@ -550,19 +550,20 @@ class BaseInterface(object):
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout
+        client_dict = { misc.DHCLIENT : self._parse_dhclient,
+                        misc.DHCPCD : self._parse_dhcpcd,
+                        misc.PUMP : self._parse_pump,
+                        misc.UDHCPC : self._parse_udhcpc,
+                      }
         
-        DHCP_CLIENT = self._get_dhcp_command() 
-        if DHCP_CLIENT == misc.DHCLIENT:
-            return self._parse_dhclient(pipe)
-        elif DHCP_CLIENT == misc.PUMP:
-            return self._parse_pump(pipe)
-        elif DHCP_CLIENT == misc.DHCPCD:
-            return self._parse_dhcpcd(pipe)
-        elif DHCP_CLIENT == misc.UDHCPC:
-            return self._parse_udhcpc(pipe)
+        DHCP_CLIENT = self._get_dhcp_command()
+        if DHCP_CLIENT in client_dict:
+            ret = client_dict[DHCP_CLIENT](pipe)
         else:
-            print 'ERROR no dhclient found!'
-    
+            print "ERROR: no dhcp client found"
+            ret = None
+        return ret
+        
     @neediface(False)
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """

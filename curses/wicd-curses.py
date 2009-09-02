@@ -3,8 +3,8 @@
 
 """ wicd-curses. (curses/urwid-based) console interface to wicd
 
-Provides the a console UI for wicd, so that people with broken X servers can
-at least get a network connection.  Or those who don't like using X.  ;-)
+Provides a console UI for wicd, so that people with broken X servers can
+at least get a network connection.  Or those who don't like using X and/or GTK.
 
 """
 
@@ -583,11 +583,11 @@ class appGUI():
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
-        self.prefCols = OptCols( [ ('meta enter','OK'),
-                                   ('meta [','Tab Left',),
-                                   ('meta ]','Tab Right'),
+        self.prefCols = OptCols( [ ('f10','OK'),
+                                   ('page up','Tab Left',),
+                                   ('page down', 'Tab Right'),
                                    ('esc','Cancel') ], self.handle_keys)
-        self.confCols = OptCols( [ ('meta enter','OK'),
+        self.confCols = OptCols( [ ('f10','OK'),
                                    ('esc','Cancel') ],self.handle_keys)
 
     # Does what it says it does
@@ -902,7 +902,7 @@ class appGUI():
                 if  k == 'esc' or k == 'q' or k == 'Q':
                     self.restore_primary()
                     break
-                if k == 'meta enter':
+                if k == 'f10':
                     self.diag.save_settings()
                     self.restore_primary()
                     break

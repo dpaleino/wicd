@@ -211,9 +211,9 @@ class TabColumns(urwid.WidgetWrap):
         return True
 
     def keypress(self,size,key):
-        if key == "meta [" or key == "meta ]":
+        if key == "page up" or key == "page down":
             self._w.get_body().set_focus(0)
-            newK = 'left' if key[-1] == '[' else 'right'
+            newK = 'left' if key == "page up" else 'right'
             self.keypress(size,newK)
             self._w.get_body().set_focus(1)
         else:
@@ -564,26 +564,11 @@ class OptCols(urwid.WidgetWrap):
         # callbacks map the text contents to its assigned callback.
         self.callbacks = []
         for cmd in tuples:
-            splitcmd = cmd[0].split()
-            key = ''
-            for part in splitcmd:
-                if part == 'ctrl':
-                    key+='Ctrl+'
-                elif part == 'meta':
-                    # If anyone has a problem with this, they can bother me
-                    # about it.
-                    key+='Alt+'
-                else:
-                   if part == 'left':
-                       key += '<-'
-                   elif part == 'right':
-                       key += '->'
-                   elif part == 'esc':
-                       key += 'ESC'
-                   elif part == 'enter':
-                       key += 'Enter'
-                   else:
-                       key += part
+            key = reduce(lambda s,(f,t):s.replace(f,t), [ \
+                ('ctrl ', 'Ctrl+'), ('meta ', 'Alt+'), \
+                ('left', '<-'), ('right', '->'), \
+                ('page up', 'Page Up'), ('page down', 'Page Down'), \
+                ('esc', 'ESC'), ('enter', 'Enter'), ('f10','F10')], cmd[0])
             
             if debug:
                 callback = self.debugClick

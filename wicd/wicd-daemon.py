@@ -1144,7 +1144,7 @@ class WirelessDaemon(dbus.service.Object):
                                                                'predisconnectscript')
         self.wifi.post_disconnect_script = self.GetWirelessProperty(id,
                                                                'postdisconnectscript')
-        print 'Connecting to wireless network ' + self.LastScan[id]['essid']
+        print 'Connecting to wireless network ' + str(self.LastScan[id]['essid'])
         self.daemon.wired_bus.wired.Disconnect()
         self.daemon.SetForcedDisconnect(False)
         conthread = self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)

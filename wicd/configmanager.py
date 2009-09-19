@@ -124,6 +124,9 @@ class ConfigManager(RawConfigParser):
     
     def write(self):
         """ Writes the loaded config file to disk. """
+        for section in self.sections():
+            if not section:
+                self.remove_section(section)
         configfile = open(self.config_file, 'w')
         RawConfigParser.write(self, configfile)
         configfile.close()

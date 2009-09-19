@@ -1446,6 +1446,8 @@ class WiredDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CreateWiredNetworkProfile(self, profilename, default=False):
         """ Creates a wired network profile. """
+        if not profilename:
+            return False
         profilename = misc.to_unicode(profilename)
         print "Creating wired profile for " + profilename
         if self.config.has_section(profilename):

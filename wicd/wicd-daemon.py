@@ -1685,7 +1685,7 @@ def main(argv):
         logpath = os.path.join(wpath.log, 'wicd.log')
         if not os.path.exists(wpath.log):
             os.makedirs(wpath.log)
-            os.chmod(wpath.log, 755)
+            os.chmod(wpath.log, 0755)
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:

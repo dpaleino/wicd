@@ -65,8 +65,11 @@ class DynWrap(urwid.AttrWrap):
     def __init__(self,w,sensitive=True,attrs=('editbx','editnfc'),focus_attr='editfc'):
         self._attrs=attrs
         self._sensitive = sensitive
-        
-        cur_attr = attrs[0] if sensitive else attrs[1]
+
+        if sensitive:
+            cur_attr = attrs[0]
+        else:
+            cur_attr = attrs[1]
 
         self.__super.__init__(w,cur_attr,focus_attr)
 
@@ -211,24 +214,27 @@ class TabColumns(urwid.WidgetWrap):
         return True
 
     def keypress(self,size,key):
+        # If the key is page up or page down, move focus to the tabs and call
+        # left or right on the tabs.
         if key == "page up" or key == "page down":
             self._w.get_body().set_focus(0)
-            newK = 'left' if key == "page up" else 'right'
+            if key == "page up":
+                newK = 'left'
+            else:
+                newK = 'right'
             self.keypress(size,newK)
             self._w.get_body().set_focus(1)
         else:
             key = self._w.keypress(size,key)
             wid = self.pile.get_focus().get_body()
             if wid == self.columns:
-            #    lw = self.listbox.body
-            #    lw.pop(1)
                 self.active_tab.set_attr('body')
                 self.columns.get_focus().set_attr('tab active')
                 self.active_tab = self.columns.get_focus()
                 self.gen_pile(self.tab_map[self.active_tab])
         
         return key
-        #    self.listbox.body = lw
+
     def mouse_event(self,size,event,button,x,y,focus):
         wid = self.pile.get_focus().get_body()
         if wid == self.columns:

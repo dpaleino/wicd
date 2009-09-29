@@ -254,9 +254,14 @@ def help_dialog(body):
 
 def run_configscript(parent,netname,nettype):
     configfile = wpath.etc+netname+'-settings.conf'
-    header = 'profile' if nettype == 'wired' else 'BSSID'
-    profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
-            int(netname),'bssid')
+    if nettype != 'wired':
+        header = 'profile'
+    else:
+        header ='BSSID'
+    if nettype == 'wired':
+        profname = nettype
+    else:
+        profname = wireless.GetWirelessProperty( int(netname),'bssid')
     theText = [ 
             language['cannot_edit_scripts_1'].replace('$A',configfile).replace('$B',header),
 "\n\n["+profname+"]\n\n",
@@ -329,7 +334,12 @@ class NetLabel(urwid.WidgetWrap):
                 str(wireless.GetWirelessProperty(id, strenstr)))
         self.essid = wireless.GetWirelessProperty(id, 'essid')
         self.bssid = wireless.GetWirelessProperty(id, 'bssid')
-        self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else language['unsecured']
+
+        if wireless.GetWirelessProperty(id, 'encryption'):
+            self.encrypt = wireless.GetWirelessProperty(id,'encryption_method')
+        else:
+            self.encrypt = language['unsecured']
+
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
         theString = '  %-*s %25s %9s %17s %6s %4s' % (gap,

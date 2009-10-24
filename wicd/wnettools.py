@@ -844,7 +844,7 @@ class BaseWirelessInterface(BaseInterface):
         essid -- essid to set the interface to
 
         """
-        cmd = ['iwconfig', self.iface, 'essid', essid]
+        cmd = ['iwconfig', self.iface, 'essid', str(essid)]
         if self.verbose: print str(cmd)
         misc.Run(cmd)
 
@@ -1055,7 +1055,7 @@ class BaseWirelessInterface(BaseInterface):
         if not wpa_pass_path: return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
-        cmd = [wpa_pass_path, network['essid'], str(network['key'])]
+        cmd = [wpa_pass_path, str(network['essid']), str(network['key'])]
         if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 

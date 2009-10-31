@@ -33,7 +33,7 @@ wired = None
 from wicd.translations import language
 
 class PrefsDialog(urwid.WidgetWrap):
-    def __init__(self,body,pos,ui,dbus=None):
+    def __init__(self, body, pos, ui, dbus=None):
         global daemon, wireless, wired
 
         daemon = dbus['daemon']
@@ -49,9 +49,9 @@ class PrefsDialog(urwid.WidgetWrap):
         header0_t = language["gen_settings"]
         header1_t = language["ext_programs"]
         header2_t = language["advanced_settings"]
-        self.header0 = urwid.AttrWrap(SelText(header0_t),'tab active','focus')
-        self.header1 = urwid.AttrWrap(SelText(header1_t),'body','focus')
-        self.header2 = urwid.AttrWrap(SelText(header2_t),'body','focus')
+        self.header0 = urwid.AttrWrap(SelText(header0_t), 'tab active', 'focus')
+        self.header1 = urwid.AttrWrap(SelText(header1_t), 'body', 'focus')
+        self.header2 = urwid.AttrWrap(SelText(header2_t), 'body', 'focus')
         title   = language['preferences']
 
         # Blank line
@@ -62,64 +62,61 @@ class PrefsDialog(urwid.WidgetWrap):
         ####
 
         # General Settings
-        net_cat_t           = ('header',language['network_interfaces'])
-        wired_t             = ('editcp',language['wired_interface']+':   ')
-        wless_t             = ('editcp',language['wireless_interface']+':')
+        net_cat_t           = ('header', language['network_interfaces'])
+        wired_t             = ('editcp', language['wired_interface']+':   ')
+        wless_t             = ('editcp', language['wireless_interface']+':')
         always_show_wired_t = language['wired_always_on']
         prefer_wired_t      = language['always_switch_to_wired']
 
-        global_dns_cat_t = ('header',language['global_dns_servers'])
-        global_dns_t     = ('editcp',language['use_global_dns'])
-        dns_dom_t        = ('editcp','    '+language['dns_domain']+':   ')
-        search_dom_t     = ('editcp','    '+language['search_domain']+':')
-        dns1_t           = ('editcp','    DNS server 1: ')
-        dns2_t           = ('editcp','    DNS server 2: ')
-        dns3_t           = ('editcp','    DNS server 3: ')
+        global_dns_cat_t = ('header', language['global_dns_servers'])
+        global_dns_t     = ('editcp', language['use_global_dns'])
+        dns_dom_t        = ('editcp', '    '+language['dns_domain']+':   ')
+        search_dom_t     = ('editcp', '    '+language['search_domain']+':')
+        dns1_t           = ('editcp', '    DNS server 1: ')
+        dns2_t           = ('editcp', '    DNS server 2: ')
+        dns3_t           = ('editcp', '    DNS server 3: ')
 
 
-        wired_auto_cat_t= ('header',language['wired_autoconnect_settings'])
+        wired_auto_cat_t= ('header', language['wired_autoconnect_settings'])
         wired_auto_1_t = language['use_default_profile']
         wired_auto_2_t = language['show_wired_list']
         wired_auto_3_t = language['use_last_used_profile']
 
-        auto_reconn_cat_t = ('header',language['automatic_reconnection'])
+        auto_reconn_cat_t = ('header', language['automatic_reconnection'])
         auto_reconn_t = language['auto_reconnect']
 
         #### External Programs
         automatic_t = language['wicd_auto_config']
 
-        dhcp_header_t = ('header',language["dhcp_client"])
+        dhcp_header_t = ('header', language["dhcp_client"])
         # Automatic
         dhcp1_t  = 'dhclient'
         dhcp2_t  = 'dhcpcd'
         dhcp3_t  = 'pump'
         dhcp4_t  = 'udhcpc'
 
-        wired_detect_header_t = ('header',language["wired_detect"])
+        wired_detect_header_t = ('header', language["wired_detect"])
         wired1_t              = 'ethtool'
         wired2_t              = 'mii-tool'
 
-        flush_header_t = ('header',language["route_flush"])
+        flush_header_t = ('header', language["route_flush"])
         flush1_t           = 'ip'
         flush2_t           = 'route'
  
         #### Advanced Settings
-        #wpa_t=('editcp',language['wpa_supplicant_driver']+':')
-        wpa_cat_t=('header',language['wpa_supplicant'])
+        wpa_cat_t=('header', language['wpa_supplicant'])
         wpa_t=('editcp','Driver:')
-        wpa_list = ['spam','double spam','triple spam','quadruple spam']
-        wpa_warn_t = ('important',language['always_use_wext'])
+        wpa_list = []
+        wpa_warn_t = ('important', language['always_use_wext'])
         
-        backend_cat_t = ('header',language['backend'])
+        backend_cat_t = ('header', language['backend'])
         backend_t = language['backend']+':'
-        backend_list = ['spam','double spam','triple spam','quadruple spam']
-        #backend_warn_t = ('important',
-        #   'Changes to the backend (probably) requires a daemon restart')
+        backend_list = []
         
-        debug_cat_t = ('header',language['debugging'])
+        debug_cat_t = ('header', language['debugging'])
         debug_mode_t = language['use_debug_mode']
 
-        wless_cat_t = ('header',language['wireless_interface'])
+        wless_cat_t = ('header', language['wireless_interface'])
         use_dbm_t = language['display_type_dialog']
         
 
@@ -129,7 +126,7 @@ class PrefsDialog(urwid.WidgetWrap):
         ####
 
         # General Settings
-        self.net_cat     = urwid.Text(net_cat_t)
+        self.net_cat    = urwid.Text(net_cat_t)
         self.wired_edit = urwid.AttrWrap(urwid.Edit(wired_t),'editbx','editfc')
         self.wless_edit = urwid.AttrWrap(urwid.Edit(wless_t),'editbx','editfc')
         self.prefer_wired_chkbx = urwid.CheckBox(prefer_wired_t)
@@ -137,13 +134,13 @@ class PrefsDialog(urwid.WidgetWrap):
         # Default the global DNS settings to off.  They will be reenabled later
         # if so required.
         global_dns_state = False
-        self.global_dns_checkb  = urwid.CheckBox(global_dns_t,global_dns_state,
+        self.global_dns_checkb  = urwid.CheckBox(global_dns_t, global_dns_state,
                 on_state_change=self.global_dns_trigger)
-        self.search_dom = DynWrap(urwid.Edit(search_dom_t),global_dns_state)
-        self.dns_dom    = DynWrap(urwid.Edit(dns_dom_t),global_dns_state)
-        self.dns1       = DynWrap(urwid.Edit(dns1_t),global_dns_state)
-        self.dns2       = DynWrap(urwid.Edit(dns2_t),global_dns_state)
-        self.dns3       = DynWrap(urwid.Edit(dns3_t),global_dns_state)
+        self.search_dom = DynWrap(urwid.Edit(search_dom_t), global_dns_state)
+        self.dns_dom    = DynWrap(urwid.Edit(dns_dom_t), global_dns_state)
+        self.dns1       = DynWrap(urwid.Edit(dns1_t), global_dns_state)
+        self.dns2       = DynWrap(urwid.Edit(dns2_t), global_dns_state)
+        self.dns3       = DynWrap(urwid.Edit(dns3_t), global_dns_state)
 
 
         self.always_show_wired_checkb = urwid.CheckBox(always_show_wired_t)
@@ -182,19 +179,19 @@ class PrefsDialog(urwid.WidgetWrap):
         # Order of these is flipped in the actual interface,
         # (2,3,1 -> dhcpcd, pump, dhclient), because dhclient often doesn't like
         # to work on several distros.
-        self.dhcp0  = urwid.RadioButton(self.dhcp_l,automatic_t)
-        self.dhcp1  = DynRadioButton(self.dhcp_l,dhcp1_t)
-        self.dhcp2  = DynRadioButton(self.dhcp_l,dhcp2_t)
-        self.dhcp3  = DynRadioButton(self.dhcp_l,dhcp3_t)
-        self.dhcp4  = DynRadioButton(self.dhcp_l,dhcp4_t)
+        self.dhcp0  = urwid.RadioButton(self.dhcp_l ,automatic_t)
+        self.dhcp1  = DynRadioButton(self.dhcp_l, dhcp1_t)
+        self.dhcp2  = DynRadioButton(self.dhcp_l, dhcp2_t)
+        self.dhcp3  = DynRadioButton(self.dhcp_l, dhcp3_t)
+        self.dhcp4  = DynRadioButton(self.dhcp_l, dhcp4_t)
         self.dhcp_l = [self.dhcp0,self.dhcp1,self.dhcp2,self.dhcp3,self.dhcp4]
 
         self.wired_l = []
         self.wired_detect_header = urwid.Text(wired_detect_header_t)
-        self.wired0         = urwid.RadioButton(self.wired_l,automatic_t)
-        self.wired1         = DynRadioButton(self.wired_l,wired1_t)
-        self.wired2         = DynRadioButton(self.wired_l,wired2_t)
-        self.wired_l = [self.wired0,self.wired1,self.wired2]
+        self.wired0         = urwid.RadioButton(self.wired_l, automatic_t)
+        self.wired1         = DynRadioButton(self.wired_l, wired1_t)
+        self.wired2         = DynRadioButton(self.wired_l, wired2_t)
+        self.wired_l = [self.wired0, self.wired1, self.wired2]
 
         self.flush_l = []
         self.flush_header   = urwid.Text(flush_header_t)
@@ -204,7 +201,8 @@ class PrefsDialog(urwid.WidgetWrap):
         self.flush_l = [self.flush0,self.flush1,self.flush2]
 
         externalLB = urwid.ListBox([self.dhcp_header,
-                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,self.dhcp4,
+                                    self.dhcp0,self.dhcp2,self.dhcp3,self.dhcp1,
+                                    self.dhcp4,
                                     _blank,
                                     self.wired_detect_header,
                                     self.wired0,self.wired1,self.wired2,

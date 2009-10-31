@@ -294,9 +294,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
         ### Advanced settings
         # wpa_supplicant janx
-        self.wpadrivers = ["wext", "hostap", "madwifi", "atmel",
-                           "ndiswrapper", "ipw"]
-        self.wpadrivers = wireless.GetWpaSupplicantDrivers(self.wpadrivers)
+        self.wpadrivers = wireless.GetWpaSupplicantDrivers()
         self.wpadrivers.append("ralink_legacy")
         # Same as above with the dbus.String
         self.thedrivers = [unicode(w) for w in self.wpadrivers]

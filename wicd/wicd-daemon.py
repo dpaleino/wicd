@@ -1269,9 +1269,9 @@ class WirelessDaemon(dbus.service.Object):
         self.config.remove_section(essid_key)
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetWpaSupplicantDrivers(self, drivers):
-        """ Returns all valid wpa_supplicant drivers in a given list. """
-        return self.wifi.GetWpaSupplicantDrivers(drivers)
+    def GetWpaSupplicantDrivers(self):
+        """ Returns all valid wpa_supplicant drivers. """
+        return self.wifi.GetWpaSupplicantDrivers()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def ReloadConfig(self):

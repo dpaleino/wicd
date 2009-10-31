@@ -703,10 +703,9 @@ class Wireless(Controller):
         """ Get the out of iwconfig. """
         return self.wiface.GetIwconfig()
     
-    def GetWpaSupplicantDrivers(self, drivers):
-        """ Returns all valid wpa_supplicant drivers in a list. """
-        return [driver for driver in drivers if 
-                BACKEND.IsValidWpaSuppDriver(driver)]
+    def GetWpaSupplicantDrivers(self):
+        """ Returns all valid wpa_supplicant drivers on the system. """
+        return BACKEND.GetWpaSupplicantDrivers()
     
     def StopWPA(self):
         return self.wiface.StopWPA()

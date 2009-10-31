@@ -155,6 +155,17 @@ def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
     raise NotImplementedError
 
+def GetWpaSupplicantDrivers():
+    """ Returns a list of all valid wpa_supplicant drivers. """
+    output = misc.Run(["wpa_supplicant", "-h"])
+    try:
+        output = output.split("drivers:")[1].split("options:")[0].strip()
+    except:
+        print "Warning: Couldn't get list of valid wpa_supplicant drivers"
+        return [""]
+    patt = re.compile("(\S+)\s+=.*")
+    return patt.findall(output) or [""]
+
 def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",

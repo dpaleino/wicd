@@ -31,7 +31,7 @@ class WirelessInterface() -- Control a wireless network interface.
 
 from wicd.wnettools import GetDefaultGateway, GetWiredInterfaces, \
 GetWirelessInterfaces, IsValidWpaSuppDriver, BaseWirelessInterface, \
-BaseWiredInterface, BaseInterface
+BaseWiredInterface, BaseInterface, GetWpaSupplicantDrivers
 
 NAME = "external"
 UPDATE_INTERVAL = 5

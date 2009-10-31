@@ -156,6 +156,17 @@ def NeedsExternalCalls():
     """ Returns True if the backend needs to use an external program. """
     raise NotImplementedError
 
+def GetWpaSupplicantDrivers():
+    """ Returns a list of all valid wpa_supplicant drivers. """
+    output = misc.Run(["wpa_supplicant", "-h"])
+    try:
+        output = output.split("drivers:")[1].split("options:")[0].strip()
+    except:
+        print "Warning: Couldn't get list of valid wpa_supplicant drivers"
+        return [""]
+    patt = re.compile("(\S+)\s+=.*")
+    return patt.findall(output) or [""]
+
 def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",
@@ -551,19 +562,20 @@ class BaseInterface(object):
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout
+        client_dict = { misc.DHCLIENT : self._parse_dhclient,
+                        misc.DHCPCD : self._parse_dhcpcd,
+                        misc.PUMP : self._parse_pump,
+                        misc.UDHCPC : self._parse_udhcpc,
+                      }
         
-        DHCP_CLIENT = self._get_dhcp_command() 
-        if DHCP_CLIENT == misc.DHCLIENT:
-            return self._parse_dhclient(pipe)
-        elif DHCP_CLIENT == misc.PUMP:
-            return self._parse_pump(pipe)
-        elif DHCP_CLIENT == misc.DHCPCD:
-            return self._parse_dhcpcd(pipe)
-        elif DHCP_CLIENT == misc.UDHCPC:
-            return self._parse_udhcpc(pipe)
+        DHCP_CLIENT = self._get_dhcp_command()
+        if DHCP_CLIENT in client_dict:
+            ret = client_dict[DHCP_CLIENT](pipe)
         else:
-            print 'ERROR no dhclient found!'
-    
+            print "ERROR: no dhcp client found"
+            ret = None
+        return ret
+        
     @neediface(False)
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
@@ -844,7 +856,7 @@ class BaseWirelessInterface(BaseInterface):
         essid -- essid to set the interface to
 
         """
-        cmd = ['iwconfig', self.iface, 'essid', essid]
+        cmd = ['iwconfig', self.iface, 'essid', str(essid)]
         if self.verbose: print str(cmd)
         misc.Run(cmd)
 
@@ -1055,7 +1067,7 @@ class BaseWirelessInterface(BaseInterface):
         if not wpa_pass_path: return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
-        cmd = [wpa_pass_path, network['essid'], str(network['key'])]
+        cmd = [wpa_pass_path, str(network['essid']), str(network['key'])]
         if self.verbose: print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 

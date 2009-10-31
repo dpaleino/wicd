@@ -375,9 +375,7 @@ class PreferencesDialog(object):
 
         # Replacement for the combo box hack
         self.wpadrivercombo = build_combobox("pref_wpa_combobox")
-        self.wpadrivers = ["wext", "hostap", "madwifi", "atmel",
-                           "ndiswrapper", "ipw"]
-        self.wpadrivers = wireless.GetWpaSupplicantDrivers(self.wpadrivers)
+        self.wpadrivers = wireless.GetWpaSupplicantDrivers()
         self.wpadrivers.append("ralink_legacy")
         
         for x in self.wpadrivers:

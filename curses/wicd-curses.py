@@ -3,8 +3,8 @@
 
 """ wicd-curses. (curses/urwid-based) console interface to wicd
 
-Provides the a console UI for wicd, so that people with broken X servers can
-at least get a network connection.  Or those who don't like using X.  ;-)
+Provides a console UI for wicd, so that people with broken X servers can
+at least get a network connection.  Or those who don't like using X and/or GTK.
 
 """
 
@@ -254,9 +254,14 @@ def help_dialog(body):
 
 def run_configscript(parent,netname,nettype):
     configfile = wpath.etc+netname+'-settings.conf'
-    header = 'profile' if nettype == 'wired' else 'BSSID'
-    profname = netname if nettype == 'wired' else wireless.GetWirelessProperty(
-            int(netname),'bssid')
+    if nettype != 'wired':
+        header = 'profile'
+    else:
+        header ='BSSID'
+    if nettype == 'wired':
+        profname = nettype
+    else:
+        profname = wireless.GetWirelessProperty( int(netname),'bssid')
     theText = [ 
             language['cannot_edit_scripts_1'].replace('$A',configfile).replace('$B',header),
 "\n\n["+profname+"]\n\n",
@@ -329,7 +334,12 @@ class NetLabel(urwid.WidgetWrap):
                 str(wireless.GetWirelessProperty(id, strenstr)))
         self.essid = wireless.GetWirelessProperty(id, 'essid')
         self.bssid = wireless.GetWirelessProperty(id, 'bssid')
-        self.encrypt = wireless.GetWirelessProperty(id,'encryption_method') if wireless.GetWirelessProperty(id, 'encryption') else language['unsecured']
+
+        if wireless.GetWirelessProperty(id, 'encryption'):
+            self.encrypt = wireless.GetWirelessProperty(id,'encryption_method')
+        else:
+            self.encrypt = language['unsecured']
+
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
         theString = '  %-*s %25s %9s %17s %6s %4s' % (gap,
@@ -400,7 +410,6 @@ class WiredComboBox(ComboBox):
                     self.rebuild_combobox()
                 self.set_focus(prev_focus)
             else:
-                print "updating..."
                 wired.ReadWiredNetworkProfile(self.get_selected_profile())
         if key == 'delete':
             if len(self.theList) == 1:
@@ -583,11 +592,11 @@ class appGUI():
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
-        self.prefCols = OptCols( [ ('meta enter','OK'),
-                                   ('meta [','Tab Left',),
-                                   ('meta ]','Tab Right'),
+        self.prefCols = OptCols( [ ('f10','OK'),
+                                   ('page up','Tab Left',),
+                                   ('page down', 'Tab Right'),
                                    ('esc','Cancel') ], self.handle_keys)
-        self.confCols = OptCols( [ ('meta enter','OK'),
+        self.confCols = OptCols( [ ('f10','OK'),
                                    ('esc','Cancel') ],self.handle_keys)
 
     # Does what it says it does
@@ -768,6 +777,7 @@ class appGUI():
             self.tcount+=1
             toAppend=self.twirl[self.tcount % 4]
         self.status_label.set_text(text+' '+toAppend)
+        self.update_ui()
         return True
 
     # Make sure the screen is still working by providing a pretty counter.
@@ -776,6 +786,7 @@ class appGUI():
     #@wrap_exceptions
     def update_time(self):
         self.time_label.set_text(strftime('%H:%M:%S'))
+        self.update_ui()
         return True
 
     # Yeah, I'm copying code.  Anything wrong with that?
@@ -902,7 +913,7 @@ class appGUI():
                 if  k == 'esc' or k == 'q' or k == 'Q':
                     self.restore_primary()
                     break
-                if k == 'meta enter':
+                if k == 'f10':
                     self.diag.save_settings()
                     self.restore_primary()
                     break
@@ -911,17 +922,16 @@ class appGUI():
                 continue
 
     def call_update_ui(self,source,cb_condition):
-        self.update_ui(from_key=True)
+        self.update_ui(True)
         return True
 
     # Redraw the screen
     @wrap_exceptions
-    def update_ui(self,from_key=True,from_alarm=False):
-        #self.update_status()
-        canvas = self.frame.render( (self.size),True )
-
+    def update_ui(self,from_key=False):
         if not ui._started:
             return False
+        canvas = self.frame.render( (self.size),True )
+
         # Update the screen
         ui.draw_screen((self.size),canvas)
         # Get the input data
@@ -932,24 +942,12 @@ class appGUI():
         # Resolve any "alarms" in the waiting
         if self.update_tag != None:
             gobject.source_remove(self.update_tag)
-        if max_wait == None:
-            max_wait = 25
-        else:
-            max_wait *= 100
-
-        max_wait = int(max_wait)
-        self.update_tag = gobject.timeout_add(max_wait, \
-                self.update_ui,False,True)
-        #print keys
-        #if keys == []:
-        #    return True
-        self.handle_keys(keys)
-
-        # If we came from the "alarm", die.
-        if from_alarm:
-            return False
-            
-        return True
+        if from_key:
+            max_wait = 20
+            self.update_tag = gobject.timeout_add(max_wait, \
+                    self.update_ui,True)
+            self.handle_keys(keys)
+        return False
 
     def connect(self, nettype, networkid, networkentry=None):
         """ Initiates the connection process in the daemon. """

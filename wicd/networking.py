@@ -528,6 +528,14 @@ class ConnectThread(threading.Thread):
         print 'Putting interface up...'
         self.SetStatus('interface_up')
         iface.Up()
+        for x in range(0, 5):
+            time.sleep(2)
+            if iface.IsUp():
+                return
+            self.abort_if_needed()
+         
+        # If we get here, the interface never came up
+        print "WARNING: Timed out waiting for interface to come up"
 
 
 class Wireless(Controller):
@@ -697,10 +705,9 @@ class Wireless(Controller):
         """ Get the out of iwconfig. """
         return self.wiface.GetIwconfig()
     
-    def GetWpaSupplicantDrivers(self, drivers):
-        """ Returns all valid wpa_supplicant drivers in a list. """
-        return [driver for driver in drivers if 
-                BACKEND.IsValidWpaSuppDriver(driver)]
+    def GetWpaSupplicantDrivers(self):
+        """ Returns all valid wpa_supplicant drivers on the system. """
+        return BACKEND.GetWpaSupplicantDrivers()
     
     def StopWPA(self):
         return self.wiface.StopWPA()
@@ -771,7 +778,7 @@ class Wireless(Controller):
             iwconfig = self.GetIwconfig()
         else:
             iwconfig = None
-        bssid = self.wiface.GetBSSID(iwconfig),
+        bssid = self.wiface.GetBSSID(iwconfig)
         essid = self.wiface.GetCurrentNetwork(iwconfig) 
 
         Controller.Disconnect(self, bssid, essid)

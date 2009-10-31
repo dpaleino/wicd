@@ -1145,7 +1145,7 @@ class WirelessDaemon(dbus.service.Object):
                                                                'predisconnectscript')
         self.wifi.post_disconnect_script = self.GetWirelessProperty(id,
                                                                'postdisconnectscript')
-        print 'Connecting to wireless network ' + self.LastScan[id]['essid']
+        print 'Connecting to wireless network ' + str(self.LastScan[id]['essid'])
         self.daemon.wired_bus.wired.Disconnect()
         self.daemon.SetForcedDisconnect(False)
         conthread = self.wifi.Connect(self.LastScan[id], debug=self.debug_mode)
@@ -1270,9 +1270,9 @@ class WirelessDaemon(dbus.service.Object):
         self.config.remove_section(essid_key)
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def GetWpaSupplicantDrivers(self, drivers):
-        """ Returns all valid wpa_supplicant drivers in a given list. """
-        return self.wifi.GetWpaSupplicantDrivers(drivers)
+    def GetWpaSupplicantDrivers(self):
+        """ Returns all valid wpa_supplicant drivers. """
+        return self.wifi.GetWpaSupplicantDrivers()
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def ReloadConfig(self):
@@ -1447,6 +1447,8 @@ class WiredDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wired')
     def CreateWiredNetworkProfile(self, profilename, default=False):
         """ Creates a wired network profile. """
+        if not profilename:
+            return False
         profilename = misc.to_unicode(profilename)
         print "Creating wired profile for " + profilename
         if self.config.has_section(profilename):
@@ -1687,7 +1689,7 @@ def main(argv):
         logpath = os.path.join(wpath.log, 'wicd.log')
         if not os.path.exists(wpath.log):
             os.makedirs(wpath.log)
-            os.chmod(wpath.log, 755)
+            os.chmod(wpath.log, 0755)
         output = ManagedStdio(logpath)
         if os.path.exists(logpath):
             try:

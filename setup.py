@@ -98,6 +98,7 @@ class configure(Command):
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
         ('no-install-docs', None, 'do not install the auxiliary documentation'),
         ('no-install-ncurses', None, 'do not install the ncurses client'),
+        ('no-install-cli', None, 'do not install the command line executable'),
         ('no-use-notifications', None, 'do not ever allow the use of libnotify notifications')
         ]
         
@@ -134,6 +135,7 @@ class configure(Command):
         self.no_install_pmutils = False
         self.no_install_docs = False
         self.no_install_ncurses = False
+        self.no_install_cli = False
         self.no_use_notifications = False
 
         # Determine the default init file location on several different distros
@@ -505,6 +507,10 @@ try:
         data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
+    if not wpath.no_install_cli:
+        data.append((wpath.bin, ['scripts/wicd-cli'])) 
+        if not wpath.no_install_man:
+            data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'

@@ -507,11 +507,16 @@ try:
         data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
+        if not wpath.no_install_docs:
+            data.append(( wpath.docdir, ['curses/README.curses'])) 
+            data.append(( wpath.docdir, ['curses/TODO.curses'])) 
     if not wpath.no_install_cli:
         data.append((wpath.lib, ['cli/wicd-cli.py']))
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 
+        if not wpath.no_install_docs:
+            data.append(( wpath.docdir, ['cli/README.cli'])) 
     piddir = os.path.dirname(wpath.pidfile)
     if not piddir.endswith('/'):
         piddir += '/'

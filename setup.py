@@ -460,6 +460,10 @@ message. It is probably because you haven't run python setup.py
 configure yet or you are running it for the first time.'''
 
 data = []
+py_modules=['wicd.networking','wicd.misc','wicd.wnettools',
+           'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+           'wicd.logfile','wicd.backend','wicd.configmanager',
+           'wicd.translations']
 
 try:
     print "Using init file",(wpath.init, wpath.initfile)
@@ -481,6 +485,7 @@ try:
     (wpath.postconnectscripts, []),
     ]
     if not wpath.no_install_gtk:
+        py_modules.extend(['wicd.gui', 'wicd.guiutil'])
         data.append((wpath.desktop, ['other/wicd.desktop']))
         data.append((wpath.bin, ['scripts/wicd-client']))
         data.append((wpath.share, ['data/wicd.glade']))
@@ -544,7 +549,6 @@ except Exception, e:
     print '''Error setting up data array. This is normal if 
 python setup.py configure has not yet been run.'''
 
-
 wpactrl_ext = Extension(name='wpactrl', 
                         sources=['depends/python-wpactrl/wpa_ctrl.c',
                                  'depends/python-wpactrl/wpactrl.c'],
@@ -572,9 +576,6 @@ connect at startup to any preferred network within range.
       author_email="compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
-                  'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
-                  'wicd.logfile','wicd.backend','wicd.configmanager',
-                  'wicd.guiutil','wicd.translations'], 
+      py_modules=py_modules,
       data_files=data
       )

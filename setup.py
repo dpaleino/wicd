@@ -508,6 +508,7 @@ try:
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
     if not wpath.no_install_cli:
+        data.append((wpath.lib, ['cli/wicd-cli.py']))
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 

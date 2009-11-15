@@ -456,8 +456,14 @@ class ConnectThread(threading.Thread):
         """
         if self.network.get('gateway'):
             self.SetStatus('verifying_association')
-            print "Verifying AP association"
-            retcode = self.iface.VerifyAPAssociation(self.network['gateway'])
+            print "Verifying AP association..."
+            for tries in range(1, 11):
+                print "Attempt %d of 10..." % tries
+                retcode = self.iface.VerifyAPAssociation(self.network['gateway'])
+                if retcode == 0: 
+                    print "Successfully associated."
+                    break
+                time.sleep(1)
             #TODO this should be in wnettools.py
             if retcode:
                 print "Connection Failed: Failed to ping the access point!"

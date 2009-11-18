@@ -278,17 +278,17 @@ class BaseInterface(object):
                  'id' : misc.DHCLIENT, 
                  },
             "pump" : 
-                { 'connect' : r"%(cmd)s -h '%(hostname)s' -i %(iface)s",
+                { 'connect' : r"%(cmd)s -i %(iface)s -h %(hostname)s",
                   'release' : r"%(cmd)s -r -i %(iface)s",
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%(cmd)s -h '%(hostname)s' %(iface)s ",
+                {'connect' : r"%(cmd)s %(iface)s -h %(hostname)s ",
                  'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
                 },
             "udhcpc":
-                {'connect' : r"%(cmd)s -H '%(hostname)s' -n -i %(iface)s",
+                {'connect' : r"%(cmd)s -n -i %(iface)s -H %(hostname)s ",
                  'release' : r"killall -SIGUSR2 %(cmd)s",
                  'id' : misc.UDHCPC,
                 },

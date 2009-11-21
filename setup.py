@@ -99,6 +99,7 @@ class configure(Command):
         ('no-install-docs', None, 'do not install the auxiliary documentation'),
         ('no-install-ncurses', None, 'do not install the ncurses client'),
         ('no-install-cli', None, 'do not install the command line executable'),
+        ('no-install-gtk', None, 'do not install the gtk client'),
         ('no-use-notifications', None, 'do not ever allow the use of libnotify notifications')
         ]
         
@@ -134,6 +135,7 @@ class configure(Command):
         self.no_install_acpi = False
         self.no_install_pmutils = False
         self.no_install_docs = False
+        self.no_install_gtk = False
         self.no_install_ncurses = False
         self.no_install_cli = False
         self.no_use_notifications = False
@@ -460,44 +462,52 @@ message. It is probably because you haven't run python setup.py
 configure yet or you are running it for the first time.'''
 
 data = []
+py_modules=['wicd.networking','wicd.misc','wicd.wnettools',
+           'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+           'wicd.logfile','wicd.backend','wicd.configmanager',
+           'wicd.translations']
 
 try:
     print "Using init file",(wpath.init, wpath.initfile)
     data = [
     (wpath.dbus, ['other/wicd.conf']),
-    (wpath.desktop, ['other/wicd.desktop']),
     (wpath.log, []), 
     (wpath.etc, []),
-    (wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-client.svg']),
-    (wpath.icons + '192x192/apps/', ['icons/192px/wicd-client.png']),
-    (wpath.icons + '128x128/apps/', ['icons/128px/wicd-client.png']),
-    (wpath.icons + '96x96/apps/', ['icons/96px/wicd-client.png']),
-    (wpath.icons + '72x72/apps/', ['icons/72px/wicd-client.png']),
-    (wpath.icons + '64x64/apps/', ['icons/64px/wicd-client.png']),
-    (wpath.icons + '48x48/apps/', ['icons/48px/wicd-client.png']),
-    (wpath.icons + '36x36/apps/', ['icons/36px/wicd-client.png']),
-    (wpath.icons + '32x32/apps/', ['icons/32px/wicd-client.png']),
-    (wpath.icons + '24x24/apps/', ['icons/24px/wicd-client.png']),
-    (wpath.icons + '22x22/apps/', ['icons/22px/wicd-client.png']),
-    (wpath.icons + '16x16/apps/', ['icons/16px/wicd-client.png']),
-    (wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]),
     (wpath.encryption, [('encryption/templates/' + b) for b in 
                         os.listdir('encryption/templates') if not b.startswith('.')]),
     (wpath.networks, []),
-    (wpath.bin, ['scripts/wicd-client', ]), 
-    (wpath.sbin,  ['scripts/wicd', ]),  
-    (wpath.share, ['data/wicd.glade', ]),
-    (wpath.lib, ['wicd/wicd-client.py', 'wicd/monitor.py',
-                 'wicd/wicd-daemon.py', 'wicd/configscript.py',
+    (wpath.sbin,  ['scripts/wicd']),  
+    (wpath.lib, ['wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py',
                  'wicd/suspend.py', 'wicd/autoconnect.py']), 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
-    (wpath.autostart, ['other/wicd-tray.desktop', ]),
     (wpath.scripts, []),
     (wpath.predisconnectscripts, []),
     (wpath.postdisconnectscripts, []),
     (wpath.preconnectscripts, []),
     (wpath.postconnectscripts, []),
     ]
+    if not wpath.no_install_gtk:
+        py_modules.extend(['wicd.gui', 'wicd.guiutil'])
+        data.append((wpath.desktop, ['other/wicd.desktop']))
+        data.append((wpath.bin, ['scripts/wicd-client']))
+        data.append((wpath.share, ['data/wicd.glade']))
+        data.append((wpath.lib, ['wicd/wicd-client.py']))
+        data.append((wpath.autostart, ['other/wicd-tray.desktop']))
+        if not wpath.no_install_man:
+            data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
+        data.append((wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-client.svg']))
+        data.append((wpath.icons + '192x192/apps/', ['icons/192px/wicd-client.png']))
+        data.append((wpath.icons + '128x128/apps/', ['icons/128px/wicd-client.png']))
+        data.append((wpath.icons + '96x96/apps/', ['icons/96px/wicd-client.png']))
+        data.append((wpath.icons + '72x72/apps/', ['icons/72px/wicd-client.png']))
+        data.append((wpath.icons + '64x64/apps/', ['icons/64px/wicd-client.png']))
+        data.append((wpath.icons + '48x48/apps/', ['icons/48px/wicd-client.png']))
+        data.append((wpath.icons + '36x36/apps/', ['icons/36px/wicd-client.png']))
+        data.append((wpath.icons + '32x32/apps/', ['icons/32px/wicd-client.png']))
+        data.append((wpath.icons + '24x24/apps/', ['icons/24px/wicd-client.png']))
+        data.append((wpath.icons + '22x22/apps/', ['icons/22px/wicd-client.png']))
+        data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-client.png']))
+        data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
     if not wpath.no_install_ncurses:
         data.append((wpath.lib, ['curses/curses_misc.py']))
         data.append((wpath.lib, ['curses/prefs_curses.py']))
@@ -525,7 +535,8 @@ try:
                                      'README', 'CHANGES', ]))
         data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
     if not wpath.no_install_kde:
-        data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
+        if not wpath.no_install_gtk:
+            data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
     if not wpath.no_install_init:
         data.append((wpath.init, [ wpath.initfile ]))
     if not wpath.no_install_man:
@@ -579,9 +590,6 @@ connect at startup to any preferred network within range.
       author_email="compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
       url="http://wicd.net",
       license="http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-      py_modules=['wicd.networking','wicd.misc','wicd.gui','wicd.wnettools',
-                  'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
-                  'wicd.logfile','wicd.backend','wicd.configmanager',
-                  'wicd.guiutil','wicd.translations'], 
+      py_modules=py_modules,
       data_files=data
       )

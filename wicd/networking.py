@@ -201,25 +201,34 @@ class Controller(object):
         """
         return self.iface.GetIP(ifconfig)
 
-    def Disconnect(self, *args, **kargs):
+    def Disconnect(self, nettype, name, mac):
         """ Disconnect from the network. """
         iface = self.iface
-        misc.ExecuteScripts(wpath.predisconnectscripts, self.debug)
+        # mac and name need to be strings
+        if mac in (None, ''):
+            mac = 'X'
+        if name in (None, ''):
+            name = 'X'
+        misc.ExecuteScripts(wpath.predisconnectscripts, self.debug,
+                           extra_parameters=(nettype, name, mac))
         if self.pre_disconnect_script:
             print 'Running pre-disconnect script'
             misc.ExecuteScript(expand_script_macros(self.pre_disconnect_script,
-                                                    'pre-disconnection', *args),
+                                                    'pre-disconnection', (mac,
+                                                                          name)),
                                self.debug)
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.FlushRoutes()
         iface.Down()
         iface.Up()
-        misc.ExecuteScripts(wpath.postdisconnectscripts, self.debug)
+        misc.ExecuteScripts(wpath.postdisconnectscripts, self.debug,
+                            extra_parameters=(nettype, name, mac))
         if self.post_disconnect_script:
             print 'Running post-disconnect script'
             misc.ExecuteScript(expand_script_macros(self.post_disconnect_script,
-                                                    'post-disconnection', *args),
+                                                    'post-disconnection',
+                                                   (mac, name)),
                                self.debug)
         
     def ReleaseDHCP(self):
@@ -387,8 +396,9 @@ class ConnectThread(threading.Thread):
         iface.Down()
         
     @abortable
-    def run_global_scripts_if_needed(self, script_dir):
-        misc.ExecuteScripts(script_dir, verbose=self.debug)
+    def run_global_scripts_if_needed(self, script_dir, extra_parameters=()):
+        misc.ExecuteScripts(script_dir, verbose=self.debug,
+                            extra_parameters=extra_parameters)
 
     @abortable
     def run_script_if_needed(self, script, msg, bssid='wired', essid='wired'):
@@ -785,7 +795,7 @@ class Wireless(Controller):
         bssid = self.wiface.GetBSSID(iwconfig)
         essid = self.wiface.GetCurrentNetwork(iwconfig) 
 
-        Controller.Disconnect(self, bssid, essid)
+        Controller.Disconnect(self, 'wireless', essid, bssid)
         self.StopWPA()
     
     def SetWPADriver(self, driver):
@@ -845,7 +855,11 @@ class WirelessConnectThread(ConnectThread):
         self.is_connecting = True
         
         # Run pre-connection script.
-        self.run_global_scripts_if_needed(wpath.preconnectscripts)
+        self.run_global_scripts_if_needed(wpath.preconnectscripts,
+                                          extra_parameters=('wireless',
+                                                    self.network['essid'],
+                                                    self.network['bssid'])
+                                         )
         self.run_script_if_needed(self.before_script, 'pre-connection', 
                                   self.network['bssid'], self.network['essid'])
 
@@ -890,7 +904,11 @@ class WirelessConnectThread(ConnectThread):
         self.verify_association(wiface)
         
         # Run post-connection script.
-        self.run_global_scripts_if_needed(wpath.postconnectscripts)
+        self.run_global_scripts_if_needed(wpath.postconnectscripts,
+                                          extra_parameters=('wireless',
+                                                    self.network['essid'],
+                                                    self.network['bssid'])
+                                         )
         self.run_script_if_needed(self.after_script, 'post-connection', 
                                   self.network['bssid'], self.network['essid'])
 
@@ -1003,7 +1021,7 @@ class Wired(Controller):
         return self.connecting_thread
     
     def Disconnect(self):
-        Controller.Disconnect(self, 'wired', 'wired')
+        Controller.Disconnect(self, 'wired', 'wired', 'wired')
     
     def DetectWiredInterface(self):
         """ Attempts to automatically detect a wired interface. """
@@ -1062,7 +1080,10 @@ class WiredConnectThread(ConnectThread):
         self.is_connecting = True
 
         # Run pre-connection script.
-        self.run_global_scripts_if_needed(wpath.preconnectscripts)
+        self.run_global_scripts_if_needed(wpath.preconnectscripts,
+                                          extra_parameters=('wired', 'wired',
+                                                            self.network['profilename'])
+                                          )
         self.run_script_if_needed(self.before_script, 'pre-connection', 'wired', 
                                   'wired')
 
@@ -1081,7 +1102,10 @@ class WiredConnectThread(ConnectThread):
         self.set_dns_addresses(liface)
         
         # Run post-connection script.
-        self.run_global_scripts_if_needed(wpath.postconnectscripts)
+        self.run_global_scripts_if_needed(wpath.postconnectscripts,
+                                          extra_parameters=('wired', 'wired',
+                                                self.network['profilename'])
+                                         )
         self.run_script_if_needed(self.after_script, 'post-connection', 'wired', 
                                   'wired')
 

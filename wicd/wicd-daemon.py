@@ -1543,6 +1543,7 @@ class WiredDaemon(dbus.service.Object):
                 profile[x] = misc.Noneify(self.config.get(profilename, x))
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))
             profile['use_static_dns'] = bool(profile.get('use_static_dns'))
+            profile['profilename'] = profilename
             self.WiredNetwork = profile
             self._cur_wired_prof_name = profilename
             return "100: Loaded Profile"

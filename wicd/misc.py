@@ -31,6 +31,7 @@ from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
 from itertools import repeat, chain, izip
+from pipes import quote
 
 # wicd imports
 import wpath
@@ -180,20 +181,25 @@ def WriteLine(my_file, text):
     """ write a line to a file """
     my_file.write(text + "\n")
 
-def ExecuteScripts(scripts_dir, verbose=False):
+def ExecuteScripts(scripts_dir, verbose=False, extra_parameters=()):
     """ Execute every executable file in a given directory. """
     if not os.path.exists(scripts_dir):
         return
     for obj in os.listdir(scripts_dir):
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):
-            ExecuteScript(os.path.abspath(obj), verbose=verbose)
+            ExecuteScript(os.path.abspath(obj), verbose=verbose,
+                          extra_parameters=extra_parameters)
 
-def ExecuteScript(script, verbose=False):
+def ExecuteScript(script, verbose=False, extra_parameters=()):
     """ Execute a command and send its output to the bit bucket. """
+    extra_parameters = [ quote(s) for s in extra_parameters ]
+    params = ' '.join(extra_parameters)
+    # escape script name
+    script = quote(script)
     if verbose:
-        print "Executing %s" % script
-    ret = call("%s > /dev/null 2>&1" % script, shell=True)
+        print "Executing %s with params %s" % (script, params)
+    ret = call('%s %s > /dev/null 2>&1' % (script, params), shell=True)
     if verbose:
         print "%s returned %s" % (script, ret)
 

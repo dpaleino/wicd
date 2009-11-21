@@ -1,0 +1,50 @@
+wicd-cli is a scriptable command-line only "client" for wicd written
+by Ronuk Raval.
+
+Some usage examples for wicd-cli.py
+
+Scan for new wireless networks and display them:
+  python wicd-cli.py --wireless --scan --list-networks
+or (same thing, short version)
+  python wicd-cli.py -y -S -l
+
+Or, you can view the networks Wicd has in its cache:
+  python wicd-cli.py --wireless --list-networks
+
+If you want to do anything with these networks, you''ll need to note the 
+network ID listed on the left side of the above command.
+
+Get the channel number from network 0:
+  python wicd-cli.py --wireless --network 0 --network-property channel
+
+Or get all available information for a certain network, do:
+  python wicd-cli.py --wireless --network 0 --network-details
+
+Or do the same for the currently connected network, do:
+  python wicd-cli.py --wireless --network-details
+
+View the available encryption templates Wicd can use:
+  python wicd-cli.py --wireless --list-encryption-types
+
+Look under your chosen encryption scheme for a list of required properties
+(marked with "Req:"). These are additional properties that must be set before
+the encryption can be used.
+
+For example, the listing for WPA encryption looks as follows:
+  0       wpa                     WPA 1/2 (Passphrase)                                                
+    Req: key (Key)
+The list indicates that to use WPA encryption, the following properties must be
+set:
+  'enctype' => 'wpa' (from the name field)
+  'key' => YOUR_WPA_PASSKEY (from the required field)
+
+Use the WPA encryption scheme on network 0 by issuing the following two
+commands:
+  python wicd-cli.py --wireless --network 0 \
+    --network-property enctype --set-to wpa
+  python wicd-cli.py --wireless --network 0 \
+    --network-property key --set-to YOUR_WPA_PASSKEY
+
+Finally, we need to connect to the network:
+  python wicd-cli.py --wireless --network 0 --connect
+

@@ -1,0 +1,7 @@
+.\" First revision was r???
+.TH WICD-CCLI "6" "November 2009"
+.SH NAME
+.B wicd-cli
+\- commandline- only wicd(8) controller
+.SH DESCRIPTION
+TODO  :-)

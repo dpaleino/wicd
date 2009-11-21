@@ -27,7 +27,7 @@ import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
 from wicd.translations import language
-import sys
+import os
 
 daemon = None
 wired = None
@@ -255,7 +255,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.autoconnect_chkbox = urwid.CheckBox(autoconnect_t)
         self.pile_encrypt = None
         # _w is a Frame, _w.body is a ListBox, _w.body.body is the ListWalker :-)
-        self._listbox.body.append(urwid.Text(""))
         self._listbox.body.append(self.global_settings_chkbox)
         self._listbox.body.append(self.autoconnect_chkbox)
         self._listbox.body.append(self.encryption_chkbox)

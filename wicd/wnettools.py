@@ -16,6 +16,7 @@ class BaseWirelessInterface() -- Control a wireless network interface.
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly
 #   Copyright (C) 2007 - 2009 Byron Hillis
+#   Copyright (C) 2009        Andrew Psaltis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -241,7 +242,7 @@ class BaseInterface(object):
         return path
 
     
-    def _get_dhcp_command(self, flavor=None):
+    def _get_dhcp_command(self, flavor=None, hostname=None):
         """ Returns the correct DHCP client command. 
        
         Given a type of DHCP request (create or release a lease),
@@ -277,17 +278,17 @@ class BaseInterface(object):
                  'id' : misc.DHCLIENT, 
                  },
             "pump" : 
-                { 'connect' : r"%(cmd)s -i %(iface)s",
+                { 'connect' : r"%(cmd)s -i %(iface)s -h %(hostname)s",
                   'release' : r"%(cmd)s -r -i %(iface)s",
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%(cmd)s %(iface)s",
+                {'connect' : r"%(cmd)s %(iface)s -h %(hostname)s ",
                  'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
                 },
             "udhcpc":
-                {'connect' : r"%(cmd)s -n -i %(iface)s",
+                {'connect' : r"%(cmd)s -n -i %(iface)s -H %(hostname)s ",
                  'release' : r"killall -SIGUSR2 %(cmd)s",
                  'id' : misc.UDHCPC,
                 },
@@ -298,7 +299,7 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
-            return client_dict[client_name]['connect'] % {"cmd":cmd, "iface":self.iface}
+            return client_dict[client_name]['connect'] % {"cmd":cmd, "iface":self.iface, "hostname":hostname}
         elif flavor == "release":
             return client_dict[client_name]['release'] % {"cmd":cmd, "iface":self.iface}
         else:
@@ -549,7 +550,7 @@ class BaseInterface(object):
             return 'dhcp_failed'
             
     @neediface(False)
-    def StartDHCP(self):
+    def StartDHCP(self,hostname):
         """ Start the DHCP client to obtain an IP address.
         
         Returns:
@@ -557,7 +558,7 @@ class BaseInterface(object):
         _check_dhcp_result for the possible values.
         
         """
-        cmd = self._get_dhcp_command('connect')
+        cmd = self._get_dhcp_command('connect',hostname)
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout

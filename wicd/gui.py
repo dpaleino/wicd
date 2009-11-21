@@ -307,7 +307,7 @@ class appGui(object):
         dialog = gtk.AboutDialog()
         dialog.set_name("Wicd")
         dialog.set_version(daemon.Hello())
-        dialog.set_authors([ "Adam Blackburn", "Dan O'Reilly" ])
+        dialog.set_authors([ "Adam Blackburn", "Dan O'Reilly", "Andrew Psaltis" ])
         dialog.set_website("http://wicd.sourceforge.net")
         dialog.run()
         dialog.destroy()

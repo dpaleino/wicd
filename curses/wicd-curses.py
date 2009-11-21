@@ -192,9 +192,9 @@ def about_dialog(body):
 ('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
 ('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net\n",
 ('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      ",language["brought_to_you"],"\n",
-('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn (wicd)\n",
-"     ___|+|___         Dan O'Reilly   (wicd)\n",
-"    |---------|        Andrew Psaltis (this ui)\n",
+('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn\n",
+"     ___|+|___         Dan O'Reilly\n",
+"    |---------|        Andrew Psaltis\n",
 "-----------------------------------------------------"]
     about = TextDialog(theText,16,55,header=('header','About Wicd'))
     about.run(ui,body)

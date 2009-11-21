@@ -22,6 +22,7 @@ class WiredConnectThread() -- Connection thread for wired
 #   Copyright (C) 2007 - 2009 Adam Blackburn
 #   Copyright (C) 2007 - 2009 Dan O'Reilly
 #   Copyright (C) 2007 - 2009 Byron Hillis
+#   Copyright (C)        2009 Andrew Psaltis
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License Version 2 as
@@ -290,7 +291,8 @@ class ConnectThread(threading.Thread):
 
     def __init__(self, network, interface_name, before_script, after_script, 
                  pre_disconnect_script, post_disconnect_script, gdns1,
-                 gdns2, gdns3, gdns_dom, gsearch_dom, iface, debug):
+                 gdns2, gdns3, gdns_dom, gsearch_dom, iface,
+                 debug):
         """ Initialise the required object variables and the thread.
 
         Keyword arguments:
@@ -325,7 +327,7 @@ class ConnectThread(threading.Thread):
         self.global_dns_3 = gdns3
         self.global_dns_dom = gdns_dom
         self.global_search_dom = gsearch_dom
-        
+
         self.iface = iface
 
         self.connecting_message = None
@@ -446,8 +448,8 @@ class ConnectThread(threading.Thread):
         else:
             # Run dhcp...
             self.SetStatus('running_dhcp')
-            print "Running DHCP"
-            dhcp_status = iface.StartDHCP()
+            print "Running DHCP with hostname",self.network["dhcphostname"]
+            dhcp_status = iface.StartDHCP(self.network["dhcphostname"])
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
                 if self.connect_result != "aborted":
                     self.abort_connection(dhcp_status)
@@ -1059,7 +1061,8 @@ class WiredConnectThread(ConnectThread):
         ConnectThread.__init__(self, network, wired, before_script, 
                                after_script, pre_disconnect_script,
                                post_disconnect_script, gdns1, gdns2,
-                               gdns3, gdns_dom, gsearch_dom, liface, debug)
+                               gdns3, gdns_dom, gsearch_dom, liface,
+                               debug)
 
     def _connect(self):
         """ The main function of the connection thread.

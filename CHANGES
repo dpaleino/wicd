@@ -1,4 +1,268 @@
 ------------------------------------------------------------
+revno: 471
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-11-21 18:27:41 -0500
+message:
+  Fix dhcp hostname bug in wicd-curses, and fix a small formatting issue.
+------------------------------------------------------------
+revno: 470 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 12:06:46 -0600
+message:
+  merged optionalgui
+------------------------------------------------------------
+revno: 469 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 11:56:03 -0600
+message:
+  merged cli_integration
+------------------------------------------------------------
+revno: 468 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 11:55:50 -0600
+message:
+  merged connection-info
+------------------------------------------------------------
+revno: 467 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 11:47:02 -0600
+message:
+  merged dhcp-hostnames
+------------------------------------------------------------
+revno: 466 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 11:03:28 -0600
+message:
+  merged global-parameters
+------------------------------------------------------------
+revno: 465 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 11:02:56 -0600
+message:
+  merged wired-while-scanning
+------------------------------------------------------------
+revno: 464
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sun 2009-11-01 15:22:45 -0500
+message:
+  Retry AP association verification 10 times to accomodate cards that are slow to associate.  Thanks to muttoni for the patch.
+------------------------------------------------------------
+revno: 463
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Fri 2009-10-30 23:52:30 -0400
+message:
+  Determine valid wpa_supplicant drivers by parsing the list from wpa_supplicant, rather than comparing it's output to a static list of possible drivers.
+------------------------------------------------------------
+revno: 462
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-10-24 01:03:29 -0400
+message:
+  Handle essids that are made up of numbers.  Thanks to anish for the patch.
+------------------------------------------------------------
+revno: 461
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-09-29 12:38:11 -0400
+message:
+  Remove uses of ternary operator from wicd-curses, restoring support for python 2.4.
+------------------------------------------------------------
+revno: 460
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-09-27 17:35:26 -0400
+message:
+  Reduce cursor flicker in wicd-curses.
+------------------------------------------------------------
+revno: 459
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-09-19 17:24:40 -0400
+message:
+  Still trying to get rid of this empty wired-settings.conf section bug.
+------------------------------------------------------------
+revno: 458
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-09-19 14:58:00 -0400
+message:
+  chmod to 0755, not 755. Fixes LP #431304
+------------------------------------------------------------
+revno: 457
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Thu 2009-09-10 19:43:26 -0400
+message:
+  Fix for crash when trying to connect to an essid with all numeric characters.
+------------------------------------------------------------
+revno: 456
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-09-02 10:20:13 -0400
+message:
+  Adjusted the keystrokes in wicd-curses to support 8-bit terminals (like xterms by default).
+  
+  Thanks to DarkStarSword for the patch.
+------------------------------------------------------------
+revno: 455
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Fri 2009-08-28 19:47:55 -0400
+message:
+  Wait for the network interface to finish coming up before moving on during the connection process.
+  Use a dict instead of if/elifs in StartDHCP() method.
+------------------------------------------------------------
+revno: 454
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2009-08-15 18:12:40 -0500
+message:
+  updated hidden network ESSID retrieval code
+------------------------------------------------------------
+revno: 453 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2009-08-14 11:00:54 -0500
+message:
+  merged 1.6-urwid-all
+------------------------------------------------------------
+revno: 452 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-08-13 12:11:55 -0500
+message:
+  merged 1.6-strip-ips and updated translations.py
+------------------------------------------------------------
+revno: 451 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-08-13 05:10:58 -0500
+message:
+  merged 1.6-reconnect-dbm to allow automatic reconnection when the dBm signal drops below -99
+------------------------------------------------------------
+revno: 450
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-08-05 21:27:24 -0500
+message:
+  commit fix from https://bugs.launchpad.net/wicd/+bug/388116/comments/3
+------------------------------------------------------------
+revno: 449 [merge]
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Mon 2009-08-03 19:30:21 -0400
+message:
+  Merge.
+------------------------------------------------------------
+revno: 448
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Mon 2009-08-03 19:29:18 -0400
+message:
+  Actually display the error messag we get when scanning fails in the ioctl backend.
+  Make sure we actually abort the connection attempt when authentication validation fails.
+------------------------------------------------------------
+revno: 447
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-08-01 21:25:58 -0400
+message:
+  Fix crash when trying to use an unavaiable locale.
+------------------------------------------------------------
+revno: 446
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-08-01 19:05:24 -0400
+message:
+  Enforce valid wired profile names at the GUI level.
+------------------------------------------------------------
+revno: 445
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Sat 2009-08-01 18:57:00 -0400
+message:
+  Fix some minor formatting issues
+  Don't save wired profiles that have only whitespace in their names.
+------------------------------------------------------------
+revno: 444
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Mon 2009-07-27 21:09:18 -0500
+message:
+  moved 55wicd to 91wicd
+------------------------------------------------------------
+revno: 443
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-07-22 21:47:47 -0500
+message:
+  added the -o option to the help text
+------------------------------------------------------------
+revno: 442
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Wed 2009-07-22 21:29:34 -0500
+message:
+  added support for not displaying the tray icon or the GUI, only the notifications
+------------------------------------------------------------
+revno: 441
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Mon 2009-07-13 18:10:28 -0400
+message:
+  Fix typo in prefs.py
+------------------------------------------------------------
+revno: 440
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-07-07 22:01:19 -1000
+message:
+  commit Dan's fix for long numeric keys
+------------------------------------------------------------
+revno: 439 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-07-07 21:51:32 -1000
+message:
+  merge trunk-rw again
+------------------------------------------------------------
+revno: 438
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-07-07 18:41:52 -1000
+message:
+  Added Robby's comment on at_console
+------------------------------------------------------------
+revno: 437 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-07-07 18:29:53 -1000
+message:
+  merged up to r438 from lp:~rworkman/wicd/trunk-rw
+------------------------------------------------------------
+revno: 436
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-07-05 09:26:24 -1000
+message:
+  fix problem running get_translations if translations/ doesn't exist
+------------------------------------------------------------
+revno: 435
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-07-05 08:56:26 -1000
+message:
+  updated setup.py version number, CHANGES, and NEWS
+------------------------------------------------------------
 revno: 434
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
@@ -35,82 +299,19 @@ timestamp: Thu 2009-07-02 16:50:48 -0400
 message:
   Fix crash when trying to create an ad-hoc network.
 ------------------------------------------------------------
-revno: 429
+revno: 429 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-06-30 22:58:44 -0400
 message:
   Merged r353 of 1.6-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.62
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Tue 2009-06-30 22:43:17 -0400
-    message:
-      Background wicd's startup in Slackware's initscript.
-    ------------------------------------------------------------
-    revno: 202.2.61
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Tue 2009-06-30 21:51:33 -0400
-    message:
-      Fix a small unicode problem in wicd-curses that caused a crash in Debian Lenny.
 ------------------------------------------------------------
-revno: 428
+revno: 428 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-06-24 19:14:43 -0400
 message:
   Merge bugfixes from r351 of 1.6-nacl, thanks to comfrey in #wicd for noticing them.
-    ------------------------------------------------------------
-    revno: 202.2.60
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Wed 2009-06-24 19:10:30 -0400
-    message:
-      Do nothing if the user makes a connection attempt while scanning.
-    ------------------------------------------------------------
-    revno: 202.2.59
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Wed 2009-06-24 18:44:29 -0400
-    message:
-      Do nothing in wicd-curses if there are no networks present.
-    ------------------------------------------------------------
-    revno: 202.2.58
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Wed 2009-06-24 18:43:58 -0400
-    message:
-      Merged r417 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.57
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Sun 2009-06-21 14:07:22 -0400
-    message:
-      Merged r426 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.56
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Fri 2009-06-19 23:20:29 -0400
-    message:
-      Merge r417 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.55
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Wed 2009-06-17 20:52:59 -0400
-    message:
-      Merge r416 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.54
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-nacl
-    timestamp: Sun 2009-06-07 14:53:04 -0400
-    message:
-      Merge 411 of mainline 1.6.
 ------------------------------------------------------------
 revno: 427
 committer: Andrew Psaltis <ampsaltis@gmail.com>
@@ -140,178 +341,47 @@ timestamp: Sat 2009-06-20 21:59:45 -0500
 message:
   updated translations.py
 ------------------------------------------------------------
-revno: 423
+revno: 423 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 21:44:32 -0500
 message:
   merged lp:~nacl/wicd/1.6-access-denied to display an error message if access to the daemon via DBus is denied
-    ------------------------------------------------------------
-    revno: 417.2.6
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Sat 2009-06-20 21:41:17 -0400
-    message:
-      Restore python 2.5 compatibility in both clients.
-    ------------------------------------------------------------
-    revno: 417.2.5
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Fri 2009-06-19 23:03:42 -0400
-    message:
-      Made the wicd-curses "access denied" string translatable, and updated wicd-curses.py to use it.
-    ------------------------------------------------------------
-    revno: 417.2.4
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Fri 2009-06-19 20:07:10 -0400
-    message:
-      Use the ANSI escape sequences to print colors instead of fetching them using tput(1) in wicd-curses.
-    ------------------------------------------------------------
-    revno: 417.2.3
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Fri 2009-06-19 18:59:30 -0400
-    message:
-      Fixed wicd-client to actually show the error dialog, by checking e.get_dbus_name() instead of just e.
-    ------------------------------------------------------------
-    revno: 417.2.2
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Fri 2009-06-19 18:48:39 -0400
-    message:
-      Updated wicd-curses to use DBusException.get_dbus_name() instead of the exception arguments.
-    ------------------------------------------------------------
-    revno: 417.2.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6-access-denied
-    timestamp: Fri 2009-06-19 17:29:25 -0400
-    message:
-      Made wicd-curses.py spit out an error if a dbus access denied error appears on startup.
 ------------------------------------------------------------
-revno: 422
+revno: 422 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 19:25:10 -0500
 message:
   merged lp:~adamblackburn/wicd/1.6-return-101-if-no-strength to allow cards that don't report signal strength to work with Wicd's default settings
-    ------------------------------------------------------------
-    revno: 418.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sat 2009-06-20 14:40:30 -0500
-    message:
-      update FormatSignalForPrinting to return ??% instead of 101%
-    ------------------------------------------------------------
-    revno: 418.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sat 2009-06-20 13:42:21 -0500
-    message:
-      return 101 as the signal strength if altstrenth_pattern fails to find the strength
 ------------------------------------------------------------
-revno: 421
+revno: 421 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 19:24:07 -0500
 message:
   merged lp:~dpaleino/wicd/pre-post-down to allow having pre/post disconnection scripts
-    ------------------------------------------------------------
-    revno: 415.2.1
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Tue 2009-06-16 17:13:41 +0200
-    message:
-      Provide a pre-/post-down script mechanism
-      
-        WICD currently only provides pre-/post-connection scripts, and
-        only one disconnection script, that is run before actually
-        disconnecting. This provides pre-/post-disconnection scripts,
-        thus increasing configuration flexibility.
 ------------------------------------------------------------
-revno: 420
+revno: 420 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 19:22:36 -0500
 message:
   merged lp:~adamblackburn/wicd/loggroup to allow passing the preferred log group and permissions to setup.py configure -- thanks to David Paleino
-    ------------------------------------------------------------
-    revno: 412.3.6
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: loggroup
-    timestamp: Fri 2009-06-19 22:08:32 -0500
-    message:
-      seperated chmod and chown try/excepts
-    ------------------------------------------------------------
-    revno: 412.3.5
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: loggroup
-    timestamp: Tue 2009-06-16 23:57:02 +0800
-    message:
-      added forgotten underscores
-    ------------------------------------------------------------
-    revno: 412.3.4
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: loggroup
-    timestamp: Tue 2009-06-16 23:22:40 +0800
-    message:
-      removed wicd-daemon.py from .bzrignore
-    ------------------------------------------------------------
-    revno: 412.3.3
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: loggroup
-    timestamp: Tue 2009-06-16 23:15:05 +0800
-    message:
-      merge 1.6 r415
-    ------------------------------------------------------------
-    revno: 412.3.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: loggroup
-    timestamp: Tue 2009-06-16 23:08:52 +0800
-    message:
-      moved wicd-daemon.py back to wicd/ and changed wpath replacement values to use the wpath module
-    ------------------------------------------------------------
-    revno: 412.3.1
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-06-13 22:59:03 +0200
-    message:
-      Support --loggroup and --logperms arguments to setup.py
 ------------------------------------------------------------
-revno: 419
+revno: 419 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 19:20:42 -0500
 message:
   merged lp:~adamblackburn/wicd/1.6-cancel-edit-settings to allow canceling the edit settings dialog that appears when attempting to connect to an encrypted network without entering the encryption details
-    ------------------------------------------------------------
-    revno: 417.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sat 2009-06-20 07:58:15 -0500
-    message:
-      fix crash resulting from encryption info missing when connecting
-    ------------------------------------------------------------
-    revno: 417.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Thu 2009-06-18 15:16:29 +0800
-    message:
-      allow user to cancel preferences dialog if they chose not to connect after clicking connect and showing the preferences dialog
 ------------------------------------------------------------
-revno: 418
+revno: 418 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-06-20 10:33:23 -0500
 message:
   merged David Paleino's Debian init script that includes a status command
-    ------------------------------------------------------------
-    revno: 415.1.1
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Tue 2009-06-16 17:56:21 +0200
-    message:
-      Add "status" to /etc/init.d/wicd (Debian/Ubuntu)
 ------------------------------------------------------------
 revno: 417
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -334,47 +404,12 @@ timestamp: Tue 2009-06-16 07:44:27 +0800
 message:
   disable automatically disconnecting when Automatically reconnect is False
 ------------------------------------------------------------
-revno: 414
+revno: 414 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: trunk
 timestamp: Sun 2009-06-14 14:27:21 -0400
 message:
   Merge.
-    ------------------------------------------------------------
-    revno: 412.2.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-06-14 12:27:36 +0800
-    message:
-      merged David's Debian patches branch
-    ------------------------------------------------------------
-    revno: 412.1.3
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-06-13 22:07:49 +0200
-    message:
-      Support udhcpc, this is needed to smoothly run on the OpenMoko FreeRunner.
-      
-      Thanks to Luca Capello <gismo@debian.org> for porting the patch to 1.5.9, and
-      to "madmo" from the linked forum for making the patch.
-      
-      Patch originally taken from http://wicd.net/punbb/viewtopic.php?id=132
-      
-      Patch ported to 1.6.0 code by David Paleino <d.paleino@gmail.com>.
-    ------------------------------------------------------------
-    revno: 412.1.2
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-06-13 22:06:08 +0200
-    message:
-      Update manpage with an appropriate WHATIS entry
-    ------------------------------------------------------------
-    revno: 412.1.1
-    committer: David Paleino <d.paleino@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-06-13 22:05:10 +0200
-    message:
-      Remove deprecated Encoding field
 ------------------------------------------------------------
 revno: 413
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -405,26 +440,12 @@ timestamp: Fri 2009-06-05 15:20:58 +0800
 message:
   updated CHANGES
 ------------------------------------------------------------
-revno: 409
+revno: 409 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Fri 2009-06-05 15:08:47 +0800
 message:
   merged experimental-nacl
-    ------------------------------------------------------------
-    revno: 202.2.53
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-06-04 22:19:33 -0400
-    message:
-      If a network dialog is up when a scan is initiated externally, drop the dialog.
-    ------------------------------------------------------------
-    revno: 202.2.52
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-06-04 22:10:05 -0400
-    message:
-      Merge r408 of mainline 1.6.
 ------------------------------------------------------------
 revno: 408
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -440,26 +461,12 @@ timestamp: Thu 2009-06-04 21:39:36 +0800
 message:
   updated CHANGES, setup.py version, and NEWS
 ------------------------------------------------------------
-revno: 406
+revno: 406 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-05-30 23:18:22 -0400
 message:
   Merge r342 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.51
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-30 23:12:53 -0400
-    message:
-      Increased time between wireless scans to 2 seconds.
-    ------------------------------------------------------------
-    revno: 202.2.50
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-30 23:11:37 -0400
-    message:
-      Merged with r405 of mainline 1.6
 ------------------------------------------------------------
 revno: 405
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -468,49 +475,12 @@ timestamp: Thu 2009-05-28 11:10:10 +0800
 message:
   updated CHANGES and setup.py version
 ------------------------------------------------------------
-revno: 404
+revno: 404 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-05-27 22:25:32 -0400
 message:
   Merge 1.6-dan
-    ------------------------------------------------------------
-    revno: 401.1.3
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Sun 2009-05-24 17:11:14 -0400
-    message:
-      Try to recover if we attempt to load a non-existent backend.
-    ------------------------------------------------------------
-    revno: 401.1.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Fri 2009-05-22 15:43:14 -0400
-    message:
-      Merge
-        ------------------------------------------------------------
-        revno: 401.2.1
-        committer: Dan O'Reilly <oreilldf@gmail.com>
-        branch nick: experimental
-        timestamp: Fri 2009-05-22 15:33:03 -0400
-        message:
-          - Make the GUI behave better when a disconnect button is pushed.
-          - Move some of the libnotify logic to guiutil.py and add support for displaying some error messages in a libnotify pop-up.
-          - Apply some patches provided by sunseraph.  Tweak to the channel regex and checking for a valid AP bssid when monitoring a wireless connection.  Set essid, bssid, and channel in separate calls to iwconfig.
-          - Add caching for ifconfig and iwconfig results in wnettools.py.  That way we're not needlessly calling the same command a bunch of times in a short period of time (2 seconds).  This removes the need for us to pass around iwconfig/ifconfig output elsewhere, though I've left it in for now.
-          - Remove unneeded BackendManager instance from networking.py
-    ------------------------------------------------------------
-    revno: 401.1.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Fri 2009-05-22 15:40:35 -0400
-    message:
-      - Make the GUI behave better when a disconnect button is pushed.
-      - Move some of the libnotify logic to guiutil.py and add support for displaying some error messages in a libnotify pop-up.
-      - Apply some patches provided by sunseraph.  Tweak to the channel regex and checking for a valid AP bssid when monitoring a wireless connection.  Set essid, bssid, and channel in separate calls to iwconfig.
-      - Add caching for ifconfig and iwconfig results in wnettools.py.  That way we're not needlessly calling the same command a bunch of times in a short period of time (2 seconds).  This removes the need for us to pass around iwconfig/ifconfig output elsewhere, though I've left it in for now.
-      - Remove unneeded BackendManager instance from networking.py
-      - Fix last used wired networking autoconnection method
 ------------------------------------------------------------
 revno: 403
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -519,41 +489,12 @@ timestamp: Sat 2009-05-23 12:51:02 +0800
 message:
   Updated version numbers and CHANGES
 ------------------------------------------------------------
-revno: 402
+revno: 402 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-05-23 00:40:52 -0400
 message:
   Merged r340 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.49
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-23 00:36:54 -0400
-    message:
-      Merged r401 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.48
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-23 00:32:29 -0400
-    message:
-      Made M^ and C^ into Alt+ and Ctrl+ respectively in OptCols.
-      Rearranged the OptCols for the preferences dialog to match those in the others.
-    ------------------------------------------------------------
-    revno: 202.2.47
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-23 00:23:11 -0400
-    message:
-      Removed some comments from wicd-curses.py.
-    ------------------------------------------------------------
-    revno: 202.2.46
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-23 00:02:58 -0400
-    message:
-      Really fixed bug 355693. :)
 ------------------------------------------------------------
 revno: 401
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -562,136 +503,33 @@ timestamp: Fri 2009-05-22 11:29:12 +0800
 message:
   Buttons are now activated correctly when using the keyboard
 ------------------------------------------------------------
-revno: 400
+revno: 400 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Thu 2009-05-21 23:18:48 +0800
 message:
   merged 1.6-rworkman
-    ------------------------------------------------------------
-    revno: 365.1.15
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Thu 2009-05-21 10:12:03 -0500
-    message:
-      Clarify intent of INSTALL with respect to pm-utils version.
-    ------------------------------------------------------------
-    revno: 365.1.14
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Tue 2009-05-19 23:40:13 -0500
-    message:
-      Merged mainline back in; no other changes.
 ------------------------------------------------------------
-revno: 399
+revno: 399 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-05-19 21:25:09 -0400
 message:
   Merged r336 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.45
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-05-19 21:20:29 -0400
-    message:
-      Added wrap_exceptions to wicd-curses.py's run() function.
-    ------------------------------------------------------------
-    revno: 202.2.44
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-05-19 21:18:30 -0400
-    message:
-      Flipped the order of the dhcp clients in the prefs dialog and fixed a syntax
-      error in wicd-curses.py.
-    ------------------------------------------------------------
-    revno: 202.2.43
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-05-19 21:06:38 -0400
-    message:
-      Merge r398 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.42
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-05-15 01:05:36 -0400
-    message:
-      Merge r395 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.41
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-05-15 01:05:04 -0400
-    message:
-      Added some deactivated options for enabling debug logs.
 ------------------------------------------------------------
-revno: 398
+revno: 398 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-05-20 07:12:58 +0800
 message:
   Merged 1.6-rworkman
-    ------------------------------------------------------------
-    revno: 365.1.13
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Tue 2009-05-19 15:44:52 -0500
-    message:
-      Make sure the /sys/class/net/whatever is actually a directory in
-        GetWiredInterfaces() (similar to the check in GetWireless)
-    ------------------------------------------------------------
-    revno: 365.1.12
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Fri 2009-05-15 12:25:58 -0500
-    message:
-      Merged mainline. No other changes to this branch; no need to merge 
-        into mainline.
-    ------------------------------------------------------------
-    revno: 365.1.11
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Fri 2009-05-08 14:27:46 -0500
-    message:
-      Merged mainline; no other changes.
-    ------------------------------------------------------------
-    revno: 365.1.10
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Sat 2009-05-02 20:25:25 -0500
-    message:
-      Merged mainline back in to sync up this branch.
-        No need to re-merge into mainline, as there are no other changes 
-        at this point.
-    ------------------------------------------------------------
-    revno: 365.1.9
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Fri 2009-05-01 09:15:18 -0500
-    message:
-      Merged mainline.
 ------------------------------------------------------------
-revno: 397
+revno: 397 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-05-20 07:10:49 +0800
 message:
   merge
-    ------------------------------------------------------------
-    revno: 395.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Wed 2009-05-20 07:01:31 +0800
-    message:
-      Changed DHCP client order to dhcpcd -> pump -> dhclient
-    ------------------------------------------------------------
-    revno: 395.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sat 2009-05-16 20:50:20 +0800
-    message:
-      Apply .desktop file patch from Debian (remove deprecated encoding line)
 ------------------------------------------------------------
 revno: 396
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -707,19 +545,12 @@ timestamp: Thu 2009-05-14 21:55:59 +0800
 message:
   update CHANGES and NEWS
 ------------------------------------------------------------
-revno: 394
+revno: 394 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Thu 2009-05-14 09:44:28 -0400
 message:
   Merged typo fix from r331 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.40
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-05-13 19:03:29 -0400
-    message:
-      Fixed typo in wicd-curses.py.
 ------------------------------------------------------------
 revno: 393
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -728,27 +559,12 @@ timestamp: Thu 2009-05-14 19:37:20 +0800
 message:
   Fix <b>/</b> tags
 ------------------------------------------------------------
-revno: 392
+revno: 392 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-05-12 00:06:38 -0400
 message:
   Merged r330 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.39
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-05-12 00:04:43 -0400
-    message:
-      If the screen in wicd-curses is not up and an ui update is requested, abort the
-      program.
-    ------------------------------------------------------------
-    revno: 202.2.38
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-05-11 23:52:43 -0400
-    message:
-      Merged with r391 of mainline 1.6.
 ------------------------------------------------------------
 revno: 391
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -771,61 +587,12 @@ timestamp: Sun 2009-05-10 22:03:52 +0800
 message:
   Removed italicized text from the GTK GUI
 ------------------------------------------------------------
-revno: 388
+revno: 388 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sun 2009-05-10 09:51:01 -0400
 message:
   Merged with r328 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.37
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-05-10 09:40:38 -0400
-    message:
-      Hopefully fixed bug 355693, related to focus positioning.
-    ------------------------------------------------------------
-    revno: 202.2.36
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-05-07 00:38:18 -0400
-    message:
-      Redid the decorator to look like the other exception-catching decorators in wicd.
-    ------------------------------------------------------------
-    revno: 202.2.35
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-05-07 00:37:28 -0400
-    message:
-      Remerge with mainline, doing nothing.
-    ------------------------------------------------------------
-    revno: 202.2.34
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-05-07 00:30:25 -0400
-    message:
-      Added support for manual distro detection in setup.py.
-    ------------------------------------------------------------
-    revno: 202.2.33
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-05-06 15:33:12 -0400
-    message:
-      Made scans asynchronous so that users can actually access preferences while the daemon is scanning.
-    ------------------------------------------------------------
-    revno: 202.2.32
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-05-06 15:19:46 -0400
-    message:
-      Merged r385 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.31
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-05-02 18:45:36 -0400
-    message:
-      Merged r379 of mainline 1.6.
 ------------------------------------------------------------
 revno: 387
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -862,117 +629,19 @@ timestamp: Tue 2009-05-05 12:00:22 +0800
 message:
   updated CHANGES/NEWS
 ------------------------------------------------------------
-revno: 382
+revno: 382 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-05-05 11:58:36 +0800
 message:
   merged notifications branch
-    ------------------------------------------------------------
-    revno: 371.1.13
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Tue 2009-05-05 10:34:44 +0800
-    message:
-      added support for disabling notifications in setup.py
-    ------------------------------------------------------------
-    revno: 371.1.12
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Tue 2009-05-05 10:17:10 +0800
-    message:
-      merged latest 1.6
-    ------------------------------------------------------------
-    revno: 371.1.11
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 17:31:18 +0800
-    message:
-      Added icons for wireless networks and disconnect states
-    ------------------------------------------------------------
-    revno: 371.1.10
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 17:27:31 +0800
-    message:
-      merge latest 1.6
-    ------------------------------------------------------------
-    revno: 371.1.9
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 17:26:29 +0800
-    message:
-      added images to wired network connection notifications
-    ------------------------------------------------------------
-    revno: 371.1.8
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 10:32:10 +0800
-    message:
-      Added support for instantly enabling/disabling notifications when the preference is changed
-    ------------------------------------------------------------
-    revno: 371.1.7
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 09:50:09 +0800
-    message:
-      Fixed the libglade warnings when loading the GTK GUI
-    ------------------------------------------------------------
-    revno: 371.1.6
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sun 2009-05-03 09:33:32 +0800
-    message:
-      Merge latest 1.6
-    ------------------------------------------------------------
-    revno: 371.1.5
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sat 2009-05-02 14:01:30 +0800
-    message:
-      Disable the enable notification option if pynotify isn't installed
-    ------------------------------------------------------------
-    revno: 371.1.4
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sat 2009-05-02 12:47:05 +0800
-    message:
-      Merge latest 1.6
-    ------------------------------------------------------------
-    revno: 371.1.3
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Sat 2009-05-02 12:43:43 +0800
-    message:
-      Reworded notifications and added new entries to translations.py
-    ------------------------------------------------------------
-    revno: 371.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Fri 2009-05-01 14:32:09 +0800
-    message:
-      added support for enabling/disabling notifications
-    ------------------------------------------------------------
-    revno: 371.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: libnotify-support-ng
-    timestamp: Fri 2009-05-01 13:46:21 +0800
-    message:
-      Initial notification support
 ------------------------------------------------------------
-revno: 381
+revno: 381 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Sun 2009-05-03 22:00:24 +0800
 message:
   print wicd's version number on daemon start
-    ------------------------------------------------------------
-    revno: 379.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-05-03 17:20:02 +0800
-    message:
-      Updated translations.py to include all translations from old translations.py
 ------------------------------------------------------------
 revno: 380
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -981,38 +650,12 @@ timestamp: Sun 2009-05-03 21:58:11 +0800
 message:
   print wicd's version number on daemon start
 ------------------------------------------------------------
-revno: 379
+revno: 379 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-05-02 14:08:07 -0400
 message:
   Merged bugfixes from r321 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.30
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-05-01 22:23:40 -0400
-    message:
-      Merge r375 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.29
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-05-01 22:13:15 -0400
-    message:
-      Some more bugfixes...
-      Fixed unencrypted network support in both UIs.
-      Fixed marking the Static IP checkbox in wicd-curses.
-      Made the checkboxes in the the network properties dialogs in wicd-curses act
-        like those in wicd-client.
-      Filter the urwid popen2 warning in wicd-curses.
-    ------------------------------------------------------------
-    revno: 202.2.28
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-05-01 13:02:44 -0400
-    message:
-      Merged with r272 of mainline 1.6.
 ------------------------------------------------------------
 revno: 378
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -1050,59 +693,12 @@ message:
   Fix crash when saving settings for unencrypted networks.
   Remove unneeded function in prefs.py
 ------------------------------------------------------------
-revno: 373
+revno: 373 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Fri 2009-05-01 21:58:53 +0800
 message:
   Merge 1.6-rworkman (thanks!)
-    ------------------------------------------------------------
-    revno: 365.1.8
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Tue 2009-04-28 10:51:16 -0500
-    message:
-      Tweaks to NEWS file.
-    ------------------------------------------------------------
-    revno: 365.1.7
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Tue 2009-04-28 10:50:23 -0500
-    message:
-      Merged mainline.  This will require one more change to the NEWS file
-        to handle conflicts.
-    ------------------------------------------------------------
-    revno: 365.1.6
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Sun 2009-04-26 21:38:10 -0500
-    message:
-      Clarified some required versions in INSTALL
-    ------------------------------------------------------------
-    revno: 365.1.5
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Sat 2009-04-25 23:17:33 -0500
-    message:
-      Use set_icon_name() instead of set_icon_from_file() in gui.py ; this 
-        allows gtk to use the themed icons (and presumably the correct size
-        and all that good stuff).
-    ------------------------------------------------------------
-    revno: 365.1.4
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Sat 2009-04-25 22:55:12 -0500
-    message:
-      Synced CHANGES file with mainline.
-      Minor tweaks to NEWS file (mostly formatting).
-    ------------------------------------------------------------
-    revno: 365.1.3
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: 1.6-rworkman
-    timestamp: Wed 2009-04-22 19:53:08 -0500
-    message:
-      Added NEWS file with major changes since 1.5.x.
-      Updated CHANGES file with 'bzr log' output as of r367.
 ------------------------------------------------------------
 revno: 372
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -1141,40 +737,12 @@ timestamp: Sun 2009-04-26 07:53:24 +0900
 message:
   Fixed setup.py translations installation and made wicd-daemon.py +x
 ------------------------------------------------------------
-revno: 367
+revno: 367 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Thu 2009-04-23 19:41:10 +0800
 message:
   Merged
-    ------------------------------------------------------------
-    revno: 365.1.2
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Wed 2009-04-22 17:40:07 -0400
-    message:
-      Merged r318 of experimental-nacl, fixing yet another wicd-curses bug.
-        ------------------------------------------------------------
-        revno: 202.2.27
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: experimental-nacl
-        timestamp: Wed 2009-04-22 17:37:50 -0400
-        message:
-          Made the network preferences dialogs save whether they are using static IPs or not.  Thanks to Adam for finding this one.
-        ------------------------------------------------------------
-        revno: 202.2.26
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: experimental-nacl
-        timestamp: Wed 2009-04-22 14:06:26 -0400
-        message:
-          Merged r366 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 365.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Wed 2009-04-22 12:13:06 -0400
-    message:
-      Set the SVG wicd icon as the window icon in wicd-client.
 ------------------------------------------------------------
 revno: 366
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -1227,55 +795,12 @@ message:
   Use atexit instead of catching SIGTERM in wicd-daemon.
   Use Popen to launch wicd-monitor instead of gobject.spawn_async.
 ------------------------------------------------------------
-revno: 359
+revno: 359 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-04-21 17:47:46 -0400
 message:
   Merged r316 of experimental-nacl, providing some small feature additions and bufixes.
-    ------------------------------------------------------------
-    revno: 202.2.25
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-04-21 14:09:29 -0400
-    message:
-      Fixed a problem where if a scan is initiated externally, and wicd-curses doesn't see it, wicd-curses will half-drop a running big dialog.
-    ------------------------------------------------------------
-    revno: 202.2.24
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-04-21 13:34:01 -0400
-    message:
-      Fix bug introduced in r356 where wicd would crash upon not finding dhclient.
-    ------------------------------------------------------------
-    revno: 202.2.23
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-04-21 13:16:44 -0400
-    message:
-      Added support for disabling nonexistent external tools in the pref_curses.py.
-      Added a DynRadioButton in curses_misc.py.
-    ------------------------------------------------------------
-    revno: 202.2.22
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-04-21 13:15:30 -0400
-    message:
-      Merged with r358 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.21
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-04-17 08:04:02 -0400
-    message:
-      Merged r355 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.20
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-04-12 12:12:38 -0400
-    message:
-      Merge r352 of mainline 1.6
 ------------------------------------------------------------
 revno: 358
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -1381,58 +906,19 @@ message:
   Don't build C extensions modules in main setup.py
   Give WirelessInformationDialog a parent.
 ------------------------------------------------------------
-revno: 344
+revno: 344 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Fri 2009-04-10 22:46:57 -0400
 message:
   Merged some more wicd-curses changes, experimental-nacl r310.
-    ------------------------------------------------------------
-    revno: 202.2.19
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-04-10 22:33:40 -0400
-    message:
-      Made it possible to enter 'q' and 'Q' into dialog edit fields.
 ------------------------------------------------------------
-revno: 343
+revno: 343 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Fri 2009-04-10 22:13:48 -0400
 message:
   Merged wicd-curses changes from r309 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.18
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-04-10 22:07:14 -0400
-    message:
-      Fixed network DNS input bug found by Brandon Hartshorn.
-    ------------------------------------------------------------
-    revno: 202.2.17
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-04-05 11:35:36 -0400
-    message:
-      Merged with r342 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.16
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-04-01 19:01:00 -0400
-    message:
-      Generic updates and a bugfix.
-      curses/README,curses/TODO: Cleaned up and updated respectively
-      curses/curses_misc.py: added a get_caption() method to MaskingEdit
-      curses/netentry_curses.py: Actually made the error dialogs work instead of crashing the program.
-      curses/wicd-curses.py: Changed some capitalization in the help.
-    ------------------------------------------------------------
-    revno: 202.2.15
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-03-30 15:41:37 -0400
-    message:
-      Merge r340 of mainline 1.6.
 ------------------------------------------------------------
 revno: 342
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -1449,40 +935,12 @@ timestamp: Fri 2009-04-03 19:07:00 -0400
 message:
   Always use the "C" local when running external commands.
 ------------------------------------------------------------
-revno: 340
+revno: 340 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Fri 2009-03-27 23:14:19 -0400
 message:
   Merge.
-    ------------------------------------------------------------
-    revno: 338.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Fri 2009-03-27 10:24:59 -0400
-    message:
-      Merged r305 of experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.14
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-03-27 00:25:59 -0400
-    message:
-      Changed some of the colors in wicd-curses.py and added the About to the OptCols on the main screen.
-    ------------------------------------------------------------
-    revno: 202.2.13
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-03-25 12:36:57 -0400
-    message:
-      Various fixes.                                                 
-      curses/curses_misc.py:
-        Simplified changing the "arrow" on the ComboBox, if I decide to do so.                                                             
-      curses/prefs_curses.py: Added a docstring                                 
-      curses/wicd-curses.py:                                                    
-        'q' or 'Q' quits a dialog without saving now.                           
-        Fixed a bug where a scan run while a dialog is up would lock the screen and
-          half-close the dialog when it is done.
 ------------------------------------------------------------
 revno: 339
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -1500,341 +958,12 @@ message:
   Fix potential issue if encryption key is a number
   Close all open fd's in the daemonize code.
 ------------------------------------------------------------
-revno: 337
+revno: 337 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Tue 2009-03-24 12:30:25 -0400
 message:
   Merged in curses-uimod changes from experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.2.12
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-03-24 09:01:02 -0400
-    message:
-      Merge 336 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.11
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-03-24 08:12:07 -0400
-    message:
-      Made the help in wicd-curses.py all read out on one line. per entry
-    ------------------------------------------------------------
-    revno: 202.2.10
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-03-23 12:32:03 -0400
-    message:
-      Merged r335 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.9
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-03-22 21:00:40 -0400
-    message:
-      Improved the timing in general.
-      Decreased the clock update time to 500 ms.
-      Ensured that the wheel when connecting doesn't alternate weirdly.
-        Fixing this may also improve performance.
-    ------------------------------------------------------------
-    revno: 202.2.8
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-03-22 19:25:19 -0400
-    message:
-      Changed the clock in wicd-curses.py to update every 0.9 seconds.
-    ------------------------------------------------------------
-    revno: 202.2.7
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-03-22 00:22:07 -0400
-    message:
-      Merged in r331 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.6
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-03-21 23:21:31 -0400
-    message:
-      Merged curses-uimod.  It works well enough for me at the moment.
-        ------------------------------------------------------------
-        revno: 202.3.26
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-21 23:18:03 -0400
-        message:
-          Updated docs to note that enter results in connecting.
-        ------------------------------------------------------------
-        revno: 202.3.25
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-21 17:33:41 -0400
-        message:
-          Merged in enctemplates error handling fixes.
-        ------------------------------------------------------------
-        revno: 202.3.24
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Thu 2009-03-19 12:48:28 -0400
-        message:
-          Re-enabled "enter" in wicd-curses.py.
-        ------------------------------------------------------------
-        revno: 202.3.23
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-18 23:37:28 -0400
-        message:
-          Merged in Dan's enctemplates branch, and repaired two code merge conflicts.
-        ------------------------------------------------------------
-        revno: 202.3.22
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod-old
-        timestamp: Wed 2009-03-18 23:00:32 -0400
-        message:
-          Merged r295 of experimental-nacl
-        ------------------------------------------------------------
-        revno: 202.3.21
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-14 20:54:45 -0400
-        message:
-          Fixed some keypress shenanigans
-          curses/wicd-curses.py: Fixed mouse events being passed to keypress functions (again)
-          curses/prefs_curses.py: Fixed some translations
-          curses/curses_misc.py:
-            Fixed mouse handling in TabColumns
-            Fixed callbacks to non-global keypresses in OptCols
-        ------------------------------------------------------------
-        revno: 202.3.20
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-14 16:56:06 -0400
-        message:
-          Merged setup.py changes from experimental-nacl, r293.
-        ------------------------------------------------------------
-        revno: 202.3.19
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-11 20:34:52 -0400
-        message:
-          Merged with experimental-nacl, r292
-        ------------------------------------------------------------
-        revno: 202.3.18
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-11 10:21:20 -0400
-        message:
-          Fixed some bugs/usability issues
-          Enter is no longer mapped to anything
-          Arrow left is no longer mapped to anything
-          Edit text when it is unfocusable is now brown.
-          Fixed problem where scrolling up on the Preferences Dialog would somehow shift the dab over one.
-        ------------------------------------------------------------
-        revno: 202.3.17
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-07 19:53:10 -0500
-        message:
-          Fixed most keypresses not working.
-        ------------------------------------------------------------
-        revno: 202.3.16
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-07 16:26:41 -0500
-        message:
-          Added mouse support to OptCols.  Everything works :-).
-          
-          This branch will be merged into experimental-nacl once I'm sure that everything works, and I update the documentation.
-        ------------------------------------------------------------
-        revno: 202.3.15
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-03-07 14:49:51 -0500
-        message:
-          Merged r294 of experimental-nacl
-        ------------------------------------------------------------
-        revno: 202.3.14
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Fri 2009-03-06 15:41:19 -0500
-        message:
-          Fixed the "left does not quit the preferences dialog" problem in wicd-curses.
-        ------------------------------------------------------------
-        revno: 202.3.13
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Fri 2009-03-06 12:49:27 -0500
-        message:
-          curses/prefs_curses.py: Adapted widgets for integration into the main UI
-          curses/curses_misc.py:
-            Removed the "bottom_part" from the TabColumns
-          curses/wicd-curses.py:
-            Added support for editing preferences directly in the main UI w/o a dialog
-            'left' now only quits with saving for the NetworkSettingsDialogs
-              (suggestions as for what to do here would be appreciated)
-        ------------------------------------------------------------
-        revno: 202.3.12
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Thu 2009-03-05 23:13:29 -0500
-        message:
-          Made the keymappings displayed in the OptCols actually do what they say they're suppoed to do.
-          Updated the README
-        ------------------------------------------------------------
-        revno: 202.3.11
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Thu 2009-03-05 23:09:17 -0500
-        message:
-          More htoppish ui changes
-          curses/prefs_curses.py: changed save_results to save_settings
-          curses/curses_misc.py:
-            M^[ and M^] shift the tabs left and right respectively.  The curses module
-              has trouble picking up M^left and M^right
-          curses/netentry_curses.py:
-            Removed the buttons and button-related code from the interface.
-            Removed the overlay code.
-            Adapted the code for direct insertion into the wicd-curses interface
-          curses/wicd-curses.py:
-            Teaked the wireless header.
-            Added support for sticking the network config dialog into the interface, and
-              changing the current OptCols when it is activated.
-            Added new OptCols for other large dialogs
-        ------------------------------------------------------------
-        revno: 202.3.10
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Thu 2009-03-05 11:20:43 -0500
-        message:
-          Actually made window resizing not drop the help screen.
-        ------------------------------------------------------------
-        revno: 202.3.9
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Thu 2009-03-05 10:09:23 -0500
-        message:
-          Modified the help dialog in wicd-curses so that it fills up the entire screen.
-          There may still a formatting issue, will wait on user opinion before changing.
-        ------------------------------------------------------------
-        revno: 202.3.8
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-04 17:01:00 -0500
-        message:
-          Fixed the wireless network header when we are only seeing wireless networks.
-        ------------------------------------------------------------
-        revno: 202.3.7
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-04 16:54:26 -0500
-        message:
-          curses/curses_misc.py:
-            Added a non-selectable listbox for the wireless network header
-          curses/wicd-curses.py:
-            Updated the wireless list-header generating function and activated it.
-            Removed/deactivated some unused code.
-        ------------------------------------------------------------
-        revno: 202.3.6
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Wed 2009-03-04 00:56:17 -0500
-        message:
-          curses/curses_misc.py:
-            added support for Meta and Ctrl being applied to keys in OptCols
-          curses/wicd-curses.py
-            Changed the colors slightly, colorized the clock.
-        ------------------------------------------------------------
-        revno: 202.3.5
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Mon 2009-03-02 14:05:25 -0500
-        message:
-          curses/wicd-curses.py:
-            Replaced idle_incr with a clock that counts seconds.
-            Streamlined some of the footer functions
-            The connecting progress-wheel now updates independently of any other counter.
-            Increased status updating time to 2 seconds (from 1.5)
-        ------------------------------------------------------------
-        revno: 202.3.4
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sun 2009-03-01 23:53:59 -0500
-        message:
-          curses/curses_misc.py: Added a colon to each entry in OptCols
-          curses/wicd-curses.py: 
-            Removed the 'print ""' from the end of the main entry point
-            Changed the infobar colors to grey on dark blue
-        ------------------------------------------------------------
-        revno: 202.3.3
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sun 2009-03-01 20:47:08 -0500
-        message:
-          Things are coming along...
-          curses/netentry_curses.py: Realigned some text
-          curses/curses_misc.py:
-            Added support for clicking stuff (doesn't do anything except change a label
-              for now)
-            The keys 'left' and 'right' now accepted, and translated into fake arrows
-            Added a debug mode for the OptCols
-          curses/wicd-curses.py:
-            Removed if loop in locals() from the exception wrapper, this was causing bugs
-              in OptCols to spam my console
-            Debug mode on the optcols is set to default (for now)
-            Cleaned up idle_incr
-            Removed some of the exception wrappers
-        ------------------------------------------------------------
-        revno: 202.3.2
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-02-28 18:58:12 -0500
-        message:
-          curses/curses_misc.py: Added a htop-like OptCols
-          curses/wicd-curses.py:
-            Added support for OptCols.  Some of the keys in there are not valid as of yet.
-        ------------------------------------------------------------
-        revno: 202.3.1
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: curses-uimod
-        timestamp: Sat 2009-02-28 11:32:29 -0500
-        message:
-          Merged with r291 of experimental-nacl
-    ------------------------------------------------------------
-    revno: 202.2.5
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-03-21 22:28:05 -0400
-    message:
-      Merged r329 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.4
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-03-16 21:12:36 -0400
-    message:
-      Dump descriptions of error messages to stderr instead of stdout.
-    ------------------------------------------------------------
-    revno: 202.2.3
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-03-16 20:59:06 -0400
-    message:
-      Merged in resolvconf support from mainline 1.6, r325.
-    ------------------------------------------------------------
-    revno: 202.2.2
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-03-12 14:40:58 -0400
-    message:
-      Merged r324 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.2.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-03-11 20:32:36 -0400
-    message:
-      Merge with mainline 1,6, r323.
 ------------------------------------------------------------
 revno: 336
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -1881,70 +1010,12 @@ timestamp: Sun 2009-03-22 00:13:42 -0400
 message:
   Fix decorators.
 ------------------------------------------------------------
-revno: 330
+revno: 330 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sat 2009-03-21 22:38:33 -0400
 message:
   Merge enctemplates branch.
-    ------------------------------------------------------------
-    revno: 312.3.7
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Sat 2009-03-21 16:37:21 -0400
-    message:
-      Merge 1.6 branch.
-    ------------------------------------------------------------
-    revno: 312.3.6
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Sat 2009-03-21 15:30:26 -0400
-    message:
-      Fix some issues in the template error handling code.
-    ------------------------------------------------------------
-    revno: 312.3.5
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Mon 2009-03-16 23:19:06 -0400
-    message:
-      Merge from 1.6 branch.
-    ------------------------------------------------------------
-    revno: 312.3.4
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Fri 2009-03-13 18:55:18 -0400
-    message:
-      Merge
-    ------------------------------------------------------------
-    revno: 312.3.3
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Sun 2009-03-08 18:38:16 -0400
-    message:
-      Merge encryption template changes for curses.
-        ------------------------------------------------------------
-        revno: 312.4.1
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: enctemplates
-        timestamp: Sun 2009-03-08 17:45:38 -0400
-        message:
-          Fixed wicd-curses to support the new template backend.
-          Made the cacert and clcert fields optional in the eap-tls template.
-    ------------------------------------------------------------
-    revno: 312.3.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Sun 2009-03-08 18:32:48 -0400
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 312.3.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: enctemplates
-    timestamp: Sat 2009-02-28 21:52:27 -0500
-    message:
-      Tweak encryption template code so that optional parameters can be supplied.  Tweak UI code to reflect that new functionality.
-      Allow for slightly more variation in template formatting.
 ------------------------------------------------------------
 revno: 329
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -1975,47 +1046,12 @@ timestamp: Sun 2009-03-15 20:54:16 -0400
 message:
   Apply Debian initscript patch from David Paleino.
 ------------------------------------------------------------
-revno: 325
+revno: 325 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sun 2009-03-15 15:54:14 -0400
 message:
   Merge in resolvconf support.
-    ------------------------------------------------------------
-    revno: 322.1.5
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: resolvconf2
-    timestamp: Sun 2009-03-15 13:47:55 -0400
-    message:
-      Only print "Setting DNS" message if debug mode is on.
-    ------------------------------------------------------------
-    revno: 322.1.4
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: resolvconf2
-    timestamp: Sat 2009-03-14 17:41:51 -0400
-    message:
-      Fix how we set nameserver entries after code review.
-    ------------------------------------------------------------
-    revno: 322.1.3
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: resolvconf2
-    timestamp: Thu 2009-03-12 20:54:33 -0400
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 322.1.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: resolvconf2
-    timestamp: Mon 2009-03-09 01:49:33 -0400
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 322.1.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: resolvconf2
-    timestamp: Mon 2009-03-09 00:07:39 -0400
-    message:
-      Add support for using resolvconf instead of directly editing resolv.conf if possible.
 ------------------------------------------------------------
 revno: 324
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -2031,152 +1067,19 @@ timestamp: Mon 2009-03-09 01:46:31 -0400
 message:
   Add lunar init directory.
 ------------------------------------------------------------
-revno: 322
+revno: 322 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sun 2009-03-08 23:39:41 -0400
 message:
   Still trying to fix this...
-    ------------------------------------------------------------
-    revno: 298.3.7
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Sun 2009-03-08 23:14:35 -0400
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 321.1.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Sun 2009-03-08 23:09:12 -0400
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 312.1.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-03-08 23:07:38 -0400
-    message:
-      Merging/removing accidently commit.
-        ------------------------------------------------------------
-        revno: 312.2.2
-        committer: Dan O'Reilly <oreilldf@gmail.com>
-        branch nick: resolvconf
-        timestamp: Sun 2009-03-08 22:45:24 -0400
-        message:
-          Merge.
-            ------------------------------------------------------------
-            revno: 319.1.3
-            committer: Andrew Psaltis <ampsaltis@gmail.com>
-            branch nick: 1.6
-            timestamp: Sun 2009-03-08 18:31:36 -0400
-            message:
-              Fixed the fix.
-            ------------------------------------------------------------
-            revno: 319.1.2
-            committer: Andrew Psaltis <ampsaltis@gmail.com>
-            branch nick: 1.6
-            timestamp: Sun 2009-03-08 18:02:44 -0400
-            message:
-              Fixed the Lunar init script.
-            ------------------------------------------------------------
-            revno: 319.1.1
-            committer: Andrew Psaltis <ampsaltis@gmail.com>
-            branch nick: 1.6
-            timestamp: Sun 2009-03-08 17:38:47 -0400
-            message:
-              Added an init script for Lunar Linux.
-        ------------------------------------------------------------
-        revno: 312.2.1
-        committer: Dan O'Reilly <oreilldf@gmail.com>
-        branch nick: resolvconf
-        timestamp: Sat 2009-02-28 16:01:26 -0500
-        message:
-          Add support for using resolvconf instead of directly editing /etc/resolv.conf if it's available.
-    ------------------------------------------------------------
-    revno: 312.1.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-03-08 23:03:04 -0400
-    message:
-      Undoing accidental commit.
 ------------------------------------------------------------
-revno: 321
+revno: 321 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sun 2009-03-08 22:49:24 -0400
 message:
   Merge in Dario Freddi's additions, with some modifications.
-    ------------------------------------------------------------
-    revno: 311.1.10
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-03-07 12:51:11 +0100
-    message:
-      Merges
-    ------------------------------------------------------------
-    revno: 311.1.9
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2009-03-07 12:16:45 +0100
-    message:
-      Forgot to add a definition
-    ------------------------------------------------------------
-    revno: 311.1.8
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Fri 2009-03-06 23:53:09 +0100
-    message:
-      Merging last changes
-    ------------------------------------------------------------
-    revno: 311.1.7
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Tue 2009-03-03 11:40:34 +0100
-    message:
-      Removing placeholders, and fixing issues pointed out by Dan
-    ------------------------------------------------------------
-    revno: 311.1.6
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Mon 2009-03-02 11:44:57 +0100
-    message:
-      Fixing implementation in ioctl
-    ------------------------------------------------------------
-    revno: 311.1.5
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sun 2009-03-01 20:19:16 +0100
-    message:
-      Adding available auth methods
-    ------------------------------------------------------------
-    revno: 311.1.4
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sun 2009-03-01 19:31:34 +0100
-    message:
-      Adding GetOperationalMode() to determine op mode of an interface
-    ------------------------------------------------------------
-    revno: 311.1.3
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sun 2009-03-01 19:22:30 +0100
-    message:
-      Adding the possibility of a custom iwconfig
-    ------------------------------------------------------------
-    revno: 311.1.2
-    committer: Dario Freddi <drf54321@gmail.com>
-    branch nick: wicd
-    timestamp: Sun 2009-03-01 16:46:58 +0100
-    message:
-      Adding per-channel bitrate information as a string
-    ------------------------------------------------------------
-    revno: 311.1.1
-    committer: drf <drf@drfarch>
-    branch nick: wicd
-    timestamp: Sun 2009-03-01 16:01:21 +0100
-    message:
-      Starting implementation of current bitrate retrieval
 ------------------------------------------------------------
 revno: 320
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2192,61 +1095,12 @@ timestamp: Sun 2009-03-08 15:58:44 -0400
 message:
   Fix suse init script.
 ------------------------------------------------------------
-revno: 318
+revno: 318 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-03-07 11:38:37 -0500
 message:
   Merged wicd-curses changes from experimental-nacl, r294
-    ------------------------------------------------------------
-    revno: 202.1.92
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-03-07 11:34:22 -0500
-    message:
-      Fixed translations.py support in wicd-curses.
-    ------------------------------------------------------------
-    revno: 202.1.91
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-03-06 19:40:10 -0500
-    message:
-      Merged r317 of mainline 1.6
-    ------------------------------------------------------------
-    revno: 202.1.90
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-03-04 00:41:28 -0500
-    message:
-      Merged in translations.py changes (r315) from mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.1.89
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-28 08:48:21 -0500
-    message:
-      Merge r311 of mainline 1.6
-    ------------------------------------------------------------
-    revno: 202.1.88
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-28 08:40:02 -0500
-    message:
-      curses/netentry_curses.py:
-        Made the password field actually keep its "passwordiness" when we go to the
-          buttons.
-      in/scripts=wicd-client.in:
-        Added support for X being off and wicd-curses not being there
-    ------------------------------------------------------------
-    revno: 202.1.87
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-21 19:36:57 -0500
-    message:
-      curses/wicd-curses.py:
-        Console display defaults to raw_display now, added -c argument to select curses_display
-      curses/README,in/man=wicd-curses.8.in:
-        Updated stuff done in wicd-curses.py
 ------------------------------------------------------------
 revno: 317
 committer: Andrew Psaltis <ampsaltis@gmail.com>
@@ -2258,29 +1112,12 @@ message:
     the wicd-client script to support it
   Fixed a typo in setup.py
 ------------------------------------------------------------
-revno: 316
+revno: 316 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Wed 2009-03-04 18:34:35 -0500
 message:
   Merge
-    ------------------------------------------------------------
-    revno: 314.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Wed 2009-03-04 19:44:55 +0800
-    message:
-      Removed old images
-    ------------------------------------------------------------
-    revno: 314.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Wed 2009-03-04 00:02:14 -0500
-    message:
-      Added translations.py, and adapted all gtk and curses ui files to use it.
-      Moved the language dict functions and get_gettext to translations.py.  Also
-        killed the functions and laid the dict bare in the file
-      Removed all instances of language[number] from wicd.
 ------------------------------------------------------------
 revno: 315
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2296,56 +1133,12 @@ timestamp: Sun 2009-03-01 23:15:34 -0500
 message:
   Apply lang patch from David Paleino
 ------------------------------------------------------------
-revno: 313
+revno: 313 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sun 2009-03-01 23:00:22 -0500
 message:
   Merge in global script support.
-    ------------------------------------------------------------
-    revno: 298.3.6
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Sun 2009-03-01 22:43:28 -0500
-    message:
-      Don't provide separate options for pre/post/disconnect scripts.  Just a parent scripts directory.
-    ------------------------------------------------------------
-    revno: 298.3.5
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Sun 2009-03-01 21:50:18 -0500
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 298.3.4
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Sat 2009-02-28 15:16:45 -0500
-    message:
-      Merge
-    ------------------------------------------------------------
-    revno: 298.3.3
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Fri 2009-02-27 00:40:19 -0500
-    message:
-      Initial crack at global scripts support.  Also includes some setup.py tweaks.
-    ------------------------------------------------------------
-    revno: 298.3.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Fri 2009-02-27 00:20:37 -0500
-    message:
-      Merge.
-    ------------------------------------------------------------
-    revno: 298.3.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: global-scripts
-    timestamp: Fri 2009-02-27 00:13:00 -0500
-    message:
-      Get rid of unneeded "use_tray" variable being passed around in wicd-client.
-      Add some methods for executing multiple scripts to be use for global scripts later.
-      Remove some rogue extra whitespace in networking.py
 ------------------------------------------------------------
 revno: 312
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2354,33 +1147,12 @@ timestamp: Sat 2009-02-28 15:34:34 -0500
 message:
   Don't use the thread module in networking.py.
 ------------------------------------------------------------
-revno: 311
+revno: 311 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Fri 2009-02-27 00:38:09 -0500
 message:
   Merge.
-    ------------------------------------------------------------
-    revno: 203.1.87
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Fri 2009-02-13 10:07:40 -0600
-    message:
-      Merged mainline r297.
-    ------------------------------------------------------------
-    revno: 203.1.86
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Thu 2009-02-12 18:41:12 -0600
-    message:
-      Merged r295 of mainline.
-    ------------------------------------------------------------
-    revno: 308.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-02-24 10:28:03 -0500
-    message:
-      Made the Slackware init script look more like the rest of the Slackware init scripts.
 ------------------------------------------------------------
 revno: 310
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2406,71 +1178,19 @@ timestamp: Sat 2009-02-21 13:11:55 -0500
 message:
   Fix typo
 ------------------------------------------------------------
-revno: 307
+revno: 307 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Sat 2009-02-21 01:37:38 -0500
 message:
   Merged experimental-nacl r288, and updated wicd-curses revno.
-    ------------------------------------------------------------
-    revno: 202.1.86
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-21 01:23:29 -0500
-    message:
-      Added the translations to .bzrignore (hopefully that is all of it).
-    ------------------------------------------------------------
-    revno: 202.1.85
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-21 01:17:59 -0500
-    message:
-      Force utf8 encoding in wicd-curses.py.  Hopefully this won't break compat on non-utf8 consoles.
-    ------------------------------------------------------------
-    revno: 202.1.84
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-21 01:17:22 -0500
-    message:
-      Merged r306 of mainline 1.6
 ------------------------------------------------------------
-revno: 306
+revno: 306 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sat 2009-02-21 01:00:40 -0500
 message:
   merge
-    ------------------------------------------------------------
-    revno: 304.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: 1.6
-    timestamp: Fri 2009-02-20 22:06:59 -0500
-    message:
-      Merged misc.py and .bzrignore changes from experimental-nacl r285.
-    ------------------------------------------------------------
-    revno: 202.1.83
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-02-20 21:54:30 -0500
-    message:
-      .bzrignore: Added some stuff that I missed.
-    ------------------------------------------------------------
-    revno: 202.1.82
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-02-20 21:44:16 -0500
-    message:
-      .bzrignore: Added files generated from the build to .bzrignore
-      wicd/misc.py:
-        Decode all unicode fonts before a client handles them.  Prevents wicd-curses
-        from dying due to having to display non-latin characters.
-    ------------------------------------------------------------
-    revno: 202.1.81
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-02-20 00:36:51 -0500
-    message:
-      Merged with r304 of mainline 1.6.
 ------------------------------------------------------------
 revno: 305
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2500,84 +1220,19 @@ timestamp: Thu 2009-02-19 22:22:12 -0600
 message:
   Fixed the dhcp_object error.
 ------------------------------------------------------------
-revno: 301
+revno: 301 [merge]
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-02-18 07:42:48 -0500
 message:
   Merged with experimental-nacl, r282.
-    ------------------------------------------------------------
-    revno: 202.1.80
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-02-17 20:04:50 -0500
-    message:
-      curses/curses_misc.py:
-        Fixed some of the arguments in MaskingEdit
-      curses/netentry_curses.py:
-        Added an autoconnect switch to the WirelessSettingsDialog
-        Reformatted some code
-        Ensured that the buttons are glued to the bottom of the dialog
-      AUTHORS:
-        Changed Adam's e-mail to match the ones in the man page.
-      AUTHORS, in/man=wicd.8.in:
-        Added/updated my e-mail
-      in/man=wicd-curses.8.in:
-        Removed mention of the keymap modification (too difficult/potentially
-          problematic)
-        Removed mention of my branch, bugs can be tagged with "wicd-curses" or something
-          like that
 ------------------------------------------------------------
-revno: 300
+revno: 300 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.6
 timestamp: Wed 2009-02-18 16:15:50 +0800
 message:
   Merge
-    ------------------------------------------------------------
-    revno: 298.1.2
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Tue 2009-02-17 23:44:25 -0500
-    message:
-      Merge.
-        ------------------------------------------------------------
-        revno: 298.2.1
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: 1.6
-        timestamp: Mon 2009-02-16 10:46:54 -0500
-        message:
-          Merged with experimental-nacl, r281.
-        ------------------------------------------------------------
-        revno: 202.1.79
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: experimental-nacl
-        timestamp: Mon 2009-02-16 10:43:57 -0500
-        message:
-          curses/wicd-curses.py: Removed the redraw_tag, since I discovered that I don't need it.
-        ------------------------------------------------------------
-        revno: 202.1.78
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: experimental-nacl
-        timestamp: Mon 2009-02-16 10:39:19 -0500
-        message:
-          Merged r298 of mainline 1.6.
-        ------------------------------------------------------------
-        revno: 202.1.77
-        committer: Andrew Psaltis <ampsaltis@gmail.com>
-        branch nick: experimental-nacl
-        timestamp: Fri 2009-02-13 13:27:38 -0500
-        message:
-          Merged mainline r297 of 1.6.
-    ------------------------------------------------------------
-    revno: 298.1.1
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: experimental
-    timestamp: Tue 2009-02-17 23:29:14 -0500
-    message:
-      Refactor wnettools/backend code so that most external tool functionality exists in wnettools, and it just inherited by the external backends.  This simplifies creating new backends that just override selected methods.
-      Rewrite encryption template parsing code to allow blank entries (though the GUI still doesn't), and be more permissive of slightly incorrect formatting.
-      Fix bug in wicd-monitor error handling code.
 ------------------------------------------------------------
 revno: 299
 committer: Adam Blackburn <compwiz18@gmail.com>
@@ -2593,152 +1248,19 @@ timestamp: Fri 2009-02-13 18:54:27 -0500
 message:
   Fix bug where GUI could get stuck in the connecting state if the GUI was first opened while a connection was in progress.
 ------------------------------------------------------------
-revno: 297
+revno: 297 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Thu 2009-02-12 20:07:12 -0500
 message:
   Merge experimental-rworkman
-    ------------------------------------------------------------
-    revno: 203.1.85
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 22:04:44 -0600
-    message:
-      Removed a relic from 1.4.x  :)
-    ------------------------------------------------------------
-    revno: 203.1.84
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 22:03:24 -0600
-    message:
-      Removed date ; added reference to wicd-curses(8).
-      Minor formatting fixes.
-      Documented the backend=, prefer_wired=, and global_dns_dom= parameters
-        in manager-settings.conf
-    ------------------------------------------------------------
-    revno: 203.1.83
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 22:01:58 -0600
-    message:
-      Removed date ; added references to wicd-curses(8).
-    ------------------------------------------------------------
-    revno: 203.1.82
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 22:01:24 -0600
-    message:
-      Removed date ; added references to wicd-curses(8).
-    ------------------------------------------------------------
-    revno: 203.1.81
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 22:00:10 -0600
-    message:
-      Removed the date, as it's pointless.
-      Added NaCl to the AUTHORS list (still needs email addy).
-      Something else minor that I forgot :/
-    ------------------------------------------------------------
-    revno: 203.1.80
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-11 21:38:38 -0600
-    message:
-      Merged mainline.
-    ------------------------------------------------------------
-    revno: 203.1.79
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Mon 2009-02-09 20:40:35 -0600
-    message:
-      Merged mainline.
-    ------------------------------------------------------------
-    revno: 203.1.78
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2009-02-07 16:51:03 -0600
-    message:
-      Merged r285 upstream
-    ------------------------------------------------------------
-    revno: 203.1.77
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2009-02-04 15:00:40 -0600
-    message:
-      Merged mainline.
-    ------------------------------------------------------------
-    revno: 203.1.76
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2009-02-03 21:18:35 -0600
-    message:
-      Merged back with mainline.
 ------------------------------------------------------------
-revno: 296
+revno: 296 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Thu 2009-02-12 18:48:10 -0500
 message:
   Merged curses changes.
-    ------------------------------------------------------------
-    revno: 202.1.76
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-02-12 00:38:24 -0500
-    message:
-      Merged with r294 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.1.75
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-02-11 10:44:57 -0500
-    message:
-      Some minor code cleanup and fixes
-      curses/wicd-curses.py: Fixed lag upon completing connections
-      curses/wicd-curses.py,curses/prefs_curses.py,curses/curses_misc.py:
-        Cleaned up some code, removed/reformatted some comments
-    ------------------------------------------------------------
-    revno: 202.1.74
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-02-10 20:55:11 -0500
-    message:
-      Merged with r291 of mainline 1.6.
-    ------------------------------------------------------------
-    revno: 202.1.73
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-02-08 12:26:50 -0500
-    message:
-      curses/wicd-curses.py:
-        Added a mention of the About dialog in the help
-      curses/prefs_curses.py:
-        Fixed mouse support
-      in/man=wicd-curses.8.in
-        Added a mention of the about dialog
-    ------------------------------------------------------------
-    revno: 202.1.72
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-02-07 23:24:08 -0500
-    message:
-      Merged r285 of mainline 1.6
-      The last commit should have read:
-        curses/netentry_curses.py:
-          Fixed a bug where we are unable to save any individual network information.
-        curses/wicd-curses.py
-          Added information to the uppermost footer text telling how the user can
-            display the help dialog.
-        The last commit fixed the removal of a blank string in prefs_curses from the
-        backends list, that no longer has a blank string in it any more.
-    ------------------------------------------------------------
-    revno: 202.1.71
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-02-05 16:33:45 -0500
-    message:
-      curses/wicd-curses.py: ListBox focus-maintaining code completely debugged
 ------------------------------------------------------------
 revno: 295
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2860,31 +1382,12 @@ timestamp: Wed 2009-02-04 19:13:06 -0500
 message:
   More tweaking of how the GUI updates the status bar.  Should be more efficient now.
 ------------------------------------------------------------
-revno: 280
+revno: 280 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Wed 2009-02-04 18:32:58 -0500
 message:
   Merge experimental-nacl.
-    ------------------------------------------------------------
-    revno: 202.1.70
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-02-04 17:28:43 -0500
-    message:
-      curses/prefs_curses.py:
-        Removed the external entry point
-        Removed the removing of a blank string that caused
-      wicd/misc.py:
-        Made sure that "advanced_settings" in get_language_list_gui() actually is
-          "Advanced Settings"
-    ------------------------------------------------------------
-    revno: 202.1.69
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-02-04 17:13:04 -0500
-    message:
-      Merged with mainline 1.6, r279
 ------------------------------------------------------------
 revno: 279
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2900,48 +1403,12 @@ timestamp: Tue 2009-02-03 23:48:58 -0500
 message:
   Fix bug where link detection tool value wasn't get propogated down the stack.
 ------------------------------------------------------------
-revno: 277
+revno: 277 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Tue 2009-02-03 21:21:40 -0500
 message:
   Merge experimental-rworkman
-    ------------------------------------------------------------
-    revno: 203.1.75
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2009-02-03 10:14:34 -0600
-    message:
-      Bugfix to prevent creation of $HOME/~/ directory
-    ------------------------------------------------------------
-    revno: 203.1.74
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2009-02-03 00:26:28 -0600
-    message:
-      More INSTALL tweaks.
-    ------------------------------------------------------------
-    revno: 203.1.73
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2009-02-03 00:12:39 -0600
-    message:
-      Tweaked INSTALL to note dbus and friends deps.
-    ------------------------------------------------------------
-    revno: 203.1.72
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2009-02-03 00:08:42 -0600
-    message:
-      Merged mainline, which includes NaCl's curses stuff and all fixes and 
-        such from this branch.  
-    ------------------------------------------------------------
-    revno: 203.1.71
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2009-02-01 21:05:04 -0600
-    message:
-      Merged r265..r266 from mainline.
 ------------------------------------------------------------
 revno: 276
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -2994,1216 +1461,12 @@ message:
   Simplify the inheritance of static wnettools functions in the backends.
   Make sure we select a default route flushing tool.
 ------------------------------------------------------------
-revno: 269
+revno: 269 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sun 2009-02-01 23:32:55 -0500
 message:
   Merge NaCl's curses frontend and rworkman's experimental branch.
-    ------------------------------------------------------------
-    revno: 265.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6-clean
-    timestamp: Sat 2009-01-31 15:58:28 +0800
-    message:
-      Merged rworkman's experimental branch
-        ------------------------------------------------------------
-        revno: 203.1.70
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-31 01:16:34 -0600
-        message:
-          Merged latest from NaCl.
-        ------------------------------------------------------------
-        revno: 203.1.69
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-31 01:00:03 -0600
-        message:
-          Merged mainline r265
-        ------------------------------------------------------------
-        revno: 203.1.68
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-31 00:38:59 -0600
-        message:
-          Added some more salinity here...
-        ------------------------------------------------------------
-        revno: 203.1.67
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-30 22:48:56 -0600
-        message:
-          Merged some salty stuff...
-        ------------------------------------------------------------
-        revno: 203.1.66
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-30 21:48:59 -0600
-        message:
-          Fix a harmless typo.
-        ------------------------------------------------------------
-        revno: 203.1.65
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-30 20:22:38 -0600
-        message:
-          Merged mainline for a bugfix.
-        ------------------------------------------------------------
-        revno: 203.1.64
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-30 07:58:37 -0600
-        message:
-          Merged latest salty branch.
-        ------------------------------------------------------------
-        revno: 203.1.63
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-29 22:37:58 -0600
-        message:
-          Merged NaCl's branch.
-        ------------------------------------------------------------
-        revno: 203.1.62
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-29 11:33:40 -0600
-        message:
-          This merges from the selinux branch (I accidentally edited the wrong
-            branch) with a note in INSTALL about pm-utils optional dep.
-        ------------------------------------------------------------
-        revno: 203.1.61
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-29 11:12:32 -0600
-        message:
-          Removed references to "Tray" from other/wicd.desktop
-        ------------------------------------------------------------
-        revno: 203.1.60
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-29 11:06:27 -0600
-        message:
-          Removed an unneeded wicd.png from other/ and fixed up the wicd.desktop
-            file in there (for users who want to just start the client without
-            the tray icon, and have a menu entry to do so).
-        ------------------------------------------------------------
-        revno: 203.1.59
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-29 10:55:57 -0600
-        message:
-          Merge mainline with some removals and bugfixes.
-        ------------------------------------------------------------
-        revno: 203.1.58
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-28 21:40:40 -0600
-        message:
-          Quote some values in the wicd-client.in script, in case some insane
-            person passes a VERSION string with spaces in it.  I can't imagine
-            who would have done such a thing ;-)
-        ------------------------------------------------------------
-        revno: 203.1.57
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-28 20:54:31 -0600
-        message:
-          Updated Gentoo's init script from portage.
-            Thanks to Jeremy Olexa (darkside_).
-        ------------------------------------------------------------
-        revno: 203.1.56
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-28 19:28:05 -0600
-        message:
-          Merged changes from svenstaro to the Arch init script, and then
-            did some cleanup edits in this tree.
-        ------------------------------------------------------------
-        revno: 203.1.55
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-28 15:49:30 -0600
-        message:
-          Merged latest from NaCl's branch.
-        ------------------------------------------------------------
-        revno: 203.1.54
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Tue 2009-01-27 15:59:41 -0600
-        message:
-          Merged mainline fixes.
-        ------------------------------------------------------------
-        revno: 203.1.53
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-26 18:49:43 -0600
-        message:
-          Merge mainline with some bugfixes.
-        ------------------------------------------------------------
-        revno: 203.1.52
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-26 10:37:06 -0600
-        message:
-          Updated INSTALL with some dependency information.
-        ------------------------------------------------------------
-        revno: 203.1.51
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-26 09:02:43 -0600
-        message:
-          Merged latest changes in NaCl's branch.
-        ------------------------------------------------------------
-        revno: 203.1.50
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sun 2009-01-25 21:55:12 -0600
-        message:
-          Merged latest mainline with several bugfixes.
-        ------------------------------------------------------------
-        revno: 203.1.49
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sun 2009-01-25 18:00:08 -0600
-        message:
-          Merged NaCl's branch, which resulted in no changes. :)
-        ------------------------------------------------------------
-        revno: 203.1.48
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sun 2009-01-25 15:25:58 -0600
-        message:
-          Merged mainline experimental changes.
-        ------------------------------------------------------------
-        revno: 203.1.47
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-24 22:11:33 -0600
-        message:
-          Merged bugfix from mainline experimental.
-        ------------------------------------------------------------
-        revno: 203.1.46
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-24 20:36:55 -0600
-        message:
-          s/subversion/bzr/ in INSTALL file.  Possibly more changes coming...
-        ------------------------------------------------------------
-        revno: 203.1.45
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-24 11:27:41 -0600
-        message:
-          Merged latest changes from NaCl's branch.
-    ------------------------------------------------------------
-    revno: 265.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6-clean
-    timestamp: Sat 2009-01-31 15:58:07 +0800
-    message:
-      Merged NaCl's curses branch
-    ------------------------------------------------------------
-    revno: 202.1.68
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-31 02:13:18 -0500
-    message:
-      Merged with r265 of mainline 1.6, providing PyLintish fixes
-    ------------------------------------------------------------
-    revno: 202.1.67
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-31 02:07:50 -0500
-    message:
-      curses/wicd-curses.py:
-        Made the tagged wireless network actually show the network we're connected to,
-          or not, as the case may be.
-        Added ' -- ' to the upper statusbar
-      
-      Also, in the last commit, configscript_curses should be netentry_curses
-    ------------------------------------------------------------
-    revno: 202.1.66
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-31 01:33:11 -0500
-    message:
-      curses/configscript_curses.py:
-        Added translations
-        Removed the redundant run() function in WirelessSettingsDialog
-      curses/wicd-curses.py:
-        Added translations, some still missing.
-      wicd/misc.py:
-        Added some translations that are not in the database, but are in the translator
-    ------------------------------------------------------------
-    revno: 202.1.65
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-30 23:48:44 -0500
-    message:
-      Merged with r264 of the mainline, providing a bugfix.
-    ------------------------------------------------------------
-    revno: 202.1.64
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-30 23:46:07 -0500
-    message:
-      curses/configscript_curses.py:
-        Fixed the typo that rworkman noticed.
-      curses/wicd-curses.py:
-        Ensured that the upper status bar updates itself immediately after a
-          connection is made, as opposed to a second or two after the fact
-      curses/README: Added a FAQ and added the new keybindings
-      in/man=wicd-curses.8.in: Added the new keybindings
-    ------------------------------------------------------------
-    revno: 202.1.63
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-30 00:30:33 -0500
-    message:
-      curses/wicd-curses.py:
-        Added some stuff to the help dialog.
-        '?' and 'h' now raise the help dialog
-        'q' now quits the client.
-        Keymaps are now colored white in the help dialog.
-    ------------------------------------------------------------
-    revno: 202.1.62
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-29 23:29:58 -0500
-    message:
-      Merged with r263 of the mainline 1.6 branch, which (somehow) contains more changes than what I originally had in "r265".
-    ------------------------------------------------------------
-    revno: 202.1.61
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-29 23:25:02 -0500
-    message:
-      curses/wicd-curses.py:
-        Applied some typographical changes from rworkman
-        Fixed the script showing dialog for wireless networks.
-    ------------------------------------------------------------
-    revno: 202.1.60
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-29 15:55:32 -0500
-    message:
-      Merged in (only) r261 of rworkman's branch, which quotes the strings in the wicd-client script.
-      
-      Also, the revision numbers of the mainline have changed on me.  r263 contained all of the translations that I requested.
-    ------------------------------------------------------------
-    revno: 202.1.59
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-27 21:50:24 -0500
-    message:
-      Merged with r265 of mainline 1.6, giving me most of the remaining translations that I need.
-    ------------------------------------------------------------
-    revno: 202.1.58
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-27 21:46:52 -0500
-    message:
-      wicd/misc.py:
-        Fixed a typo in get_language_list_gui
-          (%CURSES_REVNO%)
-      curses/wicd-curses.py:
-        Added in some translations (not done yet)
-      curses/prefs_curses.py:
-        Added all of the translations
-        Removed the warning about changing the backends (since it is useless)
-    ------------------------------------------------------------
-    revno: 202.1.57
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2009-01-26 23:43:40 -0500
-    message:
-      Merged with r262 of mainline 1.6, which adds some bugfixes and the translations I need for my next commit.
-    ------------------------------------------------------------
-    revno: 202.1.56
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-25 23:07:47 -0500
-    message:
-      Merged with r260 of the mainline 1.6 branch.
-    ------------------------------------------------------------
-    revno: 202.1.55
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-25 23:05:46 -0500
-    message:
-      curses/prefs_curses.py: Added support for the "Prefer Wired Networks" function.
-    ------------------------------------------------------------
-    revno: 202.1.54
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-25 17:37:23 -0500
-    message:
-      Merged with r254 of mainline 1.6 branch.
-    ------------------------------------------------------------
-    revno: 202.1.53
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-23 22:18:18 -0500
-    message:
-      Merged with r247 of rworkman's branch, which:
-        Adds ~crux support to setup.py
-        Slightly reformats the wicd-client.1 man page, and fixes a spelling error
-        Fixes some stuff in the wicd-client script.  I just accepted the other "nitpicks", too.
-      
-      I do not know why the wicd.glade file was changed.
-      There were conflicts in merging of the wicd-client script and man page.
-        ------------------------------------------------------------
-        revno: 203.1.44
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-23 16:06:53 -0600
-        message:
-          Fix a misspelling in wicd-client.1, and add linewraps at <80 chars
-            in the raw text.
-        ------------------------------------------------------------
-        revno: 203.1.43
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-23 16:04:07 -0600
-        message:
-          Some nitpick edits to wicd-client's section that checks for X and offers
-            to launch the curses client.  This is largely personal preference, so
-            no offense will be taken by merge refusal, but I'm not convinced that
-            "friendliness" belongs in the file comments :-)
-        ------------------------------------------------------------
-        revno: 203.1.42
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-23 15:45:25 -0600
-        message:
-          Merged r250 of mainline.
-        ------------------------------------------------------------
-        revno: 203.1.41
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-22 23:58:32 -0600
-        message:
-          Merged Dan's latest commit to mainline.
-        ------------------------------------------------------------
-        revno: 203.1.40
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-21 22:35:46 -0600
-        message:
-          Added crux support to setup.py
-        ------------------------------------------------------------
-        revno: 203.1.39
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-21 22:12:51 -0600
-        message:
-          Merged latest changes from NaCl's branch.
-        ------------------------------------------------------------
-        revno: 203.1.38
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Thu 2009-01-15 00:14:24 -0600
-        message:
-          Merged latest from NaCl's branch.
-        ------------------------------------------------------------
-        revno: 203.1.37
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-12 13:49:47 -0600
-        message:
-          Merged networking.py patch from experimental to address bug 315238.
-        ------------------------------------------------------------
-        revno: 203.1.36
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-12 00:21:09 -0600
-        message:
-          Merged NaCl's latest revision (used bzr merge --weave as it handled the
-          conflicts much better) (and no, I'm not even sure *why* there were
-          conflicts).
-        ------------------------------------------------------------
-        revno: 203.1.35
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-12 00:17:20 -0600
-        message:
-          Merged Adam's latest 1.6-noexpander branch.  There was a conflict in 
-          data/wicd.glade around line 450-something -- the y_options flag was
-          removed in the noexpander branch.  I wasn't sure whether that was
-          intentional or not, so I left it in to resolve the conflict.  If that
-          was the wrong decision, it can be fixed later :)
-        ------------------------------------------------------------
-        revno: 203.1.34
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-12 00:16:34 -0600
-        message:
-          Merged upstream experimental branch.
-        ------------------------------------------------------------
-        revno: 203.1.33
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Wed 2009-01-07 22:26:31 -0600
-        message:
-          Merged r238 of NaCl's branch.
-    ------------------------------------------------------------
-    revno: 202.1.52
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-23 22:13:27 -0500
-    message:
-      setup.py:
-        Added support for keeping track of the revisions of the curses client
-          (%CURSES_REVNO%)
-      curses/wicd-curses.py:
-        Added the ad-hoc controls to the Help dialog
-        Set wireless scans to be synchronous (True), to adapt to an API change in mainline
-        Added support for OptionParser, added and implemented the option that was
-          described in the man page (and -h (help) and --version)
-      in/wicd=wpath.py.in: Added a curses_revision flag
-      in/man=wicd-curses.8.in:
-        Option parsing has been implemented.  Added the %CURSES_REVNO% flag to the man page.
-        Fixed an accidental " added to one of the headers
-    ------------------------------------------------------------
-    revno: 202.1.51
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-23 21:13:36 -0500
-    message:
-      Ad-hoc network support is added ("O").
-      This commit is should be the last one containing new interface elements. :-D
-      This also may not work directly from the install.  I need to change some stuff
-      first.
-      curses/curses_misc.py:
-        Fixed bug in Dialog2 where mouse clicks would cause the program to crash
-        Added DynEdit and DynIntEdit, Simple DynWrapped widgets, nothing special
-          about them
-      curses/wicd-curses.py:
-        Added support for Ad-Hoc network controls (I don't know exactly how this
-          works)
-      curses/README,TODO,in/man=wicd-curses.8.in:
-        Ad-Hoc network support has been added
-    ------------------------------------------------------------
-    revno: 202.1.50
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-23 09:30:39 -0500
-    message:
-      Merged with r250 of the mainline experimental branch.
-    ------------------------------------------------------------
-    revno: 202.1.49
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2009-01-21 00:09:45 -0500
-    message:
-      Merged with r247 of mainline experimental (1.6) branch.
-      
-      -------------- This line and the following will be ignored ---------
-      added:
-        wicd/guiutil.py
-      modified:
-        encryption/templates/ttls
-        setup.py
-        wicd/configmanager.py
-        wicd/dbusmanager.py
-        wicd/gui.py
-        wicd/misc.py
-        wicd/monitor.py
-        wicd/netentry.py
-        wicd/networking.py
-        wicd/prefs.py
-        wicd/wicd-client.py
-        wicd/wicd-daemon.py
-        wicd/wnettools.py
-      unknown:
-        build/
-        install.log
-        uninstall.log
-        vcsinfo.py
-        wpath.py
-        curses/bzr_commit
-        curses/configscript.py
-        curses/current.diff
-        init/arch/wicd
-        init/debian/wicd
-        init/default/wicd
-        init/gentoo/wicd
-        init/pld/wicd
-        init/redhat/wicd
-        init/slackware/rc.wicd
-        init/suse/wicd
-        man/wicd-curses.8
-        man/wicd-manager-settings.conf.5
-        man/wicd-wired-settings.conf.5
-        man/wicd-wireless-settings.conf.5
-        man/wicd.8
-        other/50-wicd-suspend.sh
-        other/55wicd
-        other/80-wicd-connect.sh
-        other/WHEREAREMYFILES
-        other/postinst
-        other/wicd.conf
-        scripts/wicd
-        scripts/wicd-client
-        scripts/wicd-curses
-        wicd/wpath.py
-      pending merges:
-        Dan O'Reilly 2009-01-20 Add missing guiutil module
-          Dan O'Reilly 2009-01-20 Add support for writing config data with whitespace kep...
-          Dan O'Reilly 2009-01-19 Fix a few typos in the option gateway code.
-          Dan O'Reilly 2009-01-19 Fix bug that was keeping DHCP release from working.
-          Dan O'Reilly 2009-01-19 Fix ttls template
-    ------------------------------------------------------------
-    revno: 202.1.48
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-20 23:41:44 -0500
-    message:
-      curses/curses_misc.py: 
-        Added support for setting the text in the input dialog
-        Changed "body" to "parent" in ComboBox.
-        set_focus() unconditionally sets the focus now
-        Moved error() to this file.  It fits better here, anyway.
-        Reverted TextDialog to its previous state
-      curses/netentry_curses.py:
-        Moved error() to curses_misc.py
-      curses/wicd-curses.py:
-        "Deimplemented" the script configurator, at the suggestion of various folks
-          #wicd, and replaced it with a simple instructions dialog.  My original code
-          is still there, just commented out.
-        Added support for renaming wired network profiles (F2 when over the combo box)
-        Fixed various issues caused when deleting wired network profiles.
-        Refactored the help/about dialogs to support the old TextDialog
-      curses/README, in/man=wicd-curses.8.in:
-        Script configurator has been "changed"
-    ------------------------------------------------------------
-    revno: 202.1.47
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-17 20:10:10 -0500
-    message:
-      curses/configscript_curses.py: ADDED.  Script configurator.  More or less done.
-      curses/wicd-curses.py:
-        Added suport for the script configurator
-      curses/README, in/man=wicd-curses.8.in:
-        Script configurator now active
-      setup.py: Install configscript_curses.py with the rest of the stuff
-    ------------------------------------------------------------
-    revno: 202.1.46
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-17 15:15:14 -0500
-    message:
-      Merged with r242 of mainline experimental (1.6) branch.
-    ------------------------------------------------------------
-    revno: 202.1.45
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-17 15:13:53 -0500
-    message:
-      Wired network control support is now more-or-less complete
-      curses/curses_misc.py:
-        Made set_focus() actually set the focus
-        Added ability for combobox to rebuild itself
-      curses/netentry_curses:
-          Added WiredSettingsDialog.  Sometimes, the "Defaultness" of the network
-            takes a little while to show up in the dialog.  Don't know why yet.
-          Reorganized some of the AdvancedSettingsDialog code
-      curses/wicd-curses.py:
-          Reactivated WiredComboBox
-          Added support for WiredSettingsDialog
-          Added ability to create and delete wired network profiles
-          Fixed bug where the program could crash on the end of scanning networks if
-            timing is slightly off
-          Display the screen locker immediately after initiating a scan
-      curses/README,TODO: Wired network support is complete
-      in/man=wicd-curses.8.in:
-        Wired network support is now complete
-        Added revision information to the bottom of the man page
-    ------------------------------------------------------------
-    revno: 202.1.44
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-16 12:09:20 -0500
-    message:
-      Merged with mainline 1.6 branch, r241, adding in the noexpander stuff
-    ------------------------------------------------------------
-    revno: 202.1.43
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-15 21:46:35 -0500
-    message:
-      curses/wicd-curses.py: ListBox focus-maintaining code completely debugged
-    ------------------------------------------------------------
-    revno: 202.1.42
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-13 18:13:24 -0500
-    message:
-      curses/curses_misc.py:
-        Modified TextDialog to use a listbox as opposed to one long text box
-        Aligned the header on the right in Dialog2 by default
-      curses/wicd-curses.py:
-        Removed the traceback if the user presses ctrl+c
-        Refactored about_dialog to support the modified TextDialog
-        Added a help dialog.  Raise it with "H"
-        Refactored some code in the appGUI constructor so that I can recycle update_netlist()
-      curses/TODO, curses/README, in/man=wicd-curses.8.in:
-        Help dialog now active
-      in/man=wicd-curses.8.in: Removed redundant scipt selector command
-    ------------------------------------------------------------
-    revno: 202.1.41
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-13 15:53:10 -0500
-    message:
-      Merged with r239 of mainline experimental.
-    ------------------------------------------------------------
-    revno: 202.1.40
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-11 19:40:29 -0500
-    message:
-      Progress is being made, apparently
-      curses/curses_misc.py:
-        Made Dialog a bit more generic with the new Dialog2, also supports mouse events.
-        Included TextDialog and InputDialog as subclasses of Dialog2
-      curses/netentry_curses.py:
-        Changed error() to support Dialog2
-        Added support for mouse events
-      curses/prefs_curses.py:
-        Added support for mouse events
-      curses/wicd-curses.py:
-        Added support for wicd's hidden wireless-network functionality
-        (Really) finished refactoring for the changes in ComboBox
-        Made some transitions a bit more immediate by calling update_ui() manually
-        Refactored to about_dialog to support Dialog2
-        Added support for mouse events (clicking to select, mostly)
-        Added support for retaining current list netlist focus throughout screen updates
-        (Hopefully) Added support for handling an instance of 0 available wireless
-          networks
-      in/man=wicd-curses.8.in: Hidden network support is fully functional
-      man/wicd-client.1: Added a word. (You'll live.)
-      setup.py: From last commit: Added the python "shebang" to the top of the file
-    ------------------------------------------------------------
-    revno: 202.1.39
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-11 13:05:01 -0500
-    message:
-      curses/prefs_curses.py:
-        Finished refactoring to accommodate the ComboBox changes
-      curses/wicd-curses.py:
-        Moved some of the keybinding code around
-      in/other=WHEREAREMYFILES.in: ADDED.
-        File telling the user where the wicd config files are.  Usually symlinked to
-          ~/.wicd/WHEREAREMYFILES and installed to the documentation directory
-      in/scripts=wicd-client.in:
-        Make ~/.wicd and link WHEREAREMYFILES if it has not been done so already.
-        Start wicd-curses if there is no X server on this console
-          (determined by the presence of $DISPLAY), and add a file detailing this
-      man/wicd-client.1: Added note about wicd-client starting wicd-curses
-      setup.py: Install WHEREAREMYFILES along with the rest of the documentation
-    ------------------------------------------------------------
-    revno: 202.1.38
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-09 20:43:18 -0500
-    message:
-      Forgot to mention something in the last commit:
-      in/wicd-curses.8.in: added more unimplemented keystrokes
-      Merged with r238 of the main experimental (1.6) branch.
-    ------------------------------------------------------------
-    revno: 202.1.37
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-09 20:42:12 -0500
-    message:
-      curses/curses_misc.py:
-        Refactored some ComboBox internals
-        Renamed show_first to focus in ComboBox
-        Added callback support
-      curses/netentry_curses.py:
-        Renamed NetEntryBase to AdvancedSettingsDialog, and WirelessNetEntry to
-          WirelessSettingsDialog
-        The "WirelessSettingsDialog" is complete. :-)  Raise it by pressing "C" on a wireless
-          network.  Much of the code was taken from netentry.py.  The buttons aren't pretty
-          like they are in the Preferences Dialog, but they are fully functional.
-      curses/prefs_curses.py:
-        Refactored to accommodate the ComboBox changes
-        Added a warning about changing backends
-      curses/wicd-curses.py:
-        Refactored to accommodate changes to the rest of the program
-        Added a constantly displayed message saying how to exit the program, other than
-          ctrl+c
-      curses/TODO: Removed a bunch of stuff that is already implemented, added some stuff that
-          needs to be implemented
-      curses/README: Added/clearified some things
-    ------------------------------------------------------------
-    revno: 202.1.36
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-06 19:04:12 -0500
-    message:
-      Merged with r235 of experimental-rworkman.
-        ------------------------------------------------------------
-        revno: 203.1.32
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-05 23:12:49 -0600
-        message:
-          Added logic for kde4-config (kde4's equivalent to kde-config)
-        ------------------------------------------------------------
-        revno: 203.1.31
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Mon 2009-01-05 10:25:59 -0600
-        message:
-          Merged latest changes from NaCl.
-        ------------------------------------------------------------
-        revno: 203.1.30
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sun 2009-01-04 02:31:01 -0600
-        message:
-          s/Tenative/Tentative/g in wicd-curses(8)
-        ------------------------------------------------------------
-        revno: 203.1.29
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sun 2009-01-04 02:27:44 -0600
-        message:
-          Merged latest nacl branch.
-        ------------------------------------------------------------
-        revno: 203.1.28
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Sat 2009-01-03 00:08:53 -0600
-        message:
-          Removed a blank line from the end of the slackware init script.
-            Trivial, but annoying on upgrades for the config() .new stuff.
-        ------------------------------------------------------------
-        revno: 203.1.27
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-02 21:43:55 -0600
-        message:
-          Merged in the frankencurses branch, which is basically NaCl's branch
-            plus integration with setup.py and related files. 
-        ------------------------------------------------------------
-        revno: 203.1.26
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-rworkman
-        timestamp: Fri 2009-01-02 20:54:12 -0600
-        message:
-          Merged mainline r237 (which includes the changes from here).
-    ------------------------------------------------------------
-    revno: 202.1.35
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2009-01-06 19:02:27 -0500
-    message:
-      Checkpoint in WirelessNetEntry development
-      curses/curses_misc.py:
-        Refactored some DynWrap internals
-        Added MaskingEdit, a password edit
-        Modified ComboBox to use a DynWrap internally instead of an AttrWrap
-      curses/netentry_curses.py:
-        Added most of the WirelessNetEntry.  It doesn't save information yet, but it does
-          load most of it.  Support for viewing the templated network settings is not
-          implemented yet.
-      curses/wicd-curses.py:
-        Activated support for the WirelessNetEntry configurator.  The wired one is not
-          implemented yet.
-    ------------------------------------------------------------
-    revno: 202.1.34
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-04 20:36:12 -0500
-    message:
-      in/man=wicd-curses.8.in: Apparently I can't spell "tentative" properly.  Thanks to rworkman.
-    ------------------------------------------------------------
-    revno: 202.1.33
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2009-01-04 20:33:31 -0500
-    message:
-      curses/curses_misc.py:
-        Added DynWrapper, a wrapper class with which we can dynamically change the
-          selectability of a widget.
-        Removed ToggleEdit, replaced by DynWrapper.
-      curses/netentry_curses.py: ADDED.  Network entry configurator dialog.
-        Has a base class for the common elements of the wired/wireless NetEntries.
-      curses/prefs_curses.py: Replaced ToggleEdits with DynWrapped Edits.
-      curses/wicd-curses.py:
-        Rebuilt the connect function into the main keyhandler.  I discovered that
-          implementing that the way I had previously done it would have made
-          displaying the dialogs a bit more difficult
-        Added support for running the NetEntry selector
-      in/man=wicd-curses.8.in, curses/README:
-        Modified to say that the NetEntry dialog is now a WIP (Raise it with 'C')
-      setup.py:
-        Install netentry_curses.py if we are installing the rest of the curses client
-        Install the man page only if we want to install the rest of the man pages and
-          the curses client
-    ------------------------------------------------------------
-    revno: 202.1.32
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2009-01-03 22:57:41 -0500
-    message:
-      curses/curses_misc.py:
-        meta+left/right now sets focus back to whereever you were in the list.
-      curses/wicd-curses.py:
-        Made a custom combobox for the wired networks.  The one during the last commit was actually the wireless list.
-        (Hopefully) made the wired network show up when it is actually active.
-        Removed appGUI.call_connect and appGUI.connect.  They are no longer needed.
-      in/man=wicd-curses.8.in: ADDED.  wicd-curses(8) man page
-      setup.py: Install the above man page if we are installing the rest of the curses client
-    ------------------------------------------------------------
-    revno: 202.1.31
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-02 22:47:06 -0500
-    message:
-      Merged from rworkman's frankencurses branch.
-        Includes features from experimental-rworkman
-        Curses client installs now. :-)
-        Includes r237 of experimental (1.6)
-        ------------------------------------------------------------
-        revno: 234.1.6
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: frankencurses
-        timestamp: Fri 2009-01-02 21:22:17 -0600
-        message:
-          Merged in latest from NaCl's branch.
-        ------------------------------------------------------------
-        revno: 234.1.5
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: frankencurses
-        timestamp: Fri 2009-01-02 20:57:47 -0600
-        message:
-          Merged r237 of mainline.
-        ------------------------------------------------------------
-        revno: 234.1.4
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: frankencurses
-        timestamp: Fri 2009-01-02 20:25:16 -0600
-        message:
-          Removed "in keys" from line 415 per NaCl's suggestion.
-        ------------------------------------------------------------
-        revno: 234.1.3
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-curses
-        timestamp: Thu 2009-01-01 02:02:26 -0600
-        message:
-          Fixed up setup.py and wpath.py to install the curses client.
-          Added a wicd-curses wrapper script to /usr/bin
-          Made curses *.py files executable
-          All of this passes the build test, but not the "WFM" test. :)
-        ------------------------------------------------------------
-        revno: 234.1.2
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-curses
-        timestamp: Thu 2009-01-01 01:43:00 -0600
-        message:
-          Merged my experimental branch into this.
-        ------------------------------------------------------------
-        revno: 234.1.1
-        committer: Robby Workman <rworkman@slackware.com>
-        branch nick: experimental-curses
-        timestamp: Thu 2009-01-01 01:42:20 -0600
-        message:
-          Merged NaCl's curses branch into this.
-    ------------------------------------------------------------
-    revno: 202.1.30
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2009-01-02 22:12:58 -0500
-    message:
-      curses/curses_misc.py:
-        meta+right or meta+left now move the selected tab right and left respectively.  Focus goes back to the tabs, though.
-        Fixed a bug in ComboBox where show_first does nothing
-        Restored get_selected to its original state
-      curses/prefs_curses.py:
-        Moved the automatic reconnect category to "General Settings"
-        Made the backend selector actually select the selected backend at first
-        Reset the button statuses each time we load the settings
-        meta+enter now saves+closes the preferences dialog
-      curses/wicd-curses.py:
-        Turned the wired list into a list of custom SelTexts, so that they can do the connecting/script-choosing/configuring/etc, instead of the dialog itself
-        Offset the version in the about dialog a little less
-        Recycle the old preferences dialog instead of making a new one if we run it more than once
-    ------------------------------------------------------------
-    revno: 202.1.29
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-01 00:36:08 -0500
-    message:
-      curses/*.py: updated copyrights to include 2009
-      curses/wicd-curses.py: Fixed missing comma in the About Dialog text
-    ------------------------------------------------------------
-    revno: 202.1.28
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2009-01-01 00:30:53 -0500
-    message:
-      curses/curses_misc.py:
-        Added a Dialog class, mostly borrowed from a urwid example
-      curses/prefs_curses.py:
-        Added the DNS domain to the dialog, as was done in the GTK UI
-      curses/wicd-curses.py:
-        Added a semi-pretty about dialog.
-      curses/README: Activating about dialog is done by "A"
-    ------------------------------------------------------------
-    revno: 202.1.27
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2008-12-31 18:43:15 -0500
-    message:
-      Merged with experimental (1.6) branch, r234.
-    ------------------------------------------------------------
-    revno: 202.1.26
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2008-12-30 23:12:42 -0500
-    message:
-      curses/README: Actually changed the text in the file.
-      Merged with experimental (1.6) branch, r233.  Mmmm... wpathenhancements
-    ------------------------------------------------------------
-    revno: 202.1.25
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2008-12-30 23:10:18 -0500
-    message:
-      curses/curses_misc.py:
-        Added a get_edit_text function to ToggleEdit.
-        Changed the get_selected function in ComboBox to return the index only.
-      curses/prefs_curses.py:
-        Completed the load+save functions of the UI
-        Buttons are now functional.  Only selecting the OK button will save the data for now.
-      curses/wicd-curses.py:
-        Added support for the "Always Show Wired Interface" config option
-        Completed support for the preferences dialog
-      curses/TODO,README: Preferences dialog is done. :-)
-    ------------------------------------------------------------
-    revno: 202.1.24
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2008-12-30 21:27:41 -0500
-    message:
-      Yet another checkpoint in building the Preferences Dialog up to completion.  Some of the code isn't used yet, but this should all be done relatively soon.
-      curses/curses_misc.py:
-        Added a function in the ToggleEdit to set its text to something
-        Changed the name of ComboText to ComboBox
-        Provided the ability to generate the initial parts of a ComboBox w/o needing the screen.
-        Added ComboBoxException, a simple derived exception for the ComboBox.  Used it to die of the user never called build_combobox()
-      curses/prefs_curses.py:
-        Changed the names of some of the widgets.
-        Adjusted the code to use the modified ComboBox widget
-      curses/wicd-curses.py:
-        Adjusted the code to use the modified ComboBox widget
-    ------------------------------------------------------------
-    revno: 202.1.23
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2008-12-29 22:05:48 -0500
-    message:
-      Merged with experimental (1.6) branch (r232).
-    ------------------------------------------------------------
-    revno: 202.1.22
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2008-12-29 22:04:40 -0500
-    message:
-      Checkpoint in getting the Preferences dialog functional.  There's still some tweaking left to do.
-      curses/curses_misc.py: Changed the internal layout of the widgets to allow me to stick buttons on the bottom.
-      curses/prefs_curses.py: Added rudimentary Dbus support to the dialog.
-      Started getting the config settings to save to wicd.
-      Added buttons (which don't do anything yet).
-      The PrefOverlay has been renamed to PrefsDialog.  The PrefsDialog widget is wrapped around a TabColumns widget.
-      Added a main entry point into the file to allow for somewhat easier testing.  It can now be called indepentently of wicd-curses, if needed.
-      curses/wicd-curses.py: Undid a change that caused the ESC key to disconnect from the current network, in addition to its current function.
-    ------------------------------------------------------------
-    revno: 202.1.21
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2008-12-28 12:26:21 -0500
-    message:
-      Merged with experimental (1.6) branch (r231).
-    ------------------------------------------------------------
-    revno: 202.1.20
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2008-12-28 11:36:41 -0500
-    message:
-      curses/wicd-curses.py: Fixed a problem where any use of the wired network combo box would prevent connecting to wired networks.
-      Added some semblance of a "working" indicator while connecting, a simple |,/,-,\,|,/,...
-    ------------------------------------------------------------
-    revno: 202.1.19
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2008-12-27 22:35:58 -0500
-    message:
-      curses/curses_misc.py: Added a tabbed interface widget for use in the preferences dialog.
-      curses/prefs_curses.py: Converted the code to use the tabbed interface found in curses_misc.py.  The dialog now fills up the terminal, but it still does nothing.
-      curses/wicd-curses.py: Turned the "list" wired section of the interface to a combo box.
-    ------------------------------------------------------------
-    revno: 202.1.18
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2008-12-27 00:18:03 -0500
-    message:
-      curses/curses_misc.py: ADDED.  Various urwid classes that I use throughout the program.
-      curses/prefs_curses.py: Frontend is complete.  However, it is still missing buttons and the ability to save information.  Removed code that is now in curses_misc.py.
-      curses/wicd-curses.py: Removed code that is now in curses_misc.py.  Tweaked the visuals a little bit.
-      curses/README: Preferences configuration is a WIP now.
-      curses/TODO: A combo box has been implemented in curses_misc.py, so that part has been removed.  Also added a part about making a man page.
-    ------------------------------------------------------------
-    revno: 202.1.17
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2008-12-26 14:18:40 -0500
-    message:
-      curses/prefs_curses.py: Forgot the license.  ^_^
-    ------------------------------------------------------------
-    revno: 202.1.16
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2008-12-26 13:53:25 -0500
-    message:
-      Merged with experimental (1.6) branch (r229).
-    ------------------------------------------------------------
-    revno: 202.1.15
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2008-12-26 13:48:26 -0500
-    message:
-      curses/prefs_curses.py: ADDED.  A basic global preferences dialog.  Has a tabbed interface.  It is missing things such as buttons, external program controls, advanced settings, and the ability to save information.  :-)
-      curses/wicd-curses.py: Some code cleanup, replaced the language mess with the GUI list in misc, and added support for running the Preferences dialog with 'P'.
-      curses/README: Added the keybindings to bring up the preferences dialog.
-    ------------------------------------------------------------
-    revno: 202.1.14
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Tue 2008-12-23 21:24:49 -0500
-    message:
-      Merged with the 1.6 sources (r227), and
-      curses/wicd-curses.py: modified the program so that it can run off of the experimental API.
-      Cleaned up some of the code.
-    ------------------------------------------------------------
-    revno: 202.1.13
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2008-12-22 18:27:05 -0500
-    message:
-      Merged with experimental (r219).
-    ------------------------------------------------------------
-    revno: 202.1.12
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2008-12-20 16:32:19 -0500
-    message:
-      Big one this time.  Hopefully I got everything. 
-      curses/wicd.curses.py:
-      Added the full language component from wicd.misc into the file.
-      Added support for connecting to networks :-).
-      Added statusbar-updating support during connections.
-      Fixed a problem where an exception found before the UI is on-screen will cause another exception in wrap_exceptions.
-      Turned the footer into a ListBox, so that I can add more than more stuff to it more easily.
-      Rearranged the order of strings in the wireless connection part of the UI.
-      Added a bunch of keymappings to support all of the new functionality.
-      Made the UI updating function into an idle function, to better support the new functionality (and it eats up less CPU, too).
-      Some minor code cleanup throughout.
-      curses/README: Updated to correspond with new features
-      curses/TODO: Removed connection support from the TODO, added a few other things.
-    ------------------------------------------------------------
-    revno: 202.1.11
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Fri 2008-12-19 12:34:03 -0500
-    message:
-      curses/wicd-curses.py: Redesigned the internal list so that the wired network information is always at the top, no matter the number of wireless networks present.
-    ------------------------------------------------------------
-    revno: 202.1.10
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2008-12-18 22:55:20 -0500
-    message:
-      curses/wicd-curses.py: Moved the primary entry point to outside of the appGUI class, added some comments to improve code readability
-    ------------------------------------------------------------
-    revno: 202.1.9
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2008-12-18 16:39:24 -0500
-    message:
-      curses/wicd-curses.py: Removed a lot of redundant code related to focus on the main ListBox widget.  Set focus=True in the frame's rendering function
-      made everything so much easier.
-    ------------------------------------------------------------
-    revno: 202.1.8
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Thu 2008-12-18 00:07:00 -0500
-    message:
-      curses/wicd-curses.py: fixed a bug (missing 'self.') in dbus_scan_finished
-    ------------------------------------------------------------
-    revno: 202.1.7
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2008-12-17 11:27:09 -0500
-    message:
-      curses/wicd-curses.py: Added code to restore the console on all errors, and then print them, including KeyboardInterrupts.
-      curses/TODO: Removed the above from TODO
-    ------------------------------------------------------------
-    revno: 202.1.6
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Wed 2008-12-17 10:30:55 -0500
-    message:
-      Merged with experimental (r216)
-    ------------------------------------------------------------
-    revno: 202.1.5
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Mon 2008-12-15 17:50:00 -0500
-    message:
-      curses/wicd-curses.py: Colorized the network we're currently connected to.
-      That network is now updated every time that wicd tells us that the "status" has changed.
-      Network connection status is now updated every 2 seconds, instead of every 0.5.
-    ------------------------------------------------------------
-    revno: 202.1.4
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sun 2008-12-14 01:04:23 -0500
-    message:
-      curses/wicd-curses.py: Cleaned up code for the Net/ListElements. Added '>' to mark to currently selected network. Set gen_network_list() to output signal quality in units specified in the config.
-    ------------------------------------------------------------
-    revno: 202.1.3
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental-nacl
-    timestamp: Sat 2008-12-13 16:06:11 -0500
-    message:
-      curses/wicd-curses.py: Add gobject.MainLoop support, and enable the D-Bus function connections (It works!).  Various comments/code cleanup done.
-      curses/README: f5 refreshes the netlist now
-      curses/TODO: Added a bunch of features to implement, and removed one of them. 
-    ------------------------------------------------------------
-    revno: 202.1.2
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental
-    timestamp: Sat 2008-12-13 13:32:50 -0500
-    message:
-      Merged with experimental (r207)
-    ------------------------------------------------------------
-    revno: 202.1.1
-    committer: Andrew Psaltis <ampsaltis@gmail.com>
-    branch nick: experimental
-    timestamp: Sat 2008-12-13 13:29:07 -0500
-    message:
-      Let there be light!
-      curses/wicd-curses.py: ADDED (new (very incomplete) curses UI)
-      curses/README: ADDED (Simple README. Hope it says enough for the moment)
-      curses/TODO: ADDED (Simple, incomplete, TODO list)
 ------------------------------------------------------------
 revno: 268
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -4244,47 +1507,12 @@ timestamp: Fri 2009-01-30 21:20:43 -0500
 message:
   Fix crash if essid is None
 ------------------------------------------------------------
-revno: 263
+revno: 263 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Wed 2009-01-28 19:54:17 -0500
 message:
   Merge translations updates.
-    ------------------------------------------------------------
-    revno: 260.1.5
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-01-27 14:22:10 +0800
-    message:
-      Fixed another typo
-    ------------------------------------------------------------
-    revno: 260.1.4
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-01-27 14:17:11 +0800
-    message:
-      Fixed a typo
-    ------------------------------------------------------------
-    revno: 260.1.3
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-01-27 14:15:30 +0800
-    message:
-      Added a bunch more translations
-    ------------------------------------------------------------
-    revno: 260.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-01-27 10:37:42 +0800
-    message:
-      Merged to latest 1.6
-    ------------------------------------------------------------
-    revno: 260.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Tue 2009-01-27 10:35:08 +0800
-    message:
-      Fixed a typo and added more translations
 ------------------------------------------------------------
 revno: 262
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -4359,27 +1587,13 @@ timestamp: Sun 2009-01-25 00:44:51 -0500
 message:
   Add new wired GUI icon.
 ------------------------------------------------------------
-revno: 252
+revno: 252 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sat 2009-01-24 23:54:57 -0500
 message:
   Merge in improved wired profile UI
   Tweak how wired profile list is built to be simple/more efficent and not cause a dbus error.
-    ------------------------------------------------------------
-    revno: 250.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-01-25 12:03:01 +0800
-    message:
-      Updated the wired profile Add/Delete system as per https://bugs.launchpad.net/wicd/+bug/318645
-    ------------------------------------------------------------
-    revno: 250.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6
-    timestamp: Sun 2009-01-25 12:02:10 +0800
-    message:
-      Removed vertical space between the DNS entriesw
 ------------------------------------------------------------
 revno: 251
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -4464,92 +1678,12 @@ message:
   Only write settings being saved if debug mode is on.
   Clear keys entered through the GUI when the encryption checkbox is disabled.
 ------------------------------------------------------------
-revno: 241
+revno: 241 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Thu 2009-01-15 01:25:24 -0500
 message:
   Merging in noexpander branch.
-    ------------------------------------------------------------
-    revno: 237.1.10
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6-noexpander
-    timestamp: Thu 2009-01-15 01:21:54 -0500
-    message:
-      Tweak default window sizes
-    ------------------------------------------------------------
-    revno: 237.1.9
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6-noexpander
-    timestamp: Thu 2009-01-15 00:59:52 -0500
-    message:
-      merge in experimental branch
-    ------------------------------------------------------------
-    revno: 237.1.8
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6-noexpander
-    timestamp: Thu 2009-01-15 00:56:02 -0500
-    message:
-      Fix bug where be-ioctl scans always reported channels as 1.
-      Tweak the UI a little bit.
-      Add debugging output when forced_disconnect gets enabled.
-    ------------------------------------------------------------
-    revno: 237.1.7
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6-noexpander
-    timestamp: Sun 2009-01-11 20:15:01 -0500
-    message:
-      merge
-        ------------------------------------------------------------
-        revno: 237.2.1
-        committer: Adam Blackburn <compwiz18@gmail.com>
-        branch nick: 1.6-revampedgui
-        timestamp: Sat 2009-01-10 11:03:41 +0800
-        message:
-          A few minor cosmetic changes
-          Changed main GUI name from Wicd Manager to Wicd Network Manager
-    ------------------------------------------------------------
-    revno: 237.1.6
-    committer: Dan O'Reilly <oreilldf@gmail.com>
-    branch nick: 1.6-noexpander
-    timestamp: Fri 2009-01-09 23:58:14 -0500
-    message:
-      Initial crack at reworking GUI some more.
-    ------------------------------------------------------------
-    revno: 237.1.5
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6-revampedgui
-    timestamp: Sat 2009-01-10 08:36:19 +0800
-    message:
-      Made the information dialog look nicer -- added description labels and left aligned everything
-    ------------------------------------------------------------
-    revno: 237.1.4
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: 1.6-revampedgui
-    timestamp: Fri 2009-01-09 22:54:24 +0800
-    message:
-      Information dialog now uses real labels instead of grey labels
-    ------------------------------------------------------------
-    revno: 237.1.3
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-revampedgui
-    timestamp: Fri 2009-01-09 21:53:59 +0800
-    message:
-      Added an information button and a dialog
-    ------------------------------------------------------------
-    revno: 237.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-revampedgui
-    timestamp: Fri 2009-01-09 21:12:48 +0800
-    message:
-      Added a name label
-    ------------------------------------------------------------
-    revno: 237.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-revampedgui
-    timestamp: Fri 2009-01-09 20:40:30 +0800
-    message:
-      Removed network expanders
 ------------------------------------------------------------
 revno: 240
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -4579,203 +1713,12 @@ timestamp: Sat 2009-01-03 10:35:28 +0800
 message:
   Changed 25% signal icon to red and 50% signal icon to orange
 ------------------------------------------------------------
-revno: 236
+revno: 236 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Fri 2009-01-02 19:57:21 -0500
 message:
   Merge in rworkman-experimental
-    ------------------------------------------------------------
-    revno: 203.1.25
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2008-12-31 23:53:30 -0600
-    message:
-      If kde-config fails, then assume kde is not installed, and don't
-        install the autostart file for kde.
-    ------------------------------------------------------------
-    revno: 203.1.24
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2008-12-31 15:52:27 -0600
-    message:
-      Merged r234 from mainline.
-    ------------------------------------------------------------
-    revno: 203.1.23
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-30 20:07:52 -0600
-    message:
-      Merged r233 from mainline
-    ------------------------------------------------------------
-    revno: 203.1.22
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2008-12-28 19:24:37 -0600
-    message:
-      Merged r232 from mainline.
-    ------------------------------------------------------------
-    revno: 203.1.21
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2008-12-28 19:22:15 -0600
-    message:
-      Fix permissions on peap-tkip template.
-    ------------------------------------------------------------
-    revno: 203.1.20
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2008-12-28 00:19:25 -0600
-    message:
-      Merged autoconnect.py and suspend.py changes from trunk (fixes for 
-        the pm-utils sleep hook usage).
-    ------------------------------------------------------------
-    revno: 203.1.19
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2008-12-27 19:38:12 -0600
-    message:
-      Merged latest changes from mainline experimental branch.
-    ------------------------------------------------------------
-    revno: 203.1.18
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2008-12-27 19:21:45 -0600
-    message:
-      Merge in the changes to trunk's pm-utils sleep hook.
-    ------------------------------------------------------------
-    revno: 203.1.17
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2008-12-27 00:37:03 -0600
-    message:
-      Fixup pm-utils hook to return proper exit codes and fix logging.
-    ------------------------------------------------------------
-    revno: 203.1.16
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Wed 2008-12-24 11:30:07 -0600
-    message:
-      Merged r229 from mainline experimental.
-    ------------------------------------------------------------
-    revno: 203.1.15
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-23 01:50:16 -0600
-    message:
-      Add "CHANGES" file to the list of documentation installed.
-    ------------------------------------------------------------
-    revno: 203.1.14
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-23 01:47:53 -0600
-    message:
-      Add support for configurable Unix group to be used - basically, users
-        must be a member of this group in order to use Wicd.  Note that this
-        does not apply on systems configured to use ConsoleKit/PAM/et al.
-      This defaults to use the "users" group so that it will work "out of the
-        box" for most people, but distributions are encouraged to edit it
-        as needed with the "--wicdgroup=whatever" configure argument.
-    ------------------------------------------------------------
-    revno: 203.1.13
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-23 01:20:48 -0600
-    message:
-      Removed execute perms from other/wicd.conf
-    ------------------------------------------------------------
-    revno: 203.1.12
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-23 01:17:30 -0600
-    message:
-      Fix (I think) dbus errors, or at least this is one way to fix them.
-      If this is the *right* way, then it still needs work to support it
-      in setup.py
-    ------------------------------------------------------------
-    revno: 203.1.11
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Mon 2008-12-22 23:34:47 -0600
-    message:
-      Merged new prefs dialog from mainline experimental
-    ------------------------------------------------------------
-    revno: 203.1.10
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Tue 2008-12-23 04:40:47 +0000
-    message:
-      Merge r220 upstream.
-    ------------------------------------------------------------
-    revno: 203.1.9
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Mon 2008-12-22 17:14:55 +0000
-    message:
-      Merged r219 from main experimental branch.
-    ------------------------------------------------------------
-    revno: 203.1.8
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Mon 2008-12-15 17:40:07 +0000
-    message:
-      Merged r213 of main experimental branch
-    ------------------------------------------------------------
-    revno: 203.1.7
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2008-12-14 07:58:58 +0000
-    message:
-      Remove extraneous comments from setup.py and clean up a few of them.
-      This is definitely trivial crap...  
-    ------------------------------------------------------------
-    revno: 203.1.6
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sun 2008-12-14 07:43:44 +0000
-    message:
-      Merged main experimental branch
-      Fixed kde autostart directory setting
-    ------------------------------------------------------------
-    revno: 203.1.5
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2008-12-13 22:11:56 +0000
-    message:
-      Merged main experimental branch changes as of r208.
-    ------------------------------------------------------------
-    revno: 203.1.4
-    committer: Robby Workman <rworkman@slackware.com>
-    branch nick: experimental-rworkman
-    timestamp: Sat 2008-12-13 22:06:00 +0000
-    message:
-      Fixed (I think) the pkg-config and kde-config tests.  This needs more 
-        testing though before I'm sure.  Big thanks to "nanotube" for the
-        suggestions and code for this.
-    ------------------------------------------------------------
-    revno: 203.1.3
-    committer: Robby Workman <rworkman@cardinal>
-    branch nick: experimental-rworkman
-    timestamp: Fri 2008-12-12 14:05:44 +0000
-    message:
-      Merge changes from main experimental branch.
-    ------------------------------------------------------------
-    revno: 203.1.2
-    committer: Robby Workman <rworkman@cardinal>
-    branch nick: experimental-rworkman
-    timestamp: Fri 2008-12-12 05:45:13 +0000
-    message:
-      Fix icons (copied from wicd-1.5.6 source tarball)
-    ------------------------------------------------------------
-    revno: 203.1.1
-    committer: Robby Workman <rworkman@cardinal>
-    branch nick: experimental-rworkman
-    timestamp: Fri 2008-12-12 04:28:18 +0000
-    message:
-      Add support for checking pkg-config to see where pm-utils sleep hook
-        should go (supported in pm-utils >=1.2.3).
-      Add support for checking kde-config to get kde's prefix, and set the
-        kde autostart directory accordingly.
 ------------------------------------------------------------
 revno: 235
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -4792,42 +1735,12 @@ message:
   Add a domain entry for dns settings.
   Display an error if global dns is enabled for a network, but global dns entries aren't entered in the general preferences window.
 ------------------------------------------------------------
-revno: 233
+revno: 233 [merge]
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: experimental
 timestamp: Tue 2008-12-30 18:01:27 -0600
 message:
   Merged with wpathenhancements
-    ------------------------------------------------------------
-    revno: 232.1.4
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-oneversion
-    timestamp: Tue 2008-12-30 10:31:06 -0600
-    message:
-      Removed files that are generated by python setup.py configure
-      Added command to setup.py to clean out generated files ('cleargenerated')
-      Added the revision number to wicd-daemon.py --help
-    ------------------------------------------------------------
-    revno: 232.1.3
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-oneversion
-    timestamp: Tue 2008-12-30 10:17:07 -0600
-    message:
-      Fixed a typo
-    ------------------------------------------------------------
-    revno: 232.1.2
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-oneversion
-    timestamp: Tue 2008-12-30 10:16:09 -0600
-    message:
-      Added support for storing the revision number in wpath.py
-    ------------------------------------------------------------
-    revno: 232.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental-oneversion
-    timestamp: Tue 2008-12-30 09:53:30 -0600
-    message:
-      Centralized version number in setup.py
 ------------------------------------------------------------
 revno: 232
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -5026,19 +1939,12 @@ timestamp: Sat 2008-12-13 13:28:05 -0500
 message:
   Fix saving scripts not working correctly.
 ------------------------------------------------------------
-revno: 206
+revno: 206 [merge]
 committer: Dan O'Reilly <oreilldf@gmail.com>
 branch nick: experimental
 timestamp: Sat 2008-12-13 01:49:15 -0500
 message:
   merging
-    ------------------------------------------------------------
-    revno: 204.1.1
-    committer: Adam Blackburn <compwiz18@gmail.com>
-    branch nick: experimental
-    timestamp: Fri 2008-12-12 17:23:35 +0800
-    message:
-      Fixed the icons
 ------------------------------------------------------------
 revno: 205
 committer: Dan O'Reilly <oreilldf@gmail.com>
@@ -6776,3 +3682,5 @@ branch nick: stable
 timestamp: Wed 2007-07-04 14:51:57 +0000
 message:
   trying to fix
+------------------------------------------------------------
+Use --include-merges or -n0 to see merged revisions.

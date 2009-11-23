@@ -215,7 +215,7 @@ class TrayIcon(object):
                         .replace('$B', self.network_str)
                         .replace('$C', self.network_addr))
             elif (self.network_type == "wired"):
-                self.tr.set_tooltip(language['tray_connected_to_wired']
+                self.tr.set_tooltip(language['connected_to_wired']
                         .replace('$A', self.network_addr))
             elif (self.network_type == "killswitch"):
                 self.tr.set_tooltip(language['not_connected'] + "(" +

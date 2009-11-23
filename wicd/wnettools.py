@@ -856,7 +856,7 @@ class BaseWirelessInterface(BaseInterface):
         essid -- essid to set the interface to
 
         """
-        cmd = ['iwconfig', self.iface, 'essid', str(essid)]
+        cmd = ['iwconfig', self.iface, 'essid', '--', str(essid)]
         if self.verbose: print str(cmd)
         misc.Run(cmd)
 

@@ -739,7 +739,7 @@ class appGui(object):
         widget.hide()
         networkentry.connect_button.show()
         daemon.SetForcedDisconnect(True)
-        self.network_list.all_set_sensitive(False)
+        self.network_list.set_sensitive(False)
         if nettype == "wired":
             wired.DisconnectWired(reply_handler=handler, error_handler=handler)
         else:

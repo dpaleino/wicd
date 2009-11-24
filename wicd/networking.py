@@ -456,35 +456,6 @@ class ConnectThread(threading.Thread):
                 return
 
     @abortable
-    def verify_association(self, iface):
-        """ Verify that our association the AP is valid.
-        
-        Try to ping the gateway we have set to see if we're
-        really associated with it.  This is only done if
-        we're using a static IP.
-        
-        """
-        if self.network.get('gateway'):
-            self.SetStatus('verifying_association')
-            print "Verifying AP association..."
-            for tries in range(1, 11):
-                print "Attempt %d of 10..." % tries
-                retcode = self.iface.VerifyAPAssociation(self.network['gateway'])
-                if retcode == 0: 
-                    print "Successfully associated."
-                    break
-                time.sleep(1)
-            #TODO this should be in wnettools.py
-            if retcode:
-                print "Connection Failed: Failed to ping the access point!"
-                # Clean up before aborting.
-                iface.SetAddress('0.0.0.0')
-                iface.FlushRoutes()
-                if hasattr(iface, "StopWPA"):
-                    iface.StopWPA()
-                self.abort_connection("association_failed")
-
-    @abortable
     def set_dns_addresses(self, iface):
         """ Set the DNS address(es).
 
@@ -563,6 +534,7 @@ class Wireless(Controller):
         self._wpa_driver = None
         self._wireless_interface = None
         self.wiface = None 
+        self.should_verify_ap = True
         
     def set_wireless_iface(self, value):
         self._wireless_interface = value
@@ -645,7 +617,7 @@ class Wireless(Controller):
             self.after_script, self.pre_disconnect_script,
             self.post_disconnect_script, self.global_dns_1,
             self.global_dns_2, self.global_dns_3, self.global_dns_dom,
-            self.global_search_dom, self.wiface, debug)
+            self.global_search_dom, self.wiface, self.should_verify_ap, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -815,8 +787,8 @@ class WirelessConnectThread(ConnectThread):
 
     def __init__(self, network, wireless, wpa_driver, before_script,
                  after_script, pre_disconnect_script, post_disconnect_script,
-                 gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, wiface,
-                 debug=False):
+                 gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, wiface, 
+                 should_verify_ap, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -837,6 +809,7 @@ class WirelessConnectThread(ConnectThread):
                                post_disconnect_script, gdns1, gdns2,
                                gdns3, gdns_dom, gsearch_dom, wiface, debug)
         self.wpa_driver = wpa_driver
+        self.should_verify_ap = should_verify_ap
 
 
     def _connect(self):
@@ -920,6 +893,38 @@ class WirelessConnectThread(ConnectThread):
             print "IP Address is: " + str(wiface.GetIP())
         self.connect_result = "Success"
         self.is_connecting = False
+        
+    @abortable
+    def verify_association(self, iface):
+        """ Verify that our association the AP is valid.
+        
+        Try to ping the gateway we have set to see if we're
+        really associated with it.  This is only done if
+        we're using a static IP.
+        
+        """
+        if self.network.get('gateway') and self.should_verify_ap:
+            self.SetStatus('verifying_association')
+            print "Verifying AP association..."
+            for tries in range(1, 11):
+                print "Attempt %d of 10..." % tries
+                retcode = self.iface.VerifyAPAssociation(self.network['gateway'])
+                if retcode == 0: 
+                    print "Successfully associated."
+                    break
+                time.sleep(1)
+            #TODO this should be in wnettools.py
+            if retcode:
+                print "Connection Failed: Failed to ping the access point!"
+                # Clean up before aborting.
+                iface.SetAddress('0.0.0.0')
+                iface.FlushRoutes()
+                if hasattr(iface, "StopWPA"):
+                    iface.StopWPA()
+                self.abort_connection("association_failed")
+        else:
+            print 'not verifying'
+
         
     @abortable
     def stop_wpa(self, wiface):

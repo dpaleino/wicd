@@ -328,6 +328,8 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
+            if not hostname:
+                hostname = os.uname()[1]
             return client_dict[client_name]['connect'] % \
                     { "cmd" : cmd,
                       "iface" : self.iface,

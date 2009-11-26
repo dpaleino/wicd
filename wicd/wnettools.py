@@ -270,10 +270,16 @@ class BaseInterface(object):
                 client = None
                 cmd = ""
             return (client, cmd)
+
+                # probably /var/lib/wicd/dhclient.conf with defaults
+        dhclient_conf_path = os.path.join(
+                    wpath.varlib,
+                    'dhclient.conf'
+                )
         
         client_dict = {
             "dhclient" : 
-                {'connect' : r"%(cmd)s %(iface)s",
+                {'connect' : r"%(cmd)s -cf %(dhclientconf)s %(iface)s",
                  'release' : r"%(cmd)s -r %(iface)s",
                  'id' : misc.DHCLIENT, 
                  },
@@ -294,12 +300,41 @@ class BaseInterface(object):
                 },
         }
         (client_name, cmd) = get_client_name(self.DHCP_CLIENT)
+
+        # cause dhclient doesn't have a handy dandy argument
+        # for specifing the hostname to be sent
+        if client_name == "dhclient" and flavor:
+            if hostname == None:
+                # <hostname> will use the system hostname
+                # we'll use that if there is hostname passed
+                # that shouldn't happen, though
+                hostname = '<hostname>'
+            print 'attempting to set hostname with dhclient'
+            print 'using dhcpcd or another supported client may work better'
+            dhclient_template = \
+                open(os.path.join(wpath.etc, 'dhclient.conf.template'), 'r')
+
+            output_conf = open(dhclient_conf_path, 'w')
+
+            for line in dhclient_template.readlines():
+                line = line.replace('$_HOSTNAME', hostname)
+                output_conf.write(line)
+
+            output_conf.close()
+            dhclient_template.close()
+
         if not client_name or not cmd:
             print "WARNING: Failed to find a valid dhcp client!"
             return ""
             
         if flavor == "connect":
-            return client_dict[client_name]['connect'] % {"cmd":cmd, "iface":self.iface, "hostname":hostname}
+            if not hostname:
+                hostname = os.uname()[1]
+            return client_dict[client_name]['connect'] % \
+                    { "cmd" : cmd,
+                      "iface" : self.iface,
+                      "hostname" : hostname,
+                      'dhclientconf' : dhclient_conf_path }
         elif flavor == "release":
             return client_dict[client_name]['release'] % {"cmd":cmd, "iface":self.iface}
         else:
@@ -535,7 +570,7 @@ class BaseInterface(object):
     def _check_dhcp_result(self, success):
         """ Print and return the correct DHCP connection result. 
         
-        Keyword Arguents:
+        Keyword Arguments:
         success -- boolean specifying if DHCP was succesful.
         
         Returns:
@@ -550,15 +585,18 @@ class BaseInterface(object):
             return 'dhcp_failed'
             
     @neediface(False)
-    def StartDHCP(self,hostname):
+    def StartDHCP(self, hostname):
         """ Start the DHCP client to obtain an IP address.
+
+        Keyword Arguments:
+        hostname -- the hostname to send to the DHCP server
         
         Returns:
         A string representing the result of the DHCP command.  See
         _check_dhcp_result for the possible values.
         
         """
-        cmd = self._get_dhcp_command('connect',hostname)
+        cmd = self._get_dhcp_command('connect', hostname)
         if self.verbose: print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout

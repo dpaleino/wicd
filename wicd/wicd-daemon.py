@@ -523,6 +523,23 @@ class WicdDaemon(dbus.service.Object):
                         write=True)
         self.wired_connect_mode = int(method)
         self.wired_bus.connect_mode = int(method)
+        
+    @dbus.service.method('org.wicd.daemon')
+    def SetShouldVerifyAp(self, value):
+        """ Enable/disable wireless AP verification.
+        
+        If this is True, wicd will try to verify that we are associated
+        with the Wireless AP after a connection attempt appears to
+        succeed.
+        
+        """
+        self.config.set("Settings", "should_verify_ap", int(value), write=True)
+        self.wifi.should_verify_ap = misc.to_bool(value)
+        
+    @dbus.service.method('org.wicd.daemon')
+    def GetShouldVerifyAp(self):
+        """ Returns current value for WAP connection verification. """
+        return bool(self.wifi.should_verify_ap)
 
     @dbus.service.method('org.wicd.daemon')
     def GetWiredAutoConnectMethod(self):
@@ -894,6 +911,8 @@ class WicdDaemon(dbus.service.Object):
         self.SetSignalDisplayType(app_conf.get("Settings", 
                                                "signal_display_type",
                                                default=0))
+        self.SetShouldVerifyAp(app_conf.get("Settings", "should_verify_ap",
+                                            default=1))
         self.SetDHCPClient(app_conf.get("Settings", "dhcp_client", default=0))
         self.SetLinkDetectionTool(app_conf.get("Settings", "link_detect_tool",
                                                default=0))

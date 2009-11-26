@@ -24,6 +24,8 @@ reusable for other purposes as well.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os, copy
+
 from ConfigParser import RawConfigParser
 
 from wicd.misc import Noneify, to_unicode
@@ -122,7 +124,7 @@ class ConfigManager(RawConfigParser):
         """ Calls the get_option method """
         return self.get_option(*args, **kargs)
     
-    def write(self):
+    def _write_one(self):
         """ Writes the loaded config file to disk. """
         for section in self.sections():
             if not section:
@@ -144,3 +146,58 @@ class ConfigManager(RawConfigParser):
     def reload(self):
         """ Re-reads the config file, in case it was edited out-of-band. """
         self.read(self.config_file)
+
+    def read(self, path):
+        """ Reads the config file specified by 'path' then reads all the
+        files in the directory obtained by adding '.d' to 'path'. The files
+        in the '.d' directory are read in normal sorted order and section
+        entries in these files override entries in the main file.
+        """
+        RawConfigParser.read(self, path)
+
+        path_d = path + ".d"
+        files = []
+
+        if os.path.exists(path_d):
+            files = [ os.path.join(path_d, f) for f in os.listdir(path_d) ]
+            files.sort()
+
+        for fname in files:
+            p = RawConfigParser()
+            p.read(fname)
+            for section_name in p.sections():
+                # New files override old, so remove first to avoid DuplicateSectionError.
+                self.remove_section(section_name)
+                self.add_section(section_name)
+                for (name, value) in p.items(section_name):
+                    self.set(section_name, name, value)
+                # Store the filename this section was read from.
+                self.set(section_name, '_filename_', fname)
+
+
+    def _copy_section(self, name):
+        # Yes, deepcopy sucks, but it is robust to changes in both
+        # this class and RawConfigParser.
+        p = copy.deepcopy(self)
+        for sname in p.sections():
+            if sname != name:
+                p.remove_section(sname)
+        p.config_file = p.get_option(name, '_filename_', p.config_file)
+        p.remove_option(name, '_filename_')
+        return p
+
+    def write(self):
+        """ Writes the loaded config file to disk. """
+        # Really don't like this deepcopy.
+        p = copy.deepcopy(self)
+        for sname in p.sections():
+            fname = p.get_option(sname, '_filename_')
+            if fname and fname != self.config_file:
+                section = self._copy_section(sname)
+                p.remove_section(sname)
+                section._write_one()
+
+        for sname in p.sections():
+            p.remove_option(sname, '_filename_')
+        p._write_one()
+

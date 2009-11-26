@@ -1161,20 +1161,6 @@ is already active.</property>
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkRadioButton" id="dhclient_radio">
-                                        <property name="label" translatable="yes">dhclient</property>
-                                        <property name="visible">True</property>
-                                        <property name="can_focus">True</property>
-                                        <property name="receives_default">False</property>
-                                        <property name="active">True</property>
-                                        <property name="draw_indicator">True</property>
-                                      </widget>
-                                      <packing>
-                                        <property name="expand">False</property>
-                                        <property name="position">3</property>
-                                      </packing>
-                                    </child>
-                                    <child>
                                       <widget class="GtkRadioButton" id="dhcpcd_radio">
                                         <property name="label" translatable="yes">dhcpcd</property>
                                         <property name="visible">True</property>
@@ -1202,6 +1188,20 @@ is already active.</property>
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="position">2</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkRadioButton" id="dhclient_radio">
+                                        <property name="label" translatable="yes">dhclient</property>
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="receives_default">False</property>
+                                        <property name="active">True</property>
+                                        <property name="draw_indicator">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">3</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -1358,7 +1358,7 @@ is already active.</property>
                 <child>
                   <widget class="GtkTable" id="table3">
                     <property name="visible">True</property>
-                    <property name="n_rows">10</property>
+                    <property name="n_rows">11</property>
                     <property name="n_columns">2</property>
                     <child>
                       <widget class="GtkLabel" id="pref_backend_label">
@@ -1577,6 +1577,27 @@ WPA supplicant driver.</property>
                         <property name="top_attach">5</property>
                         <property name="bottom_attach">6</property>
                         <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment27">
+                        <property name="visible">True</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkCheckButton" id="pref_verify_ap_check">
+                            <property name="label" translatable="yes">Ping static gateways after connecting to verify association</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="draw_indicator">True</property>
+                          </widget>
+                        </child>
+                      </widget>
+                      <packing>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">10</property>
+                        <property name="bottom_attach">11</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>

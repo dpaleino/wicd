@@ -79,6 +79,7 @@ class PreferencesDialog(object):
         self.reconnectcheckbox.set_active(daemon.GetAutoReconnect())
         self.debugmodecheckbox.set_active(daemon.GetDebugMode())
         self.displaytypecheckbox.set_active(daemon.GetSignalDisplayType())
+        self.verifyapcheckbox.set_active(daemon.GetShouldVerifyAp())
         self.preferwiredcheckbox.set_active(daemon.GetPreferWiredNetwork())
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
@@ -197,6 +198,7 @@ class PreferencesDialog(object):
         daemon.SetAutoReconnect(self.reconnectcheckbox.get_active())
         daemon.SetDebugMode(self.debugmodecheckbox.get_active())
         daemon.SetSignalDisplayType(int(self.displaytypecheckbox.get_active()))
+        daemon.SetShouldVerifyAp(bool(self.verifyapcheckbox.get_active()))
         daemon.SetPreferWiredNetwork(bool(self.preferwiredcheckbox.get_active()))
         if self.showlistradiobutton.get_active():
             daemon.SetWiredAutoConnectMethod(2)
@@ -337,6 +339,8 @@ class PreferencesDialog(object):
                                              'use_debug_mode')
         self.displaytypecheckbox = setup_label("pref_dbm_check",
                                                'display_type_dialog')
+        self.verifyapcheckbox = setup_label("pref_verify_ap_check",
+                                            'verify_ap_dialog')
         self.usedefaultradiobutton = setup_label("pref_use_def_radio",
                                                  'use_default_profile')
         self.showlistradiobutton = setup_label("pref_prompt_radio",

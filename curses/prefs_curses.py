@@ -118,6 +118,7 @@ class PrefsDialog(urwid.WidgetWrap):
 
         wless_cat_t = ('header', language['wireless_interface'])
         use_dbm_t = language['display_type_dialog']
+        verify_ap_t = language['verify_ap_dialog']
         
 
 
@@ -223,8 +224,9 @@ class PrefsDialog(urwid.WidgetWrap):
         self.debug_cat           = urwid.Text(debug_cat_t)
         self.debug_mode_checkb   = urwid.CheckBox(debug_mode_t)
 
-        self.wless_cat      = urwid.Text(wless_cat_t)
-        self.use_dbm_checkb = urwid.CheckBox(use_dbm_t)
+        self.wless_cat        = urwid.Text(wless_cat_t)
+        self.use_dbm_checkb   = urwid.CheckBox(use_dbm_t)
+        self.verify_ap_checkb = urwid.CheckBox(verify_ap_t)
 
 
         advancedLB = urwid.ListBox([self.wpa_cat,
@@ -234,7 +236,8 @@ class PrefsDialog(urwid.WidgetWrap):
                                     self.debug_cat,
                                     self.debug_mode_checkb, _blank,
                                     self.wless_cat,
-                                    self.use_dbm_checkb, _blank
+                                    self.use_dbm_checkb, _blank,
+                                    self.verify_ap_checkb, _blank
                                     ])
 
 
@@ -314,9 +317,10 @@ class PrefsDialog(urwid.WidgetWrap):
         except ValueError:
             self.backend_cbox.set_focus(0)
 
-        # Two last checkboxes
+        # Three last checkboxes
         self.debug_mode_checkb.set_state(daemon.GetDebugMode())
         self.use_dbm_checkb.set_state(daemon.GetSignalDisplayType())
+        self.verify_ap_checkb.set_state(daemon.GetShouldVerifyAp())
 
     def save_settings(self):
         """ Pushes the selected settings to the daemon.
@@ -337,6 +341,7 @@ class PrefsDialog(urwid.WidgetWrap):
         daemon.SetAutoReconnect(self.auto_reconn_checkb.get_state())
         daemon.SetDebugMode(self.debug_mode_checkb.get_state())
         daemon.SetSignalDisplayType(int(self.use_dbm_checkb.get_state()))
+        daemon.SetShouldVerifyAp(int(self.verify_ap_checkb.get_state()))
         daemon.SetPreferWiredNetwork(bool(self.prefer_wired_chkbx.get_state()))
         if self.wired_auto_2.get_state():
             daemon.SetWiredAutoConnectMethod(2)

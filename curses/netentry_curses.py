@@ -60,7 +60,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
         
         use_dhcp_h_t = ("Use DHCP Hostname")
-        dhcp_h_t     = ('editcp',"DHCP Hostname:")
+        dhcp_h_t     = ('editcp',"DHCP Hostname: ")
         
         cancel_t = 'Cancel'
         ok_t = 'OK'

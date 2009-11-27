@@ -59,16 +59,17 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         dns2_t       = ('editcp',language['dns']+ ' 2'+':'+' '*8)
         dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
         
-        dhcp_h_t     = ('editcp',"DHCP Hostname:")
+        use_dhcp_h_t = ("Use DHCP Hostname")
+        dhcp_h_t     = ('editcp',"DHCP Hostname: ")
         
         cancel_t = 'Cancel'
         ok_t = 'OK'
         
         self.static_ip_cb = urwid.CheckBox(static_ip_t,
                 on_state_change=self.static_ip_toggle)
-        self.ip_edit     =DynWrap(urwid.Edit(ip_t),False)
-        self.netmask_edit=DynWrap(urwid.Edit(netmask_t),False)
-        self.gateway_edit=DynWrap(urwid.Edit(gateway_t),False)
+        self.ip_edit      = DynWrap(urwid.Edit(ip_t),False)
+        self.netmask_edit = DynWrap(urwid.Edit(netmask_t),False)
+        self.gateway_edit = DynWrap(urwid.Edit(gateway_t),False)
 
 
         self.static_dns_cb = DynWrap(urwid.CheckBox(use_static_dns_t,
@@ -83,7 +84,8 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         self.dns2              = DynWrap(urwid.Edit(dns2_t)      ,False)
         self.dns3              = DynWrap(urwid.Edit(dns3_t)      ,False)
 
-        self.dhcp_h            = urwid.AttrWrap(urwid.Edit(dhcp_h_t),'editbx','editfc')
+        self.use_dhcp_h        = urwid.CheckBox(use_dhcp_h_t,False,on_state_change=self.use_dhcp_h_toggle)
+        self.dhcp_h            = DynWrap(urwid.Edit(dhcp_h_t),False)
 
         _blank = urwid.Text('')
 
@@ -96,6 +98,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
                                          self.dns_dom_edit,self.search_dom_edit,
                                          self.dns1,self.dns2,self.dns3,
                                          _blank,
+                                         self.use_dhcp_h,
                                          self.dhcp_h,
                                          _blank
                                         ])
@@ -103,10 +106,12 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
 
 
         self._listbox = urwid.ListBox(walker)
-        #self._frame = urwid.Frame(self._listbox)
         self._frame = urwid.Frame(self._listbox)
         self.__super.__init__(self._frame)
     
+    def use_dhcp_h_toggle(self,checkb,new_state,user_data=None):
+        self.dhcp_h.set_sensitive(new_state)
+
     def static_ip_toggle(self,checkb,new_state,user_data=None):
         for w in [ self.ip_edit,self.netmask_edit,self.gateway_edit ]:
             w.set_sensitive(new_state)
@@ -173,6 +178,7 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
         self.set_net_prop('dhcphostname',self.dhcp_h.get_edit_text())
+        self.set_net_prop('usedhcphostname',self.use_dhcp_h.get_state())
     # Prevent comboboxes from dying.
     def ready_widgets(self,ui,body):
         pass
@@ -216,6 +222,8 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         if dhcphname is None:
             dhcphname = os.uname()[1]
 
+        self.use_dhcp_h.set_state(bool(wired.GetWiredProperty('usedhcphostname')))
+        self.dhcp_h.set_sensitive(self.use_dhcp_h.get_state())
         self.dhcp_h.set_edit_text(unicode(dhcphname))
 
     def save_settings(self):
@@ -321,6 +329,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         dhcphname = wireless.GetWirelessProperty(networkID,"dhcphostname")
         if dhcphname is None:
             dhcphname = os.uname()[1]
+        self.use_dhcp_h.set_state(bool(wireless.GetWirelessProperty(networkID,'usedhcphostname')))
+        self.dhcp_h.set_sensitive(self.use_dhcp_h.get_state())
         self.dhcp_h.set_edit_text(unicode(dhcphname))
         
 

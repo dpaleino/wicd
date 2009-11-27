@@ -448,10 +448,16 @@ class ConnectThread(threading.Thread):
         else:
             # Run dhcp...
             self.SetStatus('running_dhcp')
+            if self.network.get('usedhcphostname') == None:
+                self.network['usedhcphostname'] = False
             if self.network.get('dhcphostname') == None:
                 self.network['dhcphostname'] = os.uname()[1]
-            print "Running DHCP with hostname",self.network["dhcphostname"]
-            dhcp_status = iface.StartDHCP(self.network["dhcphostname"])
+            if not self.network['usedhcphostname']:
+                hname = os.uname()[1]
+            else:
+                hname = self.network['dhcphostname']
+            print "Running DHCP with hostname",hname
+            dhcp_status = iface.StartDHCP(hname)
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
                 if self.connect_result != "aborted":
                     self.abort_connection(dhcp_status)

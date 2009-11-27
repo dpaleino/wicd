@@ -74,7 +74,11 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.txt_dns_1 = LabelEntry(language['dns'] + ' 1')
         self.txt_dns_2 = LabelEntry(language['dns'] + ' 2')
         self.txt_dns_3 = LabelEntry(language['dns'] + ' 3')
+        dhcp_hostname_hbox = gtk.HBox(False, 0)
+        self.chkbox_use_dhcp_hostname = gtk.CheckButton()
         self.txt_dhcp_hostname = LabelEntry("DHCP Hostname")
+        dhcp_hostname_hbox.pack_start(self.chkbox_use_dhcp_hostname)
+        dhcp_hostname_hbox.pack_start(self.txt_dhcp_hostname)
         self.chkbox_static_ip = gtk.CheckButton(language['use_static_ip'])
         self.chkbox_static_dns = gtk.CheckButton(language['use_static_dns'])
         self.chkbox_global_dns = gtk.CheckButton(language['use_global_dns'])
@@ -106,7 +110,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.vbox.pack_start(self.txt_dns_1, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_2, fill=False, expand=False)
         self.vbox.pack_start(self.txt_dns_3, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_dhcp_hostname, fill=False, expand=False)
+        self.vbox.pack_start(dhcp_hostname_hbox, fill=False, expand=False)
         self.vbox.pack_end(self.button_hbox, fill=False, expand=False, padding=5)
         
         
@@ -114,6 +118,8 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.chkbox_static_ip.connect("toggled", self.toggle_ip_checkbox)
         self.chkbox_static_dns.connect("toggled", self.toggle_dns_checkbox)
         self.chkbox_global_dns.connect("toggled", self.toggle_global_dns_checkbox)
+        self.chkbox_use_dhcp_hostname.connect('toggled',
+                                              self.toggle_dhcp_hostname_checkbox)
         
         # Start with all disabled, then they will be enabled later.
         self.chkbox_static_ip.set_active(False)
@@ -192,6 +198,10 @@ class AdvancedSettingsDialog(gtk.Dialog):
                 w.set_sensitive(False)
             self.chkbox_global_dns.set_active(False)
 
+    def toggle_dhcp_hostname_checkbox(self, widget=None):
+        self.txt_dhcp_hostname.set_sensitive(
+            self.chkbox_use_dhcp_hostname.get_active())
+
     def toggle_global_dns_checkbox(self, widget=None):
         """ Set the DNS entries' sensitivity based on the Global checkbox. """
         global_dns_active = daemon.GetUseGlobalDNS()
@@ -241,6 +251,8 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.set_net_prop("dns1", '')
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
+        self.set_net_prop('use_dhcphostname',
+                          self.chkbox_use_dhcp_hostname.get_active())
         self.set_net_prop("dhcphostname",noneToString(self.txt_dhcp_hostname.get_text()))
 
         
@@ -405,10 +417,16 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.chkbox_global_settings.set_active(bool(wireless.GetWirelessProperty(networkID,
                                                              'use_settings_globally')))
 
+        self.chkbox_use_dhcp_hostname.set_active(
+            bool(wireless.GetWirelessProperty(networkID, 'use_dhcphostname')))
+
+
         dhcphname = wireless.GetWirelessProperty(networkID,"dhcphostname")
         if dhcphname is None:
             dhcphname = os.uname()[1]
         self.txt_dhcp_hostname.set_text(dhcphname)
+
+        self.toggle_dhcp_hostname_checkbox()
 
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")

@@ -471,10 +471,7 @@ class AdHocDialog(Dialog2):
 
         l = [self.essid_edit,self.ip_edit,self.channel_edit,blank,
                 self.use_ics_chkb,self.use_encrypt_chkb,self.key_edit]
-        #for line in text:
-        #    l.append( urwid.Text( line,align=align))
         body = urwid.ListBox(l)
-        #body = urwid.AttrWrap(body, 'body')
 
         header = ('header',language['create_adhoc_network'])
         Dialog2.__init__(self, header, 15, 50, body)
@@ -533,7 +530,7 @@ class appGUI():
         self.focusloc = [1,0]
 
         # These are empty to make sure that things go my way.
-        wiredL,wlessL = [],[]# = gen_network_list()
+        wiredL,wlessL = [],[]
 
         self.frame = None
         self.diag = None
@@ -559,7 +556,7 @@ class appGUI():
         self.primaryCols = OptCols(keys,self.handle_keys)
         self.time_label = \
                   urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
-        self.status_label = urwid.AttrWrap(urwid.Text('blah'),'important')
+        self.status_label = urwid.AttrWrap(urwid.Text(''),'important')
         self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
         self.footerList = urwid.Pile([self.primaryCols,self.footer2])
 
@@ -1086,8 +1083,8 @@ if __name__ == '__main__':
     parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
             ,dest='screen',help="use urwid's raw screen controller (default)")
     parser.add_option("-c", "--curses-screen",action="store_const",const='curses',dest='screen',help="use urwid's curses screen controller")
-    parser.add_option("-d", "--debug",action="store_true"
-            ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
+    #parser.add_option("-d", "--debug",action="store_true"
+    #        ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
     (options,args) = parser.parse_args()
     main()
     # Make sure that the terminal does not try to overwrite the last line of

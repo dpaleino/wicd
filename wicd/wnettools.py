@@ -165,8 +165,11 @@ def GetWpaSupplicantDrivers():
         print "Warning: Couldn't get list of valid wpa_supplicant drivers"
         return [""]
     patt = re.compile("(\S+)\s+=.*")
-    return patt.findall(output) or [""]
-
+    drivers = patt.findall(output) or [""]
+    # We cannot use the "wired" driver for wireless interfaces.
+    if 'wired' in rval:
+        drivers.remove('wired')
+    return drivers
 def IsValidWpaSuppDriver(driver):
     """ Returns True if given string is a valid wpa_supplicant driver. """
     output = misc.Run(["wpa_supplicant", "-D%s" % driver, "-iolan19",

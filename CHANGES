@@ -1,4 +1,74 @@
 ------------------------------------------------------------
+revno: 481
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Mon 2009-11-30 12:14:45 -0500
+message:
+  Some wicd-curses cleanup.
+------------------------------------------------------------
+revno: 480 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Thu 2009-11-26 21:43:15 -0600
+message:
+  merged optional-dhcp-hostnames to make optional hostnames work in the daemon
+------------------------------------------------------------
+revno: 479
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Thu 2009-11-26 21:42:39 -0600
+message:
+  add checkbox to GTK UI to make using the DHCP Hostname optional
+------------------------------------------------------------
+revno: 478 [merge]
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Thu 2009-11-26 00:05:03 -0500
+message:
+  Merge in Adam's dhclient-hostname stuff, and fix up the dhcphostname KeyError.
+------------------------------------------------------------
+revno: 477 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Wed 2009-11-25 21:27:29 -0600
+message:
+  merged Erik de Castro Lopo's branch to allow multiple configuration files
+------------------------------------------------------------
+revno: 476
+committer: Dan O'Reilly <oreilldf@gmail.com>
+branch nick: trunk
+timestamp: Tue 2009-11-24 00:27:41 -0500
+message:
+  Make pinging wireless access points when using static gateways optional.
+------------------------------------------------------------
+revno: 475
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Mon 2009-11-23 12:22:43 -0600
+message:
+  make sure that disconnect scripts are run when the connection is dropped
+------------------------------------------------------------
+revno: 474
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Mon 2009-11-23 11:43:50 -0600
+message:
+  make setting the essid work even if the essid is a reserved word
+------------------------------------------------------------
+revno: 473
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Mon 2009-11-23 11:01:32 -0600
+message:
+  fixed incorrect translation when using a wired network
+------------------------------------------------------------
+revno: 472
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Sat 2009-11-21 22:08:33 -0600
+message:
+  updated setup.py, NEWS, and CHANGES
+------------------------------------------------------------
 revno: 471
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6

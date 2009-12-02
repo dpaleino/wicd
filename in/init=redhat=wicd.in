@@ -8,36 +8,52 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-# This script was borrowed from the Wicd wiki page on building for Fedora
-# http://wicd.net/wiki/doku.php?id=fedora
 
 WICD_BIN=%SBIN%wicd
 
+pidfile=%PIDFILE%
+servicename=wicd
+processname=wicd
+start()
+{
+        echo -n "Starting wicd service: "
+        daemon $WICD_BIN 2> /dev/null
+        RETVAL=$?
+        echo
+        [ "$RETVAL" = "0" ] && touch /var/lock/subsys/$servicename
+}
+stop()
+{
+        echo -n "Stopping wicd service: "
+        killproc -p $pidfile wicd
+        RETVAL=$?
+        echo
+        if [ $RETVAL -eq 0 ]; then
+                rm -f /var/lock/subsys/$servicename
+                rm -f $pidfile
+        fi
+}
+
+
 case "$1" in
         start)
-                echo -n "Starting wicd services: "
-                daemon $WICD_BIN 2> /dev/null
-                touch /var/lock/subsys/wicd
+                start
         ;;
         stop)
-                echo -n "Shutting down wicd services: "
-                killall wicd 2> /dev/null
-                rm -f /var/lock/subsys/wicd
+                stop
         ;;
         status)
-                if pidofproc wicd > /dev/null ; then
-                        echo "wicd is running."
-                else
-                        status wicd
-                fi
+                status -p $pidfile $processname
+                RETVAL=$?
         ;;
         restart | reload)
-                $0 stop
-                $0 start
+                stop
+                start
         ;;
         *)
                 echo "Usage: wicd {start|stop|status|reload|restart}"
                 exit 1
         ;;
 esac
+exit $RETVAL
 

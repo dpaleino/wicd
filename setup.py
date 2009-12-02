@@ -238,6 +238,7 @@ class configure(Command):
         elif self.distro in ['redhat','centos','fedora']:
             self.init = '/etc/rc.d/init.d/'
             self.initfile = 'init/redhat/wicd'
+            self.pidfile = '/var/run/wicd.pid'
         elif self.distro in ['slackware','slamd64','bluewhite64']:
             self.init = '/etc/rc.d/'
             self.initfile = 'init/slackware/rc.wicd'

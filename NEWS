@@ -2,7 +2,7 @@ Wicd 1.6.0 Branch
 1.7.0a2:
 	Major Changes:
 	- Connection information is available by right clicking the tray icon
-	- Can set the hostname per network for all DHCP clients except dhclient
+	- Can set the hostname per network for all DHCP clients
 	- urwid 0.9.9 is now supported
 	- Added wicd-cli, a command line interface for use in scripts
 	- Global scripts are now passed parameters specifying the network

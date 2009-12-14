@@ -167,7 +167,7 @@ def GetWpaSupplicantDrivers():
     patt = re.compile("(\S+)\s+=.*")
     drivers = patt.findall(output) or [""]
     # We cannot use the "wired" driver for wireless interfaces.
-    if 'wired' in rval:
+    if 'wired' in drivers:
         drivers.remove('wired')
     return drivers
 def IsValidWpaSuppDriver(driver):

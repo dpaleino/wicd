@@ -1,0 +1,3 @@
+# wicd will replace $_HOSTNAME in the following line with
+# the appropriate hostname for this system
+send host-name "$_HOSTNAME";

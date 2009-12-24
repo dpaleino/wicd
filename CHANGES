@@ -1,4 +1,47 @@
 ------------------------------------------------------------
+revno: 487
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-23 16:48:39 -1000
+message:
+  add support for copying dhclient.conf.template from a default file if it isn't found
+------------------------------------------------------------
+revno: 486
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Tue 2009-12-22 18:48:43 -1000
+message:
+  added dhclient.conf.template and made setup.py install it
+------------------------------------------------------------
+revno: 485
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Mon 2009-12-14 16:21:02 -0500
+message:
+  Fix crash on accessing preferences.
+------------------------------------------------------------
+revno: 484
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-12-01 23:35:45 -0500
+message:
+  Remove the 'wired' wpa_supplicant driver from the list of drivers returned from
+  GetWpaSupplicantDrivers().
+------------------------------------------------------------
+revno: 483
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-12-01 23:24:48 -0500
+message:
+  Improved compatibility with the init system in Fedora/RHEL/CentOS.
+------------------------------------------------------------
+revno: 482
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Tue 2009-12-01 20:59:27 -0600
+message:
+  updated version number, CHANGES, and NEWS for release
+------------------------------------------------------------
 revno: 481
 committer: Andrew Psaltis <ampsaltis@gmail.com>
 branch nick: 1.6

@@ -1,5 +1,5 @@
 Wicd 1.6.0 Branch
-1.7.0a2:
+1.7.0a3:
 	Major Changes:
 	- Connection information is available by right clicking the tray icon
 	- Can set the hostname per network for all DHCP clients

@@ -1,0 +1,22 @@
+# If you're reading this, you're probably reading either:
+#  /etc/wicd/dhclient.conf.template.default
+# or
+#  /etc/wicd/dhclient.conf.template
+# or
+#  a generated dhclient configuration in /var/run
+# (these files could be in different locations, as determined by your
+# packager or system administrator, but those are the default pathes)
+#
+# Here's what you need to know:
+#  The .default file is copied by wicd to dhclient.conf.template if
+#  dhclient.conf.template does not exist. If dhclient.conf.template
+#  does exist, the .default file is not used. This is to allow
+#  upgrades of the package without destroying user changes.
+#
+#  In other words, if you want to change the generated dhclient
+#  configuration, you need to change dhclient.conf.template,
+#  NOT dhclient.conf.template.default
+
+# wicd will replace $_HOSTNAME in the following line with
+# the appropriate hostname for this system
+send host-name "$_HOSTNAME";

@@ -34,6 +34,7 @@ class WirelessDaemon() -- DBus interface to managed the wireless network.
 #
 
 import os
+import shutil
 import sys
 import time
 import getopt
@@ -66,6 +67,7 @@ misc.RenameProcess("wicd")
 
 wireless_conf = wpath.etc + "wireless-settings.conf"
 wired_conf = wpath.etc + "wired-settings.conf"
+dhclient_conf = wpath.etc + "dhclient.conf.template"
 
 class WicdDaemon(dbus.service.Object):
     """ The main wicd daemon class.
@@ -936,6 +938,9 @@ class WicdDaemon(dbus.service.Object):
             open(wired_conf, "w").close()
             b_wired.CreateWiredNetworkProfile("wired-default", default=True)
 
+        if not os.path.isfile(dhclient_conf):
+            print "dhclient.conf.template not found, copying..."
+            shutil.copy(dhclient_conf + ".default", dhclient_conf)            
         # Hide the files, so the keys aren't exposed.
         print "chmoding configuration files 0600..."
         os.chmod(app_conf.get_config(), 0600)

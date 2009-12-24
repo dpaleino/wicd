@@ -473,7 +473,7 @@ try:
     data = [
     (wpath.dbus, ['other/wicd.conf']),
     (wpath.log, []), 
-    (wpath.etc, ['other/dhclient.conf.template']),
+    (wpath.etc, ['other/dhclient.conf.template.default']),
     (wpath.encryption, [('encryption/templates/' + b) for b in 
                         os.listdir('encryption/templates') if not b.startswith('.')]),
     (wpath.networks, []),

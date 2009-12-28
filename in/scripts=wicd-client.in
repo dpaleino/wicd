@@ -41,5 +41,5 @@ EOF
 
     fi
 else
-    exec python -O %LIB%wicd-client.py $@
+    exec %PYTHON% -O %LIB%wicd-client.py $@
 fi

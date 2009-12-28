@@ -56,6 +56,7 @@ else:
 from wicd import wpath
 from wicd import networking
 from wicd import misc
+from wicd import wnettools
 from wicd.misc import noneToBlankString
 from wicd.logfile import ManagedStdio
 from wicd.configmanager import ConfigManager
@@ -1306,6 +1307,11 @@ class WirelessDaemon(dbus.service.Object):
         """ Reloads the active config file. """
         self.config.reload()
 
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetWirelessInterfaces(self):
+        ''' Returns a list of wireless interfaces on the system. '''
+        return wnettools.GetWirelessInterfaces()
+
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendStartScanSignal(self):
         """ Emits a signal announcing a scan has started. """
@@ -1596,6 +1602,10 @@ class WiredDaemon(dbus.service.Object):
         """ Reloads the active config file. """
         self.config.reload()
 
+    @dbus.service.method('org.wicd.daemon.wired')
+    def GetWiredInterfaces(self):
+        ''' Returns a list of wireless interfaces on the system. '''
+        return wnettools.GetWiredInterfaces()
 
 def usage():
     print """

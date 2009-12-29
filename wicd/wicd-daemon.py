@@ -1694,6 +1694,16 @@ def main(argv):
     argv -- The arguments passed to the script.
 
     """
+    # back up resolv.conf before we do anything else
+    try:
+        backup_location = wpath.varlib + 'resolv.conf.orig'
+        # don't back up if .orig exists, probably there cause
+        # wicd exploded
+        if not os.path.exists(backup_location):
+            shutil.copy2('/etc/resolv.conf', backup_location)
+    except IOError:
+        print 'error backing up resolv.conf'
+
     do_daemonize = True
     redirect_stderr = True
     redirect_stdout = True
@@ -1775,6 +1785,12 @@ def main(argv):
 
 def on_exit(child_pid):
     """ Called when a SIGTERM is caught, kills monitor.py before exiting. """
+    # restore resolv.conf on quit
+    try:
+        shutil.move(wpath.varlib + 'resolv.conf.orig', '/etc/resolv.conf')
+    except IOError:
+        print 'error restoring resolv.conf'
+
     if child_pid:
         print 'Daemon going down, killing wicd-monitor...'
         try:

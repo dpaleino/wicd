@@ -1162,6 +1162,7 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def ConnectWireless(self, id):
         """ Connects the the wireless network specified by i"""
+        self.SaveWirelessNetworkProfile(id)
         # Will returned instantly, that way we don't hold up dbus.
         # CheckIfWirelessConnecting can be used to test if the connection
         # is done.

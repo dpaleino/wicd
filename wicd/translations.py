@@ -55,7 +55,7 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-# Generated automatically on Mon, 23 Nov 2009 23:06:31 CST
+# Generated automatically on Wed, 30 Dec 2009 15:23:05 CST
 _ = get_gettext()
 language = {}
 language['resetting_ip_address'] = _('''Resetting IP address...''')
@@ -222,3 +222,23 @@ language['resume_script'] = _('''Resume script''')
 language['suspend_script'] = _('''Suspend script''')
 language['invalid_ip_address'] = _('''Invalid IP address entered.''')
 language['verify_ap_dialog'] = _('''Ping static gateways after connecting to verify association''')
+language['conn_info_wireless'] = _('''$A
+$B
+$C
+$D
+$E KB/s
+$F KB/s''')
+language['conn_info_wired'] = _('''$A
+$B KB/s
+$C KB/s''')
+language['conn_info_wireless_labels'] = _('''Wireless
+SSID:
+Speed:
+IP:
+Strength:
+RX:
+TX:''')
+language['conn_info_wired_labels'] = _('''Wired
+IP:
+RX:
+TX:''')

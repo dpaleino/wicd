@@ -3,7 +3,7 @@
 # /etc/rc.d/rc.wicd
 # Start/stop/restart the Wicd daemon
 
-# This is defined in /usr/lib/python2.5/site-packages/wicd/wpath.py
+# This is defined in /usr/lib/python2.6/site-packages/wicd/wpath.py
 PIDFILE="%PIDFILE%"
 DAEMON="%SBIN%wicd"
 
@@ -21,7 +21,7 @@ wicd_start() {
   fi
 }
 
-wicd_stop() {
+wicd_force_stop() {
   echo "Stopping wicd daemon..."
   if [ -e $PIDFILE ]; then
     kill $(cat $PIDFILE) 2>/dev/null
@@ -30,6 +30,12 @@ wicd_stop() {
     pkill -f python.*wicd-daemon.py 2>/dev/null
   fi
 }
+
+wicd_stop() {
+  echo "Stopping wicd daemon and closing connections..."
+  $DAEMON -k
+}
+
 
 # See how we were called and take appropriate action	
 
@@ -40,8 +46,11 @@ case $1 in
   stop)
     wicd_stop
    ;;
-  restart)
+  force_stop)
     wicd_stop
+   ;;
+  restart)
+    wicd_force_stop
     wicd_start
    ;;
   *)

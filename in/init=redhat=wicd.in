@@ -22,13 +22,28 @@ start()
         echo
         [ "$RETVAL" = "0" ] && touch /var/lock/subsys/$servicename
 }
-stop()
+stop() 
+{
+	echo -n "Stopping wicd service and closing connections: "
+	$WICD_BIN -k
+	RETVAL=$?
+        if [ $RETVAL -eq 0 ]; then
+		echo_success
+                rm -f /var/lock/subsys/$servicename
+                rm -f $pidfile
+	else
+		echo_failure
+	fi
+	echo
+}
+
+force_stop()
 {
         echo -n "Stopping wicd service: "
         killproc -p $pidfile wicd
         RETVAL=$?
         echo
-        if [ $RETVAL -eq 0 ]; then
+        if [ $retval -eq 0 ]; then
                 rm -f /var/lock/subsys/$servicename
                 rm -f $pidfile
         fi
@@ -42,16 +57,19 @@ case "$1" in
         stop)
                 stop
         ;;
+	force_stop)
+		force_stop
+	;;
         status)
                 status -p $pidfile $processname
                 RETVAL=$?
         ;;
         restart | reload)
-                stop
+                force_stop
                 start
         ;;
         *)
-                echo "Usage: wicd {start|stop|status|reload|restart}"
+                echo "Usage: wicd {start|stop|force_stop|status|reload|restart}"
                 exit 1
         ;;
 esac

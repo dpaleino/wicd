@@ -1,5 +1,5 @@
 .\" First revision was r203
-.TH WICD-CURSES "8" "April 2009" "wicd-curses-%CURSES_REVNO%"
+.TH WICD-CURSES "8" "December 2009" "wicd-curses-%CURSES_REVNO%"
 .SH NAME
 .B wicd-curses
 \- curses-based wicd(8) controller

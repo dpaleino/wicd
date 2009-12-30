@@ -1742,8 +1742,8 @@ def main(argv):
         try:
             f = open(wpath.pidfile)
         except:
-            print >> sys.stderr, "No wicd instance active, aborting."
-            sys.exit(0)
+            #print >> sys.stderr, "No wicd instance active, aborting."
+            sys.exit(1)
         from wicd import dbusmanager
         bus = dbusmanager.connect_to_dbus()
         dbus_ifaces = dbusmanager.get_dbus_ifaces()

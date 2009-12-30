@@ -735,6 +735,7 @@ class appGui(object):
         """
         def handler(*args):
             gobject.idle_add(self.all_network_list.set_sensitive, True)
+            gobject.idle_add(self.network_list.set_sensitive, True)
             
         widget.hide()
         networkentry.connect_button.show()

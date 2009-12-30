@@ -607,15 +607,15 @@ class TrayIcon(object):
                 text = ''
 
             # Choose info for the labels
-            self.list[0].set_text(text)
+            self.list[0].set_text('\n' + text)
             if state == misc.WIRED:
                 self.list[1].set_text(language['conn_info_wired_labels'])
             elif state == misc.WIRELESS:
                 self.list[1].set_text(language['conn_info_wireless_labels'])
             elif state == misc.CONNECTING:
-                self.list[1].set_text(language['conn_info_connecting'])
+                self.list[1].set_text(language['connecting'])
             elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
-                self.list[1].set_text(language['conn_info_not_connected']) 
+                self.list[1].set_text(language['disconnected']) 
                        
             return True 
                             

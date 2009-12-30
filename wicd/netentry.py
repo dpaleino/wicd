@@ -150,7 +150,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             if s_height < 768:
                 height = s_height * .75 
             else:
-                height = 500
+                height = 600
             self.resize(int(width), int(height))
         
     def set_defaults(self, widget=None, event=None):

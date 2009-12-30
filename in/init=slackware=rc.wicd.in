@@ -47,7 +47,7 @@ case $1 in
     wicd_stop
    ;;
   force_stop)
-    wicd_stop
+    wicd_force_stop
    ;;
   restart)
     wicd_force_stop

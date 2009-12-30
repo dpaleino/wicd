@@ -1,5 +1,10 @@
 Wicd 1.6.0 Branch
-1.7.0a3:
+1.7.0b1:
+	Changes for Packagers:
+	- Wicd now supports a -k option, which should be run by the init script
+	  when the daemon is stopped to release the DHCP lease but should not
+	  be run on a restart of the daemon
+
 	Major Changes:
 	- Connection information is available by right clicking the tray icon
 	- Can set the hostname per network for all DHCP clients
@@ -13,9 +18,6 @@ Wicd 1.6.0 Branch
 	- ESSIDs made of numbers now work properly
 	- All valid wpa_supplicant drivers are now displayed
 	- Wired network is now displayed while scanning wireless networks
-
-	Planned Changes:
-	- Hidden ESSIDs will be completely fixed
 
 1.6.2:
 	Minor Changes:

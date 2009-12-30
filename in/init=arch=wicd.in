@@ -5,7 +5,7 @@
 . /etc/rc.conf
 . /etc/rc.d/functions
 
-WICD_BIN=%SBIN%wicd
+WICD_BIN="%SBIN%wicd"
 
 if [ -f /var/run/wicd/wicd.pid ]; then 
 	PID="$(cat /var/run/wicd/wicd.pid)"
@@ -25,6 +25,17 @@ case "$1" in
 	fi
 	;;
   stop)
+    stat_busy "Stopping wicd Daemon"  
+      $WICD_BIN -k
+      if [ $? -gt 0 ]; then
+              stat_fail
+      else
+              rm_daemon wicd
+              stat_done
+      fi
+      ;;
+
+  force_stop)
     stat_busy "Stopping wicd Daemon"
     [ ! -z "$PID" ] && kill $PID &> /dev/null
 	if [ $? -gt 0 ]; then
@@ -35,12 +46,12 @@ case "$1" in
 	fi
 	;;
   restart)
-    $0 stop
+    $0 force_stop
     sleep 1
     $0 start
     ;;
   *)
-    echo "usage: $0 {start|stop|restart}"  
+    echo "usage: $0 {start|force_stop|stop|restart}"  
 esac
 
 exit 0

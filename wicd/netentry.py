@@ -64,6 +64,12 @@ class AdvancedSettingsDialog(gtk.Dialog):
                                                            gtk.RESPONSE_REJECT,
                                                            gtk.STOCK_OK,
                                                            gtk.RESPONSE_ACCEPT))
+
+        self.set_default_size()
+
+        self.connect('show', lambda *a, **k: self.set_default_size())
+        self.connect('hide', lambda *a, **k: self.write_size())
+
         # Set up the Advanced Settings Dialog.
         self.txt_ip = LabelEntry(language['ip'])
         self.txt_ip.entry.connect('focus-out-event', self.set_defaults)
@@ -77,7 +83,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         dhcp_hostname_hbox = gtk.HBox(False, 0)
         self.chkbox_use_dhcp_hostname = gtk.CheckButton()
         self.txt_dhcp_hostname = LabelEntry("DHCP Hostname")
-        dhcp_hostname_hbox.pack_start(self.chkbox_use_dhcp_hostname)
+        dhcp_hostname_hbox.pack_start(self.chkbox_use_dhcp_hostname, fill=False, expand=False)
         dhcp_hostname_hbox.pack_start(self.txt_dhcp_hostname)
         self.chkbox_static_ip = gtk.CheckButton(language['use_static_ip'])
         self.chkbox_static_dns = gtk.CheckButton(language['use_static_dns'])
@@ -98,21 +104,29 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.button_hbox = gtk.HBox(False, 2)
         self.button_hbox.pack_start(self.script_button, fill=False, expand=False)
         self.button_hbox.show()
+
+        self.swindow = gtk.ScrolledWindow()
+        self.swindow.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        self.viewport = gtk.Viewport()
+        self.viewport.set_shadow_type(gtk.SHADOW_NONE)
+        self.cvbox = gtk.VBox()
+        self.viewport.add(self.cvbox)
+        self.swindow.add(self.viewport)
+        self.vbox.pack_start(self.swindow)
         
-        assert(isinstance(self.vbox, gtk.VBox))
-        self.vbox.pack_start(self.chkbox_static_ip, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_ip, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_netmask, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_gateway, fill=False, expand=False)
-        self.vbox.pack_start(self.hbox_dns, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_domain, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_search_dom, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_dns_1, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_dns_2, fill=False, expand=False)
-        self.vbox.pack_start(self.txt_dns_3, fill=False, expand=False)
-        self.vbox.pack_start(dhcp_hostname_hbox, fill=False, expand=False)
-        self.vbox.pack_end(self.button_hbox, fill=False, expand=False, padding=5)
-        
+        assert(isinstance(self.cvbox, gtk.VBox))
+        self.cvbox.pack_start(self.chkbox_static_ip, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_ip, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_netmask, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_gateway, fill=False, expand=False)
+        self.cvbox.pack_start(self.hbox_dns, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_domain, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_search_dom, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_dns_1, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_dns_2, fill=False, expand=False)
+        self.cvbox.pack_start(self.txt_dns_3, fill=False, expand=False)
+        self.cvbox.pack_start(dhcp_hostname_hbox, fill=False, expand=False)
+        self.cvbox.pack_end(self.button_hbox, fill=False, expand=False, padding=5)
         
         # Connect the events to the actions
         self.chkbox_static_ip.connect("toggled", self.toggle_ip_checkbox)
@@ -124,6 +138,20 @@ class AdvancedSettingsDialog(gtk.Dialog):
         # Start with all disabled, then they will be enabled later.
         self.chkbox_static_ip.set_active(False)
         self.chkbox_static_dns.set_active(False)
+
+
+    def set_default_size(self):
+        width, height = daemon.ReadWindowSize('netprop')
+        if width > -1 and height > -1:
+            self.resize(int(width), int(height))
+        else:
+            width, height = self.get_size()
+            s_height = gtk.gdk.screen_height()
+            if s_height < 768:
+                height = s_height * .75 
+            else:
+                height = 500
+            self.resize(int(width), int(height))
         
     def set_defaults(self, widget=None, event=None):
         """ Put some default values into entries to help the user out. """
@@ -218,6 +246,10 @@ class AdvancedSettingsDialog(gtk.Dialog):
         super(AdvancedSettingsDialog, self).destroy()
         self.destroy()
         del self
+
+    def write_size(self):
+        w, h = self.get_size()
+        daemon.WriteWindowSize(w, h, 'netprop')
     
     def save_settings(self):
         """ Save settings common to wired and wireless settings dialogs. """
@@ -356,10 +388,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.combo_encryption.set_active(0)
         self.change_encrypt_method()
 
-        self.vbox.pack_start(self.chkbox_global_settings, False, False)
-        self.vbox.pack_start(self.chkbox_encryption, False, False)
-        self.vbox.pack_start(self.combo_encryption, False, False)
-        self.vbox.pack_start(self.vbox_encrypt_info, False, False)
+        self.cvbox.pack_start(self.chkbox_global_settings, False, False)
+        self.cvbox.pack_start(self.chkbox_encryption, False, False)
+        self.cvbox.pack_start(self.combo_encryption, False, False)
+        self.cvbox.pack_start(self.vbox_encrypt_info, False, False)
         
         # Connect signals.
         self.chkbox_encryption.connect("toggled", self.toggle_encryption)

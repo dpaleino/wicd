@@ -699,9 +699,11 @@ class WicdDaemon(dbus.service.Object):
         or the preferences dialog window.
 
         """
-        if win_name == "main":
-            height_str = "window_height"
-            width_str = "window_width"
+        if win_name:
+            height_str = '%s_height' % win_name
+            width_str = '%s_width' % win_name
+        # probably don't need the else, but the previous code
+        # had an else that caught everything
         else:
             height_str = "pref_height"
             width_str = "pref_width"
@@ -718,16 +720,15 @@ class WicdDaemon(dbus.service.Object):
         and if that fails, returns a default of 605 x 400.
 
         """
-        if win_name == "main":
-            default_width = -1
-            default_height = -1
-            width_str = "window_width"
-            height_str = "window_height"
+        default_width, default_height = (-1, -1)
+        if win_name:
+            height_str = '%s_height' % win_name
+            width_str = '%s_width' % win_name
+        # probably don't need the else, but the previous code
+        # had an else that caught everything
         else:
-            default_width = -1
-            default_height = -1
-            width_str = "pref_width"
             height_str = "pref_height"
+            width_str = "pref_width"
 
         width = self.config.get("Settings", width_str, default=default_width)
         height = self.config.get("Settings", height_str, default=default_height)

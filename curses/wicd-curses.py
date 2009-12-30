@@ -94,7 +94,6 @@ def wrap_exceptions(func):
                 print >> sys.stderr, "\n"+language['terminated']
                 #raise
             except DBusException:
-                #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
                 print >> sys.stderr,"\n"+language['dbus_fail']
@@ -111,7 +110,6 @@ def wrap_exceptions(func):
                 # backtrace
                 sys.stdout.flush()
                 # Raise the exception
-                #sleep(2)
                 raise
 
     wrapper.__name__ = func.__name__
@@ -164,7 +162,7 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
 
 # Generate the list of networks.
 # Mostly borrowed/stolen from wpa_cli, since I had no clue what all of those
-# DBUS interfaces do.  ^_^
+# DBUS interfaces do. :P
 # Whatever calls this must be exception-wrapped if it is run if the UI is up
 def gen_network_list():
     wiredL = wired.GetWiredProfileList()
@@ -498,7 +496,6 @@ class AdHocDialog(Dialog2):
                  self.use_ics_chkb.get_state(),
                  self.use_encrypt_chkb.get_state(),
                  self.key_edit.get_edit_text())
-
         return exitcode, data
 
 ########################################
@@ -786,8 +783,6 @@ class appGUI():
         self.update_ui()
         return True
 
-    # Yeah, I'm copying code.  Anything wrong with that?
-    #@wrap_exceptions
     def dbus_scan_finished(self):
         # I'm pretty sure that I'll need this later.
         #if not self.connecting:
@@ -795,8 +790,6 @@ class appGUI():
         self.unlock_screen()
         self.scanning = False
 
-    # Same, same, same, same, same, same
-    #@wrap_exceptions
     def dbus_scan_started(self):
         self.scanning = True
         if self.diag_type == 'conf':
@@ -949,10 +942,6 @@ class appGUI():
     def connect(self, nettype, networkid, networkentry=None):
         """ Initiates the connection process in the daemon. """
         if nettype == "wireless":
-            #if not self.check_encryption_valid(networkid,
-            #                                   networkentry.advanced_dialog):
-            #    self.edit_advanced(None, None, nettype, networkid, networkentry)
-            #    return False
             wireless.ConnectWireless(networkid)
         elif nettype == "wired":
             wired.ConnectWired()
@@ -964,18 +953,11 @@ class appGUI():
 
 def main():
     global ui, dlogger
-    # We are _not_ python.
+    # We are not python.
     misc.RenameProcess('wicd-curses')
 
-    # Import the screen based on whatever the user picked.
-    # The raw_display will have some features that may be useful to users
-    # later
-    if options.screen == 'raw':
-        import urwid.raw_display
-        ui = urwid.raw_display.Screen()
-    elif options.screen == 'curses':
-        import urwid.curses_display
-        ui = urwid.curses_display.Screen()
+    import urwid.raw_display
+    ui = urwid.raw_display.Screen()
 
     #if options.debug:
     #    dlogger = logging.getLogger("Debug")
@@ -1020,7 +1002,6 @@ def run():
     ui.set_mouse_tracking()
     app = appGUI()
 
-
     # Connect signals and whatnot to UI screen control functions
     bus.add_signal_receiver(app.dbus_scan_finished, 'SendEndScanSignal',
                             'org.wicd.daemon.wireless')
@@ -1029,8 +1010,6 @@ def run():
     # I've left this commented out many times.
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
-    # Update what the interface looks like as an idle function
-    #gobject.idle_add(app.update_ui)
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(2000,app.update_status)
     # This will make sure that it is updated on the second.
@@ -1045,7 +1024,7 @@ def run():
 
 # Mostly borrowed from gui.py
 def setup_dbus(force=True):
-    global bus, daemon, wireless, wired, DBUS_AVAIL
+    global bus, daemon, wireless, wired
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
@@ -1059,8 +1038,6 @@ def setup_dbus(force=True):
     daemon = dbus_ifaces['daemon']
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
-    DBUS_AVAIL = True
-    
 
     netentry_curses.dbus_init(dbus_ifaces)
     return True
@@ -1079,14 +1056,7 @@ if __name__ == '__main__':
             sys.exit(1)
         else:
             raise
-    parser.set_defaults(screen='raw',debug=False)
-    parser.add_option("-r", "--raw-screen",action="store_const",const='raw'
-            ,dest='screen',help="use urwid's raw screen controller (default)")
-    parser.add_option("-c", "--curses-screen",action="store_const",const='curses',dest='screen',help="use urwid's curses screen controller")
     #parser.add_option("-d", "--debug",action="store_true"
     #        ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
     (options,args) = parser.parse_args()
     main()
-    # Make sure that the terminal does not try to overwrite the last line of
-    # the program, so that everything looks pretty.
-    #print ""

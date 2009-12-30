@@ -10,10 +10,6 @@ to anything or not, all of which is updated in real time.  Other features
 include the ability to connect to networks, global preferences controls, and
 per-network settings for wireless networks.
 
-All features that I plan on implementing (that are not mentioned above) are
-listed the TODO file in this same directory.  If you want any other features,
-ask me.  I try to be on the #wicd Freenode IRC channel most of the time.
-
 Controls (most of these should be viewable in wicd-curses itself):
 
 F5          : refresh wireless networks

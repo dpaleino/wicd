@@ -9,17 +9,6 @@ wicd-curses is a curses-based network controller that uses the Wired/Wireless In
 It is designed to imitate the GTK-based wicd-client(1) as much as possible, and uses the Urwid (http://excess.org/urwid) console widget library to vastly simplify development.
 
 This man page only documents the current status of wicd-curses.  This may/may not be the most up-to-date document.
-.SH "ARGUMENTS"
-.TP
-.BR "\-r" , " \-\-raw\-screen"
-Use Urwid's raw console display.  This is the default, and has several
-advantages over the faster curses display, inculding fully functional unicode 
-and internationalization support.
-.TP
-.BR "\-c" , " \-\-curses\-screen"
-Use Urwid's curses display.  This may be faster than the default raw
-display, but it lacks proper unicode support.  This is fine to use if your
-language of choice only uses Latin characters.
 .SH CONTROLS
 All of these are case sensitive.
 .TP

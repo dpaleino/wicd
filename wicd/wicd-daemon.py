@@ -1709,11 +1709,12 @@ def main(argv):
     redirect_stderr = True
     redirect_stdout = True
     auto_connect = True
+    kill = False
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'fenoah',
+        opts, args = getopt.getopt(sys.argv[1:], 'fenoahk',
                                    ['help', 'no-daemon', 'no-poll', 'no-stderr', 'no-stdout',
-                                    'no-autoconnect'])
+                                    'no-autoconnect', 'kill'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -1734,7 +1735,24 @@ def main(argv):
             auto_connect = False
         if o in ('-n', '--no-poll'):
             no_poll = True
+        if o in ('-k', '--kill'):
+	        kill = True	
 
+    if kill:
+        try:
+            f = open(wpath.pidfile)
+        except:
+            print >> sys.stderr, "No wicd instance active, aborting."
+            sys.exit(0)
+        from wicd import dbusmanager
+        bus = dbusmanager.connect_to_dbus()
+        dbus_ifaces = dbusmanager.get_dbus_ifaces()
+        dbus_ifaces['daemon'].Disconnect()
+        pid = int(f.readline())
+        f.close()
+        os.kill(pid,signal.SIGTERM)
+
+   
     if do_daemonize: daemonize()
 
     if redirect_stderr or redirect_stdout:

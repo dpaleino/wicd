@@ -518,13 +518,16 @@ try:
         data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
+            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-curses.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['curses/README.curses'])) 
+            data.append(( wpath.docdir, ['curses/TODO.curses'])) 
     if not wpath.no_install_cli:
         data.append((wpath.lib, ['cli/wicd-cli.py']))
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 
+            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-cli.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['cli/README.cli'])) 
     piddir = os.path.dirname(wpath.pidfile)
@@ -545,6 +548,12 @@ try:
         data.append((wpath.mandir + 'man5/', [ 'man/wicd-wired-settings.conf.5' ]))
         data.append((wpath.mandir + 'man5/', [ 'man/wicd-wireless-settings.conf.5' ]))
         data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
+        # Dutch translations of the man
+        data.append((wpath.mandir + 'man8/nl/', [ 'man/nl/wicd.8' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-manager-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wired-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wireless-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man1/nl/', [ 'man/nl/wicd-client.1' ]))
     if not wpath.no_install_acpi:
         data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))

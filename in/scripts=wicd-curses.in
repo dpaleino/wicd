@@ -6,4 +6,4 @@ if [ -e "%VARLIB%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; t
     ln -s "%VARLIB%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
 fi
 
-exec %PYTHON% -O %LIB%wicd-curses.py $@
+exec %PYTHON% -O %LIB%curses/wicd-curses.py $@

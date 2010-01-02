@@ -39,7 +39,7 @@ daemon = None
 wireless = None
 wired = None
 
-from translations import language
+from wicd.translations import language
 
 USER_SETTINGS_DIR = os.path.expanduser('~/.wicd/')
 

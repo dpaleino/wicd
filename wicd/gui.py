@@ -36,12 +36,12 @@ from dbus import DBusException
 from wicd import misc
 from wicd import wpath
 from wicd import dbusmanager
-from wicd import prefs
-from wicd import netentry
 from wicd.misc import noneToString
-from wicd.netentry import WiredNetworkEntry, WirelessNetworkEntry
-from wicd.prefs import PreferencesDialog
-from wicd.guiutil import error, LabelEntry
+import prefs
+from prefs import PreferencesDialog
+import netentry
+from netentry import WiredNetworkEntry, WirelessNetworkEntry
+from guiutil import error, LabelEntry
 from wicd.translations import language
 
 if __name__ == '__main__':
@@ -148,7 +148,7 @@ class appGui(object):
 
         self.tray = tray
 
-        gladefile = os.path.join(wpath.share, "wicd.glade")
+        gladefile = os.path.join(wpath.gtk, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
         self.window = self.wTree.get_widget("window1")
         self.window.set_icon_name("wicd-client")

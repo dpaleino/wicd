@@ -19,7 +19,7 @@
 import gtk
 import os.path
 
-import wpath
+import wicd.wpath as wpath
 
 HAS_NOTIFY = True
 try:

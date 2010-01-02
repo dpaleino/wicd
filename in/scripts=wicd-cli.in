@@ -1,2 +1,2 @@
 #!/bin/bash
-exec %PYTHON% -O %LIB%wicd-cli.py $@
+exec %PYTHON% -O %LIB%cli/wicd-cli.py $@

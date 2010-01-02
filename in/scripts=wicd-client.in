@@ -41,5 +41,5 @@ EOF
 
     fi
 else
-    exec %PYTHON% -O %LIB%wicd-client.py $@
+    exec %BIN%wicd-gtk
 fi

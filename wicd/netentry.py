@@ -26,13 +26,13 @@ contained within them.
 import gtk
 import os
 
-import misc
-import wpath
-import dbusmanager
-from misc import noneToString, stringToNone, noneToBlankString, to_bool
+import wicd.misc as misc
+import wicd.wpath as wpath
+import wicd.dbusmanager as dbusmanager
+from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
 
-from translations import language
+from wicd.translations import language
 
 # These get set when a NetworkEntry is instantiated.
 daemon = None
@@ -303,7 +303,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
         profile = self.prof_name
-        cmdend = [os.path.join(wpath.lib, "configscript.py"), profile, "wired"]
+        cmdend = [os.path.join(wpath.gtk, "configscript.py"), profile, "wired"]
         if os.getuid() != 0:
             cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'],
                                         prog_num=daemon.GetSudoApp())
@@ -408,7 +408,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         
     def edit_scripts(self, widget=None, event=None):
         """ Launch the script editting dialog. """
-        cmdend = [os.path.join(wpath.lib, "configscript.py"), 
+        cmdend = [os.path.join(wpath.gtk, "configscript.py"),
                                 str(self.networkID), "wireless"]
         if os.getuid() != 0:
             cmdbase = misc.get_sudo_cmd(language['scripts_need_pass'],

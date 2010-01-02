@@ -1,9 +1,9 @@
 [Desktop Entry]
 Categories=Application;Network;
-Exec=wicd-client --no-tray
+Exec=wicd-gtk --no-tray
 GenericName=Network Manager
-Icon=wicd-client
-Icon[en_US]=wicd-client
+Icon=wicd-gtk
+Icon[en_US]=wicd-gtk
 Name=Wicd Network Manager
 Name[en_US]=Wicd Network Manager
 Comment=Start the Wicd client without system tray icon

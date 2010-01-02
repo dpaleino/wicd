@@ -53,7 +53,7 @@ The daemon's job is split between two processes: wicd-daemon.py and monitor.py.
 All the connection status monitoring, as well as the auto-reconnection logic,
 takes place in monitor.py.  Everthing else is done by wicd-daemon.py.
 
-The user interface (stored in wicd-client), which is made up of a tray 
+The user interface (stored in wicd-gtk), which is made up of a tray
 icon, a main GUI window, and its child dialogs, gets configuration and network
 info from the daemon either by querying it using the methods in the daemon's 
 dbus interface or by receiving signals emitted from the daemon over D-Bus.  

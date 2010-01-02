@@ -60,9 +60,9 @@ except ImportError:
 # Wicd specific imports
 from wicd import wpath
 from wicd import misc
-from wicd import gui
 from wicd import dbusmanager
-from wicd.guiutil import error, can_use_notify
+import gui
+from guiutil import error, can_use_notify
 
 from wicd.translations import language
 

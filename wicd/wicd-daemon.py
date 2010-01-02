@@ -1790,7 +1790,7 @@ def main(argv):
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     if not no_poll:
         child_pid = Popen([misc.find_path("python"), "-O", 
-                          os.path.join(wpath.lib, "monitor.py")],
+                          os.path.join(wpath.lib, "daemon", "monitor.py")],
                           shell=False, close_fds=True).pid
     atexit.register(on_exit, child_pid)
 

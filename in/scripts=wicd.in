@@ -1,3 +1,6 @@
 #!/bin/bash
 
-exec %PYTHON% -O %LIB%wicd-daemon.py $@
+PYTHONPATH=%LIB%
+export PYTHONPATH
+
+exec %PYTHON% -O %SHARE%daemon/wicd-daemon.py $@

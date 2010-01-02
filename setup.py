@@ -61,6 +61,10 @@ class configure(Command):
         ('bin=', None, 'set the bin directory'),
         ('sbin=', None, 'set the sbin directory'),
         ('backends=', None, 'set the backend storage directory'),
+        ('daemon=', None, 'set the daemon directory'),
+        ('curses=', None, 'set the curses UI directory'),
+        ('gtk=', None, 'set the GTK UI directory'),
+        ('cli=', None, 'set the CLI directory'),
         ('networks=', None, 'set the encryption configuration directory'),
         ('log=', None, 'set the log directory'),
         ('resume=', None, 'set the directory the resume from suspend script is stored in'),
@@ -113,7 +117,11 @@ class configure(Command):
         self.encryption = self.etc + 'encryption/templates/'
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
-        self.backends = self.lib + 'backends'
+        self.daemon = self.share + 'daemon'
+        self.backends = self.share + 'backends'
+        self.curses = self.share + 'curses'
+        self.gtk = self.share + 'gtk'
+        self.cli = self.share + 'cli'
         self.varlib = '/var/lib/wicd/'
         self.networks = self.varlib + 'configurations/'
         self.log = '/var/log/wicd/'
@@ -464,7 +472,7 @@ configure yet or you are running it for the first time.'''
 
 data = []
 py_modules=['wicd.networking','wicd.misc','wicd.wnettools',
-           'wicd.wpath','wicd.prefs','wicd.netentry','wicd.dbusmanager', 
+           'wicd.wpath','wicd.dbusmanager',
            'wicd.logfile','wicd.backend','wicd.configmanager',
            'wicd.translations']
 
@@ -478,7 +486,7 @@ try:
                         os.listdir('encryption/templates') if not b.startswith('.')]),
     (wpath.networks, []),
     (wpath.sbin,  ['scripts/wicd']),  
-    (wpath.lib, ['wicd/monitor.py', 'wicd/wicd-daemon.py', 'wicd/configscript.py',
+    (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
                  'wicd/suspend.py', 'wicd/autoconnect.py']), 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
     (wpath.scripts, []),
@@ -488,11 +496,12 @@ try:
     (wpath.postconnectscripts, []),
     ]
     if not wpath.no_install_gtk:
-        py_modules.extend(['wicd.gui', 'wicd.guiutil'])
         data.append((wpath.desktop, ['other/wicd.desktop']))
         data.append((wpath.bin, ['scripts/wicd-client']))
-        data.append((wpath.share, ['data/wicd.glade']))
-        data.append((wpath.lib, ['wicd/wicd-client.py']))
+        data.append((wpath.bin, ['scripts/wicd-gtk']))
+        data.append((wpath.gtk, ['gtk/wicd-client.py', 'gtk/netentry.py', 'gtk/prefs.py',
+                                 'gtk/gui.py', 'gtk/guiutil.py', 'data/wicd.glade',
+                                 'gtk/configscript.py']))
         data.append((wpath.autostart, ['other/wicd-tray.desktop']))
         if not wpath.no_install_man:
             data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
@@ -510,18 +519,18 @@ try:
         data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-client.png']))
         data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
     if not wpath.no_install_ncurses:
-        data.append((wpath.lib, ['curses/curses_misc.py']))
-        data.append((wpath.lib, ['curses/prefs_curses.py']))
-        data.append((wpath.lib, ['curses/wicd-curses.py']))
-        data.append((wpath.lib, ['curses/netentry_curses.py']))
-        data.append((wpath.lib, ['curses/configscript_curses.py']))
+        data.append((wpath.curses, ['curses/curses_misc.py']))
+        data.append((wpath.curses, ['curses/prefs_curses.py']))
+        data.append((wpath.curses, ['curses/wicd-curses.py']))
+        data.append((wpath.curses, ['curses/netentry_curses.py']))
+        data.append((wpath.curses, ['curses/configscript_curses.py']))
         data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['curses/README.curses'])) 
     if not wpath.no_install_cli:
-        data.append((wpath.lib, ['cli/wicd-cli.py']))
+        data.append((wpath.cli, ['cli/wicd-cli.py']))
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 

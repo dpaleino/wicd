@@ -499,9 +499,9 @@ try:
         data.append((wpath.desktop, ['other/wicd.desktop']))
         data.append((wpath.bin, ['scripts/wicd-client']))
         data.append((wpath.bin, ['scripts/wicd-gtk']))
-        data.append((wpath.gtk, ['wicd/wicd-client.py', 'wicd/netentry.py', 'wicd/prefs.py',
-                                 'wicd/gui.py', 'wicd/guiutil.py', 'data/wicd.glade',
-                                 'wicd/configscript.py']))
+        data.append((wpath.gtk, ['gtk/wicd-client.py', 'gtk/netentry.py', 'gtk/prefs.py',
+                                 'gtk/gui.py', 'gtk/guiutil.py', 'data/wicd.glade',
+                                 'gtk/configscript.py']))
         data.append((wpath.autostart, ['other/wicd-tray.desktop']))
         if not wpath.no_install_man:
             data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))

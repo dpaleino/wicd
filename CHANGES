@@ -1,4 +1,116 @@
 ------------------------------------------------------------
+revno: 503
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 11:29:59 -1000
+message:
+  fixed connection info dialog text alignment
+------------------------------------------------------------
+revno: 502
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 11:29:42 -1000
+message:
+  updated translations.py
+------------------------------------------------------------
+revno: 501
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 11:06:27 -1000
+message:
+  fix network list not being enabled after disconnect button clicked
+------------------------------------------------------------
+revno: 500
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 10:13:49 -1000
+message:
+  fix a typo in the Slackware init script
+------------------------------------------------------------
+revno: 499
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 10:06:39 -1000
+message:
+  update the Arch init script to use the -k switch
+------------------------------------------------------------
+revno: 498
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 08:29:22 -1000
+message:
+  change the default height of the network properties dialog so that scrollbars will never be needed
+------------------------------------------------------------
+revno: 497
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-30 08:28:50 -1000
+message:
+  update news with a note to packagers about the -k option
+------------------------------------------------------------
+revno: 496
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-12-29 21:22:23 -0500
+message:
+  Modified two initscripts to support wicd -k, made wicd -k have a non-zero exit code if it can't find a daemon to kill.
+------------------------------------------------------------
+revno: 495
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-12-29 21:01:59 -0500
+message:
+  Cleaned up the wicd-curses code, pruned the documentation of old stuff, and removed the -c/-r options from wicd-curses, since only -r works.
+------------------------------------------------------------
+revno: 494
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Tue 2009-12-29 20:50:31 -0500
+message:
+  Added a command-line argument to the wicd daemon that will disconnect active connections before terminating the daemon.
+------------------------------------------------------------
+revno: 493
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Tue 2009-12-29 14:36:03 -1000
+message:
+  added code to make the network properties dialog box resizable
+------------------------------------------------------------
+revno: 492
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Tue 2009-12-29 12:09:42 -1000
+message:
+  backup and restore user's resolv.conf on start/exit
+------------------------------------------------------------
+revno: 491
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Tue 2009-12-29 11:11:14 -1000
+message:
+  save the wireless network profile when connecting in order to save hidden essids
+------------------------------------------------------------
+revno: 490
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Mon 2009-12-28 10:21:18 -1000
+message:
+  expose methods for getting a list of interfaces over DBus
+------------------------------------------------------------
+revno: 489
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sun 2009-12-27 22:22:09 -0500
+message:
+  Use the system python instead of a local one (which may be referenced inside the scripts that call wicd).  Thanks to Russel O'Connor.
+------------------------------------------------------------
+revno: 488
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2009-12-23 16:51:19 -1000
+message:
+  updated version number, CHANGES, and NEWS
+------------------------------------------------------------
 revno: 487
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

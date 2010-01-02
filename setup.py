@@ -56,6 +56,7 @@ class configure(Command):
         ('share=', None, 'set the share directory'),
         ('etc=', None, 'set the etc directory'),
         ('scripts=', None, 'set the global scripts directory'),
+        ('pixmaps=', None, 'set the pixmaps directory'),
         ('images=', None, 'set the image directory'),
         ('encryption=', None, 'set the encryption template directory'),
         ('bin=', None, 'set the bin directory'),
@@ -113,7 +114,8 @@ class configure(Command):
         self.etc = '/etc/wicd/'
         self.scripts = self.etc + "scripts/"
         self.icons = '/usr/share/icons/hicolor/'
-        self.images = '/usr/share/pixmaps/wicd/'
+        self.pixmaps = '/usr/share/pixmaps/'
+        self.images = self.pixmaps + 'wicd/'
         self.encryption = self.etc + 'encryption/templates/'
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
@@ -522,6 +524,7 @@ try:
         data.append((wpath.icons + '22x22/apps/', ['icons/22px/wicd-client.png']))
         data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-client.png']))
         data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
+        data.append((wpath.pixmaps, ['other/wicd-gtk.xpm']))
     if not wpath.no_install_ncurses:
         data.append((wpath.curses, ['curses/curses_misc.py']))
         data.append((wpath.curses, ['curses/prefs_curses.py']))

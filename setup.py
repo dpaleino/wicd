@@ -332,6 +332,10 @@ class configure(Command):
                 original_name = os.path.join('in',item)
                 item_in = open(original_name, 'r')
                 final_name = item[:-3].replace('=','/')
+                parent_dir = os.path.dirname(final_name)
+                if parent_dir and not os.path.exists(parent_dir):
+                    print '(mkdir %s)'%parent_dir,
+                    os.makedirs(parent_dir)
                 print final_name
                 item_out = open(final_name, 'w')
                 for line in item_in.readlines():

@@ -361,7 +361,11 @@ class ComboBox(urwid.WidgetWrap):
 
     def set_focus(self,index):
         self.focus = index
-        self.cbox.set_w(SelText(self.list[index]+self.DOWN_ARROW))
+        # API changed between urwid 0.9.8.4 and 0.9.9
+        try:
+            self.cbox.set_w(SelText(self.list[index]+self.DOWN_ARROW))
+        except AttributeError:
+            self.cbox._w = SelText(self.list[index]+self.DOWN_ARROW)
         if self.overlay:
             self.overlay._listbox.set_focus(index)
 

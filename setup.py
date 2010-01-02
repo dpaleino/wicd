@@ -498,6 +498,7 @@ try:
     if not wpath.no_install_gtk:
         data.append((wpath.desktop, ['other/wicd.desktop']))
         data.append((wpath.bin, ['scripts/wicd-client']))
+        data.append((wpath.bin, ['scripts/wicd-gtk']))
         data.append((wpath.gtk, ['wicd/wicd-client.py', 'wicd/netentry.py', 'wicd/prefs.py',
                                  'wicd/gui.py', 'wicd/guiutil.py', 'data/wicd.glade',
                                  'wicd/configscript.py']))

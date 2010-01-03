@@ -1,5 +1,5 @@
 Wicd 1.6.0 Branch
-1.7.0b2:
+1.7.0b3:
 	Changes for Packagers:
 	- Wicd now supports a -k option, which should be run by the init script
 	  when the daemon is stopped to release the DHCP lease but should not

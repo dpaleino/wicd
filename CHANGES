@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+revno: 526
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 21:27:41 -1000
+message:
+  restore old resolv.conf file on -k instead of sigterm
+------------------------------------------------------------
+revno: 525
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:59:10 -1000
+message:
+  update CHANGES
+------------------------------------------------------------
 revno: 524
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

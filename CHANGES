@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+revno: 522
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:50:16 -1000
+message:
+  added wireless-settings.conf Dutch man page
+------------------------------------------------------------
+revno: 521
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:43:26 -1000
+message:
+  update CHANGES
+------------------------------------------------------------
 revno: 520
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

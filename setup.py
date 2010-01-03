@@ -255,6 +255,7 @@ class configure(Command):
             self.docdir = '/usr/doc/wicd-%s' % VERSION_NUM
             self.mandir = '/usr/man/'
             self.no_install_acpi = True
+            self.wicdgroup = "netdev"
         elif self.distro in ['debian']:
             self.wicdgroup = "netdev"
             self.loggroup = "adm"

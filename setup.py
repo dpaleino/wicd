@@ -546,8 +546,6 @@ try:
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 
-        if not wpath.no_install_man and not wpath.no_install_i18n_man:
-            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-cli.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['cli/README.cli'])) 
     piddir = os.path.dirname(wpath.pidfile)

@@ -9,7 +9,4 @@ if [ -e "/var/lib/wicd/WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES
     ln -s "/var/lib/wicd/WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
 fi
 
-PYTHONPATH=%LIB%
-export PYTHONPATH
-
 exec %PYTHON% -O %SHARE%gtk/wicd-client.py $@

@@ -155,7 +155,7 @@ def main (argv):
     
     script_info = get_script_info(network, network_type)
     
-    gladefile = wpath.share + "wicd.glade"
+    gladefile = wpath.gtk + "wicd.glade"
     wTree = gtk.glade.XML(gladefile)
     dialog = wTree.get_widget("configure_script_dialog")
     wTree.get_widget("pre_label").set_label(language['before_script'] + ":")

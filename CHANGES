@@ -1,4 +1,25 @@
 ------------------------------------------------------------
+revno: 529
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 09:05:58 -1000
+message:
+  updated Gentoo init script
+------------------------------------------------------------
+revno: 528 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 08:51:01 -1000
+message:
+  merged code-seperation
+------------------------------------------------------------
+revno: 527
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 22:33:13 -1000
+message:
+  updated CHANGES, NEWS, and setup.py for release
+------------------------------------------------------------
 revno: 526
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

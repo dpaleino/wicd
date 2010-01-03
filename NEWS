@@ -1,12 +1,13 @@
 Wicd 1.6.0 Branch
-1.7.0b3:
+1.7.0b4:
 	Changes for Packagers:
 	- Wicd now supports a -k option, which should be run by the init script
 	  when the daemon is stopped to release the DHCP lease but should not
 	  be run on a restart of the daemon.
 	- The ability has been added to split Wicd's components into multiple
-	  directories. Use --gtk, --cli, --curses, and --daemon to specify
-	  the locations of the respective components.
+	  directories. Use --gtk, --cli, --curses, and --daemon to
+	  setup.py configure to specify the locations of the respective
+	  components.
 	- The preferred way to run the GTK UI is now to use wicd-gtk, not
 	  wicd-client. wicd-gtk is a new addition to 1.7 that will never
 	  run wicd-curses. wicd-client will automatically decide to run

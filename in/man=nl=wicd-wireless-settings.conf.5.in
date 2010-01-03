@@ -1,0 +1,129 @@
+﻿.\" Written by Robby Workman <rworkman@slackware.com>
+.TH WICD-WIRELESS-SETTINGS.CONF 5 "wicd-%VERSION%"
+.SH NAAM
+wicd-wired-settings.conf \- stelt Wicd's draadloze netwerkinstellingen in
+
+.SH BESCHRIJVING
+
+Dit bestand bevat configuratie-informatie voor de draadloze netwerkinterfaces in Wicd.
+.br
+Dit bestand staat hier: %ETC%wireless-settings.conf
+
+
+.SH INSTELLINGEN
+
+.TP
+.BI "bssid = " <BSSID_van_netwerk>
+Deze waarde kan worden gevonden met iwconfig(8).
+.TP
+.BI "essid = " <ESSID_van_netwerk>
+Deze waarde kan worden gevonden met iwconfig(8).
+.TP
+.BI "hidden = " <True|False>
+Deze optie stelt in of de ESSID van het netwerk broadcast is of niet.
+.TP
+.BI "channel = " <numerieke_waarde>
+Goede kanalen zijn afhankelijk van het land.
+.br
+Deze waarde kan worden gevonden met iwconfig(8).
+.TP
+.BI "mode = " <Master|Ad-hoc>
+.br
+Deze waarde kan worden gevonden met iwconfig(8).
+.TP
+.BI "enctype = " <coderings_sjabloon>
+Dit kan de waarde van elk coderingssjabloon dat in %ENCRYPTION% staat.
+.TP
+.BI "encryption_method = "WEP|WPA|WPA2>
+Deze waarde kan worden gevonden met iwconfig(8).
+.TP
+.BI "key = " <platte_tekst_sleutel>
+Zorg er voor dat dit bestand alleen leesbaar is door root.
+.TP
+.BI "automatic = " <True|False>
+Deze optie stelt in of Wicd automatisch met dit netwerk moet verbinden.
+.TP
+.BI "ip = " <None|ip_adres>
+Gebruik deze optie als je een vast ip-adres voor je systeem hebt.
+.TP
+.BI "netmask = " <None|netwerk masker>
+Deze instelling is alleen van toepassing als er een vast ip-adres hierboven is ingesteld.
+.TP
+.BI "broadcast = " <None|broadcast_adres>
+Deze instelling is alleen van toepassing als er een vast ip-adres hierboven is ingesteld.
+.TP
+.BI "gateway = " <None|gateway_address>
+Deze instelling is alleen van toepassing als er een vast ip-adres hierboven is ingesteld.
+.TP
+.BI "use_static_dns = " <True|False>
+True = gebruik vaste DNS servers in plaats van accepteren wat de dhcp server aanbied..TP
+.BI "use_global_dns = " <True|False>
+True = gebruik de globale DNS servers die staan in wicd-manager-settings.conf(5).
+.br
+Deze optie is alleen van toepassing als "use_static_dns = True"
+.TP
+.BI "dns1 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+.TP
+.BI "dns2 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+.TP
+.BI "dns3 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+.TP
+.BI "use_settings_globally = " <0|1>
+Wicd houdt bij of er automatisch verbinding gemaakt moet worden gebaseert op bssid.
+Dit verzekert je ervan dat je niet per ongeluk met een ander netwerk verbind dat niet het jouwe is maar hetzelfde essid heeft – er zijn bijvoorbeeld een hoop commerciële routers in gebruik met "linksys" als de essid.
+.br
+0 = Gebruik geen globale instellingen
+.br
+1 = Gebruik globale instellingen
+.TP
+.BI "has_profile = " <True|False>
+Deze parameter wordt alleen intern door Wicd gebruikt en heeft geen effect voor de gebruiker zover de gebruiker kan zien.
+.TP
+.BI "beforescript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden voordat Wicd gaat verbinden.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "afterscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden nadat Wicd een verbinding heeft gelegd.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "predisconnectscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden voordat Wicd de verbinding verbreekt.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "postdisconnectscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden na dat Wicd de verbinding heeft verbroken.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+
+
+
+.SH OVERIG
+The "use_settings_globally" option determines how an individual network's
+configuration stanza starts.  If the option is "0" (do not use settings
+globally), then the stanza's top line will be the bssid of the access
+point (in this format):  
+.br
+[00:15:3E:87:D3:68]
+.br
+If the "option is set to "1" (use settings globally), then the first line
+of the stanza will be in this format: 
+.br
+[essid:UA Public Wireless Network]
+
+.SH "SEE ALSO"
+.BR wicd (8),
+.BR wicd-curses (8),
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wired-settings.conf (5).
+

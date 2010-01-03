@@ -1,4 +1,95 @@
 ------------------------------------------------------------
+revno: 516
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:22:00 -1000
+message:
+  added no_install_i18n_man to wpath.py.in
+------------------------------------------------------------
+revno: 515
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:14:43 -1000
+message:
+  add Dutch man pages
+------------------------------------------------------------
+revno: 514 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 19:55:04 -1000
+message:
+  merged iconfallout
+------------------------------------------------------------
+revno: 513 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 19:49:05 -1000
+message:
+  changed the path of monitor.py to the correct one so it will run again [again]
+------------------------------------------------------------
+revno: 512
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 19:46:33 -1000
+message:
+  changed the path of monitor.py to the correct one so it will run again
+------------------------------------------------------------
+revno: 511
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 18:43:42 -1000
+message:
+  change Slackware's wicdgroup to netdev
+------------------------------------------------------------
+revno: 510 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 18:35:06 -1000
+message:
+  add pixmaps to wpath
+------------------------------------------------------------
+revno: 509 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 09:22:51 -1000
+message:
+  add an xpm icon so that the .desktop file will have an icon
+------------------------------------------------------------
+revno: 508
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 08:22:06 -1000
+message:
+  fix potential urwid compatibility problem
+------------------------------------------------------------
+revno: 507
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 08:11:31 -1000
+message:
+  create directories if they do not exist when running configure
+------------------------------------------------------------
+revno: 506
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 07:57:14 -1000
+message:
+  use wicd-gtk to launch the GTK UI instead of wicd-client
+------------------------------------------------------------
+revno: 505 [merge]
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 07:52:03 -1000
+message:
+  merged David Paleino's split file installation branch
+------------------------------------------------------------
+revno: 504
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Fri 2010-01-01 21:44:48 -1000
+message:
+  updated setup.py and CHANGES for release
+------------------------------------------------------------
 revno: 503
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

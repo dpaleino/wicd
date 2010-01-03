@@ -1,9 +1,16 @@
 Wicd 1.6.0 Branch
-1.7.0b1:
+1.7.0b2:
 	Changes for Packagers:
 	- Wicd now supports a -k option, which should be run by the init script
 	  when the daemon is stopped to release the DHCP lease but should not
-	  be run on a restart of the daemon
+	  be run on a restart of the daemon.
+	- The ability has been added to split Wicd's components into multiple
+	  directories. Use --gtk, --cli, --curses, and --daemon to specify
+	  the locations of the respective components.
+	- The preferred way to run the GTK UI is now to use wicd-gtk, not
+	  wicd-client. wicd-gtk is a new addition to 1.7 that will never
+	  run wicd-curses. wicd-client will automatically decide to run
+	  wicd-curses if there is no X session available.
 
 	Major Changes:
 	- Connection information is available by right clicking the tray icon
@@ -18,6 +25,7 @@ Wicd 1.6.0 Branch
 	- ESSIDs made of numbers now work properly
 	- All valid wpa_supplicant drivers are now displayed
 	- Wired network is now displayed while scanning wireless networks
+	- Added wicd-gtk, a command to always and only run the GTK UI
 
 1.6.2:
 	Minor Changes:

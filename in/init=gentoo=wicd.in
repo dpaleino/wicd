@@ -9,17 +9,31 @@ WICD_PIDFILE=%PIDFILE%
 
 depend() {
 	need dbus
+	after hald
 }
 
 start() {
 	ebegin "Starting wicd daemon"
+	# fix Gentoo bug 296197
+	sed -i 's/^\[\]$//' /etc/wicd/wired-settings.conf
 	"${WICD_DAEMON}" >/dev/null 2>&1
 	eend $?
 }
 
 stop() {
+	ebegin "Stopping wicd daemon and closing connections"
+	# can't use ssd because it needs the -k option
+	"${WICD_DAEMON}" -k >/dev/null 2>&1
+	eend $?
+}
+
+force_kill() {
 	ebegin "Stopping wicd daemon"
 	start-stop-daemon --stop --pidfile "${WICD_PIDFILE}"
 	eend $?
 }
 
+restart() {
+	force_kill
+	start
+}

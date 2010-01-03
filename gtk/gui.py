@@ -151,7 +151,7 @@ class appGui(object):
         gladefile = os.path.join(wpath.gtk, "wicd.glade")
         self.wTree = gtk.glade.XML(gladefile)
         self.window = self.wTree.get_widget("window1")
-        self.window.set_icon_name("wicd-client")
+        self.window.set_icon_name("wicd-gtk")
         size = daemon.ReadWindowSize("main")
         width = size[0]
         height = size[1]

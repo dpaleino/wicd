@@ -1,0 +1,171 @@
+﻿.\" Geschreven door Robby Workman <rworkman@slackware.com>
+.TH WICD 8 "wicd-%VERSION%"
+.SH NAME
+.B Wicd
+\- Vaste en draadloze netwerkverbindingen beheerder
+
+.SH THEORIE VAN DE WERKING
+
+Wicd is gemaakt om gebruikers zoveel mogelijk controle over de verbinding
+te laten hebben als mogelijk. Elk netwerk, zowel vast als draadloos, heeft
+zijn eigen profiel met zijn eigen configuratieopties en verbindingsgedrag.
+Wicd zal alleen met netwerken verbindingen die de gebruiker kiest die hij
+zal proberen, met een voorkeur voor een vast netwerk boven een draadloos
+netwerk.
+
+Voor een vaste verbinding hebben gebruikers veel opties om te kiezen welke
+netwerkinstellingen gebruikt zullen worden. Wicd staat toe om een ongelimiteerd
+aantal vaste verbindingsprofielen te maken, waar elk zijn eigen unieke instellingen
+heeft. De gebruiker kan kiezen om te verbinden met een geselecteerd standaard
+profiel, kiezen met een pop-upvenster elke keer dat Wicd verbinding maakt, of
+kiezen dat Wicd automatisch het laatste profiel kiest van toen er handmatig
+verbinding werd gemaakt.
+
+Voor draadloze verbindingen kunnen gebruikers elk aantal draadloze netwerken
+kiezen om automatisch verbinding mee te maken; Wicd zal degene met het sterkste
+signaal kiezen om verbinding mee te maken.
+
+Als de gebruiker dat kiest, zal Wicd automatisch herverbinden als de verbinding
+verloren gaat. Als de laatste verbindingsstatus vast was, zal Wicd eerst met
+het vaste netwerk verbinden, en als het niet beschikbaar is, zal Wicd elk
+draadloos netwerk proberen waar automatisch verbinden aan staat. Als de laatste
+verbindingsstatus draadloos was, zal Wicd eerst proberen te verbinden met het
+vorige verbonden netwerk (ook als dat netwerk automatisch verbinden uit 
+heeft staan), en als dat mislukt, zal het zowel de vaste verbinding proberen als
+elk draadloos netwerk waar automatisch verbinden aan staat.
+
+Wicd gebruikt ingebouwde Linux draadloze netwerktools, zoals ifconfig en
+iwconfig, om netwerkinformatie te krijgen en in te stellen. Er is enige
+flexibiliteit in het gebruik van DHCP, door het ondersteunen van dhclient,
+dhcpcd en pump. Wicd gebruikt wpa_supplicant voor alle draadloze
+coderingsinstellingen, en gebruikt een sjabloongebaseert systeem om de
+configuratiebestanden te maken die door wpa_supplicant worden gebruikt. Deze
+sjablonen kunnen worden bewerkt, en nieuwe sjablonen kunnen worden gemaakt door
+de gebruiker en geimporteerd worden naar Wicd, om verbindingen met netwerken
+met ongebruikelijke coderingsinstellingen te maken.
+
+.SH STRUCTUUR
+
+Wicd heeft twee hoofdonderdelen: de daemon, die met root-rechten werkt; en de
+gebruikersinterface, die met normale gebruikersrechten werkt. Deze twee delen
+werken als gescheiden processen en gebruiken D-Bus om te communiceren.
+
+De daemon is verantwoordelijk voor het maken en instellen van verbindingen,
+lezen en schrijven van configuratiebestanden en logbestanden, en het controleren van de
+connectiestatus. De daemon is gesplitst in twee processen, wicd-daemon.py en
+monitor.py. Alle controle van de verbindingen, inclusief het automatisch
+herverbinden, vinden plaats in monitor.py. Al het andere gebeurt door
+wicd-daemon.py.
+
+De gebruikersinterface (in wicd-client), die is opgebouwd uit een tray-icoon,
+een hoofd GUI venster en zijn dialoogvensters, haalt configuratie en
+netwerkinformatie van de daemon hetzij door het aanroepen van functies in de 
+dbus interface van de daemon of door signalen te krijgen van de daemon via
+D-Bus. Alle configuratiewijzigingen gemaakt in de gebruikersinterface worden
+teruggegeven aan de daemon, die de veranderingen toepast en naar
+configuratiebestanden wegschrijft.
+
+Omdat de gebruikersinterface alleen verbindings- en configuratieinfo vraagt
+van de daemon, is het mogelijk om Wicd helemaal zonder de GUI te gebruiken.
+Bovendien is de daemon gestart door Wicd's init script tijdens het starten van
+het systeem (voordat er gebruikers inloggen), waardoor Wicd gebruikt kan worden
+door "headless" systemen.
+
+.SH TIPS
+
+.B Kiezen van alternatieve tools
+.br
+Wicd ondersteund een aantal alternatieven als het gaat om de netwerktools van
+Linux. In het "External Programs" tab van het Voorkeuren menu kun je kiezen voor
+jouw voorkeur DHCP client, link detectie tools en routing tools als de
+standaardtools niet handig zijn voor jouw distributie of systeem.
+
+.B Eigen scripts
+.br
+Als het nodig is om een eigen commando uit te voeren voor of na het verbinding
+maken of verbreken van een netwerk, dan ondersteund Wicd dit; maar je moet wel
+een grafische sudo helper geïnstalleerd hebben (op dit moment worden kdesu,
+gksu en ktsuss ondersteund).
+.br
+Als je geen grafische sudo helper geïnstalleerd hebt, heb je nog steeds de
+mogelijkheid om eigen scripts te gebruiken, maar je moet ze handmatig maken.
+Zie wicd-wired-settings.conf(5) en/of wicd-wireless-settings.conf(5) voor meer
+informatie hoe je dat moet doen.
+
+.B Automatisch verbinding maken met netwerken
+.br
+Wicd gebruikt het BSSID om een individueel netwerk te herkennen (en dus om te
+beslissen of het er automatisch mee moet verbinden). Zit je op een netwerk
+dat veel verschillende access-points heeft die allemaal dezelfde ESSID hebben (veel
+universiteiten hebben zulke netwerken), dan is er een optie in de "Geavanceerde
+instellingen") om "Gebruik deze instellingen voor alle netwerken met deze
+ESSID". Met deze optie zal Wicd automatisch met dat netwerk verbinden,
+onafhankelijk van welk access-point het ziet.
+
+
+.SH BESTANDEN
+
+.B %ETC%manager-settings.conf
+.br
+Dit bestand bevat algemene instellingen van Wicd.
+.br
+Zie de man-page van dit bestand voor meer informatie erover.
+
+.B %ETC%wired-settings.conf
+.br
+Dit bestand bevat instellingen voor de vaste interface.
+.br
+Zie de man-page van dit bestand voor meer informatie erover.
+
+.B %ETC%wireless-settings.conf
+.br
+Dit bestand bevat instellingen gerelateerd tot de draadloze interface.
+.br
+Zie de man-page van dit bestand voor meer informatie erover.
+
+.B %ENCRYPTION%
+.br
+Deze directory bevat verschillende sjablonen voor gecodeerde (WEP, WPA,
+etc.) verbindingen. Als geen daarvan aan jouw behoeften voldoet, kun je
+je eigen maken en aan deze directory toevoegen. Als je dit doet, neem
+alsjeblieft contact op met de makers van Wicd (zie hieronder).
+
+.B %NETWORKS%
+.br
+Deze directory bevat individuele configuratiebestanden voor elke gecodeerde
+verbinding die je maakt met Wicd.
+
+.B %LOG%
+.br
+Deze directory bevat logbestanden van Wicd's activiteiten. Kijk in de log
+als je problemen hebt met de verbinding of met andere dingen.
+
+.SH "ZIE OOK"
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wired-settings.conf (5),
+.BR wicd-wireless-settings.conf (5),
+.BR wicd-curses (8),
+.BR ifconfig (8),
+.BR iwconfig (8),
+.BR wpa_supplicant (8),
+.BR route (8),
+.BR ip (8),
+.BR mii-tool (8),
+.BR ethtool (8),
+.BR dhclient (8),
+.BR dhcpcd (8),
+.BR pump (8).
+
+
+.SH WICD AUTEURS
+Adam Blackburn <compwiz18@gmail.com>
+.br
+Dan O'Reilly <oreilldf@gmail.com>
+.br
+Andrew Psaltis <ampsaltis@gmail.com> (curses client)
+
+.SH MANPAGE AUTEURS
+Robby Workman <rworkman@slackware.com>
+.br
+Ayke van Laethem <aykevanlaethem@gmail.com> (Nederlandse vertaling)
+

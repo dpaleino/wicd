@@ -1,0 +1,80 @@
+﻿.\" Written by Robby Workman <rworkman@slackware.com>
+.TH WICD-WIRED-SETTINGS.CONF 5 "wicd-%VERSION%"
+.SH NAAM
+wicd-wired-settings.conf \- stelt Wicd's vaste netwerkinstellingen in
+
+.SH BESCHRIJVING
+
+Dit bestand bevat configuratie-informatie voor vaste netwerkinterfaces voor Wicd.
+.br
+Dit bestand staat hier: %ETC%wired-settings.conf
+
+
+.SH INSTELLINGEN
+
+.TP
+.BI "default = " <0|1>
+Deze optie bepaalt of dit profiel als standaard gebruikt moet worden.
+.br
+0 = gebruik dit profiel niet standaard.
+.br
+1 = gebruik dit profiel standaard.
+.TP
+.BI "beforescript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden voordat Wicd gaat verbinden.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "afterscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden nadat Wicd een verbinding heeft gelegd.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "predisconnectscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden voordat Wicd de verbinding verbreekt.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "postdisconnectscript = " <None|willekeurig_script>
+Dit definieert een script dat gestart moet worden na dat Wicd de verbinding heeft verbroken.
+Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.
+.br
+BELANGRIJK – scripts moeten ALLEEN schrijfbaar zijn door root en in een directory staan die alleen schrijfbaar is door root.
+.TP
+.BI "ip = " <None|ip_addres>
+Gebruik deze optie als je een vast ip-adres voor je systeem hebt.
+.TP
+.BI "netmask = " <None|netwerk_masker>
+Deze instelling is alleen van toepassing als er hierboven een vast ip-adres is ingesteld.
+.TP
+.BI "broadcast = " <None|broadcast_adres>
+Deze instelling is alleen van toepassing als er hierboven een vast ip-adres is ingesteld.
+.TP
+.BI "gateway = " <None|gateway_adres>
+Deze instelling is alleen van toepassing als er hierboven een vast ip-adres is ingesteld.
+.TP
+.BI "use_static_dns = " <True|False>
+True = gebruik vaste DNS servers in plaats van accepteren wat de dhcp server aanbied.
+.TP
+.BI "use_global_dns = " <True|False>
+True = gebruik de globale DNS servers die in wicd-manager-settings.conf(5) staan.
+Deze optie is alleen van toepassing als "use_static_dns = True"
+.TP
+.BI "dns1 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+.TP
+.BI "dns2 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+.TP
+.BI "dns3 = " <None|ip_adres>
+Statisch DNS adres als "use_static_dns = True" en "use_global_dns = False"
+
+.SH "ZIE OOK"
+.BR wicd (8),
+.BR wicd-curses (8),
+.BR wicd-manager-settings.conf (5),
+.BR wicd-wireless-settings.conf (5).
+

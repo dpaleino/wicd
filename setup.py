@@ -97,7 +97,8 @@ class configure(Command):
 
         # Configure switches
         ('no-install-init', None, "do not install the init file"),
-        ('no-install-man', None, 'do not install the man file'),
+        ('no-install-man', None, 'do not install the man files'),
+        ('no-install-i18n-man', None, 'do not install the translated man files'),
         ('no-install-kde', None, 'do not install the kde autostart file'),
         ('no-install-acpi', None, 'do not install the suspend.d and resume.d acpi scripts'),
         ('no-install-pmutils', None, 'do not install the pm-utils hooks'),
@@ -141,6 +142,7 @@ class configure(Command):
         
         self.no_install_init = False
         self.no_install_man = False
+        self.no_install_i18n_man = False
         self.no_install_kde = False
         self.no_install_acpi = False
         self.no_install_pmutils = False
@@ -535,6 +537,8 @@ try:
         data.append((wpath.bin, ['scripts/wicd-curses'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
+        if not wpath.no_install_man and not wpath.no_install_i18n_man:
+            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-curses.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['curses/README.curses'])) 
     if not wpath.no_install_cli:
@@ -542,6 +546,8 @@ try:
         data.append((wpath.bin, ['scripts/wicd-cli'])) 
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8'])) 
+        if not wpath.no_install_man and not wpath.no_install_i18n_man:
+            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-cli.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['cli/README.cli'])) 
     piddir = os.path.dirname(wpath.pidfile)
@@ -562,6 +568,13 @@ try:
         data.append((wpath.mandir + 'man5/', [ 'man/wicd-wired-settings.conf.5' ]))
         data.append((wpath.mandir + 'man5/', [ 'man/wicd-wireless-settings.conf.5' ]))
         data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
+    if not wpath.no_install_man and not wpath.no_install_i18n_man:
+        # Dutch translations of the man
+        data.append((wpath.mandir + 'man8/nl/', [ 'man/nl/wicd.8' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-manager-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wired-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wireless-settings.conf.5' ]))
+        data.append((wpath.mandir + 'man1/nl/', [ 'man/nl/wicd-client.1' ]))
     if not wpath.no_install_acpi:
         data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))

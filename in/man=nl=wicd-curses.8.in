@@ -1,0 +1,94 @@
+﻿.\" First revision was r203
+.TH WICD-CURSES "8" "April 2009" "wicd-curses-%CURSES_REVNO%"
+.SH NAAM
+.B wicd-curses
+\- curses-gebaseerde wicd(8) controller
+.SH BESCHRIJVING
+Wicd-curses is een curses-gebaseerde netwerk controller die de Wired/Wireless Internet Connection Daemon (wicd) gebruikt om de netwerkverbindingen te controleren. Het is geschikt om in een terminal multiplexer zoals screen(1) gestart te worden.
+
+Het is gemaakt om zoveel mogelijk de GTK-gebaseerde wicd-client(1) te imiteren, en gebruikt de Urwid (http://excess.org/urwid) console widget bibliotheek om de ontwikkeling enorm te vergemakkelijken.
+
+Deze man page documenteert alleen de huidige status van wicd-curses. Dit zou/zou niet het meest up-to-date document kunnen zijn.
+.SH "ARGUMENTEN"
+.TP
+.BR "\-r" , " \-\-raw\-screen"
+Gebruik Urwid's raw console display. Dit is standaard, en heeft een aantal
+voordelen boven het snellere curses display, inclusief volledig functionerende
+Unicode en internationalisation ondersteuning.
+.TP
+.BR "\-c" , " \-\-curses\-screen"
+Gebruik Urwid's curses display. Dit zou sneller kunnen zijn dan het standaard
+raw venster, maar het heeft geen goede Unicode ondersteuning. Dit is goed te
+gebruiken als je taal naar keuze alleen Latijnse karakters gebruikt.
+.SH CONTROLS
+Allemaal zijn ze hoofdlettergevoelig.
+.TP
+.BR "C " of " enter"
+Verbind met het geselecteerde netwerk
+.TP
+.BR "F8 " or " Q " or " q"
+Sluit de client af
+.TP
+.BR D
+Verbreek de verbindingen van alle apparaten
+.TP
+.BR ESC
+Indien Wicd aan het verbinden is met een netwerk, stop ermee
+.TP
+.BR "F5 " or " R"
+Vernieuw de netwerk lijst
+.TP
+.BR P
+Geef de voorkeuren controller
+.TP
+.BR I
+Geef het verborgen netwerken scanner dialoogvenster
+.TP
+.BR "H " or " h " or " ?"
+Geef een erg simpel help dialoogvenster. Natuurlijk noemt het deze man page als eerste. :-)
+.TP
+.BR A
+Geef het "About wicd-curses" dialoogvenster
+.\".PP
+.\"Het volgende is werk in uitvoering en zou nog niet helemaal kunnen functioneren zoals dat hiervoor.
+.TP
+.BR "pijltje naar rechts"
+Geef de netwerk instellingen controller voor het geselecteerde netwerk
+.TP
+.BR delete
+Verwijder het geselecteerde vaste netwerk profiel (van het vaste netwerk combo box bovenin)
+.TP
+.BR F2
+Hernoem het geselecteerde vaste netwerk profiel (van het vaste netwerk combo box bovenin)
+.TP
+.BR S
+.\"Geef de script selector voor het geselecteerde netwerk (vereist superuser rechten)
+Geef instructies hoe je de scripts moet bewerken.  Ik heb een manier geïmplementeerd om dit te doen in de interface zelf, maar om het met alle Linux distributies te laten werken zou moeilijk worden.  Omdat je dit aan het lezen bent, zou je moeten weten wat je moet doen wat ik suggereer. ;-)
+.TP
+.BR O
+Geef het Ad-Hoc netwerk maken dialoogvenster
+
+.SH "BESTANDEN"
+.TP
+.I ~/.wicd/WAARZIJNMIJNBESTANDEN
+Bedenk dat jouw netwerk configuratiebestanden niet hier zijn ;-)
+.PP
+.SH "ZIE OOK"
+.BR wicd-client (1),
+.BR wicd (8)
+
+.SH BUGS
+Waarschijnlijk veel.  ;-)
+
+Als je er een gevonden hebt, vraag er naar op #wicd op freenode, of stuur een bug report naar http://launchpad.net/wicd.
+
+.SH WICD-CURSES AUTEURS
+Andrew Psaltis <ampsaltis@gmail.com>
+
+.SH WICD AUTEURS
+Adam Blackburn <compwiz18@gmail.com>
+.br
+Dan O'Reilly <oreilldf@gmail.com>
+
+.SH VERTALING
+Ayke van Laëthem <aykevanlaethem@gmail.com> (Nederlandse vertaling)

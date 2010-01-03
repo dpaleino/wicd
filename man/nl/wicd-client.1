@@ -1,0 +1,20 @@
+.TH WICD-CLIENT "1" "June 2009" "wicd-client " "User Commands"
+.SH NAME
+wicd-client \- frontend voor de WICD daemon
+.SH BESCHRIJVING
+draadloos (en vast) verbindingen daemon front\-end.
+
+Als wicd-curses(8) is geïnstalleerd en je probeert wicd-client uit te voeren
+zonder een actieve X server in de huidige terminal, wicd-client probeert
+wicd-curses in plaats daarvan te starten. Hij zal je waarschuwen als dit de
+eerste keer gebeurt.
+.SS "Argumenten:"
+.TP
+\fB\-n\fR      \fB\-\-no\-tray\fR
+Start Wicd zonder het tray icon.
+.TP
+\fB\-h\fR      \fB\-\-help\fR
+Print deze helptekst.
+.TP
+\fB\-a\fR      \fB\-\-no\-animate\fR
+Start de tray icon zonder netwerkgebruik animaties.

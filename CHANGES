@@ -1,4 +1,18 @@
 ------------------------------------------------------------
+revno: 524
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:59:05 -1000
+message:
+  put the Dutch man pages in the correct directory
+------------------------------------------------------------
+revno: 523
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-02 20:50:31 -1000
+message:
+  updated CHANGES
+------------------------------------------------------------
 revno: 522
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

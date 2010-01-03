@@ -538,7 +538,7 @@ try:
         if not wpath.no_install_man:
             data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8'])) 
         if not wpath.no_install_man and not wpath.no_install_i18n_man:
-            data.append(( wpath.mandir + 'man8/nl/', ['man/nl/wicd-curses.8'])) 
+            data.append(( wpath.mandir + 'nl/man8/', ['man/nl/wicd-curses.8'])) 
         if not wpath.no_install_docs:
             data.append(( wpath.docdir, ['curses/README.curses'])) 
     if not wpath.no_install_cli:
@@ -568,11 +568,11 @@ try:
         data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
     if not wpath.no_install_man and not wpath.no_install_i18n_man:
         # Dutch translations of the man
-        data.append((wpath.mandir + 'man8/nl/', [ 'man/nl/wicd.8' ]))
-        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-manager-settings.conf.5' ]))
-        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wired-settings.conf.5' ]))
-        data.append((wpath.mandir + 'man5/nl/', [ 'man/nl/wicd-wireless-settings.conf.5' ]))
-        data.append((wpath.mandir + 'man1/nl/', [ 'man/nl/wicd-client.1' ]))
+        data.append((wpath.mandir + 'nl/man8/', [ 'man/nl/wicd.8' ]))
+        data.append((wpath.mandir + 'nl/man5/', [ 'man/nl/wicd-manager-settings.conf.5' ]))
+        data.append((wpath.mandir + 'nl/man5/', [ 'man/nl/wicd-wired-settings.conf.5' ]))
+        data.append((wpath.mandir + 'nl/man5/', [ 'man/nl/wicd-wireless-settings.conf.5' ]))
+        data.append((wpath.mandir + 'nl/man1/', [ 'man/nl/wicd-client.1' ]))
     if not wpath.no_install_acpi:
         data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))

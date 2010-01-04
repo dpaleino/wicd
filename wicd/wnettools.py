@@ -561,7 +561,7 @@ class BaseInterface(object):
 
         while not udhcpc_complete:
             line = pipe.readline()
-            if line.endswith("failing"):
+            if line.endswith("failing."):
                 udhcpc_success = False
                 udhcpc_complete = True
             elif line == '':

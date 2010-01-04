@@ -143,6 +143,7 @@ if options.network_details:
 # network properties
 
 if options.network_property:
+	options.network_property = option.network_property.lower()
 	if options.wireless:
 		is_valid_wireless_network_id(options.network)
 		if not options.set_to:

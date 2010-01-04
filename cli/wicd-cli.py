@@ -145,11 +145,16 @@ if options.network_details:
 if options.network_property:
 	options.network_property = option.network_property.lower()
 	if options.wireless:
-		is_valid_wireless_network_id(options.network)
-		if not options.set_to:
-			print wireless.GetWirelessProperty(options.network, options.network_property)
+		if options.network >= 0:
+			is_valid_wireless_network_id(options.network)
+			network_id = options.network
 		else:
-			wireless.SetWirelessProperty(options.network, \
+			network_id = wireless.GetCurrentNetworkID(0)
+			is_valid_wireless_network_id(network_id)
+		if not options.set_to:
+			print wireless.GetWirelessProperty(network_id, options.network_property)
+		else:
+			wireless.SetWirelessProperty(network_id, \
 					options.network_property, options.set_to)
 	elif options.wired:
 		if not options.set_to:

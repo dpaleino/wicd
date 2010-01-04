@@ -1762,6 +1762,9 @@ def main(argv):
 
         # quit, this should be the only option specified
         sys.exit(0)
+
+    if not os.path.exists(wpath.networks):
+        os.makedirs(wpath.networks)
    
     if do_daemonize: daemonize()
 

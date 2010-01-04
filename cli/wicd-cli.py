@@ -78,14 +78,14 @@ def is_valid_wireless_network_id(network_id):
 		sys.exit(1)
 
 def is_valid_wired_network_id(network_id):
-	num = len(config.GetWiredProfileList())
+	num = len(wired.GetWiredProfileList())
 	if not (network_id < num and \
 			network_id >= 0):
 		print 'Invalid wired network identifier.'
 		sys.exit(4)
 
 def is_valid_wired_network_profile(profile_name):
-	if not profile_name in config.GetWiredProfileList():
+	if not profile_name in wired.GetWiredProfileList():
 		print 'Profile of that name does not exist.'
 		sys.exit(5)
 
@@ -110,7 +110,7 @@ if options.list_networks:
 	elif options.wired:
 		print '#\tProfile name'
 		id = 0
-		for profile in config.GetWiredProfileList():
+		for profile in wired.GetWiredProfileList():
 			print '%s\t%s' % (id, profile)
 			id += 1
 	op_performed = True

@@ -185,7 +185,7 @@ def ExecuteScripts(scripts_dir, verbose=False, extra_parameters=()):
     """ Execute every executable file in a given directory. """
     if not os.path.exists(scripts_dir):
         return
-    for obj in os.listdir(scripts_dir):
+    for obj in sorted(os.listdir(scripts_dir)):
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):
             ExecuteScript(os.path.abspath(obj), verbose=verbose,

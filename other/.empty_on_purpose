@@ -1,0 +1,9 @@
+If you're reading this file, that means that you found a directory that
+is empty by default when Wicd is installed. Congratulations!
+
+At this point, the directory probably isn't empty, so perhaps the name
+of this file is a little confusing.
+
+Some package managers and some version control systems don't allow for
+installation or storage of empty directories, so this file exists to
+make them work properly. Just ignore it and continue on with your life.

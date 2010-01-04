@@ -485,24 +485,28 @@ py_modules=['wicd.networking','wicd.misc','wicd.wnettools',
            'wicd.logfile','wicd.backend','wicd.configmanager',
            'wicd.translations']
 
+# path to the file to put in empty directories
+# fixes https://bugs.launchpad.net/wicd/+bug/503028
+empty_file = 'other/.empty_on_purpose'
+
 try:
     print "Using init file",(wpath.init, wpath.initfile)
     data = [
     (wpath.dbus, ['other/wicd.conf']),
-    (wpath.log, []), 
+    (wpath.log, [empty_file]), 
     (wpath.etc, ['other/dhclient.conf.template.default']),
     (wpath.encryption, [('encryption/templates/' + b) for b in 
                         os.listdir('encryption/templates') if not b.startswith('.')]),
-    (wpath.networks, []),
+    (wpath.networks, [empty_file]),
     (wpath.sbin,  ['scripts/wicd']),  
     (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
                  'wicd/suspend.py', 'wicd/autoconnect.py']), 
     (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
-    (wpath.scripts, []),
-    (wpath.predisconnectscripts, []),
-    (wpath.postdisconnectscripts, []),
-    (wpath.preconnectscripts, []),
-    (wpath.postconnectscripts, []),
+    (wpath.scripts, [empty_file]),
+    (wpath.predisconnectscripts, [empty_file]),
+    (wpath.postdisconnectscripts, [empty_file]),
+    (wpath.preconnectscripts, [empty_file]),
+    (wpath.postconnectscripts, [empty_file]),
     ]
     if not wpath.no_install_gtk:
         data.append((wpath.desktop, ['other/wicd.desktop']))

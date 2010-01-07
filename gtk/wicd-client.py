@@ -477,7 +477,6 @@ class TrayIcon(object):
                                 </menu>
                                 <separator/>
                                 <menuitem action="Info"/>
-                                <menuitem action="About"/>
                                 <menuitem action="Quit"/>
                             </menu>
                         </menubar>
@@ -489,8 +488,6 @@ class TrayIcon(object):
                     ('Info', gtk.STOCK_INFO, "_Connection Info", None,
                      'Information about the current connection',
                      self.on_conn_info),
-                    ('About', gtk.STOCK_ABOUT, '_About...', None,
-                     'About wicd-tray-icon', self.on_about),
                     ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
                      self.on_quit),
                     ]
@@ -499,7 +496,7 @@ class TrayIcon(object):
             self.manager = gtk.UIManager()
             self.manager.insert_action_group(actg, 0)
             self.manager.add_ui_from_string(menu)
-            self.menu = (self.manager.get_widget('/Menubar/Menu/About').
+            self.menu = (self.manager.get_widget('/Menubar/Menu/Quit').
                                                                   props.parent)
             self.gui_win = None
             self.current_icon_path = None

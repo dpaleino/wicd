@@ -31,7 +31,7 @@ If you delete this file, then wicd-client will print the warning if it is
 launched outside of X (and then recreate this file again).
 EOF
         fi
-        exec %BIN%wicd-curses
+        exec %BIN%wicd-curses $@
     
     else
         printf "NOTICE: You do not have an X server active on this console, \n"
@@ -41,5 +41,5 @@ EOF
 
     fi
 else
-    exec %BIN%wicd-gtk
+    exec %BIN%wicd-gtk $@
 fi

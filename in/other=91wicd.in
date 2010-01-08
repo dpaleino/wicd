@@ -16,14 +16,14 @@ RETVAL=0 	# Set this to 0 initially
 wicd_suspend()
 {
 	# Put wifi interface down
-	%LIB%suspend.py 1>/dev/null 2>/dev/null
+	%DAEMON%suspend.py 1>/dev/null 2>/dev/null
 	RETVAL=$?
 }
 
 wicd_resume()
 {
 	# Bring wifi interface back up
-	%LIB%autoconnect.py 1>/dev/null 2>/dev/null
+	%DAEMON%autoconnect.py 1>/dev/null 2>/dev/null
 	RETVAL=$?
 }
 

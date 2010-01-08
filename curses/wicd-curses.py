@@ -911,32 +911,27 @@ class appGUI():
                 self.size = ui.get_cols_rows()
                 continue
 
-    def call_update_ui(self,source,cb_condition):
-        self.update_ui(True)
-        return True
-
+    def call_update_ui(self,source,cb_condition):           
+        self.update_ui(True)                                
+        return True                                         
+                
     # Redraw the screen
     @wrap_exceptions
     def update_ui(self,from_key=False):
         if not ui._started:
             return False
-        canvas = self.frame.render( (self.size),True )
+
+        input_data = ui.get_input_nonblocking()
+        # Resolve any "alarms" in the waiting
+        self.handle_keys(input_data[1])
 
         # Update the screen
+        canvas = self.frame.render( (self.size),True )
         ui.draw_screen((self.size),canvas)
         # Get the input data
-        input_data = ui.get_input_nonblocking()
-        max_wait = input_data[0]
-        keys = input_data[1]
-
-        # Resolve any "alarms" in the waiting
         if self.update_tag != None:
             gobject.source_remove(self.update_tag)
-        if from_key:
-            max_wait = 20
-            self.update_tag = gobject.timeout_add(max_wait, \
-                    self.update_ui,True)
-            self.handle_keys(keys)
+        #if from_key:
         return False
 
     def connect(self, nettype, networkid, networkentry=None):
@@ -1015,11 +1010,11 @@ def run():
     # This will make sure that it is updated on the second.
     gobject.timeout_add(500,app.update_time)
 
-    app.update_ui()
     # Get input file descriptors and add callbacks to the ui-updating function
     fds = ui.get_input_descriptors()
     for fd in fds:
         gobject.io_add_watch(fd, gobject.IO_IN,app.call_update_ui)
+    app.update_ui()
     loop.run()
 
 # Mostly borrowed from gui.py
@@ -1028,11 +1023,7 @@ def setup_dbus(force=True):
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
-        # I may need to be a little more verbose here.
-        # Suggestions as to what should go here, please?
         print >> sys.stderr, language['cannot_connect_to_daemon']
-        #raise
-        # return False # <- Will need soon.
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']

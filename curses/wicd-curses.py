@@ -993,7 +993,7 @@ def run():
     # I've left this commented out many times.
     bus.add_signal_receiver(app.update_netlist, 'StatusChanged',
                             'org.wicd.daemon')
-    # Update the connection status on the bottom every 1.5 s.
+    # Update the connection status on the bottom every 2 s.
     gobject.timeout_add(2000,app.update_status)
 
     # Get input file descriptors and add callbacks to the ui-updating function

@@ -230,7 +230,6 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         AdvancedSettingsDialog.save_settings(self)
         if self.set_default.get_state():
             wired.UnsetWiredDefault()
-        print self.set_default.get_state()
         if self.set_default.get_state():
             bool = True
         else:
@@ -346,7 +345,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     def save_settings(self):
         # Check encryption info
         if self.encryption_chkbox.get_state():
-            #print "setting encryption info..."
             encrypt_info = self.encryption_info
             encrypt_methods = self.encrypt_types
             self.set_net_prop("enctype",

@@ -551,10 +551,8 @@ class appGUI():
                ]
 
         self.primaryCols = OptCols(keys,self.handle_keys)
-        self.time_label = \
-                  urwid.AttrWrap(urwid.Text(strftime('%H:%M:%S')), 'timebar')
         self.status_label = urwid.AttrWrap(urwid.Text(''),'important')
-        self.footer2 = urwid.Columns([self.status_label,('fixed', 8, self.time_label)])
+        self.footer2 = urwid.Columns([self.status_label])
         self.footerList = urwid.Pile([self.primaryCols,self.footer2])
 
         self.frame = urwid.Frame(self.thePile,
@@ -774,15 +772,6 @@ class appGUI():
         self.update_ui()
         return True
 
-    # Make sure the screen is still working by providing a pretty counter.
-    # Not necessary in the end, but I will be using footer1 for stuff in
-    # the long run, so I might as well put something there.
-    #@wrap_exceptions
-    def update_time(self):
-        self.time_label.set_text(strftime('%H:%M:%S'))
-        self.update_ui()
-        return True
-
     def dbus_scan_finished(self):
         # I'm pretty sure that I'll need this later.
         #if not self.connecting:
@@ -977,7 +966,6 @@ def main():
         ('editnfc','brown','default','bold'),
         ('tab active','dark green','light gray'),
         ('infobar','light gray','dark blue'),
-        ('timebar','dark gray','default'),
         ('listbar','light blue','default'),
         # Simple colors around text
         ('green','dark green','default'),
@@ -1007,8 +995,6 @@ def run():
                             'org.wicd.daemon')
     # Update the connection status on the bottom every 1.5 s.
     gobject.timeout_add(2000,app.update_status)
-    # This will make sure that it is updated on the second.
-    gobject.timeout_add(500,app.update_time)
 
     # Get input file descriptors and add callbacks to the ui-updating function
     fds = ui.get_input_descriptors()

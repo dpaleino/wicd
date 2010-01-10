@@ -1,4 +1,123 @@
 ------------------------------------------------------------
+revno: 546
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sat 2010-01-09 15:30:55 -1000
+message:
+  mark ioctl not supported in wicd-gtk
+------------------------------------------------------------
+revno: 545
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2010-01-09 11:34:19 -0500
+message:
+  Fix a comment.
+------------------------------------------------------------
+revno: 544
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2010-01-09 11:17:49 -0500
+message:
+  Removed the wicd-curses clock, all it was doing really was eating CPU cycles.
+------------------------------------------------------------
+revno: 543
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Sat 2010-01-09 10:38:12 -0500
+message:
+  Remove extraneous print statement from netentry-curses.py.
+------------------------------------------------------------
+revno: 542
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2010-01-08 18:15:57 -0500
+message:
+  Remove the flickering from wicd-curses, thanks to Ian Ward for reminding me that it was still happening.
+------------------------------------------------------------
+revno: 541
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2010-01-08 18:04:28 -0500
+message:
+  Fix another code separation-induced problem.  Thanks to Robby Workman.
+------------------------------------------------------------
+revno: 540
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Thu 2010-01-07 10:39:06 -1000
+message:
+  have wicd-client pass arguments to wicd-gtk and wicd-curses again
+------------------------------------------------------------
+revno: 539
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Wed 2010-01-06 15:03:42 -1000
+message:
+  remove useless about menu in wicd's tray icon
+------------------------------------------------------------
+revno: 538
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Mon 2010-01-04 08:53:24 -1000
+message:
+  create wpath.networks at run time if it doesn't exist
+------------------------------------------------------------
+revno: 537
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Mon 2010-01-04 08:33:24 -1000
+message:
+  add .empty_on_purpose to empty directories
+------------------------------------------------------------
+revno: 536
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Mon 2010-01-04 08:18:55 -1000
+message:
+  removed empty scripts directory
+------------------------------------------------------------
+revno: 535
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 23:10:55 -1000
+message:
+  run global scripts in ordered way
+------------------------------------------------------------
+revno: 534
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 23:07:34 -1000
+message:
+  make wicd-cli easier to use
+------------------------------------------------------------
+revno: 533
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 22:47:32 -1000
+message:
+  fix the case sensitivity in wicd-cli
+------------------------------------------------------------
+revno: 532
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 22:37:57 -1000
+message:
+  fix udhcpc not working due to an extra period
+------------------------------------------------------------
+revno: 531
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 22:04:03 -1000
+message:
+  update wicd-cli calls to work with the current daemon
+------------------------------------------------------------
+revno: 530
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: 1.7
+timestamp: Sun 2010-01-03 13:13:35 -1000
+message:
+  updated CHANGES, NEWS, and setup.py for release
+------------------------------------------------------------
 revno: 529
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: 1.7

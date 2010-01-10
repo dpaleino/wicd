@@ -1,5 +1,5 @@
 Wicd 1.6.0 Branch
-1.7.0b4:
+1.7.0b5:
 	Changes for Packagers:
 	- Wicd now supports a -k option, which should be run by the init script
 	  when the daemon is stopped to release the DHCP lease but should not
@@ -27,6 +27,7 @@ Wicd 1.6.0 Branch
 	- All valid wpa_supplicant drivers are now displayed
 	- Wired network is now displayed while scanning wireless networks
 	- Added wicd-gtk, a command to always and only run the GTK UI
+	- Marked ioctl backend not supported
 
 1.6.2:
 	Minor Changes:

@@ -405,10 +405,12 @@ class PreferencesDialog(object):
         
         for x in self.backends:
             if x:
+                if x == 'ioctl':
+                    x = 'ioctl NOT SUPPORTED'
                 self.backendcombo.append_text(x)
             
     def be_combo_changed(self, combo):
         """ Update the description label for the given backend. """
         self.backendcombo.set_tooltip_text(
-            self.be_descriptions[combo.get_active_text()]
+            self.be_descriptions[self.backends[combo.get_active()]]
         )

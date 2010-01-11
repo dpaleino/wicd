@@ -80,7 +80,7 @@ aren't suitable for your particular distribution or system.
 If you need to run any custom commands before or after connecting to or 
 disconnecting from a network, Wicd supports this; however, you will need to
 have a graphical sudo helper installed (currently supported are kdesu, gksu,
-and ktsuss).
+and ktsuss). Also see %SCRIPTS% in FILES.
 .br
 If you do not have a graphical sudo helper installed, you still have the
 ability to use custom scripts, but you will have to set them up manually.
@@ -124,6 +124,23 @@ This directory contains various templates for encrypted (WEP, WPA, etcetera)
 connections.  If none of them fit your needs, you may create your own and
 add it to this directory.  If you do this, please contact the authors
 (see below) of Wicd.
+
+.B %SCRIPTS%
+.br
+Dropping a script in the relevant directory will cause it to be executed
+when the specified event is preformed upon connection or disconnect from
+or to any network. Please note that pre/post disconnect scripts may be
+executed multiple times on already-disconnected interfaces.
+.br
+Available directories are:
+.br
+%SCRIPTS%predisconnect
+.br
+%SCRIPTS%postdisconnect
+.br
+%SCRIPTS%preconnect
+.br
+%SCRIPTS%postconnect
 
 .B %NETWORKS%
 .br

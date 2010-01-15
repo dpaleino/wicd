@@ -384,7 +384,11 @@ class BaseInterface(object):
                 self.dhclient_needs_verbose = True
             else:
                 self.dhclient_needs_verbose = False
-        self.dhcpcd_cmd = self._find_program_path("dhcpcd")
+        debian_dhcpcd_cmd = self._find_program_path('dhcpcd-bin')
+        if debian_dhcpcd_cmd:
+            self.dhcpcd_cmd = debian_dhcpcd_cmd
+        else:
+            self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
         self.udhcpc_cmd = self._find_program_path("udhcpc")
         

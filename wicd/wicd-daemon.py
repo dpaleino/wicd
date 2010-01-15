@@ -1254,12 +1254,12 @@ class WirelessDaemon(dbus.service.Object):
         # We want to write the essid in addition to bssid
         # sections if global settings are enabled.
         self.config.remove_section(essid_key)
-        if cur_network["use_settings_globally"]:
+        if cur_network.get("use_settings_globally", False):
             self.config.add_section(essid_key)
 
         for x in cur_network:
             self.config.set(bssid_key, x, cur_network[x])
-            if cur_network["use_settings_globally"]:
+            if cur_network.get("use_settings_globally", False):
                 self.config.set(essid_key, x, cur_network[x])
 
         write_script_ent(bssid_key, "beforescript")
@@ -1267,7 +1267,7 @@ class WirelessDaemon(dbus.service.Object):
         write_script_ent(bssid_key, "predisconnectscript")
         write_script_ent(bssid_key, "postdisconnectscript")
 
-        if cur_network["use_settings_globally"]:
+        if cur_network.get("use_settings_globally", False):
             write_script_ent(essid_key, "beforescript")
             write_script_ent(essid_key, "afterscript")
             write_script_ent(essid_key, "predisconnectscript")

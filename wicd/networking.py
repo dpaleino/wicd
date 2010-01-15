@@ -605,6 +605,8 @@ class Wireless(Controller):
         if essid is not None:
             print 'Setting hidden essid' + essid
             wiface.SetEssid(essid)
+            # sleep for a bit; scanning to fast will result in nothing
+            time.sleep(1)
 
         aps = wiface.GetNetworks()
         aps.sort(cmp=comp, reverse=True)

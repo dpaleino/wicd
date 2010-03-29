@@ -11,10 +11,10 @@ network={
 	proto=RSN WPA
 	pairwise=CCMP TKIP
 	group=CCMP TKIP
-	key-mgmt=WPA-EAP
+	key_mgmt=WPA-EAP
 	eap=FAST
 	identity="$_USERNAME"
 	password="$_PASSWORD"
 	phase1="fast_provisioning=1"
-	pac-file="$_PAC_FILE"
+	pac_file="$_PAC_FILE"
 }

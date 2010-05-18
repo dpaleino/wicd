@@ -29,7 +29,6 @@ import time
 import gobject
 import pango
 import gtk
-import gtk.glade
 from itertools import chain
 from dbus import DBusException
 
@@ -148,10 +147,10 @@ class appGui(object):
 
         self.tray = tray
 
-        gladefile = os.path.join(wpath.gtk, "wicd.glade")
-        self.wTree = gtk.glade.XML(gladefile)
-        self.window = self.wTree.get_widget("window1")
-        self.window.set_icon_name("wicd-gtk")
+        gladefile = os.path.join(wpath.gtk, "wicd.ui")
+        self.wTree = gtk.Builder()
+        self.wTree.add_from_file(gladefile)
+        self.window = self.wTree.get_object("window1")
         size = daemon.ReadWindowSize("main")
         width = size[0]
         height = size[1]
@@ -173,16 +172,16 @@ class appGui(object):
                 "about_clicked" : self.about_dialog,
                 "create_adhoc_clicked" : self.create_adhoc_network,
                 }
-        self.wTree.signal_autoconnect(dic)
+        self.wTree.connect_signals(dic)
 
         # Set some strings in the GUI - they may be translated
-        label_instruct = self.wTree.get_widget("label_instructions")
+        label_instruct = self.wTree.get_object("label_instructions")
         label_instruct.set_label(language['select_a_network'])
 
-        probar = self.wTree.get_widget("progressbar")
+        probar = self.wTree.get_object("progressbar")
         probar.set_text(language['connecting'])
         
-        self.all_network_list = self.wTree.get_widget("network_list_vbox")
+        self.all_network_list = self.wTree.get_object("network_list_vbox")
         self.all_network_list.show_all()
         self.wired_network_box = gtk.VBox(False, 0)
         self.wired_network_box.show_all()
@@ -190,9 +189,9 @@ class appGui(object):
         self.all_network_list.pack_start(self.wired_network_box, False, False)
         self.all_network_list.pack_start(self.network_list, True, True)
         self.network_list.show_all()
-        self.status_area = self.wTree.get_widget("connecting_hbox")
-        self.status_bar = self.wTree.get_widget("statusbar")
-        menu = self.wTree.get_widget("menu1")
+        self.status_area = self.wTree.get_object("connecting_hbox")
+        self.status_bar = self.wTree.get_object("statusbar")
+        menu = self.wTree.get_object("menu1")
 
         self.status_area.hide_all()
 
@@ -351,7 +350,7 @@ class appGui(object):
         """ Alerts the daemon to cancel the connection process. """
         #should cancel a connection if there
         #is one in progress
-        cancel_button = self.wTree.get_widget("cancel_button")
+        cancel_button = self.wTree.get_object("cancel_button")
         cancel_button.set_sensitive(False)
         daemon.CancelConnect()
         # Prevents automatic reconnecting if that option is enabled
@@ -364,7 +363,7 @@ class appGui(object):
         if not self.is_visible:
             return True
         try:
-            gobject.idle_add(self.wTree.get_widget("progressbar").pulse)
+            gobject.idle_add(self.wTree.get_object("progressbar").pulse)
         except:
             pass
         return True
@@ -551,7 +550,7 @@ class appGui(object):
         if self._wired_showing:
             printLine = True
         num_networks = wireless.GetNumberOfNetworks()
-        instruct_label = self.wTree.get_widget("label_instructions")
+        instruct_label = self.wTree.get_object("label_instructions")
         if num_networks > 0:
             instruct_label.show()
             for x in range(0, num_networks):
@@ -683,7 +682,7 @@ class appGui(object):
         return True
 
     def _wait_for_connect_thread_start(self):
-        self.wTree.get_widget("progressbar").pulse()
+        self.wTree.get_object("progressbar").pulse()
         if not self._connect_thread_started:
             return True
         else:
@@ -697,7 +696,7 @@ class appGui(object):
             self._connect_thread_started = True
 
         def setup_interface_for_connection():
-            cancel_button = self.wTree.get_widget("cancel_button")
+            cancel_button = self.wTree.get_object("cancel_button")
             cancel_button.set_sensitive(True)
             self.all_network_list.set_sensitive(False)
             if self.statusID:

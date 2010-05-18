@@ -28,7 +28,6 @@ import gtk
 import gobject
 #import pango
 import os
-import gtk.glade
 
 from wicd import misc
 from wicd import wpath
@@ -162,9 +161,9 @@ class PreferencesDialog(object):
         if wpath.no_use_notifications:
             self.notificationscheckbox.set_active(False)
             self.notificationscheckbox.hide()
-            self.wTree.get_widget('label2').hide()
+            self.wTree.get_object('label2').hide()
         
-        self.wTree.get_widget("notebook2").set_current_page(0)
+        self.wTree.get_object("notebook2").set_current_page(0)
         
     def run(self):
         """ Runs the preferences dialog window. """
@@ -266,14 +265,14 @@ class PreferencesDialog(object):
 
     def set_label(self, glade_str, label):
         """ Sets the label for the given widget in wicd.glade. """
-        self.wTree.get_widget(glade_str).set_label(label)
+        self.wTree.get_object(glade_str).set_label(label)
         
     def prep_settings_diag(self):
         """ Set up anything that doesn't have to be persisted later. """
         def build_combobox(lbl):
             """ Sets up a ComboBox using the given widget name. """
             liststore = gtk.ListStore(gobject.TYPE_STRING)
-            combobox = self.wTree.get_widget(lbl)
+            combobox = self.wTree.get_object(lbl)
             combobox.clear()
             combobox.set_model(liststore)
             cell = gtk.CellRendererText()
@@ -283,7 +282,7 @@ class PreferencesDialog(object):
         
         def setup_label(name, lbl=""):
             """ Sets up a label for the given widget name. """
-            widget = self.wTree.get_widget(name)
+            widget = self.wTree.get_object(name)
             # if lbl:
             #     widget.set_label(language[lbl])
             if widget is None:
@@ -291,14 +290,14 @@ class PreferencesDialog(object):
             return widget
         
         # External Programs tab
-        # self.wTree.get_widget("gen_settings_label").set_label(language["gen_settings"])
-        # self.wTree.get_widget("ext_prog_label").set_label(language["ext_programs"])
-        # self.wTree.get_widget("dhcp_client_label").set_label(language["dhcp_client"])
-        # self.wTree.get_widget("wired_detect_label").set_label(language["wired_detect"])
-        # self.wTree.get_widget("route_flush_label").set_label(language["route_flush"])
-        # self.wTree.get_widget("pref_backend_label").set_label(language["backend"] + ":")
+        # self.wTree.get_object("gen_settings_label").set_label(language["gen_settings"])
+        # self.wTree.get_object("ext_prog_label").set_label(language["ext_programs"])
+        # self.wTree.get_object("dhcp_client_label").set_label(language["dhcp_client"])
+        # self.wTree.get_object("wired_detect_label").set_label(language["wired_detect"])
+        # self.wTree.get_object("route_flush_label").set_label(language["route_flush"])
+        # self.wTree.get_object("pref_backend_label").set_label(language["backend"] + ":")
         
-        # entryWiredAutoMethod = self.wTree.get_widget("pref_wired_auto_label")
+        # entryWiredAutoMethod = self.wTree.get_object("pref_wired_auto_label")
         # entryWiredAutoMethod.set_label('Wired Autoconnect Setting:')
         # entryWiredAutoMethod.set_alignment(0, 0)
         # atrlist = pango.AttrList()
@@ -313,7 +312,7 @@ class PreferencesDialog(object):
         # self.set_label("pref_wired_label", "%s:" % language['wired_interface'])
         # self.set_label("pref_driver_label", "%s:" % language['wpa_supplicant_driver'])
         
-        self.dialog = self.wTree.get_widget("pref_dialog")
+        self.dialog = self.wTree.get_object("pref_dialog")
         self.dialog.set_title(language['preferences'])
         if os.path.exists(os.path.join(wpath.images, "wicd.png")):
             self.dialog.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
@@ -354,10 +353,10 @@ class PreferencesDialog(object):
 
         # DHCP Clients
         self.dhcpautoradio = setup_label("dhcp_auto_radio", "wicd_auto_config")
-        self.dhclientradio = self.wTree.get_widget("dhclient_radio")
-        self.pumpradio = self.wTree.get_widget("pump_radio")
-        self.dhcpcdradio = self.wTree.get_widget("dhcpcd_radio")
-        self.udhcpcradio = self.wTree.get_widget("udhcpc_radio")
+        self.dhclientradio = self.wTree.get_object("dhclient_radio")
+        self.pumpradio = self.wTree.get_object("pump_radio")
+        self.dhcpcdradio = self.wTree.get_object("dhcpcd_radio")
+        self.udhcpcradio = self.wTree.get_object("udhcpc_radio")
         
         # Wired Link Detection Apps
         self.linkautoradio = setup_label("link_auto_radio", 'wicd_auto_config')
@@ -385,17 +384,17 @@ class PreferencesDialog(object):
         for x in self.wpadrivers:
             self.wpadrivercombo.append_text(x)
 
-        self.entryWirelessInterface = self.wTree.get_widget("pref_wifi_entry")
-        self.entryWiredInterface = self.wTree.get_widget("pref_wired_entry")
+        self.entryWirelessInterface = self.wTree.get_object("pref_wifi_entry")
+        self.entryWiredInterface = self.wTree.get_object("pref_wired_entry")
         
         # Set up global DNS stuff
         self.useGlobalDNSCheckbox = setup_label("pref_global_check",
                                                 'use_global_dns')
-        self.searchDomEntry = self.wTree.get_widget("pref_search_dom_entry")
-        self.dnsDomEntry = self.wTree.get_widget("pref_dns_dom_entry")
-        self.dns1Entry = self.wTree.get_widget("pref_dns1_entry")
-        self.dns2Entry = self.wTree.get_widget("pref_dns2_entry")
-        self.dns3Entry = self.wTree.get_widget("pref_dns3_entry")
+        self.searchDomEntry = self.wTree.get_object("pref_search_dom_entry")
+        self.dnsDomEntry = self.wTree.get_object("pref_dns_dom_entry")
+        self.dns1Entry = self.wTree.get_object("pref_dns1_entry")
+        self.dns2Entry = self.wTree.get_object("pref_dns2_entry")
+        self.dns3Entry = self.wTree.get_object("pref_dns3_entry")
         
         self.backendcombo = build_combobox("pref_backend_combobox")
         self.backendcombo.connect("changed", self.be_combo_changed)

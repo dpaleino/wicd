@@ -436,7 +436,10 @@ class get_translations(Command):
         import urllib, shutil
         if os.path.exists('translations'):
             shutil.rmtree('translations/')
+        if os.path.exists('po'):
+            shutil.rmtree('po/')
         os.makedirs('translations')
+        os.makedirs('po')
         filename, headers = urllib.urlretrieve('http://wicd.sourceforge.net/translator/idlist/')
         id_file = open(filename, 'r')
         lines = id_file.readlines()
@@ -452,11 +455,10 @@ class get_translations(Command):
             except:
                 print >> sys.stderr, 'error downloading language %s' % id
             else:
-                shutil.move(pofile, lang_identifier+'.po')
+                shutil.move(pofile, 'po/'+lang_identifier+'.po')
                 os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
                 os.system('msgfmt --output-file=translations/' + lang_identifier +
-                          '/LC_MESSAGES/wicd.mo ' + lang_identifier + '.po')
-                os.remove(lang_identifier+'.po')
+                          '/LC_MESSAGES/wicd.mo po/' + lang_identifier + '.po')
 
 
 class uninstall(Command):

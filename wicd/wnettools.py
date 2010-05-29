@@ -619,6 +619,7 @@ class BaseInterface(object):
         else:
             print "ERROR: no dhcp client found"
             ret = None
+        self.dhcp_object.wait()
         return ret
         
     @neediface(False)

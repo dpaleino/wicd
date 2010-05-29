@@ -26,7 +26,7 @@ reusable for other purposes as well.
 
 import os, copy
 
-from ConfigParser import RawConfigParser
+from ConfigParser import RawConfigParser, ParsingError
 
 from wicd.misc import Noneify, to_unicode
 
@@ -39,8 +39,17 @@ class ConfigManager(RawConfigParser):
         self.config_file = path
         self.debug = debug
         self.mrk_ws = mark_whitespace
-        self.read(path)
-        
+        try:
+            self.read(path)
+        except ParsingError, e:
+            self.write()
+            try:
+                self.read(path)
+            except ParsingError, p:
+                import sys
+                print "Could not start wicd: %s" % p.message
+                sys.exit(1)
+
     def __repr__(self):
         return self.config_file
     

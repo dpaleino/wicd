@@ -325,6 +325,7 @@ class BaseInterface(object):
 
             output_conf.close()
             dhclient_template.close()
+            os.chmod(dhclient_conf_path, 0644)
 
         if not client_name or not cmd:
             print "WARNING: Failed to find a valid dhcp client!"

@@ -948,12 +948,14 @@ class WicdDaemon(dbus.service.Object):
         os.chmod(app_conf.get_config(), 0600)
         os.chmod(wireless_conf, 0600)
         os.chmod(wired_conf, 0600)
+        os.chmod(dhclient_conf, 0644)
 
         # Make root own them
         print "chowning configuration files root:root..."
         os.chown(app_conf.get_config(), 0, 0)
         os.chown(wireless_conf, 0, 0)
         os.chown(wired_conf, 0, 0)
+        os.chown(dhclient_conf, 0, 0)
 
         print "Using wireless interface..." + self.GetWirelessInterface()
         print "Using wired interface..." + self.GetWiredInterface()
@@ -1702,6 +1704,7 @@ def main(argv):
         # wicd exploded
         if not os.path.exists(backup_location):
             shutil.copy2('/etc/resolv.conf', backup_location)
+            os.chmod(backup_location, 0644)
     except IOError:
         print 'error backing up resolv.conf'
 
@@ -1748,6 +1751,7 @@ def main(argv):
         # restore resolv.conf on quit
         try:
             shutil.move(wpath.varlib + 'resolv.conf.orig', '/etc/resolv.conf')
+            os.chmod('/etc/resolv.conf', 0644)
         except IOError:
             print 'error restoring resolv.conf'
 

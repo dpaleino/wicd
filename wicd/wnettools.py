@@ -1088,9 +1088,7 @@ class BaseWirelessInterface(BaseInterface):
         bssid -- bssid of the network
 
         """
-        cmd = ['iwconfig', self.iface, 'essid', essid]
-        if self.verbose: print str(cmd)
-        misc.Run(cmd)
+        self.SetEssid(essid)
         base = "iwconfig %s" % self.iface
         if channel and str(channel).isdigit():
             cmd = "%s channel %s" % (base, str(channel))

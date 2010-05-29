@@ -138,6 +138,12 @@ when the specified event is preformed upon connection or disconnect from
 or to any network. Please note that pre/post disconnect scripts may be
 executed multiple times on already-disconnected interfaces.
 .br
+The scripts will be passed different parameters, depending if Wicd is
+acting on a wired or a wireless network. In the former case, "wired
+wired wired" will be passed (three times, just for compatibility with
+the wireless case). If Wicd is acting on a wireless network, it will
+pass "wireless ESSID BSSID" to the script.
+.br
 Available directories are:
 .br
 %SCRIPTS%predisconnect

@@ -791,6 +791,7 @@ class appGui(object):
         
         """
         self.window.present()
+        self.window.deiconify()
         self.wait_for_events()
         self.is_visible = True
         daemon.SetGUIOpen(True)

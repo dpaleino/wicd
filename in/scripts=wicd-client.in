@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 BOLD=$(tput bold)
 BLUE=$(tput setaf 4)
 NC=$(tput sgr0)

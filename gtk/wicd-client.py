@@ -550,6 +550,7 @@ class TrayIcon(object):
             # Create labels
             self.label = gtk.Label()
             self.data = gtk.Label()
+            self.data.set_selectable(True)
             self.label.show()
             self.data.show()
             self.list = []

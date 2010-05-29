@@ -118,6 +118,12 @@ This file contains settings related to the wireless interface.
 .br
 See this file's own man page for more information about it.
 
+.B %ETC%dhclient.conf.template
+.br
+This is used to replace /etc/dhclient.conf during Wicd activity,
+if you're using dhclient(1) as DHCP client. See dhclient.conf(5)
+for more information.
+
 .B %ENCRYPTION%
 .br
 This directory contains various templates for encrypted (WEP, WPA, etcetera)
@@ -156,6 +162,7 @@ log if you are having connection or other problems.
 .BR wicd-manager-settings.conf (5),
 .BR wicd-wired-settings.conf (5),
 .BR wicd-wireless-settings.conf (5),
+.BR dhclient.conf (5),
 .BR wicd-curses (8),
 .BR ifconfig (8),
 .BR iwconfig (8),

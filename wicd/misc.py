@@ -186,6 +186,8 @@ def ExecuteScripts(scripts_dir, verbose=False, extra_parameters=()):
     if not os.path.exists(scripts_dir):
         return
     for obj in sorted(os.listdir(scripts_dir)):
+        if obj.startswith(".") or obj.endswith(("~", ".new", ".orig")):
+            continue
         obj = os.path.abspath(os.path.join(scripts_dir, obj))
         if os.path.isfile(obj) and os.access(obj, os.X_OK):
             ExecuteScript(os.path.abspath(obj), verbose=verbose,

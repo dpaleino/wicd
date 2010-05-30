@@ -429,7 +429,7 @@ class appGui(object):
             gobject.idle_add(self.all_network_list.set_sensitive, True)
             gobject.idle_add(self.status_area.hide_all)
         if self.statusID:
-            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+            gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
     
     def set_connecting_state(self, info):
         if not self.connecting:
@@ -444,7 +444,7 @@ class appGui(object):
             gobject.idle_add(self.all_network_list.set_sensitive, False)
             gobject.idle_add(self.status_area.show_all)
         if self.statusID:
-            gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+            gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
         if info[0] == "wireless":
             gobject.idle_add(self.set_status, str(info[1]) + ': ' +
                    language[str(wireless.CheckWirelessConnectingMessage())])
@@ -700,7 +700,7 @@ class appGui(object):
             cancel_button.set_sensitive(True)
             self.all_network_list.set_sensitive(False)
             if self.statusID:
-                gobject.idle_add(self.status_bar.remove, 1, self.statusID)
+                gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
             gobject.idle_add(self.set_status, language["disconnecting_active"])
             gobject.idle_add(self.status_area.show_all)
             self.wait_for_events()
@@ -791,6 +791,7 @@ class appGui(object):
         
         """
         self.window.present()
+        self.window.deiconify()
         self.wait_for_events()
         self.is_visible = True
         daemon.SetGUIOpen(True)

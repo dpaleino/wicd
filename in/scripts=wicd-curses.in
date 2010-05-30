@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 if [ ! -d "$HOME/.wicd" ]; then
     mkdir -p "$HOME/.wicd"
 fi

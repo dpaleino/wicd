@@ -325,6 +325,7 @@ class BaseInterface(object):
 
             output_conf.close()
             dhclient_template.close()
+            os.chmod(dhclient_conf_path, 0644)
 
         if not client_name or not cmd:
             print "WARNING: Failed to find a valid dhcp client!"
@@ -619,6 +620,7 @@ class BaseInterface(object):
         else:
             print "ERROR: no dhcp client found"
             ret = None
+        self.dhcp_object.wait()
         return ret
         
     @neediface(False)
@@ -1088,9 +1090,7 @@ class BaseWirelessInterface(BaseInterface):
         bssid -- bssid of the network
 
         """
-        cmd = ['iwconfig', self.iface, 'essid', essid]
-        if self.verbose: print str(cmd)
-        misc.Run(cmd)
+        self.SetEssid(essid)
         base = "iwconfig %s" % self.iface
         if channel and str(channel).isdigit():
             cmd = "%s channel %s" % (base, str(channel))

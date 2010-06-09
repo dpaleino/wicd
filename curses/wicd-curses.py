@@ -105,7 +105,8 @@ def wrap_exceptions(func):
                 # Zap the screen
                 ui.stop()
                 # Print out standard notification:
-                print >> sys.stderr, "\n" + language['exception']
+                # This message was far too scary for humans, so it's gone now.
+                # print >> sys.stderr, "\n" + language['exception']
                 # Flush the buffer so that the notification is always above the
                 # backtrace
                 sys.stdout.flush()

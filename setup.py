@@ -515,7 +515,7 @@ try:
         data.append((wpath.bin, ['scripts/wicd-client']))
         data.append((wpath.bin, ['scripts/wicd-gtk']))
         data.append((wpath.gtk, ['gtk/wicd-client.py', 'gtk/netentry.py', 'gtk/prefs.py',
-                                 'gtk/gui.py', 'gtk/guiutil.py', 'data/wicd.glade',
+                                 'gtk/gui.py', 'gtk/guiutil.py', 'data/wicd.ui',
                                  'gtk/configscript.py']))
         data.append((wpath.autostart, ['other/wicd-tray.desktop']))
         if not wpath.no_install_man:

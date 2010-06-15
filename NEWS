@@ -1,4 +1,16 @@
-Wicd 1.6.0 Branch
+Wicd 1.7.0 Branch
+1.7.1:
+	Minor Changes:
+	- Now uses gtkbuilder instead of libglade
+	- Fixed bug in script macro expansion
+	- Fixed typo in EAP-fast template
+	- Applied 14 patches from Debian (big thank you to everyone who contributed):
+	  - Includes translations in source tarball
+	  - Improved documentation
+	  - Fixed resolv.conf permissions
+	  - Ignore configparser errors
+	  - Several others, please see CHANGES for more details
+
 1.7.0:
 	Changes for Packagers:
 	- Wicd now supports a -k option, which should be run by the init script

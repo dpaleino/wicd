@@ -257,7 +257,7 @@ def ParseEncryption(network):
                 if cur_val:
                     if cur_val[0] == 'SCAN':
                         #TODO should this be hardcoded?
-                        line = line.replace("$_SCAN", "0")
+                        line = line.replace("$_SCAN", "1")
                         config_file = ''.join([config_file, line])
                     else:
                         rep_val = network.get(cur_val[0].lower())

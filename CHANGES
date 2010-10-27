@@ -1,4 +1,27 @@
 ------------------------------------------------------------
+revno: 561
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Wed 2010-10-27 11:17:15 -0500
+message:
+  committed patch to fix Python 2.7 support and use python2 instead of python to run monitor.py -- thanks to Archlinux and Rémy Oudompheng
+------------------------------------------------------------
+revno: 560
+committer: Andrew Psaltis <ampsaltis@gmail.com>
+branch nick: 1.6
+timestamp: Fri 2010-08-20 17:38:52 -0400
+message:
+  Scan the SSID by default, should make wicd a bit more cooperative at handling hidden SSIDs.
+  
+  Set scan_ssid in the templates to "1" by default, instead of "0".
+------------------------------------------------------------
+revno: 559
+committer: Adam Blackburn <compwiz18@gmail.com>
+branch nick: wicd
+timestamp: Tue 2010-06-15 11:53:53 -0500
+message:
+  updated setup.py, NEWS, and CHANGES for 1.7.1 release
+------------------------------------------------------------
 revno: 558
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: wicd
@@ -19,104 +42,6 @@ branch nick: wicd
 timestamp: Sun 2010-05-30 18:03:18 +0800
 message:
   Merged 1.7.1-probably, which contains 14 patches from Debian. Thanks to David Paleino and everyone else who contributed these patches.
-    ------------------------------------------------------------
-    revno: 555.1.14
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:40 +0800
-    message:
-      Debian patch: xx-get_translations.patch
-    ------------------------------------------------------------
-    revno: 555.1.13
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:39 +0800
-    message:
-      Debian patch: 30-make_connection_info_selectable.patch
-    ------------------------------------------------------------
-    revno: 555.1.12
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:39 +0800
-    message:
-      Debian patch: 29-document_variables_passed_to_scripts.patch
-    ------------------------------------------------------------
-    revno: 555.1.11
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:38 +0800
-    message:
-      Debian patch: 28-announce_dhclient.conf.template.patch
-    ------------------------------------------------------------
-    revno: 555.1.10
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:38 +0800
-    message:
-      Debian patch: 27-fix_resolv.conf_perms.patch
-    ------------------------------------------------------------
-    revno: 555.1.9
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:37 +0800
-    message:
-      Debian patch: 24-wait_for_DHCP_client.patch
-    ------------------------------------------------------------
-    revno: 555.1.8
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:37 +0800
-    message:
-      Debian patch: 22-fix_deprecation.patch
-    ------------------------------------------------------------
-    revno: 555.1.7
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:36 +0800
-    message:
-      Debian patch: 21-fix_ESSID_setting.patch
-    ------------------------------------------------------------
-    revno: 555.1.6
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:36 +0800
-    message:
-      Debian patch: 18-dont_run_unexpected_files_in_scripts.patch
-    ------------------------------------------------------------
-    revno: 555.1.5
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:35 +0800
-    message:
-      Debian patch: 11-fix_gui_showing_from_tray.patch
-    ------------------------------------------------------------
-    revno: 555.1.4
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:35 +0800
-    message:
-      Debian patch: 08-fix_help_message.patch
-    ------------------------------------------------------------
-    revno: 555.1.3
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:35 +0800
-    message:
-      Debian patch: 06-dont_bomb_out_on_configparser_error.patch
-    ------------------------------------------------------------
-    revno: 555.1.2
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:34 +0800
-    message:
-      Debian patch: 05-use_binsh.patch
-    ------------------------------------------------------------
-    revno: 555.1.1
-    committer: Adam Blackburn <abkbrn@gmail.com>
-    branch nick: wicd
-    timestamp: Sat 2010-05-29 17:32:34 +0800
-    message:
-      Debian patch: 03-fix_typo_wicd-cli.patch
 ------------------------------------------------------------
 revno: 555
 fixes bug(s): https://launchpad.net/bugs/555386
@@ -139,6 +64,7 @@ branch nick: 1.6
 timestamp: Wed 2010-01-27 14:06:21 -0500
 message:
   Fixed bug in script macro expansion.
+------------------------------------------------------------
 
 Due to size, this file has been truncated. All revisions relevant to
 the 1.7.1 release have been included. For more information, please see

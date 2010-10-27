@@ -4,6 +4,9 @@ Wicd 1.7.0 Branch
 	- Now uses gtkbuilder instead of libglade
 	- Fixed bug in script macro expansion
 	- Fixed typo in EAP-fast template
+	- Applied 1 patch from Archlinux (thanks Rémy Oudompheng)
+	  - Fixed Python 2.7 support
+	  - Works if Python3 is the default Python
 	- Applied 14 patches from Debian (big thank you to everyone who contributed):
 	  - Includes translations in source tarball
 	  - Improved documentation

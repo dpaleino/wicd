@@ -35,7 +35,7 @@ from dbus import Int32
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
     def __init__(self, path, debug=False, mark_whitespace="`'`"):
-        RawConfigParser.__init__(self)
+        RawConfigParser.__init__(self, allow_no_value=True)
         self.config_file = path
         self.debug = debug
         self.mrk_ws = mark_whitespace
@@ -185,28 +185,35 @@ class ConfigManager(RawConfigParser):
 
 
     def _copy_section(self, name):
-        # Yes, deepcopy sucks, but it is robust to changes in both
-        # this class and RawConfigParser.
-        p = copy.deepcopy(self)
-        for sname in p.sections():
-            if sname != name:
-                p.remove_section(sname)
+        p = ConfigManager("", self.debug, self.mrk_ws)
+        p.add_section(name)
+        for (iname, value) in self.items(name):
+            p.set(name, iname, value)
+        # Store the filename this section was read from.
         p.config_file = p.get_option(name, '_filename_', p.config_file)
         p.remove_option(name, '_filename_')
         return p
 
     def write(self):
         """ Writes the loaded config file to disk. """
-        # Really don't like this deepcopy.
-        p = copy.deepcopy(self)
-        for sname in p.sections():
-            fname = p.get_option(sname, '_filename_')
+        in_this_file = []
+        for sname in self.sections():
+            fname = self.get_option(sname, '_filename_')
             if fname and fname != self.config_file:
+                # Write sections from other files
                 section = self._copy_section(sname)
-                p.remove_section(sname)
                 section._write_one()
+            else:
+                # Save names of local sections
+                in_this_file.append(sname)
 
-        for sname in p.sections():
+        # Make an instance with only these sections
+        p = ConfigManager("", self.debug, self.mrk_ws)
+        p.config_file = self.config_file
+        for sname in in_this_file:
+            p.add_section(sname)
+            for (iname, value) in self.items(sname):
+                p.set(sname, iname, value)
             p.remove_option(sname, '_filename_')
         p._write_one()
 

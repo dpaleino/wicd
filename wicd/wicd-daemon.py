@@ -1806,7 +1806,7 @@ def main(argv):
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
     if not no_poll:
-        child_pid = Popen([misc.find_path("python"), "-O", 
+        child_pid = Popen([misc.find_path("python2"), "-O", 
                           os.path.join(wpath.daemon, "monitor.py")],
                           shell=False, close_fds=True).pid
     atexit.register(on_exit, child_pid)

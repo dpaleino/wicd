@@ -1,4 +1,25 @@
 ------------------------------------------------------------
+revno: 564
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Fri 2010-10-29 10:32:33 -0500
+message:
+  work with Python < 2.7 again
+------------------------------------------------------------
+revno: 563
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Wed 2010-10-27 11:46:49 -0500
+message:
+  change to 1.7.1b1 beta release
+------------------------------------------------------------
+revno: 562
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Wed 2010-10-27 11:41:47 -0500
+message:
+  updated NEWS and CHANGES for 1.7.1 release (again)
+------------------------------------------------------------
 revno: 561
 committer: Adam Blackburn <abkbrn@gmail.com>
 branch nick: wicd

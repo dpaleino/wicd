@@ -1,5 +1,5 @@
 Wicd 1.7.0 Branch
-1.7.1b1:
+1.7.1b2:
 	Minor Changes:
 	- Now uses gtkbuilder instead of libglade
 	- Fixed bug in script macro expansion

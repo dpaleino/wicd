@@ -24,7 +24,7 @@ reusable for other purposes as well.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import os, copy
+import sys, os, copy
 
 from ConfigParser import RawConfigParser, ParsingError
 
@@ -35,7 +35,10 @@ from dbus import Int32
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
     def __init__(self, path, debug=False, mark_whitespace="`'`"):
-        RawConfigParser.__init__(self, allow_no_value=True)
+        if sys.version_info >= (2, 7, 0):
+            RawConfigParser.__init__(self, allow_no_value=True)
+        else:
+            RawConfigParser.__init__(self)
         self.config_file = path
         self.debug = debug
         self.mrk_ws = mark_whitespace
@@ -46,7 +49,6 @@ class ConfigManager(RawConfigParser):
             try:
                 self.read(path)
             except ParsingError, p:
-                import sys
                 print "Could not start wicd: %s" % p.message
                 sys.exit(1)
 

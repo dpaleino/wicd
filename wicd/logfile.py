@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 #
 #    Copyright (C) 1999-2006  Keith Dart <keith@kdart.com>

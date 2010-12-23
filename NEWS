@@ -1,5 +1,13 @@
 Wicd 1.7.0 Branch
 1.7.1b2:
+	Changes for Packagers:
+	- You will now want to use the --python option to setup.py configure to 
+	  make sure the right Python (python2.x) is used. With the Python 3
+	  transition in progress, the lack of uniformity across distros made it 
+	  difficult to find a solution that works everywhere. As a result, the 
+	  python executable path can be set (for subprocesses launched by Wicd)
+	  with the --python option to setup.py configure, and patching of the
+	  shebang lines may be required if `which python` is not python2.x.
 	Minor Changes:
 	- Now uses gtkbuilder instead of libglade
 	- Fixed bug in script macro expansion
@@ -7,7 +15,8 @@ Wicd 1.7.0 Branch
 	- Applied 1 patch from Archlinux (thanks Rémy Oudompheng)
 	  - Fixed Python 2.7 support
 	  - Works if Python3 is the default Python
-	- Applied 14 patches from Debian (big thank you to everyone who contributed):
+	- Applied 14 patches from Debian (big thank you to everyone
+							who contributed):
 	  - Includes translations in source tarball
 	  - Improved documentation
 	  - Fixed resolv.conf permissions

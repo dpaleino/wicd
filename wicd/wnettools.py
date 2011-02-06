@@ -292,7 +292,7 @@ class BaseInterface(object):
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%(cmd)s %(iface)s -h %(hostname)s ",
+                {'connect' : r"%(cmd)s %(iface)s -h %(hostname)s --noipv4ll ",
                  'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
                 },

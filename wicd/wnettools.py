@@ -738,7 +738,16 @@ class BaseInterface(object):
         trying to ping it.
         
         """
-        cmd = "ping -q -w 3 -c 1 %s" % gateway
+        if "iputils" in misc.Run(["ping", "-V"]):
+            cmd = "ping -q -w 3 -c 1 %s" % gateway
+        else:
+            # ping is from inetutils-ping (which doesn't support -w)
+            # or from some other package
+            #
+            # If there's no AP association, this will wait for
+            # timeout, while the above will wait (-w) 3 seconds at
+            # most.
+            cmd = "ping -q -c 1 %s" % gateway
         if self.verbose: print cmd
         return misc.LaunchAndWait(cmd)
 

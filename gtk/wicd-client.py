@@ -227,15 +227,24 @@ class TrayIcon(object):
 
         def _show_notification(self, title, details, image=None):
             if self.should_notify:
-                if not self._last_bubble:
-                    self._last_bubble = pynotify.Notification(title, details,
-                                                              image)
-                    self._last_bubble.show()
-                else:
-                    self._last_bubble.clear_actions()
-                    self._last_bubble.clear_hints()
-                    self._last_bubble.update(title, details, image)
-                    self._last_bubble.show()
+                try:
+                    if not self._last_bubble:
+                        self._last_bubble = pynotify.Notification(title, details,
+                                                                  image)
+                        self._last_bubble.show()
+                    else:
+                        self._last_bubble.clear_actions()
+                        self._last_bubble.clear_hints()
+                        self._last_bubble.update(title, details, image)
+                        self._last_bubble.show()
+                except Exception, e:
+                    if hasattr(e, 'message') and e.message != '':
+                        msg = e.message
+                    elif hasattr(e, 'args') and len(e.args) > 0:
+                        msg = e.args[-1]
+                    else:
+                        msg = str(e)
+                    print "Exception during notification: %s" % msg
 
                 self.should_notify = False
 

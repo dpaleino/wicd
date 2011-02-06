@@ -292,7 +292,7 @@ class BaseInterface(object):
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%(cmd)s %(iface)s -h %(hostname)s --noipv4ll ",
+                {'connect' : r"%(cmd)s -h %(hostname)s --noipv4ll %(iface)s ",
                  'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
                 },
@@ -385,11 +385,7 @@ class BaseInterface(object):
                 self.dhclient_needs_verbose = True
             else:
                 self.dhclient_needs_verbose = False
-        debian_dhcpcd_cmd = self._find_program_path('dhcpcd-bin')
-        if debian_dhcpcd_cmd:
-            self.dhcpcd_cmd = debian_dhcpcd_cmd
-        else:
-            self.dhcpcd_cmd = self._find_program_path("dhcpcd")
+        self.dhcpcd_cmd = self._find_program_path("dhcpcd")
         self.pump_cmd = self._find_program_path("pump")
         self.udhcpc_cmd = self._find_program_path("udhcpc")
         

@@ -1201,8 +1201,9 @@ class WirelessDaemon(dbus.service.Object):
     def CheckWirelessConnectingMessage(self):
         """ Returns the wireless interface's status message. """
         if not self.wifi.connecting_thread == None:
+            essid = self.wifi.connecting_thread.network["essid"]
             stat = self.wifi.connecting_thread.GetStatus()
-            return stat
+            return essid, stat
         else:
             return False
 

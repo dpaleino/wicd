@@ -151,16 +151,10 @@ class appGui(object):
         self.wTree = gtk.Builder()
         self.wTree.add_from_file(gladefile)
         self.window = self.wTree.get_object("window1")
-        size = daemon.ReadWindowSize("main")
-        width = size[0]
-        height = size[1]
-        if width > -1 and height > -1:
-            self.window.resize(int(width), int(height))
-        else:
-            width = int(gtk.gdk.screen_width() / 2)
-            if width > 530:
-                width = 530
-            self.window.resize(width, int(gtk.gdk.screen_height() / 1.7))
+        width = int(gtk.gdk.screen_width() / 2)
+        if width > 530:
+            width = 530
+        self.window.resize(width, int(gtk.gdk.screen_height() / 1.7))
 
         dic = { "refresh_clicked" : self.refresh_clicked, 
                 "quit_clicked" : self.exit, 
@@ -772,7 +766,6 @@ class appGui(object):
                                    'org.wicd.daemon')
         [width, height] = self.window.get_size()
         try:
-            daemon.WriteWindowSize(width, height, "main")
             daemon.SetGUIOpen(False)
         except DBusException:
             pass

@@ -83,10 +83,6 @@ of commercial routers in use with "linksys" as the essid.
 .br
 1 = Use settings globally
 .TP
-.BI "has_profile = " <True|False>
-This parameter is used internally by Wicd and has no effect as far as the 
-user is concerned.
-.TP
 .BI "beforescript = " <None|arbitrary_script>
 This defines a script to run before Wicd brings up the connection.
 .br

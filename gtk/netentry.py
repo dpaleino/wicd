@@ -68,7 +68,6 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.set_default_size()
 
         self.connect('show', lambda *a, **k: self.set_default_size())
-        self.connect('hide', lambda *a, **k: self.write_size())
 
         # Set up the Advanced Settings Dialog.
         self.txt_ip = LabelEntry(language['ip'])
@@ -141,17 +140,13 @@ class AdvancedSettingsDialog(gtk.Dialog):
 
 
     def set_default_size(self):
-        width, height = daemon.ReadWindowSize('netprop')
-        if width > -1 and height > -1:
-            self.resize(int(width), int(height))
+        width, height = self.get_size()
+        s_height = gtk.gdk.screen_height()
+        if s_height < 768:
+            height = s_height * .75
         else:
-            width, height = self.get_size()
-            s_height = gtk.gdk.screen_height()
-            if s_height < 768:
-                height = s_height * .75 
-            else:
-                height = 600
-            self.resize(int(width), int(height))
+            height = 600
+        self.resize(int(width), int(height))
         
     def set_defaults(self, widget=None, event=None):
         """ Put some default values into entries to help the user out. """
@@ -247,10 +242,6 @@ class AdvancedSettingsDialog(gtk.Dialog):
         self.destroy()
         del self
 
-    def write_size(self):
-        w, h = self.get_size()
-        daemon.WriteWindowSize(w, h, 'netprop')
-    
     def save_settings(self):
         """ Save settings common to wired and wireless settings dialogs. """
         if self.chkbox_static_ip.get_active():

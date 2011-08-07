@@ -690,55 +690,6 @@ class WicdDaemon(dbus.service.Object):
         self.sudo_app = sudo_app
         self.config.set("Settings", "sudo_app", sudo_app, write=True)
 
-    @dbus.service.method('org.wicd.daemon')
-    def WriteWindowSize(self, width, height, win_name):
-        """ Write the desired default window size.
-
-        win_name should be either 'main' or 'pref', and specifies
-        whether the size being given applies to the main GUI window
-        or the preferences dialog window.
-
-        """
-        if win_name:
-            height_str = '%s_height' % win_name
-            width_str = '%s_width' % win_name
-        # probably don't need the else, but the previous code
-        # had an else that caught everything
-        else:
-            height_str = "pref_height"
-            width_str = "pref_width"
-
-        self.config.set("Settings", width_str, width)
-        self.config.set("Settings", height_str, height)
-        self.config.write()
-
-    @dbus.service.method('org.wicd.daemon')
-    def ReadWindowSize(self, win_name):
-        """Returns a list containing the desired default window size
-
-        Attempts to read the default size from the config file,
-        and if that fails, returns a default of 605 x 400.
-
-        """
-        default_width, default_height = (-1, -1)
-        if win_name:
-            height_str = '%s_height' % win_name
-            width_str = '%s_width' % win_name
-        # probably don't need the else, but the previous code
-        # had an else that caught everything
-        else:
-            height_str = "pref_height"
-            width_str = "pref_width"
-
-        width = self.config.get("Settings", width_str, default=default_width)
-        height = self.config.get("Settings", height_str, default=default_height)
-        self.config.write()
-
-        size = []
-        size.append(int(width))
-        size.append(int(height))
-        return size
-
     def _wired_autoconnect(self, fresh=True):
         """ Attempts to autoconnect to a wired network. """
         wiredb = self.wired_bus
@@ -1218,10 +1169,7 @@ class WirelessDaemon(dbus.service.Object):
         elif self.config.has_section(bssid_key):
             section = bssid_key
         else:
-            cur_network["has_profile"] = False
             return "500: Profile Not Found"
-
-        cur_network["has_profile"] = True
 
         for x in self.config.options(section):
             if not cur_network.has_key(x) or x.endswith("script"):
@@ -1260,9 +1208,11 @@ class WirelessDaemon(dbus.service.Object):
             self.config.add_section(essid_key)
 
         for x in cur_network:
-            self.config.set(bssid_key, x, cur_network[x])
-            if cur_network.get("use_settings_globally", False):
-                self.config.set(essid_key, x, cur_network[x])
+            # There's no reason to save these to a configfile...
+            if x not in ['quality', 'strength', 'bitrates', 'has_profile']:
+                self.config.set(bssid_key, x, cur_network[x])
+                if cur_network.get("use_settings_globally", False):
+                    self.config.set(essid_key, x, cur_network[x])
 
         write_script_ent(bssid_key, "beforescript")
         write_script_ent(bssid_key, "afterscript")
@@ -1337,7 +1287,7 @@ class WirelessDaemon(dbus.service.Object):
             self.Scan(sync=True)
 
         for x, network in enumerate(self.LastScan):
-            if bool(network["has_profile"]):
+            if self.config.has_section(network['bssid']):
                 if self.debug_mode:
                     print network["essid"] + ' has profile'
                 if bool(network.get('automatic')):

@@ -91,18 +91,6 @@ This specifies the default search domain to be used by the resolver.
 0 = disabled
 .br
 1 = enabled
-.TP
-.BI "window_height = " <integer_value> " (in pixels)"
-This determines the height of the client window.
-.TP
-.BI "window_width = " <integer_value> " (in pixels)"
-This determines the width of the client window.
-.TP
-.BI "pref_height = " <integer_value> " (in pixels)"
-This determines the height of the "Preferences" window when launched from the client.
-.TP
-.BI "pref_width = " <integer_value> " (in pixels)"
-This determines the width of the "Preferences" window when launched from the client.
 
 
 .SH "SEE ALSO"

@@ -79,9 +79,6 @@ Dit verzekert je ervan dat je niet per ongeluk met een ander netwerk verbind dat
 .br
 1 = Gebruik globale instellingen
 .TP
-.BI "has_profile = " <True|False>
-Deze parameter wordt alleen intern door Wicd gebruikt en heeft geen effect voor de gebruiker zover de gebruiker kan zien.
-.TP
 .BI "beforescript = " <None|willekeurig_script>
 Dit definieert een script dat gestart moet worden voordat Wicd gaat verbinden.
 Dit script moet een Bourne-compatibel script zijn en moet uitvoerbaar zijn.

@@ -248,7 +248,6 @@ class PreferencesDialog(object):
         daemon.SetSudoApp(sudo_tool)
 
         [width, height] = self.dialog.get_size()
-        daemon.WriteWindowSize(width, height, "pref")
         
         not_path = os.path.join(USER_SETTINGS_DIR, 'USE_NOTIFICATIONS')
         if self.notificationscheckbox.get_active():
@@ -316,16 +315,10 @@ class PreferencesDialog(object):
         self.dialog.set_title(language['preferences'])
         if os.path.exists(os.path.join(wpath.images, "wicd.png")):
             self.dialog.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
-        size = daemon.ReadWindowSize("pref")
-        width = size[0]
-        height = size[1]
-        if width > -1 and height > -1:
-            self.dialog.resize(int(width), int(height))
-        else:
-            width = int(gtk.gdk.screen_width() / 2.4)
-            if width > 450:
-                width = 450
-            self.dialog.resize(width, int(gtk.gdk.screen_height() / 2))
+        width = int(gtk.gdk.screen_width() / 2.4)
+        if width > 450:
+            width = 450
+        self.dialog.resize(width, int(gtk.gdk.screen_height() / 2))
             
         self.wiredcheckbox = setup_label("pref_always_check",
                                          'wired_always_on')

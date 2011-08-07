@@ -50,7 +50,7 @@ strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
 bitrates_pattern = re.compile('(\d+\s+\S+/s)', _re_mode)
-mode_pattern = re.compile('.*Mode:(.*?)\n', _re_mode)
+mode_pattern = re.compile('.*Mode:([A-Za-z-]*?)\n', _re_mode)
 freq_pattern = re.compile('.*Frequency:(.*?)\n', _re_mode)
 wep_pattern = re.compile('.*Encryption key:(.*?)\n', _re_mode)
 altwpa_pattern = re.compile('(wpa_ie)', _re_mode)
@@ -1263,6 +1263,9 @@ class BaseWirelessInterface(BaseInterface):
 
         # Mode
         ap['mode'] = misc.RunRegex(mode_pattern, cell)
+        if ap['mode'] is None:
+            print 'Invalid network mode string, ignoring!'
+            return None
 
         # Break off here if we're using a ralink card
         if self.wpa_driver == RALINK_DRIVER:

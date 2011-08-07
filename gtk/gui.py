@@ -440,8 +440,9 @@ class appGui(object):
         if self.statusID:
             gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
         if info[0] == "wireless":
-            gobject.idle_add(self.set_status, str(info[1]) + ': ' +
-                   language[str(wireless.CheckWirelessConnectingMessage())])
+            essid, stat = wireless.CheckWirelessConnectingMessage()
+            gobject.idle_add(self.set_status, "%s: %s" % (essid,
+                                                          language[str(stat)]))
         elif info[0] == "wired":
             gobject.idle_add(self.set_status, language['wired_network'] + ': ' +
                          language[str(wired.CheckWiredConnectingMessage())])

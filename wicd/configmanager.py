@@ -24,7 +24,7 @@ reusable for other purposes as well.
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import sys, os, copy
+import sys, os
 
 from ConfigParser import RawConfigParser, ParsingError
 

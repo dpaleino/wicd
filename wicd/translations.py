@@ -55,7 +55,7 @@ def get_gettext():
     _ = lang.gettext
     return _
 
-# Generated automatically on Wed, 30 Dec 2009 15:23:05 CST
+# Generated automatically on Mon, 11 Jul 2011 03:53:23 CDT
 _ = get_gettext()
 language = {}
 language['resetting_ip_address'] = _('''Resetting IP address...''')
@@ -75,7 +75,7 @@ language['backend_alert'] = _('''Changes to your backend won't occur until the d
 language['about_help'] = _('''Stop a network connection in progress''')
 language['connecting'] = _('''Connecting''')
 language['pre_disconnect_script'] = _('''Run pre-disconnect script''')
-language['cannot_edit_scripts_1'] = _('''To avoid various complications, wicd-curses does not support directly editing the scripts directly.  However, you can edit them manually.  First, (as root)", open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:''')
+language['cannot_edit_scripts_1'] = _('''To avoid various complications, wicd-curses does not support directly editing the scripts.  However, you can edit them manually.  First, (as root)", open the "$A" config file, and look for the section labeled by the $B in question.  In this case, this is:''')
 language['cannot_edit_scripts_3'] = _('''You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.''')
 language['cannot_edit_scripts_2'] = _('''Once there, you can adjust (or add) the "beforescript", "afterscript", and "disconnectscript" variables as needed, to change the preconnect, postconnect, and disconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information.''')
 language['scripts_need_pass'] = _('''You must enter your password to configure scripts''')

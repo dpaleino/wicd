@@ -30,7 +30,6 @@ import sys
 import os
 import gtk
 import ConfigParser
-import gtk.glade
 
 from wicd import wpath
 from wicd import translations
@@ -155,21 +154,22 @@ def main (argv):
     
     script_info = get_script_info(network, network_type)
     
-    gladefile = wpath.gtk + "wicd.glade"
-    wTree = gtk.glade.XML(gladefile)
-    dialog = wTree.get_widget("configure_script_dialog")
-    wTree.get_widget("pre_label").set_label(language['before_script'] + ":")
-    wTree.get_widget("post_label").set_label(language['after_script'] + ":")
-    wTree.get_widget("pre_disconnect_label").set_label(language['pre_disconnect_script']
+    gladefile = os.path.join(wpath.gtk, "wicd.ui")
+    self.wTree = gtk.Builder()
+    self.wTree.add_from_file(gladefile)
+    self.dialog = self.wTree.get_object("configure_script_dialog")
+    self.wTree.get_object("pre_label").set_label(language['before_script'] + ":")
+    self.wTree.get_object("post_label").set_label(language['after_script'] + ":")
+    self.wTree.get_object("pre_disconnect_label").set_label(language['pre_disconnect_script']
                                                    + ":")
-    wTree.get_widget("post_disconnect_label").set_label(language['post_disconnect_script']
+    self.wTree.get_object("post_disconnect_label").set_label(language['post_disconnect_script']
                                                    + ":")
-    wTree.get_widget("window1").hide()
+    self.wTree.get_object("window1").hide()
     
-    pre_entry = wTree.get_widget("pre_entry")
-    post_entry = wTree.get_widget("post_entry")
-    pre_disconnect_entry = wTree.get_widget("pre_disconnect_entry")
-    post_disconnect_entry = wTree.get_widget("post_disconnect_entry")
+    pre_entry = self.wTree.get_object("pre_entry")
+    post_entry = self.wTree.get_object("post_entry")
+    pre_disconnect_entry = self.wTree.get_object("pre_disconnect_entry")
+    post_disconnect_entry = self.wTree.get_object("post_disconnect_entry")
     
     pre_entry.set_text(none_to_blank(script_info.get("pre_entry")))
     post_entry.set_text(none_to_blank(script_info.get("post_entry")))

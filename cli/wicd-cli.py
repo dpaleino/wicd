@@ -175,6 +175,7 @@ if options.disconnect:
 	op_performed = True
 
 if options.connect:
+	check = None
 	if options.wireless and options.network > -1:
 		is_valid_wireless_network_id(options.network)
 		name = wireless.GetWirelessProperty(options.network, 'essid')
@@ -194,17 +195,18 @@ if options.connect:
 
 	# update user on what the daemon is doing
 	last = None
-	while check():
-		next = message()
-		if next != last:
-			# avoid a race condition where status is updated to "done" after the
-			# loop check
-			if next == "done":
-				break
-			print "%s..." % next.replace("_", " ")
-			last = next
-	print "done!"
-	op_performed = True
+	if check:
+		while check():
+			next = message()
+			if next != last:
+				# avoid a race condition where status is updated to "done" after the
+				# loop check
+				if next == "done":
+					break
+				print "%s..." % next.replace("_", " ")
+				last = next
+		print "done!"
+		op_performed = True
 
 # pretty print optional and required properties
 def str_properties(prop):

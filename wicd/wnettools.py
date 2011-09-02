@@ -45,7 +45,7 @@ from misc import find_path
 _re_mode = (re.I | re.M | re.S)
 essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', _re_mode)
 ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
-channel_pattern = re.compile('.*Channel:?=? ?(\d\d?)', _re_mode)
+channel_pattern = re.compile('.*Channel:?=? ?(\d+)', _re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)

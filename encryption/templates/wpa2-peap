@@ -1,0 +1,16 @@
+name = WPA2-PEAP
+author = atiketemola
+version = 1
+require identity *Username domain *Domain password *Password
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+    ssid="$_ESSID"
+    proto=RSN
+    key_mgmt=WPA-EAP
+    pairwise=CCMP
+    eap=PEAP
+    identity="$_DOMAIN\$_IDENTITY"
+    password="$_PASSWORD"
+    phase2="auth=MSCHAPv2"
+}

@@ -1,5 +1,8 @@
 wpa
+wpa-peap
 wpa-psk
+wpa2-leap
+wpa2-peap
 wep-hex
 wep-passphrase
 wep-shared

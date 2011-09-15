@@ -1,0 +1,18 @@
+name = WPA2-LEAP
+author = atiketemola
+version = 1
+require username *Username password *Password
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+    ssid="$_ESSID"
+    scan_ssid=$_SCAN
+    auth_alg=LEAP
+    key_mgmt=WPA-EAP
+    proto=WPA2
+    pairwise=CCMP TKIP
+    group=CCMP TKIP
+    eap=LEAP
+    identity="$_USERNAME"
+    password="$_PASSWORD"
+}

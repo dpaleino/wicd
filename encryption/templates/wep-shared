@@ -2,6 +2,7 @@ name = WEP Shared/Restricted
 author = Dan O'Reilly
 version = 1
 require key *Key
+protected key *Key
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

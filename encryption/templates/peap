@@ -2,6 +2,7 @@ name = PEAP with GTC
 author = Adam Blackburn
 version = 2
 require identity *Identity password *Password
+protected password *Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

@@ -2,6 +2,7 @@ name = WPA 1/2 (Passphrase)
 author = Adam Blackburn
 version = 1
 require key *Key
+protected key *Key
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

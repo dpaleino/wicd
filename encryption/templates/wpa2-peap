@@ -2,6 +2,7 @@ name = WPA2-PEAP
 author = atiketemola
 version = 1
 require identity *Username domain *Domain password *Password
+protected password *Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

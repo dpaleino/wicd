@@ -176,3 +176,43 @@ class GreyLabel(gtk.Label):
     def set_label(self, text):
         self.set_markup(text)
         self.set_alignment(0, 0)
+
+
+class ProtectedLabelEntry(gtk.HBox):
+    """ A LabelEntry with a CheckButton that protects the entry text. """
+    def __init__(self, label_text):
+        gtk.HBox.__init__(self)
+        self.entry = gtk.Entry()
+        self.entry.set_size_request(200, -1)
+        self.entry.set_visibility(False)
+        self.label = LeftAlignedLabel()
+        self.label.set_text(label_text)
+        self.label.set_size_request(165, -1)
+        self.check = gtk.CheckButton()
+        self.check.set_size_request(5, -1)
+        self.check.set_active(False)
+        self.check.set_focus_on_click(False)
+        self.pack_start(self.label, fill=True, expand=True)
+        self.pack_start(self.check, fill=True, expand=True)
+        self.pack_start(self.entry, fill=False, expand=False)
+        self.label.show()
+        self.check.show()
+        self.entry.show()
+        self.check.connect('clicked', self.click_handler)
+        self.show()
+
+    def set_entry_text(self, text):
+        # For compatibility...
+        self.entry.set_text(text)
+
+    def get_entry_text(self):
+        return self.entry.get_text()
+
+    def set_sensitive(self, value):
+        self.entry.set_sensitive(value)
+        self.label.set_sensitive(value)
+        self.check.set_sensitive(value)
+
+    def click_handler(self, widget=None, event=None):
+        active = self.check.get_active()
+        self.entry.set_visibility(active)

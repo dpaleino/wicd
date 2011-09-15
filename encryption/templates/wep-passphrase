@@ -2,6 +2,7 @@ name = WEP (Passphrase)
 author = Adam Blackburn
 version = 1
 require passphrase *Passphrase
+protected passphrase *Passphrase
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

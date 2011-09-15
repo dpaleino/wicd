@@ -30,7 +30,7 @@ import wicd.misc as misc
 import wicd.wpath as wpath
 import wicd.dbusmanager as dbusmanager
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input
+from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input, ProtectedLabelEntry
 
 from wicd.translations import language
 
@@ -358,7 +358,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.chkbox_encryption.set_active(False)
         self.combo_encryption.set_sensitive(False)
         self.encrypt_types = misc.LoadEncryptionMethods()
-        
+ 
         information_button = gtk.Button(stock=gtk.STOCK_INFO)
         self.button_hbox.pack_start(information_button, False, False)
         information_button.connect('clicked', lambda *a, **k: WirelessInformationDialog(networkID, self))
@@ -532,10 +532,15 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             fields = methods[ID][type_]
             for field in fields:
                 if language.has_key(field[1]):
-                    box = LabelEntry(language[field[1].lower().replace(' ','_')])
+                    field_text = language[field[1].lower().replace(' ','_')]
                 else:
-                    box = LabelEntry(field[1].replace('_',' '))
-                box.set_auto_hidden(True)
+                    field_text = field[1].replace('_',' ')
+               
+                if field in methods[ID]['protected']:
+                    box = ProtectedLabelEntry(field_text)
+                else:
+                    box = LabelEntry(field_text)
+
                 self.vbox_encrypt_info.pack_start(box)
                 # Add the data to a dict, so that the information
                 # can be easily accessed by giving the name of the wanted

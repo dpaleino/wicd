@@ -2,6 +2,7 @@ name = WPA2-LEAP
 author = atiketemola
 version = 1
 require username *Username password *Password
+protected password *Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

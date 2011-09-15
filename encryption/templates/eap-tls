@@ -3,7 +3,7 @@ author = Dan O'Reilly
 version = 1
 require identity *Identity private_key *Private_Key private_key_passwd *Private_Key_Password
 optional ca_cert *Path_to_CA_Cert client_cert *Path_to_Client_Cert
-
+protected identity *Identity private_key *Private_Key private_key_passwd *Private_Key_Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

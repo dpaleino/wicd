@@ -2,6 +2,7 @@ name = WPA 1/2 (Preshared Key)
 author = Adam Blackburn
 version = 1
 require apsk *Preshared_Key
+protected apsk *Preshared_Key
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

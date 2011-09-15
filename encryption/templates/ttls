@@ -2,6 +2,7 @@ name = TTLS with WEP
 author = Adam Blackburn
 version = 1
 require identity *Identity password *Password auth *Authentication
+protected password *Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={

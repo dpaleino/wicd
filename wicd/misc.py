@@ -335,6 +335,7 @@ def _parse_enc_template(enctype):
     cur_type["fields"] = []
     cur_type['optional'] = []
     cur_type['required'] = []
+    cur_type['protected'] = []
     cur_type['name'] = ""
     for index, line in enumerate(f):
         if line.startswith("name") and not cur_type["name"]:
@@ -352,6 +353,13 @@ def _parse_enc_template(enctype):
             if not cur_type["optional"]:
                 # An error occured parsing the optional line.
                 print "Invalid 'optional' line found in template %s" % enctype
+                continue
+        elif line.startswith("protected"):
+            cur_type["protected"] = __parse_field_ent(parse_ent(line, "protected"),
+                                                    field_type="protected")
+            if not cur_type["protected"]:
+                # An error occured parsing the protected line.
+                print "Invalid 'protected' line found in template %s" % enctype
                 continue
         elif line.startswith("----"):
             # We're done.

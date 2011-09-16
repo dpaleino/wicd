@@ -144,14 +144,17 @@ def LaunchAndWait(cmd):
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid. """
-    if ip != None:
-        if ip.count('.') == 3:
-            ipNumbers = ip.split('.')
-            for number in ipNumbers:
-                if not number.isdigit() or int(number) > 255:
-                    return False
-            return ipNumbers
-    return False
+    if not ip: return False
+
+    ipNumbers = ip.split('.')
+    if len(ipNumbers) < 4:
+        return False
+
+    for number in ipNumbers:
+        if not number.isdigit() or int(number) > 255:
+            return False
+
+    return ipNumbers
 
 def PromptToStartDaemon():
     """ Prompt the user to start the daemon """

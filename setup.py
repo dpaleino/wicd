@@ -583,7 +583,7 @@ try:
         data.append((wpath.resume, ['other/80-wicd-connect.sh' ]))
         data.append((wpath.suspend, ['other/50-wicd-suspend.sh' ]))
     if not wpath.no_install_pmutils:
-        data.append((wpath.pmutils, ['other/91wicd' ]))
+        data.append((wpath.pmutils, ['other/55wicd' ]))
     print 'Using pid path', os.path.basename(wpath.pidfile)
     print 'Language support for',
     for language in os.listdir('translations/'):

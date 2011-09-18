@@ -139,6 +139,9 @@ class WiredProfileChooser:
         dialog.destroy()
 
 
+def get_wireless_prop(net_id, prop):
+    return wireless.GetWirelessProperty(net_id, prop)
+
 class appGui(object):
     """ The main wicd GUI class. """
     def __init__(self, standalone=False, tray=None):
@@ -559,8 +562,10 @@ class appGui(object):
         num_networks = wireless.GetNumberOfNetworks()
         instruct_label = self.wTree.get_object("label_instructions")
         if num_networks > 0:
+            skip_never_connect = not daemon.GetShowNeverConnect()
             instruct_label.show()
-            for x in range(0, num_networks):
+            for x in xrange(0, num_networks):
+                if skip_never_connect and misc.to_bool(get_wireless_prop(x,'never')): continue
                 if printLine:
                     sep = gtk.HSeparator()
                     self.network_list.pack_start(sep, padding=10, fill=False,

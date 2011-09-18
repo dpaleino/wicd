@@ -57,7 +57,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
         if network_name:
             title = '%s - %s' % (network_name, language['properties'])
         else:
-            title = language['properties']	
+            title = language['properties']  
 
         gtk.Dialog.__init__(self, title=title,
                             flags=gtk.DIALOG_MODAL, buttons=(gtk.STOCK_CANCEL,
@@ -813,6 +813,7 @@ class WirelessNetworkEntry(NetworkEntry):
         
         print "ESSID : " + self.essid
         self.chkbox_autoconnect = gtk.CheckButton(language['automatic_connect'])
+        self.chkbox_neverconnect = gtk.CheckButton(language['never_connect'])
         
         self.set_signal_strength(wireless.GetWirelessProperty(networkID, 
                                                               'quality'),
@@ -833,14 +834,23 @@ class WirelessNetworkEntry(NetworkEntry):
         # Add the wireless network specific parts to the NetworkEntry
         # VBox objects.
         self.vbox_top.pack_start(self.chkbox_autoconnect, False, False)
+        self.vbox_top.pack_start(self.chkbox_neverconnect, False, False)
 
         if to_bool(self.format_entry(networkID, "automatic")):
             self.chkbox_autoconnect.set_active(True)
         else:
             self.chkbox_autoconnect.set_active(False)
         
+        if to_bool(self.format_entry(networkID, "never")):
+            self.chkbox_autoconnect.set_sensitive(False)
+            self.connect_button.set_sensitive(False)
+            self.chkbox_neverconnect.set_active(True)
+        else:
+            self.chkbox_neverconnect.set_active(False)
+
         # Connect signals.
-        self.chkbox_autoconnect.connect("toggled", self.update_autoconnect)      
+        self.chkbox_autoconnect.connect("toggled", self.update_autoconnect)
+        self.chkbox_neverconnect.connect("toggled", self.update_neverconnect)
         
         # Show everything
         self.show_all()
@@ -863,6 +873,18 @@ class WirelessNetworkEntry(NetworkEntry):
                                                   get_active()))
         wireless.SaveWirelessNetworkProperty(self.networkID, "automatic")
 
+    def update_neverconnect(self, widget=None):
+        """ Called when the neverconnect checkbox is toggled. """
+        wireless.SetWirelessProperty(self.networkID, "never",
+                        noneToString(self.chkbox_neverconnect.get_active()))
+        wireless.SaveWirelessNetworkProperty(self.networkID, "never")
+        if self.chkbox_neverconnect.get_active():
+            self.chkbox_autoconnect.set_sensitive(False)
+            self.connect_button.set_sensitive(False)
+        else:
+            self.chkbox_autoconnect.set_sensitive(True)
+            self.connect_button.set_sensitive(True)
+
     def destroy_called(self, *args):
         """ Clean up everything. """
         self.disconnect(self.wifides)
@@ -874,6 +896,8 @@ class WirelessNetworkEntry(NetworkEntry):
         
     def update_connect_button(self, state, apbssid):
         """ Update the connection/disconnect button for this entry. """
+        if to_bool(self.format_entry(self.networkID, "never")):
+            self.connect_button.set_sensitive(False)
         if not apbssid:
             apbssid = wireless.GetApBssid()
         if state == misc.WIRELESS and \

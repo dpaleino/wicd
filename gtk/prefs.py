@@ -80,6 +80,7 @@ class PreferencesDialog(object):
         self.displaytypecheckbox.set_active(daemon.GetSignalDisplayType())
         self.verifyapcheckbox.set_active(daemon.GetShouldVerifyAp())
         self.preferwiredcheckbox.set_active(daemon.GetPreferWiredNetwork())
+        self.showneverconnectcheckbox.set_active(daemon.GetShowNeverConnect())
         
         dhcp_list = [self.dhcpautoradio, self.dhclientradio, self.dhcpcdradio, 
                      self.pumpradio, self.udhcpcradio]
@@ -199,6 +200,7 @@ class PreferencesDialog(object):
         daemon.SetSignalDisplayType(int(self.displaytypecheckbox.get_active()))
         daemon.SetShouldVerifyAp(bool(self.verifyapcheckbox.get_active()))
         daemon.SetPreferWiredNetwork(bool(self.preferwiredcheckbox.get_active()))
+        daemon.SetShowNeverConnect(bool(self.showneverconnectcheckbox.get_active()))
         if self.showlistradiobutton.get_active():
             daemon.SetWiredAutoConnectMethod(2)
         elif self.lastusedradiobutton.get_active():
@@ -327,6 +329,8 @@ class PreferencesDialog(object):
 
         self.reconnectcheckbox = setup_label("pref_auto_check",
                                              'auto_reconnect')
+        self.showneverconnectcheckbox = setup_label("pref_show_never_connect_check",
+                                             'show_never_connect')
         self.debugmodecheckbox = setup_label("pref_debug_check",
                                              'use_debug_mode')
         self.displaytypecheckbox = setup_label("pref_dbm_check",

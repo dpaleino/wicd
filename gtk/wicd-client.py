@@ -765,7 +765,9 @@ class TrayIcon(object):
                 sep.show()
             
             if num_networks > 0:
-                for x in range(0, num_networks):
+                skip_never_connect = not daemon.GetShowNeverConnect()
+                for x in xrange(0, num_networks):
+                    if skip_never_connect and misc.to_bool(get_prop(x,"never")): continue
                     essid = get_prop(x, "essid")
                     if status == misc.WIRELESS and info[1] == essid:
                         is_active = True

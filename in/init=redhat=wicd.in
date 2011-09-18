@@ -43,7 +43,7 @@ force_stop()
         killproc -p $pidfile wicd
         RETVAL=$?
         echo
-        if [ $retval -eq 0 ]; then
+        if [ $RETVAL -eq 0 ]; then
                 rm -f /var/lock/subsys/$servicename
                 rm -f $pidfile
         fi

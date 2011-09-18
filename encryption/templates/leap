@@ -9,7 +9,7 @@ network={
 	ssid="$_ESSID"
 	scan_ssid=$_SCAN
 	eap=LEAP
-	key-mgmt=IEEE8021X
+	key_mgmt=IEEE8021X
 	identity="$_USERNAME"
 	password="$_PASSWORD"
 }

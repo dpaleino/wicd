@@ -604,11 +604,8 @@ class appGui(object):
                 
         if entry.chkbox_static_dns.get_active() and \
            not entry.chkbox_global_dns.get_active():
-            req_entlist.append(entry.txt_dns_1)
-            # Only append additional dns entries if they're entered.
-            for ent in [entry.txt_dns_2, entry.txt_dns_3]:
-                if ent.get_text() != "":
-                    opt_entlist.append(ent)
+            for ent in [entry.txt_dns_1, entry.txt_dns_2, entry.txt_dns_3]:
+                opt_entlist.append(ent)
         
         # Required entries.
         for lblent in req_entlist:

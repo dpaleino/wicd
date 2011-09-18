@@ -765,6 +765,37 @@ class Wireless(Controller):
         """
         return self.wiface.GetKillSwitchStatus()
 
+    def SwitchRfKill(self):
+        """ Switches the rfkill on/off for wireless cards. """
+        types = ['wifi', 'wlan', 'wimax', 'wwan']
+        try:
+            if self.GetRfKillStatus():
+                action = 'unblock'
+            else:
+                action = 'block'
+            for t in types:
+                cmd = ['rfkill', action, t]
+                print "rfkill: %sing %s" % (action, t)
+                misc.Run(cmd)
+            return True
+        except Exception, e:
+            raise e
+            return False
+
+    def GetRfKillStatus(self):
+        """ Determines if rfkill switch is active or not.
+
+        Returns:
+        True if rfkill (soft-)switch is enabled.
+        """
+        cmd = 'rfkill list'
+        rfkill_out = misc.Run(cmd)
+        soft_blocks = filter(lambda x: x.startswith('Soft'), rfkill_out.split('\t'))
+        for line in map(lambda x: x.strip(), soft_blocks):
+            if line.endswith('yes'):
+                return True
+        return False
+
     def Disconnect(self):
         """ Disconnect the given iface.
         

@@ -157,7 +157,8 @@ class appGui(object):
         self.window.resize(width, int(gtk.gdk.screen_height() / 1.7))
 
         dic = { "refresh_clicked" : self.refresh_clicked, 
-                "quit_clicked" : self.exit, 
+                "quit_clicked" : self.exit,
+                "rfkill_clicked" : self.switch_rfkill,
                 "disconnect_clicked" : self.disconnect_all,
                 "main_exit" : self.exit, 
                 "cancel_clicked" : self.cancel_connect,
@@ -174,7 +175,8 @@ class appGui(object):
 
         probar = self.wTree.get_object("progressbar")
         probar.set_text(language['connecting'])
-        
+
+        self.rfkill_button = self.wTree.get_object("rfkill_button")
         self.all_network_list = self.wTree.get_object("network_list_vbox")
         self.all_network_list.show_all()
         self.wired_network_box = gtk.VBox(False, 0)
@@ -286,6 +288,16 @@ class appGui(object):
     def toggle_encrypt_check(self, widget=None):
         """ Toggles the encryption key entry box for the ad-hoc dialog. """
         self.key_entry.set_sensitive(self.chkbox_use_encryption.get_active())
+
+    def switch_rfkill(self, widget=None):
+        """ Switches wifi card on/off. """
+        wireless.SwitchRfKill()
+        if wireless.GetRfKillEnabled():
+            self.rfkill_button.set_stock_id(gtk.STOCK_MEDIA_PLAY)
+            self.rfkill_button.set_label(language['switch_on_wifi'])
+        else:
+            self.rfkill_button.set_stock_id(gtk.STOCK_MEDIA_STOP)
+            self.rfkill_button.set_label(language['switch_off_wifi'])
 
     def disconnect_all(self, widget=None):
         """ Disconnects from any active network. """

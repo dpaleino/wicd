@@ -242,3 +242,5 @@ language['conn_info_wired_labels'] = _('''Wired
 IP:
 RX:
 TX:''')
+language['switch_on_wifi'] = _('''Switch On Wi-Fi''')
+language['switch_off_wifi'] = _('''Switch Off Wi-Fi''')

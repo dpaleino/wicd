@@ -542,6 +542,7 @@ class appGUI():
                 ('H' ,'Help'  ,None),
                 ('right','Config',None),
                 #('  ','         ',None),
+                ('K' , 'RfKill',None),
                 ('C' ,'Connect',None),
                 ('D' ,'Disconn',None),
                 ('R' ,'Refresh',None),
@@ -803,6 +804,9 @@ class appGUI():
             if "f5" in keys or 'R' in keys:
                 self.lock_screen()
                 self.doScan()
+            if 'k' in keys or 'K' in keys:
+                wireless.SwitchRfKill()
+                self.update_netlist()
             if "D" in keys:
                 # Disconnect from all networks.
                 daemon.Disconnect()

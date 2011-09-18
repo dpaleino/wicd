@@ -1026,6 +1026,16 @@ class WirelessDaemon(dbus.service.Object):
         return status
 
     @dbus.service.method('org.wicd.daemon.wireless')
+    def SwitchRfKill(self):
+        """ Switches the rfkill on/off for wireless cards. """
+        return self.wifi.SwitchRfKill()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetRfKillEnabled(self):
+        """ Returns true if rfkill switch is enabled. """
+        return self.wifi.GetRfKillStatus()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
     def GetWirelessProperty(self, networkid, property):
         """ Retrieves wireless property from the network specified """
         try:

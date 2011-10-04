@@ -101,6 +101,7 @@ class WicdDaemon(dbus.service.Object):
         self.connection_info = [""]
         self.auto_connecting = False
         self.prefer_wired = False
+        self.show_never_connect = True
         self.dhcp_client = 0
         self.link_detect_tool = 0
         self.flush_tool = 0
@@ -566,6 +567,20 @@ class WicdDaemon(dbus.service.Object):
         self.prefer_wired = bool(value)
 
     @dbus.service.method('org.wicd.daemon')
+    def GetShowNeverConnect(self):
+        """ Returns True if show_never_connect is set
+
+        if True then the client will show networks marked as never connect
+        """
+        return self.show_never_connect
+
+    @dbus.service.method('org.wicd.daemon')
+    def SetShowNeverConnect(self, value):
+        """ Sets the how_never_connect state. """
+        self.config.set("Settings", "show_never_connect", bool(value), write=True)
+        self.show_never_connect = bool(value)
+
+    @dbus.service.method('org.wicd.daemon')
     def SetConnectionStatus(self, state, info):
         """ Sets the connection status.
 
@@ -875,6 +890,8 @@ class WicdDaemon(dbus.service.Object):
         self.SetSudoApp(app_conf.get("Settings", "sudo_app", default=0))
         self.SetPreferWiredNetwork(app_conf.get("Settings", "prefer_wired", 
                                                 default=False))
+        self.SetShowNeverConnect(app_conf.get("Settings", "show_never_connect", 
+                                                default=True))
         app_conf.write()
 
         if os.path.isfile(wireless_conf):
@@ -1302,6 +1319,12 @@ class WirelessDaemon(dbus.service.Object):
                 if self.debug_mode:
                     print network["essid"] + ' has profile'
                 if bool(network.get('automatic')):
+                    try:
+                        if network.get('never'):
+                            print network["essid"],'marked never connect'
+                            continue
+                    except:
+                        print network["essid"],'has no never connect value'
                     print 'trying to automatically connect to...' + \
                           network["essid"]
                     self.ConnectWireless(x)
@@ -1700,7 +1723,7 @@ def main(argv):
         if o in ('-n', '--no-poll'):
             no_poll = True
         if o in ('-k', '--kill'):
-	        kill = True	
+             kill = True
 
     if kill:
         try:

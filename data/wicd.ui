@@ -502,7 +502,7 @@
                         <child>
                           <object class="GtkTable" id="table1">
                             <property name="visible">True</property>
-                            <property name="n_rows">20</property>
+                            <property name="n_rows">22</property>
                             <property name="n_columns">2</property>
                             <property name="column_spacing">4</property>
                             <property name="row_spacing">4</property>
@@ -560,6 +560,41 @@ is already active.</property>
                                 <property name="top_attach">7</property>
                                 <property name="bottom_attach">8</property>
                                 <property name="y_options">GTK_FILL</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkAlignment" id="alignment13_1">
+                                <property name="visible">True</property>
+                                <property name="left_padding">12</property>
+                                <child>
+                                  <object class="GtkCheckButton" id="pref_show_never_connect_check">
+                                    <property name="label" translatable="yes">Show never connect networks</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="draw_indicator">True</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">19</property>
+                                <property name="bottom_attach">20</property>
+                                <property name="y_options"/>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label12_1">
+                                <property name="visible">True</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Never Connect&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="right_attach">2</property>
+                                <property name="top_attach">18</property>
+                                <property name="bottom_attach">19</property>
+                                <property name="y_options"/>
                               </packing>
                             </child>
                             <child>
@@ -943,8 +978,8 @@ is already active.</property>
                               </object>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">18</property>
-                                <property name="bottom_attach">19</property>
+                                <property name="top_attach">20</property>
+                                <property name="bottom_attach">21</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>
@@ -964,8 +999,8 @@ is already active.</property>
                               </object>
                               <packing>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">19</property>
-                                <property name="bottom_attach">20</property>
+                                <property name="top_attach">21</property>
+                                <property name="bottom_attach">22</property>
                                 <property name="y_options"></property>
                               </packing>
                             </child>

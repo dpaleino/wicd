@@ -1,0 +1,15 @@
+[Unit]
+Description=Wicd a wireless and wired network manager for Linux
+After=syslog.target
+Wants=network.target
+Before=network.target
+Conflicts=NetworkManager.service
+
+[Service]
+Type=dbus
+BusName=org.wicd.daemon
+ExecStart=/usr/sbin/wicd --no-daemon
+
+[Install]
+WantedBy=multi-user.target
+Alias=dbus-org.wicd.daemon.service

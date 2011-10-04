@@ -73,6 +73,7 @@ class configure(Command):
         ('pmutils=', None, 'set the directory the  pm-utils hooks are stored in'),
         ('dbus=', None, 'set the directory the dbus config file is stored in'),
         ('dbus-service=', None, 'set the directory where the dbus services config files are stored in'),
+        ('systemd=', None, 'set the directory where the systemd system services config files are stored in'),
         ('desktop=', None, 'set the directory the .desktop file is stored in'),
         ('icons=', None, "set the base directory for the .desktop file's icons"),
         ('translations=', None, 'set the directory translations are stored in'),
@@ -134,6 +135,7 @@ class configure(Command):
         self.pmutils = '/usr/lib/pm-utils/sleep.d/'
         self.dbus = '/etc/dbus-1/system.d/'
         self.dbus_service = '/usr/share/dbus-1/system-services/'
+        self.systemd = '/lib/systemd/system/'
         self.desktop = '/usr/share/applications/'
         self.translations = '/usr/share/locale/'
         self.autostart = '/etc/xdg/autostart/'
@@ -498,6 +500,7 @@ try:
     data = [
     (wpath.dbus, ['other/wicd.conf']),
     (wpath.dbus_service, ['other/org.wicd.daemon.service']),
+    (wpath.systemd, ['other/wicd.service']),
     (wpath.log, [empty_file]), 
     (wpath.etc, ['other/dhclient.conf.template.default']),
     (wpath.encryption, [('encryption/templates/' + b) for b in 

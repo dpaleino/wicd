@@ -1,0 +1,6 @@
+%LOG%wicd.log {
+    missingok
+    notifempty
+    size 30k
+    create %LOGPERMS% root %LOGGROUP%
+}

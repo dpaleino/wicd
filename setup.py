@@ -136,6 +136,7 @@ class configure(Command):
         self.dbus = '/etc/dbus-1/system.d/'
         self.dbus_service = '/usr/share/dbus-1/system-services/'
         self.systemd = '/lib/systemd/system/'
+        self.logrotate = '/etc/logrotate.d/'
         self.desktop = '/usr/share/applications/'
         self.translations = '/usr/share/locale/'
         self.autostart = '/etc/xdg/autostart/'
@@ -501,6 +502,7 @@ try:
     (wpath.dbus, ['other/wicd.conf']),
     (wpath.dbus_service, ['other/org.wicd.daemon.service']),
     (wpath.systemd, ['other/wicd.service']),
+    (wpath.logrotate, ['other/wicd.logrotate']),
     (wpath.log, [empty_file]), 
     (wpath.etc, ['other/dhclient.conf.template.default']),
     (wpath.encryption, [('encryption/templates/' + b) for b in 

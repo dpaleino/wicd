@@ -196,6 +196,9 @@ if options.connect:
 
         check = lambda: wired.CheckIfWiredConnecting()
         message = lambda: wired.CheckWiredConnectingMessage()
+    else:
+        check = lambda: False
+        message = lambda: False
 
     # update user on what the daemon is doing
     last = None

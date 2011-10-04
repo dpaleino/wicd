@@ -43,6 +43,10 @@ except dbus.DBusException:
     print 'Error: Could not connect to the daemon. Please make sure it is running.'
     sys.exit(3)
 
+if not daemon:
+    print 'Error connecting to wicd via D-Bus.  Please make sure the wicd service is running.'
+    sys.exit(3)
+
 parser = optparse.OptionParser()
 
 parser.add_option('--network', '-n', type='int', default=-1)

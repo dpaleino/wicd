@@ -145,6 +145,17 @@ class appGui(object):
         """ Initializes everything needed for the GUI. """
         setup_dbus()
 
+        if not daemon:
+            errmsg = "Error connecting to wicd service via D-Bus." + \
+                     "Please ensure the wicd service is running."
+            d = gtk.MessageDialog(parent=None,
+                                  flags=gtk.DIALOG_MODAL,
+                                  type=gtk.MESSAGE_ERROR,
+                                  buttons=gtk.BUTTONS_OK,
+                                  message_format=errmsg)
+            d.run()
+            sys.exit(1)
+
         self.tray = tray
 
         gladefile = os.path.join(wpath.gtk, "wicd.ui")

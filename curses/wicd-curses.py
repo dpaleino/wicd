@@ -1018,6 +1018,10 @@ def setup_dbus(force=True):
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
 
+    if not daemon:
+        print 'Error connecting to wicd via D-Bus.  Please make sure the wicd service is running.'
+        sys.exit(3)
+
     netentry_curses.dbus_init(dbus_ifaces)
     return True
 

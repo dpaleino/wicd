@@ -1,0 +1,11 @@
+# This D-Bus service activation file is only for systemd support since
+# an auto-activated wicd would be quite surprising for those people
+# who have wicd installed but turned off.  Thus the Exec path available to
+# D-Bus is /bin/false, but systemd knows the real Exec path due to the
+# wicd systemd .service file.
+
+[D-BUS Service]
+Name=org.wicd.daemon
+Exec=/bin/false
+User=root
+SystemdService=dbus-org.wicd.daemon.service

@@ -72,6 +72,7 @@ class configure(Command):
         ('suspend=', None, 'set the directory the  suspend script is stored in'),
         ('pmutils=', None, 'set the directory the  pm-utils hooks are stored in'),
         ('dbus=', None, 'set the directory the dbus config file is stored in'),
+        ('dbus-service=', None, 'set the directory where the dbus services config files are stored in'),
         ('desktop=', None, 'set the directory the .desktop file is stored in'),
         ('icons=', None, "set the base directory for the .desktop file's icons"),
         ('translations=', None, 'set the directory translations are stored in'),
@@ -132,6 +133,7 @@ class configure(Command):
         self.suspend = '/etc/acpi/suspend.d/'
         self.pmutils = '/usr/lib/pm-utils/sleep.d/'
         self.dbus = '/etc/dbus-1/system.d/'
+        self.dbus_service = '/usr/share/dbus-1/system-services/'
         self.desktop = '/usr/share/applications/'
         self.translations = '/usr/share/locale/'
         self.autostart = '/etc/xdg/autostart/'
@@ -304,7 +306,7 @@ class configure(Command):
             # sans the = sign at the end
             argument_name = argument[0][:-1]
             # select the first one, which is the name of the option
-            value = getattr(self, argument_name)
+            value = getattr(self, argument_name.replace('-', '_'))
             # if the option is not python (which is not a directory)
             if not argument[0][:-1] == "python":
                 # see if it ends with a /
@@ -321,7 +323,7 @@ class configure(Command):
         for argument in self.user_options:
             if argument[0].endswith('='):
                 cur_arg = argument[0][:-1]
-                cur_arg_value = getattr(self, cur_arg)
+                cur_arg_value = getattr(self, cur_arg.replace('-', '_'))
                 print "%s is %s" % (cur_arg, cur_arg_value)
                 values.append((cur_arg, getattr(self, cur_arg.replace('-','_'))))
             else:
@@ -495,6 +497,7 @@ try:
     print "Using init file",(wpath.init, wpath.initfile)
     data = [
     (wpath.dbus, ['other/wicd.conf']),
+    (wpath.dbus_service, ['other/org.wicd.daemon.service']),
     (wpath.log, [empty_file]), 
     (wpath.etc, ['other/dhclient.conf.template.default']),
     (wpath.encryption, [('encryption/templates/' + b) for b in 

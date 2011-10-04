@@ -215,6 +215,7 @@ class appGui(object):
         self.refreshing = False
         self.prev_state = None
         self.update_cb = None
+        self._wired_showing = False
         self.network_list.set_sensitive(False)
         label = gtk.Label("%s..." % language['scanning'])
         self.network_list.pack_start(label)

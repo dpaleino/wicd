@@ -211,7 +211,6 @@ if options.connect:
             if next != last:
                 # avoid a race condition where status is updated to "done" after the
                 # loop check
-                # FIXME
                 if next == "done":
                     break
                 print message()

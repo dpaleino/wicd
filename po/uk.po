@@ -1,0 +1,790 @@
+# Translations for Ukrainian (uk)
+# Translator ID 53
+# /translator/edit/53/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:13+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:12+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "Перевстановлення IP-адреси…"
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Параметри:"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Помилка з’єднання: відсутня відповідь DHCP"
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "Більш детально можна ознайомитись на сторінці wicd-curses(8) man"
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "Помилка з’єднання: невірний пароль"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"Неможливо з’єднатися з сервісом wicd  через інтерфейс DBus. Зазвичай це "
+"означає, що є проблема із запуском служби. Перевірте реєстраційний журнал "
+"wicd для отримання більш детальної інформації."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "Перевірка відповідності точки доступу…"
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Завжди показувати дротовий інтерфейс"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"Не вдалося з’єднатися з сервісом wicd через інтерфейс DBus. Перевірте "
+"реєстраційний журнал на наявність сповіщень про помилки."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "Шлях до PAC-файлу:"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Завжди відображати дротовий інтерфейс в разі доступності"
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Відключитись від усіх мереж"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Дротові мережі:"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr "Зміни набудуть чинності після перезапуску wicd."
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Зупинка мережевого з’єднання:"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "З’єднання:"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Виконати сценарій підготовки до відключення."
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"Для уникнення різноманітних ускладнень wicd-curses не підтримує прямого "
+"редагування сценаріїв. Однак ви можете редагувати їх власноруч. По перше, "
+"від імені root відкрийте файл налаштувань „$A“  та знайдіть секцію позначену "
+"$B (яка Вас цікавить). У цьому разі, це:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Ви також можете налаштувати бездротову мережу знайшовши поле з відповідним "
+"„[<ESSID>]“ у файлі налаштувань."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Тут ви можете налаштувати (або додати) змінні \"beforescript\", "
+"\"afterscript\" та \"disconnectscript\", щоб змінити сценарії preconnect, "
+"postconnect та disconnect  відповідно. Зауважте, що треба вказати шлях до "
+"сценаріїв, а не власне сценарії, які треба створити окремо. Зверніться до "
+"сторінки довідника wicd для отримання додаткової інформації."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "Для зміни сценаріїв потрібно ввести ваш пароль"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "DNS домен"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "З'єднання відмінено"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "Сканування мереж... зачекайте..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Пароль"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "Служба Wicd недоступна:"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Використати статичний DNS:"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "Встановлення широкомовної адреси…"
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Виберіть або створіть профіль дротового з’єднання для"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Для з'єднання з дротовою мережею, потрібно створити профіль мережі. Для "
+"створення профілю мережі, введіть його назву і натисніть Додати (Add)."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Для відміни - ESC"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "Сканування"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Очищення таблиці маршрутизації..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "Надано вам від:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Оновити список мереж"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Виберіть ESSID прихованої мережі"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "Зовнішні програми"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "З'єднатись"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Показати це вікно допомоги"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Використовувати глобальні DNS-сервери"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "Ця мережа вимагає застосування шифрування."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr "Використовувати останній профіль для автопід’єднання"
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Налаштування"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Помилка з’єднання: неможливо отримати IP-адресу"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "Встановлення статичної IP-адреси…"
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "З’єднання зі службою…"
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Автоматично з’єднуватись з цією мережею"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Додати новий дротовий профіль"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "DHCP-клієнт"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "Показувати рівень сигналу в dBm"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Використовувати дані налаштування для усіх мереж з даним ESSID"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Налаштування обраної мережі"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Дозволити режим відлагодження (debug)"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "Вилучення старого з’єднання…"
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Не вдалося знайти графічні sudo-програми. Редактор сценаріїв не може бути "
+"запущений. Необхідно відредагувати сценарії безпосередньо в файлах "
+"конфігурації."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Бездротові мережі"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Налаштування параметрів дротового профілю \"$A\""
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "Бездротові мережі не знайдено"
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Перевірте використання драйверів madwifi/atheros"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Властивості"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Налаштування шифрування"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Про Wicd"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "Гаразд"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Налаштувати однорангову (Ad-hoc) мережу"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "Обрати сценарії"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "Невірна адреса в $A."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "Налаштування бездротового інтерфейсу..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "Генерація PSK..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "Перевірка автентифікації..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Анонімна ідентифікація"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Бездротовий інтерфейс"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Прихована мережа"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Ключ"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Інтерфейс Wicd Curses"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "Відлагодження"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Використовувати шифрування"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Глобальні DNS-сервери"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "З'єднання відсутнє"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "Виконується з'єднання..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "Неможливо під’єднатись до служби, спроба її автоматичного запуску…"
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Відміна"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "Всі параметри чутливі до регістру символів"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Шлюз"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Рушій"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"Збі’й DBus! Можливо це сталось через зупинку служби wicd під час запуску "
+"wicd-curses. Будь ласка перезапустіть службу wicd, після чого запустіть wicd-"
+"curses."
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Скасовано користувачем"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Пошук дротового з'єднання"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Додати новий профіль"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Надавати іншим загальний доступ до Інтернету"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Створити однорангову (Ad-Hoc) мережу"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "Підключення інтерфейсу..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Глобальний DNS не вказаний в загальних налаштуваннях"
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Додаткові налаштування"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Користувач"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Авто (рекомендовано)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "Знайдене дротове з'єднання"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Маска мережі"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Виберіть з доступних мереж:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "З’єднання з вибраною мережею"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses не підтримує вилучення останнього профілю дротового з’єднання. "
+"Спробуйте перейменувати його ('F2')"
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "Загальні налаштування"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Під’єднання до $A через $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"ВИНЯТКОВА СИТУАЦІЯ! Будь ласка, повідомте розробника про помилку. Додайте до "
+"звіту трасування, що наведено нижче:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Налаштування параметрів дротової мережі \"$A\" ($B):"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "Генерація файлу налаштувань WPA..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Домен пошуку імен"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Відсутня інформація про шифрування."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "Отримання IP-адреси..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"Службу wicd було зупинено. Перезапустіть службу для відновлення роботи."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Для з'єднання з дротовою мережею потрібно створити мережевий профіль. Для "
+"цього введіть назву, що характеризує цю мережу, та натисніть Додати."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "Встановлюються статичні DNS-сервери..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Автоматично підключитись при втраті з'єднання"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Використовувати шифрування (тільки WEP)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Параметри для автоз'єднання"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Виконати сценарій до з'єднання"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr ""
+"Найчастіше за все у якості драйвера WPA supplicant використовується wext"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Мережеві інтерфейси"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr "Використати типовий профіль для дротового автоз'єднання"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Сканування"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP:"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Підключено до дротової мережі (IP: $A):"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "Драйвер WPA Supplicant"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd потребує доступу до мережевих карт ПК."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "Бездротовий Kill Switch Увімкнено"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "ESSID прихованої мережі:"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Захищено:"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "Відключення інтерфейсу..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Автентифікація:"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Запустити сценарій після з'єднання:"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Запитувати профіль при автопід’єднанні:"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Канал:"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Незахищене:"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Перейменування дротового профілю:"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "Ваш запит не може бути виконаним, тому що служба  wicd недоступна"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr ""
+"Тимчасово призупинити показ виринаючої підказки автоматичного підключення:"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Знайти приховані мережі:"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Використати статичні IP-адреси:"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "використовувати керування screen з urwid"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Очищення таблиці маршрутизації:"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Сценарії:"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Ідентифікація:"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Автоматичне перез’єднання:"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Дротовий інтерфейс:"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Натисніть F8 або Q для виходу."
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr ""
+"Використовувати, як типовий профіль (перезапис попереднього типового профілю)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Дротова мережа:"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "DNS сервер:"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Нагадування"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Відображати нагадування про статус з'єднання"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "З'єднання встановлене"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "Роз'єднано"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "Встановлення з'єднання..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr ""
+"З'єднання втрачено: неможливо з'єднатися з бездротовою точкою доступу."
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"Не вдається зв'язатися зі службою Wicd через відмову в доступі до шини DBus. "
+"Будь ласка, переконайтеся у приналежності вашого користувача до групи $A."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "Відключення активних з'єднань.."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"Помилка: програмі wicd-curses було відмовлено у доступі до сервіса wicd: "
+"будь ласка, перевірте приналежність вашого користувача до групи \"$A\"."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Виконати сценарій після роз'єднання"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Відновити виконання сценарію"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Призупинити сценарій"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Введено невірну IP адресу."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr "Виконати перевірку (Ping) статичного шлюзу для перевірки асоціацій"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr "$A $B $C $D $E КБ/с $F КБ/с"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr "$A $B КБ/с $C КБ/с"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Бездротове з'єднання SSID: Швидкість: IP: Рівень сигналу: RX: TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Дротове з'єднання IP: RX: TX:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

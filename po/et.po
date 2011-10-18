@@ -1,0 +1,792 @@
+# Translations for Estonian (et)
+# Translator ID 33
+# /translator/edit/33/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:12+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:11+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "IP-aadressi nullimine..."
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Eelistuste dialoog"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Ühendumine nurjus: ei saadud DHCP-pakkumisi."
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "Üksikasjalikumat abiinfot vaadake wicd-curses(8) man lehelt."
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "Ühendumine nurjus: vale parool"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"wicd deemoni DBus liidesega ei saadud ühendust. Tavaliselt tähendab see "
+"seda, et deemoni käivitamisega oli probleeme. Uuri wicd logi edasise info "
+"saamiseks."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "Tugijaamaga ühenduse kontrollimine..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Juhtmega võrgu liidest näidatakse alati"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"Ei suutnud wicd deemoni DBus liidesega ühenduda. Uuri wicd logist veateateid."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "PAC faili asukoht"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Lülita alati juhtmega ühenduse peale kui see on saadaval."
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Katkesta kõik loodud ühendused"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Juhtmega võrgud"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr ""
+"Sinu taustaprogrammi muudatused ei jõustu enne kui deemon on taaskäivitatud."
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Peata võrguga ühenduse loomine"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "Ühenduse loomine"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Käivita pre-disconnect skript"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"Vältimaks erinevaid probleeme, ei toeta wicd-curses otsest skriptide "
+"muutmist. Siiski on neid võimalik muuta käsitsi. Selleks ava juurkasutajana "
+"(root) konfiguratsioonifail \"$A\" ja otsi failist lõiku, mille pealkirjaks "
+"on \"$B\". Käesoleval juhul on see:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Traadita võrke on sul võimalik seadistada ka otsides konfiguratsioonifailist "
+"\"[<ESSID>]\" välja."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Seal olles on sul võimalik vajadusel muuta  (või lisada) \"beforescript\", "
+"\"afterscript\" ja \"disconnectscript\" muutujaid, et  vastavaid preconnect, "
+"postconnect ja  disconnect skripte muuta. Pea silmas, et määratlema pead "
+"skripti absoluutse asukoha, mitte skripti sisu. Skripti sisu muutmine või "
+"sinna millegi lisamine toimub eraldi. Lisainfo saamiseks loe wicd man "
+"lehekülgi."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "Skriptide muutmiseks pead sisestama oma parooli"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "DNS domeen"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "Ühenduse loomine katkestati"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "Võrkude otsimine... Palun oota..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Parool"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "WiCD deemon ei ole kättesaadav"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Staatilise nimeserveri kasutamine"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "Leviaadressi seadistamine..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Vali või loo juhtmega võrguühenduse jaoks profiil"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Juhtmega võrguühenduse loomiseks tuleb luua võrguprofiil. Selleks kirjuta "
+"nimi,  mis seda võrku kirjeldab, ning vajuta Lisa."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Katkestamiseks vajuta ESC klahvile"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "Võrkude otsimine"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Ruutimistabeli puhastamine..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "WICD tõid Teieni:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Võrgunimekirja värskendamine"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Peidetud võrgu ESSID valimine"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "Välised programmid"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "Ühenda"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Näita abidialoogi"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Globaalsete nimeserverite kasutamine"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "Selle võrgu puhul peab olema krüpteerimine lubatud."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr ""
+"Kasuta automaatseks juhtmega võrguühenduse loomiseks viimati kasutatud "
+"profiili."
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Eelistused"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Ühendumine nurjus: ei saadud IP-aadressi"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "Staatiliste IP aadresside määramine..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "Ühenduse loomine deemoniga..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Automaatselt luuakse ühendus selle võrguga"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Uue juhtmega võrgu profiili loomine"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "DHCP klient"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "dBm kasutamine signaali tugevuse mõõtühikuna"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr ""
+"Kasuta selliseid seadeid kõikide võrkude jaoks, mis jagavad sama essid"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Valitud võrgu seadistamine"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Silumisrežiimi lubamine"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "Vana võrguühenduse andmete kustutamine..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Graafilist sudo programmi ei leitud ning samuti ei suudetud käivitada "
+"skriptide redigeerijat. Sa pead skripte konfiguratsioonifailist muutma."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Traadita võrgud"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Juhtmega võrgu profiili \"$A\" eelistuste seadistamine"
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "Ühtegi traadita võrku ei leitud."
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Kontrolli, kas kasutusel on madwifi/atheros draiverid"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Omadused"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Krüpteerimisinfo seadistamine"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Teave Wicd kohta"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "OK"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Ad-hoc võrgu seadistamine"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "Skriptide valimine"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "Vigane aadress $A kirjes."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "Traadita võrguliidese seadistamine..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "PSK genereerimine..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "Autentimise kontrollimine..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Anonüümne identiteet"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Traadita võrguliides"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Varjatud võrk"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Võti"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Wicd Curses kasutajaliides"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "Vigade otsimine"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Krüpteerimise kasutamine"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Globaalsed nimeserverid"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "Ühendus puudub"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "Ühendatud..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "Deemoniga ei saanud ühendust, proovin seda automaatselt käivitada..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Katkesta"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "Kõik sisestatud märgid on tõstutundlikud"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Võrgulüüs"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Taustaprogramm"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"DBus viga, mis on tõenäoliselt põhjustatud sellest, et wicd deemon peatus "
+"sel ajal kui wicd-curses veel töötas. Palun käivita wicd ning seejärel "
+"käivita uuesti wicd-curses."
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Katkestatud kasutaja poolt"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Juhtmega ühenduse tuvastamine"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Uue profiili lisamine"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Jagatud internetiühenduse aktiveerimine"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Ad-hoc võrgu loomine"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "Võrguliidese sisselülitamine..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Globaalsed nimeserverid ei ole üldistes seadetes lubatud."
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Laiendatud seaded"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Kasutajanimi"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Automaatne (soovitav)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "Juhtmega ühendus tuvastatud"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Võrgumask"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Vali üks järgnevatest võrkudest:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "Ühenduse loomine valitud võrguga"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses ei toeta viimase traadiga ühenduse profiili kustutamist. Proovi "
+"seda klahvi F2 abil ümber nimetada."
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "Üldised seaded"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Ühendus võrguga $A loodud, signaali tugevus $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"Erand! Palun teata sellest arendajale ja registreeri viga koos järgneva "
+"tagasijälitusega:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Traadita võrgu \"$A\" ($B) seadistuste muutmine"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "WPA konfiguratsioonifaili loomine..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Otsi domeeni"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Nõutud krüpteerimisinfo puudub."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "IP aadressi hankimine..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"wicd deemon on seiskunud. Kasutajaliides ei tööta korralikult kuni wicd on "
+"uuesti käivitatud."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Juhtmega võrguühenduse loomiseks tuleb luua võrguprofiil. Selleks kirjuta "
+"nimi,  mis seda võrku kirjeldab, ning vajuta Lisa."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "Staatiliste nimeserverite seadistamine..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Ühenduse katkemisel loo uus ühendus automaatselt"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Krüpteeringu kasutamine (ainult WEP)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Juhtmega võrgu automaatühenduse seadistamine"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Käivita skript enne ühenduse loomist"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "Sa peaksid peaaegu alati kasutama wext-i WPA komponendi jaoks"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Võrguliidesed"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr ""
+"Kasuta automaatseks juhtmega võrguühenduse loomiseks vaikimisi profiili"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Otsi"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP aadress"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Ühendus juhtmega võrguga loodud (IP: $A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "WPA komponendi juhtprogramm"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd vajab ligipääsu sinu arvuti võrgukaartidele."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "Traadita ühenduse väljalülitamine lubatud"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "Varjatud võrgu ESSID"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Turvaline võrk"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "Võrguliidese väljalülitamine..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Autentimine"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Käivita skript pärast ühenduse loomist"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Automaatse juhtmega võrguühenduse loomisel küsitakse profiili"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Kanal"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Ebaturvaline võrk"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Juhtmega profiili ümbernimetamine"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "wicd deemon ei ole saadaval, seega ei saa sinu soovi täita"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Ajutine automaatühenduse hüpikakna kuvamise keelamine"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Peidetud võrkude otsimine"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Staatilise IP aadressi kasutamine"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "kasuta urwid toorest ekraanihaldurit"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Ruutimistabeli puhastamine"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Skriptid"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Identiteet"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Automaatne ühenduse taasloomine"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Juhtmega võrguliides"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Väljumiseks vajuta F8 või Q"
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr ""
+"Kasuta vaikimisi profiilina (kirjutab eelmise vaikimisi profiili üle)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Juhtmega võrk"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "Nimeserver"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Teated"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Näita ühenduse oleku teateid"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "Ühendus loodud"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "Ühendus katkestatud"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "Ühenduse loomine..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr "Ühenduse loomine ebaõnnestus: tugijaamaga ei saadud kontakti"
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"wicd deemoniga ei saa ühendust kuna ligipääs DBus-ile on takistatud. Palun "
+"kontrolli, kas sinu kasutaja on $A grupis."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "Loodud ühenduste katkestamine..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"Viga: wixd-curses ei saa ühendust wicd deemoniga. Palun kontrolli, kas sinu "
+"kasutaja on \"$A\" grupis."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Skripti post-disconnect käivitamine"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Peatatud skripti jätkamine"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Skripti peatamine"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Sisestatud IP aadress on vigane"
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr "Pingi lüüsi peale ühenduse loomist"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr "$A $B $C $D $E KB/s $F KB/s"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr "$A $B KB/s $C KB/s"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Võrgu SSID: Kiirus: IP: Tugevus: RX: TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Juhtmega IP: RX: TX:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

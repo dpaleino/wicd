@@ -406,6 +406,22 @@ class test(Command):
         print 'running tests'
         tests.run_tests()
 
+class update_message_catalog(Command):
+    description = "update wicd.pot with new strings"
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        os.system('pybabel extract . -o po/wicd.pot')
+        os.system('xgettext -L glade data/wicd.ui -j -o po/wicd.pot')
+        
+
 class update_translations_py(Command):
     description = "download new translations.py from the online translator"
 
@@ -629,6 +645,7 @@ setup(
         'test' : test,
         'clear_generated' : clear_generated,
         'update_translations_py' : update_translations_py,
+        'update_message_catalog' : update_message_catalog,
     },
     name = "Wicd",
     version = VERSION_NUM,

@@ -1,0 +1,808 @@
+# English (United Kingdom) translation for wicd
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the wicd package.
+# David Paleino <d.paleino@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wicd\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:31+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: English (United Kingdom) <en_GB@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:12+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "Resetting IP address..."
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Preferences dialog"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Connection Failed: No DHCP offers received."
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "For more detailed help, consult the wicd-curses(8) man page."
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "Connection Failed: Bad password"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "Verifying access point association..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Always show wired interface"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "Path to PAC File"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Always switch to wired connection when available"
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Disconnect from all networks"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Wired Networks"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr "Changes to your backend won't occur until the daemon is restarted."
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Stop a network connection in progress"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "Connecting"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Run pre-disconnect script"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "You must enter your password to configure scripts"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "DNS domain"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "Connection Cancelled"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "Scanning networks... stand by..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Password"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "Wicd daemon unreachable"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Use Static DNS"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "Setting broadcast address..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Select or create a wired profile to connect with"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Press ESC to cancel"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "Scanning"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Flushing the routing table..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "Brought to you by:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Refresh network list"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Select Hidden Network ESSID"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "External Programs"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "Connect"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Display this help dialog"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Use global DNS servers"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "This network requires encryption to be enabled."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr "Use last used profile on wired autoconnect"
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Preferences"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Connection Failed: Unable to Get IP Address"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "Setting static IP addresses..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "Connecting to daemon..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Automatically connect to this network"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Add a new wired profile"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "DHCP Client"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "Use dBm to measure signal strength"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Use these settings for all networks sharing this essid"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Configure Selected Network"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Enable debug mode"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "Removing old connection..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Wireless Networks"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Configuring preferences for wired profile \"$A\""
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "No wireless networks found."
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Check if using madwifi/atheros drivers"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Properties"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Setting encryption info"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "About Wicd"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "OK"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Set up Ad-hoc network"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "Select scripts"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "Invalid address in $A entry."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "Configuring wireless interface..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "Generating PSK..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "Validating authentication..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Anonymous Identity"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Wireless Interface"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Hidden Network"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Key"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Wicd Curses Interface"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "Debugging"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Use Encryption"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Global DNS servers"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "Not connected"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "Done connecting..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "Can't connect to the daemon, trying to start it automatically..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Cancel"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "All controls are case sensitive"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Gateway"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Backend"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Terminated by user"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Wired Link Detection"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Add a new profile"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Activate Internet Connection Sharing"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Create an Ad-Hoc Network"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "Putting interface up..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Global DNS has not been enabled in general preferences."
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Advanced Settings"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Username"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Automatic (recommended)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "Wired connection detected"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Netmask"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Choose from the networks below:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "Connect to selected network"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "General Settings"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Connected to $A at $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Configuring preferences for wireless network \"$A\" ($B)"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "Generating WPA configuration file..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Search domain"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Required encryption information is missing."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "Obtaining IP address..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "Setting static DNS servers..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Automatically reconnect on connection loss"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Use Encryption (WEP only)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Wired Autoconnect Settings"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Run script before connect"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "You should almost always use wext as the WPA supplicant driver"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Network Interfaces"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr "Use default profile on wired autoconnect"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Scan"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Connected to wired network (IP: $A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "WPA Supplicant Driver"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd needs to access your computer's network cards."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "Wireless Kill Switch Enabled"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "Hidden Network ESSID"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Secured"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "Putting interface down..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Authentication"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Run script after connect"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Prompt for profile on wired autoconnect"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Channel"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Unsecured"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Rename wired profile"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "The wicd daemon is unavailable, so your request cannot be completed"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Stop Showing Autoconnect pop-up temporarily"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Scan for hidden networks"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Use Static IPs"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "use urwid's raw screen controller"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Route Table Flushing"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Scripts"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Identity"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Automatic Reconnection"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Wired Interface"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Press F8 or Q to quit."
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr "Use as default profile (overwrites any previous default)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Wired Network"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "DNS server"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Notifications"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Display notifications about connection status"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "Connection established"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "Disconnected"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "Establishing connection..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr "Connection failed: Could not contact the wireless access point."
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "Disconnecting active connections..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Run post-disconnect script"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Resume script"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Suspend script"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Invalid IP address entered."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr "Ping static gateways after connecting to verify association"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr "Switch On Wi-Fi"
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr "Switch Off Wi-Fi"

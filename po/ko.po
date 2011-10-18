@@ -1,0 +1,766 @@
+# Translations for Korean (ko)
+# Translator ID 45
+# /translator/edit/45/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:12+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:12+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "IP 주소 다시 설정하는 중..."
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "설정 대화 상자"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "연결 실패 : DHCP 정보를 받을 수 없음"
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "자세한 정보를 얻기 위해서는 wicd-curses(8) man 페이지를 참조하세요."
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "연결 실패: 암호가 잘못됨"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"wicd 데몬의 DBus 인터페이스에 접근할 수 없습니다. 데몬을 시작하는 문제가 생겼을 수도 있습니다. 데몬 로그를 확인하십시오."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "AP 연결 확인하는 중..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "항상 유선 네트워크 인터페이스 보이기"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr "wicd D-Bus 인터페이스에 연결 할 수 없습니다. 로그를 확인하십시오."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "PAC 파일 위치"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "유선 네트워크를 사용할 수 있을 때 항상 유선 네트워크로 전환하기"
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "모든 네트워크 연결 끊기"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "유선 네트워크"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr "데몬을 다시 시작할 때까지 백엔드 변경 사항이 적용되지 않습니다."
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "네트워크 연결 진행 중지"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "연결 중"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "연결 해제 준비 스크립트 실행"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"다양한 오류를 방지하기 위해 wicd-curses는 스크립트를 직접 수정하는 것을 허용하지 않습니다. 그러나, 수작업으로 할 수 "
+"있습니다. 우선, root로 \"$A\" config 파일을 열고, question에서 $B에 의해 레이블된 섹션을 찾습니다. 이 경우는 "
+":"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr "설정 파일의 \"[<ESSID>]\" 필드를 찾아서 무선 네트워크를 설정할 수도 있습니다."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively. Note that you will be "
+"specifying the full path to the scripts - not the actual script contents. "
+"You will need to add/edit the script contents separately. Refer to the wicd "
+"manual page for more information."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "스크립트를 설정하려면 암호를 입력하십시오"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "DNS 도메인"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "연결 취소됨"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "네트워크 찾는 중... 기다려 주십시오..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "암호"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "Wicd 데몬 접근 불가능"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "지정한 DNS 서버 사용하기"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "브로드캐스트 주소 설정하는 중..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "연결할 유선 네트워크 프로필을 선택하거나 만들기"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr "유선 네트워크에 연결하려면 프로필을 만들어야 합니다. 네트워크 프로필을 만들려면 프로필 이름을 입력하고 추가를 누르십시오."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "ESC 키를 누르면 취소합니다"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "검사 중"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "라우팅 테이블 비우는 중..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "만든 사람들:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "네트워크 목록 갱신"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "숨겨진 네트워크 ESSID 선택"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "외부 프로그램"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "연결"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "이 도움말 대화상자를 표시합니다"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "전역 DNS 서버 사용하기"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "이 네트워크에 연결하려면 암호화가 필요합니다."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr "자동으로 연결할 때 마지막으로 사용된 프로필 사용하기"
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "환경 설정"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "연결 실패: IP 주소를 가져올 수 없음"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "고정 IP 주소 설정하는 중..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "데몬에 연결하는 중..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "자동으로 이 네트워크에 연결하기"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "새 유선 프로필 추가하기"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "DHCP 클라이언트"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "신호 강도를 dBm으로 측정하기"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr "이 ESSID를 사용하는 모든 네트워크에 이 설정 사용하기"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "선택한 네트워크 설정하기"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "디버그 모드 사용하기"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "이전 연결을 지우는 중..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"그래픽 sudo 프로그램을 찾을 수 없습니다. 스크립트 편집기를 실행할 수 없습니다. 설정 파일을 직접 편집하셔서 스크립트를 수정하십시오."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "무선 네트워크"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "유선 프로필 \"$A\" 설정하기"
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "무선 네트워크가 없습니다."
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "madwifi/atheros 드라이버를 사용하고 있다면 선택하십시오"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "속성"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "암호 정보 설정하는 중"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Wicd 정보"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "확인"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Ad-hoc 네트워크 설정"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "스크립트 선택"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "$A 항목에 올바르지 않은 주소가 있습니다."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "무선 네트워크 인터페이스 설정 중..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "PSK 생성 중..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "인증 검증 중..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "익명"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "무선 네트워크 인터페이스"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "숨은 네트워크"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "키"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Wicd Curses 인터페이스"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "디버깅"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "암호화 사용하기"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA 도우미"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "전역 DNS 서버"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "연결되지 않음"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "연결 완료됨..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "데몬과 연결할 수 없습니다. 자동으로 시작하려는 중입니다..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "취소"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "모든 정보는 대소문자를 구분합니다"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "게이트웨이"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "백엔드"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"DBus 오류! wicd-curses가 실행 중일 때 wicd 데몬이 멈춘 것 같습니다. 데몬을 다시 시작하고 wicd-curses를 "
+"다시 시작하십시오"
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "사용자가 종료함"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "유선 연결 찾기"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "새 프로필 추가"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "인터넷 연결 공유 사용하기"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Ad-hoc 네트워크 만들기"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "인터페이스 작동 중..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "일반 설정에서 전역 DNS 서버를 활성화하지 않았습니다."
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "고급 설정"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "사용자 이름"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "자동 (추천)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "유선 연결 감지됨"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "넷마스크"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "아래에 있는 네트워크 중에서 선택하십시오:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "선택한 네트워크에 연결하기"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses는 마지막으로 사용한 유선 프로필 삭제를 지원하지 않습니다. 'F2' 키를 눌러서 이름을 바꿔 보십시오."
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "일반 설정"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "$A에 연결됨. 신호 강도: $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr "예외 발생! wicd 작성자에게 보고해 주십시오. 아래쪽에 있는 역추적도 같이 첨부해 주십시오:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "유선 네트워크 \"$A\" 설정 중 ($B)"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "WPA 설정 파일 생성 중..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "찾을 도메인"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "필요한 암호화 정보가 없습니다."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "IP 주소 얻는 중..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr "wicd 데몬이 종료되었습니다. 데몬을 다시 시작할 때까지 인터페이스가 작동하지 않을 것입니다."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"유선 네트워크에 연결할려면 프로필을 만들어야 합니다. 네트워크 프로필을 만들려면 프로필 이름을 입력한 다음 추가를 누르십시오."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "정적 DNS 서버 설정하는 중..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "연결이 끊어졌을 때 자동으로 다시 연결하기"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "암호화 사용 (WEP 전용)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "유선 자동 연결 설정"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "접속하기 전에 스크립트 실행하기"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "가능한 한 WPA 도우미 드라이버로 wext를 사용하십시오"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "네트워크 인터페이스"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr "유선 네트워크에 자동으로 연결할 때 기본 프로필 사용하기"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "검색"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "유선 네트워크에 연결됨(IP:$A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "WPA 도우미 드라이버"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd에서 네트워크 카드에 접근해야 합니다."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "무선 네트워크 끄기 스위치가 켜져 있음"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "숨겨진 네트워크의 ESSID"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "암호화됨"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "인터페이스 비활성화 중..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "인증"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "접속한 후 스크립트 실행하기"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "유선 네트워크 자동 연결 시 프로필 묻기"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "채널"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "암호화되지 않음"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "유선 프로필 이름 바꾸기"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "wicd 데몬을 사용할 수 없으므로 요청을 처리할 수 없습니다"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "자동 연결 메시지 표시 잠깐 중단하기"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "숨겨진 네트워크 검색하기"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "고정 IP 사용하기"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "urwid의 raw 화면 제어기 사용하기"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "라우트 테이블 비우기"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "스크립트"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "정보"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "자동 재연결"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "유선 네트워크 인터페이스"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "F8이나 Q 키를 누르면 종료합니다."
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr "기본 프로필로 사용하기 (이전 설정 덮어씀)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "유선 네트워크"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "DNS 서버"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "알림"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "연결 상태 정보 보이기"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "연결됨"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "연결 해제됨"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "연결하는 중..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr "연결할 수 없음: 무선 액세스 포인트에 접근할 수 없습니다."
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr "DBus 접근 불가 오류로 wicd 데몬에 접근할 수 없습니다. 사용자가 $A 그룹에 추가되어 있는지 확인하십시오."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "활성 연결 해제 중..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr "오류: wicd-curses에서 wicd 데몬에 접근할 수 없습니다. 사용자가 $A 그룹에 추가되어 있는지 확인하십시오."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "연결 해제 이후 스크립트 실행하기"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "스크립트 계속하기"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "스크립트 중단하기"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "잘못된 IP 주소를 입력했습니다."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr "연결한 후 정적 네트워크 게이트웨이에 핑을 보내 연결 확인하기"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr "$A $B $C $D $E KB/s $F KB/s"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr "$A $B KB/s $C KB/s"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "무선 SSID: 속도: IP: 신호 강도: 받은 양: 보낸 양:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "유선 IP: 받은 양: 보낸 양:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

@@ -1,0 +1,798 @@
+# Translations for Romanian (ro)
+# Translator ID 6
+# /translator/edit/6/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:11+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:12+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "Reinițializare adresă IP..."
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Dialog de preferințe"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Conexiune eşuată: Nu am găsit un server DHCP."
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "Pentru ajutor mai detaliat, consultați pagina man wicd-curses(8)"
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "Conexiune eșuată: Parolă greșită"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"Imposibil de conectat la interfaţa D-Bus a serviciului wicd. De obicei, asta "
+"înseamnă că a fost o problemă la pornirea serviciului. Verificaţi jurnalul "
+"wicd pentru mai multe informaţii."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "Verific asocierea cu punctul de acces..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Arată întotdeauna interfața cu fir"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"Imposibil de conectat la interfața D-Bus a lui wicd. Verificați jurnalul "
+"wicd pentru mesaje de eroare."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "Calea către fișierul PAC"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Comută întotdeauna la rețeaua prin fir cînd este disponibilă"
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Deconectează de la toate rețelele"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Rețele prin fir"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr ""
+"Modificările din configuraţie nu se vor activa decât după repornirea "
+"serviciului."
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Oprește o conexiune la rețea în curs"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "Conectare"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Execută scriptul premergător deconectării"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"Pentru evitarea complicaţiilor, wicd-curses nu suportă editarea directă a "
+"scripturilor. Totuşi, le puteţi edita manual. Mai întâi, ca root, dechideţi "
+"fişierul de configurare \"$A\" şi căutaţi secţiunea numită de $B. În acest "
+"caz aceasta este:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Puteţi să configuraţi reţelele fără fir şi prin identificarea câmpului "
+"\"[<ESSID>]\" din fişierul de configurare."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Din acest pas puteţi ajusta (sau adăuga) variabilele \"beforescript\", "
+"\"afterscript\" şi \"disconnectscript\" pentru modificarea scripturilor de "
+"pre-, post- şi deconectare. Reţineţi că trebuie să specificaţi calea "
+"completă către scripturi - nu să scrieţi scripturile în sine. Acestea vor "
+"trebuie adăugate/editate separat. Citiţi manualul wicd pentru mai multe "
+"informaţii."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "Trebuie să vă introduceţi parola pentru a configura scripturile"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "Domeniu DNS"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "Conexiune anulată"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "Căutare rețele... așteptați..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Parolă"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "Serviciul Wicd este indisponibil"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Folosește DNS static"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "Stabilire adresă de difuzare..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Alegeți sau creați un profil de rețea prin fir pentru conectare"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Pentru conectarea la o rețea prin fir trebuie să creați un profil de rețea. "
+"Pentru a crea un profil de rețea, tastați o denumire care descrie această "
+"rețea și apăsați Adaugă."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Apăsați ESC pentru a anula"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "Scanare"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Golire tabelă de rutare..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "Vă este adus de:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Actualizează lista rețelelor"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Alegeți ESSID-ul rețelei ascunse"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "Programe externe"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "Conectează"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Afișează acest dialog de ajutor"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Folosește DNS-uri globale"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "Această rețea necesită activarea criptării."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr "Folosește ultimul profil la conectarea automată prin fir"
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Preferințe"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Conexiune eșuată: Imposibil de obținut o adresă IP"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "Stabilire adresă IP statică..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "Conectare la demon..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Conectare automată la această rețea"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Adaugă un profil prin fir nou"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "Client DHCP"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "Folosește dBm pentru a măsura puterea semnalului"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr ""
+"Folosește aceste configurări pentru toate rețelele care împart acest ESSID"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Configurează rețeaua aleasă"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Activează regimul de depanare"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "Eliminare conexiune veche..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Programul sudo grafic nu poate fi găsit. Editorul de scripturi nu a putut fi "
+"lansat. Va trebui să editaţi scripturile direct în fişierele de configurare."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Rețele fără fir"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Configurarea preferințelor pentru profilul prin fir „$A”"
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "Nu au fost găsite rețele fără fir."
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Verifică dacă sunt în uz driverele madwifi/atheros"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Proprietăţi"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Setare informaţii criptare"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Despre Wicd"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "OK"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Configurează rețea ad-hoc"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "Alege scripturi"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "Adresă nevalidă în câmpul $A."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "Configurare interfață fără fir..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "Generare PSK..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "Validez autentificarea..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Anonim"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Interfață fără fir"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Rețea ascunsă"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Cheie"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Interfață Curses pentru Wicd"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "Depanare"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Folosește criptare"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "Solicitator WPA"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Servere DNS globale"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "Neconectat"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "Conexiune încheiată..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "Imposibil de conectat la demon, încerc să-l pornesc automat..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Renunță"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "Toate controalele sînt sensibile la registru"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Gateway"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Configuraţie"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"Eșec D-Bus! Acesta este cauzat cel mai probabil de oprirea demonului wicd în "
+"timpul rulării wicd-curses. Reporniți demonul și apoi reporniți wicd-curses."
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Terminat de utilizator"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Detectare rețea prin fir"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Adaugă un profil nou"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Activează partajarea conexiunii la Internet"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Creează o reţea ad-hoc"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "Deschidere interfață..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "DNS-ul global nu a fost activat în preferinţele generale."
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Setări avansate"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Utilizator"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Automat (recomandat)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "Conexiune prin fir detectată"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Mască rețea"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Alegeți dintre rețelele de mai jos:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "Conectează la rețeaua aleasă"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses nu susține ștergerea ultimului profil prin fir. Încercați să-l "
+"redenumiți („F2”)"
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "Configurări generale"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Conectat la $A la $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"EXCEPȚIE! Raportați aceasta responsabilului și trimiteți un raport de eroare "
+"cu backtrace-ul de mai jos:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Configurarea preferințelor pentru rețeaua fără fir „$A” ($B)"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "Generare fișier de configurare WPA..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Căutare domeniu"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Lipsesc informații de criptare necesare."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "Obținere adresă IP..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"Serviciul wicd s-a oprit. Interfaţa de utilizator nu va funcţiona corect "
+"până la repornirea acestuia."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Pentru conectare la o reţea cu fie trebuie să creaţi un profil de reţea. "
+"Acesta poate fi creat prin specificarea unui nume care descrie reţeaua şi "
+"apăsarea butonului Adaugă."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "Stabilire DNS-uri statice..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Reconectare automată la pierderea legăturii"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Folosește criptare (doar WEP)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Configurări conectare automată prin fir"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Rulează script înainte de conectare"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr ""
+"Aproape întotdeauna trebuie să utilizați wext ca driver pentru solicitatorul "
+"WPA"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Interfețe de rețea"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr "Folosește profilul implicit la conectarea automată prin fir"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Caută"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Conectat la rețea prin fir (IP: $A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "Driver WPA Supplicant"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd are nevoie să acceseze plăcile de rețea ale calculatorului dvs."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "Întrerupătorul pentru rețeaua fără fir e activat"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "ESSID rețea ascunsă"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Protejată"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "Închidere interfață..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Autentificare"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Rulează script după conectare"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Cere profil la conectarea automată prin fir"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Canal"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Neprotejată"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Redenumește profilul prin fir"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr ""
+"Serviciul wicd nu este disponibil, deci cererea dumneavoastră nu poate fi "
+"efectuată"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Nu mai arăta pentru moment indiciul de conectare automată"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Caută rețele ascunse"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Folosește IP-uri statice"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "utilizează controlorul urwid pentru ecran brut"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Golire tabelă de rutare"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Scripturi"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Identitate"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Reconectare automată"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Interfață cu fir"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Apăsați F8 sau Q pentru a ieși."
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr ""
+"Foloseşte ca profil implicit (suprascrie un profil implicit salvat anterior)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Rețea prin fir"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "Server DNS"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Notificări"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Afişează notificări despre datele conexiunii"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "Conexiune stabilită"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "Deconectat"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "Stabilesc conexiunea..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr ""
+"Conectare eşuată: Nu m-am putut conecta la punctul de acces fără fir."
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"Nu pot contacta serviciul Wicd deoarece D-Bus a refuzat accesul la acesta. "
+"Vă rugăm să verificaţi dacă utilizatorul dvs. se află în grupul $A."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "Deconectez conexiunile active..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"EROARE: lui wicd-curses i s-a refuzat accesul la serviciul wicd. Vă rugăm să "
+"verificaţi dacă utilizatorul dvs. se află în grupul \"$A\"."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Execută script post-deconectare"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Continuă scriptul"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Suspendă scriptul"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Aţi introdus o adresă IP nevalidă."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr ""
+"Daţi ping pe gateway-uri statice după conectare, pentru verificarea asocierii"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr "$A $B $C $D $E KB/s $F KB/s"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr "$A $B KB/s $C KB/s"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "SSID wireless: Viteza: IP: Putere: RX: TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "IP fir: RX: TX:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

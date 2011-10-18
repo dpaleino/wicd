@@ -1,0 +1,798 @@
+# Translations for Finnish (fi)
+# Translator ID 36
+# /translator/edit/36/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:12+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:11+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "Alustetaan IP-osoitetta..."
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Asetukset"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Yhteys epäonnistui: DHCP-palvelinta ei löytynyt."
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr ""
+"Halutessasi yksityiskohtaisempaa tietoa tutustu wicd-curses(8) man-sivuun."
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "Yhteys epäonnistui: Väärä salasana"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"Wicd-palvelua ei voitu yhdistää DBUS-rajapintaan. Tämä johtunee palvelun "
+"käynnistysongelmista. Lisätietoa voi löytää wicd:n lokista."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "Varmistetaan yhteyspisteen liityntää..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Näytä aina langallinen verkkolaite"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"Ei voitu yhdistää wicd:n DBUS-rajapintaan. Wicd:n lokista löytyy "
+"virheviestejä."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "Polku PAC-tiedostoon"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Vaihda aina langalliseen yhteyteen, jos vain mahdollista."
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Katkaise kaikki verkkoyhteydet"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Langalliset verkot"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr ""
+"Taustasovellusmuutokset eivät vaikuta ennen kuin palvelu "
+"uudelleenkäynnistetään"
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Pysäytä yhdistäminen"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "Yhdistetään"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Aja esi-katkaisuskripti"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"Wicd-cursesilla ei voi muokata skriptejä suoraan, koska se hankaloittaisi "
+"asioita. Skriptejä voi kuitenkin muokata käsin. Roottina pitää avata \"$A\"-"
+"tiedosto ja etsiä osio $B, tässä tapauksessa:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Voit myös säätää langattomien verkkojen asetukset etsimällä \"[<ESSID>]\"-"
+"kenttää asetustiedostosta."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Siinä vaiheessa voi muokata tai lisätä beforescript-, afterscript- ja "
+"disconnectscript-muuttujia tarpeen mukaan. Näillä vaikutetaan "
+"yhdistämistestä edeltävään, seuraavaan ja katkaisua seuraavaan skriptiin "
+"vastaavasti. Skripteille pitää antaa hakemistopolku, ei sisältöä. "
+"Tiedostojen sisällöt pitää tuottaa erikseen. Tarkempia tietoja löytyy wicd:n "
+"man-sivuilta."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "Salasana tarvitaan configure-skripteille"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "DNS domain"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "Yhteys peruutettu"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "Haetaan verkkoja... odota..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Salasana"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "Wicd-palvelu saavuttamattomissa"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Käytä staattista DNS:ää"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "Asetetaan Broadcast-osoitetta..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Valitse tai luo langallinen profiili, jolla yhdistäminen tapahtuu"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Yhdistääksesi lankaverkkoon sinun on luotava verkkoprofiili. Kirjoita "
+"verkkoa kuvaava nimi ja paina Lisää."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Paina ESC peruuttaaksesi"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "Etsitään"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Tyhjennetään reititystaulua..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "Tuottajat:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Päivitä verkot:"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Valitse piilotetun verkon ESSID"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "Ulkoiset ohjelmat"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "Yhdistä"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Näytä tämä ohje"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Käytä globaaleja DNS-palvelimia"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr ""
+"Tämä verkko vaatii salauksasetukset, jotta se voitaisiin ottaa käyttöön."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr ""
+"Käytä viimeksi käytettyä profiilia yhdistettäessä langattomaan verkkoon "
+"automaattisesti."
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Yhteys epäonnistui: IP-osoitetta ei vastaanotettu"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "Asetetaan staattista IP-osoitetta..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "Yhdistetään taustaprosessiin..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Yhdistä automaattisesti tähän verkkoon"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Lisää uusi langallinen profiili"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "DHCP-ohjelma"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "Näytä signaalin vahvuus desibeleinä"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Käytä näitä asetuksia kaikille samannimisille verkoille"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Tee asetukset valittuun verkkoon"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Käytä vianetsintätilaa"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "Poistetaan vanha yhteys..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Graafista sudoa ei löydetty. Skriptinmuokkkainta ei voida avata. Skriptit "
+"pitää muokata käsin asetustiedostosta."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Langattomat verkot"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Tehdään asetuksia langalliselle profiilille \"$A\""
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "Langattomia verkkoa ei löytynyt"
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Valitse, jos käytät madwifi/atheros-ajureita"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Ominaisuudet"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Asetetaan salaustiedot"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Tietoja Wicd:stä"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "OK"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr "Luo Ad-hoc-verkko"
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr "Valitse skriptit"
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr "Virheellinen osoite syötteessä $A."
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "Määritetään langattoman verkkolaitteen asetuksia..."
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "Luodaan salausavainta..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "Varmistetaan authentikointia..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Anonyymi identiteetti"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Langaton verkkolaite"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Piilotettu verkko"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Avain"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Wicd Curses -käyttöliittymä."
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "Virheenjäljitys"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Käytä salausta"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Globaalit DNS-palvelimet"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "Ei kytketty"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "Yhdistetty..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr ""
+"Ei voida yhdistää taustaprosessiin; se yritetään käynnistää "
+"automaattisesti..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "Kaikki asetukset seuraavat kirjaintasoja"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Yhdyskäytävä"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Taustasovellus"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"DBUS-virhe. Tämä johtunee pysäytetystä wicd-palvelusta wicd-cursesin "
+"päälläollessa. Käynnistä palvelu uudestaan ja sitten wicd-curses."
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Käyttäjä keskeytti"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Langallinen linkki tunnistettu"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Lisää uusi profiili"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Internet-yhteyden jakaminen"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Luo Ad-Hoc-verkko"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "Otetaan verkkolaite käyttöön..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Globaali DNS ei ole päällä yleisasetuksissa"
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Lisäasetukset"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Käyttäjänimi"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Automaattinen (suositeltava)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "Langallinen yhteys tunnistettu"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Verkon peite"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Valitse alla olevista verkoista:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "Yhdistä valittuun verkkoon"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses ei tue viimeisen langallisen profiilin poistoa. Yritä nimetä se "
+"uudelleen ('F2')"
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "Yleiset asetukset"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Yhdistetty verkkoon $A, $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"Poikkeus. Ilmoita tästä virheestä ohjelman tekijälle ja liitä allaoleva "
+"pinon vedos virheilmoitukseen:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Tehdään asetuksia langattomalle verkolle \"$A\" ($B)"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "Luodaan WPA-asetustiedostoa..."
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Etsi verkko-osoitetta"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Salausasetuksia ei ole annettu."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "Haetaan IP-osoitetta..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"Wicd-taustaprosessi on sulkeutunut. Käyttöliittymä ei toimi oikein ennen "
+"kuin se käynnistetään uudelleen."
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Yhdistääksesi langalliseen verkkoon sinun pitää luoda verkkoprofiili. "
+"Luodaksesi verkkoprofiilin kirjoita nimi, joka kuvaa tätä verkkoa, ja paina "
+"Lisää."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "Asetetaan staattiset DNS-palvelimia..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Yhdistä automaattisesti yhteyden katkettua"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Käytä salausta (vain WEP)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Langallisen yhteyden automaattiyhdistämisen asetukset"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Suorita skripti ennen yhdistämistä"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "Lähes aina wext on oikea WPA supplicantin ajuri"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Verkkolaitteet"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr ""
+"Käytä oletusprofiilia yhdistettäessä automaattisesti langalliseen verkkoon"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Hae"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Langallinen yhteys (IP: $A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "WPA Supplicant -ajuri"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd tarvitsee luvan verkkokorttien käyttöön."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "Langattoman verkkolaitteen radio kytketty päälle"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "Piilotetun verkon ESSID"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Salattu"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "Poistetaan verkkolaite käytöstä..."
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Tunnistus"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Suorita skripti yhdistämisen jälkeen"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr ""
+"Kysy profiilia profiilia yhdistettäessä automaattisesti langalliseen verkkoon"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Kanava"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Salaamaton"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Uudelleen nimeä wired profiili"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "Wicd-palvelu on saavuttamattomissa joten pyyntöä ei voitu toteuttaa"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Älä näytä automaattisen yhteyden ponnahdusikkunaa"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Etsi piilotetut verkot"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Käytä staattista IP:tä"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr "Käytä urwidin raakaa ruudun ohjainta"
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Reititystaulun tyhjennys"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Skriptit"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Identiteetti"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Automaattinen uudelleenyhdistäminen"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Langallinen verkkolaite"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Paina F8 tai Q poistuaksesi"
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr "Käytä oletusprofiilia (korvaa kaikki aikaisemmat muutokset)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Langallinen verkko"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "DNS-palvelin"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Ilmoitukset"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Näytä ilmoituksia yhteyden tilasta"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "Yhteys muodostettu"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "Yhteys katkaistu"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "Muodostetaan yhteyttä..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr ""
+"Yhteys epäonnistui: Ei voitu ottaa yhteyttä langattomaan liityntäpisteeseen"
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"Ei voitu liittää wicd-palveluun koska DBUS antoi pääsy estetty -virheen. "
+"Tarkista että käyttäjäsi on ryhmässä $A."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "Suljetaan aktiivisia yhteyksiä..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"Virhe. Wicd-curses ei saanut yhteyttä wicd-palveluun, tarkista että "
+"käyttäjäsi on ryhmässä $A."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Aja post-disconnect-skripti"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Palauta skripti ajoon"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Pysäytä skriptin suoritus"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Syötetty IP-osoite oli virheellinen."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr ""
+"Pingaa staattisia yhdyskäytäviä yhteydenmuodostuksen jälkeen yhteyden "
+"vahvistamiseksi"
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr "$A $B $C $D $E Kt/s $F Kt/s"
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr "$A $B Kt/s $C Kt/s"
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Langaton SSID: Nopeus: IP: Vahvuus: RX: TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Langallinen IP: RX: TX:"
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

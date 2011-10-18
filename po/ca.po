@@ -1,0 +1,791 @@
+# Translations for Catalan (ca)
+# Translator ID 21
+# /translator/edit/21/
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"PO-Revision-Date: 2011-09-18 16:09+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-09-20 05:11+0000\n"
+"X-Generator: Launchpad (build 13980)\n"
+
+#: wicd/translations.py:61
+msgid "Resetting IP address..."
+msgstr "S'està reiniciant l'adreça IP"
+
+#: wicd/translations.py:62
+msgid "Preferences dialog"
+msgstr "Diàleg de preferències"
+
+#: wicd/translations.py:63
+msgid "Connection Failed: No DHCP offers received."
+msgstr "La connexió ha fallat: No s'han rebut ofertes DHCP"
+
+#: wicd/translations.py:64
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr ""
+"Per una ajuda més detallada, consulteu la pàgina man de wicd-curses(8)"
+
+#: wicd/translations.py:65
+msgid "Connection Failed: Bad password"
+msgstr "La connexió ha fallat: la contrasenya és incorrecta"
+
+#: wicd/translations.py:66
+msgid ""
+"Unable to connect to wicd daemon DBus interface. This typically means there "
+"was a problem starting the daemon. Check the wicd log for more information."
+msgstr ""
+"No es pot connectar amb el dimoni de la interfície DBus de wicd. Això "
+"habitualment indica que hi ha hagut un problema en iniciar el dimoni. Per "
+"més informació, comproveu el registre de wicd."
+
+#: wicd/translations.py:67
+msgid "Verifying access point association..."
+msgstr "S'està verificant l'associació amb el punt d'accés..."
+
+#: wicd/translations.py:68
+msgid "Always show wired interface"
+msgstr "Mostra sempre la interfície amb fil"
+
+#: wicd/translations.py:69
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
+msgstr ""
+"No es pot connectar amb la interfície D-Bus de wicd. Comproveu els misstages "
+"del registre de wicd."
+
+#: wicd/translations.py:70
+msgid "Path to PAC File"
+msgstr "Camí cap al fitxer PAC"
+
+#: wicd/translations.py:71
+msgid "Always switch to wired connection when available"
+msgstr "Canvia a la xarxa cablejada sempre que estigui disponible"
+
+#: wicd/translations.py:72
+msgid "Disconnect from all networks"
+msgstr "Desconnecta de totes les xarxes"
+
+#: wicd/translations.py:73
+msgid "Wired Networks"
+msgstr "Xarxes cablejades"
+
+#: wicd/translations.py:74
+msgid "Changes to your backend won't occur until the daemon is restarted."
+msgstr "Els canvis en el dorsal no es notaran fins que reinicieu el dimoni"
+
+#: wicd/translations.py:75
+msgid "Stop a network connection in progress"
+msgstr "Atura una connexió en progrés"
+
+#: wicd/translations.py:76
+msgid "Connecting"
+msgstr "S'està connectant"
+
+#: wicd/translations.py:77
+msgid "Run pre-disconnect script"
+msgstr "Executa l'script predesconnexió"
+
+#: wicd/translations.py:78
+msgid ""
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts.  However, you can edit them manually.  First, (as "
+"root)\", open the \"$A\" config file, and look for the section labeled by "
+"the $B in question.  In this case, this is:"
+msgstr ""
+"Per evitar diverses complicacions, wicd-curses no permet editar els scripts "
+"directament. Malgrat tot, els podeu editar manualment. Primer, (com a "
+"root)\", obriu el fitxer de configuració \"$A\", i busqueu la secció "
+"etiquetada amb la $B en qüestió. En aquest cas és:"
+
+#: wicd/translations.py:79
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"També podeu configurar les xarxes sense fil cercant el camp \"[<ESSID>]\" al "
+"fitxer de configuració."
+
+#: wicd/translations.py:80
+msgid ""
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"and \"disconnectscript\" variables as needed, to change the preconnect, "
+"postconnect, and disconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents.  "
+"You will need to add/edit the script contents separately.  Refer to the wicd "
+"manual page for more information."
+msgstr ""
+"Llavors, podeu ajustar (o afegir) les variables \"beforescript\", "
+"\"afterscript\" i \"disconnectscript\" segons us calgui, per canviar els "
+"scripts de preconnexió, postconnexió o desconnexió respectivament. Noteu que "
+"heu d'especificar el camí complet als scripts, no el contingut dels scripts. "
+"Haureu d'afegir/editar el contingut de l'script separadament. Per més "
+"informació, dirigiu-vos al manual de wicd."
+
+#: wicd/translations.py:81
+msgid "You must enter your password to configure scripts"
+msgstr "Heu d'escriure la contrasenya per configurar els scripts"
+
+#: wicd/translations.py:82
+msgid "DNS domain"
+msgstr "Domini DNS"
+
+#: wicd/translations.py:83
+msgid "Connection Cancelled"
+msgstr "Connexió cancel·lada"
+
+#: wicd/translations.py:84
+msgid "Scanning networks... stand by..."
+msgstr "S'estan cercant xarxes... espereu..."
+
+#: wicd/translations.py:85
+msgid "Password"
+msgstr "Contrasenya"
+
+#: wicd/translations.py:86
+msgid "Wicd daemon unreachable"
+msgstr "No s'ha trobat el dimoni de wicd"
+
+#: wicd/translations.py:87
+msgid "Use Static DNS"
+msgstr "Utilitza DNS estàtiques"
+
+#: wicd/translations.py:88
+msgid "Setting broadcast address..."
+msgstr "S'està configurant l'adreça d'emissió..."
+
+#: wicd/translations.py:89
+msgid "Select or create a wired profile to connect with"
+msgstr "Seleccioneu o creeu un perfil per a la connexió amb fil"
+
+#: wicd/translations.py:90
+msgid ""
+"To connect to a wired network, you must create a network profile.  To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Per a connectar a una xarxa amb fil heu de crear un perfil de xarxa. Per a "
+"crear-lo, escriviu un nom que descrigui aquesta xarxa i premeu afegir."
+
+#: wicd/translations.py:91
+msgid "Press ESC to cancel"
+msgstr "Premeu ESC per cancel·lar"
+
+#: wicd/translations.py:92
+msgid "Scanning"
+msgstr "S'està escanejant"
+
+#: wicd/translations.py:93
+msgid "Flushing the routing table..."
+msgstr "Netejant la taula d'encaminament..."
+
+#: wicd/translations.py:94
+msgid "Brought to you by:"
+msgstr "Presentat per:"
+
+#: wicd/translations.py:95
+msgid "Refresh network list"
+msgstr "Resfresca la llista de xarxes"
+
+#: wicd/translations.py:96
+msgid "Select Hidden Network ESSID"
+msgstr "Selecciona el ESSID de la xarxa oculta"
+
+#: wicd/translations.py:97
+msgid "External Programs"
+msgstr "Programes externs"
+
+#: wicd/translations.py:98
+msgid "Connect"
+msgstr "Connecta"
+
+#: wicd/translations.py:99
+msgid "Display this help dialog"
+msgstr "Mostra aquest diàleg d'ajuda"
+
+#: wicd/translations.py:100
+msgid "Use global DNS servers"
+msgstr "Utilitza servidors DNS globals"
+
+#: wicd/translations.py:101
+msgid "This network requires encryption to be enabled."
+msgstr "Aquesta xarxa requereix encriptació per activar-se."
+
+#: wicd/translations.py:102
+msgid "Use last used profile on wired autoconnect"
+msgstr "Utilitza l'últim perfil usat al connectar-se a una xarxa amb fil"
+
+#: wicd/translations.py:103
+msgid "Preferences"
+msgstr "Preferències"
+
+#: wicd/translations.py:104
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Connexió fallida: impossible d'obtenir una direcció IP"
+
+#: wicd/translations.py:105
+msgid "Setting static IP addresses..."
+msgstr "S'estan configurant adreces IP estàtiques..."
+
+#: wicd/translations.py:106
+msgid "Connecting to daemon..."
+msgstr "S'està conectant al dimoni..."
+
+#: wicd/translations.py:107
+msgid "Automatically connect to this network"
+msgstr "Connecta automàticament a aquesta xarxa"
+
+#: wicd/translations.py:108
+msgid "Add a new wired profile"
+msgstr "Crear un nou perfil de xarxa amb fil"
+
+#: wicd/translations.py:109
+msgid "DHCP Client"
+msgstr "Client DHCP"
+
+#: wicd/translations.py:110
+msgid "Use dBm to measure signal strength"
+msgstr "Utilitzar dBm per mesurar la força del senyal"
+
+#: wicd/translations.py:111
+msgid "Use these settings for all networks sharing this essid"
+msgstr ""
+"Utilitza aquesta configuració per a totes les xarxes que comparteixen aquest "
+"essid"
+
+#: wicd/translations.py:112
+msgid "Configure Selected Network"
+msgstr "Configura la xarxa seleccionada"
+
+#: wicd/translations.py:113
+msgid "Enable debug mode"
+msgstr "Activa el mode de depuració"
+
+#: wicd/translations.py:114
+msgid "Removing old connection..."
+msgstr "S'està eliminant la connexió vella..."
+
+#: wicd/translations.py:115
+msgid ""
+"Could not find a graphical sudo program.  The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"No es pot trobar un programa sudo gràfic. L'editor d'script no s'ha pogut "
+"engegar. Haureu d'editar els scripts directament del fitxer de configuració."
+
+#: wicd/translations.py:116
+msgid "Wireless Networks"
+msgstr "Xarxes sense fil"
+
+#: wicd/translations.py:117
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "S'estan configurant les preferències del perfil cablejat \"$A\""
+
+#: wicd/translations.py:118
+msgid "No wireless networks found."
+msgstr "No s'han trobat xarxes sense fil."
+
+#: wicd/translations.py:119
+msgid "Check if using madwifi/atheros drivers"
+msgstr "Comprova si s'estan usant els controladors madwifi/atheros"
+
+#: wicd/translations.py:120
+msgid "Properties"
+msgstr "Propietats"
+
+#: wicd/translations.py:121
+msgid "Setting encryption info"
+msgstr "Configuració d'informació d'encriptació"
+
+#: wicd/translations.py:122
+msgid "About Wicd"
+msgstr "Quant a Wicd"
+
+#: wicd/translations.py:123
+msgid "OK"
+msgstr "D'acord"
+
+#: wicd/translations.py:124
+msgid "Set up Ad-hoc network"
+msgstr ""
+
+#: wicd/translations.py:125
+msgid "Select scripts"
+msgstr ""
+
+#: wicd/translations.py:126
+msgid "Invalid address in $A entry."
+msgstr ""
+
+#: wicd/translations.py:127
+msgid "Configuring wireless interface..."
+msgstr "S'està configurant la interfície sense fil"
+
+#: wicd/translations.py:128
+msgid "Generating PSK..."
+msgstr "S'està generant PSK..."
+
+#: wicd/translations.py:129
+msgid "Validating authentication..."
+msgstr "S'està validant l'autenticació..."
+
+#: wicd/translations.py:130
+msgid "ESSID"
+msgstr "ESSID"
+
+#: wicd/translations.py:131
+msgid "Anonymous Identity"
+msgstr "Identitat anònima"
+
+#: wicd/translations.py:132
+msgid "Wireless Interface"
+msgstr "Interfície sense fil"
+
+#: wicd/translations.py:133
+msgid "Hidden Network"
+msgstr "Xarxa amagada"
+
+#: wicd/translations.py:134
+msgid "Key"
+msgstr "Clau"
+
+#: wicd/translations.py:135
+msgid "Wicd Curses Interface"
+msgstr "Interfície Wicd Curses"
+
+#: wicd/translations.py:136
+msgid "Debugging"
+msgstr "S'està depurant"
+
+#: wicd/translations.py:137
+msgid "Use Encryption"
+msgstr "Utilitza encriptació"
+
+#: wicd/translations.py:138
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: wicd/translations.py:139
+msgid "Global DNS servers"
+msgstr "Servidors DNS globals"
+
+#: wicd/translations.py:140
+msgid "Not connected"
+msgstr "Desconnectat"
+
+#: wicd/translations.py:141
+msgid "Done connecting..."
+msgstr "S'ha connectat..."
+
+#: wicd/translations.py:142
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr ""
+"No es pot connectar amb el dimoni; S'està intentant iniciar-lo "
+"automàticament..."
+
+#: wicd/translations.py:143
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#: wicd/translations.py:144
+msgid "All controls are case sensitive"
+msgstr "Tots els controls distingeixen majúscules i minúscules"
+
+#: wicd/translations.py:145
+msgid "Gateway"
+msgstr "Passareŀla"
+
+#: wicd/translations.py:146
+msgid "Backend"
+msgstr "Dorsal"
+
+#: wicd/translations.py:147
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
+msgstr ""
+"Error Dbus! Provablement causat perquè el dimoni de wicd s'ha aturat mentre "
+"wicd-curses s'executava. Reinicieu el dimoni i després wicd-curses"
+
+#: wicd/translations.py:148
+msgid "Terminated by user"
+msgstr "Finalitzat per l'usuari"
+
+#: wicd/translations.py:149
+msgid "Wired Link Detection"
+msgstr "Detecció de connexió cablejada"
+
+#: wicd/translations.py:150
+msgid "Add a new profile"
+msgstr "Crea un perfil nou"
+
+#: wicd/translations.py:151
+msgid "Activate Internet Connection Sharing"
+msgstr "Activa la compartició de connexió a Internet"
+
+#: wicd/translations.py:152
+msgid "Create an Ad-Hoc Network"
+msgstr "Crear una xarxa Ad-Hoc"
+
+#: wicd/translations.py:153
+msgid "Putting interface up..."
+msgstr "S'està activant la interfície..."
+
+#: wicd/translations.py:154
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Les DNS globals no s'han activat a les preferències generals."
+
+#: wicd/translations.py:155
+msgid "DNS"
+msgstr "DNS"
+
+#: wicd/translations.py:156
+msgid "Advanced Settings"
+msgstr "Configuració avançada"
+
+#: wicd/translations.py:157
+msgid "Username"
+msgstr "Nom d'usuari"
+
+#: wicd/translations.py:158
+msgid "Automatic (recommended)"
+msgstr "Automàtic (recomanat)"
+
+#: wicd/translations.py:159
+msgid "Wired connection detected"
+msgstr "S'ha detectat la connexió per cable"
+
+#: wicd/translations.py:160
+msgid "Netmask"
+msgstr "Màscara de subxarxa"
+
+#: wicd/translations.py:161
+msgid "Choose from the networks below:"
+msgstr "Tria entre les següents xarxes:"
+
+#: wicd/translations.py:162
+msgid "Connect to selected network"
+msgstr "Connecta a la xarxa seleccionada"
+
+#: wicd/translations.py:163
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it ('F2')"
+msgstr ""
+"wicd-curses no permet l'eliminació de l'últim perfil. Proveu de canviar-li "
+"el nom ('F2')"
+
+#: wicd/translations.py:164
+msgid "General Settings"
+msgstr "Configuració general"
+
+#: wicd/translations.py:165
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Connectat a $A al $B (IP: $C)"
+
+#: wicd/translations.py:166
+msgid ""
+"EXCEPTION! Please report this to the maintainer and file a bug report with "
+"the backtrace below:"
+msgstr ""
+"EXCEPCIÓ! Informeu al mantenidor enviant un informe d'error amb la traça "
+"inversa següent:"
+
+#: wicd/translations.py:167
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr ""
+"S'estan configurant les preferències de la xarxa sense fils \"$A\" ($B)"
+
+#: wicd/translations.py:168
+msgid "Generating WPA configuration file..."
+msgstr "S'està generant el fitxer de configuració de WPA"
+
+#: wicd/translations.py:169
+msgid "Search domain"
+msgstr "Cerca el domini"
+
+#: wicd/translations.py:170
+msgid "Required encryption information is missing."
+msgstr "Falta informació referent a l'encriptació."
+
+#: wicd/translations.py:171
+msgid "Obtaining IP address..."
+msgstr "S'està obtenint l'adreça IP..."
+
+#: wicd/translations.py:172
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr "fins que reinicia"
+
+#: wicd/translations.py:173
+msgid ""
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
+msgstr ""
+"Per connectar a una xarxa sense fil, heu de crear un perfil de xarxa. Per "
+"crear-ne un, escriviu un nom que descrigui aquesta xarxa, i premeu Afegeix."
+
+#: wicd/translations.py:174
+msgid "Setting static DNS servers..."
+msgstr "s'estan configurant servidors DNS estàtics..."
+
+#: wicd/translations.py:175
+msgid "Automatically reconnect on connection loss"
+msgstr "Reconnecta automàticament en perdre la connexió"
+
+#: wicd/translations.py:176
+msgid "Use Encryption (WEP only)"
+msgstr "Utilitzar Encriptació (només WEP)"
+
+#: wicd/translations.py:177
+msgid "Wired Autoconnect Settings"
+msgstr "Configuració de l'autoconnexió de la xarxa cablejada"
+
+#: wicd/translations.py:178
+msgid "Run script before connect"
+msgstr "Executa un script abans de connectar"
+
+#: wicd/translations.py:179
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "Quasi sempre s'ha d'usar wext com a controlador WPA supplicant"
+
+#: wicd/translations.py:180
+msgid "Network Interfaces"
+msgstr "Interfícies de xarxa"
+
+#: wicd/translations.py:181
+msgid "Use default profile on wired autoconnect"
+msgstr "Utilitza el perfil predeterminat en connectar amb una xarxa amb fil"
+
+#: wicd/translations.py:182
+msgid "Scan"
+msgstr "Cerca"
+
+#: wicd/translations.py:183
+msgid "IP"
+msgstr "IP"
+
+#: wicd/translations.py:184
+msgid "Connected to wired network (IP: $A)"
+msgstr "Connectat a xarxa amb fil (IP: $A)"
+
+#: wicd/translations.py:185
+msgid "WPA Supplicant Driver"
+msgstr "Connector de WPA Supplicant"
+
+#: wicd/translations.py:186
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd necessita accedir a les targetes de xarxa del teu ordinador."
+
+#: wicd/translations.py:187
+msgid "Wireless Kill Switch Enabled"
+msgstr "L'interruptor de desconnexió inalàmbrica està activat"
+
+#: wicd/translations.py:188
+msgid "Hidden Network ESSID"
+msgstr "ESSID de xarxa amagada"
+
+#: wicd/translations.py:189
+msgid "Secured"
+msgstr "Segura"
+
+#: wicd/translations.py:190
+msgid "Putting interface down..."
+msgstr "S'està desactivant la interfície"
+
+#: wicd/translations.py:191
+msgid "Authentication"
+msgstr "Autenticació"
+
+#: wicd/translations.py:192
+msgid "Run script after connect"
+msgstr "Executa un script després de connectar"
+
+#: wicd/translations.py:193
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Demana pel perfil en connectar amb una xarxa amb fil"
+
+#: wicd/translations.py:194
+msgid "Channel"
+msgstr "Canal"
+
+#: wicd/translations.py:195
+msgid "Unsecured"
+msgstr "Insegura"
+
+#: wicd/translations.py:196
+msgid "Rename wired profile"
+msgstr "Reanomena el perfil de xarxa amb fil"
+
+#: wicd/translations.py:197
+msgid "The wicd daemon is unavailable, so your request cannot be completed"
+msgstr "No es pot robar el dimoni wicd, i la petició no es pot completar"
+
+#: wicd/translations.py:198
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Desactiva temporalment els emergents d'autoconnexió"
+
+#: wicd/translations.py:199
+msgid "Scan for hidden networks"
+msgstr "Cerca xarxes ocultes"
+
+#: wicd/translations.py:200
+msgid "Use Static IPs"
+msgstr "Utilitza IPs estàtiques"
+
+#: wicd/translations.py:201
+msgid "use urwid's raw screen controller"
+msgstr ""
+
+#: wicd/translations.py:202
+msgid "Route Table Flushing"
+msgstr "Neteja la taula de rutes"
+
+#: wicd/translations.py:203
+msgid "Scripts"
+msgstr "Scripts"
+
+#: wicd/translations.py:204
+msgid "Identity"
+msgstr "Indentitat"
+
+#: wicd/translations.py:205
+msgid "Automatic Reconnection"
+msgstr "Reconnexió automàtica"
+
+#: wicd/translations.py:206
+msgid "Wired Interface"
+msgstr "Interfície amb fil"
+
+#: wicd/translations.py:207
+msgid "Press F8 or Q to quit."
+msgstr "Premeu F8 o Q per sortir"
+
+#: wicd/translations.py:208
+msgid "Use as default profile (overwrites any previous default)"
+msgstr "Utilitza com a predefinida (sobreescriu la predefinida anteriorment)"
+
+#: wicd/translations.py:209
+msgid "Wired Network"
+msgstr "Xarxa amb fil"
+
+#: wicd/translations.py:210
+msgid "DNS server"
+msgstr "Servidor DNS"
+
+#: wicd/translations.py:211
+msgid "Notifications"
+msgstr "Notificacions"
+
+#: wicd/translations.py:212
+msgid "Display notifications about connection status"
+msgstr "Mostra notificacions quan a l'estat de la connexió"
+
+#: wicd/translations.py:213
+msgid "Connection established"
+msgstr "s'ha establert la connexió"
+
+#: wicd/translations.py:214
+msgid "Disconnected"
+msgstr "S'ha desconnectat"
+
+#: wicd/translations.py:215
+msgid "Establishing connection..."
+msgstr "S'està establint la connexió..."
+
+#: wicd/translations.py:216
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr ""
+"La connexió ha fallat: no s'ha pogut contactar amb el punt d'accés sense fils"
+
+#: wicd/translations.py:217
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
+msgstr ""
+"No s'ha pogut establir contacte amb el dimoni Wicd perquè s'ha denegat "
+"l'accés des de DBus. Si us plau comproveu que l'usuari sigui al grup $A ."
+
+#: wicd/translations.py:218
+msgid "Disconnecting active connections..."
+msgstr "S'estan aturant les connexions actives..."
+
+#: wicd/translations.py:219
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
+msgstr ""
+"ERROR: wicd-curses no ha pogut accedir al dimoni wicd: si us plau, comproveu "
+"que l'usuari sigui al grup \"$A\"."
+
+#: wicd/translations.py:220
+msgid "Run post-disconnect script"
+msgstr "Executa script de post-desconnexió"
+
+#: wicd/translations.py:221
+msgid "Resume script"
+msgstr "Continuar script"
+
+#: wicd/translations.py:222
+msgid "Suspend script"
+msgstr "Suspendre script"
+
+#: wicd/translations.py:223
+msgid "Invalid IP address entered."
+msgstr "Direcció IP introduïda no vàlida."
+
+#: wicd/translations.py:224
+msgid "Ping static gateways after connecting to verify association"
+msgstr ""
+
+#: wicd/translations.py:225
+msgid ""
+"$A\r\n"
+"$B\r\n"
+"$C\r\n"
+"$D\r\n"
+"$E KB/s\r\n"
+"$F KB/s"
+msgstr ""
+
+#: wicd/translations.py:231
+msgid ""
+"$A\r\n"
+"$B KB/s\r\n"
+"$C KB/s"
+msgstr ""
+
+#: wicd/translations.py:234
+msgid ""
+"Wireless\r\n"
+"SSID:\r\n"
+"Speed:\r\n"
+"IP:\r\n"
+"Strength:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr "Wireless SSID: Velocitat: IP: Potencia: RX: TX:"
+
+#: wicd/translations.py:241
+msgid ""
+"Wired\r\n"
+"IP:\r\n"
+"RX:\r\n"
+"TX:"
+msgstr ""
+
+#: wicd/translations.py:245
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: wicd/translations.py:246
+msgid "Switch Off Wi-Fi"
+msgstr ""

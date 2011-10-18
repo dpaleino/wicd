@@ -37,13 +37,6 @@ from wicd import dbusmanager
 
 _ = translations.get_gettext()
 
-language = {}
-language['configure_scripts'] = _("Configure Scripts")
-language['before_script'] = _("Pre-connection Script")
-language['after_script'] = _("Post-connection Script")
-language['pre_disconnect_script'] = _("Pre-disconnection Script")
-language['post_disconnect_script'] = _("Post-disconnection Script")
-
 dbus = dbusmanager.DBusManager()
 dbus.connect_to_dbus()
 
@@ -158,11 +151,11 @@ def main (argv):
     self.wTree = gtk.Builder()
     self.wTree.add_from_file(gladefile)
     self.dialog = self.wTree.get_object("configure_script_dialog")
-    self.wTree.get_object("pre_label").set_label(language['before_script'] + ":")
-    self.wTree.get_object("post_label").set_label(language['after_script'] + ":")
-    self.wTree.get_object("pre_disconnect_label").set_label(language['pre_disconnect_script']
+    self.wTree.get_object("pre_label").set_label(_('Pre-connection Script') + ":")
+    self.wTree.get_object("post_label").set_label(_('Post-connection Script') + ":")
+    self.wTree.get_object("pre_disconnect_label").set_label(_('Pre-disconnection Script')
                                                    + ":")
-    self.wTree.get_object("post_disconnect_label").set_label(language['post_disconnect_script']
+    self.wTree.get_object("post_disconnect_label").set_label(_('Post-disconnection Script')
                                                    + ":")
     self.wTree.get_object("window1").hide()
     

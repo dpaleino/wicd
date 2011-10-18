@@ -189,28 +189,32 @@ if options.connect:
         wireless.ConnectWireless(options.network)
 
         check = lambda: wireless.CheckIfWirelessConnecting()
+        status = lambda: wireless.CheckWirelessConnectingStatus()[1]
         message = lambda: wireless.CheckWirelessConnectingMessage()[1]
     elif options.wired:
         print "Connecting to wired connection on %s" % wired.DetectWiredInterface()
         wired.ConnectWired()
 
         check = lambda: wired.CheckIfWiredConnecting()
+        status = lambda: wired.CheckWiredConnectingStatus()
         message = lambda: wired.CheckWiredConnectingMessage()
     else:
         check = lambda: False
+        status = lambda: False
         message = lambda: False
 
     # update user on what the daemon is doing
     last = None
     if check:
         while check():
-            next = message()
+            next = status()
             if next != last:
                 # avoid a race condition where status is updated to "done" after the
                 # loop check
+                # FIXME
                 if next == "done":
                     break
-                print "%s..." % next.replace("_", " ")
+                print message()
                 last = next
         print "done!"
         op_performed = True

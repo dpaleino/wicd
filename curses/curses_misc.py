@@ -24,6 +24,8 @@ wicd-curses.
 
 import urwid
 
+from wicd.translations import _
+
 # Uses code that is towards the bottom
 def error(ui,parent,message):
     """Shows an error dialog (or something that resembles one)"""
@@ -522,7 +524,7 @@ class TextDialog(Dialog2):
             self.frame.set_focus('footer')
 
 class InputDialog(Dialog2):
-    def __init__(self, text, height, width,ok_name='OK',edit_text=''):
+    def __init__(self, text, height, width,ok_name=_('OK'),edit_text=''):
         self.edit = urwid.Edit(wrap='clip',edit_text=edit_text)
         body = urwid.ListBox([self.edit])
         body = urwid.AttrWrap(body, 'editbx','editfc')
@@ -530,7 +532,7 @@ class InputDialog(Dialog2):
         Dialog2.__init__(self, text, height, width, body)
        
         self.frame.set_focus('body')
-        self.add_buttons([(ok_name,0),('Cancel',-1)])
+        self.add_buttons([(ok_name,0),(_('Cancel'),-1)])
        
     def unhandled_key(self, size, k):
         if k in ('up','page up'):

@@ -24,6 +24,7 @@ Also recycles a lot of configscript.py, too. :-)
 #       MA 02110-1301, USA.
 
 from wicd import misc
+from wicd.translations import _
 import configscript
 from configscript import write_scripts,get_script_info,get_val,none_to_blank,blank_to_none
 
@@ -31,15 +32,6 @@ import urwid
 import urwid.curses_display
 import sys
 import os
-
-_ = misc.get_gettext()
-
-language = {}
-language['configure_scripts'] = _("Configure Scripts")
-language['before_script'] = _("Pre-connection Script")
-language['after_script'] = _("Post-connection Script")
-language['pre_disconnect_script'] = _("Pre-disconnection Script")
-language['post_disconnect_script'] = _("Post-disconnection Script")
 
 def main(argv):
     global ui,frame
@@ -61,10 +53,10 @@ def main(argv):
     script_info = get_script_info(network, network_type)
 
     blank = urwid.Text('')
-    pre_entry_t = ('body',language['before_script']+': ')
-    post_entry_t  = ('body',language['after_script']+': ')
-    pre_disconnect_entry_t = ('body',language['pre_disconnect_script']+': ')
-    post_disconnect_entry_t = ('body',language['post_disconnect_script']+': ')
+    pre_entry_t = ('body',_('Pre-connection Script')+': ')
+    post_entry_t  = ('body',_('Post-connection Script')+': ')
+    pre_disconnect_entry_t = ('body',_('Pre-disconnection Script')+': ')
+    post_disconnect_entry_t = ('body',_('Post-disconnection Script')+': ')
 
     global pre_entry,post_entry,pre_disconnect_entry,post_disconnect_entry
     pre_entry  = urwid.AttrWrap(urwid.Edit(pre_entry_t,
@@ -78,8 +70,8 @@ def main(argv):
             none_to_blank(script_info.get('post_disconnect_entry'))),'editbx','editfc' )
 
     # The buttons
-    ok_button = urwid.AttrWrap(urwid.Button('OK',ok_callback),'body','focus')
-    cancel_button = urwid.AttrWrap(urwid.Button('Cancel',cancel_callback),'body','focus')
+    ok_button = urwid.AttrWrap(urwid.Button(_('OK'),ok_callback),'body','focus')
+    cancel_button = urwid.AttrWrap(urwid.Button(_('Cancel'),cancel_callback),'body','focus')
 
     button_cols = urwid.Columns([ok_button,cancel_button],dividechars=1)
 

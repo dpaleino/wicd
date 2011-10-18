@@ -64,7 +64,7 @@ from wicd import dbusmanager
 import gui
 from guiutil import error, can_use_notify
 
-from wicd.translations import language
+from wicd.translations import _
 
 ICON_AVAIL = True
 USE_EGG = False
@@ -91,7 +91,7 @@ def catchdbus(func):
             return func(*args, **kwargs)
         except DBusException, e:
             if e.get_dbus_name() != None and "DBus.Error.AccessDenied" in e.get_dbus_name():
-                error(None, language['access_denied'].replace("$A","<b>"+wpath.wicd_group+"</b>"))
+                error(None, _('Unable to contact the Wicd daemon due to an access denied error from DBus. Please check that your user is in the $A group.').replace("$A","<b>"+wpath.wicd_group+"</b>"))
                 #raise
                 raise DBusException(e)
             else:
@@ -208,20 +208,20 @@ class TrayIcon(object):
             Updates the trayicon tooltip based on current connection status
             """
             if (self.network_type == "none"):
-                self.tr.set_tooltip(language['not_connected'])
+                self.tr.set_tooltip(_('Not connected'))
             elif (self.network_type == "wireless"):
-                self.tr.set_tooltip(language['connected_to_wireless']
+                self.tr.set_tooltip(_('Connected to $A at $B (IP: $C)')
                         .replace('$A', self.network_name)
                         .replace('$B', self.network_str)
                         .replace('$C', self.network_addr))
             elif (self.network_type == "wired"):
-                self.tr.set_tooltip(language['connected_to_wired']
+                self.tr.set_tooltip(_('Connected to wired network (IP: $A)')
                         .replace('$A', self.network_addr))
             elif (self.network_type == "killswitch"):
-                self.tr.set_tooltip(language['not_connected'] + "(" +
-                        language['killswitched_enabled'] + ")")
+                self.tr.set_tooltip(_('Not connected') + "(" +
+                        _('Wireless Kill Switch Enabled') + ")")
             elif (self.network_type == "no_daemon"):
-                self.tr.set_tooltip(language['no_daemon_tooltip'])
+                self.tr.set_tooltip(_('Wicd daemon unreachable'))
 
             return True
 
@@ -260,11 +260,11 @@ class TrayIcon(object):
             self.network_addr = str(info[0])
             self.network_type = "wired"
             self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
-            # status_string = language['connected_to_wired'].replace('$A',
+            # status_string = _('Connected to wired network (IP: $A)').replace('$A',
             #wired_ip)
             # self.tr.set_tooltip(status_string)
-            self._show_notification(language['wired_network'],
-                                    language['connection_established'],
+            self._show_notification(_('Wired Network'),
+                                    _('Connection established'),
                                     'network-wired')
             
             self.update_tooltip()
@@ -287,14 +287,14 @@ class TrayIcon(object):
             
             if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                 lock = "-lock"
-            # status_string = (language['connected_to_wireless']
+            # status_string = (_('Connected to $A at $B (IP: $C)')
             #.replace('$A', self.network)
             #                    .replace('$B', sig_string)
             #                    .replace('$C', str(wireless_ip))) 
             #self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
             self._show_notification(self.network,
-                                    language['connection_established'],
+                                    _('Connection established'),
                                     'network-wireless')
             
                 
@@ -304,22 +304,22 @@ class TrayIcon(object):
             """ Sets the icon info for a connecting state. """
             wired = False
             if info[0] == 'wired' and len(info) == 1:
-                cur_network = language['wired_network']
+                cur_network = _('Wired Network')
                 wired = True
             else:
                 cur_network = info[1]
-            status_string = language['connecting'] + " to " + \
+            status_string = _('Connecting') + " to " + \
                                 cur_network + "..."
             self.update_tooltip()
             # self.tr.set_tooltip(status_string)
             self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
             if wired:
                 self._show_notification(cur_network,
-                                    language['establishing_connection'],
+                                        _('Establishing connection...'),
                                         'network-wired')
             else:
                 self._show_notification(cur_network,
-                                        language['establishing_connection'],
+                                        _('Establishing connection...'),
                                         'network-wireless')
 
             
@@ -328,14 +328,14 @@ class TrayIcon(object):
             """ Set the icon info for the not connected state. """
             self.tr.set_from_file(wpath.images + "no-signal.png")
             if not DBUS_AVAIL:
-                status = language['no_daemon_tooltip']
+                status = _('Wicd daemon unreachable')
             elif wireless.GetKillSwitchEnabled():
-                status = (language['not_connected'] + " (" + 
-                         language['killswitch_enabled'] + ")")
+                status = (_('Not connected') + " (" + 
+                         _('Wireless Kill Switch Enabled') + ")")
             else:
-                status = language['not_connected']
+                status = _('Not connected')
             # self.tr.set_tooltip(status)
-            self._show_notification(language['disconnected'], None, 'stop')
+            self._show_notification(_('Disconnected'), None, 'stop')
             self.update_tooltip()
 
         @catchdbus
@@ -495,9 +495,9 @@ class TrayIcon(object):
                     ('Menu',  None, 'Menu'),
                     ('Connect', gtk.STOCK_CONNECT, "Connect"),
                     ('Info', gtk.STOCK_INFO, "_Connection Info", None,
-                     'Information about the current connection',
+                     _('Information about the current connection'),
                      self.on_conn_info),
-                    ('Quit',gtk.STOCK_QUIT,'_Quit',None,'Quit wicd-tray-icon',
+                    ('Quit',gtk.STOCK_QUIT,'_Quit',None,_('Quit wicd-tray-icon'),
                      self.on_quit),
                     ]
             actg = gtk.ActionGroup('Actions')
@@ -535,7 +535,7 @@ class TrayIcon(object):
             if DBUS_AVAIL:
                 self.toggle_wicd_gui()
             else:
-                # error(None, language["daemon_unavailable"])
+                # error(None, _('The wicd daemon is unavailable, so your request cannot be completed'))
                 pass
 
         def on_quit(self, widget=None):
@@ -598,12 +598,19 @@ class TrayIcon(object):
                    
             # Choose info for the data
             if state == misc.WIRED:
-                text = (language['conn_info_wired']
+                text = (_('''$A
+$B KB/s
+$C KB/s''')
                         .replace('$A', str(info[0]))    #IP
                         .replace('$B', str(rx))         #RX
                         .replace('$C', str(tx)))        #TX
             elif state == misc.WIRELESS:
-                text = (language['conn_info_wireless']
+                text = (_('''$A
+$B
+$C
+$D
+$E KB/s
+$F KB/s''')
                         .replace('$A', str(info[1]))    #SSID
                         .replace('$B', str(info[4]))    #Speed
                         .replace('$C', str(info[0]))    #IP
@@ -616,13 +623,22 @@ class TrayIcon(object):
             # Choose info for the labels
             self.list[0].set_text('\n' + text)
             if state == misc.WIRED:
-                self.list[1].set_text(language['conn_info_wired_labels'])
+                self.list[1].set_text(_('''Wired
+IP:
+RX:
+TX:'''))
             elif state == misc.WIRELESS:
-                self.list[1].set_text(language['conn_info_wireless_labels'])
+                self.list[1].set_text(_('''Wireless
+SSID:
+Speed:
+IP:
+Strength:
+RX:
+TX:'''))
             elif state == misc.CONNECTING:
-                self.list[1].set_text(language['connecting'])
+                self.list[1].set_text(_('Connecting'))
             elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
-                self.list[1].set_text(language['disconnected']) 
+                self.list[1].set_text(_('Disconnected'))
                        
             return True 
                             
@@ -776,7 +792,7 @@ class TrayIcon(object):
                     self._add_item_to_menu(submenu, essid, "wifi", x,
                                            is_connecting, is_active)
             else:
-                no_nets_item = gtk.MenuItem(language['no_wireless_networks_found'])
+                no_nets_item = gtk.MenuItem(_('No wireless networks found.'))
                 no_nets_item.set_sensitive(False)
                 no_nets_item.show()
                 submenu.append(no_nets_item)
@@ -789,7 +805,7 @@ class TrayIcon(object):
             submenu = net_menuitem.get_submenu()
             self._clear_menu(submenu)
 
-            loading_item = gtk.MenuItem(language['scanning'] + "...")
+            loading_item = gtk.MenuItem(_('Scanning') + "...")
             loading_item.set_sensitive(False)
             loading_item.show()
             submenu.append(loading_item)
@@ -933,8 +949,7 @@ def setup_dbus(force=True):
             try:
                 dbusmanager.connect_to_dbus()
             except DBusException:
-                error(None, "Could not connect to wicd's D-Bus interface.  " +
-                          "Check the wicd log for error messages.")
+                error(None, _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages."))
                 return False
         else:  
             return False
@@ -963,7 +978,7 @@ def handle_no_dbus():
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    lost_dbus_id = misc.timeout_add(5, lambda:error(None, language['lost_dbus'], 
+    lost_dbus_id = misc.timeout_add(5, lambda:error(None, _('The wicd daemon has shut down. The UI will not function properly until it is restarted.'),
                                                     block=False))
     return False
 

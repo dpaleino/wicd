@@ -57,7 +57,7 @@ from wicd import wpath
 from wicd import networking
 from wicd import misc
 from wicd import wnettools
-from wicd.misc import noneToBlankString
+from wicd.misc import noneToBlankString, _status_dict
 from wicd.logfile import ManagedStdio
 from wicd.configmanager import ConfigManager
 
@@ -1176,12 +1176,21 @@ class WirelessDaemon(dbus.service.Object):
         return ip
 
     @dbus.service.method('org.wicd.daemon.wireless')
-    def CheckWirelessConnectingMessage(self):
-        """ Returns the wireless interface's status message. """
-        if not self.wifi.connecting_thread == None:
+    def CheckWirelessConnectingStatus(self):
+        """ Returns the wireless interface's status code. """
+        if self.wifi.connecting_thread:
             essid = self.wifi.connecting_thread.network["essid"]
             stat = self.wifi.connecting_thread.GetStatus()
             return essid, stat
+        else:
+            return False
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def CheckWirelessConnectingMessage(self):
+        """ Returns the wireless interface's status message. """
+        if self.wifi.connecting_thread:
+            essid, stat = self.CheckWirelessConnectingStatus()
+            return essid, _status_dict[stat]
         else:
             return False
 
@@ -1373,10 +1382,18 @@ class WiredDaemon(dbus.service.Object):
             return False
 
     @dbus.service.method('org.wicd.daemon.wired')
+    def CheckWiredConnectingStatus(self):
+        """Returns the wired interface's status code. '"""
+        if self.wired.connecting_thread:
+            return self.wired.connecting_thread.GetStatus()
+        else:
+            return False
+
+    @dbus.service.method('org.wicd.daemon.wired')
     def CheckWiredConnectingMessage(self):
         """ Returns the wired interface's status message. """
         if self.wired.connecting_thread:
-            return self.wired.connecting_thread.GetStatus()
+            return _status_dict(self.CheckWiredConnectingStatus())
         else:
             return False
 

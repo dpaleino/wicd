@@ -53,6 +53,7 @@ from signal import SIGTERM
 import misc
 import wpath
 from backend import BackendManager
+from translations import _
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
@@ -330,13 +331,13 @@ class ConnectThread(threading.Thread):
 
         self.iface = iface
 
-        self.connecting_message = None
+        self.connecting_status = None
         self.debug = debug
         
         self.SetStatus('interface_down')
         
     def run(self):
-        self.connect_result = "Failed"
+        self.connect_result = "failed"
         try:
             self._connect()
         finally:
@@ -360,7 +361,7 @@ class ConnectThread(threading.Thread):
         """
         self.lock.acquire()
         try:
-            self.connecting_message = status
+            self.connecting_status = status
         finally:
             self.lock.release()
 
@@ -373,10 +374,10 @@ class ConnectThread(threading.Thread):
         """
         self.lock.acquire()
         try:
-            message = self.connecting_message
+            status = self.connecting_status
         finally:
             self.lock.release()
-        return message
+        return status
     
     @abortable
     def reset_ip_addresses(self, iface):
@@ -496,7 +497,7 @@ class ConnectThread(threading.Thread):
         """ Sets the thread status to aborted. """
         if self.abort_reason:
             reason = self.abort_reason
-        self.connecting_message = reason
+        self.connecting_status = reason
         self.is_aborted = True
         self.connect_result = reason
         self.is_connecting = False
@@ -910,7 +911,7 @@ class WirelessConnectThread(ConnectThread):
             self.SetStatus('validating_authentication')
             if not wiface.ValidateAuthentication(time.time()):
                 print "connect result is %s" % self.connect_result
-                if not self.connect_result or self.connect_result == 'Failed':
+                if not self.connect_result or self.connect_result == 'failed':
                     self.abort_connection('bad_pass')
 
         # Set up gateway, IP address, and DNS servers.
@@ -932,7 +933,7 @@ class WirelessConnectThread(ConnectThread):
         print 'Connecting thread exiting.'
         if self.debug:
             print "IP Address is: " + str(wiface.GetIP())
-        self.connect_result = "Success"
+        self.connect_result = "success"
         self.is_connecting = False
         
     @abortable
@@ -962,7 +963,7 @@ class WirelessConnectThread(ConnectThread):
                 iface.FlushRoutes()
                 if hasattr(iface, "StopWPA"):
                     iface.StopWPA()
-                self.abort_connection("association_failed")
+                self.abort_connection('association_failed')
         else:
             print 'not verifying'
 
@@ -1163,5 +1164,5 @@ class WiredConnectThread(ConnectThread):
         if self.debug:
             print "IP Address is: " + str(liface.GetIP())
         
-        self.connect_result = "Success"
+        self.connect_result = "success"
         self.is_connecting = False

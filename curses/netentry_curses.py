@@ -46,24 +46,24 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
     def __init__(self):
         self.ui=None
 
-        static_ip_t = language['use_static_ip']
-        ip_t        = ('editcp',language['ip']+':     ')
-        netmask_t   = ('editcp',language['netmask']+':')
-        gateway_t   = ('editcp',language['gateway']+':')
+        static_ip_t = _('Use Static IPs')
+        ip_t        = ('editcp',_('IP')+':     ')
+        netmask_t   = ('editcp',_('Netmask')+':')
+        gateway_t   = ('editcp',_('Gateway')+':')
 
-        use_static_dns_t = language['use_static_dns']
-        use_global_dns_t = language['use_global_dns']
-        dns_dom_t    = ('editcp',language['dns_domain']+':   ')
-        search_dom_t = ('editcp',language['search_domain']+':')
-        dns1_t       = ('editcp',language['dns']+ ' 1'+':'+' '*8)
-        dns2_t       = ('editcp',language['dns']+ ' 2'+':'+' '*8)
-        dns3_t       = ('editcp',language['dns']+ ' 3'+':'+' '*8)
+        use_static_dns_t = _('Use Static DNS')
+        use_global_dns_t = _('Use global DNS servers')
+        dns_dom_t    = ('editcp',_('DNS domain')+':   ')
+        search_dom_t = ('editcp',_('Search domain')+':')
+        dns1_t       = ('editcp',_('DNS server')+ ' 1'+':'+' '*8)
+        dns2_t       = ('editcp',_('DNS server')+ ' 2'+':'+' '*8)
+        dns3_t       = ('editcp',_('DNS server')+ ' 3'+':'+' '*8)
         
-        use_dhcp_h_t = ("Use DHCP Hostname")
-        dhcp_h_t     = ('editcp',"DHCP Hostname: ")
+        use_dhcp_h_t = _('Use DHCP Hostname')
+        dhcp_h_t     = ('editcp',_('DHCP Hostname')+': ')
         
-        cancel_t = 'Cancel'
-        ok_t = 'OK'
+        cancel_t = _('Cancel')
+        ok_t = _('OK')
         
         self.static_ip_cb = urwid.CheckBox(static_ip_t,
                 on_state_change=self.static_ip_toggle)
@@ -187,13 +187,13 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,name):
         global wired, daemon
         AdvancedSettingsDialog.__init__(self)
-        self.set_default = urwid.CheckBox(language['default_wired'])
+        self.set_default = urwid.CheckBox(_('Use as default profile (overwrites any previous default)'))
         #self.cur_default = 
         # Add widgets to listbox
         self._w.body.body.append(self.set_default)
         
         self.prof_name = name
-        title = language['configuring_wired'].replace('$A',self.prof_name)
+        title = _('Configuring preferences for wired profile "$A"').replace('$A',self.prof_name)
         self._w.header = urwid.Text( ('header',title),align='right' )
 
         self.set_values()
@@ -252,9 +252,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         AdvancedSettingsDialog.__init__(self)
         self.networkid = networkID
         self.parent = parent
-        global_settings_t = language['global_settings']
-        encryption_t = language['use_encryption']
-        autoconnect_t = language['automatic_connect']
+        global_settings_t = _('Use these settings for all networks sharing this essid')
+        encryption_t = _('Use Encryption')
+        autoconnect_t = _('Automatically connect to this network')
         
         self.global_settings_chkbox = urwid.CheckBox(global_settings_t)
         self.encryption_chkbox = urwid.CheckBox(encryption_t,on_state_change=self.encryption_toggle)
@@ -269,7 +269,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.encrypt_types = misc.LoadEncryptionMethods()
         self.set_values()
 
-        title = language['configuring_wireless'].replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
+        title = _('Configuring preferences for wireless network "$A" ($B)').replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
         self._w.header = urwid.Text(('header',title),align='right' )
     
     def encryption_toggle(self,chkbox,new_state,user_data=None):
@@ -354,7 +354,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                 if entry_info[0].get_edit_text() == "" \
                     and entry_info[1] == 'required':
                     error(self.ui, self.parent,"%s (%s)" \
-                            % (language['encrypt_info_missing'], 
+                            % (_('Required encryption information is missing.'),
                                 entry_info[0].get_caption()[0:-2] )
                           )
                     return False
@@ -365,7 +365,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         elif not self.encryption_chkbox.get_state() and \
              wireless.GetWirelessProperty(self.networkid, "encryption"):
             # Encrypt checkbox is off, but the network needs it.
-            error(self.ui, self.parent, language['enable_encryption'])
+            error(self.ui, self.parent, _('This network requires encryption to be enabled.'))
             return False
         else:
             self.set_net_prop("enctype", "None")
@@ -403,10 +403,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         for type_ in ['required', 'optional']:
             fields = methods[ID][type_]
             for field in fields:
-                if language.has_key(field[1]):
-                    edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
-                else:
-                    edit = MaskingEdit(('editcp',field[1].replace('_',' ')+': '))
+                edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
                 edit.set_mask_mode('no_focus')
                 theList.append(edit)
                 # Add the data to any array, so that the information

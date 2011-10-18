@@ -33,6 +33,7 @@ from wicd import misc
 from wicd import wpath
 from wicd import dbusmanager
 from wicd.misc import checkboxTextboxToggle, noneToBlankString
+from wicd.translations import _
 
 daemon = None
 wireless = None
@@ -285,18 +286,18 @@ class PreferencesDialog(object):
             """ Sets up a label for the given widget name. """
             widget = self.wTree.get_object(name)
             # if lbl:
-            #     widget.set_label(language[lbl])
+            #     widget.set_label(lbl)
             if widget is None:
                 raise ValueError('widget %s does not exist' % name)
             return widget
         
         # External Programs tab
-        # self.wTree.get_object("gen_settings_label").set_label(language["gen_settings"])
-        # self.wTree.get_object("ext_prog_label").set_label(language["ext_programs"])
-        # self.wTree.get_object("dhcp_client_label").set_label(language["dhcp_client"])
-        # self.wTree.get_object("wired_detect_label").set_label(language["wired_detect"])
-        # self.wTree.get_object("route_flush_label").set_label(language["route_flush"])
-        # self.wTree.get_object("pref_backend_label").set_label(language["backend"] + ":")
+        # self.wTree.get_object("gen_settings_label").set_label(_('General Settings'))
+        # self.wTree.get_object("ext_prog_label").set_label(_('External Programs'))
+        # self.wTree.get_object("dhcp_client_label").set_label(_('DHCP Client'))
+        # self.wTree.get_object("wired_detect_label").set_label(_('Wired Link Detection'))
+        # self.wTree.get_object("route_flush_label").set_label(_('Route Table Flushing'))
+        # self.wTree.get_object("pref_backend_label").set_label(_('Backend') + ":")
         
         # entryWiredAutoMethod = self.wTree.get_object("pref_wired_auto_label")
         # entryWiredAutoMethod.set_label('Wired Autoconnect Setting:')
@@ -305,16 +306,16 @@ class PreferencesDialog(object):
         # atrlist.insert(pango.AttrWeight(pango.WEIGHT_BOLD, 0, 50))
         # entryWiredAutoMethod.set_attributes(atrlist)
         
-        # self.set_label("pref_dns1_label", "%s %s" % (language['dns'], language['1']))
-        # self.set_label("pref_dns2_label", "%s %s" % (language['dns'], language['2']))
-        # self.set_label("pref_dns3_label", "%s %s" % (language['dns'], language['3']))
-        # self.set_label("pref_search_dom_label", "%s:" % language['search_domain'])
-        # self.set_label("pref_wifi_label", "%s:" % language['wireless_interface'])
-        # self.set_label("pref_wired_label", "%s:" % language['wired_interface'])
-        # self.set_label("pref_driver_label", "%s:" % language['wpa_supplicant_driver'])
+        # self.set_label("pref_dns1_label", "%s 1" % _('DNS server'))
+        # self.set_label("pref_dns2_label", "%s 2" % _('DNS server'))
+        # self.set_label("pref_dns3_label", "%s 3" % _('DNS server'))
+        # self.set_label("pref_search_dom_label", "%s:" % _('Search domain'))
+        # self.set_label("pref_wifi_label", "%s:" % _('Wireless Interface'))
+        # self.set_label("pref_wired_label", "%s:" % _('Wired Interface'))
+        # self.set_label("pref_driver_label", "%s:" % _('WPA Supplicant Driver'))
         
         self.dialog = self.wTree.get_object("pref_dialog")
-        self.dialog.set_title(language['preferences'])
+        self.dialog.set_title(_('Preferences'))
         if os.path.exists(os.path.join(wpath.images, "wicd.png")):
             self.dialog.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
         width = int(gtk.gdk.screen_width() / 2.4)
@@ -322,53 +323,52 @@ class PreferencesDialog(object):
             width = 450
         self.dialog.resize(width, int(gtk.gdk.screen_height() / 2))
             
-        self.wiredcheckbox = setup_label("pref_always_check",
-                                         'wired_always_on')
+        self.wiredcheckbox = setup_label("pref_always_check", _('''Always show wired interface'''))
         self.preferwiredcheckbox = setup_label("pref_prefer_wired_check",
                                                "prefer_wired")
 
         self.reconnectcheckbox = setup_label("pref_auto_check",
-                                             'auto_reconnect')
+                                             _('Automatically reconnect on connection loss'))
         self.showneverconnectcheckbox = setup_label("pref_show_never_connect_check",
-                                             'show_never_connect')
+                                             _('Show never connect networks'))
         self.debugmodecheckbox = setup_label("pref_debug_check",
-                                             'use_debug_mode')
+                                             _('Enable debug mode'))
         self.displaytypecheckbox = setup_label("pref_dbm_check",
-                                               'display_type_dialog')
+                                               _('Use dBm to measure signal strength'))
         self.verifyapcheckbox = setup_label("pref_verify_ap_check",
-                                            'verify_ap_dialog')
+                                            _('Ping static gateways after connecting to verify association'))
         self.usedefaultradiobutton = setup_label("pref_use_def_radio",
-                                                 'use_default_profile')
+                                                 _('Use default profile on wired autoconnect'))
         self.showlistradiobutton = setup_label("pref_prompt_radio",
-                                               'show_wired_list')
+                                               _('Prompt for profile on wired autoconnect'))
         self.lastusedradiobutton = setup_label("pref_use_last_radio",
-                                               'use_last_used_profile')
+                                               _('Use last used profile on wired autoconnect'))
 
             
         self.notificationscheckbox = setup_label("pref_use_libnotify",
-                                             'display_notifications')
+                                                 _('Display notifications about connection status'))
 
         # DHCP Clients
-        self.dhcpautoradio = setup_label("dhcp_auto_radio", "wicd_auto_config")
+        self.dhcpautoradio = setup_label("dhcp_auto_radio", _('Automatic (recommended)'))
         self.dhclientradio = self.wTree.get_object("dhclient_radio")
         self.pumpradio = self.wTree.get_object("pump_radio")
         self.dhcpcdradio = self.wTree.get_object("dhcpcd_radio")
         self.udhcpcradio = self.wTree.get_object("udhcpc_radio")
         
         # Wired Link Detection Apps
-        self.linkautoradio = setup_label("link_auto_radio", 'wicd_auto_config')
+        self.linkautoradio = setup_label("link_auto_radio", _('Automatic (recommended)'))
         self.linkautoradio = setup_label("link_auto_radio")
         self.ethtoolradio = setup_label("ethtool_radio")
         self.miitoolradio = setup_label("miitool_radio")
         
         # Route Flushing Apps
         self.flushautoradio = setup_label("flush_auto_radio",
-                                          'wicd_auto_config')
+                                          _('Automatic (recommended)'))
         self.ipflushradio = setup_label("ip_flush_radio")
         self.routeflushradio = setup_label("route_flush_radio")
         
         # Graphical Sudo Apps
-        self.sudoautoradio = setup_label("sudo_auto_radio", "wicd_auto_config")
+        self.sudoautoradio = setup_label("sudo_auto_radio", _('Automatic (recommended)'))
         self.gksudoradio = setup_label("gksudo_radio")
         self.kdesuradio = setup_label("kdesu_radio")
         self.ktsussradio = setup_label("ktsuss_radio")

@@ -24,6 +24,7 @@ import urwid.curses_display
 
 from wicd import misc
 from wicd import dbusmanager
+from wicd.translations import _
 from curses_misc import SelText,DynWrap,DynRadioButton,ComboBox,TabColumns
 
 daemon = None
@@ -46,13 +47,13 @@ class PrefsDialog(urwid.WidgetWrap):
         #height = 20
         # Stuff that goes at the top
 
-        header0_t = language["gen_settings"]
-        header1_t = language["ext_programs"]
-        header2_t = language["advanced_settings"]
+        header0_t = _('General Settings')
+        header1_t = _('External Programs')
+        header2_t = _('Advanced Settings')
         self.header0 = urwid.AttrWrap(SelText(header0_t), 'tab active', 'focus')
         self.header1 = urwid.AttrWrap(SelText(header1_t), 'body', 'focus')
         self.header2 = urwid.AttrWrap(SelText(header2_t), 'body', 'focus')
-        title   = language['preferences']
+        title   = _('Preferences')
 
         # Blank line
         _blank = urwid.Text('')
@@ -62,63 +63,63 @@ class PrefsDialog(urwid.WidgetWrap):
         ####
 
         # General Settings
-        net_cat_t           = ('header', language['network_interfaces'])
-        wired_t             = ('editcp', language['wired_interface']+':   ')
-        wless_t             = ('editcp', language['wireless_interface']+':')
-        always_show_wired_t = language['wired_always_on']
-        prefer_wired_t      = language['always_switch_to_wired']
+        net_cat_t           = ('header', _('Network Interfaces'))
+        wired_t             = ('editcp', _('Wired Interface')+':   ')
+        wless_t             = ('editcp', _('Wireless Interface')+':')
+        always_show_wired_t = _('''Always show wired interface''')
+        prefer_wired_t      = _('''Always switch to wired connection when available''')
 
-        global_dns_cat_t = ('header', language['global_dns_servers'])
-        global_dns_t     = ('editcp', language['use_global_dns'])
-        dns_dom_t        = ('editcp', '    '+language['dns_domain']+':   ')
-        search_dom_t     = ('editcp', '    '+language['search_domain']+':')
-        dns1_t           = ('editcp', '    DNS server 1: ')
-        dns2_t           = ('editcp', '    DNS server 2: ')
-        dns3_t           = ('editcp', '    DNS server 3: ')
+        global_dns_cat_t = ('header', _('Global DNS servers'))
+        global_dns_t     = ('editcp', _('Use global DNS servers'))
+        dns_dom_t        = ('editcp', '    '+_('DNS domain')+':   ')
+        search_dom_t     = ('editcp', '    '+_('Search domain')+':')
+        dns1_t           = ('editcp', '    '+_('DNS server')+' 1: ')
+        dns2_t           = ('editcp', '    '+_('DNS server')+' 2: ')
+        dns3_t           = ('editcp', '    '+_('DNS server')+' 3: ')
 
 
-        wired_auto_cat_t= ('header', language['wired_autoconnect_settings'])
-        wired_auto_1_t = language['use_default_profile']
-        wired_auto_2_t = language['show_wired_list']
-        wired_auto_3_t = language['use_last_used_profile']
+        wired_auto_cat_t= ('header', _('Wired Autoconnect Settings'))
+        wired_auto_1_t = _('Use default profile on wired autoconnect')
+        wired_auto_2_t = _('Prompt for profile on wired autoconnect')
+        wired_auto_3_t = _('Use last used profile on wired autoconnect')
 
-        auto_reconn_cat_t = ('header', language['automatic_reconnection'])
-        auto_reconn_t = language['auto_reconnect']
+        auto_reconn_cat_t = ('header', _('Automatic Reconnection'))
+        auto_reconn_t = _('Automatically reconnect on connection loss')
 
         #### External Programs
-        automatic_t = language['wicd_auto_config']
+        automatic_t = _('Automatic (recommended)')
 
-        dhcp_header_t = ('header', language["dhcp_client"])
+        dhcp_header_t = ('header', _('DHCP Client'))
         # Automatic
         dhcp1_t  = 'dhclient'
         dhcp2_t  = 'dhcpcd'
         dhcp3_t  = 'pump'
         dhcp4_t  = 'udhcpc'
 
-        wired_detect_header_t = ('header', language["wired_detect"])
+        wired_detect_header_t = ('header', _('Wired Link Detection'))
         wired1_t              = 'ethtool'
         wired2_t              = 'mii-tool'
 
-        flush_header_t = ('header', language["route_flush"])
+        flush_header_t = ('header', _('Route Table Flushing'))
         flush1_t           = 'ip'
         flush2_t           = 'route'
  
         #### Advanced Settings
-        wpa_cat_t=('header', language['wpa_supplicant'])
+        wpa_cat_t=('header', _('WPA Supplicant'))
         wpa_t=('editcp','Driver:')
         wpa_list = []
-        wpa_warn_t = ('important', language['always_use_wext'])
+        wpa_warn_t = ('important', _('You should almost always use wext as the WPA supplicant driver'))
         
-        backend_cat_t = ('header', language['backend'])
-        backend_t = language['backend']+':'
+        backend_cat_t = ('header', _('Backend'))
+        backend_t = _('Backend')+':'
         backend_list = []
         
-        debug_cat_t = ('header', language['debugging'])
-        debug_mode_t = language['use_debug_mode']
+        debug_cat_t = ('header', _('Debugging'))
+        debug_mode_t = _('Enable debug mode')
 
-        wless_cat_t = ('header', language['wireless_interface'])
-        use_dbm_t = language['display_type_dialog']
-        verify_ap_t = language['verify_ap_dialog']
+        wless_cat_t = ('header', _('Wireless Interface'))
+        use_dbm_t = _('Use dBm to measure signal strength')
+        verify_ap_t = _('Ping static gateways after connecting to verify association')
         
 
 
@@ -172,7 +173,7 @@ class PrefsDialog(urwid.WidgetWrap):
                                   ])
 
         #### External Programs tab
-        automatic_t = language['wicd_auto_config']
+        automatic_t = _('Automatic (recommended)')
 
         self.dhcp_header = urwid.Text(dhcp_header_t)
         self.dhcp_l = []
@@ -248,7 +249,7 @@ class PrefsDialog(urwid.WidgetWrap):
                         self.header2 : advancedLB}
         #self.load_settings()
 
-        self.tabs = TabColumns(headerList,lbList,language['preferences'])
+        self.tabs = TabColumns(headerList,lbList,_('Preferences'))
         self.__super.__init__(self.tabs)
         
     def load_settings(self):

@@ -75,7 +75,7 @@ from os import system
 CURSES_REV=wpath.curses_revision
 
 # Fix strings in wicd-curses
-from wicd.translations import language
+from wicd.translations import language, _
 for i in language.keys():
     language[i] = language[i].decode('utf8')
 
@@ -91,12 +91,14 @@ def wrap_exceptions(func):
                 #gobject.source_remove(redraw_tag)
                 loop.quit()
                 ui.stop()
-                print >> sys.stderr, "\n"+language['terminated']
+                print >> sys.stderr, "\n"+_('Terminated by user')
                 #raise
             except DBusException:
                 loop.quit()
                 ui.stop()
-                print >> sys.stderr,"\n"+language['dbus_fail']
+                print >> sys.stderr,"\n"+_('DBus failure! '\
+                    'This is most likely caused by the wicd daemon stopping while wicd-curses is running. '\
+                    'Please restart the daemon, and then restart wicd-curses.')
                 raise
             except :
                 # Quit the loop
@@ -106,7 +108,7 @@ def wrap_exceptions(func):
                 ui.stop()
                 # Print out standard notification:
                 # This message was far too scary for humans, so it's gone now.
-                # print >> sys.stderr, "\n" + language['exception']
+                # print >> sys.stderr, "\n" + _('EXCEPTION! Please report this to the maintainer and file a bug report with the backtrace below:')
                 # Flush the buffer so that the notification is always above the
                 # backtrace
                 sys.stdout.flush()
@@ -129,7 +131,7 @@ def wrap_exceptions(func):
 def check_for_wired(wired_ip,set_status):
     """ Determine if wired is active, and if yes, set the status. """
     if wired_ip and wired.CheckPluggedIn():
-        set_status(language['connected_to_wired'].replace('$A',wired_ip))
+        set_status(_('Connected to wired network (IP: $A)').replace('$A',wired_ip))
         return True
     else:
         return False
@@ -154,7 +156,7 @@ def check_for_wireless(iwconfig, wireless_ip, set_status):
         return False
     strength = str(strength)            
     ip = str(wireless_ip)
-    set_status(language['connected_to_wireless'].replace
+    set_status(_('Connected to $A at $B (IP: $C)').replace
                     ('$A', network).replace
                     ('$B', daemon.FormatSignalForPrinting(strength)).replace
                     ('$C', wireless_ip))
@@ -190,40 +192,40 @@ def about_dialog(body):
 
 ('green',"\\||  \\\\")," |+| ",('green',"//  ||/    \n"),
 ('green'," \\\\\\"),"    |+|    ",('green',"///"),"      http://wicd.net\n",
-('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      ",language["brought_to_you"],"\n",
+('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      ",_('Brought to you by:'),"\n",
 ('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn\n",
 "     ___|+|___         Dan O'Reilly\n",
 "    |---------|        Andrew Psaltis\n",
 "-----------------------------------------------------"]
-    about = TextDialog(theText,16,55,header=('header','About Wicd'))
+    about = TextDialog(theText,16,55,header=('header',_('About Wicd')))
     about.run(ui,body)
 
 # Modeled after htop's help
 def help_dialog(body):
-    textT  = urwid.Text(('header','wicd-curses help'),'right') 
+    textT  = urwid.Text(('header',_('wicd-curses help')),'right') 
     textSH = urwid.Text(['This is ',('blue','wicd-curses-'+CURSES_REV),' using wicd ',unicode(daemon.Hello()),'\n'])
 
     textH = urwid.Text([
-"For more detailed help, consult the wicd-curses(8) man page.\n",
+_('For more detailed help, consult the wicd-curses(8) man page.')+"\n",
 ('bold','->'),' and ',('bold','<-')," are the right and left arrows respectively.\n"])
 
     text1 = urwid.Text([
-('bold','  H h ?'),": Display this help dialog\n",
-('bold','enter C'),": Connect to selected network\n",
-('bold','      D'),": Disconnect from all networks\n",
-('bold','    ESC'),": Stop a connection in progress\n",
-('bold','   F5 R'),": Refresh network list\n",
-('bold','      P'),": Prefrences dialog\n",
+('bold','  H h ?'),": "+_('Display this help dialog')+"\n",
+('bold','enter C'),": "+_('Connect to selected network')+"\n",
+('bold','      D'),": "+_('Disconnect from all networks')+"\n",
+('bold','    ESC'),": "+_('Stop a connection in progress')+"\n",
+('bold','   F5 R'),": "+_('Refresh network list')+"\n",
+('bold','      P'),": "+_('Preferences dialog')+"\n",
     ])
     text2 = urwid.Text([
-('bold','      I'),": Scan for hidden networks\n",
-('bold','      S'),": Select scripts\n",
-('bold','      O'),": Set up Ad-hoc network\n",
-('bold','     ->'),": Configure selected network\n",
-('bold','      A'),": Display 'about' dialog\n",
-('bold',' F8 q Q'),": Quit wicd-curses\n",
+('bold','      I'),": "+_('Scan for hidden networks')+"\n",
+('bold','      S'),": "+_('Select scripts')+"\n",
+('bold','      O'),": "+_('Set up Ad-hoc network')+"\n",
+('bold','     ->'),": "+_('Configure selected network')+"\n",
+('bold','      A'),": "+_("Display 'about' dialog")+"\n",
+('bold',' F8 q Q'),": "+_('Quit wicd-curses')+"\n",
     ])
-    textF = urwid.Text('Press any key to return.')
+    textF = urwid.Text(_('Press any key to return.'))
     
     # textJ = urwid.Text(('important','Nobody expects the Spanish Inquisition!'))
 
@@ -265,13 +267,19 @@ def run_configscript(parent,netname,nettype):
         profname = nettype
     else:
         profname = wireless.GetWirelessProperty( int(netname),'bssid')
-    theText = [ 
-            language['cannot_edit_scripts_1'].replace('$A',configfile).replace('$B',header),
+    theText = [
+    _('To avoid various complications, wicd-curses does not support directly editing the scripts. '\
+      'However, you can edit them manually. First, (as root), open the "$A" config file, and look '\
+      'for the section labeled by the $B in question. In this case, this is:').
+        replace('$A', configfile).replace('$B', header),
 "\n\n["+profname+"]\n\n",
-# Translation needs to be changed to accomidate this text below.
-"""You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.  
-
-Once there, you can adjust (or add) the "beforescript", "afterscript", "predisconnectscript" and "postdisconnectscript" variables as needed, to change the preconnect, postconnect, predisconnect and postdisconnect scripts respectively.  Note that you will be specifying the full path to the scripts - not the actual script contents.  You will need to add/edit the script contents separately.  Refer to the wicd manual page for more information."""]
+    _('You can also configure the wireless networks by looking for the "[<ESSID>]" field in the config file.'),
+    _('Once there, you can adjust (or add) the "beforescript", "afterscript", "predisconnectscript" '\
+      'and "postdisconnectscript" variables as needed, to change the preconnect, postconnect, '\
+      'predisconnect and postdisconnect scripts respectively.  Note that you will be specifying '\
+      'the full path to the scripts - not the actual script contents.  You will need to add/edit '\
+      'the script contents separately.  Refer to the wicd manual page for more information.')
+    ]
     dialog = TextDialog(theText,20,80)
     dialog.run(ui,parent)
     # This code works with many distributions, but not all of them.  So, to
@@ -341,7 +349,7 @@ class NetLabel(urwid.WidgetWrap):
         if wireless.GetWirelessProperty(id, 'encryption'):
             self.encrypt = wireless.GetWirelessProperty(id,'encryption_method')
         else:
-            self.encrypt = language['unsecured']
+            self.encrypt = _('Unsecured')
 
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')
@@ -366,7 +374,7 @@ class WiredComboBox(ComboBox):
     list : the list of wired network profiles.  The rest is self-explanitory.
     """
     def __init__(self,list):
-        self.ADD_PROFILE = '---'+language["add_new_profile"]+'---'
+        self.ADD_PROFILE = '---'+_('Add a new profile')+'---'
         self.__super.__init__(use_enter=False)
         self.set_list(list)
 
@@ -399,7 +407,7 @@ class WiredComboBox(ComboBox):
         key = ComboBox.keypress(self,size,key)
         if key == ' ':
             if self.get_focus()[1] == len(self.list)-1:
-                dialog = InputDialog(('header',language["add_new_wired_profile"]),7,30)
+                dialog = InputDialog(('header',_('Add a new wired profile')),7,30)
                 exitcode,name = dialog.run(ui,self.parent)
                 if exitcode == 0:
                     name = name.strip()
@@ -416,7 +424,7 @@ class WiredComboBox(ComboBox):
                 wired.ReadWiredNetworkProfile(self.get_selected_profile())
         if key == 'delete':
             if len(self.theList) == 1:
-                error(self.ui,self.parent,language["no_delete_last_profile"])
+                error(self.ui,self.parent,_('wicd-curses does not support deleting the last wired profile.  Try renaming it ("F2")'))
                 return key
             wired.DeleteWiredNetworkProfile(self.get_selected_profile())
             # Return to the top of the list if something is deleted.
@@ -429,7 +437,7 @@ class WiredComboBox(ComboBox):
             self.set_list(wired.GetWiredProfileList())
             self.rebuild_combobox()
         if key == 'f2':
-            dialog = InputDialog(('header',language["rename_wired_profile"]),7,30,
+            dialog = InputDialog(('header',_('Rename wired profile')),7,30,
                     edit_text=unicode(self.get_selected_profile()))
             exitcode,name = dialog.run(ui,self.parent)
             if exitcode == 0:
@@ -449,12 +457,12 @@ class WiredComboBox(ComboBox):
 # Dialog2 that initiates an Ad-Hoc network connection
 class AdHocDialog(Dialog2):
     def __init__(self):
-        essid_t = language['essid']
-        ip_t = language['ip']
-        channel_t = language['channel']
-        key_t = "    " + language['key']
-        use_ics_t = language['use_ics']
-        use_encrypt_t = language['use_wep_encryption']
+        essid_t = _('ESSID')
+        ip_t = _('IP')
+        channel_t = _('Channel')
+        key_t = "    " + _('Key')
+        use_ics_t =  _('Activate Internet Connection Sharing')
+        use_encrypt_t = _('Use Encryption (WEP only)')
 
         self.essid_edit = DynEdit(essid_t)
         self.ip_edit = DynEdit(ip_t)
@@ -476,9 +484,9 @@ class AdHocDialog(Dialog2):
                 self.use_ics_chkb,self.use_encrypt_chkb,self.key_edit]
         body = urwid.ListBox(l)
 
-        header = ('header',language['create_adhoc_network'])
+        header = ('header', _('Create an Ad-Hoc Network'))
         Dialog2.__init__(self, header, 15, 50, body)
-        self.add_buttons([('OK',1),('Cancel',-1)])
+        self.add_buttons([(_('OK'),1),(_('Cancel'),-1)])
         self.frame.set_focus('body')
 
     def encrypt_callback(self,chkbox,new_state,user_info=None):
@@ -514,16 +522,16 @@ class appGUI():
         self.size = ui.get_cols_rows()
         # Happy screen saying that you can't do anything because we're scanning
         # for networks.  :-)
-        self.screen_locker = urwid.Filler(urwid.Text(('important',language['scanning_stand_by']), align='center'))
-        self.no_wlan = urwid.Filler(urwid.Text(('important',language['no_wireless_networks_found']), align='center'))
-        self.TITLE = language['wicd_curses']
+        self.screen_locker = urwid.Filler(urwid.Text(('important',_('Scanning networks... stand by...')), align='center'))
+        self.no_wlan = urwid.Filler(urwid.Text(('important',_('No wireless networks found.')), align='center'))
+        self.TITLE = _('Wicd Curses Interface')
         self.WIRED_IDX = 1
         self.WLESS_IDX = 3
 
         header = urwid.AttrWrap(urwid.Text(self.TITLE,align='right'), 'header')
-        self.wiredH=urwid.Filler(urwid.Text("Wired Network(s)"))
+        self.wiredH=urwid.Filler(urwid.Text(_('Wired Networks')))
         self.list_header=urwid.AttrWrap(urwid.Text(gen_list_header()),'listbar')
-        self.wlessH=NSelListBox([urwid.Text("Wireless Network(s)"),self.list_header])
+        self.wlessH=NSelListBox([urwid.Text(_('Wireless Networks')),self.list_header])
 
         # Init this earlier to make update_status happy
         self.update_tag = None
@@ -543,17 +551,17 @@ class appGUI():
         
         # Keymappings proposed by nanotube in #wicd
         keys = [
-                ('H' ,'Help'  ,None),
-                ('right','Config',None),
+                ('H' ,_('Help'),None),
+                ('right',_('Config'),None),
                 #('  ','         ',None),
-                ('K' , 'RfKill',None),
-                ('C' ,'Connect',None),
-                ('D' ,'Disconn',None),
-                ('R' ,'Refresh',None),
-                ('P' ,'Prefs',None),
-                ('I' ,'Hidden',None),
-                ('A' ,'About',None),
-                ('Q' ,'Quit',loop.quit)
+                ('K' , _('RfKill'),None),
+                ('C' ,_('Connect'),None),
+                ('D' ,_('Disconn'),None),
+                ('R' ,_('Refresh'),None),
+                ('P' ,_('Prefs'),None),
+                ('I' ,_('Hidden'),None),
+                ('A' ,_('About'),None),
+                ('Q' ,_('Quit'),loop.quit)
                ]
 
         self.primaryCols = OptCols(keys,self.handle_keys)
@@ -590,12 +598,12 @@ class appGUI():
 
     def init_other_optcols(self):
         # The "tabbed" preferences dialog
-        self.prefCols = OptCols( [ ('f10','OK'),
-                                   ('page up','Tab Left',),
-                                   ('page down', 'Tab Right'),
-                                   ('esc','Cancel') ], self.handle_keys)
-        self.confCols = OptCols( [ ('f10','OK'),
-                                   ('esc','Cancel') ],self.handle_keys)
+        self.prefCols = OptCols( [ ('f10',_('OK')),
+                                   ('page up',_('Tab Left'),),
+                                   ('page down', _('Tab Right')),
+                                   ('esc',_('Cancel')) ], self.handle_keys)
+        self.confCols = OptCols( [ ('f10',_('OK')),
+                                   ('esc',_('Cancel')) ],self.handle_keys)
 
     # Does what it says it does
     def lock_screen(self):
@@ -617,7 +625,7 @@ class appGUI():
         self.update_ui()
 
     def raise_hidden_network_dialog(self):
-        dialog = InputDialog(('header',language["select_hidden_essid"]),7,30,language['scan'])
+        dialog = InputDialog(('header',_('Select Hidden Network ESSID')),7,30,_('Scan'))
         exitcode,hidden = dialog.run(ui,self.frame)
         if exitcode != -1:
             # That dialog will sit there for a while if I don't get rid of it
@@ -726,7 +734,7 @@ class appGUI():
                     self.set_status):
                 return True
             else:
-                self.set_status(language['not_connected'])
+                self.set_status(_('Not connected'))
                 self.update_ui()
                 return True
 
@@ -739,13 +747,10 @@ class appGUI():
             else:
                 iwconfig = ''
             essid, stat = wireless.CheckWirelessConnectingMessage()
-            return self.set_status("%s: %s" % (essid, language[str(stat)]),
-                                   True)
+            return self.set_status("%s: %s" % (essid, stat), True)
         if wired_connecting:
-            return self.set_status( language['wired_network'] +
-                    ': ' +
-                    language[str(wired.CheckWiredConnectingMessage())],
-                    True)
+            return self.set_status(_('Wired Network') +
+                    ': ' + wired.CheckWiredConnectingMessage(), True)
         else:
             self.conn_status=False
             return False
@@ -1019,7 +1024,7 @@ def setup_dbus(force=True):
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
-        print >> sys.stderr, language['cannot_connect_to_daemon']
+        print >> sys.stderr, _("Can't connect to the daemon, trying to start it automatically...")
     bus = dbusmanager.get_bus()
     dbus_ifaces = dbusmanager.get_dbus_ifaces()
     daemon = dbus_ifaces['daemon']
@@ -1043,11 +1048,14 @@ if __name__ == '__main__':
         parser = OptionParser(version="wicd-curses-%s (using wicd %s)" % (CURSES_REV,daemon.Hello()), prog="wicd-curses")
     except Exception, e:
         if "DBus.Error.AccessDenied" in e.get_dbus_name():
-            print language['access_denied_wc'].replace('$A','\033[1;34m'+wpath.wicd_group+'\033[0m')
+            print _('ERROR: wicd-curses was denied access to the wicd daemon: '\
+                'please check that your user is in the "$A" group.').\
+                replace('$A','\033[1;34m' + wpath.wicd_group + '\033[0m')
             sys.exit(1)
         else:
             raise
     #parser.add_option("-d", "--debug",action="store_true"
     #        ,dest='debug',help="enable logging of wicd-curses (currently does nothing)")
+
     (options,args) = parser.parse_args()
     main()

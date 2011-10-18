@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 23:05+0200\n"
+"POT-Creation-Date: 2011-10-18 23:50+0200\n"
 "PO-Revision-Date: 2011-09-18 16:12+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: el <LL@li.org>\n"
@@ -15,146 +15,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:154
-#, fuzzy
-msgid "Pre-connection Script"
-msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
-
-#: curses/configscript_curses.py:57 gtk/configscript.py:155
-#, fuzzy
-msgid "Post-connection Script"
-msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
-
-#: curses/configscript_curses.py:58 gtk/configscript.py:156
-#, fuzzy
-msgid "Pre-disconnection Script"
-msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
-
-#: curses/configscript_curses.py:59 gtk/configscript.py:158
-#, fuzzy
-msgid "Post-disconnection Script"
-msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
-
-#: curses/configscript_curses.py:73 curses/curses_misc.py:525
-#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
-msgid "OK"
-msgstr "Εντάξει"
-
-#: curses/configscript_curses.py:74 curses/curses_misc.py:533
-#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
-msgid "Cancel"
-msgstr "Ακύρωση"
-
-#: curses/netentry_curses.py:49 gtk/netentry.py:87
-msgid "Use Static IPs"
-msgstr "Χρήση στατικών διευθύνσεων IP"
-
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
-#: gtk/netentry.py:73
-msgid "IP"
-msgstr "IP"
-
-#: curses/netentry_curses.py:51 gtk/netentry.py:75
-msgid "Netmask"
-msgstr "Μάσκα Δικτύου"
-
-#: curses/netentry_curses.py:52 gtk/netentry.py:76
-msgid "Gateway"
-msgstr "Πύλη"
-
-#: curses/netentry_curses.py:54 gtk/netentry.py:88
-msgid "Use Static DNS"
-msgstr "χρήση στατικών DNS"
-
-#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
-#: data/wicd.ui:882
-msgid "Use global DNS servers"
-msgstr "Χρήση κύριων Διακομιστών Ονομάτων"
-
-#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
-msgid "DNS domain"
-msgstr "Όνομα DNS"
-
-#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
-msgid "Search domain"
-msgstr "Αναζήτηση τομέα"
-
-#: curses/netentry_curses.py:58 curses/netentry_curses.py:59
-#: curses/netentry_curses.py:60 curses/prefs_curses.py:76
-#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
-#: gtk/netentry.py:80 gtk/netentry.py:81
-msgid "DNS server"
-msgstr "Εξυπηρετητής DNS:"
-
-#: curses/netentry_curses.py:62
-msgid "Use DHCP Hostname"
+#: gtk/wicd-client.py:608
+msgid ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 msgstr ""
 
-#: curses/netentry_curses.py:63
-msgid "DHCP Hostname"
+#: gtk/wicd-client.py:601
+msgid ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 msgstr ""
 
-#: curses/netentry_curses.py:190 gtk/netentry.py:635
-msgid "Use as default profile (overwrites any previous default)"
-msgstr "Χρήση ως προεπιλεγμένου προφίλ (αντικαθιστά τα προηγούμενα)"
+#: curses/wicd-curses.py:563
+msgid "About"
+msgstr ""
 
-#: curses/netentry_curses.py:196
-msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Ρύθμιση προτιμήσεων για το ενσύρματο δίκτυο \"$A\""
+#: curses/wicd-curses.py:200
+msgid "About Wicd"
+msgstr "Σχετικά με την εφαρμογή Wicd"
 
-#: curses/netentry_curses.py:255 gtk/netentry.py:356
-msgid "Use these settings for all networks sharing this essid"
-msgstr "Χρήση αυτών των ρυθμίσεων για όλα τα δίκτυα που μοιράζονται το essid"
+#: curses/wicd-curses.py:464 gtk/gui.py:271
+msgid "Activate Internet Connection Sharing"
+msgstr "Ενεργοποίηση κοινόχρηστης σύνδεσης Internet"
 
-#: curses/netentry_curses.py:256 gtk/netentry.py:355
-msgid "Use Encryption"
-msgstr "Χρήση κρυπτογράφησης"
+#: curses/wicd-curses.py:377
+msgid "Add a new profile"
+msgstr "Προσθήκη νέου προφίλ"
 
-#: curses/netentry_curses.py:257 gtk/netentry.py:816
-msgid "Automatically connect to this network"
-msgstr "Αυτόματη σύνδεση στο δίκτυο"
-
-#: curses/netentry_curses.py:272
-msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr "Ρύθμιση προτιμήσεων για το ασύρματο δίκτυο \"$A\" ($B)"
-
-#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
-msgid "Required encryption information is missing."
-msgstr "Η απαιτούμενη πληροφορία κρυπτογράφησης δεν υπάρχει."
-
-#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
-msgid "This network requires encryption to be enabled."
-msgstr "Το δίκτυο απαιτεί ενεργοποιημένη κρυπτογράφηση."
-
-#: curses/prefs_curses.py:50 data/wicd.ui:1018
-msgid "General Settings"
-msgstr "Γενικές Ρυθμίσεις"
-
-#: curses/prefs_curses.py:51 data/wicd.ui:1398
-msgid "External Programs"
-msgstr "Εξωτερικά Προγράμματα"
+#: curses/wicd-curses.py:410
+msgid "Add a new wired profile"
+msgstr "Προσθήκη νέου προφίλ για ενσύρματο δίκτυο"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
 msgstr "Προχωρημένες ρυθμίσεις"
-
-#: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
-msgid "Preferences"
-msgstr "Προτιμήσεις"
-
-#: curses/prefs_curses.py:66
-msgid "Network Interfaces"
-msgstr "Διεπαφές δικτύου"
-
-#: curses/prefs_curses.py:67
-msgid "Wired Interface"
-msgstr "Ενσύρματη συσκευή"
-
-#: curses/prefs_curses.py:68 curses/prefs_curses.py:120
-msgid "Wireless Interface"
-msgstr "Ασύρματη διεπαφή"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"
@@ -164,33 +64,9 @@ msgstr "Προβολή πάντα των ενσύρματων συσκευών"
 msgid "Always switch to wired connection when available"
 msgstr "Πάντα σύνδεση με το ενσύρματο δίκτυο αν υπάρχει"
 
-#: curses/prefs_curses.py:72
-msgid "Global DNS servers"
-msgstr "Κύριοι Διακομιστές Ονομάτων"
-
-#: curses/prefs_curses.py:81
-msgid "Wired Autoconnect Settings"
-msgstr "Ρυθμίσεις ενσύρματης αυτόματης σύνδεσης"
-
-#: curses/prefs_curses.py:82 gtk/prefs.py:341
-msgid "Use default profile on wired autoconnect"
-msgstr "Χρήση προεπιλεγμένου προφίλ σε ενσύρματο δίκτυο"
-
-#: curses/prefs_curses.py:83 gtk/prefs.py:343
-msgid "Prompt for profile on wired autoconnect"
-msgstr "Ζητηση προφιλ ενσυρματου δικτυου"
-
-#: curses/prefs_curses.py:84 gtk/prefs.py:345
-msgid "Use last used profile on wired autoconnect"
-msgstr "Χρήση τελευταίου χρησιμοποιημένου προφίλ σε επανασύνδεση"
-
-#: curses/prefs_curses.py:86
-msgid "Automatic Reconnection"
-msgstr "Αυτόματη επανασύνδεση"
-
-#: curses/prefs_curses.py:87 gtk/prefs.py:331
-msgid "Automatically reconnect on connection loss"
-msgstr "Αυτόματη επανασύνδεση κατά την αποσύνδεση"
+#: build/lib.linux-i686-2.7/wicd/translations.py:77 wicd/translations.py:77
+msgid "Authentication"
+msgstr "Πιστοποίηση"
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1082
@@ -198,49 +74,143 @@ msgstr "Αυτόματη επανασύνδεση κατά την αποσύνδ
 msgid "Automatic (recommended)"
 msgstr "Αυτόματο (προτείνεται)"
 
-#: curses/prefs_curses.py:92
-msgid "DHCP Client"
-msgstr "Πελάτης DHCP"
+#: curses/prefs_curses.py:86
+msgid "Automatic Reconnection"
+msgstr "Αυτόματη επανασύνδεση"
 
-#: curses/prefs_curses.py:99
-msgid "Wired Link Detection"
-msgstr "Ανίχνευση ενσύρματου δικτύου"
+#: curses/netentry_curses.py:257 gtk/netentry.py:816
+msgid "Automatically connect to this network"
+msgstr "Αυτόματη σύνδεση στο δίκτυο"
 
-#: curses/prefs_curses.py:103
-msgid "Route Table Flushing"
-msgstr "Σβήσιμο πίνακα δρομολόγησης:"
-
-#: curses/prefs_curses.py:108
-msgid "WPA Supplicant"
-msgstr ""
-
-#: curses/prefs_curses.py:111
-msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "Θα πρέπει σχεδόν πάντα να χρησιμοποιείτε το wext για συνδέσεις WPA"
+#: curses/prefs_curses.py:87 gtk/prefs.py:331
+msgid "Automatically reconnect on connection loss"
+msgstr "Αυτόματη επανασύνδεση κατά την αποσύνδεση"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
 msgstr ""
 
-#: curses/prefs_curses.py:117
-msgid "Debugging"
-msgstr "Αποσφαλμάτωση"
+#: curses/wicd-curses.py:195
+msgid "Brought to you by:"
+msgstr "Προσφορά από:"
 
-#: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
-msgid "Enable debug mode"
-msgstr "Ενεργοποίηση λειτουργίας αποσφαλμάτωσης"
+#: curses/wicd-curses.py:1027
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr ""
+"Δεν είναι δυνατή η σύνδεση με την υπηρεσία, γίνεται προσπάθεια αυτόματης "
+"εκκίνησης..."
 
-#: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
-msgid "Use dBm to measure signal strength"
-msgstr "Χρήση dBm για μέτρηση ισχύος σήματος"
+#: curses/configscript_curses.py:74 curses/curses_misc.py:535
+#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
+msgid "Cancel"
+msgstr "Ακύρωση"
 
-#: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
-msgid "Ping static gateways after connecting to verify association"
-msgstr "Επικοινωνία με στατικές πύλες μετά την σύνδεση για επιβεβαίωση συσχετισμού"
+#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: gtk/netentry.py:1087
+msgid "Channel"
+msgstr "Κανάλι"
 
-#: curses/wicd-curses.py:94
-msgid "Terminated by user"
-msgstr "Τερματισμός από το χρήστη"
+#: gtk/gui.py:187 data/wicd.ui:173
+msgid "Choose from the networks below:"
+msgstr "Επιλέξτε από τα δίκτυα:"
+
+#: curses/wicd-curses.py:555
+msgid "Config"
+msgstr ""
+
+#: curses/wicd-curses.py:224
+#, fuzzy
+msgid "Configure selected network"
+msgstr "Ρύθμιση επιλεγμένου δικτύου"
+
+#: curses/netentry_curses.py:196
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Ρύθμιση προτιμήσεων για το ενσύρματο δίκτυο \"$A\""
+
+#: curses/netentry_curses.py:272
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Ρύθμιση προτιμήσεων για το ασύρματο δίκτυο \"$A\" ($B)"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:80 wicd/misc.py:80
+msgid "Configuring wireless interface..."
+msgstr "Ρύθμιση ασύρματης διεπαφής..."
+
+#: curses/wicd-curses.py:558
+msgid "Connect"
+msgstr "Σύνδεση"
+
+#: curses/wicd-curses.py:214
+msgid "Connect to selected network"
+msgstr "Σύνδεση στο επιλεγμένο δίκτυο"
+
+#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Συνδεδεμένο στο $A με $B (IP: $C)"
+
+#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+msgid "Connected to wired network (IP: $A)"
+msgstr "Συνδεδεμένο με το ενσύρματο δίκτυο (IP: $A)"
+
+#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+msgid "Connecting"
+msgstr "Σύνδεση"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
+msgid "Connection Cancelled"
+msgstr "Ακύρωση Σύνδεσης"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
+#, fuzzy
+msgid "Connection Failed."
+msgstr "Ακύρωση Σύνδεσης"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
+msgid "Connection Failed: Bad password"
+msgstr "Αποτυχία Σύνδεσης: Λάθος κωδικός"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:89 wicd/misc.py:89
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Η σύνδεση απέτυχε: Η αυτόματη απόδοση διεύθυνσης IP απέτυχε."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:81 wicd/misc.py:81
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Αποτυχία σύνδεσης: Αδυναμία ανάκτησης IP διεύθυνσης"
+
+#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
+msgid "Connection established"
+msgstr "Η σύνδεση ολοκληρώθηκε"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr "Σφλαμα σύνδεσης: Η σύνδεση με τον ασύρματο σταθμό απέτυχε."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
+#, fuzzy
+msgid "Connection successful."
+msgstr "Ακύρωση Σύνδεσης"
+
+#: gtk/gui.py:65 gtk/wicd-client.py:952
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
+msgstr ""
+"Αποτυχία σύνδεσης με το D-Bus. Δείτε το αρχείο καταγραφής σφαλμάτων του "
+"wicd."
+
+#: gtk/netentry.py:302 gtk/netentry.py:410
+#, fuzzy
+msgid ""
+"Could not find a graphical sudo program. The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Δεν είναι δυνατή η εύρεση γραφικού περιβάλλοντος για το πρόγραμμα sudo. Ο"
+" διορθωτής αρχείου δέσμης δεν μπορεί να ξεκινήσει. Πρέπει να διορθώσετε "
+"τα αρχεία δέσμης κατευθείαν στο αρχείο ρυθμίσεων."
+
+#: curses/wicd-curses.py:487 gtk/gui.py:257
+msgid "Create an Ad-Hoc Network"
+msgstr "Δημιουργία Ad-Hoc δικτύου"
 
 #: curses/wicd-curses.py:99
 msgid ""
@@ -252,25 +222,93 @@ msgstr ""
 "ώρα που τρέχει το wicd-curses. Παρακαλώ επανεκκινήστε τον δαίμονα και "
 "μετά επανεκκινηστε το wicd-curses."
 
-#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
-msgid "Connected to wired network (IP: $A)"
-msgstr "Συνδεδεμένο με το ενσύρματο δίκτυο (IP: $A)"
+#: curses/prefs_curses.py:92
+msgid "DHCP Client"
+msgstr "Πελάτης DHCP"
 
-#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
-msgid "Connected to $A at $B (IP: $C)"
-msgstr "Συνδεδεμένο στο $A με $B (IP: $C)"
-
-#: curses/wicd-curses.py:195
-msgid "Brought to you by:"
-msgstr "Προσφορά από:"
-
-#: curses/wicd-curses.py:200
-msgid "About Wicd"
-msgstr "Σχετικά με την εφαρμογή Wicd"
-
-#: curses/wicd-curses.py:205
-msgid "wicd-curses help"
+#: curses/netentry_curses.py:63
+msgid "DHCP Hostname"
 msgstr ""
+
+#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
+msgid "DNS domain"
+msgstr "Όνομα DNS"
+
+#: curses/netentry_curses.py:58 curses/netentry_curses.py:59
+#: curses/netentry_curses.py:60 curses/prefs_curses.py:76
+#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
+#: gtk/netentry.py:80 gtk/netentry.py:81
+msgid "DNS server"
+msgstr "Εξυπηρετητής DNS:"
+
+#: curses/prefs_curses.py:117
+msgid "Debugging"
+msgstr "Αποσφαλμάτωση"
+
+#: curses/wicd-curses.py:559
+#, fuzzy
+msgid "Disconn"
+msgstr "Αποσυνδεμένο."
+
+#: curses/wicd-curses.py:215
+msgid "Disconnect from all networks"
+msgstr "Αποσύνδεση από όλα τα δίκτυα"
+
+#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
+msgid "Disconnected"
+msgstr "Αποσυνδεμένο."
+
+#: gtk/gui.py:723
+msgid "Disconnecting active connections..."
+msgstr "Αποσυνδέονται οι ενεργές συνδέσεις"
+
+#: curses/wicd-curses.py:225
+#, fuzzy
+msgid "Display 'about' dialog"
+msgstr "Προβολή του διαλόγου βοήθειας"
+
+#: gtk/prefs.py:349 data/wicd.ui:992
+msgid "Display notifications about connection status"
+msgstr "Προβολή υπενθυμίσεων σχετικά με την κατάσταση σύνδεσης"
+
+#: curses/wicd-curses.py:213
+msgid "Display this help dialog"
+msgstr "Προβολή του διαλόγου βοήθειας"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
+#, fuzzy
+msgid "Domain"
+msgstr "Όνομα DNS"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
+msgid "Done connecting..."
+msgstr "Η σύνδεση ολοκληρώθηκε..."
+
+#: curses/wicd-curses.py:1051
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
+msgstr ""
+
+#: curses/wicd-curses.py:460 gtk/gui.py:265
+msgid "ESSID"
+msgstr "ESSID"
+
+#: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
+msgid "Enable debug mode"
+msgstr "Ενεργοποίηση λειτουργίας αποσφαλμάτωσης"
+
+#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
+msgid "Establishing connection..."
+msgstr "Προσπάθεια σύνδεσης σε εξέλιξη..."
+
+#: curses/prefs_curses.py:51 data/wicd.ui:1398
+msgid "External Programs"
+msgstr "Εξωτερικά Προγράμματα"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:84 wicd/misc.py:84
+msgid "Flushing the routing table..."
+msgstr "Καθάρισμα πινάκα δρομολόγησης..."
 
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
@@ -279,81 +317,99 @@ msgstr ""
 "\r\n"
 "Από κονσόλα, δώστε man wicd-curses"
 
-#: curses/wicd-curses.py:213
-msgid "Display this help dialog"
-msgstr "Προβολή του διαλόγου βοήθειας"
+#: curses/netentry_curses.py:52 gtk/netentry.py:76
+msgid "Gateway"
+msgstr "Πύλη"
 
-#: curses/wicd-curses.py:214
-msgid "Connect to selected network"
-msgstr "Σύνδεση στο επιλεγμένο δίκτυο"
+#: curses/prefs_curses.py:50 data/wicd.ui:1018
+msgid "General Settings"
+msgstr "Γενικές Ρυθμίσεις"
 
-#: curses/wicd-curses.py:215
-msgid "Disconnect from all networks"
-msgstr "Αποσύνδεση από όλα τα δίκτυα"
+#: build/lib.linux-i686-2.7/wicd/misc.py:85 wicd/misc.py:85
+msgid "Generating PSK..."
+msgstr "Δημιουργία PSK..."
 
-#: curses/wicd-curses.py:216
-#, fuzzy
-msgid "Stop a connection in progress"
-msgstr "Σταματήστε την σύνδεση που βρίσκεται σε εξέλιξη"
+#: build/lib.linux-i686-2.7/wicd/misc.py:86 wicd/misc.py:86
+msgid "Generating WPA configuration file..."
+msgstr "Δημιουργία αρχείου ρύθμισης WPA..."
 
-#: curses/wicd-curses.py:217
-msgid "Refresh network list"
-msgstr "Ανανέωση λίστας δικτύων"
+#: gtk/netentry.py:232
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Ο κύριος διακομιστής DNS δεν έχει ενεργοποιηθεί στις γενικές προτιμήσεις"
 
-#: curses/wicd-curses.py:218
-msgid "Preferences dialog"
-msgstr "Διάλογος προτιμήσεων"
+#: curses/prefs_curses.py:72
+msgid "Global DNS servers"
+msgstr "Κύριοι Διακομιστές Ονομάτων"
 
-#: curses/wicd-curses.py:221
-msgid "Scan for hidden networks"
-msgstr "Σάρωση για κρυφά δίκτυα"
-
-#: curses/wicd-curses.py:222
-msgid "Select scripts"
-msgstr "Επιλογή σεναρίων"
-
-#: curses/wicd-curses.py:223
-msgid "Set up Ad-hoc network"
-msgstr "Ρύθμιση δικτύου Ad-hoc"
-
-#: curses/wicd-curses.py:224
-#, fuzzy
-msgid "Configure selected network"
-msgstr "Ρύθμιση επιλεγμένου δικτύου"
-
-#: curses/wicd-curses.py:225
-#, fuzzy
-msgid "Display 'about' dialog"
-msgstr "Προβολή του διαλόγου βοήθειας"
-
-#: curses/wicd-curses.py:226
-msgid "Quit wicd-curses"
+#: curses/wicd-curses.py:554
+msgid "Help"
 msgstr ""
 
-#: curses/wicd-curses.py:228
-msgid "Press any key to return."
+#: curses/wicd-curses.py:562
+msgid "Hidden"
 msgstr ""
 
-#: curses/wicd-curses.py:271
+#: gtk/gui.py:356
+msgid "Hidden Network ESSID"
+msgstr "Κρυφό ESSID δικτύου"
+
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: gtk/netentry.py:73
+msgid "IP"
+msgstr "IP"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
+msgid "Identity"
+msgstr "Ταυτότητα"
+
+#: gtk/wicd-client.py:498
+msgid "Information about the current connection"
+msgstr ""
+
+#: gtk/netentry.py:166
+msgid "Invalid IP address entered."
+msgstr "Εισήχθη άκυρη διεύθυνση IP."
+
+#: gtk/gui.py:629 gtk/gui.py:637
+msgid "Invalid address in $A entry."
+msgstr "Άκυρη διεύθυνση στην καταχώρηση $A"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:80 curses/wicd-curses.py:463
+#: gtk/gui.py:267 wicd/translations.py:80
+msgid "Key"
+msgstr "Κλειδί"
+
+#: curses/netentry_curses.py:51 gtk/netentry.py:75
+msgid "Netmask"
+msgstr "Μάσκα Δικτύου"
+
+#: curses/prefs_curses.py:66
+msgid "Network Interfaces"
+msgstr "Διεπαφές δικτύου"
+
+#: gtk/netentry.py:817
 #, fuzzy
-msgid ""
-"To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
-msgstr ""
-"Για την αποφυγή διαφόρων επιπλοκών το wicd-curses δεν επιτρέπει την "
-"απευθείας επεξεργασία των αρχείων. Μπορείτε να τα επεξεργαστείτε "
-"χειροκίνητα. Πρώτα (σαν root) ανοιχτε το \"$A\" αρχείο ρυθμίσεων και "
-"βρείτε τον τομέα με τον τίτλο $B. Σε αυτήν την περίπτωση είναι:"
+msgid "Never connect to this network"
+msgstr "Αυτόματη σύνδεση στο δίκτυο"
 
-#: curses/wicd-curses.py:276
-msgid ""
-"You can also configure the wireless networks by looking for the "
-"\"[<ESSID>]\" field in the config file."
-msgstr ""
-"Μπορείτε επίσης να ρυθμίσετε τα ασύρματα δίκτυα ψάχνοντας το πεδίο "
-"\"[<ESSID>]\"  στο αρχείο ρυθμίσεων"
+#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+msgid "No wireless networks found."
+msgstr "Δεν βρέθηκαν ασύρματα δίκτυα."
+
+#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
+msgid "Not connected"
+msgstr "Αποσυνδεμένο"
+
+#: curses/configscript_curses.py:73 curses/curses_misc.py:527
+#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
+msgid "OK"
+msgstr "Εντάξει"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:91 wicd/misc.py:91
+msgid "Obtaining IP address..."
+msgstr "Ανάκτηση διεύθυνσης IP..."
 
 #: curses/wicd-curses.py:277
 #, fuzzy
@@ -373,116 +429,212 @@ msgstr ""
 "προσθέσετε/επεξεργαστείτε τα περιεχόμενα ξεχωρηστά. Περισσότερες "
 "πληροφορίες μπορείτε να βρείτε στις σελίδες εγχειριδίου του wicd."
 
-#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
-msgid "Unsecured"
-msgstr "Ανασφαλής"
+#: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
+msgid "Passphrase"
+msgstr ""
 
-#: curses/wicd-curses.py:377
-msgid "Add a new profile"
-msgstr "Προσθήκη νέου προφίλ"
+#: build/lib.linux-i686-2.7/wicd/translations.py:82 wicd/translations.py:82
+msgid "Password"
+msgstr "Κωδικός"
 
-#: curses/wicd-curses.py:410
-msgid "Add a new wired profile"
-msgstr "Προσθήκη νέου προφίλ για ενσύρματο δίκτυο"
+#: build/lib.linux-i686-2.7/wicd/translations.py:83 wicd/translations.py:83
+msgid "Path to CA cert"
+msgstr ""
 
-#: curses/wicd-curses.py:427
+#: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
 #, fuzzy
-msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
-msgstr ""
-"To wicd-curses δεν υποστηρίζει την διαγραφή του τελευταίου ενσύρματου "
-"δικτύου. Δοκιμάστε να το μετονομάσετε ('F2')"
+msgid "Path to PAC file"
+msgstr "Διαδρομή για το  αρχείο PAC"
 
-#: curses/wicd-curses.py:440
-msgid "Rename wired profile"
-msgstr "Μετονομασία ενσύρματου προφίλ"
-
-#: curses/wicd-curses.py:460 gtk/gui.py:265
-msgid "ESSID"
-msgstr "ESSID"
-
-#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
-#: gtk/netentry.py:1087
-msgid "Channel"
-msgstr "Κανάλι"
-
-#: curses/wicd-curses.py:463 gtk/gui.py:267 wicd/translations.py:80
-msgid "Key"
-msgstr "Κλειδί"
-
-#: curses/wicd-curses.py:464 gtk/gui.py:271
-msgid "Activate Internet Connection Sharing"
-msgstr "Ενεργοποίηση κοινόχρηστης σύνδεσης Internet"
-
-#: curses/wicd-curses.py:465 gtk/gui.py:262
-msgid "Use Encryption (WEP only)"
-msgstr "Χρήση κρυπτογράφησης (μόνο WEP)"
-
-#: curses/wicd-curses.py:487 gtk/gui.py:257
-msgid "Create an Ad-Hoc Network"
-msgstr "Δημιουργία Ad-Hoc δικτύου"
-
-#: curses/wicd-curses.py:525
-msgid "Scanning networks... stand by..."
-msgstr "Σάρωση δικτύων...αναμείνατε..."
-
-#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
-msgid "No wireless networks found."
-msgstr "Δεν βρέθηκαν ασύρματα δίκτυα."
-
-#: curses/wicd-curses.py:527
-msgid "Wicd Curses Interface"
-msgstr "Διεπαφή Wicd Curses"
-
-#: curses/wicd-curses.py:532
-msgid "Wired Networks"
-msgstr "Ενσύρματα δίκτυα"
-
-#: curses/wicd-curses.py:534
-msgid "Wireless Networks"
-msgstr "Ασύρματα δίκτυα"
-
-#: curses/wicd-curses.py:554
-msgid "Help)"
+#: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
+msgid "Path to client cert"
 msgstr ""
 
-#: curses/wicd-curses.py:555
-msgid "Config"
-msgstr ""
+#: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
+msgid "Ping static gateways after connecting to verify association"
+msgstr "Επικοινωνία με στατικές πύλες μετά την σύνδεση για επιβεβαίωση συσχετισμού"
 
-#: curses/wicd-curses.py:557
-msgid "RfKill"
-msgstr ""
-
-#: curses/wicd-curses.py:558
-msgid "Connect"
-msgstr "Σύνδεση"
-
-#: curses/wicd-curses.py:559
+#: curses/configscript_curses.py:57 gtk/configscript.py:155
 #, fuzzy
-msgid "Disconn"
-msgstr "Αποσυνδεμένο."
+msgid "Post-connection Script"
+msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
+
+#: curses/configscript_curses.py:59 gtk/configscript.py:158
+#, fuzzy
+msgid "Post-disconnection Script"
+msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
+
+#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#, fuzzy
+msgid "Pre-connection Script"
+msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
+
+#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#, fuzzy
+msgid "Pre-disconnection Script"
+msgstr "Εκτέλεση του αρχείου δέσμης προ-αποσύνδεσης."
+
+#: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: curses/wicd-curses.py:218
+msgid "Preferences dialog"
+msgstr "Διάλογος προτιμήσεων"
+
+#: curses/wicd-curses.py:561
+msgid "Prefs"
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:86 wicd/translations.py:86
+msgid "Preshared key"
+msgstr ""
+
+#: curses/wicd-curses.py:228
+msgid "Press any key to return."
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:87 wicd/translations.py:87
+msgid "Private key"
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:88 wicd/translations.py:88
+msgid "Private key password"
+msgstr ""
+
+#: curses/prefs_curses.py:83 gtk/prefs.py:343
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Ζητηση προφιλ ενσυρματου δικτυου"
+
+#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:87 wicd/misc.py:87
+msgid "Putting interface down..."
+msgstr "Απενεργοποίηση κάρτας δικτύου"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:88 wicd/misc.py:88
+msgid "Putting interface up..."
+msgstr "Ενεργοποίηση διεπαφής..."
+
+#: curses/wicd-curses.py:564
+msgid "Quit"
+msgstr ""
+
+#: curses/wicd-curses.py:226
+msgid "Quit wicd-curses"
+msgstr ""
+
+#: gtk/wicd-client.py:500
+msgid "Quit wicd-tray-icon"
+msgstr ""
 
 #: curses/wicd-curses.py:560
 #, fuzzy
 msgid "Refresh"
 msgstr "Προτιμήσεις"
 
-#: curses/wicd-curses.py:561
-msgid "Prefs"
+#: curses/wicd-curses.py:217
+msgid "Refresh network list"
+msgstr "Ανανέωση λίστας δικτύων"
+
+#: curses/wicd-curses.py:440
+msgid "Rename wired profile"
+msgstr "Μετονομασία ενσύρματου προφίλ"
+
+#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+msgid "Required encryption information is missing."
+msgstr "Η απαιτούμενη πληροφορία κρυπτογράφησης δεν υπάρχει."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:90 wicd/misc.py:90
+msgid "Resetting IP address..."
+msgstr "Επανάκτηση Διεύθυνσης IP..."
+
+#: curses/wicd-curses.py:557
+msgid "RfKill"
 msgstr ""
 
-#: curses/wicd-curses.py:562
-msgid "Hidden"
+#: curses/prefs_curses.py:103
+msgid "Route Table Flushing"
+msgstr "Σβήσιμο πίνακα δρομολόγησης:"
+
+#: curses/wicd-curses.py:628
+msgid "Scan"
+msgstr "Σάρωση"
+
+#: curses/wicd-curses.py:221
+msgid "Scan for hidden networks"
+msgstr "Σάρωση για κρυφά δίκτυα"
+
+#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+msgid "Scanning"
+msgstr "Σάρωση"
+
+#: curses/wicd-curses.py:525
+msgid "Scanning networks... stand by..."
+msgstr "Σάρωση δικτύων...αναμείνατε..."
+
+#: gtk/netentry.py:101
+msgid "Scripts"
+msgstr "Σενάρια"
+
+#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
+msgid "Search domain"
+msgstr "Αναζήτηση τομέα"
+
+#: gtk/netentry.py:959 gtk/netentry.py:1081
+msgid "Secured"
+msgstr "Ασφαλής"
+
+#: curses/wicd-curses.py:628
+msgid "Select Hidden Network ESSID"
+msgstr "Επιλογή κρυφού δικτύου ESSID"
+
+#: gtk/gui.py:103
+msgid "Select or create a wired profile to connect with"
+msgstr "Επιλέξτε ή δημιουργήστε προφίλ για την ενσύρματη σύνδεση με"
+
+#: curses/wicd-curses.py:222
+msgid "Select scripts"
+msgstr "Επιλογή σεναρίων"
+
+#: curses/wicd-curses.py:223
+msgid "Set up Ad-hoc network"
+msgstr "Ρύθμιση δικτύου Ad-hoc"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:92 wicd/misc.py:92
+msgid "Setting broadcast address..."
+msgstr "Ρύθμιση διεύθυνσης εκπομπής..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:93 wicd/misc.py:93
+msgid "Setting static DNS servers..."
+msgstr "Ρύθμιση στατικού διακομιστή DNS..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:94 wicd/misc.py:94
+msgid "Setting static IP addresses..."
+msgstr "Ρύθμιση στατικής διεύθυνσης IP..."
+
+#: gtk/prefs.py:333 data/wicd.ui:571
+#, fuzzy
+msgid "Show never connect networks"
+msgstr "Αποσύνδεση από όλα τα δίκτυα"
+
+#: gtk/gui.py:104
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Διακοπή εμφάνισης μηνύματος επανασύνδεσης"
+
+#: curses/wicd-curses.py:216
+#, fuzzy
+msgid "Stop a connection in progress"
+msgstr "Σταματήστε την σύνδεση που βρίσκεται σε εξέλιξη"
+
+#: gtk/gui.py:314
+msgid "Switch Off Wi-Fi"
 msgstr ""
 
-#: curses/wicd-curses.py:563
-msgid "About"
-msgstr ""
-
-#: curses/wicd-curses.py:564
-msgid "Quit"
+#: gtk/gui.py:311
+msgid "Switch On Wi-Fi"
 msgstr ""
 
 #: curses/wicd-curses.py:602
@@ -493,43 +645,9 @@ msgstr ""
 msgid "Tab Right"
 msgstr ""
 
-#: curses/wicd-curses.py:628
-msgid "Select Hidden Network ESSID"
-msgstr "Επιλογή κρυφού δικτύου ESSID"
-
-#: curses/wicd-curses.py:628
-msgid "Scan"
-msgstr "Σάρωση"
-
-#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
-#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
-msgid "Not connected"
-msgstr "Αποσυνδεμένο"
-
-#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
-#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
-msgid "Wired Network"
-msgstr "Ενσύρματο δίκτυο"
-
-#: curses/wicd-curses.py:1027
-msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr ""
-"Δεν είναι δυνατή η σύνδεση με την υπηρεσία, γίνεται προσπάθεια αυτόματης "
-"εκκίνησης..."
-
-#: curses/wicd-curses.py:1051
-msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
-msgstr ""
-
-#: gtk/gui.py:65 gtk/wicd-client.py:952
-msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
-msgstr ""
-"Αποτυχία σύνδεσης με το D-Bus. Δείτε το αρχείο καταγραφής σφαλμάτων του "
-"wicd."
+#: curses/wicd-curses.py:94
+msgid "Terminated by user"
+msgstr "Τερματισμός από το χρήστη"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
@@ -539,83 +657,22 @@ msgstr ""
 "Ο δαίμονας του wicd τερματίστηκε. Το γραφικό περιβάλλον δεν θα λειτουργεί"
 " σωστά εάν δεν επανεκκινηθεί ο δαίμονας."
 
-#: gtk/gui.py:97
-msgid "Wired connection detected"
-msgstr "Βρέθηκε ενσύρματη σύνδεση"
+#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+msgid "This network requires encryption to be enabled."
+msgstr "Το δίκτυο απαιτεί ενεργοποιημένη κρυπτογράφηση."
 
-#: gtk/gui.py:103
-msgid "Select or create a wired profile to connect with"
-msgstr "Επιλέξτε ή δημιουργήστε προφίλ για την ενσύρματη σύνδεση με"
-
-#: gtk/gui.py:104
-msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Διακοπή εμφάνισης μηνύματος επανασύνδεσης"
-
-#: gtk/gui.py:187 data/wicd.ui:173
-msgid "Choose from the networks below:"
-msgstr "Επιλέξτε από τα δίκτυα:"
-
-#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
-msgid "Connecting"
-msgstr "Σύνδεση"
-
-#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
-msgid "Scanning"
-msgstr "Σάρωση"
-
-#: gtk/gui.py:311
-msgid "Switch On Wi-Fi"
-msgstr ""
-
-#: gtk/gui.py:314
-msgid "Switch Off Wi-Fi"
-msgstr ""
-
-#: gtk/gui.py:356
-msgid "Hidden Network ESSID"
-msgstr "Κρυφό ESSID δικτύου"
-
-#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
-msgid "Wireless Kill Switch Enabled"
-msgstr "Ενεργοποίηση του διακόπτη wifi"
-
-#: gtk/gui.py:629 gtk/gui.py:637
-msgid "Invalid address in $A entry."
-msgstr "Άκυρη διεύθυνση στην καταχώρηση $A"
-
-#: gtk/gui.py:723
-msgid "Disconnecting active connections..."
-msgstr "Αποσυνδέονται οι ενεργές συνδέσεις"
-
-#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
-msgid "Properties"
-msgstr "Ιδιότητες"
-
-#: gtk/netentry.py:101
-msgid "Scripts"
-msgstr "Σενάρια"
-
-#: gtk/netentry.py:166
-msgid "Invalid IP address entered."
-msgstr "Εισήχθη άκυρη διεύθυνση IP."
-
-#: gtk/netentry.py:232
-msgid "Global DNS has not been enabled in general preferences."
-msgstr "Ο κύριος διακομιστής DNS δεν έχει ενεργοποιηθεί στις γενικές προτιμήσεις"
-
-#: gtk/netentry.py:299 gtk/netentry.py:407
-msgid "You must enter your password to configure scripts"
-msgstr "Πρέπει να βάλετε τον κωδικό σας για να επεξεργαστείτε τις εντολές"
-
-#: gtk/netentry.py:302 gtk/netentry.py:410
+#: curses/wicd-curses.py:271
 #, fuzzy
 msgid ""
-"Could not find a graphical sudo program. The script editor could not be "
-"launched.  You'll have to edit scripts directly your configuration file."
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
-"Δεν είναι δυνατή η εύρεση γραφικού περιβάλλοντος για το πρόγραμμα sudo. Ο"
-" διορθωτής αρχείου δέσμης δεν μπορεί να ξεκινήσει. Πρέπει να διορθώσετε "
-"τα αρχεία δέσμης κατευθείαν στο αρχείο ρυθμίσεων."
+"Για την αποφυγή διαφόρων επιπλοκών το wicd-curses δεν επιτρέπει την "
+"απευθείας επεξεργασία των αρχείων. Μπορείτε να τα επεξεργαστείτε "
+"χειροκίνητα. Πρώτα (σαν root) ανοιχτε το \"$A\" αρχείο ρυθμίσεων και "
+"βρείτε τον τομέα με τον τίτλο $B. Σε αυτήν την περίπτωση είναι:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -627,24 +684,6 @@ msgstr ""
 "προφίλ δικτύου.\r\n"
 "Για την δημιουργία προφίλ, εισάγετε ένα όνομα και πιέστε Προσθήκη."
 
-#: gtk/netentry.py:817
-#, fuzzy
-msgid "Never connect to this network"
-msgstr "Αυτόματη σύνδεση στο δίκτυο"
-
-#: gtk/netentry.py:959 gtk/netentry.py:1081
-msgid "Secured"
-msgstr "Ασφαλής"
-
-#: gtk/prefs.py:333 data/wicd.ui:571
-#, fuzzy
-msgid "Show never connect networks"
-msgstr "Αποσύνδεση από όλα τα δίκτυα"
-
-#: gtk/prefs.py:349 data/wicd.ui:992
-msgid "Display notifications about connection status"
-msgstr "Προβολή υπενθυμίσεων σχετικά με την κατάσταση σύνδεσης"
-
 #: gtk/wicd-client.py:94
 msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from "
@@ -653,46 +692,82 @@ msgstr ""
 "Η σύνδεση με τον δαίμονα του Wicd είναι αδύνατη, εξ' αιτίας απαγόρευσης "
 "πρόσβασης από το DBus. Επιβαιβεώστε ότι ο χρήστης ανήκει στην ομάδα $A"
 
+#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
+msgid "Unsecured"
+msgstr "Ανασφαλής"
+
+#: curses/netentry_curses.py:62
+msgid "Use DHCP Hostname"
+msgstr ""
+
+#: curses/netentry_curses.py:256 gtk/netentry.py:355
+msgid "Use Encryption"
+msgstr "Χρήση κρυπτογράφησης"
+
+#: curses/wicd-curses.py:465 gtk/gui.py:262
+msgid "Use Encryption (WEP only)"
+msgstr "Χρήση κρυπτογράφησης (μόνο WEP)"
+
+#: curses/netentry_curses.py:54 gtk/netentry.py:88
+msgid "Use Static DNS"
+msgstr "χρήση στατικών DNS"
+
+#: curses/netentry_curses.py:49 gtk/netentry.py:87
+msgid "Use Static IPs"
+msgstr "Χρήση στατικών διευθύνσεων IP"
+
+#: curses/netentry_curses.py:190 gtk/netentry.py:635
+msgid "Use as default profile (overwrites any previous default)"
+msgstr "Χρήση ως προεπιλεγμένου προφίλ (αντικαθιστά τα προηγούμενα)"
+
+#: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
+msgid "Use dBm to measure signal strength"
+msgstr "Χρήση dBm για μέτρηση ισχύος σήματος"
+
+#: curses/prefs_curses.py:82 gtk/prefs.py:341
+msgid "Use default profile on wired autoconnect"
+msgstr "Χρήση προεπιλεγμένου προφίλ σε ενσύρματο δίκτυο"
+
+#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
+#: data/wicd.ui:882
+msgid "Use global DNS servers"
+msgstr "Χρήση κύριων Διακομιστών Ονομάτων"
+
+#: curses/prefs_curses.py:84 gtk/prefs.py:345
+msgid "Use last used profile on wired autoconnect"
+msgstr "Χρήση τελευταίου χρησιμοποιημένου προφίλ σε επανασύνδεση"
+
+#: curses/netentry_curses.py:255 gtk/netentry.py:356
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Χρήση αυτών των ρυθμίσεων για όλα τα δίκτυα που μοιράζονται το essid"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:89 wicd/translations.py:89
+msgid "Username"
+msgstr "Όνομα"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:96 wicd/misc.py:96
+msgid "Validating authentication..."
+msgstr "Έλεγχος εξουσιοδότησης..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:97 wicd/misc.py:97
+msgid "Verifying access point association..."
+msgstr "Επιβεβαίωση συσχέτισης με το Σημείο Πρόσβασης"
+
+#: curses/prefs_curses.py:108
+msgid "WPA Supplicant"
+msgstr ""
+
+#: curses/wicd-curses.py:527
+msgid "Wicd Curses Interface"
+msgstr "Διεπαφή Wicd Curses"
+
 #: gtk/wicd-client.py:224 gtk/wicd-client.py:331
 msgid "Wicd daemon unreachable"
 msgstr "Η σύνδεση με τον δαίμονα του wicd είναι ανέφικτη."
 
-#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
-msgid "Connection established"
-msgstr "Η σύνδεση ολοκληρώθηκε"
-
-#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
-msgid "Establishing connection..."
-msgstr "Προσπάθεια σύνδεσης σε εξέλιξη..."
-
-#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
-msgid "Disconnected"
-msgstr "Αποσυνδεμένο."
-
-#: gtk/wicd-client.py:498
-msgid "Information about the current connection"
-msgstr ""
-
-#: gtk/wicd-client.py:500
-msgid "Quit wicd-tray-icon"
-msgstr ""
-
-#: gtk/wicd-client.py:601
-msgid ""
-"$A\n"
-"$B KB/s\n"
-"$C KB/s"
-msgstr ""
-
-#: gtk/wicd-client.py:608
-msgid ""
-"$A\n"
-"$B\n"
-"$C\n"
-"$D\n"
-"$E KB/s\n"
-"$F KB/s"
-msgstr ""
+#: build/lib.linux-i686-2.7/wicd/misc.py:196 wicd/misc.py:196
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Το WICD χρειάζεται πρόσβαση στις κάρτες δικτύου του Η/Υ σας."
 
 #: gtk/wicd-client.py:626
 msgid ""
@@ -701,6 +776,31 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+
+#: curses/prefs_curses.py:81
+msgid "Wired Autoconnect Settings"
+msgstr "Ρυθμίσεις ενσύρματης αυτόματης σύνδεσης"
+
+#: curses/prefs_curses.py:67
+msgid "Wired Interface"
+msgstr "Ενσύρματη συσκευή"
+
+#: curses/prefs_curses.py:99
+msgid "Wired Link Detection"
+msgstr "Ανίχνευση ενσύρματου δικτύου"
+
+#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
+msgid "Wired Network"
+msgstr "Ενσύρματο δίκτυο"
+
+#: curses/wicd-curses.py:532
+msgid "Wired Networks"
+msgstr "Ενσύρματα δίκτυα"
+
+#: gtk/gui.py:97
+msgid "Wired connection detected"
+msgstr "Βρέθηκε ενσύρματη σύνδεση"
 
 #: gtk/wicd-client.py:631
 #, fuzzy
@@ -714,145 +814,46 @@ msgid ""
 "TX:"
 msgstr "Ασύρματο SSID: Ταχύτητα: IP: Ισχύς: RX: TX:"
 
-#: wicd/misc.py:77
-msgid "Connection Cancelled"
-msgstr "Ακύρωση Σύνδεσης"
+#: curses/prefs_curses.py:68 curses/prefs_curses.py:120
+msgid "Wireless Interface"
+msgstr "Ασύρματη διεπαφή"
 
-#: wicd/misc.py:78
-msgid "Connection failed: Could not contact the wireless access point."
-msgstr "Σφλαμα σύνδεσης: Η σύνδεση με τον ασύρματο σταθμό απέτυχε."
+#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+msgid "Wireless Kill Switch Enabled"
+msgstr "Ενεργοποίηση του διακόπτη wifi"
 
-#: wicd/misc.py:79
-msgid "Connection Failed: Bad password"
-msgstr "Αποτυχία Σύνδεσης: Λάθος κωδικός"
+#: curses/wicd-curses.py:534
+msgid "Wireless Networks"
+msgstr "Ασύρματα δίκτυα"
 
-#: wicd/misc.py:80
-msgid "Configuring wireless interface..."
-msgstr "Ρύθμιση ασύρματης διεπαφής..."
+#: curses/wicd-curses.py:276
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Μπορείτε επίσης να ρυθμίσετε τα ασύρματα δίκτυα ψάχνοντας το πεδίο "
+"\"[<ESSID>]\"  στο αρχείο ρυθμίσεων"
 
-#: wicd/misc.py:81
-msgid "Connection Failed: Unable to Get IP Address"
-msgstr "Αποτυχία σύνδεσης: Αδυναμία ανάκτησης IP διεύθυνσης"
+#: gtk/netentry.py:299 gtk/netentry.py:407
+msgid "You must enter your password to configure scripts"
+msgstr "Πρέπει να βάλετε τον κωδικό σας για να επεξεργαστείτε τις εντολές"
 
-#: wicd/misc.py:82
-msgid "Done connecting..."
-msgstr "Η σύνδεση ολοκληρώθηκε..."
+#: curses/prefs_curses.py:111
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "Θα πρέπει σχεδόν πάντα να χρησιμοποιείτε το wext για συνδέσεις WPA"
 
-#: wicd/misc.py:83
+#: curses/wicd-curses.py:427
 #, fuzzy
-msgid "Connection Failed."
-msgstr "Ακύρωση Σύνδεσης"
-
-#: wicd/misc.py:84
-msgid "Flushing the routing table..."
-msgstr "Καθάρισμα πινάκα δρομολόγησης..."
-
-#: wicd/misc.py:85
-msgid "Generating PSK..."
-msgstr "Δημιουργία PSK..."
-
-#: wicd/misc.py:86
-msgid "Generating WPA configuration file..."
-msgstr "Δημιουργία αρχείου ρύθμισης WPA..."
-
-#: wicd/misc.py:87
-msgid "Putting interface down..."
-msgstr "Απενεργοποίηση κάρτας δικτύου"
-
-#: wicd/misc.py:88
-msgid "Putting interface up..."
-msgstr "Ενεργοποίηση διεπαφής..."
-
-#: wicd/misc.py:89
-msgid "Connection Failed: No DHCP offers received."
-msgstr "Η σύνδεση απέτυχε: Η αυτόματη απόδοση διεύθυνσης IP απέτυχε."
-
-#: wicd/misc.py:90
-msgid "Resetting IP address..."
-msgstr "Επανάκτηση Διεύθυνσης IP..."
-
-#: wicd/misc.py:91
-msgid "Obtaining IP address..."
-msgstr "Ανάκτηση διεύθυνσης IP..."
-
-#: wicd/misc.py:92
-msgid "Setting broadcast address..."
-msgstr "Ρύθμιση διεύθυνσης εκπομπής..."
-
-#: wicd/misc.py:93
-msgid "Setting static DNS servers..."
-msgstr "Ρύθμιση στατικού διακομιστή DNS..."
-
-#: wicd/misc.py:94
-msgid "Setting static IP addresses..."
-msgstr "Ρύθμιση στατικής διεύθυνσης IP..."
-
-#: wicd/misc.py:95
-#, fuzzy
-msgid "Connection successful."
-msgstr "Ακύρωση Σύνδεσης"
-
-#: wicd/misc.py:96
-msgid "Validating authentication..."
-msgstr "Έλεγχος εξουσιοδότησης..."
-
-#: wicd/misc.py:97
-msgid "Verifying access point association..."
-msgstr "Επιβεβαίωση συσχέτισης με το Σημείο Πρόσβασης"
-
-#: wicd/misc.py:196
-msgid "Wicd needs to access your computer's network cards."
-msgstr "Το WICD χρειάζεται πρόσβαση στις κάρτες δικτύου του Η/Υ σας."
-
-#: wicd/translations.py:77
-msgid "Authentication"
-msgstr "Πιστοποίηση"
-
-#: wicd/translations.py:78
-#, fuzzy
-msgid "Domain"
-msgstr "Όνομα DNS"
-
-#: wicd/translations.py:79
-msgid "Identity"
-msgstr "Ταυτότητα"
-
-#: wicd/translations.py:81
-msgid "Passphrase"
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
 msgstr ""
+"To wicd-curses δεν υποστηρίζει την διαγραφή του τελευταίου ενσύρματου "
+"δικτύου. Δοκιμάστε να το μετονομάσετε ('F2')"
 
-#: wicd/translations.py:82
-msgid "Password"
-msgstr "Κωδικός"
-
-#: wicd/translations.py:83
-msgid "Path to CA cert"
+#: curses/wicd-curses.py:205
+msgid "wicd-curses help"
 msgstr ""
-
-#: wicd/translations.py:84
-msgid "Path to client cert"
-msgstr ""
-
-#: wicd/translations.py:85
-#, fuzzy
-msgid "Path to PAC file"
-msgstr "Διαδρομή για το  αρχείο PAC"
-
-#: wicd/translations.py:86
-msgid "Preshared key"
-msgstr ""
-
-#: wicd/translations.py:87
-msgid "Private key"
-msgstr ""
-
-#: wicd/translations.py:88
-msgid "Private key password"
-msgstr ""
-
-#: wicd/translations.py:89
-msgid "Username"
-msgstr "Όνομα"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
@@ -1085,119 +1086,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Θα πρέπει σχεδόν πάντα να χρησιμοποιείτε το wext για συνδέσεις WPA"
-
-#~ msgid ""
-#~ "Unable to connect to wicd daemon "
-#~ "DBus interface. This typically means "
-#~ "there was a problem starting the "
-#~ "daemon. Check the wicd log for "
-#~ "more information."
-#~ msgstr ""
-#~ "Η σύνδεση με τον δαίμονα του wicd"
-#~ " απέτυχε. Αυτό συνήθως συμβαίνει όταν "
-#~ "είναι αδύνατη η εκκίνηση του δαίμονα."
-#~ " Ελέγξτε τα αρχεία καταγραφής του "
-#~ "wicd για περισσότερες λεμπομέρειες"
-
-#~ msgid "Changes to your backend won't occur until the daemon is restarted."
-#~ msgstr ""
-#~ "Για να ενεργοποιηθούν οι αλλαγές, πρέπει"
-#~ " να επανεκκινηθεί ο δαίμονας του "
-#~ "wicd."
-
-#~ msgid ""
-#~ "To connect to a wired network, you"
-#~ " must create a network profile.  To"
-#~ " create a network profile, type a "
-#~ "name that describes this network, and"
-#~ " press Add."
-#~ msgstr ""
-#~ "Για μια ενσύρματη σύνδεση, απαιτείται "
-#~ "ένα προφίλ δικτύου. Για τη δημιουργία"
-#~ " προφίλ, πληκτρολογήστε ένα όνομα και "
-#~ "επιλέξτε Προσθήκη..."
-
-#~ msgid "Press ESC to cancel"
-#~ msgstr "Πατήστε Esc για ακύρωση"
-
-#~ msgid "Connecting to daemon..."
-#~ msgstr "Σύνδεση στο δαίμονα..."
-
-#~ msgid "Removing old connection..."
-#~ msgstr "Αφαίρεση παλιάς σύνδεσης..."
-
-#~ msgid "Check if using madwifi/atheros drivers"
-#~ msgstr "Έλεγχος για χρήση οδηγών madwifi/atheros"
-
-#~ msgid "Setting encryption info"
-#~ msgstr "Ρύθμιση πληροφοριών κρυπτογράφησης"
-
-#~ msgid "Anonymous Identity"
-#~ msgstr "Ανώνυμη ταυτότητα"
-
-#~ msgid "Hidden Network"
-#~ msgstr "Κρυφό δίκτυο"
-
-#~ msgid "All controls are case sensitive"
-#~ msgstr ""
-
-#~ msgid "DNS"
-#~ msgstr "DNS"
-
-#~ msgid ""
-#~ "EXCEPTION! Please report this to the "
-#~ "maintainer and file a bug report "
-#~ "with the backtrace below:"
-#~ msgstr ""
-#~ "ΣΦΑΛΜΑ! Παρακαλώ αναφέρετέ το και "
-#~ "δηλώστε το με τις παρακάτω πληροφορίες"
-
-#~ msgid "Run script before connect"
-#~ msgstr "Εκτέλεση σεναρίου πριν τη σύνδεση"
-
-#~ msgid "WPA Supplicant Driver"
-#~ msgstr "Οδηγός WPA"
-
-#~ msgid "Run script after connect"
-#~ msgstr "Εκτέλεση σεναρίου μετά τη σύνδεση"
-
-#~ msgid "The wicd daemon is unavailable, so your request cannot be completed"
-#~ msgstr ""
-#~ "Ο δαίμονας του wicd δεν είναι "
-#~ "διαθέσιμος, συνεπώς το αίτημά σας δεν"
-#~ " μπορεί να ολοκληρωθεί:"
-
-#~ msgid "use urwid's raw screen controller"
-#~ msgstr "χρήση του ελεγκτή οθόνης urwid"
-
-#~ msgid "Press F8 or Q to quit."
-#~ msgstr "Επιλέξτε F8 ή Q για έξοδο"
-
-#~ msgid "Run post-disconnect script"
-#~ msgstr ""
-
-#~ msgid "Suspend script"
-#~ msgstr "Διακοπή εκτέλεσης  αρχείου δέσμης"
-
-#~ msgid ""
-#~ "$A\r\n"
-#~ "$B\r\n"
-#~ "$C\r\n"
-#~ "$D\r\n"
-#~ "$E KB/s\r\n"
-#~ "$F KB/s"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "$A\r\n"
-#~ "$B KB/s\r\n"
-#~ "$C KB/s"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "Wired\r\n"
-#~ "IP:\r\n"
-#~ "RX:\r\n"
-#~ "TX:"
-#~ msgstr "Ενσύρματη IP: RX: TX:"
 

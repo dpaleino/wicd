@@ -424,7 +424,7 @@ class update_message_catalog(Command):
         pass
 
     def run(self):
-        os.system('pybabel extract . -o po/wicd.pot')
+        os.system('pybabel extract . -o po/wicd.pot --sort-output')
         os.system('xgettext -L glade data/wicd.ui -j -o po/wicd.pot')
         
 class update_translations(Command):

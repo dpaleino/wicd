@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 23:05+0200\n"
+"POT-Creation-Date: 2011-10-18 23:50+0200\n"
 "PO-Revision-Date: 2011-09-18 16:13+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: uk <LL@li.org>\n"
@@ -16,148 +16,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:154
-#, fuzzy
-msgid "Pre-connection Script"
-msgstr "Виконати сценарій підготовки до відключення."
-
-#: curses/configscript_curses.py:57 gtk/configscript.py:155
-#, fuzzy
-msgid "Post-connection Script"
-msgstr "Виконати сценарій після роз'єднання"
-
-#: curses/configscript_curses.py:58 gtk/configscript.py:156
-#, fuzzy
-msgid "Pre-disconnection Script"
-msgstr "Виконати сценарій підготовки до відключення."
-
-#: curses/configscript_curses.py:59 gtk/configscript.py:158
-#, fuzzy
-msgid "Post-disconnection Script"
-msgstr "Виконати сценарій після роз'єднання"
-
-#: curses/configscript_curses.py:73 curses/curses_misc.py:525
-#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
-msgid "OK"
-msgstr "Гаразд"
-
-#: curses/configscript_curses.py:74 curses/curses_misc.py:533
-#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
-msgid "Cancel"
-msgstr "Відміна"
-
-#: curses/netentry_curses.py:49 gtk/netentry.py:87
-msgid "Use Static IPs"
-msgstr "Використати статичні IP-адреси:"
-
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
-#: gtk/netentry.py:73
-msgid "IP"
-msgstr "IP:"
-
-#: curses/netentry_curses.py:51 gtk/netentry.py:75
-msgid "Netmask"
-msgstr "Маска мережі"
-
-#: curses/netentry_curses.py:52 gtk/netentry.py:76
-msgid "Gateway"
-msgstr "Шлюз"
-
-#: curses/netentry_curses.py:54 gtk/netentry.py:88
-msgid "Use Static DNS"
-msgstr "Використати статичний DNS:"
-
-#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
-#: data/wicd.ui:882
-msgid "Use global DNS servers"
-msgstr "Використовувати глобальні DNS-сервери"
-
-#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
-msgid "DNS domain"
-msgstr "DNS домен"
-
-#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
-msgid "Search domain"
-msgstr "Домен пошуку імен"
-
-#: curses/netentry_curses.py:58 curses/netentry_curses.py:59
-#: curses/netentry_curses.py:60 curses/prefs_curses.py:76
-#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
-#: gtk/netentry.py:80 gtk/netentry.py:81
-msgid "DNS server"
-msgstr "DNS сервер:"
-
-#: curses/netentry_curses.py:62
-msgid "Use DHCP Hostname"
+#: gtk/wicd-client.py:608
+msgid ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 msgstr ""
 
-#: curses/netentry_curses.py:63
-msgid "DHCP Hostname"
+#: gtk/wicd-client.py:601
+msgid ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 msgstr ""
 
-#: curses/netentry_curses.py:190 gtk/netentry.py:635
-msgid "Use as default profile (overwrites any previous default)"
+#: curses/wicd-curses.py:563
+msgid "About"
 msgstr ""
-"Використовувати, як типовий профіль (перезапис попереднього типового "
-"профілю)"
 
-#: curses/netentry_curses.py:196
-msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Налаштування параметрів дротового профілю \"$A\""
+#: curses/wicd-curses.py:200
+msgid "About Wicd"
+msgstr "Про Wicd"
 
-#: curses/netentry_curses.py:255 gtk/netentry.py:356
-msgid "Use these settings for all networks sharing this essid"
-msgstr "Використовувати дані налаштування для усіх мереж з даним ESSID"
+#: curses/wicd-curses.py:464 gtk/gui.py:271
+msgid "Activate Internet Connection Sharing"
+msgstr "Надавати іншим загальний доступ до Інтернету"
 
-#: curses/netentry_curses.py:256 gtk/netentry.py:355
-msgid "Use Encryption"
-msgstr "Використовувати шифрування"
+#: curses/wicd-curses.py:377
+msgid "Add a new profile"
+msgstr "Додати новий профіль"
 
-#: curses/netentry_curses.py:257 gtk/netentry.py:816
-msgid "Automatically connect to this network"
-msgstr "Автоматично з’єднуватись з цією мережею"
-
-#: curses/netentry_curses.py:272
-msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr "Налаштування параметрів дротової мережі \"$A\" ($B):"
-
-#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
-msgid "Required encryption information is missing."
-msgstr "Відсутня інформація про шифрування."
-
-#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
-msgid "This network requires encryption to be enabled."
-msgstr "Ця мережа вимагає застосування шифрування."
-
-#: curses/prefs_curses.py:50 data/wicd.ui:1018
-msgid "General Settings"
-msgstr "Загальні налаштування"
-
-#: curses/prefs_curses.py:51 data/wicd.ui:1398
-msgid "External Programs"
-msgstr "Зовнішні програми"
+#: curses/wicd-curses.py:410
+msgid "Add a new wired profile"
+msgstr "Додати новий дротовий профіль"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
 msgstr "Додаткові налаштування"
-
-#: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
-msgid "Preferences"
-msgstr "Налаштування"
-
-#: curses/prefs_curses.py:66
-msgid "Network Interfaces"
-msgstr "Мережеві інтерфейси"
-
-#: curses/prefs_curses.py:67
-msgid "Wired Interface"
-msgstr "Дротовий інтерфейс:"
-
-#: curses/prefs_curses.py:68 curses/prefs_curses.py:120
-msgid "Wireless Interface"
-msgstr "Бездротовий інтерфейс"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"
@@ -167,33 +65,9 @@ msgstr "Завжди показувати дротовий інтерфейс"
 msgid "Always switch to wired connection when available"
 msgstr "Завжди відображати дротовий інтерфейс в разі доступності"
 
-#: curses/prefs_curses.py:72
-msgid "Global DNS servers"
-msgstr "Глобальні DNS-сервери"
-
-#: curses/prefs_curses.py:81
-msgid "Wired Autoconnect Settings"
-msgstr "Параметри для автоз'єднання"
-
-#: curses/prefs_curses.py:82 gtk/prefs.py:341
-msgid "Use default profile on wired autoconnect"
-msgstr "Використати типовий профіль для дротового автоз'єднання"
-
-#: curses/prefs_curses.py:83 gtk/prefs.py:343
-msgid "Prompt for profile on wired autoconnect"
-msgstr "Запитувати профіль при автопід’єднанні:"
-
-#: curses/prefs_curses.py:84 gtk/prefs.py:345
-msgid "Use last used profile on wired autoconnect"
-msgstr "Використовувати останній профіль для автопід’єднання"
-
-#: curses/prefs_curses.py:86
-msgid "Automatic Reconnection"
-msgstr "Автоматичне перез’єднання:"
-
-#: curses/prefs_curses.py:87 gtk/prefs.py:331
-msgid "Automatically reconnect on connection loss"
-msgstr "Автоматично підключитись при втраті з'єднання"
+#: build/lib.linux-i686-2.7/wicd/translations.py:77 wicd/translations.py:77
+msgid "Authentication"
+msgstr "Автентифікація:"
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1082
@@ -201,49 +75,141 @@ msgstr "Автоматично підключитись при втраті з'�
 msgid "Automatic (recommended)"
 msgstr "Авто (рекомендовано)"
 
-#: curses/prefs_curses.py:92
-msgid "DHCP Client"
-msgstr "DHCP-клієнт"
+#: curses/prefs_curses.py:86
+msgid "Automatic Reconnection"
+msgstr "Автоматичне перез’єднання:"
 
-#: curses/prefs_curses.py:99
-msgid "Wired Link Detection"
-msgstr "Пошук дротового з'єднання"
+#: curses/netentry_curses.py:257 gtk/netentry.py:816
+msgid "Automatically connect to this network"
+msgstr "Автоматично з’єднуватись з цією мережею"
 
-#: curses/prefs_curses.py:103
-msgid "Route Table Flushing"
-msgstr "Очищення таблиці маршрутизації:"
-
-#: curses/prefs_curses.py:108
-msgid "WPA Supplicant"
-msgstr "WPA Supplicant"
-
-#: curses/prefs_curses.py:111
-msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "Найчастіше за все у якості драйвера WPA supplicant використовується wext"
+#: curses/prefs_curses.py:87 gtk/prefs.py:331
+msgid "Automatically reconnect on connection loss"
+msgstr "Автоматично підключитись при втраті з'єднання"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
 msgstr "Рушій"
 
-#: curses/prefs_curses.py:117
-msgid "Debugging"
-msgstr "Відлагодження"
+#: curses/wicd-curses.py:195
+msgid "Brought to you by:"
+msgstr "Надано вам від:"
 
-#: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
-msgid "Enable debug mode"
-msgstr "Дозволити режим відлагодження (debug)"
+#: curses/wicd-curses.py:1027
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr "Неможливо під’єднатись до служби, спроба її автоматичного запуску…"
 
-#: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
-msgid "Use dBm to measure signal strength"
-msgstr "Показувати рівень сигналу в dBm"
+#: curses/configscript_curses.py:74 curses/curses_misc.py:535
+#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
+msgid "Cancel"
+msgstr "Відміна"
 
-#: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
-msgid "Ping static gateways after connecting to verify association"
-msgstr "Виконати перевірку (Ping) статичного шлюзу для перевірки асоціацій"
+#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: gtk/netentry.py:1087
+msgid "Channel"
+msgstr "Канал:"
 
-#: curses/wicd-curses.py:94
-msgid "Terminated by user"
-msgstr "Скасовано користувачем"
+#: gtk/gui.py:187 data/wicd.ui:173
+msgid "Choose from the networks below:"
+msgstr "Виберіть з доступних мереж:"
+
+#: curses/wicd-curses.py:555
+msgid "Config"
+msgstr ""
+
+#: curses/wicd-curses.py:224
+#, fuzzy
+msgid "Configure selected network"
+msgstr "Налаштування обраної мережі"
+
+#: curses/netentry_curses.py:196
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Налаштування параметрів дротового профілю \"$A\""
+
+#: curses/netentry_curses.py:272
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr "Налаштування параметрів дротової мережі \"$A\" ($B):"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:80 wicd/misc.py:80
+msgid "Configuring wireless interface..."
+msgstr "Налаштування бездротового інтерфейсу..."
+
+#: curses/wicd-curses.py:558
+msgid "Connect"
+msgstr "З'єднатись"
+
+#: curses/wicd-curses.py:214
+msgid "Connect to selected network"
+msgstr "З’єднання з вибраною мережею"
+
+#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+msgid "Connected to $A at $B (IP: $C)"
+msgstr "Під’єднання до $A через $B (IP: $C)"
+
+#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+msgid "Connected to wired network (IP: $A)"
+msgstr "Підключено до дротової мережі (IP: $A):"
+
+#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+msgid "Connecting"
+msgstr "З’єднання:"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
+msgid "Connection Cancelled"
+msgstr "З'єднання відмінено"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
+#, fuzzy
+msgid "Connection Failed."
+msgstr "З'єднання відмінено"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
+msgid "Connection Failed: Bad password"
+msgstr "Помилка з’єднання: невірний пароль"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:89 wicd/misc.py:89
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Помилка з’єднання: відсутня відповідь DHCP"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:81 wicd/misc.py:81
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Помилка з’єднання: неможливо отримати IP-адресу"
+
+#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
+msgid "Connection established"
+msgstr "З'єднання встановлене"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
+msgid "Connection failed: Could not contact the wireless access point."
+msgstr "З'єднання втрачено: неможливо з'єднатися з бездротовою точкою доступу."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
+#, fuzzy
+msgid "Connection successful."
+msgstr "З'єднання відмінено"
+
+#: gtk/gui.py:65 gtk/wicd-client.py:952
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
+msgstr ""
+"Не вдалося з’єднатися з сервісом wicd через інтерфейс DBus. Перевірте "
+"реєстраційний журнал на наявність сповіщень про помилки."
+
+#: gtk/netentry.py:302 gtk/netentry.py:410
+#, fuzzy
+msgid ""
+"Could not find a graphical sudo program. The script editor could not be "
+"launched.  You'll have to edit scripts directly your configuration file."
+msgstr ""
+"Не вдалося знайти графічні sudo-програми. Редактор сценаріїв не може бути"
+" запущений. Необхідно відредагувати сценарії безпосередньо в файлах "
+"конфігурації."
+
+#: curses/wicd-curses.py:487 gtk/gui.py:257
+msgid "Create an Ad-Hoc Network"
+msgstr "Створити однорангову (Ad-Hoc) мережу"
 
 #: curses/wicd-curses.py:99
 msgid ""
@@ -255,105 +221,193 @@ msgstr ""
 "wicd-curses. Будь ласка перезапустіть службу wicd, після чого запустіть "
 "wicd-curses."
 
-#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
-msgid "Connected to wired network (IP: $A)"
-msgstr "Підключено до дротової мережі (IP: $A):"
+#: curses/prefs_curses.py:92
+msgid "DHCP Client"
+msgstr "DHCP-клієнт"
 
-#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
-msgid "Connected to $A at $B (IP: $C)"
-msgstr "Під’єднання до $A через $B (IP: $C)"
-
-#: curses/wicd-curses.py:195
-msgid "Brought to you by:"
-msgstr "Надано вам від:"
-
-#: curses/wicd-curses.py:200
-msgid "About Wicd"
-msgstr "Про Wicd"
-
-#: curses/wicd-curses.py:205
-msgid "wicd-curses help"
+#: curses/netentry_curses.py:63
+msgid "DHCP Hostname"
 msgstr ""
 
-#: curses/wicd-curses.py:209
-msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "Більш детально можна ознайомитись на сторінці wicd-curses(8) man"
+#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
+msgid "DNS domain"
+msgstr "DNS домен"
 
-#: curses/wicd-curses.py:213
-msgid "Display this help dialog"
-msgstr "Показати це вікно допомоги"
+#: curses/netentry_curses.py:58 curses/netentry_curses.py:59
+#: curses/netentry_curses.py:60 curses/prefs_curses.py:76
+#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
+#: gtk/netentry.py:80 gtk/netentry.py:81
+msgid "DNS server"
+msgstr "DNS сервер:"
 
-#: curses/wicd-curses.py:214
-msgid "Connect to selected network"
-msgstr "З’єднання з вибраною мережею"
+#: curses/prefs_curses.py:117
+msgid "Debugging"
+msgstr "Відлагодження"
+
+#: curses/wicd-curses.py:559
+#, fuzzy
+msgid "Disconn"
+msgstr "Роз'єднано"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
 msgstr "Відключитись від усіх мереж"
 
-#: curses/wicd-curses.py:216
-#, fuzzy
-msgid "Stop a connection in progress"
-msgstr "Зупинка мережевого з’єднання:"
+#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
+msgid "Disconnected"
+msgstr "Роз'єднано"
 
-#: curses/wicd-curses.py:217
-msgid "Refresh network list"
-msgstr "Оновити список мереж"
-
-#: curses/wicd-curses.py:218
-msgid "Preferences dialog"
-msgstr "Параметри:"
-
-#: curses/wicd-curses.py:221
-msgid "Scan for hidden networks"
-msgstr "Знайти приховані мережі:"
-
-#: curses/wicd-curses.py:222
-msgid "Select scripts"
-msgstr "Обрати сценарії"
-
-#: curses/wicd-curses.py:223
-msgid "Set up Ad-hoc network"
-msgstr "Налаштувати однорангову (Ad-hoc) мережу"
-
-#: curses/wicd-curses.py:224
-#, fuzzy
-msgid "Configure selected network"
-msgstr "Налаштування обраної мережі"
+#: gtk/gui.py:723
+msgid "Disconnecting active connections..."
+msgstr "Відключення активних з'єднань.."
 
 #: curses/wicd-curses.py:225
 #, fuzzy
 msgid "Display 'about' dialog"
 msgstr "Показати це вікно допомоги"
 
-#: curses/wicd-curses.py:226
-msgid "Quit wicd-curses"
-msgstr ""
+#: gtk/prefs.py:349 data/wicd.ui:992
+msgid "Display notifications about connection status"
+msgstr "Відображати нагадування про статус з'єднання"
 
-#: curses/wicd-curses.py:228
-msgid "Press any key to return."
-msgstr ""
+#: curses/wicd-curses.py:213
+msgid "Display this help dialog"
+msgstr "Показати це вікно допомоги"
 
-#: curses/wicd-curses.py:271
+#: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
 #, fuzzy
-msgid ""
-"To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
-msgstr ""
-"Для уникнення різноманітних ускладнень wicd-curses не підтримує прямого "
-"редагування сценаріїв. Однак ви можете редагувати їх власноруч. По перше,"
-" від імені root відкрийте файл налаштувань „$A“  та знайдіть секцію "
-"позначену $B (яка Вас цікавить). У цьому разі, це:"
+msgid "Domain"
+msgstr "DNS домен"
 
-#: curses/wicd-curses.py:276
+#: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
+msgid "Done connecting..."
+msgstr "Виконується з'єднання..."
+
+#: curses/wicd-curses.py:1051
 msgid ""
-"You can also configure the wireless networks by looking for the "
-"\"[<ESSID>]\" field in the config file."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
 msgstr ""
-"Ви також можете налаштувати бездротову мережу знайшовши поле з "
-"відповідним „[<ESSID>]“ у файлі налаштувань."
+"Помилка: програмі wicd-curses було відмовлено у доступі до сервіса wicd: "
+"будь ласка, перевірте приналежність вашого користувача до групи \"$A\"."
+
+#: curses/wicd-curses.py:460 gtk/gui.py:265
+msgid "ESSID"
+msgstr "ESSID"
+
+#: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
+msgid "Enable debug mode"
+msgstr "Дозволити режим відлагодження (debug)"
+
+#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
+msgid "Establishing connection..."
+msgstr "Встановлення з'єднання..."
+
+#: curses/prefs_curses.py:51 data/wicd.ui:1398
+msgid "External Programs"
+msgstr "Зовнішні програми"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:84 wicd/misc.py:84
+msgid "Flushing the routing table..."
+msgstr "Очищення таблиці маршрутизації..."
+
+#: curses/wicd-curses.py:209
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "Більш детально можна ознайомитись на сторінці wicd-curses(8) man"
+
+#: curses/netentry_curses.py:52 gtk/netentry.py:76
+msgid "Gateway"
+msgstr "Шлюз"
+
+#: curses/prefs_curses.py:50 data/wicd.ui:1018
+msgid "General Settings"
+msgstr "Загальні налаштування"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:85 wicd/misc.py:85
+msgid "Generating PSK..."
+msgstr "Генерація PSK..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:86 wicd/misc.py:86
+msgid "Generating WPA configuration file..."
+msgstr "Генерація файлу налаштувань WPA..."
+
+#: gtk/netentry.py:232
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Глобальний DNS не вказаний в загальних налаштуваннях"
+
+#: curses/prefs_curses.py:72
+msgid "Global DNS servers"
+msgstr "Глобальні DNS-сервери"
+
+#: curses/wicd-curses.py:554
+msgid "Help"
+msgstr ""
+
+#: curses/wicd-curses.py:562
+msgid "Hidden"
+msgstr ""
+
+#: gtk/gui.py:356
+msgid "Hidden Network ESSID"
+msgstr "ESSID прихованої мережі:"
+
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: gtk/netentry.py:73
+msgid "IP"
+msgstr "IP:"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
+msgid "Identity"
+msgstr "Ідентифікація:"
+
+#: gtk/wicd-client.py:498
+msgid "Information about the current connection"
+msgstr ""
+
+#: gtk/netentry.py:166
+msgid "Invalid IP address entered."
+msgstr "Введено невірну IP адресу."
+
+#: gtk/gui.py:629 gtk/gui.py:637
+msgid "Invalid address in $A entry."
+msgstr "Невірна адреса в $A."
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:80 curses/wicd-curses.py:463
+#: gtk/gui.py:267 wicd/translations.py:80
+msgid "Key"
+msgstr "Ключ"
+
+#: curses/netentry_curses.py:51 gtk/netentry.py:75
+msgid "Netmask"
+msgstr "Маска мережі"
+
+#: curses/prefs_curses.py:66
+msgid "Network Interfaces"
+msgstr "Мережеві інтерфейси"
+
+#: gtk/netentry.py:817
+#, fuzzy
+msgid "Never connect to this network"
+msgstr "Автоматично з’єднуватись з цією мережею"
+
+#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+msgid "No wireless networks found."
+msgstr "Бездротові мережі не знайдено"
+
+#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
+msgid "Not connected"
+msgstr "З'єднання відсутнє"
+
+#: curses/configscript_curses.py:73 curses/curses_misc.py:527
+#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
+msgid "OK"
+msgstr "Гаразд"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:91 wicd/misc.py:91
+msgid "Obtaining IP address..."
+msgstr "Отримання IP-адреси..."
 
 #: curses/wicd-curses.py:277
 #, fuzzy
@@ -372,116 +426,212 @@ msgstr ""
 "до сценаріїв, а не власне сценарії, які треба створити окремо. Зверніться"
 " до сторінки довідника wicd для отримання додаткової інформації."
 
-#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
-msgid "Unsecured"
-msgstr "Незахищене:"
+#: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
+msgid "Passphrase"
+msgstr ""
 
-#: curses/wicd-curses.py:377
-msgid "Add a new profile"
-msgstr "Додати новий профіль"
+#: build/lib.linux-i686-2.7/wicd/translations.py:82 wicd/translations.py:82
+msgid "Password"
+msgstr "Пароль"
 
-#: curses/wicd-curses.py:410
-msgid "Add a new wired profile"
-msgstr "Додати новий дротовий профіль"
+#: build/lib.linux-i686-2.7/wicd/translations.py:83 wicd/translations.py:83
+msgid "Path to CA cert"
+msgstr ""
 
-#: curses/wicd-curses.py:427
+#: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
 #, fuzzy
-msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
-msgstr ""
-"wicd-curses не підтримує вилучення останнього профілю дротового "
-"з’єднання. Спробуйте перейменувати його ('F2')"
+msgid "Path to PAC file"
+msgstr "Шлях до PAC-файлу:"
 
-#: curses/wicd-curses.py:440
-msgid "Rename wired profile"
-msgstr "Перейменування дротового профілю:"
-
-#: curses/wicd-curses.py:460 gtk/gui.py:265
-msgid "ESSID"
-msgstr "ESSID"
-
-#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
-#: gtk/netentry.py:1087
-msgid "Channel"
-msgstr "Канал:"
-
-#: curses/wicd-curses.py:463 gtk/gui.py:267 wicd/translations.py:80
-msgid "Key"
-msgstr "Ключ"
-
-#: curses/wicd-curses.py:464 gtk/gui.py:271
-msgid "Activate Internet Connection Sharing"
-msgstr "Надавати іншим загальний доступ до Інтернету"
-
-#: curses/wicd-curses.py:465 gtk/gui.py:262
-msgid "Use Encryption (WEP only)"
-msgstr "Використовувати шифрування (тільки WEP)"
-
-#: curses/wicd-curses.py:487 gtk/gui.py:257
-msgid "Create an Ad-Hoc Network"
-msgstr "Створити однорангову (Ad-Hoc) мережу"
-
-#: curses/wicd-curses.py:525
-msgid "Scanning networks... stand by..."
-msgstr "Сканування мереж... зачекайте..."
-
-#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
-msgid "No wireless networks found."
-msgstr "Бездротові мережі не знайдено"
-
-#: curses/wicd-curses.py:527
-msgid "Wicd Curses Interface"
-msgstr "Інтерфейс Wicd Curses"
-
-#: curses/wicd-curses.py:532
-msgid "Wired Networks"
-msgstr "Дротові мережі:"
-
-#: curses/wicd-curses.py:534
-msgid "Wireless Networks"
-msgstr "Бездротові мережі"
-
-#: curses/wicd-curses.py:554
-msgid "Help)"
+#: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
+msgid "Path to client cert"
 msgstr ""
 
-#: curses/wicd-curses.py:555
-msgid "Config"
-msgstr ""
+#: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
+msgid "Ping static gateways after connecting to verify association"
+msgstr "Виконати перевірку (Ping) статичного шлюзу для перевірки асоціацій"
 
-#: curses/wicd-curses.py:557
-msgid "RfKill"
-msgstr ""
-
-#: curses/wicd-curses.py:558
-msgid "Connect"
-msgstr "З'єднатись"
-
-#: curses/wicd-curses.py:559
+#: curses/configscript_curses.py:57 gtk/configscript.py:155
 #, fuzzy
-msgid "Disconn"
-msgstr "Роз'єднано"
+msgid "Post-connection Script"
+msgstr "Виконати сценарій після роз'єднання"
+
+#: curses/configscript_curses.py:59 gtk/configscript.py:158
+#, fuzzy
+msgid "Post-disconnection Script"
+msgstr "Виконати сценарій після роз'єднання"
+
+#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#, fuzzy
+msgid "Pre-connection Script"
+msgstr "Виконати сценарій підготовки до відключення."
+
+#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#, fuzzy
+msgid "Pre-disconnection Script"
+msgstr "Виконати сценарій підготовки до відключення."
+
+#: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
+msgid "Preferences"
+msgstr "Налаштування"
+
+#: curses/wicd-curses.py:218
+msgid "Preferences dialog"
+msgstr "Параметри:"
+
+#: curses/wicd-curses.py:561
+msgid "Prefs"
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:86 wicd/translations.py:86
+msgid "Preshared key"
+msgstr ""
+
+#: curses/wicd-curses.py:228
+msgid "Press any key to return."
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:87 wicd/translations.py:87
+msgid "Private key"
+msgstr ""
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:88 wicd/translations.py:88
+msgid "Private key password"
+msgstr ""
+
+#: curses/prefs_curses.py:83 gtk/prefs.py:343
+msgid "Prompt for profile on wired autoconnect"
+msgstr "Запитувати профіль при автопід’єднанні:"
+
+#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
+msgid "Properties"
+msgstr "Властивості"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:87 wicd/misc.py:87
+msgid "Putting interface down..."
+msgstr "Відключення інтерфейсу..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:88 wicd/misc.py:88
+msgid "Putting interface up..."
+msgstr "Підключення інтерфейсу..."
+
+#: curses/wicd-curses.py:564
+msgid "Quit"
+msgstr ""
+
+#: curses/wicd-curses.py:226
+msgid "Quit wicd-curses"
+msgstr ""
+
+#: gtk/wicd-client.py:500
+msgid "Quit wicd-tray-icon"
+msgstr ""
 
 #: curses/wicd-curses.py:560
 #, fuzzy
 msgid "Refresh"
 msgstr "Налаштування"
 
-#: curses/wicd-curses.py:561
-msgid "Prefs"
+#: curses/wicd-curses.py:217
+msgid "Refresh network list"
+msgstr "Оновити список мереж"
+
+#: curses/wicd-curses.py:440
+msgid "Rename wired profile"
+msgstr "Перейменування дротового профілю:"
+
+#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+msgid "Required encryption information is missing."
+msgstr "Відсутня інформація про шифрування."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:90 wicd/misc.py:90
+msgid "Resetting IP address..."
+msgstr "Перевстановлення IP-адреси…"
+
+#: curses/wicd-curses.py:557
+msgid "RfKill"
 msgstr ""
 
-#: curses/wicd-curses.py:562
-msgid "Hidden"
+#: curses/prefs_curses.py:103
+msgid "Route Table Flushing"
+msgstr "Очищення таблиці маршрутизації:"
+
+#: curses/wicd-curses.py:628
+msgid "Scan"
+msgstr "Сканування"
+
+#: curses/wicd-curses.py:221
+msgid "Scan for hidden networks"
+msgstr "Знайти приховані мережі:"
+
+#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+msgid "Scanning"
+msgstr "Сканування"
+
+#: curses/wicd-curses.py:525
+msgid "Scanning networks... stand by..."
+msgstr "Сканування мереж... зачекайте..."
+
+#: gtk/netentry.py:101
+msgid "Scripts"
+msgstr "Сценарії:"
+
+#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
+msgid "Search domain"
+msgstr "Домен пошуку імен"
+
+#: gtk/netentry.py:959 gtk/netentry.py:1081
+msgid "Secured"
+msgstr "Захищено:"
+
+#: curses/wicd-curses.py:628
+msgid "Select Hidden Network ESSID"
+msgstr "Виберіть ESSID прихованої мережі"
+
+#: gtk/gui.py:103
+msgid "Select or create a wired profile to connect with"
+msgstr "Виберіть або створіть профіль дротового з’єднання для"
+
+#: curses/wicd-curses.py:222
+msgid "Select scripts"
+msgstr "Обрати сценарії"
+
+#: curses/wicd-curses.py:223
+msgid "Set up Ad-hoc network"
+msgstr "Налаштувати однорангову (Ad-hoc) мережу"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:92 wicd/misc.py:92
+msgid "Setting broadcast address..."
+msgstr "Встановлення широкомовної адреси…"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:93 wicd/misc.py:93
+msgid "Setting static DNS servers..."
+msgstr "Встановлюються статичні DNS-сервери..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:94 wicd/misc.py:94
+msgid "Setting static IP addresses..."
+msgstr "Встановлення статичної IP-адреси…"
+
+#: gtk/prefs.py:333 data/wicd.ui:571
+#, fuzzy
+msgid "Show never connect networks"
+msgstr "Відключитись від усіх мереж"
+
+#: gtk/gui.py:104
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr "Тимчасово призупинити показ виринаючої підказки автоматичного підключення:"
+
+#: curses/wicd-curses.py:216
+#, fuzzy
+msgid "Stop a connection in progress"
+msgstr "Зупинка мережевого з’єднання:"
+
+#: gtk/gui.py:314
+msgid "Switch Off Wi-Fi"
 msgstr ""
 
-#: curses/wicd-curses.py:563
-msgid "About"
-msgstr ""
-
-#: curses/wicd-curses.py:564
-msgid "Quit"
+#: gtk/gui.py:311
+msgid "Switch On Wi-Fi"
 msgstr ""
 
 #: curses/wicd-curses.py:602
@@ -492,43 +642,9 @@ msgstr ""
 msgid "Tab Right"
 msgstr ""
 
-#: curses/wicd-curses.py:628
-msgid "Select Hidden Network ESSID"
-msgstr "Виберіть ESSID прихованої мережі"
-
-#: curses/wicd-curses.py:628
-msgid "Scan"
-msgstr "Сканування"
-
-#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
-#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
-msgid "Not connected"
-msgstr "З'єднання відсутнє"
-
-#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
-#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
-msgid "Wired Network"
-msgstr "Дротова мережа:"
-
-#: curses/wicd-curses.py:1027
-msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr "Неможливо під’єднатись до служби, спроба її автоматичного запуску…"
-
-#: curses/wicd-curses.py:1051
-msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
-msgstr ""
-"Помилка: програмі wicd-curses було відмовлено у доступі до сервіса wicd: "
-"будь ласка, перевірте приналежність вашого користувача до групи \"$A\"."
-
-#: gtk/gui.py:65 gtk/wicd-client.py:952
-msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
-msgstr ""
-"Не вдалося з’єднатися з сервісом wicd через інтерфейс DBus. Перевірте "
-"реєстраційний журнал на наявність сповіщень про помилки."
+#: curses/wicd-curses.py:94
+msgid "Terminated by user"
+msgstr "Скасовано користувачем"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
@@ -536,83 +652,22 @@ msgid ""
 " is restarted."
 msgstr "Службу wicd було зупинено. Перезапустіть службу для відновлення роботи."
 
-#: gtk/gui.py:97
-msgid "Wired connection detected"
-msgstr "Знайдене дротове з'єднання"
+#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+msgid "This network requires encryption to be enabled."
+msgstr "Ця мережа вимагає застосування шифрування."
 
-#: gtk/gui.py:103
-msgid "Select or create a wired profile to connect with"
-msgstr "Виберіть або створіть профіль дротового з’єднання для"
-
-#: gtk/gui.py:104
-msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Тимчасово призупинити показ виринаючої підказки автоматичного підключення:"
-
-#: gtk/gui.py:187 data/wicd.ui:173
-msgid "Choose from the networks below:"
-msgstr "Виберіть з доступних мереж:"
-
-#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
-msgid "Connecting"
-msgstr "З’єднання:"
-
-#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
-msgid "Scanning"
-msgstr "Сканування"
-
-#: gtk/gui.py:311
-msgid "Switch On Wi-Fi"
-msgstr ""
-
-#: gtk/gui.py:314
-msgid "Switch Off Wi-Fi"
-msgstr ""
-
-#: gtk/gui.py:356
-msgid "Hidden Network ESSID"
-msgstr "ESSID прихованої мережі:"
-
-#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
-msgid "Wireless Kill Switch Enabled"
-msgstr "Бездротовий Kill Switch Увімкнено"
-
-#: gtk/gui.py:629 gtk/gui.py:637
-msgid "Invalid address in $A entry."
-msgstr "Невірна адреса в $A."
-
-#: gtk/gui.py:723
-msgid "Disconnecting active connections..."
-msgstr "Відключення активних з'єднань.."
-
-#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
-msgid "Properties"
-msgstr "Властивості"
-
-#: gtk/netentry.py:101
-msgid "Scripts"
-msgstr "Сценарії:"
-
-#: gtk/netentry.py:166
-msgid "Invalid IP address entered."
-msgstr "Введено невірну IP адресу."
-
-#: gtk/netentry.py:232
-msgid "Global DNS has not been enabled in general preferences."
-msgstr "Глобальний DNS не вказаний в загальних налаштуваннях"
-
-#: gtk/netentry.py:299 gtk/netentry.py:407
-msgid "You must enter your password to configure scripts"
-msgstr "Для зміни сценаріїв потрібно ввести ваш пароль"
-
-#: gtk/netentry.py:302 gtk/netentry.py:410
+#: curses/wicd-curses.py:271
 #, fuzzy
 msgid ""
-"Could not find a graphical sudo program. The script editor could not be "
-"launched.  You'll have to edit scripts directly your configuration file."
+"To avoid various complications, wicd-curses does not support directly "
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
-"Не вдалося знайти графічні sudo-програми. Редактор сценаріїв не може бути"
-" запущений. Необхідно відредагувати сценарії безпосередньо в файлах "
-"конфігурації."
+"Для уникнення різноманітних ускладнень wicd-curses не підтримує прямого "
+"редагування сценаріїв. Однак ви можете редагувати їх власноруч. По перше,"
+" від імені root відкрийте файл налаштувань „$A“  та знайдіть секцію "
+"позначену $B (яка Вас цікавить). У цьому разі, це:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -623,24 +678,6 @@ msgstr ""
 "Для з'єднання з дротовою мережею потрібно створити мережевий профіль. Для"
 " цього введіть назву, що характеризує цю мережу, та натисніть Додати."
 
-#: gtk/netentry.py:817
-#, fuzzy
-msgid "Never connect to this network"
-msgstr "Автоматично з’єднуватись з цією мережею"
-
-#: gtk/netentry.py:959 gtk/netentry.py:1081
-msgid "Secured"
-msgstr "Захищено:"
-
-#: gtk/prefs.py:333 data/wicd.ui:571
-#, fuzzy
-msgid "Show never connect networks"
-msgstr "Відключитись від усіх мереж"
-
-#: gtk/prefs.py:349 data/wicd.ui:992
-msgid "Display notifications about connection status"
-msgstr "Відображати нагадування про статус з'єднання"
-
 #: gtk/wicd-client.py:94
 msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from "
@@ -650,46 +687,84 @@ msgstr ""
 "DBus. Будь ласка, переконайтеся у приналежності вашого користувача до "
 "групи $A."
 
+#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
+msgid "Unsecured"
+msgstr "Незахищене:"
+
+#: curses/netentry_curses.py:62
+msgid "Use DHCP Hostname"
+msgstr ""
+
+#: curses/netentry_curses.py:256 gtk/netentry.py:355
+msgid "Use Encryption"
+msgstr "Використовувати шифрування"
+
+#: curses/wicd-curses.py:465 gtk/gui.py:262
+msgid "Use Encryption (WEP only)"
+msgstr "Використовувати шифрування (тільки WEP)"
+
+#: curses/netentry_curses.py:54 gtk/netentry.py:88
+msgid "Use Static DNS"
+msgstr "Використати статичний DNS:"
+
+#: curses/netentry_curses.py:49 gtk/netentry.py:87
+msgid "Use Static IPs"
+msgstr "Використати статичні IP-адреси:"
+
+#: curses/netentry_curses.py:190 gtk/netentry.py:635
+msgid "Use as default profile (overwrites any previous default)"
+msgstr ""
+"Використовувати, як типовий профіль (перезапис попереднього типового "
+"профілю)"
+
+#: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
+msgid "Use dBm to measure signal strength"
+msgstr "Показувати рівень сигналу в dBm"
+
+#: curses/prefs_curses.py:82 gtk/prefs.py:341
+msgid "Use default profile on wired autoconnect"
+msgstr "Використати типовий профіль для дротового автоз'єднання"
+
+#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
+#: data/wicd.ui:882
+msgid "Use global DNS servers"
+msgstr "Використовувати глобальні DNS-сервери"
+
+#: curses/prefs_curses.py:84 gtk/prefs.py:345
+msgid "Use last used profile on wired autoconnect"
+msgstr "Використовувати останній профіль для автопід’єднання"
+
+#: curses/netentry_curses.py:255 gtk/netentry.py:356
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Використовувати дані налаштування для усіх мереж з даним ESSID"
+
+#: build/lib.linux-i686-2.7/wicd/translations.py:89 wicd/translations.py:89
+msgid "Username"
+msgstr "Користувач"
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:96 wicd/misc.py:96
+msgid "Validating authentication..."
+msgstr "Перевірка автентифікації..."
+
+#: build/lib.linux-i686-2.7/wicd/misc.py:97 wicd/misc.py:97
+msgid "Verifying access point association..."
+msgstr "Перевірка відповідності точки доступу…"
+
+#: curses/prefs_curses.py:108
+msgid "WPA Supplicant"
+msgstr "WPA Supplicant"
+
+#: curses/wicd-curses.py:527
+msgid "Wicd Curses Interface"
+msgstr "Інтерфейс Wicd Curses"
+
 #: gtk/wicd-client.py:224 gtk/wicd-client.py:331
 msgid "Wicd daemon unreachable"
 msgstr "Служба Wicd недоступна:"
 
-#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
-msgid "Connection established"
-msgstr "З'єднання встановлене"
-
-#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
-msgid "Establishing connection..."
-msgstr "Встановлення з'єднання..."
-
-#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
-msgid "Disconnected"
-msgstr "Роз'єднано"
-
-#: gtk/wicd-client.py:498
-msgid "Information about the current connection"
-msgstr ""
-
-#: gtk/wicd-client.py:500
-msgid "Quit wicd-tray-icon"
-msgstr ""
-
-#: gtk/wicd-client.py:601
-msgid ""
-"$A\n"
-"$B KB/s\n"
-"$C KB/s"
-msgstr ""
-
-#: gtk/wicd-client.py:608
-msgid ""
-"$A\n"
-"$B\n"
-"$C\n"
-"$D\n"
-"$E KB/s\n"
-"$F KB/s"
-msgstr ""
+#: build/lib.linux-i686-2.7/wicd/misc.py:196 wicd/misc.py:196
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd потребує доступу до мережевих карт ПК."
 
 #: gtk/wicd-client.py:626
 msgid ""
@@ -698,6 +773,31 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+
+#: curses/prefs_curses.py:81
+msgid "Wired Autoconnect Settings"
+msgstr "Параметри для автоз'єднання"
+
+#: curses/prefs_curses.py:67
+msgid "Wired Interface"
+msgstr "Дротовий інтерфейс:"
+
+#: curses/prefs_curses.py:99
+msgid "Wired Link Detection"
+msgstr "Пошук дротового з'єднання"
+
+#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
+msgid "Wired Network"
+msgstr "Дротова мережа:"
+
+#: curses/wicd-curses.py:532
+msgid "Wired Networks"
+msgstr "Дротові мережі:"
+
+#: gtk/gui.py:97
+msgid "Wired connection detected"
+msgstr "Знайдене дротове з'єднання"
 
 #: gtk/wicd-client.py:631
 #, fuzzy
@@ -711,145 +811,46 @@ msgid ""
 "TX:"
 msgstr "Бездротове з'єднання SSID: Швидкість: IP: Рівень сигналу: RX: TX:"
 
-#: wicd/misc.py:77
-msgid "Connection Cancelled"
-msgstr "З'єднання відмінено"
+#: curses/prefs_curses.py:68 curses/prefs_curses.py:120
+msgid "Wireless Interface"
+msgstr "Бездротовий інтерфейс"
 
-#: wicd/misc.py:78
-msgid "Connection failed: Could not contact the wireless access point."
-msgstr "З'єднання втрачено: неможливо з'єднатися з бездротовою точкою доступу."
+#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+msgid "Wireless Kill Switch Enabled"
+msgstr "Бездротовий Kill Switch Увімкнено"
 
-#: wicd/misc.py:79
-msgid "Connection Failed: Bad password"
-msgstr "Помилка з’єднання: невірний пароль"
+#: curses/wicd-curses.py:534
+msgid "Wireless Networks"
+msgstr "Бездротові мережі"
 
-#: wicd/misc.py:80
-msgid "Configuring wireless interface..."
-msgstr "Налаштування бездротового інтерфейсу..."
+#: curses/wicd-curses.py:276
+msgid ""
+"You can also configure the wireless networks by looking for the "
+"\"[<ESSID>]\" field in the config file."
+msgstr ""
+"Ви також можете налаштувати бездротову мережу знайшовши поле з "
+"відповідним „[<ESSID>]“ у файлі налаштувань."
 
-#: wicd/misc.py:81
-msgid "Connection Failed: Unable to Get IP Address"
-msgstr "Помилка з’єднання: неможливо отримати IP-адресу"
+#: gtk/netentry.py:299 gtk/netentry.py:407
+msgid "You must enter your password to configure scripts"
+msgstr "Для зміни сценаріїв потрібно ввести ваш пароль"
 
-#: wicd/misc.py:82
-msgid "Done connecting..."
-msgstr "Виконується з'єднання..."
+#: curses/prefs_curses.py:111
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr "Найчастіше за все у якості драйвера WPA supplicant використовується wext"
 
-#: wicd/misc.py:83
+#: curses/wicd-curses.py:427
 #, fuzzy
-msgid "Connection Failed."
-msgstr "З'єднання відмінено"
-
-#: wicd/misc.py:84
-msgid "Flushing the routing table..."
-msgstr "Очищення таблиці маршрутизації..."
-
-#: wicd/misc.py:85
-msgid "Generating PSK..."
-msgstr "Генерація PSK..."
-
-#: wicd/misc.py:86
-msgid "Generating WPA configuration file..."
-msgstr "Генерація файлу налаштувань WPA..."
-
-#: wicd/misc.py:87
-msgid "Putting interface down..."
-msgstr "Відключення інтерфейсу..."
-
-#: wicd/misc.py:88
-msgid "Putting interface up..."
-msgstr "Підключення інтерфейсу..."
-
-#: wicd/misc.py:89
-msgid "Connection Failed: No DHCP offers received."
-msgstr "Помилка з’єднання: відсутня відповідь DHCP"
-
-#: wicd/misc.py:90
-msgid "Resetting IP address..."
-msgstr "Перевстановлення IP-адреси…"
-
-#: wicd/misc.py:91
-msgid "Obtaining IP address..."
-msgstr "Отримання IP-адреси..."
-
-#: wicd/misc.py:92
-msgid "Setting broadcast address..."
-msgstr "Встановлення широкомовної адреси…"
-
-#: wicd/misc.py:93
-msgid "Setting static DNS servers..."
-msgstr "Встановлюються статичні DNS-сервери..."
-
-#: wicd/misc.py:94
-msgid "Setting static IP addresses..."
-msgstr "Встановлення статичної IP-адреси…"
-
-#: wicd/misc.py:95
-#, fuzzy
-msgid "Connection successful."
-msgstr "З'єднання відмінено"
-
-#: wicd/misc.py:96
-msgid "Validating authentication..."
-msgstr "Перевірка автентифікації..."
-
-#: wicd/misc.py:97
-msgid "Verifying access point association..."
-msgstr "Перевірка відповідності точки доступу…"
-
-#: wicd/misc.py:196
-msgid "Wicd needs to access your computer's network cards."
-msgstr "Wicd потребує доступу до мережевих карт ПК."
-
-#: wicd/translations.py:77
-msgid "Authentication"
-msgstr "Автентифікація:"
-
-#: wicd/translations.py:78
-#, fuzzy
-msgid "Domain"
-msgstr "DNS домен"
-
-#: wicd/translations.py:79
-msgid "Identity"
-msgstr "Ідентифікація:"
-
-#: wicd/translations.py:81
-msgid "Passphrase"
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
 msgstr ""
+"wicd-curses не підтримує вилучення останнього профілю дротового "
+"з’єднання. Спробуйте перейменувати його ('F2')"
 
-#: wicd/translations.py:82
-msgid "Password"
-msgstr "Пароль"
-
-#: wicd/translations.py:83
-msgid "Path to CA cert"
+#: curses/wicd-curses.py:205
+msgid "wicd-curses help"
 msgstr ""
-
-#: wicd/translations.py:84
-msgid "Path to client cert"
-msgstr ""
-
-#: wicd/translations.py:85
-#, fuzzy
-msgid "Path to PAC file"
-msgstr "Шлях до PAC-файлу:"
-
-#: wicd/translations.py:86
-msgid "Preshared key"
-msgstr ""
-
-#: wicd/translations.py:87
-msgid "Private key"
-msgstr ""
-
-#: wicd/translations.py:88
-msgid "Private key password"
-msgstr ""
-
-#: wicd/translations.py:89
-msgid "Username"
-msgstr "Користувач"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
@@ -1083,111 +1084,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Найчастіше за все у якості драйвера WPA supplicant використовується wext"
-
-#~ msgid ""
-#~ "Unable to connect to wicd daemon "
-#~ "DBus interface. This typically means "
-#~ "there was a problem starting the "
-#~ "daemon. Check the wicd log for "
-#~ "more information."
-#~ msgstr ""
-#~ "Неможливо з’єднатися з сервісом wicd  "
-#~ "через інтерфейс DBus. Зазвичай це "
-#~ "означає, що є проблема із запуском "
-#~ "служби. Перевірте реєстраційний журнал wicd"
-#~ " для отримання більш детальної інформації."
-
-#~ msgid "Changes to your backend won't occur until the daemon is restarted."
-#~ msgstr "Зміни набудуть чинності після перезапуску wicd."
-
-#~ msgid ""
-#~ "To connect to a wired network, you"
-#~ " must create a network profile.  To"
-#~ " create a network profile, type a "
-#~ "name that describes this network, and"
-#~ " press Add."
-#~ msgstr ""
-#~ "Для з'єднання з дротовою мережею, "
-#~ "потрібно створити профіль мережі. Для "
-#~ "створення профілю мережі, введіть його "
-#~ "назву і натисніть Додати (Add)."
-
-#~ msgid "Press ESC to cancel"
-#~ msgstr "Для відміни - ESC"
-
-#~ msgid "Connecting to daemon..."
-#~ msgstr "З’єднання зі службою…"
-
-#~ msgid "Removing old connection..."
-#~ msgstr "Вилучення старого з’єднання…"
-
-#~ msgid "Check if using madwifi/atheros drivers"
-#~ msgstr "Перевірте використання драйверів madwifi/atheros"
-
-#~ msgid "Setting encryption info"
-#~ msgstr "Налаштування шифрування"
-
-#~ msgid "Anonymous Identity"
-#~ msgstr "Анонімна ідентифікація"
-
-#~ msgid "Hidden Network"
-#~ msgstr "Прихована мережа"
-
-#~ msgid "All controls are case sensitive"
-#~ msgstr "Всі параметри чутливі до регістру символів"
-
-#~ msgid "DNS"
-#~ msgstr "DNS"
-
-#~ msgid ""
-#~ "EXCEPTION! Please report this to the "
-#~ "maintainer and file a bug report "
-#~ "with the backtrace below:"
-#~ msgstr ""
-#~ "ВИНЯТКОВА СИТУАЦІЯ! Будь ласка, повідомте "
-#~ "розробника про помилку. Додайте до звіту"
-#~ " трасування, що наведено нижче:"
-
-#~ msgid "Run script before connect"
-#~ msgstr "Виконати сценарій до з'єднання"
-
-#~ msgid "WPA Supplicant Driver"
-#~ msgstr "Драйвер WPA Supplicant"
-
-#~ msgid "Run script after connect"
-#~ msgstr "Запустити сценарій після з'єднання:"
-
-#~ msgid "The wicd daemon is unavailable, so your request cannot be completed"
-#~ msgstr "Ваш запит не може бути виконаним, тому що служба  wicd недоступна"
-
-#~ msgid "use urwid's raw screen controller"
-#~ msgstr "використовувати керування screen з urwid"
-
-#~ msgid "Press F8 or Q to quit."
-#~ msgstr "Натисніть F8 або Q для виходу."
-
-#~ msgid "Suspend script"
-#~ msgstr "Призупинити сценарій"
-
-#~ msgid ""
-#~ "$A\r\n"
-#~ "$B\r\n"
-#~ "$C\r\n"
-#~ "$D\r\n"
-#~ "$E KB/s\r\n"
-#~ "$F KB/s"
-#~ msgstr "$A $B $C $D $E КБ/с $F КБ/с"
-
-#~ msgid ""
-#~ "$A\r\n"
-#~ "$B KB/s\r\n"
-#~ "$C KB/s"
-#~ msgstr "$A $B КБ/с $C КБ/с"
-
-#~ msgid ""
-#~ "Wired\r\n"
-#~ "IP:\r\n"
-#~ "RX:\r\n"
-#~ "TX:"
-#~ msgstr "Дротове з'єднання IP: RX: TX:"
 

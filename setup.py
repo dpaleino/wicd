@@ -23,6 +23,7 @@ import os
 import sys
 import shutil
 import subprocess
+from glob import glob
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
@@ -388,6 +389,10 @@ class clear_generated(Command):
                     print 'Removed.'
                 else:
                     print 'Does not exist.'
+        print 'Removing compiled translation files...'
+        if os.path.exists('translations'):
+            shutil.rmtree('translations/')
+        os.makedirs('translations/')
 
 class test(Command):
     description = "run Wicd's unit tests"
@@ -422,8 +427,8 @@ class update_message_catalog(Command):
         os.system('xgettext -L glade data/wicd.ui -j -o po/wicd.pot')
         
 
-class update_translations_py(Command):
-    description = "download new translations.py from the online translator"
+class compile_translations(Command):
+    description = 'compile po-files to binary mo'
 
     user_options = []
 
@@ -434,53 +439,15 @@ class update_translations_py(Command):
         pass
 
     def run(self):
-        import urllib, shutil
-        # grab translations.py
-        filename, headers = urllib.urlretrieve('http://wicd.net/translator/generate/translations.py/')
-        # copy it into the right location
-        shutil.copyfile(filename,
-                        os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                     'wicd/translations.py'))
-
-class get_translations(Command):
-    description = "download the translations from the online translator"
-         
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        import urllib, shutil
         if os.path.exists('translations'):
             shutil.rmtree('translations/')
-        if os.path.exists('po'):
-            shutil.rmtree('po/')
         os.makedirs('translations')
-        os.makedirs('po')
-        filename, headers = urllib.urlretrieve('http://wicd.sourceforge.net/translator/idlist/')
-        id_file = open(filename, 'r')
-        lines = id_file.readlines()
-        # remove the \n from the end of lines, and remove blank entries
-        lines = [ x.strip() for x in lines if not x.strip() is '' ]
-        for id in lines:
-            pofile, poheaders = urllib.urlretrieve('http://wicd.sourceforge.net/translator/download/'+str(id)+'/')
-            try:
-                lang_identifier = open(pofile,'r').readlines()[0].strip()
-                first_line = lang_identifier
-                lang_identifier = lang_identifier[lang_identifier.rindex('(')+1:lang_identifier.rindex(')')]
-                print first_line
-            except:
-                print >> sys.stderr, 'error downloading language %s' % id
-            else:
-                shutil.move(pofile, 'po/'+lang_identifier+'.po')
-                os.makedirs('translations/'+lang_identifier+'/LC_MESSAGES')
-                os.system('msgfmt --output-file=translations/' + lang_identifier +
-                          '/LC_MESSAGES/wicd.mo po/' + lang_identifier + '.po')
-
+        for pofile in glob('po/*.po'):
+            lang = pofile.replace('po/', '').replace('.po', '')
+            os.makedirs('translations/' + lang + '/LC_MESSAGES/')
+            os.system('msgfmt --output-file=translations/' + lang +
+                          '/LC_MESSAGES/wicd.mo ' + pofile)
+        
 
 class uninstall(Command):
     description = "remove Wicd using uninstall.sh and install.log"
@@ -640,12 +607,11 @@ iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
 setup(
     cmdclass = {
         'configure' : configure,
-        'get_translations' : get_translations,
         'uninstall' : uninstall,
         'test' : test,
         'clear_generated' : clear_generated,
-        'update_translations_py' : update_translations_py,
         'update_message_catalog' : update_message_catalog,
+        'compile_translations' : compile_translations,
     },
     name = "Wicd",
     version = VERSION_NUM,

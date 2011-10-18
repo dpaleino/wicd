@@ -75,6 +75,7 @@ class configure(Command):
         ('dbus=', None, 'set the directory the dbus config file is stored in'),
         ('dbus-service=', None, 'set the directory where the dbus services config files are stored in'),
         ('systemd=', None, 'set the directory where the systemd system services config files are stored in'),
+        ('logrotate=', None, 'set the directory where the logrotate configuration files are stored in'),
         ('desktop=', None, 'set the directory the .desktop file is stored in'),
         ('icons=', None, "set the base directory for the .desktop file's icons"),
         ('translations=', None, 'set the directory translations are stored in'),

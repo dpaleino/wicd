@@ -5,101 +5,341 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-18 17:21+0200\n"
+"POT-Creation-Date: 2011-10-18 23:05+0200\n"
 "PO-Revision-Date: 2011-09-18 16:07+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: hr <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-20 05:12+0000\n"
-"X-Generator: Launchpad (build 13980)\n"
+"Generated-By: Babel 0.9.6\n"
 
-#: wicd/translations.py:61
-msgid "Resetting IP address..."
-msgstr "Ponovno postavljanje IP adrese"
+#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#, fuzzy
+msgid "Pre-connection Script"
+msgstr "Odaberite skripte"
 
-#: wicd/translations.py:62
-msgid "Preferences dialog"
-msgstr "Postavke"
-
-#: wicd/translations.py:63
-msgid "Connection Failed: No DHCP offers received."
-msgstr "Veza nije uspjela: Nema DHCP ponude"
-
-#: wicd/translations.py:64
-msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "Za detaljniju pomoć, pogledajte wicd-curses(8) man stranicu"
-
-#: wicd/translations.py:65
-msgid "Connection Failed: Bad password"
-msgstr "Veza nije uspjela: Kriva lozinka"
-
-#: wicd/translations.py:66
-msgid ""
-"Unable to connect to wicd daemon DBus interface. This typically means there "
-"was a problem starting the daemon. Check the wicd log for more information."
+#: curses/configscript_curses.py:57 gtk/configscript.py:155
+msgid "Post-connection Script"
 msgstr ""
 
-#: wicd/translations.py:67
-msgid "Verifying access point association..."
+#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#, fuzzy
+msgid "Pre-disconnection Script"
+msgstr "Žična veza pronađena"
+
+#: curses/configscript_curses.py:59 gtk/configscript.py:158
+msgid "Post-disconnection Script"
 msgstr ""
 
-#: wicd/translations.py:68
+#: curses/configscript_curses.py:73 curses/curses_misc.py:525
+#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
+msgid "OK"
+msgstr "OK"
+
+#: curses/configscript_curses.py:74 curses/curses_misc.py:533
+#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
+#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
+msgid "Cancel"
+msgstr "Poništi"
+
+#: curses/netentry_curses.py:49 gtk/netentry.py:87
+msgid "Use Static IPs"
+msgstr ""
+
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: gtk/netentry.py:73
+msgid "IP"
+msgstr "IP"
+
+#: curses/netentry_curses.py:51 gtk/netentry.py:75
+msgid "Netmask"
+msgstr "Mrežna maska"
+
+#: curses/netentry_curses.py:52 gtk/netentry.py:76
+msgid "Gateway"
+msgstr ""
+
+#: curses/netentry_curses.py:54 gtk/netentry.py:88
+msgid "Use Static DNS"
+msgstr "Koristite statični DNS"
+
+#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
+#: data/wicd.ui:882
+msgid "Use global DNS servers"
+msgstr "Koristite globalne DNS poslužitelje"
+
+#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
+msgid "DNS domain"
+msgstr "DNS domena"
+
+#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
+msgid "Search domain"
+msgstr "Traži domenu"
+
+#: curses/netentry_curses.py:58 curses/netentry_curses.py:59
+#: curses/netentry_curses.py:60 curses/prefs_curses.py:76
+#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
+#: gtk/netentry.py:80 gtk/netentry.py:81
+msgid "DNS server"
+msgstr "DNS poslužitelj"
+
+#: curses/netentry_curses.py:62
+msgid "Use DHCP Hostname"
+msgstr ""
+
+#: curses/netentry_curses.py:63
+msgid "DHCP Hostname"
+msgstr ""
+
+#: curses/netentry_curses.py:190 gtk/netentry.py:635
+msgid "Use as default profile (overwrites any previous default)"
+msgstr ""
+
+#: curses/netentry_curses.py:196
+msgid "Configuring preferences for wired profile \"$A\""
+msgstr "Konfiguriram osobitosti za žični profil  \"$A\""
+
+#: curses/netentry_curses.py:255 gtk/netentry.py:356
+msgid "Use these settings for all networks sharing this essid"
+msgstr "Koristite ove postavke za sve mreže koje djele ovaj  essid"
+
+#: curses/netentry_curses.py:256 gtk/netentry.py:355
+msgid "Use Encryption"
+msgstr "Koristite enkripciju"
+
+#: curses/netentry_curses.py:257 gtk/netentry.py:816
+msgid "Automatically connect to this network"
+msgstr "Automatski spoji na ovu mrežu"
+
+#: curses/netentry_curses.py:272
+msgid "Configuring preferences for wireless network \"$A\" ($B)"
+msgstr ""
+
+#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+msgid "Required encryption information is missing."
+msgstr ""
+
+#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+msgid "This network requires encryption to be enabled."
+msgstr "Da bi bila omogućena ova mreža zahtjeva enkripciju."
+
+#: curses/prefs_curses.py:50 data/wicd.ui:1018
+msgid "General Settings"
+msgstr "Osnovne postavke"
+
+#: curses/prefs_curses.py:51 data/wicd.ui:1398
+msgid "External Programs"
+msgstr "Vanjski programi"
+
+#: curses/prefs_curses.py:52 data/wicd.ui:1669
+msgid "Advanced Settings"
+msgstr "Napredne postavke"
+
+#: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
+msgid "Preferences"
+msgstr "Osobitosti"
+
+#: curses/prefs_curses.py:66
+msgid "Network Interfaces"
+msgstr "Mrežna sučelja"
+
+#: curses/prefs_curses.py:67
+msgid "Wired Interface"
+msgstr "Žično sučelje"
+
+#: curses/prefs_curses.py:68 curses/prefs_curses.py:120
+msgid "Wireless Interface"
+msgstr "Bežično sučelje"
+
+#: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"
 msgstr "Uvijek prikaži žično sučelje"
 
-#: wicd/translations.py:69
-msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
-"messages."
-msgstr ""
-
-#: wicd/translations.py:70
-msgid "Path to PAC File"
-msgstr ""
-
-#: wicd/translations.py:71
+#: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
 msgstr "Uvijek prebaci na žičnu vezu kada je dostupna"
 
-#: wicd/translations.py:72
+#: curses/prefs_curses.py:72
+msgid "Global DNS servers"
+msgstr "Globalni DNS poslužitelji"
+
+#: curses/prefs_curses.py:81
+msgid "Wired Autoconnect Settings"
+msgstr "Postavke žičnog samospajanja"
+
+#: curses/prefs_curses.py:82 gtk/prefs.py:341
+msgid "Use default profile on wired autoconnect"
+msgstr "Koristite zadani profil kod žičnog samospajanja"
+
+#: curses/prefs_curses.py:83 gtk/prefs.py:343
+msgid "Prompt for profile on wired autoconnect"
+msgstr ""
+
+#: curses/prefs_curses.py:84 gtk/prefs.py:345
+msgid "Use last used profile on wired autoconnect"
+msgstr "Koristite zadnji korišteni profil za žično samospajanje"
+
+#: curses/prefs_curses.py:86
+msgid "Automatic Reconnection"
+msgstr "Automatsko prespajanje"
+
+#: curses/prefs_curses.py:87 gtk/prefs.py:331
+msgid "Automatically reconnect on connection loss"
+msgstr ""
+
+#: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
+#: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1082
+#: data/wicd.ui:1143 data/wicd.ui:1204 data/wicd.ui:1319
+msgid "Automatic (recommended)"
+msgstr "Automatski (preporučeno)"
+
+#: curses/prefs_curses.py:92
+msgid "DHCP Client"
+msgstr ""
+
+#: curses/prefs_curses.py:99
+msgid "Wired Link Detection"
+msgstr ""
+
+#: curses/prefs_curses.py:103
+msgid "Route Table Flushing"
+msgstr ""
+
+#: curses/prefs_curses.py:108
+msgid "WPA Supplicant"
+msgstr ""
+
+#: curses/prefs_curses.py:111
+msgid "You should almost always use wext as the WPA supplicant driver"
+msgstr ""
+
+#: curses/prefs_curses.py:113 curses/prefs_curses.py:114
+msgid "Backend"
+msgstr ""
+
+#: curses/prefs_curses.py:117
+msgid "Debugging"
+msgstr ""
+
+#: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
+msgid "Enable debug mode"
+msgstr ""
+
+#: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
+msgid "Use dBm to measure signal strength"
+msgstr ""
+
+#: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
+msgid "Ping static gateways after connecting to verify association"
+msgstr ""
+
+#: curses/wicd-curses.py:94
+msgid "Terminated by user"
+msgstr ""
+
+#: curses/wicd-curses.py:99
+msgid ""
+"DBus failure! This is most likely caused by the wicd daemon stopping "
+"while wicd-curses is running. Please restart the daemon, and then restart"
+" wicd-curses."
+msgstr ""
+
+#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+msgid "Connected to wired network (IP: $A)"
+msgstr "Spojen na žičnu mrežu (IP: $A)"
+
+#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+msgid "Connected to $A at $B (IP: $C)"
+msgstr ""
+
+#: curses/wicd-curses.py:195
+msgid "Brought to you by:"
+msgstr ""
+
+#: curses/wicd-curses.py:200
+msgid "About Wicd"
+msgstr "O WIcd-u"
+
+#: curses/wicd-curses.py:205
+msgid "wicd-curses help"
+msgstr ""
+
+#: curses/wicd-curses.py:209
+msgid "For more detailed help, consult the wicd-curses(8) man page."
+msgstr "Za detaljniju pomoć, pogledajte wicd-curses(8) man stranicu"
+
+#: curses/wicd-curses.py:213
+msgid "Display this help dialog"
+msgstr "Prikaži ovaj dijalog pomoći"
+
+#: curses/wicd-curses.py:214
+msgid "Connect to selected network"
+msgstr "Spoji na odabranu mrežu"
+
+#: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
 msgstr "Odspoji sa svih mreža"
 
-#: wicd/translations.py:73
-msgid "Wired Networks"
-msgstr "Žične mreže"
-
-#: wicd/translations.py:74
-msgid "Changes to your backend won't occur until the daemon is restarted."
+#: curses/wicd-curses.py:216
+msgid "Stop a connection in progress"
 msgstr ""
 
-#: wicd/translations.py:75
-msgid "Stop a network connection in progress"
+#: curses/wicd-curses.py:217
+msgid "Refresh network list"
+msgstr "Osvježi mrežnu listu"
+
+#: curses/wicd-curses.py:218
+msgid "Preferences dialog"
+msgstr "Postavke"
+
+#: curses/wicd-curses.py:221
+msgid "Scan for hidden networks"
 msgstr ""
 
-#: wicd/translations.py:76
-msgid "Connecting"
-msgstr "Spajam"
+#: curses/wicd-curses.py:222
+msgid "Select scripts"
+msgstr "Odaberite skripte"
 
-#: wicd/translations.py:77
-msgid "Run pre-disconnect script"
+#: curses/wicd-curses.py:223
+msgid "Set up Ad-hoc network"
+msgstr "Postavljanje Ad-hoc mreže"
+
+#: curses/wicd-curses.py:224
+#, fuzzy
+msgid "Configure selected network"
+msgstr "Konfiguriraj odabranu mrežu"
+
+#: curses/wicd-curses.py:225
+#, fuzzy
+msgid "Display 'about' dialog"
+msgstr "Prikaži ovaj dijalog pomoći"
+
+#: curses/wicd-curses.py:226
+msgid "Quit wicd-curses"
 msgstr ""
 
-#: wicd/translations.py:78
+#: curses/wicd-curses.py:228
+msgid "Press any key to return."
+msgstr ""
+
+#: curses/wicd-curses.py:271
+#, fuzzy
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts.  However, you can edit them manually.  First, (as "
-"root)\", open the \"$A\" config file, and look for the section labeled by "
-"the $B in question.  In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
-"Da bi se izbjegle različite komplikacije,wicd-curses ne podržava uređivanje "
-"skripti.Ipak,možete ih urediti ručno.Prvo ( kao korijenski korisnik) "
-"otvorite \"$A\" configuracijsku datoteku,i tražite sekciju označenu sa  $B u "
-"pitanju.U tom slučaju ovo je:"
+"Da bi se izbjegle različite komplikacije,wicd-curses ne podržava "
+"uređivanje skripti.Ipak,možete ih urediti ručno.Prvo ( kao korijenski "
+"korisnik) otvorite \"$A\" configuracijsku datoteku,i tražite sekciju "
+"označenu sa  $B u pitanju.U tom slučaju ovo je:"
 
-#: wicd/translations.py:79
+#: curses/wicd-curses.py:276
 msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
@@ -107,657 +347,852 @@ msgstr ""
 "Također možete konfigurirati bežične mreže tražeći \"[<ESSID>]\" polje u "
 "konfiguracijskoj datoteci."
 
-#: wicd/translations.py:80
+#: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"and \"disconnectscript\" variables as needed, to change the preconnect, "
-"postconnect, and disconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents.  "
-"You will need to add/edit the script contents separately.  Refer to the wicd "
-"manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", "
+"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
+"variables as needed, to change the preconnect, postconnect, predisconnect"
+" and postdisconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents."
+"  You will need to add/edit the script contents separately.  Refer to the"
+" wicd manual page for more information."
 msgstr ""
 
-#: wicd/translations.py:81
-msgid "You must enter your password to configure scripts"
-msgstr "Za konfiguraciju skripti morate unijeti svoju lozinku"
+#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
+msgid "Unsecured"
+msgstr "Neosigurano"
 
-#: wicd/translations.py:82
-msgid "DNS domain"
-msgstr "DNS domena"
+#: curses/wicd-curses.py:377
+msgid "Add a new profile"
+msgstr "Dodaj novi profil"
 
-#: wicd/translations.py:83
-msgid "Connection Cancelled"
-msgstr "Veza poništena"
-
-#: wicd/translations.py:84
-msgid "Scanning networks... stand by..."
-msgstr ""
-
-#: wicd/translations.py:85
-msgid "Password"
-msgstr "Lozinka"
-
-#: wicd/translations.py:86
-msgid "Wicd daemon unreachable"
-msgstr ""
-
-#: wicd/translations.py:87
-msgid "Use Static DNS"
-msgstr "Koristite statični DNS"
-
-#: wicd/translations.py:88
-msgid "Setting broadcast address..."
-msgstr ""
-
-#: wicd/translations.py:89
-msgid "Select or create a wired profile to connect with"
-msgstr "Odaberite ili napravite žični profil za spajanje"
-
-#: wicd/translations.py:90
-msgid ""
-"To connect to a wired network, you must create a network profile.  To create "
-"a network profile, type a name that describes this network, and press Add."
-msgstr ""
-"Za spajanje na žičnu mrežu,morate napraviti mrežni profil.Da biste napravili "
-"mrežni profil,upišite ime koje opisuje ovu mrežu,i pritisnite Dodaj"
-
-#: wicd/translations.py:91
-msgid "Press ESC to cancel"
-msgstr "Pritisnite  ESC za poništavanje"
-
-#: wicd/translations.py:92
-msgid "Scanning"
-msgstr ""
-
-#: wicd/translations.py:93
-msgid "Flushing the routing table..."
-msgstr ""
-
-#: wicd/translations.py:94
-msgid "Brought to you by:"
-msgstr ""
-
-#: wicd/translations.py:95
-msgid "Refresh network list"
-msgstr "Osvježi mrežnu listu"
-
-#: wicd/translations.py:96
-msgid "Select Hidden Network ESSID"
-msgstr "Odaberite  ESSID skrivene mreže"
-
-#: wicd/translations.py:97
-msgid "External Programs"
-msgstr "Vanjski programi"
-
-#: wicd/translations.py:98
-msgid "Connect"
-msgstr "Spoji"
-
-#: wicd/translations.py:99
-msgid "Display this help dialog"
-msgstr "Prikaži ovaj dijalog pomoći"
-
-#: wicd/translations.py:100
-msgid "Use global DNS servers"
-msgstr "Koristite globalne DNS poslužitelje"
-
-#: wicd/translations.py:101
-msgid "This network requires encryption to be enabled."
-msgstr "Da bi bila omogućena ova mreža zahtjeva enkripciju."
-
-#: wicd/translations.py:102
-msgid "Use last used profile on wired autoconnect"
-msgstr "Koristite zadnji korišteni profil za žično samospajanje"
-
-#: wicd/translations.py:103
-msgid "Preferences"
-msgstr "Osobitosti"
-
-#: wicd/translations.py:104
-msgid "Connection Failed: Unable to Get IP Address"
-msgstr "Neuspjelo spajanje:Onemogućeno dobavljanje IP adrese"
-
-#: wicd/translations.py:105
-msgid "Setting static IP addresses..."
-msgstr "Postavljanje statičkih IP adresa..."
-
-#: wicd/translations.py:106
-msgid "Connecting to daemon..."
-msgstr ""
-
-#: wicd/translations.py:107
-msgid "Automatically connect to this network"
-msgstr "Automatski spoji na ovu mrežu"
-
-#: wicd/translations.py:108
+#: curses/wicd-curses.py:410
 msgid "Add a new wired profile"
 msgstr "Dodaj novi žični profil"
 
-#: wicd/translations.py:109
-msgid "DHCP Client"
-msgstr ""
-
-#: wicd/translations.py:110
-msgid "Use dBm to measure signal strength"
-msgstr ""
-
-#: wicd/translations.py:111
-msgid "Use these settings for all networks sharing this essid"
-msgstr "Koristite ove postavke za sve mreže koje djele ovaj  essid"
-
-#: wicd/translations.py:112
-msgid "Configure Selected Network"
-msgstr "Konfiguriraj odabranu mrežu"
-
-#: wicd/translations.py:113
-msgid "Enable debug mode"
-msgstr ""
-
-#: wicd/translations.py:114
-msgid "Removing old connection..."
-msgstr "Uklanjanje stare veze..."
-
-#: wicd/translations.py:115
+#: curses/wicd-curses.py:427
 msgid ""
-"Could not find a graphical sudo program.  The script editor could not be "
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
+msgstr ""
+
+#: curses/wicd-curses.py:440
+msgid "Rename wired profile"
+msgstr "Preimenuj žični pofil"
+
+#: curses/wicd-curses.py:460 gtk/gui.py:265
+msgid "ESSID"
+msgstr "ESSID"
+
+#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: gtk/netentry.py:1087
+msgid "Channel"
+msgstr ""
+
+#: curses/wicd-curses.py:463 gtk/gui.py:267 wicd/translations.py:80
+msgid "Key"
+msgstr "Ključ"
+
+#: curses/wicd-curses.py:464 gtk/gui.py:271
+msgid "Activate Internet Connection Sharing"
+msgstr ""
+
+#: curses/wicd-curses.py:465 gtk/gui.py:262
+msgid "Use Encryption (WEP only)"
+msgstr "Koristite enkripciju ( samo WEP)"
+
+#: curses/wicd-curses.py:487 gtk/gui.py:257
+msgid "Create an Ad-Hoc Network"
+msgstr "Napravite Ad-Hoc mrežu"
+
+#: curses/wicd-curses.py:525
+msgid "Scanning networks... stand by..."
+msgstr ""
+
+#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+msgid "No wireless networks found."
+msgstr "Nijedna bežična mreža nije pronađena."
+
+#: curses/wicd-curses.py:527
+msgid "Wicd Curses Interface"
+msgstr ""
+
+#: curses/wicd-curses.py:532
+msgid "Wired Networks"
+msgstr "Žične mreže"
+
+#: curses/wicd-curses.py:534
+msgid "Wireless Networks"
+msgstr "Bežične mreže"
+
+#: curses/wicd-curses.py:554
+msgid "Help)"
+msgstr ""
+
+#: curses/wicd-curses.py:555
+msgid "Config"
+msgstr ""
+
+#: curses/wicd-curses.py:557
+msgid "RfKill"
+msgstr ""
+
+#: curses/wicd-curses.py:558
+msgid "Connect"
+msgstr "Spoji"
+
+#: curses/wicd-curses.py:559
+#, fuzzy
+msgid "Disconn"
+msgstr "Isključen"
+
+#: curses/wicd-curses.py:560
+#, fuzzy
+msgid "Refresh"
+msgstr "Osobitosti"
+
+#: curses/wicd-curses.py:561
+msgid "Prefs"
+msgstr ""
+
+#: curses/wicd-curses.py:562
+msgid "Hidden"
+msgstr ""
+
+#: curses/wicd-curses.py:563
+msgid "About"
+msgstr ""
+
+#: curses/wicd-curses.py:564
+msgid "Quit"
+msgstr ""
+
+#: curses/wicd-curses.py:602
+msgid "Tab Left"
+msgstr ""
+
+#: curses/wicd-curses.py:603
+msgid "Tab Right"
+msgstr ""
+
+#: curses/wicd-curses.py:628
+msgid "Select Hidden Network ESSID"
+msgstr "Odaberite  ESSID skrivene mreže"
+
+#: curses/wicd-curses.py:628
+msgid "Scan"
+msgstr ""
+
+#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
+msgid "Not connected"
+msgstr "Nije povezan"
+
+#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
+msgid "Wired Network"
+msgstr "Žična mreža"
+
+#: curses/wicd-curses.py:1027
+msgid "Can't connect to the daemon, trying to start it automatically..."
+msgstr ""
+
+#: curses/wicd-curses.py:1051
+msgid ""
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
+msgstr ""
+
+#: gtk/gui.py:65 gtk/wicd-client.py:952
+msgid ""
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
+msgstr ""
+
+#: gtk/gui.py:85 gtk/wicd-client.py:981
+msgid ""
+"The wicd daemon has shut down. The UI will not function properly until it"
+" is restarted."
+msgstr ""
+
+#: gtk/gui.py:97
+msgid "Wired connection detected"
+msgstr "Žična veza pronađena"
+
+#: gtk/gui.py:103
+msgid "Select or create a wired profile to connect with"
+msgstr "Odaberite ili napravite žični profil za spajanje"
+
+#: gtk/gui.py:104
+msgid "Stop Showing Autoconnect pop-up temporarily"
+msgstr ""
+
+#: gtk/gui.py:187 data/wicd.ui:173
+msgid "Choose from the networks below:"
+msgstr ""
+
+#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+msgid "Connecting"
+msgstr "Spajam"
+
+#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+msgid "Scanning"
+msgstr ""
+
+#: gtk/gui.py:311
+msgid "Switch On Wi-Fi"
+msgstr ""
+
+#: gtk/gui.py:314
+msgid "Switch Off Wi-Fi"
+msgstr ""
+
+#: gtk/gui.py:356
+msgid "Hidden Network ESSID"
+msgstr ""
+
+#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+msgid "Wireless Kill Switch Enabled"
+msgstr ""
+
+#: gtk/gui.py:629 gtk/gui.py:637
+msgid "Invalid address in $A entry."
+msgstr "Neispravna adresa u  $A unosu."
+
+#: gtk/gui.py:723
+msgid "Disconnecting active connections..."
+msgstr "Isključi aktivne veze"
+
+#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
+msgid "Properties"
+msgstr "Svojstva"
+
+#: gtk/netentry.py:101
+msgid "Scripts"
+msgstr "Skripte"
+
+#: gtk/netentry.py:166
+msgid "Invalid IP address entered."
+msgstr "Upisana je pogrešna IP adresa."
+
+#: gtk/netentry.py:232
+msgid "Global DNS has not been enabled in general preferences."
+msgstr "Globalni DNS nisu omogućeni u osnovnim osobitostima."
+
+#: gtk/netentry.py:299 gtk/netentry.py:407
+msgid "You must enter your password to configure scripts"
+msgstr "Za konfiguraciju skripti morate unijeti svoju lozinku"
+
+#: gtk/netentry.py:302 gtk/netentry.py:410
+#, fuzzy
+msgid ""
+"Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
 "Ne mogu naći grafički sudo program.uređivač skripti nbe može biti "
 "pokrenut.Morate urediti skipte direkto u vašoj konfiguracijskoj datoteci."
 
-#: wicd/translations.py:116
-msgid "Wireless Networks"
-msgstr "Bežične mreže"
-
-#: wicd/translations.py:117
-msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Konfiguriram osobitosti za žični profil  \"$A\""
-
-#: wicd/translations.py:118
-msgid "No wireless networks found."
-msgstr "Nijedna bežična mreža nije pronađena."
-
-#: wicd/translations.py:119
-msgid "Check if using madwifi/atheros drivers"
-msgstr ""
-
-#: wicd/translations.py:120
-msgid "Properties"
-msgstr "Svojstva"
-
-#: wicd/translations.py:121
-msgid "Setting encryption info"
-msgstr ""
-
-#: wicd/translations.py:122
-msgid "About Wicd"
-msgstr "O WIcd-u"
-
-#: wicd/translations.py:123
-msgid "OK"
-msgstr "OK"
-
-#: wicd/translations.py:124
-msgid "Set up Ad-hoc network"
-msgstr "Postavljanje Ad-hoc mreže"
-
-#: wicd/translations.py:125
-msgid "Select scripts"
-msgstr "Odaberite skripte"
-
-#: wicd/translations.py:126
-msgid "Invalid address in $A entry."
-msgstr "Neispravna adresa u  $A unosu."
-
-#: wicd/translations.py:127
-msgid "Configuring wireless interface..."
-msgstr "Konfiguriram bežično sučelje..."
-
-#: wicd/translations.py:128
-msgid "Generating PSK..."
-msgstr ""
-
-#: wicd/translations.py:129
-msgid "Validating authentication..."
-msgstr ""
-
-#: wicd/translations.py:130
-msgid "ESSID"
-msgstr "ESSID"
-
-#: wicd/translations.py:131
-msgid "Anonymous Identity"
-msgstr "Anonimni identitet"
-
-#: wicd/translations.py:132
-msgid "Wireless Interface"
-msgstr "Bežično sučelje"
-
-#: wicd/translations.py:133
-msgid "Hidden Network"
-msgstr "Skrivena mreža"
-
-#: wicd/translations.py:134
-msgid "Key"
-msgstr "Ključ"
-
-#: wicd/translations.py:135
-msgid "Wicd Curses Interface"
-msgstr ""
-
-#: wicd/translations.py:136
-msgid "Debugging"
-msgstr ""
-
-#: wicd/translations.py:137
-msgid "Use Encryption"
-msgstr "Koristite enkripciju"
-
-#: wicd/translations.py:138
-msgid "WPA Supplicant"
-msgstr ""
-
-#: wicd/translations.py:139
-msgid "Global DNS servers"
-msgstr "Globalni DNS poslužitelji"
-
-#: wicd/translations.py:140
-msgid "Not connected"
-msgstr "Nije povezan"
-
-#: wicd/translations.py:141
-msgid "Done connecting..."
-msgstr "Povezivanje završeno..."
-
-#: wicd/translations.py:142
-msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr ""
-
-#: wicd/translations.py:143
-msgid "Cancel"
-msgstr "Poništi"
-
-#: wicd/translations.py:144
-msgid "All controls are case sensitive"
-msgstr ""
-
-#: wicd/translations.py:145
-msgid "Gateway"
-msgstr ""
-
-#: wicd/translations.py:146
-msgid "Backend"
-msgstr ""
-
-#: wicd/translations.py:147
+#: gtk/netentry.py:634
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping while "
-"wicd-curses is running. Please restart the daemon, and then restart wicd-"
-"curses."
+"To connect to a wired network, you must create a network profile. To "
+"create a network profile, type a name that describes this network, and "
+"press Add."
 msgstr ""
+"Za spajanje na žičnu mrežu,morate napraviti mrežni profil.Da biste "
+"napravili mrežni profil,upišite ime koje opisuje ovu mrežu,i pritisnite "
+"Dodaj"
 
-#: wicd/translations.py:148
-msgid "Terminated by user"
-msgstr ""
+#: gtk/netentry.py:817
+#, fuzzy
+msgid "Never connect to this network"
+msgstr "Automatski spoji na ovu mrežu"
 
-#: wicd/translations.py:149
-msgid "Wired Link Detection"
-msgstr ""
-
-#: wicd/translations.py:150
-msgid "Add a new profile"
-msgstr "Dodaj novi profil"
-
-#: wicd/translations.py:151
-msgid "Activate Internet Connection Sharing"
-msgstr ""
-
-#: wicd/translations.py:152
-msgid "Create an Ad-Hoc Network"
-msgstr "Napravite Ad-Hoc mrežu"
-
-#: wicd/translations.py:153
-msgid "Putting interface up..."
-msgstr ""
-
-#: wicd/translations.py:154
-msgid "Global DNS has not been enabled in general preferences."
-msgstr "Globalni DNS nisu omogućeni u osnovnim osobitostima."
-
-#: wicd/translations.py:155
-msgid "DNS"
-msgstr "DNS"
-
-#: wicd/translations.py:156
-msgid "Advanced Settings"
-msgstr "Napredne postavke"
-
-#: wicd/translations.py:157
-msgid "Username"
-msgstr "Korisničko ime"
-
-#: wicd/translations.py:158
-msgid "Automatic (recommended)"
-msgstr "Automatski (preporučeno)"
-
-#: wicd/translations.py:159
-msgid "Wired connection detected"
-msgstr "Žična veza pronađena"
-
-#: wicd/translations.py:160
-msgid "Netmask"
-msgstr "Mrežna maska"
-
-#: wicd/translations.py:161
-msgid "Choose from the networks below:"
-msgstr ""
-
-#: wicd/translations.py:162
-msgid "Connect to selected network"
-msgstr "Spoji na odabranu mrežu"
-
-#: wicd/translations.py:163
-msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming "
-"it ('F2')"
-msgstr ""
-
-#: wicd/translations.py:164
-msgid "General Settings"
-msgstr "Osnovne postavke"
-
-#: wicd/translations.py:165
-msgid "Connected to $A at $B (IP: $C)"
-msgstr ""
-
-#: wicd/translations.py:166
-msgid ""
-"EXCEPTION! Please report this to the maintainer and file a bug report with "
-"the backtrace below:"
-msgstr ""
-
-#: wicd/translations.py:167
-msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr ""
-
-#: wicd/translations.py:168
-msgid "Generating WPA configuration file..."
-msgstr ""
-
-#: wicd/translations.py:169
-msgid "Search domain"
-msgstr "Traži domenu"
-
-#: wicd/translations.py:170
-msgid "Required encryption information is missing."
-msgstr ""
-
-#: wicd/translations.py:171
-msgid "Obtaining IP address..."
-msgstr ""
-
-#: wicd/translations.py:172
-msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it is "
-"restarted."
-msgstr ""
-
-#: wicd/translations.py:173
-msgid ""
-"To connect to a wired network, you must create a network profile. To create "
-"a network profile, type a name that describes this network, and press Add."
-msgstr ""
-"Za spajanje na žičnu mrežu,morate napraviti mrežni profil.Da biste napravili "
-"mrežni profil,upišite ime koje opisuje ovu mrežu,i pritisnite Dodaj"
-
-#: wicd/translations.py:174
-msgid "Setting static DNS servers..."
-msgstr "Postavljanje statičnih DNS poslužitelja..."
-
-#: wicd/translations.py:175
-msgid "Automatically reconnect on connection loss"
-msgstr ""
-
-#: wicd/translations.py:176
-msgid "Use Encryption (WEP only)"
-msgstr "Koristite enkripciju ( samo WEP)"
-
-#: wicd/translations.py:177
-msgid "Wired Autoconnect Settings"
-msgstr "Postavke žičnog samospajanja"
-
-#: wicd/translations.py:178
-msgid "Run script before connect"
-msgstr "Pokreni skriptu prije spajanja"
-
-#: wicd/translations.py:179
-msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr ""
-
-#: wicd/translations.py:180
-msgid "Network Interfaces"
-msgstr "Mrežna sučelja"
-
-#: wicd/translations.py:181
-msgid "Use default profile on wired autoconnect"
-msgstr "Koristite zadani profil kod žičnog samospajanja"
-
-#: wicd/translations.py:182
-msgid "Scan"
-msgstr ""
-
-#: wicd/translations.py:183
-msgid "IP"
-msgstr "IP"
-
-#: wicd/translations.py:184
-msgid "Connected to wired network (IP: $A)"
-msgstr "Spojen na žičnu mrežu (IP: $A)"
-
-#: wicd/translations.py:185
-msgid "WPA Supplicant Driver"
-msgstr ""
-
-#: wicd/translations.py:186
-msgid "Wicd needs to access your computer's network cards."
-msgstr "Wicd mora pristupiti mrežnim karticama vašeg računala."
-
-#: wicd/translations.py:187
-msgid "Wireless Kill Switch Enabled"
-msgstr ""
-
-#: wicd/translations.py:188
-msgid "Hidden Network ESSID"
-msgstr ""
-
-#: wicd/translations.py:189
+#: gtk/netentry.py:959 gtk/netentry.py:1081
 msgid "Secured"
 msgstr "Osigurano"
 
-#: wicd/translations.py:190
-msgid "Putting interface down..."
-msgstr ""
+#: gtk/prefs.py:333 data/wicd.ui:571
+#, fuzzy
+msgid "Show never connect networks"
+msgstr "Odspoji sa svih mreža"
 
-#: wicd/translations.py:191
-msgid "Authentication"
-msgstr ""
-
-#: wicd/translations.py:192
-msgid "Run script after connect"
-msgstr ""
-
-#: wicd/translations.py:193
-msgid "Prompt for profile on wired autoconnect"
-msgstr ""
-
-#: wicd/translations.py:194
-msgid "Channel"
-msgstr ""
-
-#: wicd/translations.py:195
-msgid "Unsecured"
-msgstr "Neosigurano"
-
-#: wicd/translations.py:196
-msgid "Rename wired profile"
-msgstr "Preimenuj žični pofil"
-
-#: wicd/translations.py:197
-msgid "The wicd daemon is unavailable, so your request cannot be completed"
-msgstr ""
-
-#: wicd/translations.py:198
-msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr ""
-
-#: wicd/translations.py:199
-msgid "Scan for hidden networks"
-msgstr ""
-
-#: wicd/translations.py:200
-msgid "Use Static IPs"
-msgstr ""
-
-#: wicd/translations.py:201
-msgid "use urwid's raw screen controller"
-msgstr ""
-
-#: wicd/translations.py:202
-msgid "Route Table Flushing"
-msgstr ""
-
-#: wicd/translations.py:203
-msgid "Scripts"
-msgstr "Skripte"
-
-#: wicd/translations.py:204
-msgid "Identity"
-msgstr "Identitet"
-
-#: wicd/translations.py:205
-msgid "Automatic Reconnection"
-msgstr "Automatsko prespajanje"
-
-#: wicd/translations.py:206
-msgid "Wired Interface"
-msgstr "Žično sučelje"
-
-#: wicd/translations.py:207
-msgid "Press F8 or Q to quit."
-msgstr "Pritisnite F8 ili Q za završetak."
-
-#: wicd/translations.py:208
-msgid "Use as default profile (overwrites any previous default)"
-msgstr ""
-
-#: wicd/translations.py:209
-msgid "Wired Network"
-msgstr "Žična mreža"
-
-#: wicd/translations.py:210
-msgid "DNS server"
-msgstr "DNS poslužitelj"
-
-#: wicd/translations.py:211
-msgid "Notifications"
-msgstr ""
-
-#: wicd/translations.py:212
+#: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
 msgstr ""
 
-#: wicd/translations.py:213
+#: gtk/wicd-client.py:94
+msgid ""
+"Unable to contact the Wicd daemon due to an access denied error from "
+"DBus. Please check that your user is in the $A group."
+msgstr ""
+
+#: gtk/wicd-client.py:224 gtk/wicd-client.py:331
+msgid "Wicd daemon unreachable"
+msgstr ""
+
+#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
 msgid "Connection established"
 msgstr "Veza uspostavljena"
 
-#: wicd/translations.py:214
-msgid "Disconnected"
-msgstr "Isključen"
-
-#: wicd/translations.py:215
+#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
 msgid "Establishing connection..."
 msgstr "Uspostavljam vezu"
 
-#: wicd/translations.py:216
-msgid "Connection failed: Could not contact the wireless access point."
+#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
+msgid "Disconnected"
+msgstr "Isključen"
+
+#: gtk/wicd-client.py:498
+msgid "Information about the current connection"
 msgstr ""
 
-#: wicd/translations.py:217
+#: gtk/wicd-client.py:500
+msgid "Quit wicd-tray-icon"
+msgstr ""
+
+#: gtk/wicd-client.py:601
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from DBus. "
-"Please check that your user is in the $A group."
-msgstr ""
-
-#: wicd/translations.py:218
-msgid "Disconnecting active connections..."
-msgstr "Isključi aktivne veze"
-
-#: wicd/translations.py:219
-msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
-"your user is in the \"$A\" group."
-msgstr ""
-
-#: wicd/translations.py:220
-msgid "Run post-disconnect script"
-msgstr ""
-
-#: wicd/translations.py:221
-msgid "Resume script"
-msgstr ""
-
-#: wicd/translations.py:222
-msgid "Suspend script"
-msgstr ""
-
-#: wicd/translations.py:223
-msgid "Invalid IP address entered."
-msgstr "Upisana je pogrešna IP adresa."
-
-#: wicd/translations.py:224
-msgid "Ping static gateways after connecting to verify association"
-msgstr ""
-
-#: wicd/translations.py:225
-msgid ""
-"$A\r\n"
-"$B\r\n"
-"$C\r\n"
-"$D\r\n"
-"$E KB/s\r\n"
-"$F KB/s"
-msgstr ""
-
-#: wicd/translations.py:231
-msgid ""
-"$A\r\n"
-"$B KB/s\r\n"
+"$A\n"
+"$B KB/s\n"
 "$C KB/s"
 msgstr ""
 
-#: wicd/translations.py:234
+#: gtk/wicd-client.py:608
 msgid ""
-"Wireless\r\n"
-"SSID:\r\n"
-"Speed:\r\n"
-"IP:\r\n"
-"Strength:\r\n"
-"RX:\r\n"
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
+msgstr ""
+
+#: gtk/wicd-client.py:626
+msgid ""
+"Wired\n"
+"IP:\n"
+"RX:\n"
 "TX:"
 msgstr ""
 
-#: wicd/translations.py:241
+#: gtk/wicd-client.py:631
 msgid ""
-"Wired\r\n"
-"IP:\r\n"
-"RX:\r\n"
+"Wireless\n"
+"SSID:\n"
+"Speed:\n"
+"IP:\n"
+"Strength:\n"
+"RX:\n"
 "TX:"
 msgstr ""
 
-#: wicd/translations.py:245
-msgid "Switch On Wi-Fi"
+#: wicd/misc.py:77
+msgid "Connection Cancelled"
+msgstr "Veza poništena"
+
+#: wicd/misc.py:78
+msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 
-#: wicd/translations.py:246
-msgid "Switch Off Wi-Fi"
+#: wicd/misc.py:79
+msgid "Connection Failed: Bad password"
+msgstr "Veza nije uspjela: Kriva lozinka"
+
+#: wicd/misc.py:80
+msgid "Configuring wireless interface..."
+msgstr "Konfiguriram bežično sučelje..."
+
+#: wicd/misc.py:81
+msgid "Connection Failed: Unable to Get IP Address"
+msgstr "Neuspjelo spajanje:Onemogućeno dobavljanje IP adrese"
+
+#: wicd/misc.py:82
+msgid "Done connecting..."
+msgstr "Povezivanje završeno..."
+
+#: wicd/misc.py:83
+#, fuzzy
+msgid "Connection Failed."
+msgstr "Veza poništena"
+
+#: wicd/misc.py:84
+msgid "Flushing the routing table..."
 msgstr ""
+
+#: wicd/misc.py:85
+msgid "Generating PSK..."
+msgstr ""
+
+#: wicd/misc.py:86
+msgid "Generating WPA configuration file..."
+msgstr ""
+
+#: wicd/misc.py:87
+msgid "Putting interface down..."
+msgstr ""
+
+#: wicd/misc.py:88
+msgid "Putting interface up..."
+msgstr ""
+
+#: wicd/misc.py:89
+msgid "Connection Failed: No DHCP offers received."
+msgstr "Veza nije uspjela: Nema DHCP ponude"
+
+#: wicd/misc.py:90
+msgid "Resetting IP address..."
+msgstr "Ponovno postavljanje IP adrese"
+
+#: wicd/misc.py:91
+msgid "Obtaining IP address..."
+msgstr ""
+
+#: wicd/misc.py:92
+msgid "Setting broadcast address..."
+msgstr ""
+
+#: wicd/misc.py:93
+msgid "Setting static DNS servers..."
+msgstr "Postavljanje statičnih DNS poslužitelja..."
+
+#: wicd/misc.py:94
+msgid "Setting static IP addresses..."
+msgstr "Postavljanje statičkih IP adresa..."
+
+#: wicd/misc.py:95
+#, fuzzy
+msgid "Connection successful."
+msgstr "Veza poništena"
+
+#: wicd/misc.py:96
+msgid "Validating authentication..."
+msgstr ""
+
+#: wicd/misc.py:97
+msgid "Verifying access point association..."
+msgstr ""
+
+#: wicd/misc.py:196
+msgid "Wicd needs to access your computer's network cards."
+msgstr "Wicd mora pristupiti mrežnim karticama vašeg računala."
+
+#: wicd/translations.py:77
+msgid "Authentication"
+msgstr ""
+
+#: wicd/translations.py:78
+#, fuzzy
+msgid "Domain"
+msgstr "DNS domena"
+
+#: wicd/translations.py:79
+msgid "Identity"
+msgstr "Identitet"
+
+#: wicd/translations.py:81
+msgid "Passphrase"
+msgstr ""
+
+#: wicd/translations.py:82
+msgid "Password"
+msgstr "Lozinka"
+
+#: wicd/translations.py:83
+msgid "Path to CA cert"
+msgstr ""
+
+#: wicd/translations.py:84
+msgid "Path to client cert"
+msgstr ""
+
+#: wicd/translations.py:85
+msgid "Path to PAC file"
+msgstr ""
+
+#: wicd/translations.py:86
+msgid "Preshared key"
+msgstr ""
+
+#: wicd/translations.py:87
+msgid "Private key"
+msgstr ""
+
+#: wicd/translations.py:88
+msgid "Private key password"
+msgstr ""
+
+#: wicd/translations.py:89
+msgid "Username"
+msgstr "Korisničko ime"
+
+#: data/wicd.ui:9
+msgid "Wicd Network Manager"
+msgstr ""
+
+#: data/wicd.ui:57
+msgid "Enter a hidden network to try to locate."
+msgstr ""
+
+#: data/wicd.ui:79
+msgid "_Switch Off Wi-Fi"
+msgstr ""
+
+#: data/wicd.ui:94
+#, fuzzy
+msgid "_Disconnect All"
+msgstr "Isključen"
+
+#: data/wicd.ui:108
+#, fuzzy
+msgid "_Refresh"
+msgstr "Osobitosti"
+
+#: data/wicd.ui:122
+#, fuzzy
+msgid "_Preferences"
+msgstr "Osobitosti"
+
+#: data/wicd.ui:136
+msgid "_About"
+msgstr ""
+
+#: data/wicd.ui:151
+msgid "_Quit"
+msgstr ""
+
+#: data/wicd.ui:213 data/wicd.ui:215
+#, fuzzy
+msgid "Connecting..."
+msgstr "Povezivanje završeno..."
+
+#: data/wicd.ui:228
+msgid "Cancel the current connection attempt"
+msgstr ""
+
+#: data/wicd.ui:260
+msgid "Configure Scripts"
+msgstr ""
+
+#: data/wicd.ui:279
+msgid "Configure scripts to run for this network:"
+msgstr ""
+
+#: data/wicd.ui:296
+#, fuzzy
+msgid "Pre-connection Script:"
+msgstr "Odaberite skripte"
+
+#: data/wicd.ui:329
+msgid "Post-connection Script:"
+msgstr ""
+
+#: data/wicd.ui:362
+#, fuzzy
+msgid "Pre-disconnection Script:"
+msgstr "Žična veza pronađena"
+
+#: data/wicd.ui:395
+msgid "Post-disconnection Script:"
+msgstr ""
+
+#: data/wicd.ui:514
+#, fuzzy
+msgid "Always switch to a wired connection when available"
+msgstr "Uvijek prebaci na žičnu vezu kada je dostupna"
+
+#: data/wicd.ui:519
+msgid ""
+"If selected, wicd will automatically connect to a wired network\n"
+"as soon as a cable is plugged in, even if a wireless connection \n"
+"is already active."
+msgstr ""
+
+#: data/wicd.ui:542
+#, fuzzy
+msgid "DNS domain:"
+msgstr "DNS domena"
+
+#: data/wicd.ui:590
+msgid "<b>Never Connect</b>"
+msgstr ""
+
+#: data/wicd.ui:606
+#, fuzzy
+msgid "Automatically reconnect on network connection loss"
+msgstr "Automatski spoji na ovu mrežu"
+
+#: data/wicd.ui:625
+#, fuzzy
+msgid "<b>Automatic Reconnection</b>"
+msgstr "Automatsko prespajanje"
+
+#: data/wicd.ui:641
+#, fuzzy
+msgid "Use last wired network profile"
+msgstr "Preimenuj žični pofil"
+
+#: data/wicd.ui:663
+msgid "Prompt for wired network profile"
+msgstr ""
+
+#: data/wicd.ui:686
+#, fuzzy
+msgid "Use default wired network profile"
+msgstr "Preimenuj žični pofil"
+
+#: data/wicd.ui:707
+#, fuzzy
+msgid "<b>Wired automatic connection</b>"
+msgstr "Automatsko prespajanje"
+
+#: data/wicd.ui:725
+#, fuzzy
+msgid "Wired interface:"
+msgstr "Žično sučelje"
+
+#: data/wicd.ui:743
+#, fuzzy
+msgid "Wireless interface:"
+msgstr "Bežično sučelje"
+
+#: data/wicd.ui:783
+#, fuzzy
+msgid "<b>Network Interfaces</b>"
+msgstr "Mrežna sučelja"
+
+#: data/wicd.ui:799
+#, fuzzy
+msgid "DNS server 3:"
+msgstr "DNS poslužitelj"
+
+#: data/wicd.ui:830
+#, fuzzy
+msgid "DNS server 2:"
+msgstr "DNS poslužitelj"
+
+#: data/wicd.ui:848
+#, fuzzy
+msgid "DNS server 1:"
+msgstr "DNS poslužitelj"
+
+#: data/wicd.ui:866
+#, fuzzy
+msgid "Search domain:"
+msgstr "Traži domenu"
+
+#: data/wicd.ui:901
+#, fuzzy
+msgid "<b>Global DNS Servers</b>"
+msgstr "Globalni DNS poslužitelji"
+
+#: data/wicd.ui:960
+msgid ""
+"If enabled, the wired network interface will always be displayed in the "
+"main window. This can be useful if your wired network card does not "
+"detect when the interface is connected to a cable."
+msgstr ""
+
+#: data/wicd.ui:976
+msgid "<b>Notifications</b>"
+msgstr ""
+
+#: data/wicd.ui:1050
+msgid "<b>Route Table Flushing</b>"
+msgstr ""
+
+#: data/wicd.ui:1063
+msgid "<b>Wired Link Detection</b>"
+msgstr ""
+
+#: data/wicd.ui:1289
+msgid "<b>DHCP Client</b>"
+msgstr ""
+
+#: data/wicd.ui:1300
+msgid "<b>Graphical Sudo Application</b>"
+msgstr ""
+
+#: data/wicd.ui:1421
+msgid ""
+"Hover your mouse over the selected backend \n"
+"to read its description."
+msgstr ""
+
+#: data/wicd.ui:1474
+msgid "Driver:"
+msgstr ""
+
+#: data/wicd.ui:1530
+#, fuzzy
+msgid "<b>Wireless Interface</b>"
+msgstr "Bežično sučelje"
+
+#: data/wicd.ui:1544
+msgid "<b>WPA Supplicant</b>"
+msgstr ""
+
+#: data/wicd.ui:1556
+msgid "<b>Debugging</b>"
+msgstr ""
+
+#: data/wicd.ui:1574
+msgid "Backend:"
+msgstr ""
+
+#: data/wicd.ui:1601
+msgid "<b>Backend</b>"
+msgstr ""
+
+#: data/wicd.ui:1615
+msgid ""
+"You should almost always use wext as the\n"
+"WPA supplicant driver."
+msgstr ""
+
+#~ msgid ""
+#~ "Unable to connect to wicd daemon "
+#~ "DBus interface. This typically means "
+#~ "there was a problem starting the "
+#~ "daemon. Check the wicd log for "
+#~ "more information."
+#~ msgstr ""
+
+#~ msgid "Path to PAC File"
+#~ msgstr ""
+
+#~ msgid "Changes to your backend won't occur until the daemon is restarted."
+#~ msgstr ""
+
+#~ msgid "Stop a network connection in progress"
+#~ msgstr ""
+
+#~ msgid "Run pre-disconnect script"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Once there, you can adjust (or "
+#~ "add) the \"beforescript\", \"afterscript\", "
+#~ "and \"disconnectscript\" variables as needed,"
+#~ " to change the preconnect, postconnect, "
+#~ "and disconnect scripts respectively.  Note "
+#~ "that you will be specifying the "
+#~ "full path to the scripts - not "
+#~ "the actual script contents.  You will"
+#~ " need to add/edit the script contents"
+#~ " separately.  Refer to the wicd "
+#~ "manual page for more information."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "To connect to a wired network, you"
+#~ " must create a network profile.  To"
+#~ " create a network profile, type a "
+#~ "name that describes this network, and"
+#~ " press Add."
+#~ msgstr ""
+#~ "Za spajanje na žičnu mrežu,morate "
+#~ "napraviti mrežni profil.Da biste napravili "
+#~ "mrežni profil,upišite ime koje opisuje "
+#~ "ovu mrežu,i pritisnite Dodaj"
+
+#~ msgid "Press ESC to cancel"
+#~ msgstr "Pritisnite  ESC za poništavanje"
+
+#~ msgid "Connecting to daemon..."
+#~ msgstr ""
+
+#~ msgid "Removing old connection..."
+#~ msgstr "Uklanjanje stare veze..."
+
+#~ msgid "Check if using madwifi/atheros drivers"
+#~ msgstr ""
+
+#~ msgid "Setting encryption info"
+#~ msgstr ""
+
+#~ msgid "Anonymous Identity"
+#~ msgstr "Anonimni identitet"
+
+#~ msgid "Hidden Network"
+#~ msgstr "Skrivena mreža"
+
+#~ msgid "All controls are case sensitive"
+#~ msgstr ""
+
+#~ msgid "DNS"
+#~ msgstr "DNS"
+
+#~ msgid ""
+#~ "wicd-curses does not support deleting"
+#~ " the last wired profile.  Try "
+#~ "renaming it ('F2')"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "EXCEPTION! Please report this to the "
+#~ "maintainer and file a bug report "
+#~ "with the backtrace below:"
+#~ msgstr ""
+
+#~ msgid "Run script before connect"
+#~ msgstr "Pokreni skriptu prije spajanja"
+
+#~ msgid "WPA Supplicant Driver"
+#~ msgstr ""
+
+#~ msgid "Run script after connect"
+#~ msgstr ""
+
+#~ msgid "The wicd daemon is unavailable, so your request cannot be completed"
+#~ msgstr ""
+
+#~ msgid "use urwid's raw screen controller"
+#~ msgstr ""
+
+#~ msgid "Press F8 or Q to quit."
+#~ msgstr "Pritisnite F8 ili Q za završetak."
+
+#~ msgid "Notifications"
+#~ msgstr ""
+
+#~ msgid "Run post-disconnect script"
+#~ msgstr ""
+
+#~ msgid "Resume script"
+#~ msgstr ""
+
+#~ msgid "Suspend script"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "$A\r\n"
+#~ "$B\r\n"
+#~ "$C\r\n"
+#~ "$D\r\n"
+#~ "$E KB/s\r\n"
+#~ "$F KB/s"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "$A\r\n"
+#~ "$B KB/s\r\n"
+#~ "$C KB/s"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Wireless\r\n"
+#~ "SSID:\r\n"
+#~ "Speed:\r\n"
+#~ "IP:\r\n"
+#~ "Strength:\r\n"
+#~ "RX:\r\n"
+#~ "TX:"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "Wired\r\n"
+#~ "IP:\r\n"
+#~ "RX:\r\n"
+#~ "TX:"
+#~ msgstr ""
+

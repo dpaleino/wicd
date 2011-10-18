@@ -427,6 +427,21 @@ class update_message_catalog(Command):
         os.system('pybabel extract . -o po/wicd.pot')
         os.system('xgettext -L glade data/wicd.ui -j -o po/wicd.pot')
         
+class update_translations(Command):
+    description = "update po-files with new strings from wicd.pot"
+
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        for pofile in glob('po/*.po'):
+            lang = pofile.replace('po/', '').replace('.po', '')
+            os.system('pybabel update -o %s -i po/wicd.pot -D wicd -l %s' % (pofile, lang))
 
 class compile_translations(Command):
     description = 'compile po-files to binary mo'
@@ -446,8 +461,7 @@ class compile_translations(Command):
         for pofile in glob('po/*.po'):
             lang = pofile.replace('po/', '').replace('.po', '')
             os.makedirs('translations/' + lang + '/LC_MESSAGES/')
-            os.system('msgfmt --output-file=translations/' + lang +
-                          '/LC_MESSAGES/wicd.mo ' + pofile)
+            os.system('pybabel compile -D wicd -i %s -l %s -d translations/' % (pofile, lang))
         
 
 class uninstall(Command):
@@ -612,6 +626,7 @@ setup(
         'test' : test,
         'clear_generated' : clear_generated,
         'update_message_catalog' : update_message_catalog,
+        'update_translations' : update_translations,
         'compile_translations' : compile_translations,
     },
     name = "Wicd",

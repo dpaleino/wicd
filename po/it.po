@@ -64,7 +64,7 @@ msgstr "Aggiungi un nuovo profilo cablato"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
-msgstr "impostazioni avanzate"
+msgstr "Impostazioni avanzate"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"

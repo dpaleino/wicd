@@ -9,10 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:14+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: es_CO <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-19 06:04+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -180,8 +181,7 @@ msgstr ""
 #: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
-"Error de conexión: No se pudo contactar con el punto de acceso "
-"inalámbrico."
+"Error de conexión: No se pudo contactar con el punto de acceso inalámbrico."
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
 msgid "Connection successful."
@@ -189,8 +189,8 @@ msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
@@ -205,9 +205,9 @@ msgstr ""
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
 
 #: curses/prefs_curses.py:92
@@ -271,8 +271,8 @@ msgstr ""
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
 
 #: curses/wicd-curses.py:460 gtk/gui.py:265
@@ -394,13 +394,12 @@ msgstr ""
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
@@ -617,8 +616,8 @@ msgstr ""
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 
 #: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
@@ -628,22 +627,21 @@ msgstr ""
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
@@ -795,8 +793,8 @@ msgstr ""
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -944,9 +942,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1004,4 +1002,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-

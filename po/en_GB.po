@@ -3,19 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-18 23:50+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-10-18 23:03+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-19 06:04+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
+"Language: \n"
 
 #: gtk/wicd-client.py:608
 msgid ""
@@ -42,62 +43,6 @@ msgstr ""
 "$A\n"
 "$B KB/s\n"
 "$C KB/s"
-
-#: data/wicd.ui:625
-msgid "<b>Automatic Reconnection</b>"
-msgstr "<b>Automatic Reconnection</b>"
-
-#: data/wicd.ui:1601
-msgid "<b>Backend</b>"
-msgstr "<b>Backend</b>"
-
-#: data/wicd.ui:1289
-msgid "<b>DHCP Client</b>"
-msgstr "<b>DHCP Client</b>"
-
-#: data/wicd.ui:1556
-msgid "<b>Debugging</b>"
-msgstr "<b>Debugging</b>"
-
-#: data/wicd.ui:901
-msgid "<b>Global DNS Servers</b>"
-msgstr "<b>Global DNS Servers</b>"
-
-#: data/wicd.ui:1300
-msgid "<b>Graphical Sudo Application</b>"
-msgstr "<b>Graphical Sudo Application</b>"
-
-#: data/wicd.ui:783
-msgid "<b>Network Interfaces</b>"
-msgstr "<b>Network Interfaces</b>"
-
-#: data/wicd.ui:590
-msgid "<b>Never Connect</b>"
-msgstr "<b>Never Connect</b>"
-
-#: data/wicd.ui:976
-msgid "<b>Notifications</b>"
-msgstr "<b>Notifications</b>"
-
-#: data/wicd.ui:1050
-msgid "<b>Route Table Flushing</b>"
-msgstr "<b>Route Table Flushing</b>"
-
-#: data/wicd.ui:1544
-msgid "<b>WPA Supplicant</b>"
-msgstr "<b>WPA Supplicant</b>"
-
-#: data/wicd.ui:1063
-msgid "<b>Wired Link Detection</b>"
-msgstr "<b>Wired Link Detection</b>"
-
-#: data/wicd.ui:707
-msgid "<b>Wired automatic connection</b>"
-msgstr "<b>Wired automatic connection</b>"
-
-#: data/wicd.ui:1530
-msgid "<b>Wireless Interface</b>"
-msgstr "<b>Wireless Interface</b>"
 
 #: curses/wicd-curses.py:563
 msgid "About"
@@ -127,10 +72,6 @@ msgstr "Advanced Settings"
 msgid "Always show wired interface"
 msgstr "Always show wired interface"
 
-#: data/wicd.ui:514
-msgid "Always switch to a wired connection when available"
-msgstr "Always switch to a wired connection when available"
-
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
 msgstr "Always switch to wired connection when available"
@@ -157,17 +98,9 @@ msgstr "Automatically connect to this network"
 msgid "Automatically reconnect on connection loss"
 msgstr "Automatically reconnect on connection loss"
 
-#: data/wicd.ui:606
-msgid "Automatically reconnect on network connection loss"
-msgstr "Automatically reconnect on network connection loss"
-
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
 msgstr "Backend"
-
-#: data/wicd.ui:1574
-msgid "Backend:"
-msgstr "Backend:"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
@@ -183,10 +116,6 @@ msgstr "Can't connect to the daemon, trying to start it automatically..."
 msgid "Cancel"
 msgstr "Cancel"
 
-#: data/wicd.ui:228
-msgid "Cancel the current connection attempt"
-msgstr "Cancel the current connection attempt"
-
 #: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
 #: gtk/netentry.py:1087
 msgid "Channel"
@@ -199,14 +128,6 @@ msgstr "Choose from the networks below:"
 #: curses/wicd-curses.py:555
 msgid "Config"
 msgstr "Config"
-
-#: data/wicd.ui:260
-msgid "Configure Scripts"
-msgstr "Configure Scripts"
-
-#: data/wicd.ui:279
-msgid "Configure scripts to run for this network:"
-msgstr "Configure scripts to run for this network:"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
@@ -243,10 +164,6 @@ msgstr "Connected to wired network (IP: $A)"
 #: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
 msgid "Connecting"
 msgstr "Connecting"
-
-#: data/wicd.ui:213 data/wicd.ui:215
-msgid "Connecting..."
-msgstr "Connecting..."
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
 msgid "Connection Cancelled"
@@ -322,28 +239,12 @@ msgstr "DHCP Hostname"
 msgid "DNS domain"
 msgstr "DNS domain"
 
-#: data/wicd.ui:542
-msgid "DNS domain:"
-msgstr "DNS domain:"
-
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
 #: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
 #: gtk/netentry.py:80 gtk/netentry.py:81
 msgid "DNS server"
 msgstr "DNS server"
-
-#: data/wicd.ui:848
-msgid "DNS server 1:"
-msgstr "DNS server 1:"
-
-#: data/wicd.ui:830
-msgid "DNS server 2:"
-msgstr "DNS server 2:"
-
-#: data/wicd.ui:799
-msgid "DNS server 3:"
-msgstr "DNS server 3:"
 
 #: curses/prefs_curses.py:117
 msgid "Debugging"
@@ -385,10 +286,6 @@ msgstr "Domain"
 msgid "Done connecting..."
 msgstr "Done connecting..."
 
-#: data/wicd.ui:1474
-msgid "Driver:"
-msgstr "Driver:"
-
 #: curses/wicd-curses.py:1051
 msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
@@ -404,10 +301,6 @@ msgstr "ESSID"
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
 msgid "Enable debug mode"
 msgstr "Enable debug mode"
-
-#: data/wicd.ui:57
-msgid "Enter a hidden network to try to locate."
-msgstr "Enter a hidden network to try to locate."
 
 #: gtk/wicd-client.py:318 gtk/wicd-client.py:322
 msgid "Establishing connection..."
@@ -461,14 +354,6 @@ msgstr "Hidden"
 msgid "Hidden Network ESSID"
 msgstr "Hidden Network ESSID"
 
-#: data/wicd.ui:1421
-msgid ""
-"Hover your mouse over the selected backend \n"
-"to read its description."
-msgstr ""
-"Hover your mouse over the selected backend \n"
-"to read its description."
-
 #: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
 #: gtk/netentry.py:73
 msgid "IP"
@@ -477,26 +362,6 @@ msgstr "IP"
 #: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
 msgid "Identity"
 msgstr "Identity"
-
-#: data/wicd.ui:960
-msgid ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
-msgstr ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
-
-#: data/wicd.ui:519
-msgid ""
-"If selected, wicd will automatically connect to a wired network\n"
-"as soon as a cable is plugged in, even if a wireless connection \n"
-"is already active."
-msgstr ""
-"If selected, wicd will automatically connect to a wired network\n"
-"as soon as a cable is plugged in, even if a wireless connection \n"
-"is already active."
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
@@ -590,33 +455,17 @@ msgstr "Ping static gateways after connecting to verify association"
 msgid "Post-connection Script"
 msgstr "Post-connection Script"
 
-#: data/wicd.ui:329
-msgid "Post-connection Script:"
-msgstr "Post-connection Script:"
-
 #: curses/configscript_curses.py:59 gtk/configscript.py:158
 msgid "Post-disconnection Script"
 msgstr "Post-disconnection Script"
-
-#: data/wicd.ui:395
-msgid "Post-disconnection Script:"
-msgstr "Post-disconnection Script:"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:154
 msgid "Pre-connection Script"
 msgstr "Pre-connection Script"
 
-#: data/wicd.ui:296
-msgid "Pre-connection Script:"
-msgstr "Pre-connection Script:"
-
 #: curses/configscript_curses.py:58 gtk/configscript.py:156
 msgid "Pre-disconnection Script"
 msgstr "Pre-disconnection Script"
-
-#: data/wicd.ui:362
-msgid "Pre-disconnection Script:"
-msgstr "Pre-disconnection Script:"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -649,10 +498,6 @@ msgstr "Private key password"
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
 msgstr "Prompt for profile on wired autoconnect"
-
-#: data/wicd.ui:663
-msgid "Prompt for wired network profile"
-msgstr "Prompt for wired network profile"
 
 #: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
 msgid "Properties"
@@ -729,10 +574,6 @@ msgstr "Scripts"
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
 msgid "Search domain"
 msgstr "Search domain"
-
-#: data/wicd.ui:866
-msgid "Search domain:"
-msgstr "Search domain:"
 
 #: gtk/netentry.py:959 gtk/netentry.py:1081
 msgid "Secured"
@@ -874,10 +715,6 @@ msgstr "Use dBm to measure signal strength"
 msgid "Use default profile on wired autoconnect"
 msgstr "Use default profile on wired autoconnect"
 
-#: data/wicd.ui:686
-msgid "Use default wired network profile"
-msgstr "Use default wired network profile"
-
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
 #: data/wicd.ui:882
 msgid "Use global DNS servers"
@@ -886,10 +723,6 @@ msgstr "Use global DNS servers"
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
 msgstr "Use last used profile on wired autoconnect"
-
-#: data/wicd.ui:641
-msgid "Use last wired network profile"
-msgstr "Use last wired network profile"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:356
 msgid "Use these settings for all networks sharing this essid"
@@ -914,10 +747,6 @@ msgstr "WPA Supplicant"
 #: curses/wicd-curses.py:527
 msgid "Wicd Curses Interface"
 msgstr "Wicd Curses Interface"
-
-#: data/wicd.ui:9
-msgid "Wicd Network Manager"
-msgstr "Wicd Network Manager"
 
 #: gtk/wicd-client.py:224 gtk/wicd-client.py:331
 msgid "Wicd daemon unreachable"
@@ -964,10 +793,6 @@ msgstr "Wired Networks"
 msgid "Wired connection detected"
 msgstr "Wired connection detected"
 
-#: data/wicd.ui:725
-msgid "Wired interface:"
-msgstr "Wired interface:"
-
 #: gtk/wicd-client.py:631
 msgid ""
 "Wireless\n"
@@ -998,10 +823,6 @@ msgstr "Wireless Kill Switch Enabled"
 msgid "Wireless Networks"
 msgstr "Wireless Networks"
 
-#: data/wicd.ui:743
-msgid "Wireless interface:"
-msgstr "Wireless interface:"
-
 #: curses/wicd-curses.py:276
 msgid ""
 "You can also configure the wireless networks by looking for the "
@@ -1014,41 +835,9 @@ msgstr ""
 msgid "You must enter your password to configure scripts"
 msgstr "You must enter your password to configure scripts"
 
-#: data/wicd.ui:1615
-msgid ""
-"You should almost always use wext as the\n"
-"WPA supplicant driver."
-msgstr ""
-"You should almost always use wext as the\n"
-"WPA supplicant driver."
-
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr "You should almost always use wext as the WPA supplicant driver"
-
-#: data/wicd.ui:136
-msgid "_About"
-msgstr "_About"
-
-#: data/wicd.ui:94
-msgid "_Disconnect All"
-msgstr "_Disconnect All"
-
-#: data/wicd.ui:122
-msgid "_Preferences"
-msgstr "_Preferences"
-
-#: data/wicd.ui:151
-msgid "_Quit"
-msgstr "_Quit"
-
-#: data/wicd.ui:108
-msgid "_Refresh"
-msgstr "_Refresh"
-
-#: data/wicd.ui:79
-msgid "_Switch Off Wi-Fi"
-msgstr "_Switch Off Wi-Fi"
 
 #: curses/wicd-curses.py:427
 msgid ""
@@ -1061,3 +850,215 @@ msgstr ""
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
 msgstr "wicd-curses help"
+
+#: data/wicd.ui:9
+msgid "Wicd Network Manager"
+msgstr "Wicd Network Manager"
+
+#: data/wicd.ui:57
+msgid "Enter a hidden network to try to locate."
+msgstr "Enter a hidden network to try to locate."
+
+#: data/wicd.ui:79
+msgid "_Switch Off Wi-Fi"
+msgstr "_Switch Off Wi-Fi"
+
+#: data/wicd.ui:94
+msgid "_Disconnect All"
+msgstr "_Disconnect All"
+
+#: data/wicd.ui:108
+msgid "_Refresh"
+msgstr "_Refresh"
+
+#: data/wicd.ui:122
+msgid "_Preferences"
+msgstr "_Preferences"
+
+#: data/wicd.ui:136
+msgid "_About"
+msgstr "_About"
+
+#: data/wicd.ui:151
+msgid "_Quit"
+msgstr "_Quit"
+
+#: data/wicd.ui:213 data/wicd.ui:215
+msgid "Connecting..."
+msgstr "Connecting..."
+
+#: data/wicd.ui:228
+msgid "Cancel the current connection attempt"
+msgstr "Cancel the current connection attempt"
+
+#: data/wicd.ui:260
+msgid "Configure Scripts"
+msgstr "Configure Scripts"
+
+#: data/wicd.ui:279
+msgid "Configure scripts to run for this network:"
+msgstr "Configure scripts to run for this network:"
+
+#: data/wicd.ui:296
+msgid "Pre-connection Script:"
+msgstr "Pre-connection Script:"
+
+#: data/wicd.ui:329
+msgid "Post-connection Script:"
+msgstr "Post-connection Script:"
+
+#: data/wicd.ui:362
+msgid "Pre-disconnection Script:"
+msgstr "Pre-disconnection Script:"
+
+#: data/wicd.ui:395
+msgid "Post-disconnection Script:"
+msgstr "Post-disconnection Script:"
+
+#: data/wicd.ui:514
+msgid "Always switch to a wired connection when available"
+msgstr "Always switch to a wired connection when available"
+
+#: data/wicd.ui:519
+msgid ""
+"If selected, wicd will automatically connect to a wired network\n"
+"as soon as a cable is plugged in, even if a wireless connection \n"
+"is already active."
+msgstr ""
+"If selected, wicd will automatically connect to a wired network\n"
+"as soon as a cable is plugged in, even if a wireless connection \n"
+"is already active."
+
+#: data/wicd.ui:542
+msgid "DNS domain:"
+msgstr "DNS domain:"
+
+#: data/wicd.ui:590
+msgid "<b>Never Connect</b>"
+msgstr "<b>Never Connect</b>"
+
+#: data/wicd.ui:606
+msgid "Automatically reconnect on network connection loss"
+msgstr "Automatically reconnect on network connection loss"
+
+#: data/wicd.ui:625
+msgid "<b>Automatic Reconnection</b>"
+msgstr "<b>Automatic Reconnection</b>"
+
+#: data/wicd.ui:641
+msgid "Use last wired network profile"
+msgstr "Use last wired network profile"
+
+#: data/wicd.ui:663
+msgid "Prompt for wired network profile"
+msgstr "Prompt for wired network profile"
+
+#: data/wicd.ui:686
+msgid "Use default wired network profile"
+msgstr "Use default wired network profile"
+
+#: data/wicd.ui:707
+msgid "<b>Wired automatic connection</b>"
+msgstr "<b>Wired automatic connection</b>"
+
+#: data/wicd.ui:725
+msgid "Wired interface:"
+msgstr "Wired interface:"
+
+#: data/wicd.ui:743
+msgid "Wireless interface:"
+msgstr "Wireless interface:"
+
+#: data/wicd.ui:783
+msgid "<b>Network Interfaces</b>"
+msgstr "<b>Network Interfaces</b>"
+
+#: data/wicd.ui:799
+msgid "DNS server 3:"
+msgstr "DNS server 3:"
+
+#: data/wicd.ui:830
+msgid "DNS server 2:"
+msgstr "DNS server 2:"
+
+#: data/wicd.ui:848
+msgid "DNS server 1:"
+msgstr "DNS server 1:"
+
+#: data/wicd.ui:866
+msgid "Search domain:"
+msgstr "Search domain:"
+
+#: data/wicd.ui:901
+msgid "<b>Global DNS Servers</b>"
+msgstr "<b>Global DNS Servers</b>"
+
+#: data/wicd.ui:960
+msgid ""
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
+msgstr ""
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
+
+#: data/wicd.ui:976
+msgid "<b>Notifications</b>"
+msgstr "<b>Notifications</b>"
+
+#: data/wicd.ui:1050
+msgid "<b>Route Table Flushing</b>"
+msgstr "<b>Route Table Flushing</b>"
+
+#: data/wicd.ui:1063
+msgid "<b>Wired Link Detection</b>"
+msgstr "<b>Wired Link Detection</b>"
+
+#: data/wicd.ui:1289
+msgid "<b>DHCP Client</b>"
+msgstr "<b>DHCP Client</b>"
+
+#: data/wicd.ui:1300
+msgid "<b>Graphical Sudo Application</b>"
+msgstr "<b>Graphical Sudo Application</b>"
+
+#: data/wicd.ui:1421
+msgid ""
+"Hover your mouse over the selected backend \n"
+"to read its description."
+msgstr ""
+"Hover your mouse over the selected backend \n"
+"to read its description."
+
+#: data/wicd.ui:1474
+msgid "Driver:"
+msgstr "Driver:"
+
+#: data/wicd.ui:1530
+msgid "<b>Wireless Interface</b>"
+msgstr "<b>Wireless Interface</b>"
+
+#: data/wicd.ui:1544
+msgid "<b>WPA Supplicant</b>"
+msgstr "<b>WPA Supplicant</b>"
+
+#: data/wicd.ui:1556
+msgid "<b>Debugging</b>"
+msgstr "<b>Debugging</b>"
+
+#: data/wicd.ui:1574
+msgid "Backend:"
+msgstr "Backend:"
+
+#: data/wicd.ui:1601
+msgid "<b>Backend</b>"
+msgstr "<b>Backend</b>"
+
+#: data/wicd.ui:1615
+msgid ""
+"You should almost always use wext as the\n"
+"WPA supplicant driver."
+msgstr ""
+"You should almost always use wext as the\n"
+"WPA supplicant driver."

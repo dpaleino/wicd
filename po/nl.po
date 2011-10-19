@@ -9,10 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:08+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: nl <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-19 06:03+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -120,9 +121,8 @@ msgid "Config"
 msgstr ""
 
 #: curses/wicd-curses.py:224
-#, fuzzy
 msgid "Configure selected network"
-msgstr "Gekozen netwerk configureren"
+msgstr ""
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -161,9 +161,8 @@ msgid "Connection Cancelled"
 msgstr "Verbindingspoging afgebroken"
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
-#, fuzzy
 msgid "Connection Failed."
-msgstr "Verbindingspoging afgebroken"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -183,30 +182,26 @@ msgstr "Verbinding gemaakt"
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "Verbinding mislukt. Geen contact gekregen met draadloos toegangspunt."
+msgstr ""
+"Verbinding mislukt. Geen contact gekregen met draadloos toegangspunt."
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
-#, fuzzy
 msgid "Connection successful."
-msgstr "Verbindingspoging afgebroken"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
-"Kon geen verbinding maken met de wicd D-Bus-interface. Raadpleeg het wicd"
-" log-bestand voor foutmeldingen."
+"Kon geen verbinding maken met de wicd D-Bus-interface. Raadpleeg het wicd "
+"log-bestand voor foutmeldingen."
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
-#, fuzzy
 msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Een grafisch 'sudo'-programma werd niet gevonden. De script-editor kon "
-"niet worden gestart. Aanpassingen aan de scripts moeten rechtstreeks in "
-"het configuratie-bestand aangebracht worden."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:257
 msgid "Create an Ad-Hoc Network"
@@ -214,12 +209,12 @@ msgstr "Creëer een ad-hoc-netwerk"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
-"'D-Bus'-mislukking! Waarschijnlijk is de wicd-daemon gestopt terwijl "
-"wicd-curses bezig was. Herstart de daemon, en herstart dan wicd-curses."
+"'D-Bus'-mislukking! Waarschijnlijk is de wicd-daemon gestopt terwijl wicd-"
+"curses bezig was. Herstart de daemon, en herstart dan wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -245,9 +240,8 @@ msgid "Debugging"
 msgstr "Debuggen"
 
 #: curses/wicd-curses.py:559
-#, fuzzy
 msgid "Disconn"
-msgstr "Verbinding verbroken"
+msgstr ""
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -262,9 +256,8 @@ msgid "Disconnecting active connections..."
 msgstr "Actieve verbindingen verbreken..."
 
 #: curses/wicd-curses.py:225
-#, fuzzy
 msgid "Display 'about' dialog"
-msgstr "Geef deze hulp-dialoog weer"
+msgstr ""
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -275,9 +268,8 @@ msgid "Display this help dialog"
 msgstr "Geef deze hulp-dialoog weer"
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
-#, fuzzy
 msgid "Domain"
-msgstr "DNS-domein"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
 msgid "Done connecting..."
@@ -285,11 +277,11 @@ msgstr "Klaar met verbinden..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
-"FOUT: wicd-curses werd de toegang tot de wicd-daemon geweigerd: ga na of "
-"uw gebruikersaccount wel lid is van de \"$A\" groep."
+"FOUT: wicd-curses werd de toegang tot de wicd-daemon geweigerd: ga na of uw "
+"gebruikersaccount wel lid is van de \"$A\" groep."
 
 #: curses/wicd-curses.py:460 gtk/gui.py:265
 msgid "ESSID"
@@ -386,9 +378,8 @@ msgid "Network Interfaces"
 msgstr "Netwerkadapters"
 
 #: gtk/netentry.py:817
-#, fuzzy
 msgid "Never connect to this network"
-msgstr "Automatisch met dit netwerk verbinden"
+msgstr ""
 
 #: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -410,22 +401,14 @@ msgid "Obtaining IP address..."
 msgstr "IP-adres verkrijgen..."
 
 #: curses/wicd-curses.py:277
-#, fuzzy
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
-"Op die plek kunnen de variabelen 'beforescript', 'afterscript' en "
-"'disconnectscript' naar behoefte toegevoegd of aangepast worden. Daarmee "
-"worden de 'preconnect'-, 'postconnect'- en 'disconnect'-scripts "
-"veranderd. Geef het volledige pad voor de scripts op, en níet de ínhoud "
-"van de scripts. De inhoud van de scripts dient apart aangepast te worden."
-" Bekijk de wicd manual-pagina voor meer informatie."
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
 msgid "Passphrase"
@@ -440,9 +423,8 @@ msgid "Path to CA cert"
 msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
-#, fuzzy
 msgid "Path to PAC file"
-msgstr "Pad naar PAC-bestand"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
 msgid "Path to client cert"
@@ -450,27 +432,24 @@ msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr "Associatie verifiëren door na het verbinden statische gateways te pingen"
+msgstr ""
+"Associatie verifiëren door na het verbinden statische gateways te pingen"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:155
-#, fuzzy
 msgid "Post-connection Script"
-msgstr "Post-verbindingsverbreking-script uitvoeren"
+msgstr ""
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:158
-#, fuzzy
 msgid "Post-disconnection Script"
-msgstr "Post-verbindingsverbreking-script uitvoeren"
+msgstr ""
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:154
-#, fuzzy
 msgid "Pre-connection Script"
-msgstr "Pre-verbindingverbrekings-script uitvoeren"
+msgstr ""
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:156
-#, fuzzy
 msgid "Pre-disconnection Script"
-msgstr "Pre-verbindingverbrekings-script uitvoeren"
+msgstr ""
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -529,9 +508,8 @@ msgid "Quit wicd-tray-icon"
 msgstr ""
 
 #: curses/wicd-curses.py:560
-#, fuzzy
 msgid "Refresh"
-msgstr "Voorkeuren"
+msgstr ""
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -614,18 +592,17 @@ msgid "Setting static IP addresses..."
 msgstr "Statische IP-adressen worden ingesteld..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
-#, fuzzy
 msgid "Show never connect networks"
-msgstr "Alle netwerkverbindingen verbreken"
+msgstr ""
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Het 'Automatische Verbinding'-pop-up-venster tijdelijk niet weergeven"
+msgstr ""
+"Het 'Automatische Verbinding'-pop-up-venster tijdelijk niet weergeven"
 
 #: curses/wicd-curses.py:216
-#, fuzzy
 msgid "Stop a connection in progress"
-msgstr "Opbouw netwerkverbinding afbreken"
+msgstr ""
 
 #: gtk/gui.py:314
 msgid "Switch Off Wi-Fi"
@@ -649,8 +626,8 @@ msgstr "Afgebroken door gebruiker"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "De wicd-daemon is gestopt. De gebruikers-interface zal niet goed werken "
 "totdat de daemon weer is gestart."
@@ -660,36 +637,29 @@ msgid "This network requires encryption to be enabled."
 msgstr "Dit netwerk vereist versleuteling om gebruikt te kunnen worden."
 
 #: curses/wicd-curses.py:271
-#, fuzzy
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"Om diverse complicaties te voorkomen wordt het rechtstreeks aanpassen van"
-" scripts door wicd-curses niet ondersteund. Ze kunnen wel handmatig "
-"worden aangepast. Open daarvoor eerst (als 'root') het "
-"configuratiebestand \"$A\" en zoek de sectie op die is gelabeld door de "
-"$B in kwestie. In dit geval is dat:"
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"Om een verbinding te maken met een bedraad netwerk moet een netwerk-"
-"profiel worden aangemaakt. Geef een beschrijvende netwerknaam op, en klik"
-" op 'Toevoegen'."
+"Om een verbinding te maken met een bedraad netwerk moet een netwerk-profiel "
+"worden aangemaakt. Geef een beschrijvende netwerknaam op, en klik op "
+"'Toevoegen'."
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
-"Contact met wicd-daemon niet mogelijk vanwege een 'toegang "
-"geweigerd'-fout van D-Bus. Controleer de instellingen van D-Bus."
+"Contact met wicd-daemon niet mogelijk vanwege een 'toegang geweigerd'-fout "
+"van D-Bus. Controleer de instellingen van D-Bus."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
 msgid "Unsecured"
@@ -735,8 +705,7 @@ msgstr "Gebruik globale DNS-servers"
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
 msgstr ""
-"Gebruik het laatstgebruikte profiel bij een automatische bedrade "
-"verbinding"
+"Gebruik het laatstgebruikte profiel bij een automatische bedrade verbinding"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:356
 msgid "Use these settings for all networks sharing this essid"
@@ -804,7 +773,6 @@ msgid "Wired connection detected"
 msgstr "Bedrade verbinding gevonden"
 
 #: gtk/wicd-client.py:631
-#, fuzzy
 msgid ""
 "Wireless\n"
 "SSID:\n"
@@ -813,7 +781,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr "Draadloos SSID: Snelheid: IP: Sterkte: RX: TX:"
+msgstr ""
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -832,8 +800,8 @@ msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"De draadloze netwerken kunnen ook geconfigureerd worden door het opzoeken"
-" van het \"[<ESSID>]\"-veld in het configuratie-bestand."
+"De draadloze netwerken kunnen ook geconfigureerd worden door het opzoeken "
+"van het \"[<ESSID>]\"-veld in het configuratie-bestand."
 
 #: gtk/netentry.py:299 gtk/netentry.py:407
 msgid "You must enter your password to configure scripts"
@@ -844,13 +812,10 @@ msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr "Bijna altijd is 'wext' het juiste WPA-supplicant-stuurprogramma"
 
 #: curses/wicd-curses.py:427
-#, fuzzy
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
-"Het verwijderen van het laatste 'bedraad'-profiel wordt niet door wicd-"
-"curses ondersteund. Probeer het profiel een andere naam te geven ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -869,19 +834,16 @@ msgid "_Switch Off Wi-Fi"
 msgstr ""
 
 #: data/wicd.ui:94
-#, fuzzy
 msgid "_Disconnect All"
-msgstr "Verbinding verbroken"
+msgstr ""
 
 #: data/wicd.ui:108
-#, fuzzy
 msgid "_Refresh"
-msgstr "Voorkeuren"
+msgstr ""
 
 #: data/wicd.ui:122
-#, fuzzy
 msgid "_Preferences"
-msgstr "Voorkeuren"
+msgstr ""
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -892,47 +854,40 @@ msgid "_Quit"
 msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
-#, fuzzy
 msgid "Connecting..."
-msgstr "Klaar met verbinden..."
+msgstr "Verbinden..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
 msgstr ""
 
 #: data/wicd.ui:260
-#, fuzzy
 msgid "Configure Scripts"
-msgstr "Hervatten-script"
+msgstr ""
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
 msgstr ""
 
 #: data/wicd.ui:296
-#, fuzzy
 msgid "Pre-connection Script:"
-msgstr "Pre-verbindingverbrekings-script uitvoeren"
+msgstr ""
 
 #: data/wicd.ui:329
-#, fuzzy
 msgid "Post-connection Script:"
-msgstr "Post-verbindingsverbreking-script uitvoeren"
+msgstr ""
 
 #: data/wicd.ui:362
-#, fuzzy
 msgid "Pre-disconnection Script:"
-msgstr "Pre-verbindingverbrekings-script uitvoeren"
+msgstr ""
 
 #: data/wicd.ui:395
-#, fuzzy
 msgid "Post-disconnection Script:"
-msgstr "Post-verbindingsverbreking-script uitvoeren"
+msgstr ""
 
 #: data/wicd.ui:514
-#, fuzzy
 msgid "Always switch to a wired connection when available"
-msgstr "Altijd omschakelen naar bedrade verbinding, indien beschikbaar"
+msgstr ""
 
 #: data/wicd.ui:519
 msgid ""
@@ -942,104 +897,87 @@ msgid ""
 msgstr ""
 
 #: data/wicd.ui:542
-#, fuzzy
 msgid "DNS domain:"
-msgstr "DNS-domein"
+msgstr ""
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
 msgstr ""
 
 #: data/wicd.ui:606
-#, fuzzy
 msgid "Automatically reconnect on network connection loss"
-msgstr "Automatisch opnieuw verbinden bij verbindingsverlies"
+msgstr ""
 
 #: data/wicd.ui:625
-#, fuzzy
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatisch opnieuw verbinden"
+msgstr ""
 
 #: data/wicd.ui:641
-#, fuzzy
 msgid "Use last wired network profile"
-msgstr "Hernoem 'bedraad'-profiel"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
 msgstr ""
 
 #: data/wicd.ui:686
-#, fuzzy
 msgid "Use default wired network profile"
-msgstr "Hernoem 'bedraad'-profiel"
+msgstr ""
 
 #: data/wicd.ui:707
-#, fuzzy
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatisch opnieuw verbinden"
+msgstr ""
 
 #: data/wicd.ui:725
-#, fuzzy
 msgid "Wired interface:"
-msgstr "Bedrade netwerkadapter"
+msgstr ""
 
 #: data/wicd.ui:743
-#, fuzzy
 msgid "Wireless interface:"
-msgstr "Draadloze netwerkadapter"
+msgstr ""
 
 #: data/wicd.ui:783
-#, fuzzy
 msgid "<b>Network Interfaces</b>"
-msgstr "Netwerkadapters"
+msgstr ""
 
 #: data/wicd.ui:799
-#, fuzzy
 msgid "DNS server 3:"
-msgstr "DNS-server"
+msgstr ""
 
 #: data/wicd.ui:830
-#, fuzzy
 msgid "DNS server 2:"
-msgstr "DNS-server"
+msgstr ""
 
 #: data/wicd.ui:848
-#, fuzzy
 msgid "DNS server 1:"
-msgstr "DNS-server"
+msgstr ""
 
 #: data/wicd.ui:866
-#, fuzzy
 msgid "Search domain:"
-msgstr "Zoek-domein"
+msgstr ""
 
 #: data/wicd.ui:901
-#, fuzzy
 msgid "<b>Global DNS Servers</b>"
-msgstr "Globale DNS-servers"
+msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
-#, fuzzy
 msgid "<b>Notifications</b>"
-msgstr "<b>Mededelingen</b>"
+msgstr ""
 
 #: data/wicd.ui:1050
-#, fuzzy
 msgid "<b>Route Table Flushing</b>"
-msgstr "Route-tabel opschonen"
+msgstr ""
 
 #: data/wicd.ui:1063
-#, fuzzy
 msgid "<b>Wired Link Detection</b>"
-msgstr "Detecteren van bedrade verbinding"
+msgstr ""
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -1060,32 +998,27 @@ msgid "Driver:"
 msgstr ""
 
 #: data/wicd.ui:1530
-#, fuzzy
 msgid "<b>Wireless Interface</b>"
-msgstr "Draadloze netwerkadapter"
+msgstr ""
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
 msgstr ""
 
 #: data/wicd.ui:1556
-#, fuzzy
 msgid "<b>Debugging</b>"
-msgstr "Debuggen"
+msgstr ""
 
 #: data/wicd.ui:1574
-#, fuzzy
 msgid "Backend:"
-msgstr "Back-end"
+msgstr ""
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
 msgstr ""
 
 #: data/wicd.ui:1615
-#, fuzzy
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "Bijna altijd is 'wext' het juiste WPA-supplicant-stuurprogramma"
-
+msgstr ""

@@ -9,10 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:13+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: kk <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-19 06:03+0000\n"
+"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -118,9 +119,8 @@ msgid "Config"
 msgstr ""
 
 #: curses/wicd-curses.py:224
-#, fuzzy
 msgid "Configure selected network"
-msgstr "Таңдалған желіні баптау"
+msgstr ""
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -159,9 +159,8 @@ msgid "Connection Cancelled"
 msgstr "Байланыс орнатудан бас тартылды"
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
-#, fuzzy
 msgid "Connection Failed."
-msgstr "Байланыс орнатудан бас тартылды"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -181,29 +180,26 @@ msgstr "Байланыс орнатыолы"
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "Байланыс орнату сәтсіз. Сымсыз желі тарату нүктесіне қосылу мүмкін емес."
+msgstr ""
+"Байланыс орнату сәтсіз. Сымсыз желі тарату нүктесіне қосылу мүмкін емес."
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
-#, fuzzy
 msgid "Connection successful."
-msgstr "Байланыс орнатудан бас тартылды"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
-"Wicd D-Bus интерфейсіне қосылу мүмкін емес. Wicd лог-файлын қателер "
-"туралы хабарламаларға тексеріңіз."
+"Wicd D-Bus интерфейсіне қосылу мүмкін емес. Wicd лог-файлын қателер туралы "
+"хабарламаларға тексеріңіз."
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
-#, fuzzy
 msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Графикалық sudo бағдарламасы табылмады. Скриптерді түзеткішті қосу мүмкін"
-" емес. Сізге баптаулар файлын тура түзету керек."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:257
 msgid "Create an Ad-Hoc Network"
@@ -211,13 +207,13 @@ msgstr "Ad-Hoc желісін жасау"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
 "DBus қатесі! Көбінесе бұл қате wicd-curses қосулы тұрғанда wicd қызметі "
-"сөндірілгенде пайда болады. Алдымен қызметті, одан кейін wicd-curses "
-"қайта қосыңыз."
+"сөндірілгенде пайда болады. Алдымен қызметті, одан кейін wicd-curses қайта "
+"қосыңыз."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -243,9 +239,8 @@ msgid "Debugging"
 msgstr "Жөндеу режимі"
 
 #: curses/wicd-curses.py:559
-#, fuzzy
 msgid "Disconn"
-msgstr "Байланыспаған"
+msgstr ""
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -260,9 +255,8 @@ msgid "Disconnecting active connections..."
 msgstr "Белсенді байланыстарды үзу..."
 
 #: curses/wicd-curses.py:225
-#, fuzzy
 msgid "Display 'about' dialog"
-msgstr "Осы көмек сұхбатын көрсету"
+msgstr ""
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -273,9 +267,8 @@ msgid "Display this help dialog"
 msgstr "Осы көмек сұхбатын көрсету"
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
-#, fuzzy
 msgid "Domain"
-msgstr "DNS сервері"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
 msgid "Done connecting..."
@@ -283,8 +276,8 @@ msgstr "Байланыс орнатуды аяқтау..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
 "ҚАТЕ: wicd-curses үшін wicd қызметіне рұқсат жоқ: пайдаланушыңыз \"$A\" "
 "тобында екеніне көзіңізді жеткізіңіз."
@@ -384,9 +377,8 @@ msgid "Network Interfaces"
 msgstr "Желі интерфейстері:"
 
 #: gtk/netentry.py:817
-#, fuzzy
 msgid "Never connect to this network"
-msgstr "Осы желіге автоқосылу"
+msgstr ""
 
 #: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -408,22 +400,14 @@ msgid "Obtaining IP address..."
 msgstr "IP адресті алу..."
 
 #: curses/wicd-curses.py:277
-#, fuzzy
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
-"Сіз \"beforescript\", \"afterscript\", және \"disconnectscript\" "
-"айнымалыларын сәйкесінше байланыс орнатылғанға дейін, кейін және "
-"үзілгеннен кейін орындалатын скриптерді баптау үшін қолдана аласыз. "
-"Есіңізде сақтаңыз, скриптерге дейінгі толық жол көрсетілу керек. "
-"Скриптердің құрамасын бөлек қосу/түзету керек. Көбірек білу үшін wicd "
-"нұсқау құжатын оқыңыз."
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
 msgid "Passphrase"
@@ -438,9 +422,8 @@ msgid "Path to CA cert"
 msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
-#, fuzzy
 msgid "Path to PAC file"
-msgstr "PAC файлына жол"
+msgstr ""
 
 #: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
 msgid "Path to client cert"
@@ -451,24 +434,20 @@ msgid "Ping static gateways after connecting to verify association"
 msgstr "Байланыстан кейін тұрақты шлюздарды пингілеу"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:155
-#, fuzzy
 msgid "Post-connection Script"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:158
-#, fuzzy
 msgid "Post-disconnection Script"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:154
-#, fuzzy
 msgid "Pre-connection Script"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:156
-#, fuzzy
 msgid "Pre-disconnection Script"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -527,9 +506,8 @@ msgid "Quit wicd-tray-icon"
 msgstr ""
 
 #: curses/wicd-curses.py:560
-#, fuzzy
 msgid "Refresh"
-msgstr "Баптаулар"
+msgstr ""
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -590,8 +568,7 @@ msgstr "Жасырын желінің ESSID-ін таңдаңыз"
 #: gtk/gui.py:103
 msgid "Select or create a wired profile to connect with"
 msgstr ""
-"Байланысты орнату үшін сымды желі профилін таңдаңыз не жаңа профильді "
-"құрыңыз"
+"Байланысты орнату үшін сымды желі профилін таңдаңыз не жаңа профильді құрыңыз"
 
 #: curses/wicd-curses.py:222
 msgid "Select scripts"
@@ -614,18 +591,16 @@ msgid "Setting static IP addresses..."
 msgstr "Тұрақты IP адрестерін орнату..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
-#, fuzzy
 msgid "Show never connect networks"
-msgstr "Барлық желілермен байланысты үзу"
+msgstr ""
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
 msgstr "Автоқосылу туралы хабарлама көрсетуді уақытша тоқтату"
 
 #: curses/wicd-curses.py:216
-#, fuzzy
 msgid "Stop a connection in progress"
-msgstr "Байланыс орнатуды тоқтату"
+msgstr ""
 
 #: gtk/gui.py:314
 msgid "Switch Off Wi-Fi"
@@ -649,8 +624,8 @@ msgstr "Пайдаланушымен тоқтатылды"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "Wicd қызметі сөнді, ол қосылғанша басқару графикалық сайманы дұрыс жұмыс "
 "істемейді."
@@ -660,31 +635,25 @@ msgid "This network requires encryption to be enabled."
 msgstr "Бұл желі шифрлеуді қосуды талап етеді."
 
 #: curses/wicd-curses.py:271
-#, fuzzy
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"Мүмкін мәселелерге жол бермеу үшін, wicd-curses скриптерді тура түзете "
-"алмайды. Бірақта, сіз оларды қолмен түзете аласыз. Біріншіден (root "
-"атынан) \"$A\" баптаулар файлын ашып, $B деп аталатын керек секцияны "
-"іздеңіз. Қазір, ол"
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Сымды желіге байланыс орнату үшін желі профилін құру керек. Жасау үшін, "
 "желіні сипаттайтын атын енгізіп, Қосу батырмасын басыңыз."
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
 "Wicd қызметімен байланысты орнату сәтсіз, DBus рұқсат жоқ деген жауапты "
 "қайтарды. DBus баптауларын тексеріңіз."
@@ -800,7 +769,6 @@ msgid "Wired connection detected"
 msgstr "Сымды желі байланысы табылды"
 
 #: gtk/wicd-client.py:631
-#, fuzzy
 msgid ""
 "Wireless\n"
 "SSID:\n"
@@ -809,7 +777,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr "Сымсыз SSID: Жылдамдығы: IP: Әлі: RX: TX:"
+msgstr ""
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -840,13 +808,10 @@ msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr "Сізге әрқашан WPA supplicant драйвері ретінде wext қолдану керек"
 
 #: curses/wicd-curses.py:427
-#, fuzzy
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
-"wicd-curses соңғы қолданған сымды желі профилін өшіруді қолдамайды. Оның "
-"атын ауыстырып көріңіз ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -865,19 +830,16 @@ msgid "_Switch Off Wi-Fi"
 msgstr ""
 
 #: data/wicd.ui:94
-#, fuzzy
 msgid "_Disconnect All"
-msgstr "Байланыспаған"
+msgstr ""
 
 #: data/wicd.ui:108
-#, fuzzy
 msgid "_Refresh"
-msgstr "Баптаулар"
+msgstr ""
 
 #: data/wicd.ui:122
-#, fuzzy
 msgid "_Preferences"
-msgstr "Баптаулар"
+msgstr ""
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -888,47 +850,40 @@ msgid "_Quit"
 msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
-#, fuzzy
 msgid "Connecting..."
-msgstr "Байланыс орнатуды аяқтау..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
 msgstr ""
 
 #: data/wicd.ui:260
-#, fuzzy
 msgid "Configure Scripts"
-msgstr "Жалғастыру скрипті"
+msgstr ""
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
 msgstr ""
 
 #: data/wicd.ui:296
-#, fuzzy
 msgid "Pre-connection Script:"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:329
-#, fuzzy
 msgid "Post-connection Script:"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:362
-#, fuzzy
 msgid "Pre-disconnection Script:"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:395
-#, fuzzy
 msgid "Post-disconnection Script:"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:514
-#, fuzzy
 msgid "Always switch to a wired connection when available"
-msgstr "Мүмкін болса, әрқашан сымды желіге байланыс орнату"
+msgstr ""
 
 #: data/wicd.ui:519
 msgid ""
@@ -938,104 +893,87 @@ msgid ""
 msgstr ""
 
 #: data/wicd.ui:542
-#, fuzzy
 msgid "DNS domain:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
 msgstr ""
 
 #: data/wicd.ui:606
-#, fuzzy
 msgid "Automatically reconnect on network connection loss"
-msgstr "Байланыс жоғалса қайта автоқосылу"
+msgstr ""
 
 #: data/wicd.ui:625
-#, fuzzy
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Автоматты қайта қосылу"
+msgstr ""
 
 #: data/wicd.ui:641
-#, fuzzy
 msgid "Use last wired network profile"
-msgstr "Сымды желі профильдің атын ауыстыру"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
 msgstr ""
 
 #: data/wicd.ui:686
-#, fuzzy
 msgid "Use default wired network profile"
-msgstr "Сымды желі профильдің атын ауыстыру"
+msgstr ""
 
 #: data/wicd.ui:707
-#, fuzzy
 msgid "<b>Wired automatic connection</b>"
-msgstr "Автоматты қайта қосылу"
+msgstr ""
 
 #: data/wicd.ui:725
-#, fuzzy
 msgid "Wired interface:"
-msgstr "Сымды желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:743
-#, fuzzy
 msgid "Wireless interface:"
-msgstr "Сымсыз желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:783
-#, fuzzy
 msgid "<b>Network Interfaces</b>"
-msgstr "Желі интерфейстері:"
+msgstr ""
 
 #: data/wicd.ui:799
-#, fuzzy
 msgid "DNS server 3:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:830
-#, fuzzy
 msgid "DNS server 2:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:848
-#, fuzzy
 msgid "DNS server 1:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:866
-#, fuzzy
 msgid "Search domain:"
-msgstr "Домен іздеу"
+msgstr ""
 
 #: data/wicd.ui:901
-#, fuzzy
 msgid "<b>Global DNS Servers</b>"
-msgstr "Глобалды DNS серверлері"
+msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
-#, fuzzy
 msgid "<b>Notifications</b>"
-msgstr "<b>Хабарламалар</b>"
+msgstr ""
 
 #: data/wicd.ui:1050
-#, fuzzy
 msgid "<b>Route Table Flushing</b>"
-msgstr "Бағдарлау кестесін тазарту"
+msgstr ""
 
 #: data/wicd.ui:1063
-#, fuzzy
 msgid "<b>Wired Link Detection</b>"
-msgstr "Сымды желі анықталды"
+msgstr ""
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -1056,32 +994,27 @@ msgid "Driver:"
 msgstr ""
 
 #: data/wicd.ui:1530
-#, fuzzy
 msgid "<b>Wireless Interface</b>"
-msgstr "Сымсыз желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
 msgstr ""
 
 #: data/wicd.ui:1556
-#, fuzzy
 msgid "<b>Debugging</b>"
-msgstr "Жөндеу режимі"
+msgstr ""
 
 #: data/wicd.ui:1574
-#, fuzzy
 msgid "Backend:"
-msgstr "Басқару сайманы"
+msgstr ""
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
 msgstr ""
 
 #: data/wicd.ui:1615
-#, fuzzy
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "Сізге әрқашан WPA supplicant драйвері ретінде wext қолдану керек"
-
+msgstr ""

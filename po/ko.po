@@ -5,15 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 23:50+0200\n"
+"POT-Creation-Date: 2011-10-19 12:33+0200\n"
 "PO-Revision-Date: 2011-09-18 16:12+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ko <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-19 06:03+0000\n"
-"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -41,7 +40,7 @@ msgstr ""
 msgid "About Wicd"
 msgstr "Wicd 정보"
 
-#: curses/wicd-curses.py:464 gtk/gui.py:271
+#: curses/wicd-curses.py:464 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
 msgstr "인터넷 연결 공유 사용하기"
 
@@ -65,7 +64,7 @@ msgstr "항상 유선 네트워크 인터페이스 보이기"
 msgid "Always switch to wired connection when available"
 msgstr "유선 네트워크를 사용할 수 있을 때 항상 유선 네트워크로 전환하기"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:77 wicd/translations.py:77
+#: wicd/translations.py:77
 msgid "Authentication"
 msgstr "인증"
 
@@ -105,12 +104,12 @@ msgstr "데몬과 연결할 수 없습니다. 자동으로 시작하려는 중�
 msgid "Cancel"
 msgstr "취소"
 
-#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: curses/wicd-curses.py:462 gtk/gui.py:267 gtk/netentry.py:965
 #: gtk/netentry.py:1087
 msgid "Channel"
 msgstr "채널"
 
-#: gtk/gui.py:187 data/wicd.ui:173
+#: gtk/gui.py:188 data/wicd.ui:173
 msgid "Choose from the networks below:"
 msgstr "아래에 있는 네트워크 중에서 선택하십시오:"
 
@@ -130,7 +129,7 @@ msgstr "유선 프로필 \"$A\" 설정하기"
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "유선 네트워크 \"$A\" 설정 중 ($B)"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:80 wicd/misc.py:80
+#: wicd/misc.py:80
 msgid "Configuring wireless interface..."
 msgstr "무선 네트워크 인터페이스 설정 중..."
 
@@ -142,35 +141,35 @@ msgstr "연결"
 msgid "Connect to selected network"
 msgstr "선택한 네트워크에 연결하기"
 
-#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+#: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:213
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "$A에 연결됨. 신호 강도: $B (IP: $C)"
 
-#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+#: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:218
 msgid "Connected to wired network (IP: $A)"
 msgstr "유선 네트워크에 연결됨(IP:$A)"
 
-#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+#: gtk/gui.py:191 gtk/wicd-client.py:311 gtk/wicd-client.py:639
 msgid "Connecting"
 msgstr "연결 중"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
+#: wicd/misc.py:77
 msgid "Connection Cancelled"
 msgstr "연결 취소됨"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
+#: wicd/misc.py:83
 msgid "Connection Failed."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
+#: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
 msgstr "연결 실패: 암호가 잘못됨"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:89 wicd/misc.py:89
+#: wicd/misc.py:89
 msgid "Connection Failed: No DHCP offers received."
 msgstr "연결 실패 : DHCP 정보를 받을 수 없음"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:81 wicd/misc.py:81
+#: wicd/misc.py:81
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "연결 실패: IP 주소를 가져올 수 없음"
 
@@ -178,18 +177,18 @@ msgstr "연결 실패: IP 주소를 가져올 수 없음"
 msgid "Connection established"
 msgstr "연결됨"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
+#: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr "연결할 수 없음: 무선 액세스 포인트에 접근할 수 없습니다."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
+#: wicd/misc.py:95
 msgid "Connection successful."
 msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
-"messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
 msgstr "wicd D-Bus 인터페이스에 연결 할 수 없습니다. 로그를 확인하십시오."
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
@@ -198,18 +197,18 @@ msgid ""
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
 
-#: curses/wicd-curses.py:487 gtk/gui.py:257
+#: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
 msgstr "Ad-hoc 네트워크 만들기"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping while "
-"wicd-curses is running. Please restart the daemon, and then restart wicd-"
-"curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping "
+"while wicd-curses is running. Please restart the daemon, and then restart"
+" wicd-curses."
 msgstr ""
-"DBus 오류! wicd-curses가 실행 중일 때 wicd 데몬이 멈춘 것 같습니다. 데몬을 다시 시작하고 wicd-curses를 "
-"다시 시작하십시오"
+"DBus 오류! wicd-curses가 실행 중일 때 wicd 데몬이 멈춘 것 같습니다. 데몬을 다시 시작하고 wicd-"
+"curses를 다시 시작하십시오"
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -246,7 +245,7 @@ msgstr "모든 네트워크 연결 끊기"
 msgid "Disconnected"
 msgstr "연결 해제됨"
 
-#: gtk/gui.py:723
+#: gtk/gui.py:724
 msgid "Disconnecting active connections..."
 msgstr "활성 연결 해제 중..."
 
@@ -262,21 +261,21 @@ msgstr "연결 상태 정보 보이기"
 msgid "Display this help dialog"
 msgstr "이 도움말 대화상자를 표시합니다"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
+#: wicd/translations.py:78
 msgid "Domain"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
+#: wicd/misc.py:82
 msgid "Done connecting..."
 msgstr "연결 완료됨..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
-"your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
 msgstr "오류: wicd-curses에서 wicd 데몬에 접근할 수 없습니다. 사용자가 $A 그룹에 추가되어 있는지 확인하십시오."
 
-#: curses/wicd-curses.py:460 gtk/gui.py:265
+#: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
 msgstr "ESSID"
 
@@ -292,7 +291,7 @@ msgstr "연결하는 중..."
 msgid "External Programs"
 msgstr "외부 프로그램"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:84 wicd/misc.py:84
+#: wicd/misc.py:84
 msgid "Flushing the routing table..."
 msgstr "라우팅 테이블 비우는 중..."
 
@@ -308,11 +307,11 @@ msgstr "게이트웨이"
 msgid "General Settings"
 msgstr "일반 설정"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:85 wicd/misc.py:85
+#: wicd/misc.py:85
 msgid "Generating PSK..."
 msgstr "PSK 생성 중..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:86 wicd/misc.py:86
+#: wicd/misc.py:86
 msgid "Generating WPA configuration file..."
 msgstr "WPA 설정 파일 생성 중..."
 
@@ -332,16 +331,16 @@ msgstr ""
 msgid "Hidden"
 msgstr ""
 
-#: gtk/gui.py:356
+#: gtk/gui.py:357
 msgid "Hidden Network ESSID"
 msgstr "숨겨진 네트워크의 ESSID"
 
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:265
 #: gtk/netentry.py:73
 msgid "IP"
 msgstr "IP"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
+#: wicd/translations.py:79
 msgid "Identity"
 msgstr "정보"
 
@@ -353,12 +352,11 @@ msgstr ""
 msgid "Invalid IP address entered."
 msgstr "잘못된 IP 주소를 입력했습니다."
 
-#: gtk/gui.py:629 gtk/gui.py:637
+#: gtk/gui.py:630 gtk/gui.py:638
 msgid "Invalid address in $A entry."
 msgstr "$A 항목에 올바르지 않은 주소가 있습니다."
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:80 curses/wicd-curses.py:463
-#: gtk/gui.py:267 wicd/translations.py:80
+#: curses/wicd-curses.py:463 gtk/gui.py:268 wicd/translations.py:80
 msgid "Key"
 msgstr "키"
 
@@ -374,11 +372,11 @@ msgstr "네트워크 인터페이스"
 msgid "Never connect to this network"
 msgstr ""
 
-#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+#: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
 msgstr "무선 네트워크가 없습니다."
 
-#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: curses/wicd-curses.py:737 gtk/gui.py:439 gtk/wicd-client.py:211
 #: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
 msgid "Not connected"
 msgstr "연결되지 않음"
@@ -389,37 +387,38 @@ msgstr "연결되지 않음"
 msgid "OK"
 msgstr "확인"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:91 wicd/misc.py:91
+#: wicd/misc.py:91
 msgid "Obtaining IP address..."
 msgstr "IP 주소 얻는 중..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
-"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
-"respectively.  Note that you will be specifying the full path to the scripts "
-"- not the actual script contents.  You will need to add/edit the script "
-"contents separately.  Refer to the wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", "
+"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
+"variables as needed, to change the preconnect, postconnect, predisconnect"
+" and postdisconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents."
+"  You will need to add/edit the script contents separately.  Refer to the"
+" wicd manual page for more information."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
+#: wicd/translations.py:81
 msgid "Passphrase"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:82 wicd/translations.py:82
+#: wicd/translations.py:82
 msgid "Password"
 msgstr "암호"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:83 wicd/translations.py:83
+#: wicd/translations.py:83
 msgid "Path to CA cert"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
+#: wicd/translations.py:85
 msgid "Path to PAC file"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
+#: wicd/translations.py:84
 msgid "Path to client cert"
 msgstr ""
 
@@ -427,19 +426,19 @@ msgstr ""
 msgid "Ping static gateways after connecting to verify association"
 msgstr "연결한 후 정적 네트워크 게이트웨이에 핑을 보내 연결 확인하기"
 
-#: curses/configscript_curses.py:57 gtk/configscript.py:155
+#: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:59 gtk/configscript.py:158
+#: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
 msgstr ""
 
@@ -455,7 +454,7 @@ msgstr "설정 대화 상자"
 msgid "Prefs"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:86 wicd/translations.py:86
+#: wicd/translations.py:86
 msgid "Preshared key"
 msgstr ""
 
@@ -463,11 +462,11 @@ msgstr ""
 msgid "Press any key to return."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:87 wicd/translations.py:87
+#: wicd/translations.py:87
 msgid "Private key"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:88 wicd/translations.py:88
+#: wicd/translations.py:88
 msgid "Private key password"
 msgstr ""
 
@@ -479,11 +478,11 @@ msgstr "유선 네트워크 자동 연결 시 프로필 묻기"
 msgid "Properties"
 msgstr "속성"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:87 wicd/misc.py:87
+#: wicd/misc.py:87
 msgid "Putting interface down..."
 msgstr "인터페이스 비활성화 중..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:88 wicd/misc.py:88
+#: wicd/misc.py:88
 msgid "Putting interface up..."
 msgstr "인터페이스 작동 중..."
 
@@ -511,11 +510,11 @@ msgstr "네트워크 목록 갱신"
 msgid "Rename wired profile"
 msgstr "유선 프로필 이름 바꾸기"
 
-#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+#: curses/netentry_curses.py:357 gtk/gui.py:693 gtk/netentry.py:485
 msgid "Required encryption information is missing."
 msgstr "필요한 암호화 정보가 없습니다."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:90 wicd/misc.py:90
+#: wicd/misc.py:90
 msgid "Resetting IP address..."
 msgstr "IP 주소 다시 설정하는 중..."
 
@@ -535,7 +534,7 @@ msgstr "검색"
 msgid "Scan for hidden networks"
 msgstr "숨겨진 네트워크 검색하기"
 
-#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+#: gtk/gui.py:223 gtk/gui.py:528 gtk/wicd-client.py:808
 msgid "Scanning"
 msgstr "검사 중"
 
@@ -571,15 +570,15 @@ msgstr "스크립트 선택"
 msgid "Set up Ad-hoc network"
 msgstr "Ad-hoc 네트워크 설정"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:92 wicd/misc.py:92
+#: wicd/misc.py:92
 msgid "Setting broadcast address..."
 msgstr "브로드캐스트 주소 설정하는 중..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:93 wicd/misc.py:93
+#: wicd/misc.py:93
 msgid "Setting static DNS servers..."
 msgstr "정적 DNS 서버 설정하는 중..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:94 wicd/misc.py:94
+#: wicd/misc.py:94
 msgid "Setting static IP addresses..."
 msgstr "고정 IP 주소 설정하는 중..."
 
@@ -595,11 +594,11 @@ msgstr "자동 연결 메시지 표시 잠깐 중단하기"
 msgid "Stop a connection in progress"
 msgstr ""
 
-#: gtk/gui.py:314
+#: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
 msgstr ""
 
-#: gtk/gui.py:311
+#: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
 msgstr ""
 
@@ -617,33 +616,33 @@ msgstr "사용자가 종료함"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it is "
-"restarted."
+"The wicd daemon has shut down. The UI will not function properly until it"
+" is restarted."
 msgstr "wicd 데몬이 종료되었습니다. 데몬을 다시 시작할 때까지 인터페이스가 작동하지 않을 것입니다."
 
-#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+#: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
 msgid "This network requires encryption to be enabled."
 msgstr "이 네트워크에 연결하려면 암호화가 필요합니다."
 
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root), "
-"open the \"$A\" config file, and look for the section labeled by the $B in "
-"question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To create "
-"a network profile, type a name that describes this network, and press Add."
-msgstr ""
-"유선 네트워크에 연결할려면 프로필을 만들어야 합니다. 네트워크 프로필을 만들려면 프로필 이름을 입력한 다음 추가를 누르십시오."
+"To connect to a wired network, you must create a network profile. To "
+"create a network profile, type a name that describes this network, and "
+"press Add."
+msgstr "유선 네트워크에 연결할려면 프로필을 만들어야 합니다. 네트워크 프로필을 만들려면 프로필 이름을 입력한 다음 추가를 누르십시오."
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from DBus. "
-"Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from "
+"DBus. Please check that your user is in the $A group."
 msgstr "DBus 접근 불가 오류로 wicd 데몬에 접근할 수 없습니다. 사용자가 $A 그룹에 추가되어 있는지 확인하십시오."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
@@ -658,7 +657,7 @@ msgstr ""
 msgid "Use Encryption"
 msgstr "암호화 사용하기"
 
-#: curses/wicd-curses.py:465 gtk/gui.py:262
+#: curses/wicd-curses.py:465 gtk/gui.py:263
 msgid "Use Encryption (WEP only)"
 msgstr "암호화 사용 (WEP 전용)"
 
@@ -695,15 +694,15 @@ msgstr "자동으로 연결할 때 마지막으로 사용된 프로필 사용하
 msgid "Use these settings for all networks sharing this essid"
 msgstr "이 ESSID를 사용하는 모든 네트워크에 이 설정 사용하기"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:89 wicd/translations.py:89
+#: wicd/translations.py:89
 msgid "Username"
 msgstr "사용자 이름"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:96 wicd/misc.py:96
+#: wicd/misc.py:96
 msgid "Validating authentication..."
 msgstr "인증 검증 중..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:97 wicd/misc.py:97
+#: wicd/misc.py:97
 msgid "Verifying access point association..."
 msgstr "AP 연결 확인하는 중..."
 
@@ -719,7 +718,7 @@ msgstr "Wicd Curses 인터페이스"
 msgid "Wicd daemon unreachable"
 msgstr "Wicd 데몬 접근 불가능"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:196 wicd/misc.py:196
+#: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd에서 네트워크 카드에 접근해야 합니다."
 
@@ -743,7 +742,7 @@ msgstr "유선 네트워크 인터페이스"
 msgid "Wired Link Detection"
 msgstr "유선 연결 찾기"
 
-#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: curses/wicd-curses.py:752 gtk/gui.py:473 gtk/netentry.py:285
 #: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
 msgid "Wired Network"
 msgstr "유선 네트워크"
@@ -771,7 +770,7 @@ msgstr ""
 msgid "Wireless Interface"
 msgstr "무선 네트워크 인터페이스"
 
-#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+#: gtk/gui.py:601 gtk/wicd-client.py:222 gtk/wicd-client.py:334
 msgid "Wireless Kill Switch Enabled"
 msgstr "무선 네트워크 끄기 스위치가 켜져 있음"
 
@@ -795,8 +794,8 @@ msgstr "가능한 한 WPA 도우미 드라이버로 wext를 사용하십시오"
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming "
-"it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -944,9 +943,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the "
+"main window. This can be useful if your wired network card does not "
+"detect when the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1004,3 +1003,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
+

@@ -5,15 +5,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 23:50+0200\n"
+"POT-Creation-Date: 2011-10-19 12:33+0200\n"
 "PO-Revision-Date: 2011-09-18 16:08+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: sv <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-19 06:04+0000\n"
-"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -41,7 +40,7 @@ msgstr ""
 msgid "About Wicd"
 msgstr "Om wicd"
 
-#: curses/wicd-curses.py:464 gtk/gui.py:271
+#: curses/wicd-curses.py:464 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
 msgstr "Aktivera delning av internetanslutning"
 
@@ -65,7 +64,7 @@ msgstr "Visa alltid trådbundet nätverksgränssnitt"
 msgid "Always switch to wired connection when available"
 msgstr "Byt alltid till trådbunden anslutning om sådan finns tillgänglig"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:77 wicd/translations.py:77
+#: wicd/translations.py:77
 msgid "Authentication"
 msgstr "Autentisering"
 
@@ -98,7 +97,8 @@ msgstr "Gjordes tillgänglig till dig av:"
 #: curses/wicd-curses.py:1027
 msgid "Can't connect to the daemon, trying to start it automatically..."
 msgstr ""
-"Kan inte ansluta till bakgrundsprocessen, försöker starta den automatiskt..."
+"Kan inte ansluta till bakgrundsprocessen, försöker starta den "
+"automatiskt..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:489
@@ -106,12 +106,12 @@ msgstr ""
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: curses/wicd-curses.py:462 gtk/gui.py:267 gtk/netentry.py:965
 #: gtk/netentry.py:1087
 msgid "Channel"
 msgstr "Kanal"
 
-#: gtk/gui.py:187 data/wicd.ui:173
+#: gtk/gui.py:188 data/wicd.ui:173
 msgid "Choose from the networks below:"
 msgstr "Välj från nätverken nedan:"
 
@@ -131,7 +131,7 @@ msgstr "Konfigurerar egenskaper för trådbunden nätverksprofil \"$A\""
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Konfigurerar inställningarna för trådlöst nätverk \"$A\" ($B):"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:80 wicd/misc.py:80
+#: wicd/misc.py:80
 msgid "Configuring wireless interface..."
 msgstr "Konfigurerar trådlös anslutning..."
 
@@ -143,35 +143,35 @@ msgstr "Anslut"
 msgid "Connect to selected network"
 msgstr "Anslut till valt nätverk"
 
-#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+#: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:213
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Ansluten till $A med signal $B (IP: $C)"
 
-#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+#: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:218
 msgid "Connected to wired network (IP: $A)"
 msgstr "Ansluten till trådbundet nätverk (IP: $A)"
 
-#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+#: gtk/gui.py:191 gtk/wicd-client.py:311 gtk/wicd-client.py:639
 msgid "Connecting"
 msgstr "Ansluter"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
+#: wicd/misc.py:77
 msgid "Connection Cancelled"
 msgstr "Anslutningen avbruten"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
+#: wicd/misc.py:83
 msgid "Connection Failed."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
+#: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
 msgstr "Anslutningen misslyckades: Felaktigt lösenord"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:89 wicd/misc.py:89
+#: wicd/misc.py:89
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Anslutningen misslyckades: Inga DHCP-erbjudanden togs emot."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:81 wicd/misc.py:81
+#: wicd/misc.py:81
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Anslutningen misslyckades: Fick ingen IP-adress"
 
@@ -179,23 +179,23 @@ msgstr "Anslutningen misslyckades: Fick ingen IP-adress"
 msgid "Connection established"
 msgstr "Anslutningen etablerades"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
+#: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 "Anslutningen misslyckades: Kunde inte erhålla kontakt med den trådlösa "
 "anslutnings punkten."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
+#: wicd/misc.py:95
 msgid "Connection successful."
 msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
-"messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
 msgstr ""
-"Kunde inte ansluta till wicd:s D-Bus-gränssnitt. Kontrollera wicd:s loggfil "
-"efter felmeddelanden."
+"Kunde inte ansluta till wicd:s D-Bus-gränssnitt. Kontrollera wicd:s "
+"loggfil efter felmeddelanden."
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
 msgid ""
@@ -203,18 +203,18 @@ msgid ""
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
 
-#: curses/wicd-curses.py:487 gtk/gui.py:257
+#: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
 msgstr "Skapa ett Ad-Hoc-nätverk"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping while "
-"wicd-curses is running. Please restart the daemon, and then restart wicd-"
-"curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping "
+"while wicd-curses is running. Please restart the daemon, and then restart"
+" wicd-curses."
 msgstr ""
-"DBus-fel. Detta orsakas förmodligen av att wicd demonen stoppats medan wicd-"
-"curses kör. Starta om demonen och wicd-curses."
+"DBus-fel. Detta orsakas förmodligen av att wicd demonen stoppats medan "
+"wicd-curses kör. Starta om demonen och wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -251,7 +251,7 @@ msgstr "Koppla ner från samtliga anslutningar"
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
-#: gtk/gui.py:723
+#: gtk/gui.py:724
 msgid "Disconnecting active connections..."
 msgstr "Kopplar ner aktiva anslutningar..."
 
@@ -267,23 +267,23 @@ msgstr "Visa notifieringar om anslutningens status"
 msgid "Display this help dialog"
 msgstr "Visa hjälpfönster"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
+#: wicd/translations.py:78
 msgid "Domain"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
+#: wicd/misc.py:82
 msgid "Done connecting..."
 msgstr "Ansluting klar..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
-"your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
 msgstr ""
 "FEL: wicd-curses fick inte kontakt med wicd demonen kolla så att din "
 "användare är i $A gruppen"
 
-#: curses/wicd-curses.py:460 gtk/gui.py:265
+#: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
 msgstr "ESSID"
 
@@ -299,7 +299,7 @@ msgstr "Etablerar anslutning..."
 msgid "External Programs"
 msgstr "Externa program"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:84 wicd/misc.py:84
+#: wicd/misc.py:84
 msgid "Flushing the routing table..."
 msgstr "Tömmer routningstabellen..."
 
@@ -315,11 +315,11 @@ msgstr "Gateway"
 msgid "General Settings"
 msgstr "Allmänna inställningar"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:85 wicd/misc.py:85
+#: wicd/misc.py:85
 msgid "Generating PSK..."
 msgstr "Genererar PSK..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:86 wicd/misc.py:86
+#: wicd/misc.py:86
 msgid "Generating WPA configuration file..."
 msgstr "Genererar WPA-konfigureringsfil..."
 
@@ -339,16 +339,16 @@ msgstr ""
 msgid "Hidden"
 msgstr ""
 
-#: gtk/gui.py:356
+#: gtk/gui.py:357
 msgid "Hidden Network ESSID"
 msgstr "Dolt ESSID"
 
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:265
 #: gtk/netentry.py:73
 msgid "IP"
 msgstr "IP"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
+#: wicd/translations.py:79
 msgid "Identity"
 msgstr "Identitet"
 
@@ -360,12 +360,11 @@ msgstr ""
 msgid "Invalid IP address entered."
 msgstr "Ogiltig IP-adress angavs."
 
-#: gtk/gui.py:629 gtk/gui.py:637
+#: gtk/gui.py:630 gtk/gui.py:638
 msgid "Invalid address in $A entry."
 msgstr "Felaktig adress i $A"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:80 curses/wicd-curses.py:463
-#: gtk/gui.py:267 wicd/translations.py:80
+#: curses/wicd-curses.py:463 gtk/gui.py:268 wicd/translations.py:80
 msgid "Key"
 msgstr "Nyckel"
 
@@ -381,11 +380,11 @@ msgstr "Nätverksgränssnitt"
 msgid "Never connect to this network"
 msgstr ""
 
-#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+#: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
 msgstr "Inga trådlösa nätverk funna."
 
-#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: curses/wicd-curses.py:737 gtk/gui.py:439 gtk/wicd-client.py:211
 #: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
 msgid "Not connected"
 msgstr "Ej ansluten"
@@ -396,58 +395,58 @@ msgstr "Ej ansluten"
 msgid "OK"
 msgstr "OK"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:91 wicd/misc.py:91
+#: wicd/misc.py:91
 msgid "Obtaining IP address..."
 msgstr "Hämtar IP-adress..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
-"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
-"respectively.  Note that you will be specifying the full path to the scripts "
-"- not the actual script contents.  You will need to add/edit the script "
-"contents separately.  Refer to the wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", "
+"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
+"variables as needed, to change the preconnect, postconnect, predisconnect"
+" and postdisconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents."
+"  You will need to add/edit the script contents separately.  Refer to the"
+" wicd manual page for more information."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
+#: wicd/translations.py:81
 msgid "Passphrase"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:82 wicd/translations.py:82
+#: wicd/translations.py:82
 msgid "Password"
 msgstr "Lösenord"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:83 wicd/translations.py:83
+#: wicd/translations.py:83
 msgid "Path to CA cert"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
+#: wicd/translations.py:85
 msgid "Path to PAC file"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
+#: wicd/translations.py:84
 msgid "Path to client cert"
 msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr ""
-"Pinga statiska gateways efter anslutning för att verifiera tillhörighet"
+msgstr "Pinga statiska gateways efter anslutning för att verifiera tillhörighet"
 
-#: curses/configscript_curses.py:57 gtk/configscript.py:155
+#: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:59 gtk/configscript.py:158
+#: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
 msgstr ""
 
@@ -463,7 +462,7 @@ msgstr "Inställningsdialog"
 msgid "Prefs"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:86 wicd/translations.py:86
+#: wicd/translations.py:86
 msgid "Preshared key"
 msgstr ""
 
@@ -471,11 +470,11 @@ msgstr ""
 msgid "Press any key to return."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:87 wicd/translations.py:87
+#: wicd/translations.py:87
 msgid "Private key"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:88 wicd/translations.py:88
+#: wicd/translations.py:88
 msgid "Private key password"
 msgstr ""
 
@@ -487,11 +486,11 @@ msgstr "Fråga om profil för automatisk trådbunden anslutning"
 msgid "Properties"
 msgstr "Egenskaper:"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:87 wicd/misc.py:87
+#: wicd/misc.py:87
 msgid "Putting interface down..."
 msgstr "Inaktiverar nätverksgränssnitt..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:88 wicd/misc.py:88
+#: wicd/misc.py:88
 msgid "Putting interface up..."
 msgstr "Aktiverar nätverksgränssnittet..."
 
@@ -519,11 +518,11 @@ msgstr "Uppdatera nätverkslistan"
 msgid "Rename wired profile"
 msgstr "Byt namn på trådbunden nätverksprofil"
 
-#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+#: curses/netentry_curses.py:357 gtk/gui.py:693 gtk/netentry.py:485
 msgid "Required encryption information is missing."
 msgstr "Nödvändig krypteringsinformation saknas."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:90 wicd/misc.py:90
+#: wicd/misc.py:90
 msgid "Resetting IP address..."
 msgstr "Nollställer IP-adress..."
 
@@ -543,7 +542,7 @@ msgstr "Sök"
 msgid "Scan for hidden networks"
 msgstr "Sök efter dolda nätverk"
 
-#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+#: gtk/gui.py:223 gtk/gui.py:528 gtk/wicd-client.py:808
 msgid "Scanning"
 msgstr "Söker"
 
@@ -579,15 +578,15 @@ msgstr "Välj skript"
 msgid "Set up Ad-hoc network"
 msgstr "Ställ in Ad-hoc nätverk"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:92 wicd/misc.py:92
+#: wicd/misc.py:92
 msgid "Setting broadcast address..."
 msgstr "Ställer in broadcast-adress..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:93 wicd/misc.py:93
+#: wicd/misc.py:93
 msgid "Setting static DNS servers..."
 msgstr "Ställer in statisk DNS-server..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:94 wicd/misc.py:94
+#: wicd/misc.py:94
 msgid "Setting static IP addresses..."
 msgstr "Sätter statisk IP-adress..."
 
@@ -603,11 +602,11 @@ msgstr "Sluta tillfälligt att automatisk visa anslutnings-popup"
 msgid "Stop a connection in progress"
 msgstr ""
 
-#: gtk/gui.py:314
+#: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
 msgstr ""
 
-#: gtk/gui.py:311
+#: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
 msgstr ""
 
@@ -625,38 +624,39 @@ msgstr "Dödad av användaren"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it is "
-"restarted."
+"The wicd daemon has shut down. The UI will not function properly until it"
+" is restarted."
 msgstr ""
-"wicd:s bakgrundsprocess har avslutats. Användargränssnittet kommer inte att "
-"fungera förens den startats igen"
+"wicd:s bakgrundsprocess har avslutats. Användargränssnittet kommer inte "
+"att fungera förens den startats igen"
 
-#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+#: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
 msgid "This network requires encryption to be enabled."
 msgstr "Detta nätverk kräver att kryptering är aktiverat."
 
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root), "
-"open the \"$A\" config file, and look for the section labeled by the $B in "
-"question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To create "
-"a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To "
+"create a network profile, type a name that describes this network, and "
+"press Add."
 msgstr ""
 "För att ansluta till ett trådbundet nätverk måste du först skapa en "
 "nätverksprofil.\r\n"
-"För att skapa en nätverksprofil skriv ett namn som beskriver det nätverket "
-"och tryck \"skapa nytt\""
+"För att skapa en nätverksprofil skriv ett namn som beskriver det "
+"nätverket och tryck \"skapa nytt\""
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from DBus. "
-"Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from "
+"DBus. Please check that your user is in the $A group."
 msgstr ""
 "Kunde inte etablera kontakt med wicd:s bakgrundsprocess på grund av ett "
 "\"access denied error\" från DBus. Kontrollera din DBus-konfiguration."
@@ -673,7 +673,7 @@ msgstr ""
 msgid "Use Encryption"
 msgstr "Använd kryptering"
 
-#: curses/wicd-curses.py:465 gtk/gui.py:262
+#: curses/wicd-curses.py:465 gtk/gui.py:263
 msgid "Use Encryption (WEP only)"
 msgstr "Använd kryptering (endast WEP)"
 
@@ -710,15 +710,15 @@ msgstr "Använd senast använda profil för automatisk trådbunden anslutning"
 msgid "Use these settings for all networks sharing this essid"
 msgstr "Använd dessa inställningar för alla nätverk med detta ESSID"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:89 wicd/translations.py:89
+#: wicd/translations.py:89
 msgid "Username"
 msgstr "Användarnamn"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:96 wicd/misc.py:96
+#: wicd/misc.py:96
 msgid "Validating authentication..."
 msgstr "Validerar autentisering"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:97 wicd/misc.py:97
+#: wicd/misc.py:97
 msgid "Verifying access point association..."
 msgstr "Verifierar tillhörighet till accesspunkten..."
 
@@ -734,7 +734,7 @@ msgstr "wicd curses-gränsnitt"
 msgid "Wicd daemon unreachable"
 msgstr "Wicd:s bakgrundsprocess gick inte att hitta"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:196 wicd/misc.py:196
+#: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd behöver komma åt din dators nätverkskort"
 
@@ -758,7 +758,7 @@ msgstr "Trådbundna nätverk"
 msgid "Wired Link Detection"
 msgstr "Avkänning av trådbunden anslutning"
 
-#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: curses/wicd-curses.py:752 gtk/gui.py:473 gtk/netentry.py:285
 #: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
 msgid "Wired Network"
 msgstr "Trådbundet nätverk"
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Wireless Interface"
 msgstr "Trådlöst nätverk"
 
-#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+#: gtk/gui.py:601 gtk/wicd-client.py:222 gtk/wicd-client.py:334
 msgid "Wireless Kill Switch Enabled"
 msgstr "Trådlös radio avstängd"
 
@@ -799,8 +799,8 @@ msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"Du kan även konfigurera trådlösa nätverk genom att leta efter \"[<ESSID>]\" "
-"avsnittet i konfigurationsfilen"
+"Du kan även konfigurera trådlösa nätverk genom att leta efter "
+"\"[<ESSID>]\" avsnittet i konfigurationsfilen"
 
 #: gtk/netentry.py:299 gtk/netentry.py:407
 msgid "You must enter your password to configure scripts"
@@ -808,13 +808,12 @@ msgstr "Du måste ange ditt lösenord för att anpassa skript"
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr ""
-"Du rekommenderas att oftast använda wext som WPA supplicant drivrutin"
+msgstr "Du rekommenderas att oftast använda wext som WPA supplicant drivrutin"
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming "
-"it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -962,9 +961,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the "
+"main window. This can be useful if your wired network card does not "
+"detect when the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1022,3 +1021,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
+

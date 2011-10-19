@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-18 23:50+0200\n"
+"POT-Creation-Date: 2011-10-19 12:33+0200\n"
 "PO-Revision-Date: 2011-10-04 22:21+0000\n"
 "Last-Translator: Adam Blackburn <abkbrn@gmail.com>\n"
 "Language-Team: lt <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-19 06:03+0000\n"
-"X-Generator: Launchpad (build 14157)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -41,7 +41,7 @@ msgstr ""
 msgid "About Wicd"
 msgstr "Apie Wicd"
 
-#: curses/wicd-curses.py:464 gtk/gui.py:271
+#: curses/wicd-curses.py:464 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
 msgstr "Aktyvuoti Interneto dalinimąsi"
 
@@ -65,7 +65,7 @@ msgstr "Visada rodyti laidinę sąsają"
 msgid "Always switch to wired connection when available"
 msgstr "Visuomet prisijungti prie laidinio tinklo, jei tik įmanoma"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:77 wicd/translations.py:77
+#: wicd/translations.py:77
 msgid "Authentication"
 msgstr "Atpažinimas"
 
@@ -97,8 +97,7 @@ msgstr "Sukūrė:"
 
 #: curses/wicd-curses.py:1027
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr ""
-"Nepavyksta prisijungti prie tarnybos, bandoma ją paleisti automatiškai..."
+msgstr "Nepavyksta prisijungti prie tarnybos, bandoma ją paleisti automatiškai..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:489
@@ -106,12 +105,12 @@ msgstr ""
 msgid "Cancel"
 msgstr "Atšaukti"
 
-#: curses/wicd-curses.py:462 gtk/gui.py:266 gtk/netentry.py:965
+#: curses/wicd-curses.py:462 gtk/gui.py:267 gtk/netentry.py:965
 #: gtk/netentry.py:1087
 msgid "Channel"
 msgstr "Kanalas"
 
-#: gtk/gui.py:187 data/wicd.ui:173
+#: gtk/gui.py:188 data/wicd.ui:173
 msgid "Choose from the networks below:"
 msgstr "Pasirinkite iš apačioje esančių tinklų:"
 
@@ -131,7 +130,7 @@ msgstr "Konfigūruojamos laidinio profilio „$A“ nuostatos"
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Konfigūruojamos nuostatos belaidžiam inklui „$A“ ($B)"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:80 wicd/misc.py:80
+#: wicd/misc.py:80
 msgid "Configuring wireless interface..."
 msgstr "Konfigūruojama  belaidžio ryšio sąsaja..."
 
@@ -143,35 +142,35 @@ msgstr "Prisijungti"
 msgid "Connect to selected network"
 msgstr "Prisijungti prie pasirinkto tinklo"
 
-#: curses/wicd-curses.py:159 gtk/gui.py:428 gtk/wicd-client.py:213
+#: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:213
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Prisijungta prie $A  $B (IP: $C)"
 
-#: curses/wicd-curses.py:134 gtk/gui.py:421 gtk/wicd-client.py:218
+#: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:218
 msgid "Connected to wired network (IP: $A)"
 msgstr "Prisijungta prie laidinio tinklo (IP: $A)"
 
-#: gtk/gui.py:190 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+#: gtk/gui.py:191 gtk/wicd-client.py:311 gtk/wicd-client.py:639
 msgid "Connecting"
 msgstr "Jungiamasi"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:77 wicd/misc.py:77
+#: wicd/misc.py:77
 msgid "Connection Cancelled"
 msgstr "Prisijungimas nutrauktas"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:83 wicd/misc.py:83
+#: wicd/misc.py:83
 msgid "Connection Failed."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:79 wicd/misc.py:79
+#: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
 msgstr "Prisijungti nepavyko: Blogas slaptažodis"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:89 wicd/misc.py:89
+#: wicd/misc.py:89
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Neprisijungta: Negauta DHCP pasiūlymų."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:81 wicd/misc.py:81
+#: wicd/misc.py:81
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Prisijungti nepavyko: Negalima gauti IP adreso"
 
@@ -179,19 +178,18 @@ msgstr "Prisijungti nepavyko: Negalima gauti IP adreso"
 msgid "Connection established"
 msgstr "Ryšys užmegztas"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:78 wicd/misc.py:78
+#: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr ""
-"Jungimasis nepavyko: Nepavyko susisiekti su bevielio ryšio prieigos tašku."
+msgstr "Jungimasis nepavyko: Nepavyko susisiekti su bevielio ryšio prieigos tašku."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:95 wicd/misc.py:95
+#: wicd/misc.py:95
 msgid "Connection successful."
 msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
-"messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
 msgstr ""
 "Nepavyko prisijungti prie wicd dbus sąsajos. Daugiau informacijos rasite "
 "wicd žurnale."
@@ -202,18 +200,19 @@ msgid ""
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
 
-#: curses/wicd-curses.py:487 gtk/gui.py:257
+#: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
 msgstr "Sukurti ad-hoc tinklą"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping while "
-"wicd-curses is running. Please restart the daemon, and then restart wicd-"
-"curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping "
+"while wicd-curses is running. Please restart the daemon, and then restart"
+" wicd-curses."
 msgstr ""
-"Dbus gedimas! Tai greičiausiai sustabdė wicd demoną, o wicd-curses veikia. "
-"Prašome iš naujo paleisti demoną, ir tada iš naujo paleiskite wicd-curses."
+"Dbus gedimas! Tai greičiausiai sustabdė wicd demoną, o wicd-curses "
+"veikia. Prašome iš naujo paleisti demoną, ir tada iš naujo paleiskite "
+"wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -250,7 +249,7 @@ msgstr "Atsijungti nuo visų tinklų"
 msgid "Disconnected"
 msgstr "Atsijungta"
 
-#: gtk/gui.py:723
+#: gtk/gui.py:724
 msgid "Disconnecting active connections..."
 msgstr "Nutraukiami aktyvūs ryšiai..."
 
@@ -266,23 +265,23 @@ msgstr "Rodyti pranešimus apie prisijungimo būseną"
 msgid "Display this help dialog"
 msgstr "Rodyti šį pagalbos pranešimą"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:78 wicd/translations.py:78
+#: wicd/translations.py:78
 msgid "Domain"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:82 wicd/misc.py:82
+#: wicd/misc.py:82
 msgid "Done connecting..."
 msgstr "Baigta jungtis..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
-"your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
 msgstr ""
 "KLAIDA: wicd-curses neturi prieigos teisių prie wicd demono: Prašome "
 "patikrinti, ar jūsų naudotojas priklauso $A grupei."
 
-#: curses/wicd-curses.py:460 gtk/gui.py:265
+#: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
 msgstr "ESSID"
 
@@ -298,7 +297,7 @@ msgstr "Užmezgamas ryšys..."
 msgid "External Programs"
 msgstr "Išorinės programos"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:84 wicd/misc.py:84
+#: wicd/misc.py:84
 msgid "Flushing the routing table..."
 msgstr "Užpildoma maršrutų lentelė..."
 
@@ -314,11 +313,11 @@ msgstr "Vartai"
 msgid "General Settings"
 msgstr "Bendrosios nuostatos"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:85 wicd/misc.py:85
+#: wicd/misc.py:85
 msgid "Generating PSK..."
 msgstr "Generuojamas PSK..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:86 wicd/misc.py:86
+#: wicd/misc.py:86
 msgid "Generating WPA configuration file..."
 msgstr "Generuojama WPA konfigūracijos rinkmena..."
 
@@ -338,16 +337,16 @@ msgstr ""
 msgid "Hidden"
 msgstr ""
 
-#: gtk/gui.py:356
+#: gtk/gui.py:357
 msgid "Hidden Network ESSID"
 msgstr "Paslėptas tinklo ESSID"
 
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:264
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:265
 #: gtk/netentry.py:73
 msgid "IP"
 msgstr "IP"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:79 wicd/translations.py:79
+#: wicd/translations.py:79
 msgid "Identity"
 msgstr "Tapatybė"
 
@@ -359,12 +358,11 @@ msgstr ""
 msgid "Invalid IP address entered."
 msgstr "Įvestas neteisingas IP adresas."
 
-#: gtk/gui.py:629 gtk/gui.py:637
+#: gtk/gui.py:630 gtk/gui.py:638
 msgid "Invalid address in $A entry."
 msgstr "Netinkamas adresas ties $A įrašu"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:80 curses/wicd-curses.py:463
-#: gtk/gui.py:267 wicd/translations.py:80
+#: curses/wicd-curses.py:463 gtk/gui.py:268 wicd/translations.py:80
 msgid "Key"
 msgstr "Raktas"
 
@@ -380,11 +378,11 @@ msgstr "Tinklo įrenginiai"
 msgid "Never connect to this network"
 msgstr ""
 
-#: curses/wicd-curses.py:526 gtk/gui.py:602 gtk/wicd-client.py:795
+#: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
 msgstr "Belaidžių tinklų nerasta"
 
-#: curses/wicd-curses.py:737 gtk/gui.py:438 gtk/wicd-client.py:211
+#: curses/wicd-curses.py:737 gtk/gui.py:439 gtk/wicd-client.py:211
 #: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
 msgid "Not connected"
 msgstr "Neprisijungta"
@@ -395,58 +393,58 @@ msgstr "Neprisijungta"
 msgid "OK"
 msgstr "Gerai"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:91 wicd/misc.py:91
+#: wicd/misc.py:91
 msgid "Obtaining IP address..."
 msgstr "Gaunamas IP adresas..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
-"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
-"respectively.  Note that you will be specifying the full path to the scripts "
-"- not the actual script contents.  You will need to add/edit the script "
-"contents separately.  Refer to the wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", "
+"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
+"variables as needed, to change the preconnect, postconnect, predisconnect"
+" and postdisconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents."
+"  You will need to add/edit the script contents separately.  Refer to the"
+" wicd manual page for more information."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:81 wicd/translations.py:81
+#: wicd/translations.py:81
 msgid "Passphrase"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:82 wicd/translations.py:82
+#: wicd/translations.py:82
 msgid "Password"
 msgstr "Slaptažodis"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:83 wicd/translations.py:83
+#: wicd/translations.py:83
 msgid "Path to CA cert"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:85 wicd/translations.py:85
+#: wicd/translations.py:85
 msgid "Path to PAC file"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:84 wicd/translations.py:84
+#: wicd/translations.py:84
 msgid "Path to client cert"
 msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr ""
-"Statinių šliuzų „ping'as“ „po prisijungimo“ asociacijos vartų patikrinimui"
+msgstr "Statinių šliuzų „ping'as“ „po prisijungimo“ asociacijos vartų patikrinimui"
 
-#: curses/configscript_curses.py:57 gtk/configscript.py:155
+#: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:59 gtk/configscript.py:158
+#: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:154
+#: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
 msgstr ""
 
-#: curses/configscript_curses.py:58 gtk/configscript.py:156
+#: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
 msgstr ""
 
@@ -462,7 +460,7 @@ msgstr "Nuostatų dialogas"
 msgid "Prefs"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:86 wicd/translations.py:86
+#: wicd/translations.py:86
 msgid "Preshared key"
 msgstr ""
 
@@ -470,11 +468,11 @@ msgstr ""
 msgid "Press any key to return."
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:87 wicd/translations.py:87
+#: wicd/translations.py:87
 msgid "Private key"
 msgstr ""
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:88 wicd/translations.py:88
+#: wicd/translations.py:88
 msgid "Private key password"
 msgstr ""
 
@@ -486,11 +484,11 @@ msgstr "Klausti profilio laidiniams automatiniams prisijungimams"
 msgid "Properties"
 msgstr "Savybės"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:87 wicd/misc.py:87
+#: wicd/misc.py:87
 msgid "Putting interface down..."
 msgstr "Išjungiama sąsaja..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:88 wicd/misc.py:88
+#: wicd/misc.py:88
 msgid "Putting interface up..."
 msgstr "Įjungiama sąsaja..."
 
@@ -518,11 +516,11 @@ msgstr "Atnaujinti tinklų sąrašą"
 msgid "Rename wired profile"
 msgstr "Pervadinti laidinio ryšio profilį"
 
-#: curses/netentry_curses.py:357 gtk/gui.py:692 gtk/netentry.py:485
+#: curses/netentry_curses.py:357 gtk/gui.py:693 gtk/netentry.py:485
 msgid "Required encryption information is missing."
 msgstr "Trūksta reikalingos šifravimo informacijos"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:90 wicd/misc.py:90
+#: wicd/misc.py:90
 msgid "Resetting IP address..."
 msgstr "Atstatomas IP adresas..."
 
@@ -542,7 +540,7 @@ msgstr "Skenuoti"
 msgid "Scan for hidden networks"
 msgstr "Ieškoti paslėptų tinklų"
 
-#: gtk/gui.py:222 gtk/gui.py:527 gtk/wicd-client.py:808
+#: gtk/gui.py:223 gtk/gui.py:528 gtk/wicd-client.py:808
 msgid "Scanning"
 msgstr "Skenuojama"
 
@@ -578,15 +576,15 @@ msgstr "Pasirinkti scenarijus"
 msgid "Set up Ad-hoc network"
 msgstr "Sukurti ad-hoc tinklą"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:92 wicd/misc.py:92
+#: wicd/misc.py:92
 msgid "Setting broadcast address..."
 msgstr "Nustatomas transliavimo adresas..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:93 wicd/misc.py:93
+#: wicd/misc.py:93
 msgid "Setting static DNS servers..."
 msgstr "Nustatomi statiniai DNS serveriai..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:94 wicd/misc.py:94
+#: wicd/misc.py:94
 msgid "Setting static IP addresses..."
 msgstr "Nustatomi statiniai IP adresai"
 
@@ -602,11 +600,11 @@ msgstr "Laikinai nerodyti automatinio prisijungimo langų"
 msgid "Stop a connection in progress"
 msgstr ""
 
-#: gtk/gui.py:314
+#: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
 msgstr ""
 
-#: gtk/gui.py:311
+#: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
 msgstr ""
 
@@ -624,28 +622,29 @@ msgstr "Nutraukta vartotojo"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it is "
-"restarted."
+"The wicd daemon has shut down. The UI will not function properly until it"
+" is restarted."
 msgstr ""
 "Wicd demonas išsijungė. Vartotojo sąsaja tinkamai neveiks, kol jo "
 "nepaleisite iš naujo."
 
-#: curses/netentry_curses.py:368 gtk/gui.py:699 gtk/netentry.py:496
+#: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
 msgid "This network requires encryption to be enabled."
 msgstr "Šis tinklas reikalauja, kad būtų įjungtas šifravimas"
 
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root), "
-"open the \"$A\" config file, and look for the section labeled by the $B in "
-"question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To create "
-"a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To "
+"create a network profile, type a name that describes this network, and "
+"press Add."
 msgstr ""
 "Norėdami prisijungti prie laidinio tinklo, jūs turite sukurti tinklo "
 "profilį. Norėdami sukurti tinklo profilį, įveskite pavadinimą, kuris "
@@ -653,11 +652,11 @@ msgstr ""
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from DBus. "
-"Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from "
+"DBus. Please check that your user is in the $A group."
 msgstr ""
-"Nepavyko susisiekti Wicd demonui dėl DBus klaidos prieiga neleista. Prašome "
-"patikrinti, ar jūsų naudotojas priklauso $A grupei."
+"Nepavyko susisiekti Wicd demonui dėl DBus klaidos prieiga neleista. "
+"Prašome patikrinti, ar jūsų naudotojas priklauso $A grupei."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
 msgid "Unsecured"
@@ -671,7 +670,7 @@ msgstr ""
 msgid "Use Encryption"
 msgstr "Naudoti šifravimą"
 
-#: curses/wicd-curses.py:465 gtk/gui.py:262
+#: curses/wicd-curses.py:465 gtk/gui.py:263
 msgid "Use Encryption (WEP only)"
 msgstr "Naudoti šifravimą (tik WEP)"
 
@@ -686,7 +685,8 @@ msgstr "Naudoti statinius IP"
 #: curses/netentry_curses.py:190 gtk/netentry.py:635
 msgid "Use as default profile (overwrites any previous default)"
 msgstr ""
-"Padaryti numatytuoju profiliu (perrašomas ankstesnysis numatytasis profilis)"
+"Padaryti numatytuoju profiliu (perrašomas ankstesnysis numatytasis "
+"profilis)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
 msgid "Use dBm to measure signal strength"
@@ -709,15 +709,15 @@ msgstr "Naudoti paskutinį profilį laidiniams automatiniams prisijungimams"
 msgid "Use these settings for all networks sharing this essid"
 msgstr "Naudoti šiuos nustatymus visiems tinklams kurie dalinasi šį essid"
 
-#: build/lib.linux-i686-2.7/wicd/translations.py:89 wicd/translations.py:89
+#: wicd/translations.py:89
 msgid "Username"
 msgstr "Vartotojo vardas"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:96 wicd/misc.py:96
+#: wicd/misc.py:96
 msgid "Validating authentication..."
 msgstr "Tikrinama tapatybė..."
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:97 wicd/misc.py:97
+#: wicd/misc.py:97
 msgid "Verifying access point association..."
 msgstr "Prieigos taško asociacijos tikrinimas ..."
 
@@ -733,7 +733,7 @@ msgstr "Wicd Curses sąsaja"
 msgid "Wicd daemon unreachable"
 msgstr "Wicd tarnyba nepasiekiama"
 
-#: build/lib.linux-i686-2.7/wicd/misc.py:196 wicd/misc.py:196
+#: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd reikia prieiti prie jūsų kompiuterio tinklo kortos"
 
@@ -757,7 +757,7 @@ msgstr "Laidinė sąsaja"
 msgid "Wired Link Detection"
 msgstr "Aptikta laidinė jungtis"
 
-#: curses/wicd-curses.py:752 gtk/gui.py:472 gtk/netentry.py:285
+#: curses/wicd-curses.py:752 gtk/gui.py:473 gtk/netentry.py:285
 #: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
 msgid "Wired Network"
 msgstr "Laidinis tinklas"
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Wireless Interface"
 msgstr "Belaidžio ryšio sąsaja"
 
-#: gtk/gui.py:600 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+#: gtk/gui.py:601 gtk/wicd-client.py:222 gtk/wicd-client.py:334
 msgid "Wireless Kill Switch Enabled"
 msgstr "Belaidžio ryšio nutraukimo mygtukas įgalintas"
 
@@ -811,8 +811,8 @@ msgstr "Beveik visada turėtumėte naudoti wext kaip WPA tvarkyklę"
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming "
-"it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -960,9 +960,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the "
+"main window. This can be useful if your wired network card does not "
+"detect when the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1020,3 +1020,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
+

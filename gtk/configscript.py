@@ -32,10 +32,8 @@ import gtk
 import ConfigParser
 
 from wicd import wpath
-from wicd import translations
+from wicd.translations import _
 from wicd import dbusmanager
-
-_ = translations.get_gettext()
 
 dbus = dbusmanager.DBusManager()
 dbus.connect_to_dbus()

@@ -26,7 +26,7 @@ from curses_misc import TextDialog,DynWrap,MaskingEdit,ComboBox,error
 import wicd.misc as misc
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
 
-from wicd.translations import language
+from wicd.translations import language, _
 import os
 
 daemon = None

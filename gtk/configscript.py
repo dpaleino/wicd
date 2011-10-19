@@ -149,6 +149,7 @@ def main (argv):
     
     gladefile = os.path.join(wpath.gtk, "wicd.ui")
     self.wTree = gtk.Builder()
+    self.wTree.set_translation_domain('wicd')
     self.wTree.add_from_file(gladefile)
     self.dialog = self.wTree.get_object("configure_script_dialog")
     self.wTree.get_object("pre_label").set_label(_('Pre-connection Script') + ":")

@@ -162,6 +162,7 @@ class appGui(object):
 
         gladefile = os.path.join(wpath.gtk, "wicd.ui")
         self.wTree = gtk.Builder()
+        self.wTree.set_translation_domain('wicd')
         self.wTree.add_from_file(gladefile)
         self.window = self.wTree.get_object("window1")
         width = int(gtk.gdk.screen_width() / 2)

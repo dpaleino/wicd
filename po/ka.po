@@ -9,10 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:11+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ka <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-20 04:46+0000\n"
+"X-Generator: Launchpad (build 14165)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -187,8 +188,8 @@ msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
 "Wicd бағдарламасының D-Bus интерфейсіне қосылу мүмкін емес. Wicd "
 "бағдарламасының лог файлын қателер туралы хабарламаларға тексеріңіз."
@@ -205,9 +206,9 @@ msgstr ""
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
 "DBus қатесі! Көбінесе бұл wicd қызметін wicd-curses қосулы тұрғанда "
 "сөндіруден пайда болады. Алдымен қызметті, одан кейін wicd-curses қайта "
@@ -274,8 +275,8 @@ msgstr "Қосылу аяқталуда..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
 
 #: curses/wicd-curses.py:460 gtk/gui.py:266
@@ -396,13 +397,12 @@ msgstr "IP адресін алу..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:81
@@ -564,8 +564,8 @@ msgstr "Жасырын желі атын (ESSID) таңдау"
 #: gtk/gui.py:103
 msgid "Select or create a wired profile to connect with"
 msgstr ""
-"Сымды желі профилін таңдаңыз не жаңасын құрыңыз, келесімен байланыс жасау"
-" үшін:"
+"Сымды желі профилін таңдаңыз не жаңасын құрыңыз, келесімен байланыс жасау "
+"үшін:"
 
 #: curses/wicd-curses.py:222
 msgid "Select scripts"
@@ -621,8 +621,8 @@ msgstr "Пайдаланушы тоқтатты"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 
 #: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
@@ -632,22 +632,21 @@ msgstr "Бұл желі қосылған шифрлеуді талап етед�
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
@@ -693,7 +692,8 @@ msgstr "Глобалды DNS серверлерін қолдану"
 
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
-msgstr "Сымды желіге автоматты түрде қосылғанда соңғы қолданған профильді қолдану"
+msgstr ""
+"Сымды желіге автоматты түрде қосылғанда соңғы қолданған профильді қолдану"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:356
 msgid "Use these settings for all networks sharing this essid"
@@ -799,8 +799,8 @@ msgstr "Сізге көбінесе WPA supplicant драйвері ретінд
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -948,9 +948,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1008,4 +1008,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-

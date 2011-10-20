@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:07+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: pl <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && "
-"(n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
+"X-Generator: Launchpad (build 14165)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -183,8 +183,8 @@ msgstr "Nawiązano połączenie"
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
-"Połączanie nie powiodło się: nie można połączyć się z bezprzewodowym "
-"punktem dostępowym."
+"Połączanie nie powiodło się: nie można połączyć się z bezprzewodowym punktem "
+"dostępowym."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
@@ -192,8 +192,8 @@ msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
 "Nie można połączyć się z interfejsem D-Bus usługi wicd. Proszę sprawdzić "
 "dziennik usługi wicd, aby uzyskać komunikaty błędów."
@@ -210,13 +210,13 @@ msgstr "Utwórz sieć Ad-hoc"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
 "Niepowodzenie DBus. Jest to najprawdopodobniej spowodowane zatrzymaniem "
-"usługi wicd podczas działania wicd-curses. Proszę uruchomić ponownie "
-"usługę, a następnie wicd-curses."
+"usługi wicd podczas działania wicd-curses. Proszę uruchomić ponownie usługę, "
+"a następnie wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -279,11 +279,11 @@ msgstr "Połączono..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
-"BŁĄD: odmówiono dostępu wicd-curses do usługi wicd: proszę sprawdzić, czy"
-" użytkownik znajduje się w grupie \"$A\"."
+"BŁĄD: odmówiono dostępu wicd-curses do usługi wicd: proszę sprawdzić, czy "
+"użytkownik znajduje się w grupie \"$A\"."
 
 #: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
@@ -308,8 +308,7 @@ msgstr "Czyszczenie tablicy trasowania..."
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
 msgstr ""
-"Aby uzyskać szczegółową pomoc, należy zajrzeć do podręcznika wicd-"
-"curses(8)."
+"Aby uzyskać szczegółową pomoc, należy zajrzeć do podręcznika wicd-curses(8)."
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:76
 msgid "Gateway"
@@ -405,13 +404,12 @@ msgstr "Ustalanie adresu IP..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:81
@@ -628,8 +626,8 @@ msgstr "Przerwane przez użytkownika"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "Usługa wicd został wyłączona. Interfejs użytkownika nie będzie działać "
 "poprawnie, dopóki nie zostanie uruchomiona ponownie."
@@ -641,16 +639,15 @@ msgstr "Ta sieć wymaga włączonego szyfrowania."
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Aby połączyć się z siecią przewodową, należy utworzyć profil sieci. Aby "
 "utworzyć taki profil, należy wpisać nazwę opisującą tę sieć i nacisnąć "
@@ -658,12 +655,11 @@ msgstr ""
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
-"Nie można połączyć się z usługą wicd z powodu odmowy dostępu od "
-"magistrali D-Bus. Proszę sprawdzić, czy użytkownik znajduje się w grupie "
-"$A."
+"Nie można połączyć się z usługą wicd z powodu odmowy dostępu od magistrali D-"
+"Bus. Proszę sprawdzić, czy użytkownik znajduje się w grupie $A."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
 msgid "Unsecured"
@@ -708,7 +704,8 @@ msgstr "Użycie globalnych serwerów DNS"
 
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
-msgstr "Użycie poprzedniego profilu dla automatycznego połączenia przewodowego"
+msgstr ""
+"Użycie poprzedniego profilu dla automatycznego połączenia przewodowego"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:356
 msgid "Use these settings for all networks sharing this essid"
@@ -816,8 +813,8 @@ msgstr "Prawie zawsze należy używać wext jako sterownika suplikanta WPA"
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -965,9 +962,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1025,4 +1022,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-

@@ -9,10 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:12+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: et <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-10-20 04:46+0000\n"
+"X-Generator: Launchpad (build 14165)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -187,11 +188,10 @@ msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
-"Ei suutnud wicd deemoni DBus liidesega ühenduda. Uuri wicd logist "
-"veateateid."
+"Ei suutnud wicd deemoni DBus liidesega ühenduda. Uuri wicd logist veateateid."
 
 #: gtk/netentry.py:302 gtk/netentry.py:410
 msgid ""
@@ -205,12 +205,12 @@ msgstr "Ad-hoc võrgu loomine"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
+"curses."
 msgstr ""
-"DBus viga, mis on tõenäoliselt põhjustatud sellest, et wicd deemon peatus"
-" sel ajal kui wicd-curses veel töötas. Palun käivita wicd ning seejärel "
+"DBus viga, mis on tõenäoliselt põhjustatud sellest, et wicd deemon peatus "
+"sel ajal kui wicd-curses veel töötas. Palun käivita wicd ning seejärel "
 "käivita uuesti wicd-curses."
 
 #: curses/prefs_curses.py:92
@@ -274,11 +274,11 @@ msgstr "Ühendatud..."
 
 #: curses/wicd-curses.py:1051
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
-"Viga: wixd-curses ei saa ühendust wicd deemoniga. Palun kontrolli, kas "
-"sinu kasutaja on \"$A\" grupis."
+"Viga: wixd-curses ei saa ühendust wicd deemoniga. Palun kontrolli, kas sinu "
+"kasutaja on \"$A\" grupis."
 
 #: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
@@ -398,13 +398,12 @@ msgstr "IP aadressi hankimine..."
 
 #: curses/wicd-curses.py:277
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:81
@@ -621,11 +620,11 @@ msgstr "Katkestatud kasutaja poolt"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
-"wicd deemon on seiskunud. Kasutajaliides ei tööta korralikult kuni wicd "
-"on uuesti käivitatud."
+"wicd deemon on seiskunud. Kasutajaliides ei tööta korralikult kuni wicd on "
+"uuesti käivitatud."
 
 #: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
 msgid "This network requires encryption to be enabled."
@@ -634,27 +633,26 @@ msgstr "Selle võrgu puhul peab olema krüpteerimine lubatud."
 #: curses/wicd-curses.py:271
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:634
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"Juhtmega võrguühenduse loomiseks tuleb luua võrguprofiil. Selleks kirjuta"
-" nimi,  mis seda võrku kirjeldab, ning vajuta Lisa."
+"Juhtmega võrguühenduse loomiseks tuleb luua võrguprofiil. Selleks kirjuta "
+"nimi,  mis seda võrku kirjeldab, ning vajuta Lisa."
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
-"wicd deemoniga ei saa ühendust kuna ligipääs DBus-ile on takistatud. "
-"Palun kontrolli, kas sinu kasutaja on $A grupis."
+"wicd deemoniga ei saa ühendust kuna ligipääs DBus-ile on takistatud. Palun "
+"kontrolli, kas sinu kasutaja on $A grupis."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
 msgid "Unsecured"
@@ -682,7 +680,8 @@ msgstr "Staatilise IP aadressi kasutamine"
 
 #: curses/netentry_curses.py:190 gtk/netentry.py:635
 msgid "Use as default profile (overwrites any previous default)"
-msgstr "Kasuta vaikimisi profiilina (kirjutab eelmise vaikimisi profiili üle)"
+msgstr ""
+"Kasuta vaikimisi profiilina (kirjutab eelmise vaikimisi profiili üle)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
 msgid "Use dBm to measure signal strength"
@@ -690,7 +689,8 @@ msgstr "dBm kasutamine signaali tugevuse mõõtühikuna"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "Kasuta automaatseks juhtmega võrguühenduse loomiseks vaikimisi profiili"
+msgstr ""
+"Kasuta automaatseks juhtmega võrguühenduse loomiseks vaikimisi profiili"
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
 #: data/wicd.ui:882
@@ -705,7 +705,8 @@ msgstr ""
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:356
 msgid "Use these settings for all networks sharing this essid"
-msgstr "Kasuta selliseid seadeid kõikide võrkude jaoks, mis jagavad sama essid"
+msgstr ""
+"Kasuta selliseid seadeid kõikide võrkude jaoks, mis jagavad sama essid"
 
 #: wicd/translations.py:89
 msgid "Username"
@@ -796,8 +797,8 @@ msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"Traadita võrke on sul võimalik seadistada ka otsides "
-"konfiguratsioonifailist \"[<ESSID>]\" välja."
+"Traadita võrke on sul võimalik seadistada ka otsides konfiguratsioonifailist "
+"\"[<ESSID>]\" välja."
 
 #: gtk/netentry.py:299 gtk/netentry.py:407
 msgid "You must enter your password to configure scripts"
@@ -809,8 +810,8 @@ msgstr "Sa peaksid peaaegu alati kasutama wext-i WPA komponendi jaoks"
 
 #: curses/wicd-curses.py:427
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -958,9 +959,9 @@ msgstr ""
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1018,4 +1019,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-

@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:12+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: fi <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:46+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -122,7 +122,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "Tee asetukset valittuun verkkoon"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -162,7 +162,7 @@ msgstr "Yhteys peruutettu"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Yhteys peruutettu"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -187,7 +187,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Yhteys peruutettu"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -202,6 +202,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"Graafista sudoa ei löydetty. Skriptinmuokkkainta ei voida avata. Skriptit "
+"pitää muokata käsin asetustiedostosta."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -241,7 +243,7 @@ msgstr "Virheenjäljitys"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Yhteys katkaistu"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -257,7 +259,7 @@ msgstr "Suljetaan aktiivisia yhteyksiä..."
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr ""
+msgstr "Näytä tämä ohje"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -269,7 +271,7 @@ msgstr "Näytä tämä ohje"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "DNS domain"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -379,7 +381,7 @@ msgstr "Verkkolaitteet"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Yhdistä automaattisesti tähän verkkoon"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -409,6 +411,12 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
+"Siinä vaiheessa voi muokata tai lisätä beforescript-, afterscript- ja "
+"disconnectscript-muuttujia tarpeen mukaan. Näillä vaikutetaan "
+"yhdistämistestä edeltävään, seuraavaan ja katkaisua seuraavaan skriptiin "
+"vastaavasti. Skripteille pitää antaa hakemistopolku, ei sisältöä. "
+"Tiedostojen sisällöt pitää tuottaa erikseen. Tarkempia tietoja löytyy wicd:n "
+"man-sivuilta."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
@@ -424,7 +432,7 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "Polku PAC-tiedostoon"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -438,19 +446,19 @@ msgstr ""
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Aja post-disconnect-skripti"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Aja post-disconnect-skripti"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Aja esi-katkaisuskripti"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Aja esi-katkaisuskripti"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -511,7 +519,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "Asetukset"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -595,7 +603,7 @@ msgstr "Asetetaan staattista IP-osoitetta..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Katkaise kaikki verkkoyhteydet"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -603,7 +611,7 @@ msgstr "Älä näytä automaattisen yhteyden ponnahdusikkunaa"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "Pysäytä yhdistäminen"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -645,6 +653,9 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
+"Wicd-cursesilla ei voi muokata skriptejä suoraan, koska se hankaloittaisi "
+"asioita. Skriptejä voi kuitenkin muokata käsin. Roottina pitää avata \"$A\"-"
+"tiedosto ja etsiä osio $B, tässä tapauksessa:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -785,7 +796,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr ""
+msgstr "Langaton SSID: Nopeus: IP: Vahvuus: RX: TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -820,6 +831,8 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
+"wicd-curses ei tue viimeisen langallisen profiilin poistoa. Yritä nimetä se "
+"uudelleen ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -839,15 +852,15 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Yhteys katkaistu"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Asetukset"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Asetukset"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -859,7 +872,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Yhdistetään..."
+msgstr "Yhdistetty..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -867,7 +880,7 @@ msgstr ""
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr ""
+msgstr "Palauta skripti ajoon"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -875,23 +888,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Aja esi-katkaisuskripti"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Aja post-disconnect-skripti"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Aja esi-katkaisuskripti"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Aja post-disconnect-skripti"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "Vaihda aina langalliseen yhteyteen, jos vain mahdollista."
 
 #: data/wicd.ui:519
 msgid ""
@@ -902,7 +915,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS domain"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -910,15 +923,15 @@ msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "Yhdistä automaattisesti yhteyden katkettua"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "Automaattinen uudelleenyhdistäminen"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Uudelleen nimeä wired profiili"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -926,43 +939,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Uudelleen nimeä wired profiili"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Automaattinen uudelleenyhdistäminen"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Langallinen verkkolaite"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Langaton verkkolaite"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "Verkkolaitteet"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS-palvelin"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS-palvelin"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS-palvelin"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Etsi verkko-osoitetta"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "Globaalit DNS-palvelimet"
 
 #: data/wicd.ui:960
 msgid ""
@@ -973,15 +986,15 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Ilmoitukset</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr ""
+msgstr "Reititystaulun tyhjennys"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "Langallinen linkki tunnistettu"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -1003,7 +1016,7 @@ msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "Langaton verkkolaite"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1011,11 +1024,11 @@ msgstr ""
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr ""
+msgstr "Virheenjäljitys"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr ""
+msgstr "Taustasovellus"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
@@ -1025,4 +1038,4 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr ""
+msgstr "Lähes aina wext on oikea WPA supplicantin ajuri"

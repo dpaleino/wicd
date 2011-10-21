@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:06+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: ml <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -498,7 +498,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "മുന്‍ഗണനകള്‍"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -817,11 +817,11 @@ msgstr ""
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "മുന്‍ഗണനകള്‍"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "മുന്‍ഗണനകള്‍"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "ബന്ധിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു"
+msgstr "ബന്ധിപ്പിയ്ക്കുക"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

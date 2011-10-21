@@ -6,14 +6,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-19 18:37+0000\n"
-"Last-Translator: Martin Čarnogurský <Unknown>\n"
+"PO-Revision-Date: 2011-10-14 18:21+0000\n"
+"Last-Translator: Eduard Hummel <22edel22@gmail.com>\n"
 "Language-Team: sk <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -25,12 +26,6 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
-"$A\n"
-"$B\n"
-"$C\n"
-"$D\n"
-"$E KB/s\n"
-"$F KB/s"
 
 #: gtk/wicd-client.py:601
 msgid ""
@@ -38,13 +33,10 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
-"$A\n"
-"$B KB/s\n"
-"$C KB/s"
 
 #: curses/wicd-curses.py:563
 msgid "About"
-msgstr "O aplikácii"
+msgstr ""
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -129,7 +121,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr "Nastaviť vybranú sieť"
+msgstr "Konfigurovať vybranú sieť"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -169,7 +161,7 @@ msgstr "Spojenie zrušené"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr "Pripojenie zlyhalo."
+msgstr "Spojenie zrušené"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -189,12 +181,11 @@ msgstr "Spojenie je vytvorené"
 
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr ""
-"Spojenie zlyhalo: Nepodarilo sa kontaktovať bezdrôtový prístupový bod."
+msgstr "Spojenie zlyhalo: Nepodarilo sa kontaktovať bezdrôtový prístupový bod."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Pripojenie úspešné."
+msgstr "Spojenie zrušené"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -209,6 +200,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"Nemožno nájsť grafický sudo program. Editor skriptov nie je možné spustiť. "
+"Skripty musíte upravovať  priamo vo vašom konfiguračnom súbore."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -229,7 +222,7 @@ msgstr "DHCP klient"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr "DHCP Hostname"
+msgstr ""
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
 msgid "DNS domain"
@@ -248,7 +241,7 @@ msgstr "Ladenie"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Odpojené"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -264,7 +257,7 @@ msgstr "Odpájam aktívne spojenia..."
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr "Zobraziť dialóg 'O Aplikácii'"
+msgstr "Zobraziť túto nápovedu"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -276,7 +269,7 @@ msgstr "Zobraziť túto nápovedu"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr "Doména"
+msgstr "DNS doména"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -340,7 +333,7 @@ msgstr "Globálne DNS servery"
 
 #: curses/wicd-curses.py:554
 msgid "Help"
-msgstr "Pomoc"
+msgstr ""
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
@@ -361,7 +354,7 @@ msgstr "Identita"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr "Informácie o aktuálnom spojení"
+msgstr ""
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -385,7 +378,7 @@ msgstr "Sieťové rozhrania"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr "Nikdy sa nepripájať k tejto sieti"
+msgstr "Automaticky sa pripojiť k tejto sieti"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -415,10 +408,13 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
+"Tu môžete meniť alebo pridávať premenné \"beforescript\", \"afterscript\" a "
+"\"disconnectscript\". Zadávate plnú cestu k skriptu, nie jeho obsah. Viac "
+"informácií nájdete v manuálových stránkach wicd."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr "Heslo"
+msgstr ""
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -430,32 +426,31 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "Cesta k PAC súboru"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr "Cesta ku klientskému certifikátu"
+msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr ""
-"Pingnúť statickú bránu po pripojení pre overenie úspešnosti asociácie"
+msgstr "Pingnúť statickú bránu po pripojení pre overenie úspešnosti asociácie"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Spusti skript po odpojení."
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Spusti skript po odpojení."
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Spustiť skript pred odpojením"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Spustiť skript pred odpojením"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -475,15 +470,15 @@ msgstr ""
 
 #: curses/wicd-curses.py:228
 msgid "Press any key to return."
-msgstr "Stlačte akúkoľvek klávesu pre návrat."
+msgstr ""
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr "Súkromný kľúč"
+msgstr ""
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr "Heslo súkromného kľúča"
+msgstr ""
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -503,19 +498,19 @@ msgstr "Zapínam zariadenie..."
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
-msgstr "Ukončiť"
+msgstr ""
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr "Ukončiť wicd-curses"
+msgstr ""
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr "Ukončiť wicd-tray-icon"
+msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr "Obnoviť"
+msgstr "Nastavenia"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -599,7 +594,7 @@ msgstr "Nastavujem statické IP adresy..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Odpojiť od všetkých sietí"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -607,7 +602,7 @@ msgstr "Dočasne nezobrazuj upozornenia na automatické pripojenie"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr "Zastaviť prebiehajúce spojenie"
+msgstr "Zastaviť pripájanie ku sieti"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -648,10 +643,10 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
-"Aby sa predišlo rôznym komplikáciam, wicd-curses nepodporuje priame "
-"upravovanie skriptov. Avšak, môžete ich upraviť manuálne. Najprv, (ako "
-"root), otvorte \"$A\" konfiguračný súbor, a vyhľadajte sekciu označenú ako "
-"$B v otázke. V tomto prípade to je:"
+"Aby sa zabránilo komplikáciám, wicd-curses nepodporuje priame editovanie "
+"skriptov. Môžete ich však editovať ručne. Najskôr, (ako root)\", otvorte \"$A"
+"\" konfiguračný súbor, a vyhľadajte sekciu nazvanú $B v otázke. V tomto "
+"prípade to je:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -705,8 +700,7 @@ msgstr "Použiť dBm na meranie sily signálu"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr ""
-"Pri automatickom pripojení ku káblovej sieti použiť predvolený profil."
+msgstr "Pri automatickom pripojení ku káblovej sieti použiť predvolený profil."
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
 #: data/wicd.ui:882
@@ -757,10 +751,6 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
-"Káblové\n"
-"IP:\n"
-"RX:\n"
-"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -796,14 +786,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr ""
-"Bezdrátové\n"
-"SSID:\n"
-"Rýchlosť:\n"
-"IP:\n"
-"Sila:\n"
-"RX:\n"
-"TX:"
+msgstr "Bezdátový SSID: Rýchlosť: IP: Signál: RX: TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -838,56 +821,56 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
-"wicd-curses nepodporuje odstránenie posledného káblového profilu. Skúste ho "
-"premenovať (\"F2\")"
+"wicd-curses nepodporuje mazanie posledného profilu káblového pripojenia. "
+"Skúste ho premenovať ( F2 )"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr "wicd-curses nápoveda"
+msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr "Manažér Siete Wicd"
+msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr "Zadajte skrytú sieť pre pokus o jej vyhľadanie."
+msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr "_Vypnúť Wi-Fi"
+msgstr "Vypnúť Wi-Fi"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Odpojené"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "_Obnoviť"
+msgstr "Nastavenia"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr "_Nastavenia"
+msgstr "Nastavenia"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr "_O Programe"
+msgstr ""
 
 #: data/wicd.ui:151
 msgid "_Quit"
-msgstr "_Ukončiť"
+msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Pripájam..."
+msgstr "Končím pripojenie..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr "Zrušiť súčasný pokus o pripojenie"
+msgstr ""
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr ""
+msgstr "Skript zobudenia"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -895,23 +878,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Spustiť skript pred odpojením"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Spusti skript po odpojení."
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Spustiť skript pred odpojením"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Spusti skript po odpojení."
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr "Vždy prepnúť na káblovú sieť ak je k dispozícii"
+msgstr "Keď je dostupné, vždy prepnúť na káblové pripojenie"
 
 #: data/wicd.ui:519
 msgid ""
@@ -919,73 +902,70 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
-"Ak vybrané, wicd sa automaticky pripojí\n"
-"čo najskôr po pripojení káblu aj keď je \n"
-"bezdrátové spojenie aktívne."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr "DNS doména:"
+msgstr "DNS doména"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr "<b>Nikdy nepripojiť</b>"
+msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr "Automaticky pripojiť po strate spojenia siete"
+msgstr "Pri strate spojenia sa automaticky pripojiť"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "<b>Automatické znovupripojenie</b>"
+msgstr "Automatické pripojenie"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Premenovať profil káblového pripojenia"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr "Spýtať sa na profil káblovej siete"
+msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Použiť východzí profil káblovej siete"
+msgstr "Premenovať profil káblového pripojenia"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Automatické pripojenie"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Káblové zariadenie"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr "Bezdrátové zariadenie:"
+msgstr "Bezdrôtové zariadenie"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr "<b>Sieťové zariadenia</b>"
+msgstr "Sieťové rozhrania"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr "DNS server 3:"
+msgstr "DNS server"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr "DNS server 2:"
+msgstr "DNS server"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr "DNS server 1:"
+msgstr "DNS server"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Hľadať doménu"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr "<b>Globálne Servere DNS</b>"
+msgstr "Globálne DNS servery"
 
 #: data/wicd.ui:960
 msgid ""
@@ -993,29 +973,26 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
-"Ak povolené, sieťové zariadenie káblovej siete bude vždy zobrazené v hlavnom "
-"okne. To je užitočné ak vaša sieťová karta nedetekuje kedy je pripojené ku "
-"káblu."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr "<b>Upozornenia</b>"
+msgstr "<b>Oznámenia</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr ""
+msgstr "Vyprázdnenie smerovacej tabuľky"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "Hľadanie káblovej siete"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr "<b>DHCP Klient</b>"
+msgstr ""
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr "<b>Grafická Sudo Aplikácia</b>"
+msgstr ""
 
 #: data/wicd.ui:1421
 msgid ""
@@ -1025,11 +1002,11 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr "Ovládač:"
+msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr "<b>Bezdrátové zariadenie</b>"
+msgstr "Bezdrôtové zariadenie"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1037,11 +1014,11 @@ msgstr ""
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr "<b>Ladenie</b>"
+msgstr "Ladenie"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr ""
+msgstr "Backend"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
@@ -1051,4 +1028,4 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr ""
+msgstr "Mali by ste vždy použiť wext ako WPA supplicant ovládač"

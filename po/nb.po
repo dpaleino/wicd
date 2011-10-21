@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:13+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: nb <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -160,7 +160,7 @@ msgstr "Forbindelse avbrutt"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Forbindelse avbrutt"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Forbindelse avbrutt"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -371,7 +371,7 @@ msgstr ""
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Koble fra alle nettverk"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -416,7 +416,7 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "Sti til PAC fil"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -428,19 +428,19 @@ msgstr ""
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -584,7 +584,7 @@ msgstr ""
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Koble fra alle nettverk"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "Stopp nettverkstilkobling som settes opp"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -815,7 +815,7 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Koble fra alle nettverk"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
@@ -823,7 +823,7 @@ msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Innstillinger"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -835,7 +835,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Kobler til"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -851,23 +851,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Kjør skript før frakobling"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "Bytt alltid til kablet forbindelse hvis tilgjengelig"
 
 #: data/wicd.ui:519
 msgid ""
@@ -910,11 +910,11 @@ msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Vis alltid kablet nettverk"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Vis alltid kablet nettverk"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"

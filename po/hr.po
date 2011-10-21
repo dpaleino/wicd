@@ -9,11 +9,12 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:07+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: hr <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -120,7 +121,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "Konfiguriraj odabranu mrežu"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -160,7 +161,7 @@ msgstr "Veza poništena"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Veza poništena"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -184,7 +185,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Veza poništena"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -197,6 +198,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"Ne mogu naći grafički sudo program.uređivač skripti nbe može biti pokrenut."
+"Morate urediti skipte direkto u vašoj konfiguracijskoj datoteci."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -234,7 +237,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Isključen"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -250,7 +253,7 @@ msgstr "Isključi aktivne veze"
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr ""
+msgstr "Prikaži ovaj dijalog pomoći"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -262,7 +265,7 @@ msgstr "Prikaži ovaj dijalog pomoći"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "DNS domena"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -369,7 +372,7 @@ msgstr "Mrežna sučelja"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Automatski spoji na ovu mrežu"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -434,11 +437,11 @@ msgstr ""
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Odaberite skripte"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Žična veza pronađena"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -498,7 +501,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "Osobitosti"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -582,7 +585,7 @@ msgstr "Postavljanje statičkih IP adresa..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Odspoji sa svih mreža"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -629,6 +632,10 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
+"Da bi se izbjegle različite komplikacije,wicd-curses ne podržava uređivanje "
+"skripti.Ipak,možete ih urediti ručno.Prvo ( kao korijenski korisnik) "
+"otvorite \"$A\" configuracijsku datoteku,i tražite sekciju označenu sa  $B u "
+"pitanju.U tom slučaju ovo je:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -817,15 +824,15 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Isključen"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Osobitosti"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Osobitosti"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -837,7 +844,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Povezivanje završeno..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -853,7 +860,7 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Odaberite skripte"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
@@ -861,7 +868,7 @@ msgstr ""
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Žična veza pronađena"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
@@ -869,7 +876,7 @@ msgstr ""
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "Uvijek prebaci na žičnu vezu kada je dostupna"
 
 #: data/wicd.ui:519
 msgid ""
@@ -880,7 +887,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS domena"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -888,15 +895,15 @@ msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "Automatski spoji na ovu mrežu"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "Automatsko prespajanje"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Preimenuj žični pofil"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -904,43 +911,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Preimenuj žični pofil"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Automatsko prespajanje"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Žično sučelje"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Bežično sučelje"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "Mrežna sučelja"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS poslužitelj"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS poslužitelj"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS poslužitelj"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Traži domenu"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "Globalni DNS poslužitelji"
 
 #: data/wicd.ui:960
 msgid ""
@@ -981,7 +988,7 @@ msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "Bežično sučelje"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"

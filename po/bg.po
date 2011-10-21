@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:07+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: bg <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:46+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -120,7 +120,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "Конфигуриране на избраната мрежа"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -160,7 +160,7 @@ msgstr "Връзката прекъсната"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Връзката прекъсната"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -184,7 +184,7 @@ msgstr "Свързването неуспешно: Не е намерена бе
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Връзката прекъсната"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -199,6 +199,9 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"Няма намерена графична sudo програма. Редактора на скриптове не може да бъде "
+"стартиран. Ще трябва да редактирате скриптове директно в конфигурационния "
+"файл."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -239,7 +242,7 @@ msgstr "Диагностика"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Връзката прекъсната"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -255,7 +258,7 @@ msgstr "Прекъсване активни връзки..."
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr ""
+msgstr "Покажи прозорец с помощ"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -267,7 +270,7 @@ msgstr "Покажи прозорец с помощ"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "DNS домейн"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -376,7 +379,7 @@ msgstr "Мрежови интерфейси"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Автоматично свързване към тази мрежа"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -406,6 +409,12 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
+"Там можете да промените (или добавяне) \"beforescript\", \"afterscript\" и "
+"\"disconnectscript\" променливи, ако е необходимо, за да промените "
+"preconnect, postconnect и disconnect скриптове. Имайте предвид, че ще се "
+"посочва пълния път до скрипта - не самото съдържание на скрипта. Вие ще "
+"трябва да се добавите/редактирате съдържанието на скрипта отделно. Обърнете "
+"се към wicd ръководството за повече информация."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
@@ -421,7 +430,7 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "Път до PAC файл"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -433,19 +442,19 @@ msgstr "Провери връзката до шлюза след успешно 
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Стартирай post-disconnect скрипт"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Стартирай post-disconnect скрипт"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Стартиране на pre-disconnect скрипт"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Стартиране на pre-disconnect скрипт"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -505,7 +514,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "Настройки"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -589,7 +598,7 @@ msgstr "Настройка на статичен IP адрес"
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Прекъсване на всички мрежови връзки"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -597,7 +606,7 @@ msgstr "Временно не показвай прозореца за авто�
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "Прекъсни процеса на свързване"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -638,6 +647,10 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
+"За да се избегнат различни усложнения, wicd интерфейса не поддържа директно "
+"редактиране на скриптовете. Въпреки това, можете да ги редактирате ръчно. "
+"Първо, отворете конфигурационния файл \"$A\", и потърсете секцията $B. В "
+"този случай, това е:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -777,7 +790,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr ""
+msgstr "Име на мрежата: Скорост: IP: Сигнал: Получени: Изпратени"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -812,6 +825,8 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
+"Wicd интерфейса не позволява изтриване на единствения останал профил. Може "
+"да бъде преименуван ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -831,15 +846,15 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Връзката прекъсната"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Настройки"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Настройки"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -851,7 +866,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Връзка установена..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -859,7 +874,7 @@ msgstr ""
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr ""
+msgstr "Скрипт за събуждане"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -867,23 +882,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Стартиране на pre-disconnect скрипт"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Стартирай post-disconnect скрипт"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Стартиране на pre-disconnect скрипт"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Стартирай post-disconnect скрипт"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "Предпочитане на кабелна връзка, когато е налична"
 
 #: data/wicd.ui:519
 msgid ""
@@ -894,7 +909,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS домейн"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -902,15 +917,15 @@ msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "Автоматично свързване при загуба на връзката"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "Автоматично възстановяване на връзката, в случай на прекъсване"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Преименувай профил"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -918,43 +933,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Преименувай профил"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Автоматично възстановяване на връзката, в случай на прекъсване"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Кабелен интерфейс"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Безжичен интерфейс"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "Мрежови интерфейси"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS сървър"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS сървър"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS сървър"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Домейн за търсене"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "Глобални DNS сървъри"
 
 #: data/wicd.ui:960
 msgid ""
@@ -965,15 +980,15 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Известия</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr ""
+msgstr "Опресняване на маршрутната таблица"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "Кабелна връзка открита"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -995,7 +1010,7 @@ msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "Безжичен интерфейс"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1003,11 +1018,11 @@ msgstr ""
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr ""
+msgstr "Диагностика"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr ""
+msgstr "Backend"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
@@ -1017,4 +1032,4 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr ""
+msgstr "Почти винаги трябва да се използва wext за WPA supplicant драйвер"

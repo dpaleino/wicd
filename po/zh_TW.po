@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:13+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -120,7 +120,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "設定所選取的網路"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -160,7 +160,7 @@ msgstr "取消連線"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "取消連線"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -184,7 +184,7 @@ msgstr "連線失敗：無法聯接到無線網路存取點。"
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "取消連線"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -197,6 +197,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"無法找到圖形化 sudo 程式。此程序編輯器無法啟動。您必須字型在您的設定檔中編輯"
+"程序。"
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -234,7 +236,7 @@ msgstr "除錯中"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "斷線"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -250,7 +252,7 @@ msgstr "正在中斷使用中的連線"
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr ""
+msgstr "顯示求助對話框"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -262,7 +264,7 @@ msgstr "顯示求助對話框"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "DNS 網域"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -369,7 +371,7 @@ msgstr "網路介面"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "自動連接這個網絡"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -414,7 +416,7 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "PAC檔案的路徑"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -426,19 +428,19 @@ msgstr "在連線後 ping 固定gateway 以認證連結"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -498,7 +500,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "喜好設定"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -582,7 +584,7 @@ msgstr "正在設置靜態IP地址..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "將所有的網路斷線"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -590,7 +592,7 @@ msgstr "暫時停止顯示自動重新連結通知:"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "停止正在進行的網路連線"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -634,7 +636,9 @@ msgstr ""
 msgid ""
 "To connect to a wired network, you must create a network profile. To create "
 "a network profile, type a name that describes this network, and press Add."
-msgstr "要連線到有線網路，您必需建立一個網路設定檔。要建立網路設定檔，請鍵入描述此網路的名稱，然後按下 Add"
+msgstr ""
+"要連線到有線網路，您必需建立一個網路設定檔。要建立網路設定檔，請鍵入描述此網"
+"路的名稱，然後按下 Add"
 
 #: gtk/wicd-client.py:94
 msgid ""
@@ -761,7 +765,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr ""
+msgstr "無線 SSID: 速度: IP: 強度: RX: TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -813,15 +817,15 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "斷線"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "喜好設定"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "喜好設定"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -833,7 +837,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "連接中..."
+msgstr "完成連接中..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -841,7 +845,7 @@ msgstr ""
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr ""
+msgstr "重設指令搞"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -849,23 +853,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "執行 pre-disconnect script"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "有線網路可以用時切換成有線網路"
 
 #: data/wicd.ui:519
 msgid ""
@@ -876,7 +880,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS 網域"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -884,15 +888,15 @@ msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "當連線中斷時,自動重新連接"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "自動重新連接:"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "重新命名設定:"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -900,43 +904,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "重新命名設定:"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "自動重新連接:"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "有線網路介面"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "無線網路介面"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "網路介面"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS 伺服器:"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS 伺服器:"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS 伺服器:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "搜尋網域"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "全域 DNS 主機"
 
 #: data/wicd.ui:960
 msgid ""
@@ -947,15 +951,15 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>通知</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr ""
+msgstr "更新路由表:"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "有線連線偵測"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -977,7 +981,7 @@ msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "無線網路介面"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -985,11 +989,11 @@ msgstr ""
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr ""
+msgstr "除錯中"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr ""
+msgstr "後端"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"

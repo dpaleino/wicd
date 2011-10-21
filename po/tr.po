@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-09-18 16:11+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: tr <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -120,7 +120,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "Seçilen Ağı Düzenle"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
@@ -160,7 +160,7 @@ msgstr "Bağlantı İptal Edildi"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Bağlantı İptal Edildi"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -184,7 +184,7 @@ msgstr "Bağlantı hatası: Kablosuz erişim noktasıyla iletişilemedi."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Bağlantı İptal Edildi"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -199,6 +199,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
+"Göresel bir sudo programı bulunamadı. Betik düzenleyici başlatılamadı. "
+"Betikleri doğrudan konfigruasyon dosayasından düzenlemek zorundasınız."
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -239,7 +241,7 @@ msgstr "Ayıklanıyor"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Bağlantı koptu"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -255,7 +257,7 @@ msgstr "Etkin bağlantılar kesiliyor..."
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
-msgstr ""
+msgstr "Yardımı göster"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -267,7 +269,7 @@ msgstr "Yardımı göster"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "DNS alanadı"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -376,7 +378,7 @@ msgstr "Ağ Arayüzleri"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Bu ağa kendiliğinden bağlan"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -421,7 +423,7 @@ msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "PAC dosya yolu"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -429,24 +431,23 @@ msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr ""
-"Ortaklık doğrulama bağlantısının ardından sabit ağ geçitlerine ping at"
+msgstr "Ortaklık doğrulama bağlantısının ardından sabit ağ geçitlerine ping at"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Kopma mesajı kodunu çalıştır"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Kopma mesajı kodunu çalıştır"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Ön-kopma betiği çalıştır"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Ön-kopma betiği çalıştır"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -506,7 +507,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "Seçenekler"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -590,7 +591,7 @@ msgstr "Statik IP adresleri ayarlanıyor..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Tüm ağlarla bağlantıyı kes"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -598,7 +599,7 @@ msgstr "Otomatik bağlantı penceresini görüntülemeyi geçici olarak durdur"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "Süren ağ bağlantısını durdur"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -639,6 +640,10 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
+"Birtakım olumsuzluklardan kaçınmak için wicd-curses doğrudan betik "
+"düzenlemeyi desteklemiyor. Siz yine de elle düzenleyebilirsiniz. İlk olarak "
+"(root hakkıyla) \"$A yı açın\" ve sorudaki $B ile etiketlenmiş bölüme bakın. "
+"Bu halde olsun:"
 
 #: gtk/netentry.py:634
 msgid ""
@@ -776,7 +781,7 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr ""
+msgstr "Kablosuz SSID: Hız: IP: Kalite: RX: TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -811,6 +816,8 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
+"Wicd-curses son kablolu bağlantıyı silmeyi desteklemiyor. Yeniden "
+"isimlendirin ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -830,15 +837,15 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "Bağlantı koptu"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Seçenekler"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Seçenekler"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -850,7 +857,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Bağlanıyor..."
+msgstr "Bağlantı tamamlandı..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -858,7 +865,7 @@ msgstr ""
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr ""
+msgstr "Kodu sürdür"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -866,23 +873,23 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr ""
+msgstr "Ön-kopma betiği çalıştır"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Kopma mesajı kodunu çalıştır"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr ""
+msgstr "Ön-kopma betiği çalıştır"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Kopma mesajı kodunu çalıştır"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr ""
+msgstr "Kullanılabilirse daima kablolu bağlantıya geç"
 
 #: data/wicd.ui:519
 msgid ""
@@ -893,7 +900,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS alanadı"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -901,15 +908,15 @@ msgstr ""
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "Bağlantı koparsa derhâl yeniden bağlan"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "Otomatikman tekrar bağlan"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Kablolu arayüzünü yeniden isimlendir"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -917,43 +924,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Kablolu arayüzünü yeniden isimlendir"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Otomatikman tekrar bağlan"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Kablolu Arabirim"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Kablosuz Arabirim"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "Ağ Arayüzleri"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS sunucu"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS sunucu"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS sunucu"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Alan adı ara"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "Genel DNS sunucuları"
 
 #: data/wicd.ui:960
 msgid ""
@@ -964,15 +971,15 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Uyarılar</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr ""
+msgstr "Yol Çizelgesi Temizleniyor"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "Kablolu Ağ Algılandı"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -994,7 +1001,7 @@ msgstr ""
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "Kablosuz Arabirim"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1002,11 +1009,11 @@ msgstr ""
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr ""
+msgstr "Ayıklanıyor"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr ""
+msgstr "Arka uç"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
@@ -1016,4 +1023,4 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr ""
+msgstr "Mümkün mertebe her zaman WPA supplicant sürücü olarak wext kullan"

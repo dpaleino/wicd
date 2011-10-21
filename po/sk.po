@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-19 18:37+0000\n"
+"PO-Revision-Date: 2011-10-20 07:03+0000\n"
 "Last-Translator: Martin Čarnogurský <Unknown>\n"
 "Language-Team: sk <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:47+0000\n"
+"X-Launchpad-Export-Date: 2011-10-21 05:00+0000\n"
 "X-Generator: Launchpad (build 14165)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -125,7 +125,7 @@ msgstr "Vyberte si zo sietí zobrazených nižšie:"
 
 #: curses/wicd-curses.py:555
 msgid "Config"
-msgstr ""
+msgstr "Nastavenia"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
@@ -426,11 +426,11 @@ msgstr "Heslo"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Cesta k CA certifikátu"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr ""
+msgstr "Cesta k PAC súboru"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
@@ -941,7 +941,7 @@ msgstr "<b>Automatické znovupripojenie</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Použiť posledný káblový profil"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -994,8 +994,8 @@ msgid ""
 "the interface is connected to a cable."
 msgstr ""
 "Ak povolené, sieťové zariadenie káblovej siete bude vždy zobrazené v hlavnom "
-"okne. To je užitočné ak vaša sieťová karta nedetekuje kedy je pripojené ku "
-"káblu."
+"okne. To je užitočné ak vaša sieťová karta nedetekuje kedy je zariadenie "
+"pripojené ku káblu."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"

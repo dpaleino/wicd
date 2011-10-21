@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-09-18 16:11+0000\n"
+"PO-Revision-Date: 2011-10-20 08:25+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: eo <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-20 04:46+0000\n"
+"X-Launchpad-Export-Date: 2011-10-21 05:00+0000\n"
 "X-Generator: Launchpad (build 14165)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -35,11 +35,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:563
 msgid "About"
-msgstr ""
+msgstr "Pri"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
-msgstr ""
+msgstr "Pri Wicd"
 
 #: curses/wicd-curses.py:464 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
@@ -47,11 +47,11 @@ msgstr "Aktivigi kunhavadon de interreta konekto"
 
 #: curses/wicd-curses.py:377
 msgid "Add a new profile"
-msgstr ""
+msgstr "Aldoni nova profilo"
 
 #: curses/wicd-curses.py:410
 msgid "Add a new wired profile"
-msgstr ""
+msgstr "Aldoni nova drata profilo"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
@@ -77,7 +77,7 @@ msgstr "Aŭtomate (rekomendata)"
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
-msgstr ""
+msgstr "Aŭtomata Rekonekto"
 
 #: curses/netentry_curses.py:257 gtk/netentry.py:816
 msgid "Automatically connect to this network"
@@ -89,11 +89,11 @@ msgstr "Aŭtomate rekonekti post perdo de konekto"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr ""
+msgstr "Modulo"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
-msgstr ""
+msgstr "Prezentita al vi per:"
 
 #: curses/wicd-curses.py:1027
 msgid "Can't connect to the daemon, trying to start it automatically..."
@@ -103,7 +103,7 @@ msgstr ""
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:489
 #: curses/wicd-curses.py:604 curses/wicd-curses.py:606
 msgid "Cancel"
-msgstr ""
+msgstr "Nuligi"
 
 #: curses/wicd-curses.py:462 gtk/gui.py:267 gtk/netentry.py:965
 #: gtk/netentry.py:1087
@@ -116,19 +116,19 @@ msgstr "Elekti el retoj sube:"
 
 #: curses/wicd-curses.py:555
 msgid "Config"
-msgstr ""
+msgstr "Agordi"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
-msgstr ""
+msgstr "Agordi elektan reton"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr ""
+msgstr "Agordas drata profilo \"$A\""
 
 #: curses/netentry_curses.py:272
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr ""
+msgstr "Agordas sendrata reto \"$A\" ($B)"
 
 #: wicd/misc.py:80
 msgid "Configuring wireless interface..."
@@ -140,7 +140,7 @@ msgstr "Konekti"
 
 #: curses/wicd-curses.py:214
 msgid "Connect to selected network"
-msgstr ""
+msgstr "Konekti al elekta reto"
 
 #: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:213
 msgid "Connected to $A at $B (IP: $C)"
@@ -152,7 +152,7 @@ msgstr "Konekti en sendrata reto (IP: $A)"
 
 #: gtk/gui.py:191 gtk/wicd-client.py:311 gtk/wicd-client.py:639
 msgid "Connecting"
-msgstr ""
+msgstr "Konektanta"
 
 #: wicd/misc.py:77
 msgid "Connection Cancelled"
@@ -160,7 +160,7 @@ msgstr "Konekto rezignita"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr ""
+msgstr "Malsukcesa Konekto."
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -168,7 +168,7 @@ msgstr "Konekto fiaskis: Malbona pasvorto"
 
 #: wicd/misc.py:89
 msgid "Connection Failed: No DHCP offers received."
-msgstr ""
+msgstr "Konekto malsukcesi: neniu DHCP oferto riceva."
 
 #: wicd/misc.py:81
 msgid "Connection Failed: Unable to Get IP Address"
@@ -176,7 +176,7 @@ msgstr "Konekto fiaskis: Neebla akiri IP adresojn"
 
 #: gtk/wicd-client.py:267 gtk/wicd-client.py:297
 msgid "Connection established"
-msgstr ""
+msgstr "Establa konekto."
 
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
@@ -184,7 +184,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Sukcesa konekto."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -200,7 +200,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:487 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
-msgstr ""
+msgstr "Krei Ad-Hoc Reto"
 
 #: curses/wicd-curses.py:99
 msgid ""
@@ -219,34 +219,34 @@ msgstr ""
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
 msgid "DNS domain"
-msgstr ""
+msgstr "DNS domajno"
 
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
 #: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
 #: gtk/netentry.py:80 gtk/netentry.py:81
 msgid "DNS server"
-msgstr ""
+msgstr "Servilo DNS"
 
 #: curses/prefs_curses.py:117
 msgid "Debugging"
-msgstr ""
+msgstr "Sencimigi"
 
 #: curses/wicd-curses.py:559
 msgid "Disconn"
-msgstr ""
+msgstr "Malknkt"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
-msgstr ""
+msgstr "Malkonekti de tutaj retoj"
 
 #: gtk/wicd-client.py:338 gtk/wicd-client.py:641
 msgid "Disconnected"
-msgstr ""
+msgstr "Malkonektita"
 
 #: gtk/gui.py:724
 msgid "Disconnecting active connections..."
-msgstr ""
+msgstr "Malkonektas aktivaj konektoj..."
 
 #: curses/wicd-curses.py:225
 msgid "Display 'about' dialog"
@@ -262,7 +262,7 @@ msgstr ""
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr ""
+msgstr "Domajno"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -276,7 +276,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
-msgstr ""
+msgstr "ESSID"
 
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
 msgid "Enable debug mode"
@@ -284,7 +284,7 @@ msgstr "Ŝalti sencimigan reĝinon"
 
 #: gtk/wicd-client.py:318 gtk/wicd-client.py:322
 msgid "Establishing connection..."
-msgstr ""
+msgstr "Establas konekton..."
 
 #: curses/prefs_curses.py:51 data/wicd.ui:1398
 msgid "External Programs"
@@ -320,15 +320,15 @@ msgstr ""
 
 #: curses/prefs_curses.py:72
 msgid "Global DNS servers"
-msgstr ""
+msgstr "Universalaj DNS serviloj"
 
 #: curses/wicd-curses.py:554
 msgid "Help"
-msgstr ""
+msgstr "Helpo"
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
-msgstr ""
+msgstr "Kaŝita"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -345,7 +345,7 @@ msgstr "Idento"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Informaĵo pri la kurenta konekto"
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -365,11 +365,11 @@ msgstr "Retmasko"
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
-msgstr ""
+msgstr "Retinterfacoj"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Neniam konekti al tio ĉi reto"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -384,7 +384,7 @@ msgstr "Nekonektita"
 #: curses/netentry_curses.py:66 curses/wicd-curses.py:489
 #: curses/wicd-curses.py:601 curses/wicd-curses.py:605
 msgid "OK"
-msgstr ""
+msgstr "Bone"
 
 #: wicd/misc.py:91
 msgid "Obtaining IP address..."
@@ -402,7 +402,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "Pasfrazo"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -450,7 +450,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Prefs"
-msgstr ""
+msgstr "Prefrj"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -462,11 +462,11 @@ msgstr ""
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Privata klavo"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Privata klava pasvorto"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -474,7 +474,7 @@ msgstr ""
 
 #: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
 msgid "Properties"
-msgstr ""
+msgstr "Atributoj"
 
 #: wicd/misc.py:87
 msgid "Putting interface down..."
@@ -486,27 +486,27 @@ msgstr ""
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
-msgstr ""
+msgstr "Eliri"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Eliri wicd-curses"
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Eliri wicd-tray-icon"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr ""
+msgstr "Aktualigi"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
-msgstr ""
+msgstr "Aktualigi reta listo"
 
 #: curses/wicd-curses.py:440
 msgid "Rename wired profile"
-msgstr ""
+msgstr "Rebapti drata profilo"
 
 #: curses/netentry_curses.py:357 gtk/gui.py:693 gtk/netentry.py:485
 msgid "Required encryption information is missing."
@@ -518,7 +518,7 @@ msgstr "Rekomencado de IP adresojn..."
 
 #: curses/wicd-curses.py:557
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -526,7 +526,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:628
 msgid "Scan"
-msgstr ""
+msgstr "Skani"
 
 #: curses/wicd-curses.py:221
 msgid "Scan for hidden networks"
@@ -534,7 +534,7 @@ msgstr ""
 
 #: gtk/gui.py:223 gtk/gui.py:528 gtk/wicd-client.py:808
 msgid "Scanning"
-msgstr ""
+msgstr "Skanas"
 
 #: curses/wicd-curses.py:525
 msgid "Scanning networks... stand by..."
@@ -546,7 +546,7 @@ msgstr "Skriptoj"
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
 msgid "Search domain"
-msgstr ""
+msgstr "Serĉa domajno"
 
 #: gtk/netentry.py:959 gtk/netentry.py:1081
 msgid "Secured"
@@ -566,7 +566,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:223
 msgid "Set up Ad-hoc network"
-msgstr ""
+msgstr "Aranĝi Ad-hoc reto"
 
 #: wicd/misc.py:92
 msgid "Setting broadcast address..."
@@ -590,7 +590,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr ""
+msgstr "Fermi progresanta konekto"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -602,15 +602,15 @@ msgstr ""
 
 #: curses/wicd-curses.py:602
 msgid "Tab Left"
-msgstr ""
+msgstr "Liva Tangeto"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Right"
-msgstr ""
+msgstr "Dekstra Tangeto"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
-msgstr ""
+msgstr "Finata de uzanto"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:981
 msgid ""
@@ -697,7 +697,7 @@ msgstr "Uzantnomo"
 
 #: wicd/misc.py:96
 msgid "Validating authentication..."
-msgstr ""
+msgstr "Validigas aŭtentikecon..."
 
 #: wicd/misc.py:97
 msgid "Verifying access point association..."
@@ -713,7 +713,7 @@ msgstr ""
 
 #: gtk/wicd-client.py:224 gtk/wicd-client.py:331
 msgid "Wicd daemon unreachable"
-msgstr ""
+msgstr "Wicd dajmono malatingebla"
 
 #: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
@@ -726,6 +726,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Drata\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -746,7 +750,7 @@ msgstr "Drata reto"
 
 #: curses/wicd-curses.py:532
 msgid "Wired Networks"
-msgstr ""
+msgstr "Drataj retoj"
 
 #: gtk/gui.py:97
 msgid "Wired connection detected"
@@ -762,6 +766,13 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Sendrata\n"
+"SSID:\n"
+"Rapideco:\n"
+"IP:\n"
+"Signalo:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -773,7 +784,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:534
 msgid "Wireless Networks"
-msgstr ""
+msgstr "Sendrataj Retoj"
 
 #: curses/wicd-curses.py:276
 msgid ""
@@ -797,11 +808,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses helpo"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd Reta Administranto"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -813,23 +824,23 @@ msgstr ""
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr ""
+msgstr "_Malkonekti Tuta"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "_Aktualigi"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr ""
+msgstr "Agor_doj"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_Pri"
 
 #: data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Eliri"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -876,19 +887,19 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr ""
+msgstr "DNS domajno:"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>Neniamo Konekti</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr ""
+msgstr "Aŭtomate rekonekti kiam reta konekto estas perda"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "<b>Aŭtomata Rekonekti</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
@@ -900,43 +911,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Uzi defaŭlta drata reta profilo"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "<b>Drata aŭtomata konekto</b>"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr ""
+msgstr "Drata interfaco:"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Sendrata interfaco:"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "<b>Retaj interfacoj</b>"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr ""
+msgstr "DNS servilo 3:"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr ""
+msgstr "DNS servilo 2:"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr ""
+msgstr "DNS servilo 1:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr ""
+msgstr "Serĉa domajno:"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr ""
+msgstr "<b>Universala DNS Serviloj</b>"
 
 #: data/wicd.ui:960
 msgid ""
@@ -947,7 +958,7 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Avizoj</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
@@ -955,7 +966,7 @@ msgstr ""
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr ""
+msgstr "<b>Drata Ligila Detekto</b>"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -973,11 +984,11 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Pelilo:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr ""
+msgstr "<b>Sendrata Interfaco</b>"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"

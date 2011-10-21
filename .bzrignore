@@ -24,3 +24,5 @@ scripts/wicd-curses
 translations/*
 wicd/wpath.py
 *tags
+dist/
+MANIFEST

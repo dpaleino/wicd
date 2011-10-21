@@ -629,7 +629,7 @@ setup(
         'update_translations' : update_translations,
         'compile_translations' : compile_translations,
     },
-    name = "Wicd",
+    name = "wicd",
     version = VERSION_NUM,
     description = "A wireless and wired network manager",
     long_description = """A complete network connection manager

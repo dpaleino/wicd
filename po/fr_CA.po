@@ -6,14 +6,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-09-18 16:08+0000\n"
+"PO-Revision-Date: 2011-10-21 22:23+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: fr_CA <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Launchpad-Export-Date: 2011-10-22 05:06+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
+"Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -63,7 +64,8 @@ msgstr "Toujours afficher l'interface câblée"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Toujours permuter sur connexion câblée lorsque celle-ci est disponible"
+msgstr ""
+"Toujours permuter sur connexion câblée lorsque celle-ci est disponible"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -826,7 +828,8 @@ msgstr "Vous devez entrer votre mot de passe pour configurer les scripts"
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
+msgstr ""
+"La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
 
 #: curses/wicd-curses.py:427
 msgid ""
@@ -906,7 +909,8 @@ msgstr "Exécuter un script après la déconnexion"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr "Toujours permuter sur connexion câblée lorsque celle-ci est disponible"
+msgstr ""
+"Toujours permuter sur connexion câblée lorsque celle-ci est disponible"
 
 #: data/wicd.ui:519
 msgid ""
@@ -1040,4 +1044,5 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
+msgstr ""
+"La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"

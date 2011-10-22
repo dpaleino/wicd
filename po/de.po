@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-09-18 16:08+0000\n"
+"PO-Revision-Date: 2011-10-21 22:21+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: de <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Launchpad-Export-Date: 2011-10-22 05:05+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -308,7 +308,8 @@ msgstr "Leere die Routing-Tabelle..."
 
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "Verwenden Sie die wicd-courses (8) man Seite für ausführlichere Hilfe."
+msgstr ""
+"Verwenden Sie die wicd-courses (8) man Seite für ausführlichere Hilfe."
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:76
 msgid "Gateway"
@@ -671,9 +672,9 @@ msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from DBus. "
 "Please check that your user is in the $A group."
 msgstr ""
-"Konnte den Wicd-Daemon nicht ansprechen, da DBus einen \"Zugriff verweigert"
-"\"-Fehler ausgibt. Bitte versichern sie sich, dass ihr Benutzer in der "
-"Gruppe $A ist."
+"Konnte den Wicd-Daemon nicht ansprechen, da DBus einen \"Zugriff "
+"verweigert\"-Fehler ausgibt. Bitte versichern sie sich, dass ihr Benutzer in "
+"der Gruppe $A ist."
 
 #: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
 msgid "Unsecured"

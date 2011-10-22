@@ -6,14 +6,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-04 20:46+0000\n"
-"Last-Translator: Pierre-Olivier Megret <Unknown>\n"
+"PO-Revision-Date: 2011-10-21 22:23+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: fr <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Launchpad-Export-Date: 2011-10-22 05:05+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
+"Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:608
@@ -126,7 +127,8 @@ msgstr "Configurer le réseau sélectionné"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Configuration des préférences pour le profil de réseau filaire \"$A\""
+msgstr ""
+"Configuration des préférences pour le profil de réseau filaire \"$A\""
 
 #: curses/netentry_curses.py:272
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
@@ -416,8 +418,8 @@ msgid ""
 msgstr ""
 "Ensuite, vous pouvez changer (ou ajouter) les variables \"beforescript\", "
 "\"afterscript\" et \"disconnectscript\" selon votre besoin, pour changer les "
-"scripts avant connexion, après connexion et de déconnexion respectivement."
-"\r\n"
+"scripts avant connexion, après connexion et de déconnexion "
+"respectivement.\r\n"
 "Attention, vous devez entrer le chemin complet des scripts - pas leur "
 "contenu actuel. Vous devrez ajouter / éditer le contenu des scripts "
 "séparément. Consultez le manuel de wicd pour plus d'information"
@@ -493,7 +495,8 @@ msgstr ""
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
-msgstr "Demander le profil à utiliser lors de la connexion filaire automatique"
+msgstr ""
+"Demander le profil à utiliser lors de la connexion filaire automatique"
 
 #: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
 msgid "Properties"
@@ -712,7 +715,8 @@ msgstr "Utiliser les dBm pour mesurer la puissance du signal"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "Utiliser le profil par défaut lors de la connexion filaire automatique"
+msgstr ""
+"Utiliser le profil par défaut lors de la connexion filaire automatique"
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
 #: data/wicd.ui:882
@@ -827,7 +831,8 @@ msgstr "Vous devez entrer votre mot de passe pour configurer les scripts."
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
+msgstr ""
+"La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
 
 #: curses/wicd-curses.py:427
 msgid ""
@@ -1041,4 +1046,5 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"
+msgstr ""
+"La plupart du temps, il faut utiliser wext comme pilote WPA supplicant"

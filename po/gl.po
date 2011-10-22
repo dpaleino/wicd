@@ -758,6 +758,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Con fíos\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -794,10 +798,6 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
-"Con fíos\r\r\n"
-"IP:\r\r\n"
-"RX:\r\r\n"
-"TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"

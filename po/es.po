@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-22 10:17+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-10-24 21:30+0000\n"
+"Last-Translator: A. Emmanuel Mendoza <Unknown>\n"
 "Language-Team: es <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-23 05:27+0000\n"
-"X-Generator: Launchpad (build 14170)\n"
+"X-Launchpad-Export-Date: 2011-10-25 04:57+0000\n"
+"X-Generator: Launchpad (build 14185)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -369,7 +369,7 @@ msgstr "Identidad"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Información acerca de la conexión actual"
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -490,7 +490,7 @@ msgstr "Clave precompartida"
 
 #: curses/wicd-curses.py:228
 msgid "Press any key to return."
-msgstr ""
+msgstr "Presione cualquier tecla para volver."
 
 #: wicd/translations.py:87
 msgid "Private key"
@@ -856,7 +856,7 @@ msgstr "Gestor de Red Wicd"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Introduzca una red oculta a localizar."
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
@@ -896,7 +896,7 @@ msgstr "Continuar el script"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Configure los scripts a ejecutar para esta red:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -947,7 +947,7 @@ msgstr "Renombrar perfil cableado"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Aviso para perfil de red alámbrica"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"

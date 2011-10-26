@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wicd\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-21 15:14+0000\n"
+"PO-Revision-Date: 2011-10-25 15:57+0000\n"
 "Last-Translator: ASTUR2000 <Unknown>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-23 05:26+0000\n"
-"X-Generator: Launchpad (build 14170)\n"
+"X-Launchpad-Export-Date: 2011-10-26 05:17+0000\n"
+"X-Generator: Launchpad (build 14189)\n"
 
 #: gtk/wicd-client.py:608
 msgid ""
@@ -73,7 +73,7 @@ msgstr "Amosar siempres perfil cableáu"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Camudar siempres pa una conexón cableada cunado tean disponibles"
+msgstr "Camudar siempres pa una conexón cableada cuando tean disponibles"
 
 #: wicd/translations.py:77
 msgid "Authentication"

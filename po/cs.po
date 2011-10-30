@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-21 22:21+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-10-29 19:52+0000\n"
+"Last-Translator: Rostislav Liber <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-23 05:26+0000\n"
-"X-Generator: Launchpad (build 14170)\n"
+"X-Launchpad-Export-Date: 2011-10-30 05:20+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -36,7 +36,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:563
 msgid "About"
-msgstr ""
+msgstr "O aplikaci"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -117,7 +117,7 @@ msgstr "Vyberte ze sítí zobrazených níže:"
 
 #: curses/wicd-curses.py:555
 msgid "Config"
-msgstr ""
+msgstr "Nastavení"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
@@ -332,11 +332,11 @@ msgstr "Globální DNS servery"
 
 #: curses/wicd-curses.py:554
 msgid "Help"
-msgstr ""
+msgstr "Nápověda"
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
-msgstr ""
+msgstr "Skryté"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -353,7 +353,7 @@ msgstr "Identita"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Informace o současném připojení."
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -413,7 +413,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "Přístupové heslo"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -461,23 +461,23 @@ msgstr "Nastavení"
 
 #: curses/wicd-curses.py:561
 msgid "Prefs"
-msgstr ""
+msgstr "Předvolby"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
-msgstr ""
+msgstr "Předdefinované heslo"
 
 #: curses/wicd-curses.py:228
 msgid "Press any key to return."
-msgstr ""
+msgstr "Stiskněte libovolnou klávesu pro návrat."
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Soukromý klíč"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Heslo soukromého klíče"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -497,7 +497,7 @@ msgstr "Zapínám zařízení..."
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
-msgstr ""
+msgstr "Ukončit"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
@@ -605,11 +605,11 @@ msgstr "Zastavit připojování k síti"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Vypnout Wi-Fi"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Zapnout Wi-Fi"
 
 #: curses/wicd-curses.py:602
 msgid "Tab Left"
@@ -827,15 +827,15 @@ msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Správce sítě Wicd"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Pro nalezení skryté sítě zadejte její jméno."
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "_Vypnout Wi-Fi"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
@@ -851,11 +851,11 @@ msgstr "Vlastnosti"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_O programu"
 
 #: data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Ukončit"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -863,7 +863,7 @@ msgstr "Připojení dokončeno..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "Přerušit probíhající pokus o připojení."
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
@@ -899,6 +899,8 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"Pokud je zvolena tato volba, Wicd se automaticky připojí k LAN\n"
+"jakmile je připojen síťový kabel, ikdyž bezdrátové připojení je již aktivní."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -906,7 +908,7 @@ msgstr "DNS doména"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "Nikdy nepřipojovat"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
@@ -970,6 +972,9 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"Pokud je aktivováno, síťové rozhraní bude vždy zobrazeno v hlavním okně. "
+"Může to být užitečné, pokud Vaše síťová karta automaticky nerozpozná "
+"připojení kabelu."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
@@ -996,10 +1001,12 @@ msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
+"Najeďte kurzorem nad zvolenou cílovou architekturu\n"
+"k zobrazení  jejího popisu."
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Ovladač:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1019,7 +1026,7 @@ msgstr "Backend"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "Cílová architektura"
 
 #: data/wicd.ui:1615
 msgid ""

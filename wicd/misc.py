@@ -438,7 +438,7 @@ def to_unicode(x):
     
 def RenameProcess(new_name):
     """ Renames the process calling the function to the given name. """
-    if sys.platform != 'linux2':
+    if 'linux' not in sys.platform:
         print 'Unsupported platform'
         return False
     try:

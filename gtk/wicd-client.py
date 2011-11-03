@@ -124,7 +124,7 @@ class TrayIcon(object):
     Base Class for implementing a tray icon to display network status.
     
     """
-    def __init__(self, animate, displaytray=True):
+    def __init__(self, animate, displaytray=True, displayapp=False):
         self.cur_sndbytes = -1
         self.cur_rcvbytes = -1
         self.last_sndbytes = -1
@@ -136,6 +136,8 @@ class TrayIcon(object):
             self.tr = self.EggTrayIconGUI(self)
         else:
             self.tr = self.StatusTrayIconGUI(self)
+        if displayapp:
+            self.tr.toggle_wicd_gui()
         self.icon_info = self.TrayConnectionInfo(self, self.tr, animate)
         self.tr.icon_info = self.icon_info
         print 'displaytray %s' % displaytray
@@ -931,6 +933,7 @@ wicd %s
 wireless (and wired) connection daemon front-end.
 
 Arguments:
+\t-t\t--tray\tRun the wicd tray icon only.
 \t-n\t--no-tray\tRun wicd without the tray icon.
 \t-h\t--help\t\tPrint this help information.
 \t-a\t--no-animate\tRun the tray without network traffic tray animations.
@@ -991,9 +994,10 @@ def main(argv):
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'nhao', ['help', 'no-tray',
-                                                         'no-animate',
-                                                         'only-notifications'])
+        opts, args = getopt.getopt(sys.argv[1:], 'tnhao', ['help', 'no-tray',
+                                                          'tray',
+                                                          'no-animate',
+                                                          'only-notifications'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -1006,6 +1010,8 @@ def main(argv):
         if opt in ('-h', '--help'):
             usage()
             sys.exit(0)
+        elif opt in ('-t', '--tray'):
+            display_app = False
         elif opt in ('-n', '--no-tray'):
             use_tray = False
         elif opt in ('-a', '--no-animate'):
@@ -1021,7 +1027,7 @@ def main(argv):
     print 'Loading...'
     setup_dbus()
     atexit.register(on_exit)
-    
+
     if display_app and not use_tray or not ICON_AVAIL:
         the_gui = gui.appGui(standalone=True)
         mainloop = gobject.MainLoop()
@@ -1029,7 +1035,7 @@ def main(argv):
         sys.exit(0)
 
     # Set up the tray icon GUI and backend
-    tray_icon = TrayIcon(animate, displaytray=display_app)
+    tray_icon = TrayIcon(animate, displaytray=use_tray, displayapp=display_app)
 
     # Check to see if wired profile chooser was called before icon
     # was launched (typically happens on startup or daemon restart).

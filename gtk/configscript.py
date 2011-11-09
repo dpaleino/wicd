@@ -29,11 +29,11 @@ run as the current user.
 import sys
 import os
 import gtk
-import ConfigParser
 
 from wicd import wpath
 from wicd.translations import _
 from wicd import dbusmanager
+from wicd.configmanager import ConfigManager
 
 dbus = dbusmanager.DBusManager()
 dbus.connect_to_dbus()
@@ -64,53 +64,30 @@ def blank_to_none(text):
     else:
         return str(text)
     
-def get_val(con, network, option, default="None"):
-    """ Returns the specified option for the given network.
-
-    Returns the value stored in the config file for the given option,
-    unless the option isn't stored yet, in which case the default value
-    provided is stored and then returned.
-    
-    Keyword arguments:
-    network -- The section to search.
-    option -- The option to search for.
-    deafult -- The default value to store/return if the option isn't found.
-    
-    """
-    if not con.has_option(network, option):
-        con.set(network, option, default)
-    return con.get(network, option)
-        
-
 def get_script_info(network, network_type):
     """ Read script info from disk and load it into the configuration dialog """
     info = {}
-    con = ConfigParser.ConfigParser()
     if network_type == "wired":
-        con.read(wired_conf)
+        con = ConfigManager(wired_conf)
         if con.has_section(network):
-            info["pre_entry"] = get_val(con, network, "beforescript")
-            info["post_entry"] = get_val(con, network, "afterscript")
-            info["pre_disconnect_entry"] = get_val(con, network, "predisconnectscript")
-            info["post_disconnect_entry"] = get_val(con, network, "postdisconnectscript")
+            info["pre_entry"] = con.get(network, "beforescript", None)
+            info["post_entry"] = con.get(network, "afterscript", None)
+            info["pre_disconnect_entry"] = con.get(network, "predisconnectscript", None)
+            info["post_disconnect_entry"] = con.get(network, "postdisconnectscript", None)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
-        con.read(wireless_conf)
+        con = ConfigManager(wireless_conf)
         if con.has_section(bssid):
-            info["pre_entry"] = get_val(con, bssid, "beforescript")
-            info["post_entry"] = get_val(con, bssid, "afterscript")
-            info["pre_disconnect_entry"] = get_val(con, bssid, "predisconnectscript")
-            info["post_disconnect_entry"] = get_val(con, bssid, "postdisconnectscript")
+            info["pre_entry"] = con.get(bssid, "beforescript", None)
+            info["post_entry"] = con.get(bssid, "afterscript", None)
+            info["pre_disconnect_entry"] = con.get(bssid, "predisconnectscript", None)
+            info["post_disconnect_entry"] = con.get(bssid, "postdisconnectscript", None)
     return info
 
 def write_scripts(network, network_type, script_info):
     """ Writes script info to disk and loads it into the daemon. """
-    con = ConfigParser.ConfigParser()
-
     if network_type == "wired":
-        con.read(wired_conf)
-        if not con.has_section(network):
-            con.add_section(network)
+        con = ConfigManager(wired_conf)
         con.set(network, "beforescript", script_info["pre_entry"])
         con.set(network, "afterscript", script_info["post_entry"])
         con.set(network, "predisconnectscript", script_info["pre_disconnect_entry"])
@@ -121,9 +98,7 @@ def write_scripts(network, network_type, script_info):
         wired.SaveWiredNetworkProfile(network)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
-        con.read(wireless_conf)
-        if not con.has_section(bssid):
-            con.add_section(bssid)
+        con = ConfigManager(wireless_conf)
         con.set(bssid, "beforescript", script_info["pre_entry"])
         con.set(bssid, "afterscript", script_info["post_entry"])
         con.set(bssid, "predisconnectscript", script_info["pre_disconnect_entry"])

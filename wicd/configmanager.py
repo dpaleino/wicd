@@ -32,16 +32,26 @@ from wicd.misc import Noneify, to_unicode
 
 from dbus import Int32
 
+def sanitize_config_file(path):
+    conf = open(path)
+    newconf = ''
+    for line in conf:
+        if '[' not in line or '=' not in line:
+            newconf += line
+    conf.close()
+    conf = open(path, 'w')
+    conf.write(newconf)
+    conf.close()
+
 class ConfigManager(RawConfigParser):
     """ A class that can be used to manage a given configuration file. """
     def __init__(self, path, debug=False, mark_whitespace="`'`"):
-        if sys.version_info >= (2, 7, 0):
-            RawConfigParser.__init__(self, allow_no_value=True)
-        else:
-            RawConfigParser.__init__(self)
+        RawConfigParser.__init__(self)
         self.config_file = path
         self.debug = debug
         self.mrk_ws = mark_whitespace
+        if path:
+            sanitize_config_file(path)
         try:
             self.read(path)
         except ParsingError, e:

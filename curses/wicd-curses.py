@@ -195,7 +195,8 @@ def about_dialog(body):
 ('green',"  \\\\\\"),"   |+|   ",('green',"///"),"      ",_('Brought to you by:'),"\n",
 ('green',"   \\\\\\"),"  |+|  ",('green',"///"),"       Adam Blackburn\n",
 "     ___|+|___         Dan O'Reilly\n",
-"    |---------|        Andrew Psaltis\n",
+"    ____|+|____        Andrew Psaltis\n",
+"   |-----------|       David Paleino\n",
 "-----------------------------------------------------"]
     about = TextDialog(theText,16,55,header=('header',_('About Wicd')))
     about.run(ui,body)

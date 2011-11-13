@@ -5,6 +5,7 @@ include LICENSE
 include MANIFEST.in
 include NEWS
 include README
+include uninstall.sh
 include vcsinfo.py
 
 graft cli
@@ -15,9 +16,12 @@ graft encryption
 graft in
 graft other
 graft po
+graft tests
+graft wicd
 
 recursive-include man wicd-client.1
 recursive-include . *.py
 recursive-include . *.png
 
-prune build .bzr* *.log *.pyc
+prune build .bzr* .git*
+prunt build *.log *.pyc

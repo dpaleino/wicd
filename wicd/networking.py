@@ -658,6 +658,8 @@ class Wireless(Controller):
         The name of the currently connected network.
 
         """
+        if self.connecting_thread and self.connecting_thread.is_connecting:
+            return self.connecting_thread.network['essid']
         return self.wiface.GetCurrentNetwork(iwconfig)
     
     def GetBSSID(self):

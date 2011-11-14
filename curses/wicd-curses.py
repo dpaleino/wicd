@@ -747,7 +747,8 @@ class appGUI():
                 iwconfig = wireless.GetIwconfig()
             else:
                 iwconfig = ''
-            essid, stat = wireless.CheckWirelessConnectingMessage()
+            essid = wireless.GetCurrentNetwork()
+            stat = wireless.CheckWirelessConnectingMessage()
             return self.set_status("%s: %s" % (essid, stat), True)
         if wired_connecting:
             return self.set_status(_('Wired Network') +

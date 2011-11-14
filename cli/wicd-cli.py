@@ -189,8 +189,8 @@ if options.connect:
         wireless.ConnectWireless(options.network)
 
         check = lambda: wireless.CheckIfWirelessConnecting()
-        status = lambda: wireless.CheckWirelessConnectingStatus()[1]
-        message = lambda: wireless.CheckWirelessConnectingMessage()[1]
+        status = lambda: wireless.CheckWirelessConnectingStatus()
+        message = lambda: wireless.CheckWirelessConnectingMessage()
     elif options.wired:
         print "Connecting to wired connection on %s" % wired.DetectWiredInterface()
         wired.ConnectWired()

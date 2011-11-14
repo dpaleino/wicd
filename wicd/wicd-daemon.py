@@ -1179,9 +1179,8 @@ class WirelessDaemon(dbus.service.Object):
     def CheckWirelessConnectingStatus(self):
         """ Returns the wireless interface's status code. """
         if self.wifi.connecting_thread:
-            essid = self.wifi.connecting_thread.network["essid"]
             stat = self.wifi.connecting_thread.GetStatus()
-            return essid, stat
+            return stat
         else:
             return False
 
@@ -1189,8 +1188,8 @@ class WirelessDaemon(dbus.service.Object):
     def CheckWirelessConnectingMessage(self):
         """ Returns the wireless interface's status message. """
         if self.wifi.connecting_thread:
-            essid, stat = self.CheckWirelessConnectingStatus()
-            return essid, _status_dict[stat]
+            stat = self.CheckWirelessConnectingStatus()
+            return _status_dict[stat]
         else:
             return False
 

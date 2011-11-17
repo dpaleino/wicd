@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-21 22:27+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-11-16 09:56+0000\n"
+"Last-Translator: Longchao Dong <donglongchao@gmail.com>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-10-23 05:27+0000\n"
-"X-Generator: Launchpad (build 14170)\n"
+"X-Launchpad-Export-Date: 2011-11-17 05:33+0000\n"
+"X-Generator: Launchpad (build 14291)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -443,7 +443,7 @@ msgstr "执行”断开连接前执行“脚本"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr "执行”断开连接前执行“脚本"
+msgstr "连接断开前运行的脚本"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -909,7 +909,7 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "重命名有线配置方案"
+msgstr "使用默认的有线网络配置方案"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"

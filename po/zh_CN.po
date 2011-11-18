@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-11-16 09:56+0000\n"
+"PO-Revision-Date: 2011-11-17 14:24+0000\n"
 "Last-Translator: Longchao Dong <donglongchao@gmail.com>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-17 05:33+0000\n"
-"X-Generator: Launchpad (build 14291)\n"
+"X-Launchpad-Export-Date: 2011-11-18 05:19+0000\n"
+"X-Generator: Launchpad (build 14299)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -26,6 +26,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:601
 msgid ""
@@ -33,10 +39,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:563
 msgid "About"
-msgstr ""
+msgstr "关于"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -117,7 +126,7 @@ msgstr "从以下网络选择："
 
 #: curses/wicd-curses.py:555
 msgid "Config"
-msgstr ""
+msgstr "配置"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
@@ -161,7 +170,7 @@ msgstr "连接被取消"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr "连接被取消"
+msgstr "连接失败"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -177,7 +186,7 @@ msgstr "连接失败：无法获取IP地址"
 
 #: gtk/wicd-client.py:267 gtk/wicd-client.py:297
 msgid "Connection established"
-msgstr "连接建立"
+msgstr "连接已建立"
 
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
@@ -185,7 +194,7 @@ msgstr "连接失败：不能连接到无线接入点"
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "连接被取消"
+msgstr "连接成功"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:952
 msgid ""
@@ -217,7 +226,7 @@ msgstr "DHCP 客户端"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP主机名"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
 msgid "DNS domain"
@@ -244,7 +253,7 @@ msgstr "断开所有网络"
 
 #: gtk/wicd-client.py:338 gtk/wicd-client.py:641
 msgid "Disconnected"
-msgstr "失去连接"
+msgstr "已断开"
 
 #: gtk/gui.py:724
 msgid "Disconnecting active connections..."
@@ -326,11 +335,11 @@ msgstr "全局 DNS 服务器"
 
 #: curses/wicd-curses.py:554
 msgid "Help"
-msgstr ""
+msgstr "帮助"
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
-msgstr ""
+msgstr "隐藏"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -347,7 +356,7 @@ msgstr "身份"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr ""
+msgstr "当前连接的信息"
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -415,7 +424,7 @@ msgstr "密码"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "CA证书的路径"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -423,7 +432,7 @@ msgstr "PAC 文件路径"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "客户端证书的路径"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -431,15 +440,15 @@ msgstr "连接后 Ping 静态网关以验证"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr "运行 post-disconnect 脚本"
+msgstr "连接建立后运行的脚本"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr "运行 post-disconnect 脚本"
+msgstr "连接断开后运行的脚本"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr "执行”断开连接前执行“脚本"
+msgstr "连接建立前运行的脚本"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
@@ -455,7 +464,7 @@ msgstr "首选项对话框"
 
 #: curses/wicd-curses.py:561
 msgid "Prefs"
-msgstr ""
+msgstr "首选项"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -463,15 +472,15 @@ msgstr ""
 
 #: curses/wicd-curses.py:228
 msgid "Press any key to return."
-msgstr ""
+msgstr "按任意键返回。"
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "私人密钥"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "私人密钥密码"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -491,19 +500,19 @@ msgstr "正在启动接口..."
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
-msgstr ""
+msgstr "退出"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "退出wicd-curses"
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "退出wicd状态栏图标"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr "首选项"
+msgstr "刷新"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -527,7 +536,7 @@ msgstr ""
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
-msgstr "刷新路由表"
+msgstr "正在刷新路由表"
 
 #: curses/wicd-curses.py:628
 msgid "Scan"
@@ -563,7 +572,7 @@ msgstr "选择隐藏的无线 ESSID"
 
 #: gtk/gui.py:103
 msgid "Select or create a wired profile to connect with"
-msgstr "选择或创建有线配置并使用该设置进行连接"
+msgstr "选择或创建有线配置并使用该配置进行连接"
 
 #: curses/wicd-curses.py:222
 msgid "Select scripts"
@@ -587,7 +596,7 @@ msgstr "正在设置静态IP地址..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr "断开所有网络"
+msgstr "显示无法连接的网络"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -599,11 +608,11 @@ msgstr "正在停止一个网络连接"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "关闭Wi-Fi"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "打开Wi-Fi"
 
 #: curses/wicd-curses.py:602
 msgid "Tab Left"
@@ -635,7 +644,7 @@ msgid ""
 "question. In this case, this is:"
 msgstr ""
 "为降低复杂性，wicd-curses "
-"不支持直接编辑脚本。但是，你可以手工修改。首先（root用户），打开\"$A\"配置文件，然后找到标记为$B的段。在这里面是："
+"不支持直接编辑脚本。但是，你可以手工修改。首先（作为root用户），打开\"$A\"配置文件，然后找到标记为$B的段。在这里面是："
 
 #: gtk/netentry.py:634
 msgid ""
@@ -657,7 +666,7 @@ msgstr "不安全的"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "使用DHCP主机名"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:355
 msgid "Use Encryption"
@@ -722,7 +731,7 @@ msgstr "Wicd Curses （控制台）图形界面"
 
 #: gtk/wicd-client.py:224 gtk/wicd-client.py:331
 msgid "Wicd daemon unreachable"
-msgstr "wicd 守护进程无效"
+msgstr "Wicd 守护进程不可达"
 
 #: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
@@ -735,6 +744,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"有线连接：\n"
+"IP地址：\n"
+"接收：\n"
+"发送："
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -774,7 +787,7 @@ msgstr "无线 SSID：速度：IP：信号：RX：TX："
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
-msgstr "无线网络"
+msgstr "无线网卡"
 
 #: gtk/gui.py:601 gtk/wicd-client.py:222 gtk/wicd-client.py:334
 msgid "Wireless Kill Switch Enabled"
@@ -806,11 +819,11 @@ msgstr "wicd-curses 不支持删除最后一个无线配置。请尝试将其重
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses帮助"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd 网络管理器"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -818,39 +831,39 @@ msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "关闭Wi-Fi (_S)"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr "失去连接"
+msgstr "断开全部 (_D)"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "首选项"
+msgstr "刷新 (_R)"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr "首选项"
+msgstr "首选项 (_P)"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "关于 (_A)"
 
 #: data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "退出 (_Q)"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "连接完成..."
+msgstr "正在连接 ..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "取消当前的连接尝试"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr "唤醒脚本"
+msgstr "配置脚本"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
@@ -858,19 +871,19 @@ msgstr ""
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr "执行”断开连接前执行“脚本"
+msgstr "连接建立前运行的脚本："
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr "运行 post-disconnect 脚本"
+msgstr "连接建立后运行的脚本"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr "执行”断开连接前执行“脚本"
+msgstr "连接断开前运行的脚本"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr "运行 post-disconnect 脚本"
+msgstr "连接断开后运行的脚本"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
@@ -882,6 +895,9 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"如果被选择，一旦网线插入，\n"
+"wicd会自动连接到一个有线网络， \n"
+"既使当前有一个活动的无线连接。"
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -901,7 +917,7 @@ msgstr "自动重新连接"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "重命名有线配置方案"
+msgstr "使用上次的有线网络配置方案"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -929,15 +945,15 @@ msgstr "网络接口"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr "DNS 服务器"
+msgstr "DNS 服务器 3："
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr "DNS 服务器"
+msgstr "DNS 服务器 2："
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr "DNS 服务器"
+msgstr "DNS 服务器 1："
 
 #: data/wicd.ui:866
 msgid "Search domain:"
@@ -968,11 +984,11 @@ msgstr "有线连接检测"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP客户端<b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>图形化Sudo应用程序<b>"
 
 #: data/wicd.ui:1421
 msgid ""
@@ -982,7 +998,7 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "驱动程序："
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1002,7 +1018,7 @@ msgstr "后端"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>后端<b>"
 
 #: data/wicd.ui:1615
 msgid ""

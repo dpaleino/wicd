@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-11-04 19:05+0000\n"
+"PO-Revision-Date: 2011-11-18 19:44+0000\n"
 "Last-Translator: Willem van de Krol <Unknown>\n"
 "Language-Team: nl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-05 06:02+0000\n"
-"X-Generator: Launchpad (build 14231)\n"
+"X-Launchpad-Export-Date: 2011-11-19 05:26+0000\n"
+"X-Generator: Launchpad (build 14299)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -53,7 +53,7 @@ msgstr "Over Wicd"
 
 #: curses/wicd-curses.py:464 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
-msgstr "Internetverbinding-delen aanzetten"
+msgstr "Internetverbinding delen"
 
 #: curses/wicd-curses.py:377
 msgid "Add a new profile"
@@ -61,7 +61,7 @@ msgstr "Een nieuw profiel toevoegen"
 
 #: curses/wicd-curses.py:410
 msgid "Add a new wired profile"
-msgstr "Een nieuw 'bedraad'-profiel toevoegen"
+msgstr "Voeg een nieuw 'bedraad'-profiel toe"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
@@ -611,7 +611,7 @@ msgstr "Statische IP-adressen instellen..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr "Alle netwerkverbindingen verbreken"
+msgstr "Van verbinding uitgesloten netwerken weergeven"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -959,7 +959,7 @@ msgstr "Vraag naar een bekabeld netwerkprofiel"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Hernoem 'bedraad'-profiel"
+msgstr "Het standaard bekabelde netwerkprofiel gebruiken"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"

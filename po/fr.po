@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-11-02 09:31+0000\n"
-"Last-Translator: Stanislas Michalak <stanislas.michalak@live.fr>\n"
+"PO-Revision-Date: 2011-11-20 13:18+0000\n"
+"Last-Translator: ouaibe <ouaibe@gmail.com>\n"
 "Language-Team: fr <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-04 05:14+0000\n"
-"X-Generator: Launchpad (build 14231)\n"
+"X-Launchpad-Export-Date: 2011-11-21 05:31+0000\n"
+"X-Generator: Launchpad (build 14299)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -119,7 +119,7 @@ msgstr "Choisir parmi les réseaux suivants :"
 
 #: curses/wicd-curses.py:555
 msgid "Config"
-msgstr ""
+msgstr "Configuration"
 
 #: curses/wicd-curses.py:224
 msgid "Configure selected network"
@@ -228,7 +228,7 @@ msgstr "Client DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "Nom d'hôte DHCP"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
 msgid "DNS domain"
@@ -341,11 +341,11 @@ msgstr "Serveurs de noms (DNS) globaux"
 
 #: curses/wicd-curses.py:554
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
-msgstr ""
+msgstr "Caché"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -426,7 +426,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "Phrase secrète"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -442,7 +442,7 @@ msgstr "Chemin vers le fichier PAC"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "Emplacement du certificat client"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -475,11 +475,11 @@ msgstr "Préférences :"
 
 #: curses/wicd-curses.py:561
 msgid "Prefs"
-msgstr ""
+msgstr "Préférences"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
-msgstr ""
+msgstr "Clé pré-partagée"
 
 #: curses/wicd-curses.py:228
 msgid "Press any key to return."
@@ -487,11 +487,11 @@ msgstr ""
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Clé privée"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Mot de passe de la clé privée"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -512,15 +512,15 @@ msgstr "Démarrage de l'interface..."
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
-msgstr ""
+msgstr "Quitter"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Quitter wicd-curses"
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Quitter wicd-tray-icon"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
@@ -628,11 +628,11 @@ msgstr "Ouvrir le Wi-fi"
 
 #: curses/wicd-curses.py:602
 msgid "Tab Left"
-msgstr ""
+msgstr "Tabulation gauche"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Right"
-msgstr ""
+msgstr "Tabulation droite"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -768,6 +768,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Filaire\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -844,11 +848,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "Aide wicd-curses"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Gestionnaire réseau Wicd"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -872,11 +876,11 @@ msgstr "Préférences"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_À propos"
 
 #: data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Quitter"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -884,7 +888,7 @@ msgstr "Connexion effectuée…"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "Annuler la tentative de connextion courante"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
@@ -943,7 +947,7 @@ msgstr "Renommer un profil de réseau filaire"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Demander un profil réseau filaire"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
@@ -1006,7 +1010,7 @@ msgstr "Détection du lien filaire"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>Client DHCP</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
@@ -1020,7 +1024,7 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Pilote:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1028,7 +1032,7 @@ msgstr "Interface sans fil"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"

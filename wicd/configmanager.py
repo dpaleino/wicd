@@ -154,7 +154,7 @@ class ConfigManager(RawConfigParser):
         configfile = open(self.config_file, 'w')
         RawConfigParser.write(self, configfile)
         configfile.close()
-        
+    
     def remove_section(self, section):
         """ Wrapper around the ConfigParser.remove_section() method.
         
@@ -210,7 +210,7 @@ class ConfigManager(RawConfigParser):
     def write(self):
         """ Writes the loaded config file to disk. """
         in_this_file = []
-        for sname in self.sections():
+        for sname in sorted(self.sections()):
             fname = self.get_option(sname, '_filename_')
             if fname and fname != self.config_file:
                 # Write sections from other files

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-11-21 04:24+0000\n"
+"PO-Revision-Date: 2011-11-22 05:43+0000\n"
 "Last-Translator: Dylandy <Unknown>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-22 05:11+0000\n"
-"X-Generator: Launchpad (build 14299)\n"
+"X-Launchpad-Export-Date: 2011-11-23 05:33+0000\n"
+"X-Generator: Launchpad (build 14336)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -26,6 +26,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:601
 msgid ""
@@ -33,10 +39,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:563
 msgid "About"
-msgstr ""
+msgstr "關於"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -94,7 +103,7 @@ msgstr "後端"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
-msgstr ""
+msgstr "合作開發人："
 
 #: curses/wicd-curses.py:1027
 msgid "Can't connect to the daemon, trying to start it automatically..."
@@ -273,7 +282,7 @@ msgstr "正在完成連線..."
 msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
-msgstr ""
+msgstr "錯誤：wicd-curses 被wicd deamon拒絕存取：請確認您的使用者是否存在 \"$A\"群組裡面。"
 
 #: curses/wicd-curses.py:460 gtk/gui.py:266
 msgid "ESSID"
@@ -329,7 +338,7 @@ msgstr "說明"
 
 #: curses/wicd-curses.py:562
 msgid "Hidden"
-msgstr ""
+msgstr "隱藏"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -346,7 +355,7 @@ msgstr "身份"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr ""
+msgstr "目前連線位置的資訊"
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -403,7 +412,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "複雜密碼"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -491,11 +500,11 @@ msgstr "結束"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "關閉 wicd-curses"
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "關閉wicd-tray-icon"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
@@ -519,7 +528,7 @@ msgstr "正在重新設置IP地址..."
 
 #: curses/wicd-curses.py:557
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -706,7 +715,7 @@ msgstr "核對基地台連結狀況..."
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
-msgstr ""
+msgstr "WPA Supplicant"
 
 #: curses/wicd-curses.py:527
 msgid "Wicd Curses Interface"
@@ -727,6 +736,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"有線網路\n"
+"IP位置：\n"
+"上行流量：\n"
+"下行流量："
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"

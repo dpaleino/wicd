@@ -728,7 +728,7 @@ class BaseInterface(object):
             output = ifconfig
         # check multiple ifconfig output styles
         for pat in [ip_pattern, ip_pattern1]:
-            m = misc.RunRegex(ip_pattern, output)
+            m = misc.RunRegex(pat, output)
             if m: return m
         return None
 

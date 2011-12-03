@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-10-29 19:52+0000\n"
-"Last-Translator: Rostislav Liber <Unknown>\n"
+"PO-Revision-Date: 2011-12-02 20:41+0000\n"
+"Last-Translator: Zbyněk Schwarz <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-02 05:07+0000\n"
-"X-Generator: Launchpad (build 14414)\n"
+"X-Launchpad-Export-Date: 2011-12-03 05:27+0000\n"
+"X-Generator: Launchpad (build 14418)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -26,6 +26,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:601
 msgid ""
@@ -33,6 +39,9 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:563
 msgid "About"
@@ -221,7 +230,7 @@ msgstr "DHCP klient"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "Jméno hostitele DHCP"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
 msgid "DNS domain"
@@ -421,7 +430,7 @@ msgstr "Heslo"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Cesta k cert CA"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -429,7 +438,7 @@ msgstr "Cesta k PAC souboru"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "Cesta k cert klienta"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -501,11 +510,11 @@ msgstr "Ukončit"
 
 #: curses/wicd-curses.py:226
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Ukončit wicd-curses"
 
 #: gtk/wicd-client.py:500
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Ukončit wicd-tray-icon"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
@@ -529,7 +538,7 @@ msgstr "Znovunačítám IP adresu..."
 
 #: curses/wicd-curses.py:557
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -613,11 +622,11 @@ msgstr "Zapnout Wi-Fi"
 
 #: curses/wicd-curses.py:602
 msgid "Tab Left"
-msgstr ""
+msgstr "Karta doleva"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Right"
-msgstr ""
+msgstr "Karta doprava"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -668,7 +677,7 @@ msgstr "Nezabezpečeno"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Použít jméno hostitele DHCP"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:355
 msgid "Use Encryption"
@@ -748,6 +757,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Drátové\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -823,7 +836,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "nápověda wicd-curses"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
@@ -871,7 +884,7 @@ msgstr "Obnovit skript"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Nastavit skripty pro spuštění na této síti:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -924,7 +937,7 @@ msgstr "Přejmenuj drátový profil"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Výzva pro drátový profil sítě"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
@@ -990,11 +1003,11 @@ msgstr "Hledání drátové sítě"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>Klient DHCP</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Grafická aplikace Sudo</b>"
 
 #: data/wicd.ui:1421
 msgid ""
@@ -1014,7 +1027,7 @@ msgstr "Bezdrátové zařízení"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "b>Suplikant WPA</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
@@ -1033,3 +1046,6 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Měl byste vždy používat wext jako WPA supplicant driver"
+
+#~ msgid "Help)"
+#~ msgstr "Nápověda)"

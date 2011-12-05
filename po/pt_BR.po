@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-19 12:33+0200\n"
-"PO-Revision-Date: 2011-12-03 13:43+0000\n"
+"PO-Revision-Date: 2011-12-05 02:31+0000\n"
 "Last-Translator: Fred Ulisses Maranhão <fred.maranhao@gmail.com>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-04 04:47+0000\n"
+"X-Launchpad-Export-Date: 2011-12-05 05:25+0000\n"
 "X-Generator: Launchpad (build 14418)\n"
 "Language: \n"
 "Generated-By: Babel 0.9.6\n"
@@ -368,7 +368,7 @@ msgstr "Identidade"
 
 #: gtk/wicd-client.py:498
 msgid "Information about the current connection"
-msgstr "Informão"
+msgstr "Informação sobre a conexão atual"
 
 #: gtk/netentry.py:166
 msgid "Invalid IP address entered."
@@ -392,7 +392,7 @@ msgstr "Interfaces de Rede"
 
 #: gtk/netentry.py:817
 msgid "Never connect to this network"
-msgstr "Conectar automaticamente a esta rede"
+msgstr "Nunca conectar a esta rede"
 
 #: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
 msgid "No wireless networks found."
@@ -423,11 +423,12 @@ msgid ""
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Uma vez lá, você pode ajustar (ou adicionar) as variáveis \"beforescript\", "
-"\"afterscript\" e \"disconnectscript\" conforme necessário, para ajustar os "
-"scripts de pré-conexão, pós-conexão e desconexão, respectivamente. Note que "
-"você terá que especificar o caminho completo para os scripts e não o "
-"conteúdo deles. Você terá que adicionar/editar o conteúdo dos scripts "
-"separadamente. Leia o manual do wicd para mais informações."
+"\"afterscript\", \"predisconnectscript\" e \"postdisconnectscript\" conforme "
+"necessário, para ajustar os scripts de pré-conexão, pós-conexão, pré-"
+"desconexão e pós-desconexão, respectivamente. Note que você terá que "
+"especificar o caminho completo para os scripts e não o conteúdo deles. Você "
+"terá que adicionar/editar o conteúdo dos scripts separadamente. Leia o "
+"manual do wicd para mais informações."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
@@ -439,7 +440,7 @@ msgstr "Senha"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr "Caminho para o certficado da CA"
+msgstr "Caminho para o certficado da Autoridade Certificadora"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -455,19 +456,19 @@ msgstr "Ping gateways estático após a conexão para verificar a associação"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:156
 msgid "Post-connection Script"
-msgstr "Executar script de pós-desconexão"
+msgstr "Script de pós-conexão"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:159
 msgid "Post-disconnection Script"
-msgstr "Executar script de pós-desconexão"
+msgstr "Script de pós-desconexão"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:155
 msgid "Pre-connection Script"
-msgstr "Rodar script de pré-conexão"
+msgstr "Script de pré-conexão"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:157
 msgid "Pre-disconnection Script"
-msgstr "Rodar script de pré-conexão"
+msgstr "Script de pré-desconexão"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -479,7 +480,7 @@ msgstr "Janela de preferências"
 
 #: curses/wicd-curses.py:561
 msgid "Prefs"
-msgstr "Preferências"
+msgstr "Prefs"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -511,7 +512,7 @@ msgstr "Desligando a interface..."
 
 #: wicd/misc.py:88
 msgid "Putting interface up..."
-msgstr "Reconectando a interface"
+msgstr "Reconectando a interface..."
 
 #: curses/wicd-curses.py:564
 msgid "Quit"
@@ -527,7 +528,7 @@ msgstr "Sair do wicd-tray-icon"
 
 #: curses/wicd-curses.py:560
 msgid "Refresh"
-msgstr "Preferências"
+msgstr "Atualizar"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -555,7 +556,7 @@ msgstr "Limpeza de tabela de roteamento"
 
 #: curses/wicd-curses.py:628
 msgid "Scan"
-msgstr "Procurar"
+msgstr "Varrer"
 
 #: curses/wicd-curses.py:221
 msgid "Scan for hidden networks"

@@ -5,19 +5,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-19 12:33+0200\n"
+"POT-Creation-Date: 2011-12-07 23:04+0100\n"
 "PO-Revision-Date: 2011-11-22 05:43+0000\n"
 "Last-Translator: Dylandy <Unknown>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-02 05:08+0000\n"
-"X-Generator: Launchpad (build 14414)\n"
-"Language: \n"
 "Generated-By: Babel 0.9.6\n"
 
-#: gtk/wicd-client.py:608
+#: gtk/wicd-client.py:610
 msgid ""
 "$A\n"
 "$B\n"
@@ -33,7 +31,7 @@ msgstr ""
 "$E KB/s\n"
 "$F KB/s"
 
-#: gtk/wicd-client.py:601
+#: gtk/wicd-client.py:603
 msgid ""
 "$A\n"
 "$B KB/s\n"
@@ -43,23 +41,23 @@ msgstr ""
 "$B KB/s\n"
 "$C KB/s"
 
-#: curses/wicd-curses.py:563
+#: curses/wicd-curses.py:564
 msgid "About"
 msgstr "關於"
 
-#: curses/wicd-curses.py:200
+#: curses/wicd-curses.py:201
 msgid "About Wicd"
 msgstr "關於 Wicd:"
 
-#: curses/wicd-curses.py:464 gtk/gui.py:272
+#: curses/wicd-curses.py:465 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
 msgstr "啟用網際網路連接分享"
 
-#: curses/wicd-curses.py:377
+#: curses/wicd-curses.py:378
 msgid "Add a new profile"
 msgstr "新增設定檔"
 
-#: curses/wicd-curses.py:410
+#: curses/wicd-curses.py:411
 msgid "Add a new wired profile"
 msgstr "新增一個有線設定檔"
 
@@ -89,7 +87,7 @@ msgstr "自動 (建議值)"
 msgid "Automatic Reconnection"
 msgstr "自動重新連接:"
 
-#: curses/netentry_curses.py:257 gtk/netentry.py:816
+#: curses/netentry_curses.py:257 gtk/netentry.py:817
 msgid "Automatically connect to this network"
 msgstr "自動連接這個網絡"
 
@@ -105,18 +103,18 @@ msgstr "後端"
 msgid "Brought to you by:"
 msgstr "合作開發人："
 
-#: curses/wicd-curses.py:1027
+#: curses/wicd-curses.py:1029
 msgid "Can't connect to the daemon, trying to start it automatically..."
 msgstr "無法連接 daemon。嘗試自動啟動它..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
-#: curses/netentry_curses.py:65 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:604 curses/wicd-curses.py:606
+#: curses/netentry_curses.py:65 curses/wicd-curses.py:490
+#: curses/wicd-curses.py:605 curses/wicd-curses.py:607
 msgid "Cancel"
 msgstr "取消"
 
-#: curses/wicd-curses.py:462 gtk/gui.py:267 gtk/netentry.py:965
-#: gtk/netentry.py:1087
+#: curses/wicd-curses.py:463 gtk/gui.py:267 gtk/netentry.py:966
+#: gtk/netentry.py:1088
 msgid "Channel"
 msgstr "頻道"
 
@@ -124,11 +122,11 @@ msgstr "頻道"
 msgid "Choose from the networks below:"
 msgstr "請選擇以下網路："
 
-#: curses/wicd-curses.py:555
+#: curses/wicd-curses.py:556
 msgid "Config"
 msgstr "設定"
 
-#: curses/wicd-curses.py:224
+#: curses/wicd-curses.py:225
 msgid "Configure selected network"
 msgstr "設定所選取的網路"
 
@@ -144,23 +142,23 @@ msgstr "設定無線網路 \"$A\" ($B) 的偏好設定"
 msgid "Configuring wireless interface..."
 msgstr "正在設定無線網路介面..."
 
-#: curses/wicd-curses.py:558
+#: curses/wicd-curses.py:559 gtk/wicd-client.py:498
 msgid "Connect"
 msgstr "連線"
 
-#: curses/wicd-curses.py:214
+#: curses/wicd-curses.py:215
 msgid "Connect to selected network"
 msgstr "連線到選擇的網路："
 
-#: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:213
+#: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "已經連線到$A 在 $B (IP: $C)"
 
-#: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:218
+#: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
 msgstr "已連線到有線網路(IP: $A)"
 
-#: gtk/gui.py:191 gtk/wicd-client.py:311 gtk/wicd-client.py:639
+#: gtk/gui.py:191 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
 msgstr "嘗試連線"
 
@@ -184,7 +182,7 @@ msgstr "連線失敗：未收到DHCP封包"
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "連線失敗： 無法取得 IP 位址"
 
-#: gtk/wicd-client.py:267 gtk/wicd-client.py:297
+#: gtk/wicd-client.py:269 gtk/wicd-client.py:299
 msgid "Connection established"
 msgstr "已建立連線"
 
@@ -196,27 +194,27 @@ msgstr "連線失敗：無法聯接到無線網路存取點。"
 msgid "Connection successful."
 msgstr "連線成功"
 
-#: gtk/gui.py:65 gtk/wicd-client.py:952
+#: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
-"messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
+" messages."
 msgstr "不能連接到wicd的D-Bus介面,請檢查wicd的紀錄檔以追查錯誤訊息"
 
-#: gtk/netentry.py:302 gtk/netentry.py:410
+#: gtk/netentry.py:303 gtk/netentry.py:411
 msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr "無法找到圖形化 sudo 程式。此程序編輯器無法啟動。您必須自行在您的設定檔中編輯程序。"
 
-#: curses/wicd-curses.py:487 gtk/gui.py:258
+#: curses/wicd-curses.py:488 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
 msgstr "建立 Ad-Hoc 網路"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping while "
-"wicd-curses is running. Please restart the daemon, and then restart wicd-"
-"curses."
+"DBus failure! This is most likely caused by the wicd daemon stopping "
+"while wicd-curses is running. Please restart the daemon, and then restart"
+" wicd-curses."
 msgstr ""
 
 #: curses/prefs_curses.py:92
@@ -227,14 +225,14 @@ msgstr "DHCP 客戶端"
 msgid "DHCP Hostname"
 msgstr "DHCP 主機名稱"
 
-#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:78
+#: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
 msgstr "DNS 網域名稱"
 
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
-#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:79
-#: gtk/netentry.py:80 gtk/netentry.py:81
+#: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:80
+#: gtk/netentry.py:81 gtk/netentry.py:82
 msgid "DNS server"
 msgstr "DNS 伺服器:"
 
@@ -242,23 +240,23 @@ msgstr "DNS 伺服器:"
 msgid "Debugging"
 msgstr "除錯中"
 
-#: curses/wicd-curses.py:559
+#: curses/wicd-curses.py:560
 msgid "Disconn"
 msgstr "斷線"
 
-#: curses/wicd-curses.py:215
+#: curses/wicd-curses.py:216
 msgid "Disconnect from all networks"
 msgstr "將所有的網路斷線"
 
-#: gtk/wicd-client.py:338 gtk/wicd-client.py:641
+#: gtk/wicd-client.py:340 gtk/wicd-client.py:643
 msgid "Disconnected"
 msgstr "斷線"
 
-#: gtk/gui.py:724
+#: gtk/gui.py:725
 msgid "Disconnecting active connections..."
 msgstr "正在中斷使用中的連線"
 
-#: curses/wicd-curses.py:225
+#: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
 msgstr "顯示求助對話框"
 
@@ -266,7 +264,7 @@ msgstr "顯示求助對話框"
 msgid "Display notifications about connection status"
 msgstr "顯示連線狀態通知"
 
-#: curses/wicd-curses.py:213
+#: curses/wicd-curses.py:214
 msgid "Display this help dialog"
 msgstr "顯示求助對話框"
 
@@ -278,13 +276,13 @@ msgstr "DNS 網域"
 msgid "Done connecting..."
 msgstr "正在完成連線..."
 
-#: curses/wicd-curses.py:1051
+#: curses/wicd-curses.py:1053
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
-"your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check "
+"that your user is in the \"$A\" group."
 msgstr "錯誤：wicd-curses 被wicd deamon拒絕存取：請確認您的使用者是否存在 \"$A\"群組裡面。"
 
-#: curses/wicd-curses.py:460 gtk/gui.py:266
+#: curses/wicd-curses.py:461 gtk/gui.py:266
 msgid "ESSID"
 msgstr "ESSID"
 
@@ -292,7 +290,7 @@ msgstr "ESSID"
 msgid "Enable debug mode"
 msgstr "啟用除錯模式"
 
-#: gtk/wicd-client.py:318 gtk/wicd-client.py:322
+#: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
 msgstr "建立連線中"
 
@@ -304,11 +302,11 @@ msgstr "外部程式"
 msgid "Flushing the routing table..."
 msgstr "正在更新路由表"
 
-#: curses/wicd-curses.py:209
+#: curses/wicd-curses.py:210
 msgid "For more detailed help, consult the wicd-curses(8) man page."
 msgstr "要了解更多資訊，請參考 wicd-curses (8) 手冊"
 
-#: curses/netentry_curses.py:52 gtk/netentry.py:76
+#: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"
 msgstr "閘道器"
 
@@ -324,7 +322,7 @@ msgstr "產生PSK中..."
 msgid "Generating WPA configuration file..."
 msgstr "正在產生WPA設定檔..."
 
-#: gtk/netentry.py:232
+#: gtk/netentry.py:233
 msgid "Global DNS has not been enabled in general preferences."
 msgstr "全域 DNS 並沒有在一般偏好設定中啟用"
 
@@ -332,11 +330,11 @@ msgstr "全域 DNS 並沒有在一般偏好設定中啟用"
 msgid "Global DNS servers"
 msgstr "全域 DNS 主機"
 
-#: curses/wicd-curses.py:554
+#: curses/wicd-curses.py:555
 msgid "Help"
 msgstr "說明"
 
-#: curses/wicd-curses.py:562
+#: curses/wicd-curses.py:563
 msgid "Hidden"
 msgstr "隱藏"
 
@@ -344,8 +342,8 @@ msgstr "隱藏"
 msgid "Hidden Network ESSID"
 msgstr "隱藏的網路ESSID"
 
-#: curses/netentry_curses.py:50 curses/wicd-curses.py:461 gtk/gui.py:265
-#: gtk/netentry.py:73
+#: curses/netentry_curses.py:50 curses/wicd-curses.py:462 gtk/gui.py:265
+#: gtk/netentry.py:74
 msgid "IP"
 msgstr "IP 位址"
 
@@ -353,23 +351,23 @@ msgstr "IP 位址"
 msgid "Identity"
 msgstr "身份"
 
-#: gtk/wicd-client.py:498
+#: gtk/wicd-client.py:500
 msgid "Information about the current connection"
 msgstr "目前連線位置的資訊"
 
-#: gtk/netentry.py:166
+#: gtk/netentry.py:167
 msgid "Invalid IP address entered."
 msgstr "無效的 IP 位址。"
 
-#: gtk/gui.py:630 gtk/gui.py:638
+#: gtk/gui.py:631 gtk/gui.py:639
 msgid "Invalid address in $A entry."
 msgstr "在 $A 項目中有無法使用的位址"
 
-#: curses/wicd-curses.py:463 gtk/gui.py:268 wicd/translations.py:80
+#: curses/wicd-curses.py:464 gtk/gui.py:268 wicd/translations.py:80
 msgid "Key"
 msgstr "密鑰"
 
-#: curses/netentry_curses.py:51 gtk/netentry.py:75
+#: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
 msgstr "網路遮罩"
 
@@ -377,22 +375,22 @@ msgstr "網路遮罩"
 msgid "Network Interfaces"
 msgstr "網路介面"
 
-#: gtk/netentry.py:817
+#: gtk/netentry.py:818
 msgid "Never connect to this network"
 msgstr "永不連線到這個網路"
 
-#: curses/wicd-curses.py:526 gtk/gui.py:603 gtk/wicd-client.py:795
+#: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
 msgstr "找不到無線網絡。"
 
-#: curses/wicd-curses.py:737 gtk/gui.py:439 gtk/wicd-client.py:211
-#: gtk/wicd-client.py:221 gtk/wicd-client.py:333 gtk/wicd-client.py:336
+#: curses/wicd-curses.py:738 gtk/gui.py:439 gtk/wicd-client.py:213
+#: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
 msgid "Not connected"
 msgstr "未連線"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:527
-#: curses/netentry_curses.py:66 curses/wicd-curses.py:489
-#: curses/wicd-curses.py:601 curses/wicd-curses.py:605
+#: curses/netentry_curses.py:66 curses/wicd-curses.py:490
+#: curses/wicd-curses.py:602 curses/wicd-curses.py:606
 msgid "OK"
 msgstr "確定"
 
@@ -400,14 +398,15 @@ msgstr "確定"
 msgid "Obtaining IP address..."
 msgstr "獲取IP地址中..."
 
-#: curses/wicd-curses.py:277
+#: curses/wicd-curses.py:278
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
-"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
-"respectively.  Note that you will be specifying the full path to the scripts "
-"- not the actual script contents.  You will need to add/edit the script "
-"contents separately.  Refer to the wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", "
+"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
+"variables as needed, to change the preconnect, postconnect, predisconnect"
+" and postdisconnect scripts respectively.  Note that you will be "
+"specifying the full path to the scripts - not the actual script contents."
+"  You will need to add/edit the script contents separately.  Refer to the"
+" wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:81
@@ -434,19 +433,19 @@ msgstr ""
 msgid "Ping static gateways after connecting to verify association"
 msgstr "在連線後 ping 固定閘道以確認連結"
 
-#: curses/configscript_curses.py:57 gtk/configscript.py:156
+#: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
 msgstr "執行 pre-disconnect script"
 
-#: curses/configscript_curses.py:59 gtk/configscript.py:159
+#: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
 msgstr "執行Post-disconnection Script"
 
-#: curses/configscript_curses.py:56 gtk/configscript.py:155
+#: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
 msgstr "執行Pre-connection Script"
 
-#: curses/configscript_curses.py:58 gtk/configscript.py:157
+#: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
 msgstr "執行 pre-disconnect script"
 
@@ -454,11 +453,11 @@ msgstr "執行 pre-disconnect script"
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: curses/wicd-curses.py:218
+#: curses/wicd-curses.py:219
 msgid "Preferences dialog"
 msgstr "偏好選單:"
 
-#: curses/wicd-curses.py:561
+#: curses/wicd-curses.py:562
 msgid "Prefs"
 msgstr ""
 
@@ -466,7 +465,7 @@ msgstr ""
 msgid "Preshared key"
 msgstr ""
 
-#: curses/wicd-curses.py:228
+#: curses/wicd-curses.py:229
 msgid "Press any key to return."
 msgstr "按任意鍵返回"
 
@@ -482,7 +481,7 @@ msgstr ""
 msgid "Prompt for profile on wired autoconnect"
 msgstr "有線自動連接時,提示設定檔"
 
-#: gtk/netentry.py:58 gtk/netentry.py:60 gtk/netentry.py:597
+#: gtk/netentry.py:59 gtk/netentry.py:61 gtk/netentry.py:598
 msgid "Properties"
 msgstr "特性"
 
@@ -494,31 +493,31 @@ msgstr "正在關閉網路介面..."
 msgid "Putting interface up..."
 msgstr "正在開啟網路介面..."
 
-#: curses/wicd-curses.py:564
+#: curses/wicd-curses.py:565
 msgid "Quit"
 msgstr "結束"
 
-#: curses/wicd-curses.py:226
+#: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
 msgstr "關閉 wicd-curses"
 
-#: gtk/wicd-client.py:500
+#: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
 msgstr "關閉wicd-tray-icon"
 
-#: curses/wicd-curses.py:560
+#: curses/wicd-curses.py:561
 msgid "Refresh"
 msgstr "重新整理"
 
-#: curses/wicd-curses.py:217
+#: curses/wicd-curses.py:218
 msgid "Refresh network list"
 msgstr "更新網路列表"
 
-#: curses/wicd-curses.py:440
+#: curses/wicd-curses.py:441
 msgid "Rename wired profile"
 msgstr "重新命名設定:"
 
-#: curses/netentry_curses.py:357 gtk/gui.py:693 gtk/netentry.py:485
+#: curses/netentry_curses.py:357 gtk/gui.py:694 gtk/netentry.py:486
 msgid "Required encryption information is missing."
 msgstr "缺乏所需的加密資訊"
 
@@ -526,7 +525,7 @@ msgstr "缺乏所需的加密資訊"
 msgid "Resetting IP address..."
 msgstr "正在重新設置IP地址..."
 
-#: curses/wicd-curses.py:557
+#: curses/wicd-curses.py:558
 msgid "RfKill"
 msgstr "RfKill"
 
@@ -534,35 +533,35 @@ msgstr "RfKill"
 msgid "Route Table Flushing"
 msgstr "更新路由表:"
 
-#: curses/wicd-curses.py:628
+#: curses/wicd-curses.py:629
 msgid "Scan"
 msgstr "掃描:"
 
-#: curses/wicd-curses.py:221
+#: curses/wicd-curses.py:222
 msgid "Scan for hidden networks"
 msgstr "掃描隱藏網路:"
 
-#: gtk/gui.py:223 gtk/gui.py:528 gtk/wicd-client.py:808
+#: gtk/gui.py:223 gtk/gui.py:529 gtk/wicd-client.py:810
 msgid "Scanning"
 msgstr "掃描中"
 
-#: curses/wicd-curses.py:525
+#: curses/wicd-curses.py:526
 msgid "Scanning networks... stand by..."
 msgstr "掃描網路中...請稍後..."
 
-#: gtk/netentry.py:101
+#: gtk/netentry.py:102
 msgid "Scripts"
 msgstr "腳本"
 
-#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:77
+#: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
 msgstr "搜尋網域"
 
-#: gtk/netentry.py:959 gtk/netentry.py:1081
+#: gtk/netentry.py:960 gtk/netentry.py:1082
 msgid "Secured"
 msgstr "安全的"
 
-#: curses/wicd-curses.py:628
+#: curses/wicd-curses.py:629
 msgid "Select Hidden Network ESSID"
 msgstr "選擇隱藏網路 ESSID"
 
@@ -570,11 +569,11 @@ msgstr "選擇隱藏網路 ESSID"
 msgid "Select or create a wired profile to connect with"
 msgstr "選取或建立一個有線網路設定檔以供使用"
 
-#: curses/wicd-curses.py:222
+#: curses/wicd-curses.py:223
 msgid "Select scripts"
 msgstr "選擇 scripts"
 
-#: curses/wicd-curses.py:223
+#: curses/wicd-curses.py:224
 msgid "Set up Ad-hoc network"
 msgstr "設定 Ad-hoc 網路"
 
@@ -598,7 +597,7 @@ msgstr "顯示沒有連線過的網路"
 msgid "Stop Showing Autoconnect pop-up temporarily"
 msgstr "暫時停止顯示自動重新連結通知:"
 
-#: curses/wicd-curses.py:216
+#: curses/wicd-curses.py:217
 msgid "Stop a connection in progress"
 msgstr "停止正在進行的網路連線"
 
@@ -610,11 +609,11 @@ msgstr "關閉Wi-Fi"
 msgid "Switch On Wi-Fi"
 msgstr "開啟Wi-Fi"
 
-#: curses/wicd-curses.py:602
+#: curses/wicd-curses.py:603
 msgid "Tab Left"
 msgstr ""
 
-#: curses/wicd-curses.py:603
+#: curses/wicd-curses.py:604
 msgid "Tab Right"
 msgstr ""
 
@@ -622,37 +621,38 @@ msgstr ""
 msgid "Terminated by user"
 msgstr "操作被使用者中止"
 
-#: gtk/gui.py:85 gtk/wicd-client.py:981
+#: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it is "
-"restarted."
+"The wicd daemon has shut down. The UI will not function properly until it"
+" is restarted."
 msgstr "Wicd daemon 已被關閉。只有重新啟動 daemon 才能讓使用者介面正常運作"
 
-#: curses/netentry_curses.py:368 gtk/gui.py:700 gtk/netentry.py:496
+#: curses/netentry_curses.py:368 gtk/gui.py:701 gtk/netentry.py:497
 msgid "This network requires encryption to be enabled."
 msgstr "此網路需要加密才能連結。"
 
-#: curses/wicd-curses.py:271
+#: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root), "
-"open the \"$A\" config file, and look for the section labeled by the $B in "
-"question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as "
+"root), open the \"$A\" config file, and look for the section labeled by "
+"the $B in question. In this case, this is:"
 msgstr ""
 
-#: gtk/netentry.py:634
+#: gtk/netentry.py:635
 msgid ""
-"To connect to a wired network, you must create a network profile. To create "
-"a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To "
+"create a network profile, type a name that describes this network, and "
+"press Add."
 msgstr "要連線到有線網路，您必需建立一個網路設定檔。要建立網路設定檔，請鍵入描述此網路的名稱，然後按下 Add"
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from DBus. "
-"Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from "
+"DBus. Please check that your user is in the $A group."
 msgstr "無法連線到Wicd daemon，因為DBus拒絕存取。請檢查您的使用者是否存在 $A 群組裡"
 
-#: curses/wicd-curses.py:352 gtk/netentry.py:961 gtk/netentry.py:1083
+#: curses/wicd-curses.py:353 gtk/netentry.py:962 gtk/netentry.py:1084
 msgid "Unsecured"
 msgstr "不安全的"
 
@@ -660,23 +660,23 @@ msgstr "不安全的"
 msgid "Use DHCP Hostname"
 msgstr "使用DHCP主機名稱"
 
-#: curses/netentry_curses.py:256 gtk/netentry.py:355
+#: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
 msgstr "使用加密"
 
-#: curses/wicd-curses.py:465 gtk/gui.py:263
+#: curses/wicd-curses.py:466 gtk/gui.py:263
 msgid "Use Encryption (WEP only)"
 msgstr "使用加密(僅WEP)"
 
-#: curses/netentry_curses.py:54 gtk/netentry.py:88
+#: curses/netentry_curses.py:54 gtk/netentry.py:89
 msgid "Use Static DNS"
 msgstr "使用靜態DNS"
 
-#: curses/netentry_curses.py:49 gtk/netentry.py:87
+#: curses/netentry_curses.py:49 gtk/netentry.py:88
 msgid "Use Static IPs"
 msgstr "使用靜態IP地址"
 
-#: curses/netentry_curses.py:190 gtk/netentry.py:635
+#: curses/netentry_curses.py:190 gtk/netentry.py:636
 msgid "Use as default profile (overwrites any previous default)"
 msgstr "作為預設選項 (覆蓋前次設定):"
 
@@ -688,7 +688,7 @@ msgstr "使用dBm測試訊號強度"
 msgid "Use default profile on wired autoconnect"
 msgstr "有線自動連接時,使用預設的設定檔"
 
-#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:89
+#: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:882
 msgid "Use global DNS servers"
 msgstr "使用全域DNS伺服器"
@@ -697,7 +697,7 @@ msgstr "使用全域DNS伺服器"
 msgid "Use last used profile on wired autoconnect"
 msgstr "有線自動連接時,使用最近用過的設定檔"
 
-#: curses/netentry_curses.py:255 gtk/netentry.py:356
+#: curses/netentry_curses.py:255 gtk/netentry.py:357
 msgid "Use these settings for all networks sharing this essid"
 msgstr "使用此設定讓所有網路分享此 essid"
 
@@ -717,11 +717,11 @@ msgstr "核對基地台連結狀況..."
 msgid "WPA Supplicant"
 msgstr "WPA Supplicant"
 
-#: curses/wicd-curses.py:527
+#: curses/wicd-curses.py:528
 msgid "Wicd Curses Interface"
 msgstr "Wicd Curses 介面"
 
-#: gtk/wicd-client.py:224 gtk/wicd-client.py:331
+#: gtk/wicd-client.py:226 gtk/wicd-client.py:333
 msgid "Wicd daemon unreachable"
 msgstr "無法連接 Wicd daemon"
 
@@ -729,7 +729,7 @@ msgstr "無法連接 Wicd daemon"
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd要存取您的電腦網路卡."
 
-#: gtk/wicd-client.py:626
+#: gtk/wicd-client.py:628
 msgid ""
 "Wired\n"
 "IP:\n"
@@ -753,12 +753,12 @@ msgstr "有線網路介面"
 msgid "Wired Link Detection"
 msgstr "有線連線偵測"
 
-#: curses/wicd-curses.py:752 gtk/gui.py:473 gtk/netentry.py:285
-#: gtk/netentry.py:628 gtk/wicd-client.py:266 gtk/wicd-client.py:307
+#: curses/wicd-curses.py:754 gtk/gui.py:474 gtk/netentry.py:286
+#: gtk/netentry.py:629 gtk/wicd-client.py:268 gtk/wicd-client.py:309
 msgid "Wired Network"
 msgstr "有線網絡"
 
-#: curses/wicd-curses.py:532
+#: curses/wicd-curses.py:533
 msgid "Wired Networks"
 msgstr "有線網路"
 
@@ -766,7 +766,7 @@ msgstr "有線網路"
 msgid "Wired connection detected"
 msgstr "偵測到有線網路"
 
-#: gtk/wicd-client.py:631
+#: gtk/wicd-client.py:633
 msgid ""
 "Wireless\n"
 "SSID:\n"
@@ -781,21 +781,21 @@ msgstr "無線 SSID: 速度: IP: 強度: RX: TX:"
 msgid "Wireless Interface"
 msgstr "無線網路介面"
 
-#: gtk/gui.py:601 gtk/wicd-client.py:222 gtk/wicd-client.py:334
+#: gtk/gui.py:602 gtk/wicd-client.py:224 gtk/wicd-client.py:336
 msgid "Wireless Kill Switch Enabled"
 msgstr ""
 
-#: curses/wicd-curses.py:534
+#: curses/wicd-curses.py:535
 msgid "Wireless Networks"
 msgstr "無線網路"
 
-#: curses/wicd-curses.py:276
+#: curses/wicd-curses.py:277
 msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
 
-#: gtk/netentry.py:299 gtk/netentry.py:407
+#: gtk/netentry.py:300 gtk/netentry.py:408
 msgid "You must enter your password to configure scripts"
 msgstr "您必須輸入密碼到組態檔上"
 
@@ -803,19 +803,38 @@ msgstr "您必須輸入密碼到組態檔上"
 msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr ""
 
-#: curses/wicd-curses.py:427
-msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming "
-"it (\"F2\")"
+#: gtk/wicd-client.py:499
+#, fuzzy
+msgid "_Connection Info"
+msgstr "執行Pre-connection Script"
+
+#: gtk/wicd-client.py:502 data/wicd.ui:151
+msgid "_Quit"
 msgstr ""
 
-#: curses/wicd-curses.py:205
+#: curses/wicd-curses.py:428
+msgid ""
+"wicd-curses does not support deleting the last wired profile.  Try "
+"renaming it (\"F2\")"
+msgstr ""
+
+#: curses/wicd-curses.py:206
 msgid "wicd-curses help"
 msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
 msgstr ""
+
+#: data/wicd.ui:46
+#, fuzzy
+msgid "Create an ad-hoc network"
+msgstr "建立 Ad-Hoc 網路"
+
+#: data/wicd.ui:55
+#, fuzzy
+msgid "Find a hidden network"
+msgstr "掃描隱藏網路:"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -839,10 +858,6 @@ msgstr "喜好設定"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
-
-#: data/wicd.ui:151
-msgid "_Quit"
 msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
@@ -954,9 +969,9 @@ msgstr "全域 DNS 主機"
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the main "
-"window. This can be useful if your wired network card does not detect when "
-"the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the "
+"main window. This can be useful if your wired network card does not "
+"detect when the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1014,3 +1029,4 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
+

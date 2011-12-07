@@ -43,7 +43,7 @@
                             <property name="visible">True</property>
                             <child>
                               <object class="GtkImageMenuItem" id="create_ad_hoc_button">
-                                <property name="label">Create an ad-hoc network</property>
+                                <property name="label" translatable="yes">Create an ad-hoc network</property>
                                 <property name="visible">True</property>
                                 <property name="image">image1</property>
                                 <property name="use_stock">False</property>
@@ -52,7 +52,7 @@
                             </child>
                             <child>
                               <object class="GtkImageMenuItem" id="find_hidden_button">
-                                <property name="label">Find a hidden network</property>
+                                <property name="label" translatable="yes">Find a hidden network</property>
                                 <property name="visible">True</property>
                                 <property name="tooltip_text" translatable="yes">Enter a hidden network to try to locate.</property>
                                 <property name="image">image2</property>

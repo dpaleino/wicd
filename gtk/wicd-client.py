@@ -495,11 +495,11 @@ class TrayIcon(object):
             """
             actions = [
                     ('Menu',  None, 'Menu'),
-                    ('Connect', gtk.STOCK_CONNECT, "Connect"),
-                    ('Info', gtk.STOCK_INFO, "_Connection Info", None,
+                    ('Connect', gtk.STOCK_CONNECT, _('Connect')),
+                    ('Info', gtk.STOCK_INFO, _('_Connection Info'), None,
                      _('Information about the current connection'),
                      self.on_conn_info),
-                    ('Quit',gtk.STOCK_QUIT,'_Quit',None,_('Quit wicd-tray-icon'),
+                    ('Quit',gtk.STOCK_QUIT,_('_Quit'),None,_('Quit wicd-tray-icon'),
                      self.on_quit),
                     ]
             actg = gtk.ActionGroup('Actions')

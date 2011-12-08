@@ -66,9 +66,9 @@ if __name__ == '__main__':
 
 misc.RenameProcess("wicd")
 
-wireless_conf = wpath.etc + "wireless-settings.conf"
-wired_conf = wpath.etc + "wired-settings.conf"
-dhclient_conf = wpath.etc + "dhclient.conf.template"
+wireless_conf = os.path.join(wpath.etc, "wireless-settings.conf")
+wired_conf = os.path.join(wpath.etc, "wired-settings.conf")
+dhclient_conf = os.path.join(wpath.etc, "dhclient.conf.template")
 
 class WicdDaemon(dbus.service.Object):
     """ The main wicd daemon class.
@@ -944,9 +944,7 @@ class WirelessDaemon(dbus.service.Object):
         self._debug_mode = debug
         self._scanning = False
         self.LastScan = []
-        self.config = ConfigManager(os.path.join(wpath.etc, 
-                                                 "wireless-settings.conf"),
-                                    debug=debug)
+        self.config = ConfigManager(wireless_conf, debug=debug)
 
     def get_debug_mode(self):
         return self._debug_mode
@@ -1355,9 +1353,7 @@ class WiredDaemon(dbus.service.Object):
         self._debug_mode = debug
         self._cur_wired_prof_name = ""
         self.WiredNetwork = {}
-        self.config = ConfigManager(os.path.join(wpath.etc,
-                                                 "wired-settings.conf"), 
-                                    debug=debug)
+        self.config = ConfigManager(wired_conf, debug=debug)
 
     def get_debug_mode(self):
         return self._debug_mode

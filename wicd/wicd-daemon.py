@@ -1388,7 +1388,7 @@ class WiredDaemon(dbus.service.Object):
     def CheckWiredConnectingMessage(self):
         """ Returns the wired interface's status message. """
         if self.wired.connecting_thread:
-            return _status_dict(self.CheckWiredConnectingStatus())
+            return _status_dict[self.CheckWiredConnectingStatus()]
         else:
             return False
 

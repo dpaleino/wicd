@@ -9,11 +9,11 @@ msgstr ""
 "PO-Revision-Date: 2011-10-21 22:26+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ro <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100"
-" < 20)) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-12-08 05:46+0000\n"
+"X-Generator: Launchpad (build 14443)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -180,7 +180,8 @@ msgstr "Conexiune stabilită"
 
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "Conectare eşuată: Nu m-am putut conecta la punctul de acces fără fir."
+msgstr ""
+"Conectare eşuată: Nu m-am putut conecta la punctul de acces fără fir."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
@@ -188,8 +189,8 @@ msgstr "Conexiune anulată"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
-"Could not connect to wicd's D-Bus interface. Check the wicd log for error"
-" messages."
+"Could not connect to wicd's D-Bus interface. Check the wicd log for error "
+"messages."
 msgstr ""
 "Imposibil de conectat la interfața D-Bus a lui wicd. Verificați jurnalul "
 "wicd pentru mesaje de eroare."
@@ -199,9 +200,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Programul sudo grafic nu poate fi găsit. Editorul de scripturi nu a putut"
-" fi lansat. Va trebui să editaţi scripturile direct în fişierele de "
-"configurare."
+"Programul sudo grafic nu poate fi găsit. Editorul de scripturi nu a putut fi "
+"lansat. Va trebui să editaţi scripturile direct în fişierele de configurare."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
@@ -209,13 +209,12 @@ msgstr "Creează o reţea ad-hoc"
 
 #: curses/wicd-curses.py:99
 msgid ""
-"DBus failure! This is most likely caused by the wicd daemon stopping "
-"while wicd-curses is running. Please restart the daemon, and then restart"
-" wicd-curses."
-msgstr ""
-"Eșec D-Bus! Acesta este cauzat cel mai probabil de oprirea demonului wicd"
-" în timpul rulării wicd-curses. Reporniți demonul și apoi reporniți wicd-"
+"DBus failure! This is most likely caused by the wicd daemon stopping while "
+"wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
+msgstr ""
+"Eșec D-Bus! Acesta este cauzat cel mai probabil de oprirea demonului wicd în "
+"timpul rulării wicd-curses. Reporniți demonul și apoi reporniți wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -278,11 +277,11 @@ msgstr "Conexiune încheiată..."
 
 #: curses/wicd-curses.py:1053
 msgid ""
-"ERROR: wicd-curses was denied access to the wicd daemon: please check "
-"that your user is in the \"$A\" group."
+"ERROR: wicd-curses was denied access to the wicd daemon: please check that "
+"your user is in the \"$A\" group."
 msgstr ""
-"EROARE: lui wicd-curses i s-a refuzat accesul la serviciul wicd. Vă rugăm"
-" să verificaţi dacă utilizatorul dvs. se află în grupul \"$A\"."
+"EROARE: lui wicd-curses i s-a refuzat accesul la serviciul wicd. Vă rugăm să "
+"verificaţi dacă utilizatorul dvs. se află în grupul \"$A\"."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:266
 msgid "ESSID"
@@ -402,19 +401,18 @@ msgstr "Obținere adresă IP..."
 
 #: curses/wicd-curses.py:278
 msgid ""
-"Once there, you can adjust (or add) the \"beforescript\", "
-"\"afterscript\", \"predisconnectscript\" and \"postdisconnectscript\" "
-"variables as needed, to change the preconnect, postconnect, predisconnect"
-" and postdisconnect scripts respectively.  Note that you will be "
-"specifying the full path to the scripts - not the actual script contents."
-"  You will need to add/edit the script contents separately.  Refer to the"
-" wicd manual page for more information."
+"Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Din acest pas puteţi ajusta (sau adăuga) variabilele \"beforescript\", "
-"\"afterscript\" şi \"disconnectscript\" pentru modificarea scripturilor "
-"de pre-, post- şi deconectare. Reţineţi că trebuie să specificaţi calea "
-"completă către scripturi - nu să scrieţi scripturile în sine. Acestea vor"
-" trebuie adăugate/editate separat. Citiţi manualul wicd pentru mai multe "
+"\"afterscript\" şi \"disconnectscript\" pentru modificarea scripturilor de "
+"pre-, post- şi deconectare. Reţineţi că trebuie să specificaţi calea "
+"completă către scripturi - nu să scrieţi scripturile în sine. Acestea vor "
+"trebuie adăugate/editate separat. Citiţi manualul wicd pentru mai multe "
 "informaţii."
 
 #: wicd/translations.py:81
@@ -440,8 +438,7 @@ msgstr ""
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
 msgstr ""
-"Daţi ping pe gateway-uri statice după conectare, pentru verificarea "
-"asocierii"
+"Daţi ping pe gateway-uri statice după conectare, pentru verificarea asocierii"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
@@ -633,8 +630,8 @@ msgstr "Terminat de utilizator"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it"
-" is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "Serviciul wicd s-a oprit. Interfaţa de utilizator nu va funcţiona corect "
 "până la repornirea acestuia."
@@ -646,33 +643,31 @@ msgstr "Această rețea necesită activarea criptării."
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as "
-"root), open the \"$A\" config file, and look for the section labeled by "
-"the $B in question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"Pentru evitarea complicaţiilor, wicd-curses nu suportă editarea directă a"
-" scripturilor. Totuşi, le puteţi edita manual. Mai întâi, ca root, "
-"dechideţi fişierul de configurare \"$A\" şi căutaţi secţiunea numită de "
-"$B. În acest caz aceasta este:"
+"Pentru evitarea complicaţiilor, wicd-curses nu suportă editarea directă a "
+"scripturilor. Totuşi, le puteţi edita manual. Mai întâi, ca root, dechideţi "
+"fişierul de configurare \"$A\" şi căutaţi secţiunea numită de $B. În acest "
+"caz aceasta este:"
 
 #: gtk/netentry.py:635
 msgid ""
-"To connect to a wired network, you must create a network profile. To "
-"create a network profile, type a name that describes this network, and "
-"press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Pentru conectare la o reţea cu fie trebuie să creaţi un profil de reţea. "
-"Acesta poate fi creat prin specificarea unui nume care descrie reţeaua şi"
-" apăsarea butonului Adaugă."
+"Acesta poate fi creat prin specificarea unui nume care descrie reţeaua şi "
+"apăsarea butonului Adaugă."
 
 #: gtk/wicd-client.py:94
 msgid ""
-"Unable to contact the Wicd daemon due to an access denied error from "
-"DBus. Please check that your user is in the $A group."
+"Unable to contact the Wicd daemon due to an access denied error from DBus. "
+"Please check that your user is in the $A group."
 msgstr ""
-"Nu pot contacta serviciul Wicd deoarece D-Bus a refuzat accesul la "
-"acesta. Vă rugăm să verificaţi dacă utilizatorul dvs. se află în grupul "
-"$A."
+"Nu pot contacta serviciul Wicd deoarece D-Bus a refuzat accesul la acesta. "
+"Vă rugăm să verificaţi dacă utilizatorul dvs. se află în grupul $A."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:962 gtk/netentry.py:1084
 msgid "Unsecured"
@@ -701,8 +696,7 @@ msgstr "Folosește IP-uri statice"
 #: curses/netentry_curses.py:190 gtk/netentry.py:636
 msgid "Use as default profile (overwrites any previous default)"
 msgstr ""
-"Foloseşte ca profil implicit (suprascrie un profil implicit salvat "
-"anterior)"
+"Foloseşte ca profil implicit (suprascrie un profil implicit salvat anterior)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
 msgid "Use dBm to measure signal strength"
@@ -723,7 +717,8 @@ msgstr "Folosește ultimul profil la conectarea automată prin fir"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:357
 msgid "Use these settings for all networks sharing this essid"
-msgstr "Folosește aceste configurări pentru toate rețelele care împart acest ESSID"
+msgstr ""
+"Folosește aceste configurări pentru toate rețelele care împart acest ESSID"
 
 #: wicd/translations.py:89
 msgid "Username"
@@ -824,13 +819,12 @@ msgstr "Trebuie să vă introduceţi parola pentru a configura scripturile"
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr ""
-"Aproape întotdeauna trebuie să utilizați wext ca driver pentru "
-"solicitatorul WPA"
+"Aproape întotdeauna trebuie să utilizați wext ca driver pentru solicitatorul "
+"WPA"
 
 #: gtk/wicd-client.py:499
-#, fuzzy
 msgid "_Connection Info"
-msgstr "Execută scriptul premergător deconectării"
+msgstr ""
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -838,11 +832,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try "
-"renaming it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
-"wicd-curses nu susține ștergerea ultimului profil prin fir. Încercați "
-"să-l redenumiți („F2”)"
+"wicd-curses nu susține ștergerea ultimului profil prin fir. Încercați să-l "
+"redenumiți („F2”)"
 
 #: curses/wicd-curses.py:206
 msgid "wicd-curses help"
@@ -853,14 +847,12 @@ msgid "Wicd Network Manager"
 msgstr ""
 
 #: data/wicd.ui:46
-#, fuzzy
 msgid "Create an ad-hoc network"
-msgstr "Creează o reţea ad-hoc"
+msgstr ""
 
 #: data/wicd.ui:55
-#, fuzzy
 msgid "Find a hidden network"
-msgstr "Caută rețele ascunse"
+msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -995,9 +987,9 @@ msgstr "Servere DNS globale"
 
 #: data/wicd.ui:960
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not "
-"detect when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:976
@@ -1055,6 +1047,5 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-"Aproape întotdeauna trebuie să utilizați wext ca driver pentru "
-"solicitatorul WPA"
-
+"Aproape întotdeauna trebuie să utilizați wext ca driver pentru solicitatorul "
+"WPA"

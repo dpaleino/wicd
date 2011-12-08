@@ -11,12 +11,12 @@ msgstr ""
 "PO-Revision-Date: 2011-12-05 11:38+0000\n"
 "Last-Translator: ASTUR2000 <Unknown>\n"
 "Language-Team: Asturian <ast@li.org>\n"
-"Language: ast\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-06 05:40+0000\n"
-"X-Generator: Launchpad (build 14435)\n"
+"X-Launchpad-Export-Date: 2011-12-08 05:45+0000\n"
+"X-Generator: Launchpad (build 14443)\n"
+"Language: ast\n"
 
 #: gtk/wicd-client.py:610
 msgid ""
@@ -808,9 +808,8 @@ msgid "You should almost always use wext as the WPA supplicant driver"
 msgstr ""
 
 #: gtk/wicd-client.py:499
-#, fuzzy
 msgid "_Connection Info"
-msgstr "Coneutando"
+msgstr ""
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -831,14 +830,12 @@ msgid "Wicd Network Manager"
 msgstr ""
 
 #: data/wicd.ui:46
-#, fuzzy
 msgid "Create an ad-hoc network"
-msgstr "Criar una rede Ad-Hoc"
+msgstr ""
 
 #: data/wicd.ui:55
-#, fuzzy
 msgid "Find a hidden network"
-msgstr "Desaminar por redes anubríes"
+msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."

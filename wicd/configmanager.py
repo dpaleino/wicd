@@ -51,7 +51,7 @@ class ConfigManager(RawConfigParser):
         self.config_file = path
         self.debug = debug
         self.mrk_ws = mark_whitespace
-        if path:
+        if os.path.exists(path):
             sanitize_config_file(path)
         try:
             self.read(path)

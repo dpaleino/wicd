@@ -939,7 +939,7 @@ msgstr "<b>Automatsko prespajanje</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Koristi zadnji žični profil"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -947,7 +947,7 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Koristi zadani žični profil"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"

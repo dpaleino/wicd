@@ -952,11 +952,11 @@ msgstr "Reconectar automaticamente após queda de conexão"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Reconexão automática"
+msgstr "<b>Reconexão automática</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Renomear perfil de rede com fios"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -964,11 +964,11 @@ msgstr "Perguntar pela perfil de rede com fios"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Renomear perfil de rede com fios"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Reconexão automática"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

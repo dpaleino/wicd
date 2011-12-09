@@ -939,11 +939,11 @@ msgstr "Yhdistä automaattisesti yhteyden katkettua"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automaattinen uudelleenyhdistäminen"
+msgstr "<b>Automaattinen uudelleenyhdistäminen</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Uudelleen nimeä wired profiili"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -951,11 +951,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Uudelleen nimeä wired profiili"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automaattinen uudelleenyhdistäminen"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

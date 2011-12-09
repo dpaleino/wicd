@@ -955,11 +955,11 @@ msgstr "Automatyczne ponowne połączenie po utracie połączenia"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatyczne łączenie po rozłączeniu"
+msgstr "<b>Automatyczne łączenie po rozłączeniu</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Zmień nazwę profilu sieci przewodowej"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -967,11 +967,11 @@ msgstr "Zapytaj o profil sieci przewodowej"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Zmień nazwę profilu sieci przewodowej"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatyczne łączenie po rozłączeniu"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

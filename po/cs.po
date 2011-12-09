@@ -940,11 +940,11 @@ msgstr "Automaticky se znovu připojit po pádu spojení"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatické obnovení připojení"
+msgstr "<b>Automatické obnovení připojení</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Přejmenuj drátový profil"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -952,11 +952,11 @@ msgstr "Výzva pro drátový profil sítě"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Přejmenuj drátový profil"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatické obnovení připojení"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

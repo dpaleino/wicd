@@ -958,7 +958,7 @@ msgstr "Automatisch opnieuw verbinden bij verbindingsverlies"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatisch opnieuw verbinden"
+msgstr "<b>Automatisch opnieuw verbinden</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"

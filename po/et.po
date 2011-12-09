@@ -933,11 +933,11 @@ msgstr "Ühenduse katkemisel loo uus ühendus automaatselt"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automaatne ühenduse taasloomine"
+msgstr "<b>Automaatne ühenduse taasloomine</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Juhtmega profiili ümbernimetamine"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -945,11 +945,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Juhtmega profiili ümbernimetamine"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automaatne ühenduse taasloomine"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

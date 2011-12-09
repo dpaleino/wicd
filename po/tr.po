@@ -925,11 +925,11 @@ msgstr "Bağlantı koparsa derhâl yeniden bağlan"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Otomatikman tekrar bağlan"
+msgstr "<b>Otomatikman tekrar bağlan</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Kablolu arayüzünü yeniden isimlendir"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -937,11 +937,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Kablolu arayüzünü yeniden isimlendir"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Otomatikman tekrar bağlan"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

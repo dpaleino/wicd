@@ -944,11 +944,11 @@ msgstr "Reconnecter automatiquement en cas de perte de connexion"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Reconnexion automatique"
+msgstr "<b>Reconnexion automatique</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Renommer le profil câblé"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -956,11 +956,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Renommer le profil câblé"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Reconnexion automatique"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

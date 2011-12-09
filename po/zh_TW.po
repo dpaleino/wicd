@@ -913,11 +913,11 @@ msgstr "當連線中斷時,自動重新連接"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "自動重新連接:"
+msgstr ""
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "重新命名設定:"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -925,11 +925,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "重新命名設定:"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "自動重新連接:"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

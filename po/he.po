@@ -923,11 +923,11 @@ msgstr "חידוש החיבור לאחר אבדן התקשורת"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "חיבור מחדש אוטומטית"
+msgstr "<b>חיבור מחדש אוטומטית</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "שינוי פרופיל רשת קווית"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -935,11 +935,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "שינוי פרופיל רשת קווית"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "חיבור מחדש אוטומטית"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

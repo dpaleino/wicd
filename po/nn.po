@@ -907,7 +907,7 @@ msgstr ""
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Legg til ny kabla profil"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"

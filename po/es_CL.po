@@ -911,7 +911,7 @@ msgstr "Reconectar automaticamente cuando se pierda la conexion"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Reconexión automática"
+msgstr "<b>Reconexión automática</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
@@ -927,7 +927,7 @@ msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Reconexión automática"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

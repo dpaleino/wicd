@@ -938,11 +938,11 @@ msgstr "Restabelecer ligação automaticamente após perda de ligação"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Restabelecimento automático da ligação"
+msgstr "<b>Restabelecimento automático da ligação</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Renomear o perfil da ligação com fios"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -950,11 +950,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Renomear o perfil da ligação com fios"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Restabelecimento automático da ligação"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

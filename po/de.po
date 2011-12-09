@@ -944,11 +944,11 @@ msgstr "Automatische Neuverbindung bei Abbruch"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatische Neuverbindung"
+msgstr "<b>Automatische Neuverbindung</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Profil für Kabelnetzwerk umbenennen"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -956,11 +956,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Profil für Kabelnetzwerk umbenennen"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatische Neuverbindung"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

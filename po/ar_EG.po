@@ -920,11 +920,11 @@ msgstr "أعد الاتصال آليا عند قطعه"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "إعادة الاتصال آلياً"
+msgstr "<b>إعادة الاتصال آلياً</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "أعد تسمية ضبط الشبكة السلكية"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -932,11 +932,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "أعد تسمية ضبط الشبكة السلكية"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "إعادة الاتصال آلياً"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

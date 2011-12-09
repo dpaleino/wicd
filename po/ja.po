@@ -915,11 +915,11 @@ msgstr "接続が切れたら再接続する"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "自動再接続"
+msgstr "<b>自動再接続</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "有線プロファイルの名前を変更する"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -927,11 +927,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "有線プロファイルの名前を変更する"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "自動再接続"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

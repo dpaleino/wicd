@@ -901,11 +901,11 @@ msgstr "Ob izgubi povezave samodejno znova poveži"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Samodejno ponovno povezovanje"
+msgstr "<b>Samodejno ponovno povezovanje</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Dodaj nov žični profil"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -917,7 +917,7 @@ msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Samodejno ponovno povezovanje"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

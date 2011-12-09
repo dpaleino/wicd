@@ -947,11 +947,11 @@ msgstr "Pri strate spojenia sa automaticky pripojiť"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatické pripojenie"
+msgstr "<b>Automatické pripojenie</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Použiť posledný káblový profil"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -963,7 +963,7 @@ msgstr "Premenovať profil káblového pripojenia"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatické pripojenie"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

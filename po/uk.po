@@ -932,11 +932,11 @@ msgstr "Автоматично підключитись при втраті з'�
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Автоматичне перез’єднання:"
+msgstr "<b>Автоматичне перез’єднання</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Перейменування дротового профілю:"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -944,11 +944,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Перейменування дротового профілю:"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Автоматичне перез’єднання:"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

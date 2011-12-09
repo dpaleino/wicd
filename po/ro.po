@@ -935,11 +935,11 @@ msgstr "Reconectare automată la pierderea legăturii"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Reconectare automată"
+msgstr "<b>Reconectare automată</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Redenumește profilul prin fir"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -947,11 +947,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Redenumește profilul prin fir"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Reconectare automată"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

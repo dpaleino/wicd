@@ -915,7 +915,7 @@ msgstr "<b>Aŭtomata Rekonekti</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Uzi lasta drata reta profilo"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"

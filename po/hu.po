@@ -935,11 +935,11 @@ msgstr "Automatikus újracsatlakozás a kapcsolat megszakadásakor"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "Automatikus újracsatlakozás"
+msgstr "<b>Automatikus újracsatlakozás</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Vezetékes profil átnevezése"
+msgstr ""
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -947,11 +947,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Vezetékes profil átnevezése"
+msgstr ""
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "Automatikus újracsatlakozás"
+msgstr ""
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

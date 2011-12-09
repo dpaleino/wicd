@@ -184,7 +184,7 @@ msgstr "연결할 수 없음: 무선 액세스 포인트에 접근할 수 없습
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "연결 취소됨"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -847,7 +847,7 @@ msgstr "연결 해제됨"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "환경 설정"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -859,7 +859,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "연결 완료됨..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

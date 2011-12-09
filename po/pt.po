@@ -184,7 +184,7 @@ msgstr "A ligação falhou: Não foi possível contactar o ponto de acesso"
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Ligação cancelada"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -871,7 +871,7 @@ msgstr "Desconectado"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Preferências"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -883,7 +883,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "A terminar a ligação..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

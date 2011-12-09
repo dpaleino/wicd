@@ -193,7 +193,7 @@ msgstr "Chyba spojení: Nemohu kontaktovat bezdrátový přístupový bod."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Spojení zrušeno"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -871,7 +871,7 @@ msgstr "Odpojeno"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Vlastnosti"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -883,7 +883,7 @@ msgstr "_O programu"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Připojení dokončeno..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

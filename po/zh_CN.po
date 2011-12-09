@@ -193,7 +193,7 @@ msgstr "连接失败：不能连接到无线接入点"
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "连接成功"
+msgstr "连接成功."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -866,7 +866,7 @@ msgstr "关于 (_A)"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "正在连接 ..."
+msgstr "正在连接..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

@@ -883,7 +883,7 @@ msgstr "Déconnecter"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Actualiser"
+msgstr "_Actualiser"
 
 #: data/wicd.ui:122
 msgid "_Preferences"

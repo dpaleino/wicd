@@ -846,7 +846,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Conectando..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

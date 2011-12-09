@@ -184,7 +184,7 @@ msgstr "Свързването неуспешно: Не е намерена бе
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Връзката прекъсната"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -866,7 +866,7 @@ msgstr "Връзката прекъсната"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Настройки"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -878,7 +878,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Връзка установена..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

@@ -184,7 +184,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Forbindelse avbrutt"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -847,7 +847,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Kobler til"
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

@@ -185,7 +185,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "З'єднання відмінено"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -865,7 +865,7 @@ msgstr "Роз'єднано"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Налаштування"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -877,7 +877,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Виконується з'єднання..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

@@ -856,7 +856,7 @@ msgstr "_Pri"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Bone konektita..."
+msgstr "Konektanta..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

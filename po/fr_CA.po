@@ -188,7 +188,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Connexion annulée"
+msgstr "Connexion effectuée."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -876,7 +876,7 @@ msgstr "Déconnecté"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Préférences"
+msgstr "_Actualiser"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -888,7 +888,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Connexion effectuée..."
+msgstr "Connexion en cours..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

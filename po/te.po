@@ -833,7 +833,7 @@ msgstr ""
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "అభిరుచులు"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -845,7 +845,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "పూర్తయ్యింది అనుసంధానిస్తున్నాం..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

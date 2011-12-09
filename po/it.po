@@ -907,7 +907,7 @@ msgstr "I_nformazioni"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Connessione..."
+msgstr "Connessione in corso..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

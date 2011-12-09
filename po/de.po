@@ -186,7 +186,7 @@ msgstr "Verbindung gescheitert. Konnte das Funknetzwerk nicht finden."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Verbindung getrennt"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -876,7 +876,7 @@ msgstr "Verbindung getrennt"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Einstellungen"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -888,7 +888,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Verbindung erfolgreich..."
+msgstr ""
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

@@ -3,7 +3,6 @@ Description=Wicd a wireless and wired network manager for Linux
 After=syslog.target
 Wants=network.target
 Before=network.target
-Conflicts=NetworkManager.service
 
 [Service]
 Type=dbus

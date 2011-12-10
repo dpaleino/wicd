@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-10-21 22:24+0000\n"
+"PO-Revision-Date: 2011-12-09 23:01+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ko <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:46+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
+"X-Generator: Launchpad (build 14450)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -184,7 +184,7 @@ msgstr "연결할 수 없음: 무선 액세스 포인트에 접근할 수 없습
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "연결 취소됨"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -847,7 +847,7 @@ msgstr "연결 해제됨"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "환경 설정"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -859,7 +859,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "연결 완료됨..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -918,7 +918,7 @@ msgstr "<b>자동 재연결</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "유선 프로필 이름 바꾸기"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -926,11 +926,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "유선 프로필 이름 바꾸기"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "자동 재연결"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

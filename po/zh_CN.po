@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-11-18 19:43+0000\n"
+"PO-Revision-Date: 2011-12-09 22:53+0000\n"
 "Last-Translator: Longchao Dong <donglongchao@gmail.com>\n"
 "Language-Team: zh_CN <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:46+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2011-12-10 05:03+0000\n"
+"X-Generator: Launchpad (build 14450)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -928,7 +928,7 @@ msgstr "<b>自动重新连接</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "使用上次的有线网络配置方案"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -936,11 +936,11 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "使用默认的有线网络配置方案"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "自动重新连接"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-02 20:41+0000\n"
-"Last-Translator: Zbyněk Schwarz <Unknown>\n"
+"PO-Revision-Date: 2011-12-09 23:01+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:45+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
+"X-Generator: Launchpad (build 14450)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -193,7 +193,7 @@ msgstr "Chyba spojení: Nemohu kontaktovat bezdrátový přístupový bod."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Spojení zrušeno"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -871,7 +871,7 @@ msgstr "Odpojeno"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Vlastnosti"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -883,7 +883,7 @@ msgstr "_O programu"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Připojení dokončeno..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -944,7 +944,7 @@ msgstr "<b>Automatické obnovení připojení</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Přejmenuj drátový profil"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -952,11 +952,11 @@ msgstr "Výzva pro drátový profil sítě"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Přejmenuj drátový profil"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Automatické obnovení připojení"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

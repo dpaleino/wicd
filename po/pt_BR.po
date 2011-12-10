@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-05 02:31+0000\n"
+"PO-Revision-Date: 2011-12-09 23:02+0000\n"
 "Last-Translator: Fred Ulisses Maranhão <fred.maranhao@gmail.com>\n"
 "Language-Team: pt_BR <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:46+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
+"X-Generator: Launchpad (build 14450)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -195,7 +195,7 @@ msgstr ""
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr ""
+msgstr "Conexão feita."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -838,7 +838,7 @@ msgstr "Você deve quase sempre usar wext como driver para o WPA supplicant"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "Informações _Conexão"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -862,11 +862,11 @@ msgstr "Gestor de Redes Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Criar uma rede ad-hoc"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Encontrar uma rede escondida"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -882,7 +882,7 @@ msgstr "Desconectado"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Preferências"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -894,7 +894,7 @@ msgstr "_Sobre"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "Finalizando a conexão..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
@@ -956,7 +956,7 @@ msgstr "<b>Reconexão automática</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Renomear perfil de rede com fios"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -964,11 +964,11 @@ msgstr "Perguntar pela perfil de rede com fios"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr ""
+msgstr "Renomear perfil de rede com fios"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr ""
+msgstr "Reconexão automática"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"

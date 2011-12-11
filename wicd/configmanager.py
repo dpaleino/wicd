@@ -37,7 +37,7 @@ def sanitize_config_file(path):
     conf = open(path)
     newconf = ''
     for line in conf:
-        if '[' not in line or '=' not in line:
+        if '[' in line or '=' in line:
             newconf += line
     conf.close()
     conf = open(path, 'w')

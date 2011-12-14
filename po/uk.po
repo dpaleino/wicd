@@ -81,7 +81,7 @@ msgstr "Автоматичне перез’єднання:"
 
 #: curses/netentry_curses.py:257 gtk/netentry.py:817
 msgid "Automatically connect to this network"
-msgstr "Автоматично з’єднуватись з цією мережею"
+msgstr "Автоматично з’єднуватися з цією мережею"
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
@@ -380,7 +380,7 @@ msgstr "Мережеві інтерфейси"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Автоматично з’єднуватись з цією мережею"
+msgstr "Ніколи не з’єднуватися з цією мережею"
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."

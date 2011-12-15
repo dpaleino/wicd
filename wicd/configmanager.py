@@ -28,6 +28,7 @@ reusable for other purposes as well.
 import sys, os
 
 from ConfigParser import RawConfigParser, ParsingError
+import codecs
 
 from wicd.misc import Noneify, to_unicode
 
@@ -116,6 +117,7 @@ class ConfigManager(RawConfigParser):
             if (isinstance(ret, basestring) and ret.startswith(self.mrk_ws) 
                 and ret.endswith(self.mrk_ws)):
                 ret = ret[3:-3]
+            ret = to_unicode(ret)
             if default:
                 if self.debug:
                     print ''.join(['found ', option, ' in configuration ', 
@@ -175,7 +177,8 @@ class ConfigManager(RawConfigParser):
         in the '.d' directory are read in normal sorted order and section
         entries in these files override entries in the main file.
         """
-        RawConfigParser.read(self, path)
+        if os.path.exists(path):
+            RawConfigParser.readfp(self, codecs.open(path, 'r', 'utf-8'))
 
         path_d = path + ".d"
         files = []
@@ -186,7 +189,7 @@ class ConfigManager(RawConfigParser):
 
         for fname in files:
             p = RawConfigParser()
-            p.read(fname)
+            p.readfp(codecs.open(fname, 'r', 'utf-8'))
             for section_name in p.sections():
                 # New files override old, so remove first to avoid DuplicateSectionError.
                 self.remove_section(section_name)

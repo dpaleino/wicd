@@ -413,7 +413,7 @@ def noneToString(text):
     if text in (None, ""):
         return "None"
     else:
-        return str(text)
+        return to_unicode(text)
 
 def to_unicode(x):
     """ Attempts to convert a string to utf-8. """
@@ -422,6 +422,19 @@ def to_unicode(x):
         return x
     if isinstance(x, unicode):
         return x.encode('utf-8')
+
+    # FIXME: this is a workaround to correctly parse utf-8
+    # encoded ESSIDs returned by iwlist -- python replaces
+    # \xNN with \\xNN, thus losing the characters :/.
+    # It should really be handled in a better way. Maybe
+    # using index()/find()?
+    if '\\' in x:
+        begin = x.split('\\x')[:1]
+        chars = x.split('\\x')[1:]
+        end = [chars[-1][2:]]
+        chars[-1] = chars[-1][:2]
+        x = ''.join(begin + map(lambda c: chr(int(c, 16)), chars) + end)
+
     encoding = locale.getpreferredencoding()
     try:
         ret = x.decode(encoding).encode('utf-8')

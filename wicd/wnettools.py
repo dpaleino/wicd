@@ -1502,8 +1502,7 @@ class BaseWirelessInterface(BaseInterface):
             output = self.GetIwconfig()
         else:
             output = iwconfig
-        network = misc.RunRegex(re.compile('.*ESSID:"(.*?)"',
-                                           re.I | re.M  | re.S), output)
+        network = misc.to_unicode(misc.RunRegex(essid_pattern, output))
         if network:
             network = misc.to_unicode(network)
         return network

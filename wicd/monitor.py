@@ -274,10 +274,10 @@ class ConnectionStatus(object):
             if wired.CheckIfWiredConnecting():
                 info = ["wired"]
             else:
-                info = ["wireless", str(wireless.GetCurrentNetwork(iwconfig))]
+                info = ["wireless", wireless.GetCurrentNetwork(iwconfig)]
         elif state == misc.WIRELESS:
             self.reconnect_tries = 0
-            info = [str(wifi_ip), str(wireless.GetCurrentNetwork(iwconfig)),
+            info = [str(wifi_ip), wireless.GetCurrentNetwork(iwconfig),
                     str(self._get_printable_sig_strength()),
                     str(wireless.GetCurrentNetworkID(iwconfig)),
                     wireless.GetCurrentBitrate(iwconfig)]

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-09 23:01+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-12-14 20:56+0000\n"
+"Last-Translator: Zbyněk Schwarz <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2011-12-15 05:33+0000\n"
+"X-Generator: Launchpad (build 14487)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -827,7 +827,7 @@ msgstr "Měl byste vždy používat wext jako WPA supplicant driver"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Informace o spojení"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -851,11 +851,11 @@ msgstr "Správce sítě Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Vytvořit síť ad-hoc"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Najít skrytou síť"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."

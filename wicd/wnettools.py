@@ -1485,8 +1485,6 @@ class BaseWirelessInterface(BaseInterface):
             output = self.GetIwconfig()
         else:
             output = iwconfig
-        signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)',
-                                       re.I | re.M | re.S)
         dbm_strength = misc.RunRegex(signaldbm_pattern, output)
         return dbm_strength
 

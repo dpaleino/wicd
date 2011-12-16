@@ -11,7 +11,6 @@ include vcsinfo.py
 graft cli
 graft curses
 graft data
-graft depends
 graft encryption
 graft in
 graft other

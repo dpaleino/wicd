@@ -536,7 +536,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         for type_ in ['required', 'optional']:
             fields = methods[ID][type_]
             for field in fields:
-                field_text = language[field[1].lower().replace(' ','_')]
+                try:
+                    field_text = language[field[1].lower().replace(' ','_')]
+                except KeyError:
+                    field_text = field[1].replace(' ','_')
 
                 if field in methods[ID]['protected']:
                     box = ProtectedLabelEntry(field_text)

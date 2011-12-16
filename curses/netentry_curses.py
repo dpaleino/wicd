@@ -403,7 +403,10 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         for type_ in ['required', 'optional']:
             fields = methods[ID][type_]
             for field in fields:
-                edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
+                try:
+                    edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
+                except KeyError:
+                    edit = MaskingEdit(('editcp',field[1].replace(' ','_')+': '))
                 edit.set_mask_mode('no_focus')
                 theList.append(edit)
                 # Add the data to any array, so that the information

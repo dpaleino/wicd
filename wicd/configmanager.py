@@ -120,8 +120,13 @@ class ConfigManager(RawConfigParser):
             ret = to_unicode(ret)
             if default:
                 if self.debug:
-                    print ''.join(['found ', option, ' in configuration ', 
-                                   str(ret)])
+                    # mask out sensitive information
+                    if option in ['apsk', 'password', 'identity', 'private_key', \
+                                  'private_key_passwd', 'key', 'passphrase']:
+                        print ''.join(['found ', option, ' in configuration *****'])
+                    else:
+                        print ''.join(['found ', option, ' in configuration ', 
+                                       str(ret)])
         else:
             if default != "__None__":
                 print 'did not find %s in configuration, setting default %s' % (option, str(default))

@@ -234,11 +234,11 @@ msgstr "Cliente DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr "DHCP Hostname"
+msgstr ""
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
-msgstr "Dominio DNS:"
+msgstr "Dominio DNS"
 
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
@@ -689,7 +689,7 @@ msgstr "Insegura"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr "Use DHCP Hostname"
+msgstr ""
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"

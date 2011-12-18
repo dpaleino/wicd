@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-17 00:14+0000\n"
+"PO-Revision-Date: 2011-12-17 14:55+0000\n"
 "Last-Translator: Roberto Serrano Diaz-Grande <Unknown>\n"
 "Language-Team: es <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-17 05:30+0000\n"
+"X-Launchpad-Export-Date: 2011-12-18 04:41+0000\n"
 "X-Generator: Launchpad (build 14525)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -234,7 +234,7 @@ msgstr "Cliente DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP Hostname"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -439,7 +439,7 @@ msgstr "Contraseña"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Ruta para CA cert"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -447,7 +447,7 @@ msgstr "Ruta al archivo PAC"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "Ruta para client cert"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -689,7 +689,7 @@ msgstr "Insegura"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Use DHCP Hostname"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -839,7 +839,7 @@ msgstr "Casi siempre se debe utilizar wext como controlador WPA supplicant"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Conexión Info"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -863,11 +863,11 @@ msgstr "Gestor de Red Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Crear una red ad-hoc"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Buscar una red oculta"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."

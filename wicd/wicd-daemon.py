@@ -312,15 +312,15 @@ class WicdDaemon(dbus.service.Object):
     def FormatSignalForPrinting(self, signal):
         """ Returns the suffix to display after the signal strength number. """
         if self.GetSignalDisplayType() == 1:
-            return (signal + " dBm")
+            return '%s dBm' % signal
         else:
             try:
                 if int(signal) == 101:
                     return '??%'
                 else:
-                    return (signal + "%")
+                    return '%s%%' % signal
             except ValueError:
-                return (signal + "%")
+                return '%s%%' % signal
 
     @dbus.service.method('org.wicd.daemon')
     def SetSuspend(self, val):

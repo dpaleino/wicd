@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-09 22:53+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-12-23 15:12+0000\n"
+"Last-Translator: Daniel Winzen <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2011-12-24 05:59+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
@@ -118,7 +127,7 @@ msgstr "Wählen Sie eines der folgenden Netzwerke aus:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "Einstellungen"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -225,7 +234,7 @@ msgstr "DHCP-Client"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP Hostname"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -337,11 +346,11 @@ msgstr "Globale DNS-Server"
 
 #: curses/wicd-curses.py:555
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: curses/wicd-curses.py:563
 msgid "Hidden"
-msgstr ""
+msgstr "Versteckt"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -358,7 +367,7 @@ msgstr "Identität"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Information über die aktuelle Verbindung"
 
 #: gtk/netentry.py:167
 msgid "Invalid IP address entered."
@@ -471,7 +480,7 @@ msgstr "Voreinstellungen"
 
 #: curses/wicd-curses.py:562
 msgid "Prefs"
-msgstr ""
+msgstr "Einstellungen"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -483,11 +492,11 @@ msgstr ""
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Privater Schlüssel"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Passwort für privaten Schlüssel"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -507,7 +516,7 @@ msgstr "Starte das Gerät..."
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
-msgstr ""
+msgstr "Beenden"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
@@ -515,7 +524,7 @@ msgstr ""
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Beende wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
@@ -539,7 +548,7 @@ msgstr "IP-Adresse wird zurückgesetzt..."
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -616,11 +625,11 @@ msgstr "Eine Netzwerkverbindung wird getrennt:"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Schalte Wi-Fi aus"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Schalte Wi-Fi an"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
@@ -682,7 +691,7 @@ msgstr "Ungesichert"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Benutze DHCP Hostname"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -764,6 +773,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Kabelgebunden\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -832,11 +845,11 @@ msgstr ""
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "Verbindungsinfo"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Beenden"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -852,15 +865,15 @@ msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd Netzwerk Manager"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Erstelle ein ad-hoc Netzwerk"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Ein verborgenes Netzwerk finden"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -868,7 +881,7 @@ msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "_Schalte Wi-Fi aus"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
@@ -884,7 +897,7 @@ msgstr "Einstellungen"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_Über"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -1015,11 +1028,11 @@ msgstr "kabelgebundene Netzwerkerkennung"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP Client</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Grafische Sudo Anwendung</b>"
 
 #: data/wicd.ui:1421
 msgid ""
@@ -1029,7 +1042,7 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Treiber:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1037,7 +1050,7 @@ msgstr "WLAN-Gerät"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
@@ -1049,7 +1062,7 @@ msgstr "Backend"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>Backend</b>"
 
 #: data/wicd.ui:1615
 msgid ""
@@ -1057,3 +1070,6 @@ msgid ""
 "WPA supplicant driver."
 msgstr ""
 "Sie sollten in der Regel wext als Treiber für den WPA-Supplikanten verwenden"
+
+#~ msgid "Help)"
+#~ msgstr "Hilfe)"

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-14 21:01+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-12-25 17:31+0000\n"
+"Last-Translator: Egor Kartashov <Unknown>\n"
 "Language-Team: ru <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-15 05:33+0000\n"
-"X-Generator: Launchpad (build 14487)\n"
+"X-Launchpad-Export-Date: 2011-12-26 04:56+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -35,7 +35,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "О программе"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
@@ -116,7 +116,7 @@ msgstr "Доступны следующие сети:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "Конфигурация"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -332,11 +332,11 @@ msgstr "Глобальные серверы DNS"
 
 #: curses/wicd-curses.py:555
 msgid "Help"
-msgstr ""
+msgstr "Справка"
 
 #: curses/wicd-curses.py:563
 msgid "Hidden"
-msgstr ""
+msgstr "Скрыта"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -353,7 +353,7 @@ msgstr "Идентификация"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Информация о текущем соединении"
 
 #: gtk/netentry.py:167
 msgid "Invalid IP address entered."
@@ -424,7 +424,7 @@ msgstr "Пароль"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Расположение CA сертификатов"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -432,7 +432,7 @@ msgstr "Путь к PAC-файлу"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "Расположение сертификата клиента"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -501,7 +501,7 @@ msgstr "Подключение интерфейса..."
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
@@ -609,19 +609,19 @@ msgstr "Остановить подключение"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Выключить Wi-Fi"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Включить Wi-Fi"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
-msgstr ""
+msgstr "На левую вкладку"
 
 #: curses/wicd-curses.py:604
 msgid "Tab Right"
-msgstr ""
+msgstr "На правую вкладку"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -672,7 +672,7 @@ msgstr "Незащищённое"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Использовать DHCP-имя хоста"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -821,11 +821,11 @@ msgstr ""
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Информация о соединении"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Выход"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -845,11 +845,11 @@ msgstr ""
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Создать ad-hoc сеть"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Найти скрытую сеть"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -857,7 +857,7 @@ msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "_Выключить Wi-Fi"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
@@ -873,7 +873,7 @@ msgstr "Параметры"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_О программе"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -924,7 +924,7 @@ msgstr "Домен DNS"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>Никогда не подключаться</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
@@ -940,7 +940,7 @@ msgstr "Переименовать профиль проводного подк�
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Спрашивать, какой профиль использовать для кабельного подключения"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
@@ -1003,7 +1003,7 @@ msgstr "Определение проводного соединения"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP-клиент</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
@@ -1017,7 +1017,7 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Драйвер:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"

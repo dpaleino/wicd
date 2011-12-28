@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-09 22:58+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2011-12-27 06:54+0000\n"
+"Last-Translator: Nobuhiro Iwamatsu <Unknown>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2011-12-28 05:41+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/秒\n"
+"$F KB/秒"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/秒\n"
+"$C KB/秒"
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "情報"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
@@ -116,7 +125,7 @@ msgstr "下のネットワーク一覧から選択して下さい:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "設定"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -217,7 +226,7 @@ msgstr "DHCP クライアント"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP ホスト名"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -328,11 +337,11 @@ msgstr "グローバル DNS サーバ"
 
 #: curses/wicd-curses.py:555
 msgid "Help"
-msgstr ""
+msgstr "ヘルプ"
 
 #: curses/wicd-curses.py:563
 msgid "Hidden"
-msgstr ""
+msgstr "非表示"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -349,7 +358,7 @@ msgstr "アイデンティティ"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "現在の接続についての情報"
 
 #: gtk/netentry.py:167
 msgid "Invalid IP address entered."
@@ -410,7 +419,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "パスフレーズ"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -418,7 +427,7 @@ msgstr "パスワード"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "CA 証明書へのパス"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -426,7 +435,7 @@ msgstr "PAC ファイルへのパス"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "クライアント証明書へのパス"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -458,23 +467,23 @@ msgstr "設定ダイアログ"
 
 #: curses/wicd-curses.py:562
 msgid "Prefs"
-msgstr ""
+msgstr "設定ファイル"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
-msgstr ""
+msgstr "事前共有鍵 （PSK）"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "なにかキーを押すと戻ります。"
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "秘密鍵"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "秘密鍵のパスワード"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -494,15 +503,15 @@ msgstr "インターフェイスを有効にしています……"
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
-msgstr ""
+msgstr "終了"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "wicd-curses を終了する"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "wicd-tray-icon を終了する"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
@@ -526,7 +535,7 @@ msgstr "IP アドレスを再設定しています……"
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -810,7 +819,7 @@ msgstr ""
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "終了(_Q):"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -824,7 +833,7 @@ msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd ネットワークマネージャー"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"

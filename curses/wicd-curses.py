@@ -364,6 +364,9 @@ class NetLabel(urwid.WidgetWrap):
 
         self.__super.__init__(w)
     def selectable(self):
+        # Disable widget if the ESSID contains one (or more) NULL byte
+        if '<NULL>' in self.essid:
+            return False
         return True
     def keypress(self,size,key):
         return self._w.keypress(size,key)

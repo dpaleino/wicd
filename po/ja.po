@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-27 06:54+0000\n"
+"PO-Revision-Date: 2011-12-30 22:28+0000\n"
 "Last-Translator: Nobuhiro Iwamatsu <Unknown>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 05:41+0000\n"
+"X-Launchpad-Export-Date: 2011-12-31 06:07+0000\n"
 "X-Generator: Launchpad (build 14560)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -611,19 +611,19 @@ msgstr "接続中にネットワークが停止しました"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi の電源を OFF にする"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi の電源を ON にする"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
-msgstr ""
+msgstr "タブを左に"
 
 #: curses/wicd-curses.py:604
 msgid "Tab Right"
-msgstr ""
+msgstr "タブを右に"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -672,7 +672,7 @@ msgstr "安全ではない"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "DHCP ホスト名を利用する"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -750,6 +750,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"有線\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -815,7 +819,7 @@ msgstr "WPA サプリカントドライバーとして wext を使用してく�
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "接続情報 (_C)"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -829,7 +833,7 @@ msgstr "wicd-curses は、最後に接続した有線接続を削除できませ
 
 #: curses/wicd-curses.py:206
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses ヘルプ"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
@@ -837,11 +841,11 @@ msgstr "Wicd ネットワークマネージャー"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Ad-hoc ネットワークを作成"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "非表示のネットワークを検索する"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -849,7 +853,7 @@ msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi の電源を OFF (_S)"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
@@ -865,7 +869,7 @@ msgstr "設定"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "このプログラムについて (_A)"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."

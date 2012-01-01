@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-30 22:28+0000\n"
+"PO-Revision-Date: 2011-12-31 13:07+0000\n"
 "Last-Translator: Nobuhiro Iwamatsu <Unknown>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-31 06:07+0000\n"
+"X-Launchpad-Export-Date: 2012-01-01 05:35+0000\n"
 "X-Generator: Launchpad (build 14560)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -849,7 +849,7 @@ msgstr "非表示のネットワークを検索する"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "探したい非表示のネットワーク名を入力"
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
@@ -877,7 +877,7 @@ msgstr "接続しました……"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "現在の接続のキャンセルを試みる"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
@@ -885,7 +885,7 @@ msgstr "スクリプトの実行を再開する"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "このネットワークで動かすスクリプトを設定"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -913,6 +913,7 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"選択されているとき、既に無線接続されていても wicd はケーブルが差し込まれるとすぐに自動的にインターネットを利用しているネットワークに接続します。"
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -920,7 +921,7 @@ msgstr "DNS ドメイン"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>まだ接続していない</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
@@ -936,7 +937,7 @@ msgstr "有線プロファイルの名前を変更する"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "有線ネットワークプロファイル用プロンプト"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
@@ -999,11 +1000,11 @@ msgstr "有線接続が見つかりました"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP クライアント</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Sudo GUI アプリケーション</b>"
 
 #: data/wicd.ui:1421
 msgid ""
@@ -1013,7 +1014,7 @@ msgstr ""
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "ドライバー:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1021,7 +1022,7 @@ msgstr "無線インターフェース"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
@@ -1033,7 +1034,7 @@ msgstr "バックエンド"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>バックエンド</b>"
 
 #: data/wicd.ui:1615
 msgid ""

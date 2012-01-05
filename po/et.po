@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-09 22:58+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-01-04 10:50+0000\n"
+"Last-Translator: yllar <Unknown>\n"
 "Language-Team: et <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2012-01-05 05:57+0000\n"
+"X-Generator: Launchpad (build 14625)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "Programmist lähemalt"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
@@ -116,7 +125,7 @@ msgstr "Vali üks järgnevatest võrkudest:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "Seadistus"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -221,7 +230,7 @@ msgstr "DHCP klient"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP hosti nimi"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -336,7 +345,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:563
 msgid "Hidden"
-msgstr ""
+msgstr "Peidetud"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
@@ -353,7 +362,7 @@ msgstr "Identiteet"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Info praeguse ühenduse kohta"
 
 #: gtk/netentry.py:167
 msgid "Invalid IP address entered."
@@ -416,7 +425,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "Parool"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -424,7 +433,7 @@ msgstr "Parool"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "CA sertifikaadi asukoht"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -432,7 +441,7 @@ msgstr "PAC faili asukoht"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "Kliendi sertifikaadi asukoht"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
@@ -464,23 +473,23 @@ msgstr "Eelistuste dialoog"
 
 #: curses/wicd-curses.py:562
 msgid "Prefs"
-msgstr ""
+msgstr "Eelistus"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
-msgstr ""
+msgstr "Eeljagatud võti"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "Naasmiseks vajuta suvalist klahvi"
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Privaatvõti"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Privaatvõtme parool"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -500,19 +509,19 @@ msgstr "Võrguliidese sisselülitamine..."
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
-msgstr ""
+msgstr "Välju"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Sulge wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Sulge wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Eelistused"
+msgstr "Värskenda"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -532,7 +541,7 @@ msgstr "IP-aadressi nullimine..."
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -608,19 +617,19 @@ msgstr "Peata võrguga ühenduse loomine"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Lülita Wi-Fi välja"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Lülita Wi-Fi sisse"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
-msgstr ""
+msgstr "Kaart vasakule"
 
 #: curses/wicd-curses.py:604
 msgid "Tab Right"
-msgstr ""
+msgstr "Kaart paremale"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -672,7 +681,7 @@ msgstr "Ebaturvaline võrk"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Kasuta DHCP hosti nime"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -755,6 +764,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Kaabliga\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -826,7 +839,7 @@ msgstr ""
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Välju"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -838,11 +851,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:206
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses abi"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd Network Manager"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
@@ -858,7 +871,7 @@ msgstr ""
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "_Lülita Wi-Fi välja"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
@@ -874,7 +887,7 @@ msgstr "Eelistused"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "_Programmist lähemalt"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
@@ -882,7 +895,7 @@ msgstr "Ühendatud..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "Tühista käimas olev ühendus katse"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
@@ -890,7 +903,7 @@ msgstr "Peatatud skripti jätkamine"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Konfiguratsiooniskriptid, mida selle võrgu jaoks käivitada:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -918,6 +931,8 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"Kui valitud, siis wicd ühendub automaatselt kaabliga võrku.\n"
+"Isegi siis, kui juhtmevaba ühendus on juba aktiivne."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -925,7 +940,7 @@ msgstr "DNS domeen"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>Ära ühendu kunagi</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
@@ -941,7 +956,7 @@ msgstr "Juhtmega profiili ümbernimetamine"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Küsi kaabliga võrgu profiili"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
@@ -1004,21 +1019,21 @@ msgstr "Juhtmega ühenduse tuvastamine"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP klient</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Graafiline sudo rakendus</b>"
 
 #: data/wicd.ui:1421
 msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
-msgstr ""
+msgstr "Kirjelduse lugemiseks vii hiirekursor valitud võrgu peale"
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "Draiver:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
@@ -1026,7 +1041,7 @@ msgstr "Traadita võrguliides"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
@@ -1045,3 +1060,6 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Sa peaksid peaaegu alati kasutama wext-i WPA komponendi jaoks"
+
+#~ msgid "Help)"
+#~ msgstr "Abi)"

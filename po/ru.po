@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-25 17:31+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: Egor Kartashov <Unknown>\n"
 "Language-Team: ru <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -513,7 +513,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Параметры"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -865,7 +865,7 @@ msgstr "Нет соединения"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Параметры"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"

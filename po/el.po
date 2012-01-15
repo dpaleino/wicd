@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-09 22:58+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: el <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -381,7 +381,7 @@ msgstr "Διεπαφές δικτύου"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Αυτόματη σύνδεση στο δίκτυο"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -517,7 +517,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Προτιμήσεις"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -867,7 +867,7 @@ msgstr "Αποσυνδεμένο."
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Προτιμήσεις"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"

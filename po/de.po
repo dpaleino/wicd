@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-28 17:59+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: Daniel Winzen <d@winzen4.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -391,7 +391,7 @@ msgstr "Netzwerkgeräte"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Verbinde automatisch mit diesem Netzwerk"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -528,7 +528,7 @@ msgstr "Beende wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Einstellungen"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -889,7 +889,7 @@ msgstr "Verbindung getrennt"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Einstellungen"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-10-21 22:23+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: eu <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -369,7 +369,7 @@ msgstr ""
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Automatikoki konektatu sare honetara"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -498,7 +498,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Hobespenak"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-14 20:56+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: Zbyněk Schwarz <Unknown>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -385,7 +385,7 @@ msgstr "Síťová rozhraní"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Automaticky se připojit k této síti"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -517,7 +517,7 @@ msgstr "Ukončit wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Vlastnosti"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -871,7 +871,7 @@ msgstr "Odpojeno"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Vlastnosti"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"

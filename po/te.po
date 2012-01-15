@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-10-21 22:26+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: te <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -498,7 +498,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "అభిరుచులు"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"

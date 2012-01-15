@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-11-22 05:43+0000\n"
+"PO-Revision-Date: 2012-01-15 20:03+0100\n"
 "Last-Translator: Dylandy <Unknown>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -846,7 +846,7 @@ msgstr "斷線"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "重新整理"
 
 #: data/wicd.ui:122
 msgid "_Preferences"

@@ -1,12 +1,6 @@
 Wicd 1.7 Series
 ---------------
 
-1.7.1
-    Major Changes:
-    - Wireless networks with NULL bytes ('\x00') in the ESSID are not
-      supported. They will still show up in the UIs, but you won't be able
-      to do anything with them.
-
 1.7.1b2:
 	Changes for Packagers:
 	- You will now want to use the --python option to setup.py configure to 

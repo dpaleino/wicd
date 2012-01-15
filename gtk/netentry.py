@@ -862,10 +862,6 @@ class WirelessNetworkEntry(NetworkEntry):
         self.advanced_dialog = WirelessSettingsDialog(networkID)
         self.wifides = self.connect("destroy", self.destroy_called)
 
-        # Disable widget if the ESSID contains one (or more) NULL byte
-        if '<NULL>' in self.essid:
-            self.set_sensitive(False)
-
     def _escape(self, val):
         """ Escapes special characters so they're displayed correctly. """
         return val.replace("&", "&amp;").replace("<", "&lt;").\

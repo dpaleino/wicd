@@ -1252,11 +1252,6 @@ class BaseWirelessInterface(BaseInterface):
             print 'Unicode problem with current network essid, ignoring!!'
             return None
 
-        # We (well, DBus) don't support ESSIDs with null bytes in it.
-        # Substitute the byte for use everywhere, so that the UIs know
-        # what to disable.
-        ap['essid'].replace('\x00', '<NULL>')
-
         if ap['essid'] in ['Hidden', '<hidden>', "", None]:
             print 'hidden'
             ap['hidden'] = True

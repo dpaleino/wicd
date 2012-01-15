@@ -158,9 +158,6 @@ if options.network_property:
         if not options.set_to:
             print wireless.GetWirelessProperty(network_id, options.network_property)
         else:
-            if '<NULL>' in wireless.GetWirelessProperty(network_id, 'essid'):
-                print 'ERROR: networks with NULL bytes are not supported.'
-                sys.exit(2)
             wireless.SetWirelessProperty(network_id, \
                     options.network_property, options.set_to)
     elif options.wired:
@@ -187,9 +184,6 @@ if options.connect:
         is_valid_wireless_network_id(options.network)
         name = wireless.GetWirelessProperty(options.network, 'essid')
         encryption = wireless.GetWirelessProperty(options.network, 'enctype')
-        if '<NULL>' in name:
-            print 'ERROR: networks with NULL bytes are not supported.'
-            sys.exit(2)
         print "Connecting to %s with %s on %s" % (name, encryption,
                 wireless.DetectWirelessInterface())
         wireless.ConnectWireless(options.network)
@@ -248,10 +242,6 @@ if options.wireless and options.list_encryption_types:
 if options.save and options.network > -1:
     if options.wireless:
         is_valid_wireless_network_id(options.network)
-        essid = wireless.GetWirelessProperty(options.network, 'essid')
-        if '<NULL>' in essid:
-            print 'ERROR: networks with NULL bytes are not supported.'
-            sys.exit(2)
         config.SaveWirelessNetworkProfile(options.network)
     elif options.wired:
         config.SaveWiredNetworkProfile(options.name)

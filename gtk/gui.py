@@ -36,7 +36,7 @@ from wicd import misc
 from wicd import wpath
 from wicd import dbusmanager
 from wicd.misc import noneToString
-from wicd.translations import _
+from wicd.translations import _, language
 import prefs
 from prefs import PreferencesDialog
 import netentry

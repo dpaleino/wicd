@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:44:41+0100\n"
+"PO-Revision-Date: 2012-01-15 21:48+0000\n"
 "Last-Translator: Daniel Winzen <d@winzen4.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-29 04:52+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-01-16 05:24+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -56,7 +56,7 @@ msgstr "aktiviere Internetverbindungsfreigabe"
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"
-msgstr "Neues Profil hinzufügen"
+msgstr "Neues Profil anlegen"
 
 #: curses/wicd-curses.py:411
 msgid "Add a new wired profile"
@@ -72,8 +72,7 @@ msgstr "Kabelgebundenes Netzwerk immer anzeigen"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr ""
-"bevorzuge Wechsel zur kabelgebundenen Verbindung, immer wenn verfügbar."
+msgstr "Wenn verfügbar, immer zu Kabelverbindung wechseln"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -87,7 +86,7 @@ msgstr "Automatisch (empfohlen)"
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
-msgstr "Automatische Neuverbindung"
+msgstr "Automatisch Wiederverbinden"
 
 #: curses/netentry_curses.py:257 gtk/netentry.py:817
 msgid "Automatically connect to this network"
@@ -95,7 +94,7 @@ msgstr "Verbinde automatisch mit diesem Netzwerk"
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
-msgstr "Automatische Neuverbindung bei Abbruch"
+msgstr "Automatisches Wiederverbinden bei Verbindungsabbruch"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -108,7 +107,7 @@ msgstr "Zur Verfügung gestellt von:"
 #: curses/wicd-curses.py:1029
 msgid "Can't connect to the daemon, trying to start it automatically..."
 msgstr ""
-"Kann nicht mit dem Dienst verbinden. versuche den automatischen Start..."
+"Kann nicht mit dem Dienst verbinden, versuche ihn automatisch zu starten"
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
@@ -135,11 +134,11 @@ msgstr "Konfiguriere ausgewähltes Netzwerk"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Erstelle Einstellungen für das Kabelnetzwerk \"$A\""
+msgstr "Einstellungen für das Kabelnetzwerk \"$A\" festlegen"
 
 #: curses/netentry_curses.py:272
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr "Einstellungen festlegen für das Funknetzwerk \"$A\" ($B)"
+msgstr "Einstellungen für das Funknetzwerk \"$A\" ($B) festlegen"
 
 #: wicd/misc.py:80
 msgid "Configuring wireless interface..."
@@ -171,7 +170,7 @@ msgstr "Verbindung getrennt"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr "Verbindung getrennt"
+msgstr "Verbindung fehlgeschlagen"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -195,7 +194,7 @@ msgstr "Verbindung gescheitert. Konnte das Funknetzwerk nicht finden."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "Verbindung getrennt"
+msgstr "Verbindung erfolgreich"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""

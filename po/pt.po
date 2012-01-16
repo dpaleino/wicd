@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
-"Last-Translator: André Glória <Unknown>\n"
+"PO-Revision-Date: 2012-01-15 21:48+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: pt <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-08 05:07+0000\n"
-"X-Generator: Launchpad (build 14640)\n"
+"X-Launchpad-Export-Date: 2012-01-16 05:24+0000\n"
+"X-Generator: Launchpad (build 14664)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -388,7 +388,7 @@ msgstr "Interfaces de rede"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Ligar automaticamente a esta rede"
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."

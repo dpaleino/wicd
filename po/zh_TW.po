@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 21:36+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-01-17 22:24+0000\n"
+"Last-Translator: Dylandy <Unknown>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-16 05:24+0000\n"
-"X-Generator: Launchpad (build 14664)\n"
+"X-Launchpad-Export-Date: 2012-01-18 04:49+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -217,6 +217,7 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
+"DBus 錯誤！可能是因為wicd-curses正在執行導致wicd daemon停止執行。請重新啟動daemon，再開啟wicd-curses即可。"
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -435,7 +436,7 @@ msgstr "在連線後 ping 固定閘道以確認連結"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr "執行 pre-disconnect script"
+msgstr "執行Post-connection Script"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
@@ -792,7 +793,7 @@ msgstr "無線網路"
 msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
-msgstr ""
+msgstr "您也可以藉由設定資料夾裡的\"[<ESSID>]\"field 設定無線網路。"
 
 #: gtk/netentry.py:300 gtk/netentry.py:408
 msgid "You must enter your password to configure scripts"
@@ -800,7 +801,7 @@ msgstr "您必須輸入密碼到組態檔上"
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr ""
+msgstr "您應該時常使用wext來做為您WPA 接收裝置的驅動程式。"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"

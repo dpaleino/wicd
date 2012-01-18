@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 21:44+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-01-17 22:25+0000\n"
+"Last-Translator: yllar <Unknown>\n"
 "Language-Team: et <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-16 05:24+0000\n"
-"X-Generator: Launchpad (build 14664)\n"
+"X-Launchpad-Export-Date: 2012-01-18 04:48+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -386,7 +386,7 @@ msgstr "Võrguliidesed"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Automaatselt luuakse ühendus selle võrguga"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -867,7 +867,7 @@ msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Sisesta peidetud võrk selle leidmiseks."
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
@@ -1004,6 +1004,8 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"Kui lubatud, siis näidatakse peaaknas alati kaabliga võrguliidest. See võib "
+"olla kasulik kui võrgukaart ei saa aru kaabli eemaldamisest."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
@@ -1053,7 +1055,7 @@ msgstr "Taustaprogramm"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>Taustasüsteem</b>"
 
 #: data/wicd.ui:1615
 msgid ""

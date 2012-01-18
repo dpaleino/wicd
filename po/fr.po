@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
-"Last-Translator: ouaibe <ouaibe@gmail.com>\n"
+"PO-Revision-Date: 2012-01-17 22:25+0000\n"
+"Last-Translator: Trim <Unknown>\n"
 "Language-Team: fr <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2012-01-18 04:48+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E ko/s\n"
+"$F ko/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,6 +38,9 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B ko/s\n"
+"$C ko/s"
 
 #: curses/wicd-curses.py:564
 msgid "About"
@@ -63,7 +72,7 @@ msgstr "Toujours afficher l'interface filaire"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Toujours sélectionner une connexion filaire quand cela est possible"
+msgstr "Toujours utiliser une connexion filaire si disponible"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -433,7 +442,7 @@ msgstr "Mot de passe"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Emplacement du certificat CA"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -482,7 +491,7 @@ msgstr "Clé pré-partagée"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "Appuyez sur une touche pour revenir."
 
 #: wicd/translations.py:87
 msgid "Private key"
@@ -685,7 +694,7 @@ msgstr "Non sécurisé"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Utiliser le nom d'hôte DHCP"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -871,7 +880,7 @@ msgstr "Trouver un réseau caché"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Entrer un réseau caché pour essayer de le localiser."
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
@@ -907,7 +916,7 @@ msgstr "Reprendre le script"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Configurer les scripts à exécuter pour ce réseau:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -935,6 +944,10 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"Si sélectionné, wicd essayera automatiquement de se connecter à un réseau "
+"filaire\n"
+"dès qu'un câble est connecté, même si une connexion sans-fil\n"
+"est déjà active."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -1068,3 +1081,6 @@ msgid ""
 "WPA supplicant driver."
 msgstr ""
 "La plupart du temps, il convient d'utiliser wext comme pilote WPA supplicant"
+
+#~ msgid "Help)"
+#~ msgstr "Aide)"

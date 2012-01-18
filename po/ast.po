@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wicd\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
+"PO-Revision-Date: 2012-01-17 22:23+0000\n"
 "Last-Translator: ASTUR2000 <Unknown>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:45+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2012-01-18 04:48+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 "Language: ast\n"
 
 #: gtk/wicd-client.py:610
@@ -315,6 +315,7 @@ msgstr ""
 #: curses/wicd-curses.py:210
 msgid "For more detailed help, consult the wicd-curses(8) man page."
 msgstr ""
+"P'aida más detallada, consulta les maldiciones wicd-curses(8) del manual."
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"

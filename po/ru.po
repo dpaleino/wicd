@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
+"PO-Revision-Date: 2012-01-17 22:28+0000\n"
 "Last-Translator: Egor Kartashov <Unknown>\n"
 "Language-Team: ru <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-26 04:56+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-01-18 04:49+0000\n"
+"X-Generator: Launchpad (build 14681)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+" $B\n"
+" $C\n"
+" $D\n"
+" $E Кб/с\n"
+" $F Кб/с"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,6 +38,9 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+" $B Кб/с\n"
+" $C Кб/с"
 
 #: curses/wicd-curses.py:564
 msgid "About"
@@ -221,7 +230,7 @@ msgstr "Клиент DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP имя хоста"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -416,7 +425,7 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "Пароль"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -465,7 +474,7 @@ msgstr "Параметры"
 
 #: curses/wicd-curses.py:562
 msgid "Prefs"
-msgstr ""
+msgstr "Настройки"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -473,15 +482,15 @@ msgstr ""
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "Нажмите любую кнопку чтобы вернуться"
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "Закрытый ключ"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "Пароль закрытого ключа"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -505,15 +514,15 @@ msgstr "Выход"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Выйти из wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Убрать значок из трея"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr ""
+msgstr "Параметры"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -753,6 +762,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Кабельное соединение\n"
+" IP:\n"
+" RX:\n"
+" TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -837,11 +850,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:206
 msgid "wicd-curses help"
-msgstr ""
+msgstr "Справка по wicd-curses"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd - управление сетевыми подключениями"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
@@ -853,7 +866,7 @@ msgstr "Найти скрытую сеть"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Введите SSID скрытой сети"
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
@@ -865,7 +878,7 @@ msgstr "Нет соединения"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Параметры"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -881,7 +894,7 @@ msgstr "Соединение установлено..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "Прекратить текущую попытку подключения"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
@@ -889,7 +902,7 @@ msgstr "Скрипт возобновления"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Сконфигурировать скрипты запускаемые для данной сети:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -917,6 +930,9 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"Если выбрано, wicd автоматически подключится к кабельной\n"
+"сети как только кабель будет подключен, даже при активном\n"
+"беспроводном соединении."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
@@ -988,6 +1004,9 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"Если выбрано, кабельный интерфейс всегда отображается вглавном окне. Может "
+"быть полезно, если ваша сетевая карта автоматически не определяет "
+"подключение кабеля."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
@@ -1007,13 +1026,15 @@ msgstr "<b>DHCP-клиент</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Графическая оболочка Sudo</b>"
 
 #: data/wicd.ui:1421
 msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
+"Наведите курсор на выбраный бэкенд\n"
+"для просмотра описания"
 
 #: data/wicd.ui:1474
 msgid "Driver:"

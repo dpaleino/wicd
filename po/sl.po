@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-01-19 11:35+0000\n"
+"Last-Translator: Klemen Košir <klemen.kosir@gmx.com>\n"
 "Language-Team: sl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2012-01-20 04:45+0000\n"
+"X-Generator: Launchpad (build 14700)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "O programu"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
@@ -43,7 +52,7 @@ msgstr "O programu Wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
-msgstr "Aktiviraj skupno rabo interneta"
+msgstr "Omogoči deljenje internetne povezave"
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"
@@ -63,11 +72,11 @@ msgstr "Vedno pokaži žični vmesnik"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Vedno preklopi na žično povezavo, ko je na razpolago"
+msgstr "Vedno preklopi na žično povezavo, ko je na voljo"
 
 #: wicd/translations.py:77
 msgid "Authentication"
-msgstr "Preverjanje istovetnosti"
+msgstr "Overitev"
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1082
@@ -81,7 +90,7 @@ msgstr "Samodejno ponovno povezovanje"
 
 #: curses/netentry_curses.py:257 gtk/netentry.py:817
 msgid "Automatically connect to this network"
-msgstr "Avtomatsko se poveži v to omrežje"
+msgstr "Samodejno se poveži s tem omrežjem"
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
@@ -89,7 +98,7 @@ msgstr "Ob izgubi povezave samodejno znova poveži"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr ""
+msgstr "Zaledje"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
@@ -116,7 +125,7 @@ msgstr "Izberite med spodnjimi omrežji:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "Nastavitve"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -369,7 +378,7 @@ msgstr "Omrežni vmesniki"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Avtomatsko se poveži v to omrežje"
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -499,7 +508,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr ""
+msgstr "Nastavitve"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -834,7 +843,7 @@ msgstr "Nepovezano"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Nastavitve"
 
 #: data/wicd.ui:122
 msgid "_Preferences"

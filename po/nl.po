@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-01-26 18:50+0000\n"
+"Last-Translator: Willem van de Krol <Unknown>\n"
 "Language-Team: nl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-10 05:02+0000\n"
-"X-Generator: Launchpad (build 14450)\n"
+"X-Launchpad-Export-Date: 2012-01-27 05:34+0000\n"
+"X-Generator: Launchpad (build 14727)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -60,7 +60,7 @@ msgstr "Een nieuw profiel toevoegen"
 
 #: curses/wicd-curses.py:411
 msgid "Add a new wired profile"
-msgstr "Voeg een nieuw 'bedraad'-profiel toe"
+msgstr "Een nieuw bekabeld netwerkprofiel toevoegen"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
@@ -68,11 +68,11 @@ msgstr "Geavanceerde instellingen"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"
-msgstr "Bedrade netwerkadapter altijd weergeven"
+msgstr "Bekabelde netwerkadapter altijd weergeven"
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Altijd de bedrade verbinding gebruiken, indien beschikbaar"
+msgstr "Altijd de bekabelde verbinding gebruiken, indien beschikbaar"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -159,7 +159,7 @@ msgstr "Verbonden met $A op $B (IP: $C)"
 
 #: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
-msgstr "Verbonden met bedraad netwerk (IP: $A)"
+msgstr "Verbonden met bekabeld netwerk (IP: $A)"
 
 #: gtk/gui.py:191 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
@@ -437,7 +437,7 @@ msgstr "Wachtwoord"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr "CA-certificaat"
+msgstr "Pad naar CA-certificaat"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
@@ -630,11 +630,11 @@ msgstr "Wi-Fi inschakelen"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
-msgstr ""
+msgstr "Tab links"
 
 #: curses/wicd-curses.py:604
 msgid "Tab Right"
-msgstr ""
+msgstr "Tab rechts"
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
@@ -679,11 +679,11 @@ msgid ""
 "Please check that your user is in the $A group."
 msgstr ""
 "Kon geen contact maken met de wicd-daemon doordat de toegang door D-Bus werd "
-"geweigerd. Controleer de instellingen van D-Bus."
+"geweigerd. Ga na of u lid bent van de $A groep."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:962 gtk/netentry.py:1084
 msgid "Unsecured"
-msgstr "Niet beveiligd"
+msgstr "Onbeveiligd"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
@@ -725,7 +725,8 @@ msgstr "Globale DNS-servers gebruiken"
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
 msgstr ""
-"Het laatstgebruikte profiel gebruiken bij een automatische bedrade verbinding"
+"Het laatstgebruikte profiel gebruiken bij een automatische bekabelde "
+"verbinding"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:357
 msgid "Use these settings for all networks sharing this essid"
@@ -741,7 +742,7 @@ msgstr "De authenticatie wordt gevalideerd..."
 
 #: wicd/misc.py:97
 msgid "Verifying access point association..."
-msgstr "Toegangspunt-verbindingverifiëren..."
+msgstr "Toegangspunt-verbinding verifiëren..."
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
@@ -844,7 +845,7 @@ msgstr "Meestal is 'wext' het juiste stuurprogramma voor WPA-supplicant"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "Verbindingsinformatie"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -868,11 +869,11 @@ msgstr "Wicd Netwerkbeheer"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Een ad-hocnetwerk creëeren"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Een verborgen netwerk zoeken"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -912,7 +913,7 @@ msgstr "Scripts instellen"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr "Scripts instellen om uitgevoerd te worden voor dit netwerk"
+msgstr "Scripts instellen om uitgevoerd te worden voor dit netwerk:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
@@ -932,7 +933,7 @@ msgstr "Post-verbindingsverbreking-script uitvoeren"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr "Altijd omschakelen naar bekabelde verbinding, indien beschikbaar"
+msgstr "Altijd een bekabelde verbinding gebruiken, indien beschikbaar"
 
 #: data/wicd.ui:519
 msgid ""
@@ -1002,7 +1003,7 @@ msgstr "DNS-server 1:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr "Zoek-domein"
+msgstr "Domein zoeken:"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
@@ -1021,11 +1022,11 @@ msgstr ""
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
-msgstr "<b>Meldingen</b>"
+msgstr "<b>Mededelingen</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr "Route-tabel opschonen"
+msgstr "<b>Route-tabel opschonen</b>"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
@@ -1061,7 +1062,7 @@ msgstr "<b>WPA-supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr "Debuggen"
+msgstr "<b>Debuggen</b>"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
@@ -1075,4 +1076,9 @@ msgstr "<b>Back-end</b>"
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "Meestal is 'wext' het juiste stuurprogramma voor WPA-supplicant"
+msgstr ""
+"Meestal is 'wext' het juiste stuurprogramma\n"
+"voor WPA-supplicant."
+
+#~ msgid "Help)"
+#~ msgstr "Help)"

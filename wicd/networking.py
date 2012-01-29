@@ -1148,6 +1148,10 @@ class WiredConnectThread(ConnectThread):
         # Bring up interface.
         self.put_iface_up(liface)
         
+        # Manage encryption.
+        if self.network.get('encryption'):
+            liface.Authenticate(self.network)
+        
         # Set gateway, IP adresses, and DNS servers.
         self.set_broadcast_address(liface)
         self.set_ip_address(liface)

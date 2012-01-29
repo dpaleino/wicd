@@ -892,6 +892,13 @@ class BaseWiredInterface(BaseInterface):
         else:
             return False
         
+    def Authenticate(self, network):
+        misc.ParseEncryption(network)
+        cmd = ['wpa_supplicant', '-B', '-i', self.iface, '-c',
+               os.path.join(wpath.networks, 'wired'),
+               '-Dwired']
+        if self.verbose: print cmd
+        misc.Run(cmd)
 
 class BaseWirelessInterface(BaseInterface):
     """ Control a wireless network interface. """

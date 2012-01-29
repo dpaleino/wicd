@@ -340,7 +340,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.chkbox_encryption = gtk.CheckButton(_('Use Encryption'))
         # Make the vbox to hold the encryption stuff.
         self.vbox_encrypt_info = gtk.VBox(False, 0)
-        self.chkbox_encryption.set_active(not wired.GetWiredProperty('encryption_enabled') is None)
+        self.chkbox_encryption.set_active(bool(wired.GetWiredProperty('encryption_enabled')))
         self.combo_encryption.set_sensitive(False)
         self.encrypt_types = misc.LoadEncryptionMethods(wired = True)
  
@@ -403,6 +403,10 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 
         self.txt_dhcp_hostname.set_text(dhcphname)
         self.reset_static_checkboxes()
+        
+        self.chkbox_encryption.set_active(bool(wired.GetWiredProperty('encryption_enabled')))
+        self.change_encrypt_method()
+        self.toggle_encryption()
         
     def save_settings(self):
         # Check encryption info

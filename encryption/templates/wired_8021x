@@ -1,7 +1,7 @@
 name = 802.1x
 author = Joe MacMahon
 version = 1
-requre identity *Identity password *Password
+require identity *Identity password *Password
 protected password *Password
 -----
 eapol_version=1

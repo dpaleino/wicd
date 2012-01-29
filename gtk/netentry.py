@@ -319,7 +319,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
                 
                 if self.wired:
                     box.entry.set_text(noneToBlankString(
-                        wired.GetWiredProperty(self.networkID, field[0])))
+                        wired.GetWiredProperty(field[0])))
                 else:
                     box.entry.set_text(noneToBlankString(
                         wireless.GetWirelessProperty(self.networkID, field[0])))
@@ -336,13 +336,11 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         
         ## This section is largely copied from WirelessSettingsDialog, but with some changes
         # Set up encryption stuff
-        self.networkID = networkID
         self.combo_encryption = gtk.combo_box_new_text()
         self.chkbox_encryption = gtk.CheckButton(_('Use Encryption'))
         # Make the vbox to hold the encryption stuff.
-        self.vbox_encrypt_info = gtk.VBox(False, 0)        
-        self.toggle_encryption()
-        self.chkbox_encryption.set_active(False)
+        self.vbox_encrypt_info = gtk.VBox(False, 0)
+        self.chkbox_encryption.set_active(not wired.GetWiredProperty('encryption_enabled') is None)
         self.combo_encryption.set_sensitive(False)
         self.encrypt_types = misc.LoadEncryptionMethods(wired = True)
  
@@ -351,6 +349,7 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
             self.combo_encryption.append_text(enc_type['name'])
         self.combo_encryption.set_active(0)
         self.change_encrypt_method()
+        self.toggle_encryption()
 
         self.cvbox.pack_start(self.chkbox_encryption, False, False)
         self.cvbox.pack_start(self.combo_encryption, False, False)
@@ -406,6 +405,34 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.reset_static_checkboxes()
         
     def save_settings(self):
+        # Check encryption info
+        encrypt_info = self.encryption_info
+        self.set_net_prop("encryption_enabled", self.chkbox_encryption.get_active())
+        if self.chkbox_encryption.get_active():
+            print "setting encryption info..."
+            encrypt_methods = self.encrypt_types
+            self.set_net_prop("enctype",
+                               encrypt_methods[self.combo_encryption.get_active()]['type'])
+            # Make sure all required fields are filled in.
+            for entry_info in encrypt_info.itervalues():
+                if entry_info[0].entry.get_text() == "" and \
+                   entry_info[1] == 'required':
+                    error(self, "%s (%s)" % (_('Required encryption information is missing.'),
+                                             entry_info[0].label.get_label())
+                          )
+                    return False
+            # Now save all the entries.
+            for entry_key, entry_info in encrypt_info.iteritems():
+                self.set_net_prop(entry_key, 
+                                  noneToString(entry_info[0].entry.get_text()))
+        elif not wired and not self.chkbox_encryption.get_active() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            # Encrypt checkbox is off, but the network needs it.
+            error(self, _('This network requires encryption to be enabled.'))
+            return False
+        else:
+            print "no encryption specified..."
+            self.set_net_prop("enctype", "None")
         AdvancedSettingsDialog.save_settings(self)
         wired.SaveWiredNetworkProfile(self.prof_name)
         return True

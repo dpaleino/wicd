@@ -1255,7 +1255,7 @@ class BaseWirelessInterface(BaseInterface):
         # We (well, DBus) don't support ESSIDs with null bytes in it.
         # From some bugreports, it seems like some APs transmit the "hidden"
         # essid as NULL bytes. Let's strip them off.
-        ap['essid'].replace('\x00', '')
+        ap['essid'] = ap['essid'].replace('\x00', '')
 
         if ap['essid'] in ['Hidden', '<hidden>', "", None]:
             print 'hidden'

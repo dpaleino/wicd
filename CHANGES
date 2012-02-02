@@ -1,4 +1,1087 @@
 ------------------------------------------------------------
+revno: 716 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-02-02 17:40:20 +0100
+message:
+  Merged wired-encryption implementation by Joe MacMahon. Thanks!
+------------------------------------------------------------
+revno: 715
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2012-02-02 06:13:08 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 714
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2012-02-01 17:09:53 +0100
+message:
+  Try to better handle the double-escaped unicode ESSIDs
+------------------------------------------------------------
+revno: 713
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2012-02-01 05:10:05 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 712
+fixes bug: https://launchpad.net/bugs/907528
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2012-01-31 18:23:54 +0100
+message:
+  Finally really fix the issue with \x00-ESSIDs :(
+------------------------------------------------------------
+revno: 711
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2012-01-28 05:09:06 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 710
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2012-01-27 05:34:49 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 709
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2012-01-22 05:35:04 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 708
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2012-01-20 04:45:31 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 707
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2012-01-19 05:03:26 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 706
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2012-01-18 04:49:09 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 705
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Mon 2012-01-16 05:24:40 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 704
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-01-15 20:44:58 +0100
+message:
+  Improve German translation, thanks to Jakobus Schürz
+------------------------------------------------------------
+revno: 703
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-01-15 20:23:51 +0100
+message:
+  Fix translations (again!)
+------------------------------------------------------------
+revno: 702
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-01-15 15:24:28 +0100
+message:
+  Fix missing import
+------------------------------------------------------------
+revno: 701
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-01-15 15:21:16 +0100
+message:
+  A hopefully better attempt at ESSIDs with '\x00' in them
+------------------------------------------------------------
+revno: 700
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-01-15 15:19:40 +0100
+message:
+  Revert commit 691/8aa66e4: Don't support wireless networks with '\x00' in the ESSID
+------------------------------------------------------------
+revno: 699
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2012-01-14 05:18:58 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 698
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Tue 2012-01-10 05:39:10 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 697
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2012-01-08 05:07:40 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 696
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2012-01-05 05:57:39 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 695
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2012-01-01 05:35:01 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 694
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-12-31 06:07:45 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 693
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2011-12-30 05:51:45 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 692 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-29 12:17:57 +0100
+message:
+  Merge
+------------------------------------------------------------
+revno: 691
+fixes bug: https://launchpad.net/bugs/907528
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-29 12:16:17 +0100
+message:
+  Don't support wireless networks with '\x00' in the ESSID
+------------------------------------------------------------
+revno: 690
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2011-12-29 04:52:35 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 689
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2011-12-28 05:41:14 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 688
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Mon 2011-12-26 04:56:18 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 687
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-12-24 05:59:25 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 686
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-12-19 23:04:08 +0100
+message:
+  Fix bug with unicode-translated locale and wicd-curses
+------------------------------------------------------------
+revno: 685
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-12-19 23:01:38 +0100
+message:
+  Make signal formatting clearer
+------------------------------------------------------------
+revno: 684
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2011-12-18 04:41:10 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 683
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sat 2011-12-17 08:00:56 +0100
+message:
+  Fix Spanish translation
+------------------------------------------------------------
+revno: 682
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sat 2011-12-17 07:55:18 +0100
+message:
+  Mask out sensitive information in the logfile
+------------------------------------------------------------
+revno: 681
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-12-17 05:30:39 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 680
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-16 23:00:28 +0100
+message:
+  Don't include removed directory in the generated tarball
+------------------------------------------------------------
+revno: 679
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-16 22:59:54 +0100
+message:
+  Remove unused third-party code
+------------------------------------------------------------
+revno: 678
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-16 21:47:07 +0100
+message:
+  Make the templating system more robust to custom fields
+------------------------------------------------------------
+revno: 677
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-15 20:14:05 +0100
+message:
+  Redundant regex
+------------------------------------------------------------
+revno: 676
+fixes bugs: https://launchpad.net/bugs/718662 https://launchpad.net/bugs/269664
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-15 19:21:53 +0100
+message:
+  Fix unicode bugs with ESSIDs and keys
+------------------------------------------------------------
+revno: 675
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-15 17:49:51 +0100
+message:
+  Make wicd-cli executable
+------------------------------------------------------------
+revno: 674
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-15 11:43:01 +0100
+message:
+  Convert from \r\n to \n
+------------------------------------------------------------
+revno: 673
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2011-12-15 05:33:50 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 672
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-12-14 20:09:18 +0100
+message:
+  Fix uk and ru translations, thanks to Andriy Senkovych!
+------------------------------------------------------------
+revno: 671
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-12-11 20:41:57 +0100
+message:
+  Oops. Don't wipe out configuration files :) :/
+------------------------------------------------------------
+revno: 670
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2011-12-11 05:45:35 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 669
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-12-10 05:03:06 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 668
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-09 23:01:53 +0100
+message:
+  Fix more wrongities in l10n
+------------------------------------------------------------
+revno: 667
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-09 22:21:48 +0100
+message:
+  Fix various l10n bugs (better no translation, that a wrong one)
+------------------------------------------------------------
+revno: 666
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-12-09 18:30:38 +0100
+message:
+  Don't conflict with NetworkManager
+------------------------------------------------------------
+revno: 665
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-08 23:17:36 +0100
+message:
+  Fix brown-paper-bag bug, causing lots of troubles
+------------------------------------------------------------
+revno: 664
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-08 22:45:58 +0100
+message:
+  (Try to) Fix mismatch between clients code and DBus API, thanks to Anthony Vital
+------------------------------------------------------------
+revno: 663
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-08 18:56:03 +0100
+message:
+  Fix bug for new installations
+------------------------------------------------------------
+revno: 662
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-12-08 13:23:29 +0100
+message:
+  Don't duplicate code
+------------------------------------------------------------
+revno: 661
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2011-12-08 05:46:47 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 660
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-12-07 23:08:55 +0100
+message:
+  Update translations for new catalog
+------------------------------------------------------------
+revno: 659
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-12-07 23:08:42 +0100
+message:
+  Updated French translation received by e-mail
+------------------------------------------------------------
+revno: 658
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-12-07 23:08:19 +0100
+message:
+  Update translatable strings
+------------------------------------------------------------
+revno: 657
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Tue 2011-12-06 05:40:21 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 656
+tags: 1.7.1~b3
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-12-05 18:39:09 +0100
+message:
+  Release 1.7.1~b3
+------------------------------------------------------------
+revno: 655
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Mon 2011-12-05 05:25:14 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 654
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2011-12-04 04:47:42 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 653
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-12-03 05:27:48 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 652
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2011-12-02 05:08:06 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 651
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-11-24 17:41:42 +0100
+message:
+  Fix stupid bug with multiple pattern regex
+------------------------------------------------------------
+revno: 650
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2011-11-23 05:33:15 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 649
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Tue 2011-11-22 05:11:59 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 648 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-11-21 10:58:14 +0100
+message:
+  LP translations
+------------------------------------------------------------
+revno: 647
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-11-21 10:56:30 +0100
+message:
+  Make configfile sorted
+------------------------------------------------------------
+revno: 646
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-11-19 05:26:31 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 645
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2011-11-18 05:19:00 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 644
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2011-11-17 05:33:46 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 643
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Tue 2011-11-15 05:10:58 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 642
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-11-14 09:29:45 +0100
+message:
+  Revert 576: it was properly fixed in 640
+------------------------------------------------------------
+revno: 641
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-11-13 08:17:44 +0100
+message:
+  Fix source tarball generation
+------------------------------------------------------------
+revno: 640
+fixes bug: https://launchpad.net/bugs/755745
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-11-13 07:57:12 +0100
+message:
+  Show correct ESSID during connection, thanks to Jonatan! (LP: #755745)
+------------------------------------------------------------
+revno: 639
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 18:15:56 +0100
+message:
+  Add myself to copyright header
+------------------------------------------------------------
+revno: 638
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 18:12:13 +0100
+message:
+  Don't allow no-value options in config files
+------------------------------------------------------------
+revno: 637
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 17:12:32 +0100
+message:
+  Adding myself to authors
+------------------------------------------------------------
+revno: 636
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 13:26:49 +0100
+message:
+  Ignore debian/, and in git too
+------------------------------------------------------------
+revno: 635
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 13:17:35 +0100
+message:
+  Make configscript.py use the RawConfigParser wrapper
+------------------------------------------------------------
+revno: 634
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-09 13:17:04 +0100
+message:
+  Fix configscript.py startup
+------------------------------------------------------------
+revno: 633
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sat 2011-11-05 06:02:53 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 632
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2011-11-04 05:14:54 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 631
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-11-03 10:37:50 +0100
+message:
+  Support alternative ifconfig output style
+------------------------------------------------------------
+revno: 630
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-11-03 10:02:53 +0100
+message:
+  Update manpages
+------------------------------------------------------------
+revno: 629
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: trunk
+timestamp: Thu 2011-11-03 09:43:43 +0100
+message:
+  Autostart in tray-only mode
+------------------------------------------------------------
+revno: 628 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-11-03 09:35:23 +0100
+message:
+  Merged LP translations
+------------------------------------------------------------
+revno: 627
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: trunk
+timestamp: Thu 2011-11-03 09:32:25 +0100
+message:
+  Implement -t/--tray to only run the wicd-gtk tray icon
+------------------------------------------------------------
+revno: 626
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-11-02 22:17:09 +0100
+message:
+  Fix version check to correctly handle linux3
+------------------------------------------------------------
+revno: 625
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2011-11-02 05:03:56 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 624
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2011-10-30 05:20:58 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 623
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2011-10-26 05:17:20 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 622
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Tue 2011-10-25 04:57:11 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 621
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Sun 2011-10-23 05:27:35 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 620 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sat 2011-10-22 09:22:56 +0200
+message:
+  Merge
+------------------------------------------------------------
+revno: 619
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sat 2011-10-22 09:22:11 +0200
+message:
+  Fix gl translation
+------------------------------------------------------------
+revno: 618
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sat 2011-10-22 00:14:38 +0200
+message:
+  Make sdist work
+------------------------------------------------------------
+revno: 617 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-10-21 23:28:30 +0200
+message:
+  Merged
+------------------------------------------------------------
+revno: 616
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-10-21 23:20:23 +0200
+message:
+  Merge translations from revision 609 (they were marked fuzzy, may need fixing? -- better than nothing though :))
+------------------------------------------------------------
+revno: 615
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Thu 2011-10-20 04:47:49 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 614
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-10-19 12:46:03 +0200
+message:
+  Fix imports of '_' for l10n
+------------------------------------------------------------
+revno: 613
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-10-19 12:34:42 +0200
+message:
+  Updated pofiles and pot
+------------------------------------------------------------
+revno: 612
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-10-19 12:31:31 +0200
+message:
+  Fix incomplete translation issue for the GTK client
+------------------------------------------------------------
+revno: 611
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-10-19 12:30:18 +0200
+message:
+  Fix it translation
+------------------------------------------------------------
+revno: 610
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2011-10-19 06:04:29 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 609
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2011-10-19 00:10:32 +0200
+message:
+  Used msgen to complete en_GB file
+------------------------------------------------------------
+revno: 608
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 23:51:52 +0200
+message:
+  Sort output for easier diffing
+------------------------------------------------------------
+revno: 607
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 23:35:58 +0200
+message:
+  Fixed already
+------------------------------------------------------------
+revno: 606
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 23:34:04 +0200
+message:
+  Update po files, po template, and po handling
+------------------------------------------------------------
+revno: 605
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 23:33:23 +0200
+message:
+  Moved translations out of translations.py, re-designed l10n system a bit
+------------------------------------------------------------
+revno: 604
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 13:42:16 +0200
+message:
+  Fix logrotate config installation
+------------------------------------------------------------
+revno: 603
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 09:52:38 +0200
+message:
+  Implement new commands to handle the xgettext/pybabel infrastructure
+------------------------------------------------------------
+revno: 602
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 09:36:25 +0200
+message:
+  Add po's from Rosetta, and implement message extraction (pybabel + xgettext)
+------------------------------------------------------------
+revno: 601
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-18 09:35:35 +0200
+message:
+  These strings shouldn't be translated
+------------------------------------------------------------
+revno: 600
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-10-17 23:56:28 +0200
+message:
+  Make style consistent across the file
+------------------------------------------------------------
+revno: 599
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-10-17 23:40:35 +0200
+message:
+  Make setup.py executable
+------------------------------------------------------------
+revno: 598
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2011-10-17 22:14:40 +0200
+message:
+  Support urwid 1.0.0
+------------------------------------------------------------
+revno: 597 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 23:24:04 +0200
+message:
+  merge add support for nevershow buttons and options (Robin Becker 2011-09-18)
+------------------------------------------------------------
+revno: 596
+fixes bug: https://launchpad.net/bugs/867547
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 23:19:44 +0200
+message:
+  add logrotate config file, thanks to David Cantrell for inspiration
+------------------------------------------------------------
+revno: 595
+fixes bug: https://launchpad.net/bugs/867546
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 23:11:57 +0200
+message:
+  add systemd unit file for wicd-daemon, thanks to David Cantrell
+------------------------------------------------------------
+revno: 594
+fixes bug: https://launchpad.net/bugs/867545
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 23:07:12 +0200
+message:
+  add dbus service file, thanks to David Cantrell
+------------------------------------------------------------
+revno: 593
+fixes bug: https://launchpad.net/bugs/867540
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 22:46:28 +0200
+message:
+  initialize self._wire_showing in gtk/gui.py, thanks to David Cantrell
+------------------------------------------------------------
+revno: 592
+fixes bug: https://launchpad.net/bugs/867538
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 22:45:25 +0200
+message:
+  ensure 'check' and 'message' are initialized in cli/wicd-cli.py, thanks to David Cantrell
+------------------------------------------------------------
+revno: 591
+fixes bug: https://launchpad.net/bugs/867536
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-10-04 22:43:22 +0200
+message:
+  Handle wicd-daemon not running when client starts, thanks to David Cantrell
+------------------------------------------------------------
+revno: 590
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-09-18 12:35:16 +0200
+message:
+  Fix RH init script (LP: #587690)
+------------------------------------------------------------
+revno: 589
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-09-18 12:11:53 +0200
+message:
+  Allow empty DNS fields (LP: #492795)
+------------------------------------------------------------
+revno: 588
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: trunk
+timestamp: Sun 2011-09-18 10:45:30 +0200
+message:
+  Fix leap template (LP: #495473)
+------------------------------------------------------------
+revno: 587
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: trunk
+timestamp: Sun 2011-09-18 10:31:15 +0200
+message:
+  Implemented rfkill support (LP: #293727)
+------------------------------------------------------------
+revno: 586
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-09-16 18:29:23 +0200
+message:
+  Simplify IP validation check (LP: #743795)
+------------------------------------------------------------
+revno: 585
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-09-16 18:18:36 +0200
+message:
+  Change bootscript order to work with non-standard wifi cards (LP: #585266)
+------------------------------------------------------------
+revno: 584
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-09-15 12:56:14 +0200
+message:
+  Added PSU template, thanks to Alexander Anisimov (LP: #424504)
+------------------------------------------------------------
+revno: 583
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-09-15 12:50:21 +0200
+message:
+  Merged reyammer's branch lp:~reyammer/wicd/bug-476982: implement password hiding (LP: #476982)
+------------------------------------------------------------
+revno: 582
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2011-09-15 12:38:22 +0200
+message:
+  Add new encryption templates.
+  
+    Taken from http://wicd.net/punbb/viewtopic.php?id=233
+------------------------------------------------------------
+revno: 581
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Fri 2011-09-02 08:08:30 +0200
+message:
+  Support more-than-2-digits channels (Closes: #545248)
+------------------------------------------------------------
+revno: 580
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-08-09 18:03:01 +0200
+message:
+  Convert from tabs to (4) spaces
+------------------------------------------------------------
+revno: 579 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2011-08-09 17:58:33 +0200
+message:
+  Merge fox 2011-08-09 fixing exception for cli/wicd-cli.py --wireless -c
+------------------------------------------------------------
+revno: 578
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:52:52 +0200
+message:
+  Make configscript use GtkBuilder as well (LP: #555386)
+------------------------------------------------------------
+revno: 577 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:45:28 +0200
+message:
+  Merge Nik Nyby 2011-03-27 removed copy module, since it's no longer being used.
+------------------------------------------------------------
+revno: 576 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:39:08 +0200
+message:
+  Merged fox 2011-07-03 Fixed wireless connecting status message
+------------------------------------------------------------
+revno: 575
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:21:10 +0200
+message:
+  fix suspend scripts to use correct locations
+------------------------------------------------------------
+revno: 574
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:20:17 +0200
+message:
+  restrict network mode to some characters only
+------------------------------------------------------------
+revno: 573
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:16:36 +0200
+message:
+  Don't store useless variables inside configfiles
+------------------------------------------------------------
+revno: 572
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-08-07 22:09:49 +0200
+message:
+  generalize libc linking using ctypes' find_library()
+------------------------------------------------------------
+revno: 571
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-02-06 18:54:57 +0100
+message:
+  Don't crash on notification errors
+  
+      This is not an essential feature, so no need to crash.
+------------------------------------------------------------
+revno: 570
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-02-06 18:33:59 +0100
+message:
+  Use 'dhcpcd' also in Debian, so that defaults in /etc/default/dhcpcd are still observed.
+------------------------------------------------------------
+revno: 569
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-02-06 18:30:44 +0100
+message:
+  Don't make dhcpcd handle link-local
+------------------------------------------------------------
+revno: 568
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2011-02-06 18:22:14 +0100
+message:
+  Detect which flavour of ping(1) is installed
+  
+      This is needed because inetutils-ping does not support
+      "-w deadline", but just waits timeout.
+------------------------------------------------------------
+revno: 567
+fixes bug: https://launchpad.net/bugs/129608
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Sat 2010-12-25 13:58:35 -1000
+message:
+  Patch to make adhoc connections work better - thanks to ArchLinux people - https://bugs.archlinux.org/task/22057
+------------------------------------------------------------
+revno: 566
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Thu 2010-12-23 09:12:58 -1000
+message:
+  fixing more Python version issues
+------------------------------------------------------------
+revno: 565
+committer: Adam Blackburn <abkbrn@gmail.com>
+branch nick: wicd
+timestamp: Fri 2010-10-29 10:35:13 -0500
+message:
+  update versions to 1.7.1b2
+------------------------------------------------------------
 revno: 564
 committer: Adam Blackburn <abkbrn@gmail.com>
 branch nick: wicd
@@ -65,7 +1148,7 @@ message:
   Merged 1.7.1-probably, which contains 14 patches from Debian. Thanks to David Paleino and everyone else who contributed these patches.
 ------------------------------------------------------------
 revno: 555
-fixes bug(s): https://launchpad.net/bugs/555386
+fixes bug: https://launchpad.net/bugs/555386
 committer: Adam Blackburn <compwiz18@gmail.com>
 branch nick: wicd
 timestamp: Mon 2010-05-17 21:51:43 -0500

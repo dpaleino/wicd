@@ -27,7 +27,7 @@ from glob import glob
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.7.1~b3'
+VERSION_NUM = '1.7.1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'
@@ -640,9 +640,9 @@ to easily add encryption methods used.  It ships with some common
 encryption types, such as WPA and WEP. Wicd will automatically
 connect at startup to any preferred network within range.
 """,
-    author = "Adam Blackburn, Dan O'Reilly, Andrew Psaltis",
-    author_email = "compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com",
-    url = "http://wicd.net",
+    author = "Adam Blackburn, Dan O'Reilly, Andrew Psaltis, David Paleino",
+    author_email = "compwiz18@gmail.com, oreilldf@gmail.com, ampsaltis@gmail.com, d.paleino@gmail.com",
+    url = "https://launchpad.net/wicd",
     license = "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
     py_modules = py_modules,
     data_files = data,

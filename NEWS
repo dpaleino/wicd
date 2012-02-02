@@ -1,7 +1,7 @@
 Wicd 1.7 Series
 ---------------
 
-1.7.1b2:
+1.7.1:
 	Changes for Packagers:
 	- You will now want to use the --python option to setup.py configure to 
 	  make sure the right Python (python2.x) is used. With the Python 3
@@ -10,6 +10,21 @@ Wicd 1.7 Series
 	  python executable path can be set (for subprocesses launched by Wicd)
 	  with the --python option to setup.py configure, and patching of the
 	  shebang lines may be required if `which python` is not python2.x.
+	- If you handle translations in your packaging process, setup.py now
+	  needs 'pybabel' and 'xgettext' binaries. Please provide them during
+	  the build process.
+	- setup.py now accepts three more parameters: --dbus-service=, --systemd=
+	  and --logrotate=. Please set them accordingly to the paths of your
+	  distribution.
+
+	Major Changes:
+	- (New) upstream author: David Paleino :)
+	- The translations are now handled by Rosetta, in Launchpad.
+	- Implemented support for wired connections needing authentication with
+	  wpa_supplicant (thanks Joe MacMahon!)
+	- Support 'Never show networks' (thanks Robin Becker!)
+	- Mask out sensitive information in the logfile (CVE-2012-0813)
+
 	Minor Changes:
 	- Now uses gtkbuilder instead of libglade
 	- Fixed bug in script macro expansion
@@ -24,6 +39,16 @@ Wicd 1.7 Series
 	  - Fixed resolv.conf permissions
 	  - Ignore configparser errors
 	  - Several others, please see CHANGES for more details
+	- Proper localization of all the code has been put in place -- every part
+	  of the UIs and the daemon should be translated/translatable now!
+	- Fixed various bugs with 'unicode in ESSID' handling
+	- Implemented rfkill-support
+	- Generalized libc linking using ctypes' find_library()
+	- Fixed wireless connecting status message, now shows the correct ESSID
+	- Support wifi-channels with more than 2 digits
+	- Implemented in-GUI password hiding
+	- Implemented -t/--tray to only run the wicd-gtk tray icon
+	- Support alternative ifconfig output style
 
 1.7.0:
 	Changes for Packagers:

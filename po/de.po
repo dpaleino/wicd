@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-31 21:56+0000\n"
+"PO-Revision-Date: 2012-02-01 09:47+0000\n"
 "Last-Translator: Fabian Nowak <timystery@arcor.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-01 05:10+0000\n"
-"X-Generator: Launchpad (build 14734)\n"
+"X-Launchpad-Export-Date: 2012-02-02 06:13+0000\n"
+"X-Generator: Launchpad (build 14738)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -575,7 +575,7 @@ msgstr "Skripte"
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
-msgstr "Suche Domain"
+msgstr "Such-Domain"
 
 #: gtk/netentry.py:960 gtk/netentry.py:1082
 msgid "Secured"
@@ -888,11 +888,11 @@ msgstr "Mit einem verborgenen Netzwerk verbinden"
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr "_Schalte Wi-Fi aus"
+msgstr "Wi-Fi aus_schalten"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr "Trenne alle Verbin_dungen"
+msgstr "Alle Verbin_dungen trennen"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
@@ -954,7 +954,7 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr "DNS Domain"
+msgstr "DNS-Domain:"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
@@ -962,7 +962,7 @@ msgstr "<b>Nie verbinden</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr "Automatisch Wiederverbinden bei Abbruch der Netzwerkverbindung"
+msgstr "Automatisch wiederverbinden bei Abbruch der Netzwerkverbindung"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
@@ -970,7 +970,7 @@ msgstr "<b>Automatisches Wiederverbinden</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "Letzte Kabel-Netzwerkverbindung verwenden."
+msgstr "Letzte Kabel-Netzwerkverbindung verwenden"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -978,7 +978,7 @@ msgstr "Nach kabelgebundenen Netzwerkprofilen fragen"
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "Verwende das Standard-Kabelnetzwerk"
+msgstr "Standard-Kabelnetzwerk verwenden"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
@@ -986,11 +986,11 @@ msgstr "<b>Automatische Kabelverbindung</b>"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr "Netzwerkkarte"
+msgstr "Netzwerkkarte:"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr "WLAN-Gerät"
+msgstr "WLAN-Gerät:"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
@@ -998,23 +998,23 @@ msgstr "<b>Netzwerkgerät</b>"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr "DNS-Server 3"
+msgstr "DNS-Server 3:"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr "DNS-Server 2"
+msgstr "DNS-Server 2:"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr "DNS-Server 1"
+msgstr "DNS-Server 1:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr "Suche Domain"
+msgstr "Such-Domain:"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr "Globale DNS-Server"
+msgstr "<b>Globale DNS-Server</b>"
 
 #: data/wicd.ui:960
 msgid ""
@@ -1032,11 +1032,11 @@ msgstr "<b>Benachrichtigungen</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr "Routen-Tabelle löschen"
+msgstr "<b>Routen-Tabelle löschen</b>"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr "kabelgebundene Netzwerkerkennung"
+msgstr "<b>Kabelgebundene Netzwerkerkennung</b>"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -1044,15 +1044,15 @@ msgstr "<b>DHCP Client</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr "<b>Grafische Sudo Anwendung</b>"
+msgstr "<b>Grafische Sudo-Anwendung</b>"
 
 #: data/wicd.ui:1421
 msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
-"Um die Beschreibung lesen zu können, fahren sie mit der Maus über das "
-"gewählte Hintergrundprogramm (Backend)."
+"Um die Beschreibung lesen zu können, fahren Sie mit der Maus über das "
+"gewählte Backend."
 
 #: data/wicd.ui:1474
 msgid "Driver:"
@@ -1060,7 +1060,7 @@ msgstr "Treiber:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr "WLAN-Gerät"
+msgstr "<b>WLAN-Gerät</b>"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1072,7 +1072,7 @@ msgstr "<b>Fehlersuche</b>"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr "Backend"
+msgstr "Backend:"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"

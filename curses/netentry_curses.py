@@ -183,14 +183,81 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
     def ready_widgets(self,ui,body):
         pass
 
+    def combo_on_change(self,combobox,new_index,user_data=None):
+        self.change_encrypt_method()
+    
+    # More or less ripped from netentry.py
+    def change_encrypt_method(self):
+        #self.lbox_encrypt = urwid.ListBox()
+        self.encryption_info = {}
+        wid,ID = self.encryption_combo.get_focus()
+        methods = self.encrypt_types
+
+        if self._w.body.body.__contains__(self.pile_encrypt):
+            self._w.body.body.pop(self._w.body.body.__len__()-1)
+
+        # If nothing is selected, select the first entry.
+        if ID == -1:
+            self.encryption_combo.set_focus(0)
+            ID = 0
+
+        theList = []
+        for type_ in ['required', 'optional']:
+            fields = methods[ID][type_]
+            for field in fields:
+                try:
+                    edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
+                except KeyError:
+                    edit = MaskingEdit(('editcp',field[1].replace(' ','_')+': '))
+                edit.set_mask_mode('no_focus')
+                theList.append(edit)
+                # Add the data to any array, so that the information
+                # can be easily accessed by giving the name of the wanted
+                # data.
+                self.encryption_info[field[0]] = [edit, type_]
+                
+                if self.wired:
+                    edit.set_edit_text(noneToBlankString(
+                        wired.GetWiredProperty(field[0])))
+                else:
+                    edit.set_edit_text(noneToBlankString(
+                        wireless.GetWirelessProperty(self.networkid, field[0])))
+
+        #FIXME: This causes the entire pile to light up upon use.
+        # Make this into a listbox?
+        self.pile_encrypt = DynWrap(urwid.Pile(theList),attrs=('editbx','editnfc'))
+        
+        self.pile_encrypt.set_sensitive(self.encryption_chkbox.get_state())
+        
+        self._w.body.body.insert(self._w.body.body.__len__(),self.pile_encrypt)
+        #self._w.body.body.append(self.pile_encrypt)
+    
+    def encryption_toggle(self,chkbox,new_state,user_data=None):
+        self.encryption_combo.set_sensitive(new_state)
+        self.pile_encrypt.set_sensitive(new_state)
+
 class WiredSettingsDialog(AdvancedSettingsDialog):
-    def __init__(self,name):
+    def __init__(self,name,parent):
         global wired, daemon
         AdvancedSettingsDialog.__init__(self)
+        self.wired = True
+        
         self.set_default = urwid.CheckBox(_('Use as default profile (overwrites any previous default)'))
         #self.cur_default = 
         # Add widgets to listbox
         self._w.body.body.append(self.set_default)
+        
+        self.parent = parent
+        encryption_t = _('Use Encryption')
+        
+        self.encryption_chkbox = urwid.CheckBox(encryption_t,on_state_change=self.encryption_toggle)
+        self.encryption_combo = ComboBox(callback=self.combo_on_change)
+        self.pile_encrypt = None
+        # _w is a Frame, _w.body is a ListBox, _w.body.body is the ListWalker :-)
+        self._listbox.body.append(self.encryption_chkbox)
+        self._listbox.body.append(self.encryption_combo)
+        self.encrypt_types = misc.LoadEncryptionMethods(wired = True)
+        self.set_values()
         
         self.prof_name = name
         title = _('Configuring preferences for wired profile "$A"').replace('$A',self.prof_name)
@@ -218,6 +285,26 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
 
         self.set_default.set_state(to_bool(wired.GetWiredProperty("default")))
 
+        # Throw the encryption stuff into a list
+        list = []
+        activeID = -1  # Set the menu to this item when we are done
+        for x, enc_type in enumerate(self.encrypt_types):
+            list.append(enc_type['name'])
+            if enc_type['type'] == wired.GetWiredProperty("enctype"):
+                activeID = x
+        self.encryption_combo.set_list(list)
+
+        self.encryption_combo.set_focus(activeID)
+        if wired.GetWiredProperty("encryption_enabled"):
+            self.encryption_chkbox.set_state(True,do_callback=False)
+            self.encryption_combo.set_sensitive(True)
+            #self.lbox_encrypt_info.set_sensitive(True)
+        else:
+            self.encryption_combo.set_focus(0)
+            self.encryption_combo.set_sensitive(False)
+
+        self.change_encrypt_method()
+
         dhcphname = wired.GetWiredProperty("dhcphostname")
         if dhcphname is None:
             dhcphname = os.uname()[1]
@@ -227,6 +314,30 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.dhcp_h.set_edit_text(unicode(dhcphname))
 
     def save_settings(self):
+        # Check encryption info
+        if self.encryption_chkbox.get_state():
+            encrypt_info = self.encryption_info
+            encrypt_methods = self.encrypt_types
+            self.set_net_prop("enctype",
+                               encrypt_methods[self.encryption_combo.get_focus()[1] ]['type'])
+            self.set_net_prop("encryption_enabled", True)
+            # Make sure all required fields are filled in.
+            for entry_info in encrypt_info.itervalues():
+                if entry_info[0].get_edit_text() == "" \
+                    and entry_info[1] == 'required':
+                    error(self.ui, self.parent,"%s (%s)" \
+                            % (_('Required encryption information is missing.'),
+                                entry_info[0].get_caption()[0:-2] )
+                          )
+                    return False
+
+            for entry_key, entry_info in encrypt_info.iteritems():
+                self.set_net_prop(entry_key, noneToString(entry_info[0].
+                                                   get_edit_text()))
+        else:
+            self.set_net_prop("enctype", "None")
+            self.set_net_prop("encryption_enabled", False)
+        
         AdvancedSettingsDialog.save_settings(self)
         if self.set_default.get_state():
             wired.UnsetWiredDefault()
@@ -250,6 +361,8 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self,networkID,parent):
         global wireless, daemon
         AdvancedSettingsDialog.__init__(self)
+        self.wired = False
+        
         self.networkid = networkID
         self.parent = parent
         global_settings_t = _('Use these settings for all networks sharing this essid')
@@ -271,13 +384,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
         title = _('Configuring preferences for wireless network "$A" ($B)').replace('$A',wireless.GetWirelessProperty(networkID,'essid')).replace('$B',wireless.GetWirelessProperty(networkID,'bssid'))
         self._w.header = urwid.Text(('header',title),align='right' )
-    
-    def encryption_toggle(self,chkbox,new_state,user_data=None):
-        self.encryption_combo.set_sensitive(new_state)
-        self.pile_encrypt.set_sensitive(new_state)
-
-    def combo_on_change(self,combobox,new_index,user_data=None):
-        self.change_encrypt_method()
 
     def set_values(self):
         """ Set the various network settings to the right values. """
@@ -383,45 +489,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             
         wireless.SaveWirelessNetworkProfile(self.networkid)
         return True
-
-    # More or less ripped from netentry.py
-    def change_encrypt_method(self):
-        #self.lbox_encrypt = urwid.ListBox()
-        self.encryption_info = {}
-        wid,ID = self.encryption_combo.get_focus()
-        methods = misc.LoadEncryptionMethods()
-
-        if self._w.body.body.__contains__(self.pile_encrypt):
-            self._w.body.body.pop(self._w.body.body.__len__()-1)
-
-        # If nothing is selected, select the first entry.
-        if ID == -1:
-            self.encryption_combo.set_focus(0)
-            ID = 0
-
-        theList = []
-        for type_ in ['required', 'optional']:
-            fields = methods[ID][type_]
-            for field in fields:
-                try:
-                    edit = MaskingEdit(('editcp',language[field[1].lower().replace(' ','_')]+': '))
-                except KeyError:
-                    edit = MaskingEdit(('editcp',field[1].replace(' ','_')+': '))
-                edit.set_mask_mode('no_focus')
-                theList.append(edit)
-                # Add the data to any array, so that the information
-                # can be easily accessed by giving the name of the wanted
-                # data.
-                self.encryption_info[field[0]] = [edit, type_]
-
-                edit.set_edit_text(noneToBlankString(
-                    wireless.GetWirelessProperty(self.networkid, field[0])))
-
-        #FIXME: This causes the entire pile to light up upon use.
-        # Make this into a listbox?
-        self.pile_encrypt = DynWrap(urwid.Pile(theList),attrs=('editbx','editnfc'))
-        self._w.body.body.insert(self._w.body.body.__len__(),self.pile_encrypt)
-        #self._w.body.body.append(self.pile_encrypt)
 
     def ready_widgets(self,ui,body):
         self.ui = ui

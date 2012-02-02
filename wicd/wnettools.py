@@ -768,6 +768,13 @@ class BaseInterface(object):
             print "Could not open %s, using ifconfig to determine status" % flags_file
             return self._slow_is_up(ifconfig)
         return bool(int(flags, 16) & 1)
+    
+    @neediface(False)
+    def StopWPA(self):
+        """ Terminates wpa using wpa_cli"""
+        cmd = 'wpa_cli -i %s terminate' % self.iface
+        if self.verbose: print cmd
+        misc.Run(cmd)
         
         
     def _slow_is_up(self, ifconfig=None):
@@ -892,6 +899,13 @@ class BaseWiredInterface(BaseInterface):
         else:
             return False
         
+    def Authenticate(self, network):
+        misc.ParseEncryption(network)
+        cmd = ['wpa_supplicant', '-B', '-i', self.iface, '-c',
+               os.path.join(wpath.networks, 'wired'),
+               '-Dwired']
+        if self.verbose: print cmd
+        misc.Run(cmd)
 
 class BaseWirelessInterface(BaseInterface):
     """ Control a wireless network interface. """
@@ -1384,13 +1398,6 @@ class BaseWirelessInterface(BaseInterface):
         """
         print 'wpa_supplicant rescan forced...'
         cmd = 'wpa_cli -i' + self.iface + ' scan'
-        misc.Run(cmd)
-        
-    @neediface(False)
-    def StopWPA(self):
-        """ Terminates wpa using wpa_cli"""
-        cmd = 'wpa_cli -i %s terminate' % self.iface
-        if self.verbose: print cmd
         misc.Run(cmd)
 
     @neediface("")

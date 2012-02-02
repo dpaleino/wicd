@@ -1492,7 +1492,7 @@ class WiredDaemon(dbus.service.Object):
         for option in ["ip", "broadcast", "netmask", "gateway", "search_domain", 
                        "dns_domain", "dns1", "dns2", "dns3", "beforescript", 
                        "afterscript", "predisconnectscript",
-                       "postdisconnectscript"]:
+                       "postdisconnectscript", "encryption_enabled"]:
             self.config.set(profilename, option, None)
         self.config.set(profilename, "default", default)
         self.config.set(profilename,"dhcphostname",os.uname()[1])
@@ -1580,6 +1580,7 @@ class WiredDaemon(dbus.service.Object):
                 profile[x] = misc.Noneify(self.config.get(profilename, x))
             profile['use_global_dns'] = bool(profile.get('use_global_dns'))
             profile['use_static_dns'] = bool(profile.get('use_static_dns'))
+            profile['encryption_enabled'] = bool(profile.get('encryption_enabled'))
             profile['profilename'] = profilename
             self.WiredNetwork = profile
             self._cur_wired_prof_name = profilename

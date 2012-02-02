@@ -1,0 +1,17 @@
+name = 802.1x
+author = Joe MacMahon
+version = 1
+require identity *Identity password *Password
+protected password *Password
+-----
+ctrl_interface=/var/run/wpa_supplicant
+eapol_version=1
+fast_reauth=0
+network={
+       key_mgmt=IEEE8021X
+       eap=PEAP
+       phase1="peaplabel=1"
+       phase2="auth=MSCHAPV2"
+       identity="$_IDENTITY"
+       password="$_PASSWORD"
+}

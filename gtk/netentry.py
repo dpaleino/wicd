@@ -236,6 +236,12 @@ class AdvancedSettingsDialog(gtk.Dialog):
             for w in [self.txt_dns_1, self.txt_dns_2, self.txt_dns_3, 
                       self.txt_domain, self.txt_search_dom]:
                 w.set_sensitive(not self.chkbox_global_dns.get_active())
+    
+    def toggle_encryption(self, widget=None):
+        """ Toggle the encryption combobox based on the encryption checkbox. """
+        active = self.chkbox_encryption.get_active()
+        self.vbox_encrypt_info.set_sensitive(active)
+        self.combo_encryption.set_sensitive(active)
                 
     def destroy_called(self, *args):
         """ Clean up everything. """
@@ -279,11 +285,80 @@ class AdvancedSettingsDialog(gtk.Dialog):
                           self.chkbox_use_dhcp_hostname.get_active())
         self.set_net_prop("dhcphostname",noneToString(self.txt_dhcp_hostname.get_text()))
 
+    def change_encrypt_method(self, widget=None):
+        """ Load all the entries for a given encryption method. """
+        for z in self.vbox_encrypt_info:
+            z.destroy()  # Remove stuff in there already
+        ID = self.combo_encryption.get_active()
+        methods = self.encrypt_types
+        self.encryption_info = {}
+        
+        # If nothing is selected, select the first entry.
+        if ID == -1:
+            self.combo_encryption.set_active(0)
+            ID = 0
+
+        for type_ in ['required', 'optional']:
+            fields = methods[ID][type_]
+            for field in fields:
+                try:
+                    field_text = language[field[1].lower().replace(' ','_')]
+                except KeyError:
+                    field_text = field[1].replace(' ','_')
+
+                if field in methods[ID]['protected']:
+                    box = ProtectedLabelEntry(field_text)
+                else:
+                    box = LabelEntry(field_text)
+
+                self.vbox_encrypt_info.pack_start(box)
+                # Add the data to a dict, so that the information
+                # can be easily accessed by giving the name of the wanted
+                # data.
+                self.encryption_info[field[0]] = [box, type_]
+                
+                if self.wired:
+                    box.entry.set_text(noneToBlankString(
+                        wired.GetWiredProperty(field[0])))
+                else:
+                    box.entry.set_text(noneToBlankString(
+                        wireless.GetWirelessProperty(self.networkID, field[0])))
+        self.vbox_encrypt_info.show_all()
+
         
 class WiredSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, name):
         """ Build the wired settings dialog. """
         AdvancedSettingsDialog.__init__(self, _('Wired Network'))
+        
+        # So we can test if we are wired or wireless (for change_encrypt_method())
+        self.wired = True
+        
+        ## This section is largely copied from WirelessSettingsDialog, but with some changes
+        # Set up encryption stuff
+        self.combo_encryption = gtk.combo_box_new_text()
+        self.chkbox_encryption = gtk.CheckButton(_('Use Encryption'))
+        # Make the vbox to hold the encryption stuff.
+        self.vbox_encrypt_info = gtk.VBox(False, 0)
+        self.chkbox_encryption.set_active(bool(wired.GetWiredProperty('encryption_enabled')))
+        self.combo_encryption.set_sensitive(False)
+        self.encrypt_types = misc.LoadEncryptionMethods(wired = True)
+ 
+        # Build the encryption menu
+        for x, enc_type in enumerate(self.encrypt_types):
+            self.combo_encryption.append_text(enc_type['name'])
+        self.combo_encryption.set_active(0)
+        self.change_encrypt_method()
+        self.toggle_encryption()
+
+        self.cvbox.pack_start(self.chkbox_encryption, False, False)
+        self.cvbox.pack_start(self.combo_encryption, False, False)
+        self.cvbox.pack_start(self.vbox_encrypt_info, False, False)
+        
+        # Connect signals.
+        self.chkbox_encryption.connect("toggled", self.toggle_encryption)
+        self.combo_encryption.connect("changed", self.change_encrypt_method)
+        
         self.des = self.connect("destroy", self.destroy_called)
         self.script_button.connect("clicked", self.edit_scripts)
         self.prof_name = name
@@ -329,7 +404,39 @@ class WiredSettingsDialog(AdvancedSettingsDialog):
         self.txt_dhcp_hostname.set_text(dhcphname)
         self.reset_static_checkboxes()
         
+        self.chkbox_encryption.set_active(bool(wired.GetWiredProperty('encryption_enabled')))
+        self.change_encrypt_method()
+        self.toggle_encryption()
+        
     def save_settings(self):
+        # Check encryption info
+        encrypt_info = self.encryption_info
+        self.set_net_prop("encryption_enabled", self.chkbox_encryption.get_active())
+        if self.chkbox_encryption.get_active():
+            print "setting encryption info..."
+            encrypt_methods = self.encrypt_types
+            self.set_net_prop("enctype",
+                               encrypt_methods[self.combo_encryption.get_active()]['type'])
+            # Make sure all required fields are filled in.
+            for entry_info in encrypt_info.itervalues():
+                if entry_info[0].entry.get_text() == "" and \
+                   entry_info[1] == 'required':
+                    error(self, "%s (%s)" % (_('Required encryption information is missing.'),
+                                             entry_info[0].label.get_label())
+                          )
+                    return False
+            # Now save all the entries.
+            for entry_key, entry_info in encrypt_info.iteritems():
+                self.set_net_prop(entry_key, 
+                                  noneToString(entry_info[0].entry.get_text()))
+        elif not wired and not self.chkbox_encryption.get_active() and \
+             wireless.GetWirelessProperty(networkid, "encryption"):
+            # Encrypt checkbox is off, but the network needs it.
+            error(self, _('This network requires encryption to be enabled.'))
+            return False
+        else:
+            print "no encryption specified..."
+            self.set_net_prop("enctype", "None")
         AdvancedSettingsDialog.save_settings(self)
         wired.SaveWiredNetworkProfile(self.prof_name)
         return True
@@ -350,6 +457,9 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     def __init__(self, networkID):
         """ Build the wireless settings dialog. """
         AdvancedSettingsDialog.__init__(self, wireless.GetWirelessProperty(networkID, 'essid'))
+        # So we can test if we are wired or wireless (for change_encrypt_method())
+        self.wired = False
+        
         # Set up encryption stuff
         self.networkID = networkID
         self.combo_encryption = gtk.combo_box_new_text()
@@ -513,48 +623,6 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
     def format_entry(self, networkid, label):
         """ Helper method for fetching/formatting wireless properties. """
         return noneToBlankString(wireless.GetWirelessProperty(networkid, label))
-    
-    def toggle_encryption(self, widget=None):
-        """ Toggle the encryption combobox based on the encryption checkbox. """
-        active = self.chkbox_encryption.get_active()
-        self.vbox_encrypt_info.set_sensitive(active)
-        self.combo_encryption.set_sensitive(active)
-
-    def change_encrypt_method(self, widget=None):
-        """ Load all the entries for a given encryption method. """
-        for z in self.vbox_encrypt_info:
-            z.destroy()  # Remove stuff in there already
-        ID = self.combo_encryption.get_active()
-        methods = self.encrypt_types
-        self.encryption_info = {}
-        
-        # If nothing is selected, select the first entry.
-        if ID == -1:
-            self.combo_encryption.set_active(0)
-            ID = 0
-
-        for type_ in ['required', 'optional']:
-            fields = methods[ID][type_]
-            for field in fields:
-                try:
-                    field_text = language[field[1].lower().replace(' ','_')]
-                except KeyError:
-                    field_text = field[1].replace(' ','_')
-
-                if field in methods[ID]['protected']:
-                    box = ProtectedLabelEntry(field_text)
-                else:
-                    box = LabelEntry(field_text)
-
-                self.vbox_encrypt_info.pack_start(box)
-                # Add the data to a dict, so that the information
-                # can be easily accessed by giving the name of the wanted
-                # data.
-                self.encryption_info[field[0]] = [box, type_]
-
-                box.entry.set_text(noneToBlankString(
-                    wireless.GetWirelessProperty(self.networkID, field[0])))
-        self.vbox_encrypt_info.show_all()
         
         
 class NetworkEntry(gtk.HBox):

@@ -519,6 +519,12 @@ class ConnectThread(threading.Thread):
             self.lock.release()
         
     @abortable
+    def stop_wpa(self, iface):
+        """ Stops wpa_supplicant. """
+        print 'Stopping wpa_supplicant'
+        iface.StopWPA()
+        
+    @abortable
     def put_iface_up(self, iface):
         """ Bring up given interface. """
         print 'Putting interface up...'
@@ -968,13 +974,6 @@ class WirelessConnectThread(ConnectThread):
                 self.abort_connection('association_failed')
         else:
             print 'not verifying'
-
-        
-    @abortable
-    def stop_wpa(self, wiface):
-        """ Stops wpa_supplicant. """
-        print 'Stopping wpa_supplicant'
-        wiface.StopWPA()
         
     @abortable
     def generate_psk_and_authenticate(self, wiface):
@@ -1073,6 +1072,10 @@ class Wired(Controller):
     
     def Disconnect(self):
         Controller.Disconnect(self, 'wired', 'wired', 'wired')
+        self.StopWPA()
+    
+    def StopWPA(self):
+        self.liface.StopWPA()
     
     def DetectWiredInterface(self):
         """ Attempts to automatically detect a wired interface. """
@@ -1143,10 +1146,15 @@ class WiredConnectThread(ConnectThread):
         self.put_iface_down(liface)
         self.release_dhcp_clients(liface)
         self.reset_ip_addresses(liface)
+        self.stop_wpa(liface)
         self.flush_routes(liface)
         
         # Bring up interface.
         self.put_iface_up(liface)
+        
+        # Manage encryption.
+        if self.network.get('encryption_enabled'):
+            liface.Authenticate(self.network)
         
         # Set gateway, IP adresses, and DNS servers.
         self.set_broadcast_address(liface)

@@ -13,12 +13,7 @@ are a few dependencies:
   8. pm-utils (optional for suspend/resume integration)
      Wicd supports using versions >=1.2.4 -- earlier versions may work just
      fine, but they are completely unsupported here.
-
-If you are installing from a bzr pull and you want 
-the native language translations, first run this:
-  python setup.py update_translations_py
-  python setup.py get_translations
-You will not need to do this if you're installing from a release tarball.
+  9. pybabel
 
 Next, configure Wicd for installation.  Wicd will, by default, follow the 
 FHS guidelines <http://www.pathname.com/fhs/> (or distribution standards 
@@ -31,6 +26,10 @@ for more information, otherwise run it as is to configure Wicd for installation.
 Note that setup.py will try to determine if and where to install the autostart
 desktop file for kde (either kde3 or kde4, but not both) and where to install
 the sleep hook for pm-utils.  
+
+If you want native language translations, please remember to run:
+  python setup.py compile_translations
+before the next step.
 
 Finally, do the actual installation.  This step will need to be done as
 root or with sudo in most cases:

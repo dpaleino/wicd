@@ -1,4 +1,4 @@
-name = WPA 1/2 (Passphrase)
+name = WPA 1/2 (Hex [0-9/A-F])
 author = Adam Blackburn
 version = 1
 require key *Key

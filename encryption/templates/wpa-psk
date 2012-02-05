@@ -1,4 +1,4 @@
-name = WPA 1/2 (Preshared Key)
+name = WPA 1/2 (Passphrase)
 author = Adam Blackburn
 version = 1
 require apsk *Preshared_Key

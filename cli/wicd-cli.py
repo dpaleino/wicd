@@ -100,7 +100,7 @@ if options.scan and options.wireless:
 
 if options.load_profile and options.wired:
     is_valid_wired_network_profile(options.name)
-    config.ReadWiredNetworkProfile(options.name)
+    wired.ReadWiredNetworkProfile(options.name)
     op_performed = True
 
 if options.list_networks:

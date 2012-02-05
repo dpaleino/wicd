@@ -281,7 +281,7 @@ class AdvancedSettingsDialog(gtk.Dialog):
             self.set_net_prop("dns1", '')
             self.set_net_prop("dns2", '')
             self.set_net_prop("dns3", '')
-        self.set_net_prop('use_dhcphostname',
+        self.set_net_prop('usedhcphostname',
                           self.chkbox_use_dhcp_hostname.get_active())
         self.set_net_prop("dhcphostname",noneToString(self.txt_dhcp_hostname.get_text()))
 
@@ -556,7 +556,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
                                                              'use_settings_globally')))
 
         self.chkbox_use_dhcp_hostname.set_active(
-            bool(wireless.GetWirelessProperty(networkID, 'use_dhcphostname')))
+            bool(wireless.GetWirelessProperty(networkID, 'usedhcphostname')))
 
 
         dhcphname = wireless.GetWirelessProperty(networkID,"dhcphostname")

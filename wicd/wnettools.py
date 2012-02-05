@@ -1076,6 +1076,8 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         mode = _sanitize_string_strict(mode)
+        if not mode:
+            mode = 'master'
         if mode.lower() == 'master':
             mode = 'managed'
         cmd = 'iwconfig %s mode %s' % (self.iface, mode)

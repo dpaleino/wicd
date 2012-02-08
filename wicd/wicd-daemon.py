@@ -1764,6 +1764,11 @@ def main(argv):
         # quit, this should be the only option specified
         sys.exit(0)
 
+    if os.path.exists(wpath.pidfile):
+        print 'It seems like the daemon is already running.'
+        print 'If it is not, please remove %s and try again.' % wpath.pidfile
+        sys.exit(1)
+
     if not os.path.exists(wpath.networks):
         os.makedirs(wpath.networks)
    

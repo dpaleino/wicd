@@ -179,8 +179,8 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
             self.set_net_prop("dns3", '')
         self.set_net_prop('dhcphostname',self.dhcp_h.get_edit_text())
         self.set_net_prop('usedhcphostname',self.use_dhcp_h.get_state())
+
     # Prevent comboboxes from dying.
-    
     def ready_widgets(self,ui,body):
         self.ui = ui
         self.body = body

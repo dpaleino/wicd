@@ -828,6 +828,7 @@ class appGUI():
                     self.frame.set_footer(urwid.Pile([self.confCols,self.footer2]))
                     if focus == self.wiredCB:
                         self.diag = WiredSettingsDialog(self.wiredCB.get_body().get_selected_profile(),self.frame)
+                        self.diag.ready_widgets(ui,self.frame)
                         self.frame.set_body(self.diag)
                     else:
                         # wireless list only other option

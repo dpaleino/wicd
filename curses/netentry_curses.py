@@ -180,8 +180,12 @@ class AdvancedSettingsDialog(urwid.WidgetWrap):
         self.set_net_prop('dhcphostname',self.dhcp_h.get_edit_text())
         self.set_net_prop('usedhcphostname',self.use_dhcp_h.get_state())
     # Prevent comboboxes from dying.
+    
     def ready_widgets(self,ui,body):
-        pass
+        self.ui = ui
+        self.body = body
+        self.encryption_combo.build_combobox(body,ui,14)
+        self.change_encrypt_method()
 
     def combo_on_change(self,combobox,new_index,user_data=None):
         self.change_encrypt_method()
@@ -489,9 +493,3 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             
         wireless.SaveWirelessNetworkProfile(self.networkid)
         return True
-
-    def ready_widgets(self,ui,body):
-        self.ui = ui
-        self.body = body
-        self.encryption_combo.build_combobox(body,ui,14)
-        self.change_encrypt_method()

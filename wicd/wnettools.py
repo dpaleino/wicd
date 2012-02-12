@@ -70,6 +70,7 @@ authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current'
 auth_pattern = re.compile('.*wpa_state=(.*?)\n', _re_mode)
 
 RALINK_DRIVER = 'ralink legacy'
+NONE_DRIVER = 'none'
 
 blacklist_strict = '!"#$%&\'()*+,./:;<=>?@[\\]^`{|}~ '
 blacklist_norm = ";`$!*|><&\\"
@@ -1160,10 +1161,14 @@ class BaseWirelessInterface(BaseInterface):
         if self.wpa_driver == RALINK_DRIVER:
             self._AuthenticateRalinkLegacy(network)
         else:
+            if self.wpa_driver == NONE_DRIVER:
+                driver = ''
+            else:
+                driver = '-D' + self.wpa_driver
             cmd = ['wpa_supplicant', '-B', '-i', self.iface, '-c',
                    os.path.join(wpath.networks, 
                                 network['bssid'].replace(':', '').lower()),
-                   '-D', self.wpa_driver]
+                   driver]
             if self.verbose: print cmd
             misc.Run(cmd)
 

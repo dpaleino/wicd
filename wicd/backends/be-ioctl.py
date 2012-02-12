@@ -72,6 +72,7 @@ python-wpactrl (http://projects.otaku42.de/wiki/PythonWpaCtrl)
 python-iwscan (http://projects.otaku42.de/browser/python-iwscan/)"""
 
 RALINK_DRIVER = 'ralink legacy'
+NONE_DRIVER = 'none'
 
 # Got these from /usr/include/linux/wireless.h
 SIOCGIWESSID = 0x8B1B

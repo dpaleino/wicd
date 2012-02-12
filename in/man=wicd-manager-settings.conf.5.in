@@ -68,8 +68,10 @@ False = Do not switch to wired interface automatically
 .TP
 .BI "wireless_interface = " <name_of_wireless_interface>
 .TP
-.BI "wpa_driver = " <wext|madwifi|ndiswrapper|hostap|hermes|atmel|broadcom|ipw|ralink legacy>
+.BI "wpa_driver = " <wext|madwifi|ndiswrapper|hostap|hermes|atmel|broadcom|ipw|ralink legacy|none>
 The default (and best supported) is wext.  It should work properly in most cases.
+The \fBnone\fR special value makes WICD pass no \fI-D\fR parameter to
+wpa_supplicant, which might be useful in some cases.
 .TP
 .BI "auto_reconnect = " <True|False>
 This settings determines whether Wicd will attempt to reconnect on connection loss.

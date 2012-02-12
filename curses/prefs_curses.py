@@ -298,6 +298,7 @@ class PrefsDialog(urwid.WidgetWrap):
         # wpa_supplicant janx
         self.wpadrivers = wireless.GetWpaSupplicantDrivers()
         self.wpadrivers.append("ralink_legacy")
+        self.wpadrivers.append('none')
         # Same as above with the dbus.String
         self.thedrivers = [unicode(w) for w in self.wpadrivers]
         self.wpa_cbox.set_list(self.thedrivers)

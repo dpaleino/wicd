@@ -377,7 +377,8 @@ class PreferencesDialog(object):
         self.wpadrivercombo = build_combobox("pref_wpa_combobox")
         self.wpadrivers = wireless.GetWpaSupplicantDrivers()
         self.wpadrivers.append("ralink_legacy")
-        
+        self.wpadrivers.append('none')
+
         for x in self.wpadrivers:
             self.wpadrivercombo.append_text(x)
 

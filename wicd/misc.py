@@ -427,7 +427,7 @@ def noneToString(text):
 
 def sanitize_escaped(s):
     """ Sanitize double-escaped unicode strings. """
-    lastpos = 0
+    lastpos = -1
     while True:
         lastpos = s.find('\\x', lastpos + 1)
         #print lastpos

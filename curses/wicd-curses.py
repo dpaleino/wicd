@@ -350,7 +350,7 @@ class NetLabel(urwid.WidgetWrap):
         if wireless.GetWirelessProperty(id, 'encryption'):
             self.encrypt = wireless.GetWirelessProperty(id,'encryption_method')
         else:
-            self.encrypt = _('Unsecured')
+            self.encrypt = _('Unsecured').decode('utf-8')
 
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')

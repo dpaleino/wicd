@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-15 20:03+0100\n"
+"PO-Revision-Date: 2011-10-21 22:27+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: vi <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-08 05:46+0000\n"
-"X-Generator: Launchpad (build 14443)\n"
+"X-Launchpad-Export-Date: 2012-02-19 06:10+0000\n"
+"X-Generator: Launchpad (build 14814)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -369,7 +369,7 @@ msgstr ""
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Tự động kết nối đến mạng này"
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -498,7 +498,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr ""
+msgstr "Cấu hình"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr ""
+msgstr "Cấu hình"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
@@ -845,7 +845,7 @@ msgstr ""
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr ""
+msgstr "m m n"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

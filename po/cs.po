@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-12-14 20:56+0000\n"
-"Last-Translator: Zbyněk Schwarz <Unknown>\n"
+"PO-Revision-Date: 2012-02-25 11:41+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: cs <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:09+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-26 05:03+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -385,7 +385,7 @@ msgstr "Síťová rozhraní"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Automaticky se připojit k této síti"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -415,9 +415,6 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
-"Zde můžete změnit nebo přidat proměnné \"beforescript\", \"afterscript\" a "
-"\"disconnectscript\". Zadáváte plnou cestu ke skriptu, nikoli jeho obsah. "
-"Pro více informací se podívejte do manuálových stránek."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
@@ -517,7 +514,7 @@ msgstr "Ukončit wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Vlastnosti"
+msgstr "Obnovit"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -871,11 +868,11 @@ msgstr "Odpojeno"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Vlastnosti"
+msgstr "_Obnovit"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr "Vlastnosti"
+msgstr "_Nastaveni"
 
 #: data/wicd.ui:136
 msgid "_About"

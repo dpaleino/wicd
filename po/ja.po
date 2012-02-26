@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-02-08 06:08+0000\n"
+"PO-Revision-Date: 2012-02-25 10:06+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:09+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -611,11 +611,11 @@ msgstr "接続中にネットワークが停止しました"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr "Wi-Fi の電源を OFF にする"
+msgstr "Wi-Fi を OFF にする"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr "Wi-Fi の電源を ON にする"
+msgstr "Wi-Fi を ON にする"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
@@ -853,7 +853,7 @@ msgstr "探したい非表示のネットワーク名を入力"
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr "Wi-Fi の電源を OFF (_S)"
+msgstr "Wi-Fi を OFF (_S)"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"

@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-01-04 23:56+0000\n"
-"Last-Translator: Mateusz Łukasik <Unknown>\n"
+"PO-Revision-Date: 2012-02-25 11:44+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: pl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:09+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -393,7 +393,7 @@ msgstr "Interfejsy sieciowe"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
-msgstr "Automatyczne połączenie z tą siecią"
+msgstr ""
 
 #: curses/wicd-curses.py:527 gtk/gui.py:604 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -528,7 +528,7 @@ msgstr "Zamknij ikonę wicd"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "Preferencje"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -612,7 +612,7 @@ msgstr "Ustawianie statycznych adresów IP..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
-msgstr "Rozłącz ze wszystkich sieci"
+msgstr ""
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -884,7 +884,7 @@ msgstr "Rozłączono"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "Preferencje"
+msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"

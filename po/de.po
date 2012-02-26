@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-02-01 09:47+0000\n"
+"PO-Revision-Date: 2012-02-25 10:08+0000\n"
 "Last-Translator: Fabian Nowak <timystery@arcor.de>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:09+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
+"X-Generator: Launchpad (build 14860)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -98,7 +98,7 @@ msgstr "Automatisch wiederverbinden bei Verbindungsabbruch"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr "Backend"
+msgstr "Hintergrundprogramm"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
@@ -268,7 +268,7 @@ msgstr "Trenne aktive Verbindungen..."
 
 #: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
-msgstr "Zeige diesen Hilfe-Dialog"
+msgstr "Zeige das \"Über\"-Fenster"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -551,7 +551,7 @@ msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
-msgstr "Route Tabelle löschen"
+msgstr "Säubere Routing-Tabelle"
 
 #: curses/wicd-curses.py:629
 msgid "Scan"
@@ -620,7 +620,7 @@ msgstr "Vorübergehend das Pop-Up für automatische Verbindung nicht anzeigen"
 
 #: curses/wicd-curses.py:217
 msgid "Stop a connection in progress"
-msgstr "Eine Netzwerkverbindung wird getrennt:"
+msgstr "Verbindungsaufbau anhalten"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
@@ -653,7 +653,7 @@ msgstr ""
 #: curses/netentry_curses.py:368 gtk/gui.py:701 gtk/netentry.py:497
 msgid "This network requires encryption to be enabled."
 msgstr ""
-"Dieses Netzwerk verlangt nach einem Schlüssel um es benutzen zu können."
+"Zur Verwendung dieses Netzwerks muss die Verschlüsselung aktiviert sein."
 
 #: curses/wicd-curses.py:272
 msgid ""
@@ -916,7 +916,7 @@ msgstr "Aktuellen Verbindungsversuch abbrechen"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr "Skript fortsetzen"
+msgstr "Skripte festlegen"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"

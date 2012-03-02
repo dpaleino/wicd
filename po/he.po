@@ -1,21 +1,26 @@
+# Hebrew translation for wicd
+# This file is distributed under the same license as the wicd package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# Isratine Citizen <genghiskhan@gmx.ca>, 2012.
 # Translations for Hebrew (he)
 # Translator ID 39
 # /translator/edit/39/
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: wicd-1.7.1\n"
+"Report-Msgid-Bugs-To: Eli Zaretskii <eliz@gnu.org>\n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-02-25 11:42+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
-"Language-Team: he <LL@li.org>\n"
+"PO-Revision-Date: 2012-03-01 21:48+0000\n"
+"Last-Translator: my name <Unknown>\n"
+"Language-Team: Hebrew <he@translationproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
-"X-Generator: Launchpad (build 14860)\n"
+"X-Launchpad-Export-Date: 2012-03-02 04:50+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
 "Generated-By: Babel 0.9.6\n"
 
+# קילוביט לשנייה (Kb/s)
 #: gtk/wicd-client.py:610
 msgid ""
 "$A\n"
@@ -25,25 +30,35 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E קילוביט לשנייה (KB/s)\n"
+"$F קילוביט לשנייה (KB/s)"
 
+# קילוביט לשנייה (Kb/s)
 #: gtk/wicd-client.py:603
 msgid ""
 "$A\n"
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B קילוביט לשנייה (KB/s)\n"
+"$C קילוביט לשנייה (KB/s)"
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "אודות"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
-msgstr "על אודות Wicd"
+msgstr "אודות Wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
-msgstr "הפעלת שיתוף חיבור אינטרנט"
+msgstr "הפעלת שיתוף חיבור אינטרנט (ICS)"
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"
@@ -51,7 +66,7 @@ msgstr "הוספת פרופיל חדש"
 
 #: curses/wicd-curses.py:411
 msgid "Add a new wired profile"
-msgstr "הוספת פרופיל חדש לרשת קווית"
+msgstr "הוספת פרופיל קווי חדש"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1669
 msgid "Advanced Settings"
@@ -59,11 +74,12 @@ msgstr "הגדרות מתקדמות"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:956
 msgid "Always show wired interface"
-msgstr "יש להציג מנשק קווי תמיד"
+msgstr "הצגה תמידית של הממשק הקווי"
 
+# Automatically switch
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "תמיד יש לעבור למנשק הקווי כאשר זה זמין"
+msgstr "החלפה אוטומטית לחיבור קווי בעת זמינות"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -77,7 +93,7 @@ msgstr "אוטומטית (מומלץ)"
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
-msgstr "חיבור מחדש אוטומטית"
+msgstr "חידוש חיבור באופן אוטומטי"
 
 #: curses/netentry_curses.py:257 gtk/netentry.py:817
 msgid "Automatically connect to this network"
@@ -85,7 +101,7 @@ msgstr "התחברות אוטומטית לרשת זו"
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
-msgstr "חידוש החיבור לאחר אבדן התקשורת"
+msgstr "חידוש אוטומטי של החיבור כאשר אובד החיבור"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -93,11 +109,11 @@ msgstr "מנגנון"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
-msgstr "מוגש על ידי:"
+msgstr "מוגש לך על-ידי:"
 
 #: curses/wicd-curses.py:1029
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr "לא ניתן להתחבר לסוכן, מתבצע ניסיון להפעלתו אוטומטית..."
+msgstr "לא ניתן להתחבר לסוכן, מתבצע כעת ניסיון להפעלה אוטומטית של הסוכן..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
@@ -116,7 +132,7 @@ msgstr "נא לבחור מבין הרשתות שלהלן:"
 
 #: curses/wicd-curses.py:556
 msgid "Config"
-msgstr ""
+msgstr "תצורה"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -124,15 +140,15 @@ msgstr "הגדרת הרשת הנבחרת"
 
 #: curses/netentry_curses.py:196
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr "ההעדפות מוגדרות עבור הפרופיל הקווי \"$A\""
+msgstr "ההעדפות מוגדרות עתה עבור הפרופיל הקווי \"$A\""
 
 #: curses/netentry_curses.py:272
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr "ההעדפות מוגדרות עבור הרשת האלחוטית \"$A\"‏ ($B)"
+msgstr "ההעדפות מוגדרות עתה עבור הרשת האלחוטית \"$A\"‏ ($B)"
 
 #: wicd/misc.py:80
 msgid "Configuring wireless interface..."
-msgstr "מוגדר מנשק אלחוטי..."
+msgstr "הממשק האלחוטי מוגדר כעת..."
 
 #: curses/wicd-curses.py:559 gtk/wicd-client.py:498
 msgid "Connect"
@@ -144,15 +160,15 @@ msgstr "התחברות לרשת הנבחרת"
 
 #: curses/wicd-curses.py:159 gtk/gui.py:429 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
-msgstr "בחיבור ל־$A בקצב של $B ‏(IP: $C)"
+msgstr "מחובר אל $A בשיעור של $B ‏(IP: $C)"
 
 #: curses/wicd-curses.py:134 gtk/gui.py:422 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
-msgstr "בחיבור לרשת קווית (IP: $A)"
+msgstr "מחובר אל רשת קווית (IP: $A)"
 
 #: gtk/gui.py:191 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
-msgstr "בהתחברות"
+msgstr "בהתחברות כעת"
 
 #: wicd/misc.py:77
 msgid "Connection Cancelled"
@@ -160,50 +176,51 @@ msgstr "ההתחברות בוטלה"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr "ההתחברות בוטלה"
+msgstr "ההתחברות נכשלה."
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
-msgstr "חיבור נכשל: ססמה שגויה"
+msgstr "ההתחברות נכשלה: ססמה שגויה"
 
 #: wicd/misc.py:89
 msgid "Connection Failed: No DHCP offers received."
-msgstr "החיבור נכשל: לא התקבלו הצעות DHCP."
+msgstr "ההתחברות נכשלה: לא התקבלו הצעות DHCP."
 
 #: wicd/misc.py:81
 msgid "Connection Failed: Unable to Get IP Address"
-msgstr "החיבור נכשל: לא ניתן לקבל כתובת IP"
+msgstr "ההתחברות נכשלה: לא ניתן להשיג כתובת IP"
 
 #: gtk/wicd-client.py:269 gtk/wicd-client.py:299
 msgid "Connection established"
-msgstr "חיבור נוצר"
+msgstr "ההתחברות בוססה"
 
 #: wicd/misc.py:78
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "חיבור נכשל: לא ניתן להתחבר לנקודת החיבור לרשת."
+msgstr "ההתחברות נכשלה: לא ניתן להתחבר אל נקודת הגישה האלחוטית (AP)."
 
 #: wicd/misc.py:95
 msgid "Connection successful."
-msgstr "ההתחברות בוטלה"
+msgstr "ההתחברות נערכה בהצלחה."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
 "Could not connect to wicd's D-Bus interface. Check the wicd log for error "
 "messages."
 msgstr ""
-"לא ניתן להתחבר למנשק ה־D-Bus של wicd. יש לחפש הודעות שגיאה בקובצי היומן."
+"לא ניתן להתחבר לממשק ה־D-Bus של Wicd. יש לבדוק בקובצי היומן של Wicd עבור "
+"הודעות שגיאה."
 
 #: gtk/netentry.py:303 gtk/netentry.py:411
 msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"לא ניתן למצוא את תכנית ה־sudo הגרפית. לא ניתן להפעיל את עורך הסקריפטים. יהיה "
-"עליך לערוך סקריפטים ישירות בקובץ התצורה שלך."
+"לא ניתן למצוא את התכנית sudo הגרפית. לא ניתן להפעיל את עורך התסריטים. יהיה "
+"עליך לערוך תסריטים ישירות בקובץ התצורה שלך."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:258
 msgid "Create an Ad-Hoc Network"
-msgstr "יצירת רשת Ad-Hoc (ייעודית)"
+msgstr "יצירת רשת ייעודית (Ad-Hoc)"
 
 #: curses/wicd-curses.py:99
 msgid ""
@@ -211,8 +228,8 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
-"שגיאת DBus! כפי הנראה תקלה זו נגרמה עקב עצירת סוכן ה־wicd בעת ש־wicd-curses "
-"פעיל. נא להפעיל את הסוכן מחדש ולהפעיל מחדש את wicd-curses."
+"כשל D-Bus! כפי הנראה תקלה זו נגרמה עקב עצירת סוכן ה־Wicd בעת שהיישום wicd-"
+"curses הינו פעיל. נא להפעיל את הסוכן מחדש ולהפעיל מחדש את היישום wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -220,7 +237,7 @@ msgstr "לקוח DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "שם-מארח DHCP"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -239,23 +256,23 @@ msgstr "ניפוי שגיאות"
 
 #: curses/wicd-curses.py:560
 msgid "Disconn"
-msgstr "מנותק"
+msgstr "התנתקות"
 
 #: curses/wicd-curses.py:216
 msgid "Disconnect from all networks"
-msgstr "ניתוק מכל הרשתות"
+msgstr "התנתקות מכל הרשתות"
 
 #: gtk/wicd-client.py:340 gtk/wicd-client.py:643
 msgid "Disconnected"
-msgstr "מנותק"
+msgstr "התנתקות"
 
 #: gtk/gui.py:725
 msgid "Disconnecting active connections..."
-msgstr "החיבורים הפעילים מנותקים..."
+msgstr "חיבורים פעילים מתנתקים כעת..."
 
 #: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
-msgstr "הצגת דו־שיח זה לעזרה"
+msgstr "הצגת דו־השיח 'אודות'"
 
 #: gtk/prefs.py:349 data/wicd.ui:992
 msgid "Display notifications about connection status"
@@ -271,19 +288,19 @@ msgstr "מתחם DNS"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
-msgstr "ההתחברות הושלמה..."
+msgstr "תהליך ההתחברות הסתיים..."
 
 #: curses/wicd-curses.py:1053
 msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
-"שגיאה: מ־wicd-curses נמנעה הגישה לסוכן ה־wicd: נא לבדוק שהמשתמש שלך נמצא "
-"בקבוצה \"$A\"."
+"שגיאה: היישום wicd-curses מנוע מלגשת אל סוכן ה־Wicd: נא לבדוק שהמשתמש שלך "
+"נמצא בקבוצה \"$A\"."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:266
 msgid "ESSID"
-msgstr "ESSID"
+msgstr "‏ESSID"
 
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1511
 msgid "Enable debug mode"
@@ -291,7 +308,7 @@ msgstr "הפעלת מצב ניפוי שגיאות"
 
 #: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
-msgstr "החיבור נוצר..."
+msgstr "החיבור מתבסס כעת..."
 
 #: curses/prefs_curses.py:51 data/wicd.ui:1398
 msgid "External Programs"
@@ -299,11 +316,13 @@ msgstr "תכניות חיצוניות"
 
 #: wicd/misc.py:84
 msgid "Flushing the routing table..."
-msgstr "טבלת הניתוב מתרוקנת..."
+msgstr "טבלת הניתוב מתרוקנת כעת..."
 
 #: curses/wicd-curses.py:210
 msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "לעזרה מפורטת יותר, ניתן לפנות לעמוד ה־man wicd-curses(8)"
+msgstr ""
+"לעזרה מפורטת יותר, ניתן לפנות אל\n"
+"man wicd-curses(8)"
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"
@@ -315,15 +334,15 @@ msgstr "הגדרות כלליות"
 
 #: wicd/misc.py:85
 msgid "Generating PSK..."
-msgstr "PSK נוצר..."
+msgstr "‏PSK מתחולל כעת..."
 
 #: wicd/misc.py:86
 msgid "Generating WPA configuration file..."
-msgstr "נוצר קובץ תצורהת WPA..."
+msgstr "קובץ תצורה של WPA מתחולל כעת..."
 
 #: gtk/netentry.py:233
 msgid "Global DNS has not been enabled in general preferences."
-msgstr "ה־DNS הגלובלי לא הופעל בהגדרות הכלליות."
+msgstr "‏DNS גלובלי לא הופעל בהגדרות הכלליות."
 
 #: curses/prefs_curses.py:72
 msgid "Global DNS servers"
@@ -331,20 +350,20 @@ msgstr "שרתי DNS גלובליים"
 
 #: curses/wicd-curses.py:555
 msgid "Help"
-msgstr ""
+msgstr "עזרה"
 
 #: curses/wicd-curses.py:563
 msgid "Hidden"
-msgstr ""
+msgstr "רשת חבויה"
 
 #: gtk/gui.py:357
 msgid "Hidden Network ESSID"
-msgstr "זיהוי (ESSID) של רשת מוסתרת"
+msgstr "זיהוי (ESSID) של רשת חבויה"
 
 #: curses/netentry_curses.py:50 curses/wicd-curses.py:462 gtk/gui.py:265
 #: gtk/netentry.py:74
 msgid "IP"
-msgstr "IP"
+msgstr "‏IP"
 
 #: wicd/translations.py:79
 msgid "Identity"
@@ -352,11 +371,11 @@ msgstr "זהות"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "מידע אודות החיבור הנוכחי"
 
 #: gtk/netentry.py:167
 msgid "Invalid IP address entered."
-msgstr "כתובת ה־IP שהוזנה שגויה."
+msgstr "הוזנה כתובת IP שגויה."
 
 #: gtk/gui.py:631 gtk/gui.py:639
 msgid "Invalid address in $A entry."
@@ -372,7 +391,7 @@ msgstr "מסכת רשת"
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
-msgstr "מנשקי רשת"
+msgstr "ממשקי רשת"
 
 #: gtk/netentry.py:818
 msgid "Never connect to this network"
@@ -385,7 +404,7 @@ msgstr "לא נמצאו רשתות אלחוטיות."
 #: curses/wicd-curses.py:738 gtk/gui.py:439 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
 msgid "Not connected"
-msgstr "אין חיבור"
+msgstr "לא מחובר"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:527
 #: curses/netentry_curses.py:66 curses/wicd-curses.py:490
@@ -395,7 +414,7 @@ msgstr "אישור"
 
 #: wicd/misc.py:91
 msgid "Obtaining IP address..."
-msgstr "כתובת IP מתקבלת..."
+msgstr "כתובת IP מתקבלת כעת..."
 
 #: curses/wicd-curses.py:278
 msgid ""
@@ -407,14 +426,14 @@ msgid ""
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "לאחר שהגעת, באפשרותך להתאים (או להוסיף) את המשתנים \"beforescript\", "
-"\"afterscript\", and \"disconnectscript\" כנדרש, כדי לשנות את הסקריפטים של "
+"\"afterscript\", and \"disconnectscript\" כנדרש, כדי לשנות את התסריטים של "
 "טרום ההתחברות, לאחר ההתחברות ולאחר הניתוק בהתאמה. נא לשים לב שעליך לציין את "
-"הנתיב המלא לסקריפטים ולא את תוכן הסקריפטים עצמם. יהיה עליך להוסיף/לערוך את "
-"תכני הסקריפטים בנפרד. נא לפנות לעמוד ההדרכה של wicd למידע נוסף."
+"הנתיב המלא לתסריטים ולא את תוכן התסריטים עצמם. יהיה עליך להוסיף/לערוך את "
+"תכני התסריטים בנפרד. נא לפנות לעמוד ההדרכה של Wicd למידע נוסף."
 
 #: wicd/translations.py:81
 msgid "Passphrase"
-msgstr ""
+msgstr "משפט-ססמה"
 
 #: wicd/translations.py:82
 msgid "Password"
@@ -422,35 +441,37 @@ msgstr "ססמה"
 
 #: wicd/translations.py:83
 msgid "Path to CA cert"
-msgstr ""
+msgstr "נתיב אל CA cert"
 
 #: wicd/translations.py:85
 msgid "Path to PAC file"
-msgstr "נתיב לקובץ ה־PAC"
+msgstr "נתיב אל קובץ PAC"
 
 #: wicd/translations.py:84
 msgid "Path to client cert"
-msgstr ""
+msgstr "נתיב אל client cert"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1644
 msgid "Ping static gateways after connecting to verify association"
-msgstr "שליחת פינג לשערי גישה סטטיים לאחר החיבור כדי לאמת את השיוך"
+msgstr ""
+"שלח פינג אל שערי גישה (Gateways) סטטיים לאחר היווצרות החיבור כדי לאמת את "
+"השיוך"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr "מריץ תסריטים שלאחר ניתוק"
+msgstr "תסריט שלאחר התחברות"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
-msgstr "מריץ תסריטים שלאחר ניתוק"
+msgstr "תסריט שלאחר התנתקות"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
-msgstr "הרצת סקריפט טרום התחברות"
+msgstr "תסריט טרום התחברות"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
-msgstr "הרצת סקריפט טרום התחברות"
+msgstr "תסריט טרום התנתקות"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -462,7 +483,7 @@ msgstr "חלון ההעדפות"
 
 #: curses/wicd-curses.py:562
 msgid "Prefs"
-msgstr ""
+msgstr "העדפות"
 
 #: wicd/translations.py:86
 msgid "Preshared key"
@@ -470,15 +491,15 @@ msgstr ""
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "לחזרה, לחצו על כל מקש"
 
 #: wicd/translations.py:87
 msgid "Private key"
-msgstr ""
+msgstr "מפתח פרטי"
 
 #: wicd/translations.py:88
 msgid "Private key password"
-msgstr ""
+msgstr "ססמת מפתח פרטי"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -490,23 +511,23 @@ msgstr "מאפיינים"
 
 #: wicd/misc.py:87
 msgid "Putting interface down..."
-msgstr "פעילות המנשק מופסקת..."
+msgstr "פעילות הממשק עתה מופסקת..."
 
 #: wicd/misc.py:88
 msgid "Putting interface up..."
-msgstr "המנשק מופעל..."
+msgstr "פעילות הממשק עתה מופעלת..."
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
-msgstr ""
+msgstr "יציאה"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "יציאה מן wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "יציאה מן wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
@@ -514,23 +535,23 @@ msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
-msgstr "רענון רשימת הרשתות"
+msgstr "הטענה מחדש של רשימת הרשתות"
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
-msgstr "שינוי פרופיל רשת קווית"
+msgstr "שינוי שם פרופיל קווי"
 
 #: curses/netentry_curses.py:357 gtk/gui.py:694 gtk/netentry.py:486
 msgid "Required encryption information is missing."
-msgstr "חסר מידע נחוץ על ההצפנה."
+msgstr "מידע ההצפנה הנדרש חסר."
 
 #: wicd/misc.py:90
 msgid "Resetting IP address..."
-msgstr "כתובת ה־IP מתאפסת..."
+msgstr "כתובת IP מתאפסת כעת..."
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
-msgstr ""
+msgstr "‏RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -542,19 +563,19 @@ msgstr "סריקה"
 
 #: curses/wicd-curses.py:222
 msgid "Scan for hidden networks"
-msgstr "סריקה אחר רשתות נסתרות"
+msgstr "סריקה אחר רשתות חבויות"
 
 #: gtk/gui.py:223 gtk/gui.py:529 gtk/wicd-client.py:810
 msgid "Scanning"
-msgstr "בסריקה"
+msgstr "בסריקה כעת"
 
 #: curses/wicd-curses.py:526
 msgid "Scanning networks... stand by..."
-msgstr "בחיפוש אחר רשתות... נא להמתין..."
+msgstr "סריקה עבור רשתות מתבצעת כעת... נא להמתין..."
 
 #: gtk/netentry.py:102
 msgid "Scripts"
-msgstr "סקריפטים"
+msgstr "תסריטים"
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
@@ -566,31 +587,31 @@ msgstr "מאובטחת"
 
 #: curses/wicd-curses.py:629
 msgid "Select Hidden Network ESSID"
-msgstr "בחירת ESSID של רשת מוסתרת"
+msgstr "בחירת ESSID של רשת חבויה"
 
 #: gtk/gui.py:103
 msgid "Select or create a wired profile to connect with"
-msgstr "נא לבחור או ליצור פרופיל רשת קווית להתחברות"
+msgstr "נא לבחור או ליצור פרופיל קווי להתחברות באמצעותו"
 
 #: curses/wicd-curses.py:223
 msgid "Select scripts"
-msgstr "בחירת סקריפטים"
+msgstr "בחירת תסריטים"
 
 #: curses/wicd-curses.py:224
 msgid "Set up Ad-hoc network"
-msgstr "הגדרת רשת Ad-Hoc (ייעודית)"
+msgstr "הגדרת רשת ייעודית (Ad-Hoc)"
 
 #: wicd/misc.py:92
 msgid "Setting broadcast address..."
-msgstr "כתובת השידור מוגדרת..."
+msgstr "כתובת השידור מוגדרת כעת..."
 
 #: wicd/misc.py:93
 msgid "Setting static DNS servers..."
-msgstr "מוגדרים שרתי DNS סטטיים..."
+msgstr "שרתי DNS סטטיים מוגדרים כעת..."
 
 #: wicd/misc.py:94
 msgid "Setting static IP addresses..."
-msgstr "מוגדרות כתובות IP סטטיות..."
+msgstr "כתובות IP סטטיות מוגדרות כעת..."
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
@@ -598,19 +619,19 @@ msgstr ""
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "ביטול הצגת הודעות קופצות על חיבור אוטומטי באופן זמני"
+msgstr "הפסקה זמנית של הצגת הודעות קופצות באשר להתחברות אוטומטית"
 
 #: curses/wicd-curses.py:217
 msgid "Stop a connection in progress"
-msgstr "עצירת ניסיון חיבור לרשת המתבצע כעת"
+msgstr "עצירת תהליך ההתחברות"
 
 #: gtk/gui.py:315
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "כיבוי Wi-Fi"
 
 #: gtk/gui.py:312
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "הפעלת Wi-Fi"
 
 #: curses/wicd-curses.py:603
 msgid "Tab Left"
@@ -622,13 +643,13 @@ msgstr ""
 
 #: curses/wicd-curses.py:94
 msgid "Terminated by user"
-msgstr "המשתמש ביטל"
+msgstr "הופסק על-ידי המשתמש"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
 "The wicd daemon has shut down. The UI will not function properly until it is "
 "restarted."
-msgstr "סוכן ה־wicd נכבה. מנשק המשתמש לא יפעל כראוי עד שיופעל מחדש."
+msgstr "סוכן ה־Wicd נכבה. ממשק המשתמש לא יפעל כראוי עד שיופעל מחדש."
 
 #: curses/netentry_curses.py:368 gtk/gui.py:701 gtk/netentry.py:497
 msgid "This network requires encryption to be enabled."
@@ -641,34 +662,34 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
-"כדי להימנע מהסתבכות, wicd-curses אינו תומך בעריכת הסקריפטים באופן ישיר. עם "
-"זאת, ניתן לערוך אותם ידנית.\r\n"
-"תחילה (כמשתמש על), יש לפתוח את קובץ התצורה \"$A\" ולחפש את הפסקה בשם הנדון "
-"$B. במקרה כזה, התווית תהיה:"
+"כדי להימנע מהסתבכויות שונות, היישום wicd-curses לא תומך בעריכת התסריטים "
+"באופן ישיר. עם זאת, יש ביכולתך לערוך אותם ידנית.\r\n"
+"ראשית, (כמשתמש על), יש לפתוח את קובץ התצורה \"$A\" ולחפש את הפסקה המתויגת "
+"בשם הנדון $B. במקרה כזה, התווית תהיה:"
 
 #: gtk/netentry.py:635
 msgid ""
 "To connect to a wired network, you must create a network profile. To create "
 "a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"כדי להתחבר לרשת קווית עליך ליצור פרופיל רשת.\r\n"
-"כדי ליצור פרופיל רשת יש להזין שם המתאר את הרשת וללחוץ על הוספה."
+"כדי להתחבר לרשת קווית, עליך ליצור פרופיל רשת. כדי ליצור פרופיל רשת, יש להזין "
+"שם המתאר את הרשת וללחוץ על הוספה."
 
 #: gtk/wicd-client.py:94
 msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from DBus. "
 "Please check that your user is in the $A group."
 msgstr ""
-"לא ניתן ליצור קשר אל סוכן ה־Wicd עקב שגיאת דחיית גישה מ־DBus. נא לוודא "
+"לא ניתן ליצור קשר עם סוכן ה־Wicd עקב שגיאת דחיית גישה מאת D-Bus. נא לוודא "
 "שהמשתמש שלך נמצא בקבוצה $A."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:962 gtk/netentry.py:1084
 msgid "Unsecured"
-msgstr "לא מאובטח"
+msgstr "רשת לא מאובטחת"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "שימוש בשם-מארח DHCP"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -676,7 +697,7 @@ msgstr "שימוש בהצפנה"
 
 #: curses/wicd-curses.py:466 gtk/gui.py:263
 msgid "Use Encryption (WEP only)"
-msgstr "שימוש בהצפנה (WEP בלבד)"
+msgstr "שימוש בהצפנה (הצפנת WEP בלבד)"
 
 #: curses/netentry_curses.py:54 gtk/netentry.py:89
 msgid "Use Static DNS"
@@ -684,19 +705,19 @@ msgstr "שימוש ב־DNS סטטי"
 
 #: curses/netentry_curses.py:49 gtk/netentry.py:88
 msgid "Use Static IPs"
-msgstr "שימוש ב־IP סטטי"
+msgstr "שימוש בכתובות IP סטטיות"
 
 #: curses/netentry_curses.py:190 gtk/netentry.py:636
 msgid "Use as default profile (overwrites any previous default)"
-msgstr "שימוש כפרופיל בררת המחדל (שכתוב על בררת המחדל הקודמת)"
+msgstr "השתמש כפרופיל ברירת מחדל (שכתוב כל ברירת מחדל קודמת)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1490
 msgid "Use dBm to measure signal strength"
-msgstr "שימוש ב־dBm למדידת עצמת האות"
+msgstr "שימוש בטכניקת dBm למדידת חוזק האות"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "שימוש בפרופיל בררת המחדל עבור התחברות קווית אוטומטית"
+msgstr "שימוש בפרופיל ברירת מחדל בעת התחברות קווית אוטומטית"
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:882
@@ -705,11 +726,11 @@ msgstr "שימוש בשרתי DNS גלובליים"
 
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
-msgstr "שימוש בפרופיל האחרון בו נעשה שימוש לחיבור אוטומטי לרשת קווית"
+msgstr "שימוש בפרופיל האחרון בו נעשה שימוש בעת התחברות קווית אוטומטית"
 
 #: curses/netentry_curses.py:255 gtk/netentry.py:357
 msgid "Use these settings for all networks sharing this essid"
-msgstr "שימוש בהגדרות אלה עבור כל הרשתות החולקות essid זה"
+msgstr "השתמש בהגדרות אלה עבור כל הרשתות החולקות את ESSID זה"
 
 #: wicd/translations.py:89
 msgid "Username"
@@ -717,19 +738,19 @@ msgstr "שם משתמש"
 
 #: wicd/misc.py:96
 msgid "Validating authentication..."
-msgstr "האימות נבדק..."
+msgstr "האימות נבדק כעת..."
 
 #: wicd/misc.py:97
 msgid "Verifying access point association..."
-msgstr "ההשתייכות לנקודת הגישה נבדקת..."
+msgstr "ההשתייכות לנקודת הגישה האלחוטית (AP) נבדקת כעת..."
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
-msgstr "WPA Supplicant"
+msgstr "‏WPA Supplicant"
 
 #: curses/wicd-curses.py:528
 msgid "Wicd Curses Interface"
-msgstr "מנשק Curses של Wicd"
+msgstr "ממשק Curses של Wicd"
 
 #: gtk/wicd-client.py:226 gtk/wicd-client.py:333
 msgid "Wicd daemon unreachable"
@@ -737,8 +758,10 @@ msgstr "הסוכן של Wicd אינו נגיש"
 
 #: wicd/misc.py:196
 msgid "Wicd needs to access your computer's network cards."
-msgstr "ל־Wicd נדרשת גישה לכרטיסי הרשת שבמחשבך."
+msgstr "נדרשת גישה לכרטיסי הרשת שבמחשבך עבור Wicd."
 
+# RX: Receive/Receiver/Reception
+# TX: Transmit
 #: gtk/wicd-client.py:628
 msgid ""
 "Wired\n"
@@ -746,14 +769,18 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"חיבור קווי\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
-msgstr "הגדרות חיבור אוטומטי לרשת קווית"
+msgstr "הגדרות התחברות אוטומטית לחיבור קווי"
 
 #: curses/prefs_curses.py:67
 msgid "Wired Interface"
-msgstr "מנשק קווי"
+msgstr "ממשק קווי"
 
 #: curses/prefs_curses.py:99
 msgid "Wired Link Detection"
@@ -762,7 +789,7 @@ msgstr "זיהוי חיבור קווי"
 #: curses/wicd-curses.py:754 gtk/gui.py:474 gtk/netentry.py:286
 #: gtk/netentry.py:629 gtk/wicd-client.py:268 gtk/wicd-client.py:309
 msgid "Wired Network"
-msgstr "חיבור קווי"
+msgstr "רשת קווית"
 
 #: curses/wicd-curses.py:533
 msgid "Wired Networks"
@@ -772,6 +799,9 @@ msgstr "רשתות קוויות"
 msgid "Wired connection detected"
 msgstr "זוהה חיבור קווי"
 
+# Signal Strength
+# RX: Receive/Receiver/Reception
+# TX: Transmit
 #: gtk/wicd-client.py:633
 msgid ""
 "Wireless\n"
@@ -781,11 +811,18 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr "שם הרשת אלחוטית: מהירות: עצמה: RX:‏ TX:"
+msgstr ""
+"נקודת הגישה (AP)\n"
+"SSID:\n"
+"מהירות:\n"
+"IP:\n"
+"חוזק האות:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
-msgstr "מנשק אלחוטי"
+msgstr "ממשק אלחוטי"
 
 #: gtk/gui.py:602 gtk/wicd-client.py:224 gtk/wicd-client.py:336
 msgid "Wireless Kill Switch Enabled"
@@ -800,59 +837,60 @@ msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"ניתן להגדיר את הרשתות האלחוטיות על ידי חיפוש השדה \"[<ESSID>]\" בקובץ התצורה."
+"ניתן להגדיר את הרשתות האלחוטיות על-ידי חיפוש השדה \"[<ESSID>]\" בקובץ התצורה."
 
 #: gtk/netentry.py:300 gtk/netentry.py:408
 msgid "You must enter your password to configure scripts"
-msgstr "עליך להקליד את ססמתך כדי להגדיר סקריפטים"
+msgstr "יש להקליד את ססמתך על מנת להגדיר תסריטים"
 
+# WPA supplicant
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "מומלץ כמעט בכול מקרה להשתמש ב־wext כמנהל התקן התמיכה ב־WPA"
+msgstr "מומלץ כמעט בכול מקרה להשתמש בהתקן wext כמנהל התקן התמיכה ברכיב WPA"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_מידע אודות החיבור"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_יציאה"
 
 #: curses/wicd-curses.py:428
 msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
-"wicd-curses אינו תומך במחיקת הפרופיל הקווי האחרון. יש לנסות לשנות את שמו "
-"('F2')"
+"היישום wicd-curses לא תומך במחיקת הפרופיל הקווי האחרון. יש לנסות לשנות את שם "
+"הפרופיל (\"F2\")"
 
 #: curses/wicd-curses.py:206
 msgid "wicd-curses help"
-msgstr ""
+msgstr "עזרה עבור wicd-curses"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "מנהל הרשת Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "יצירת רשת ייעודית (Ad-Hoc)"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "איתור רשת חבויה"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "נא להזין רשת חבויה לאיתר."
 
 #: data/wicd.ui:79
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "_כיבוי Wi-Fi"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr "מנותק"
+msgstr "_ניתוק כל הרשתות"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
@@ -860,47 +898,48 @@ msgstr ""
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr "העדפות"
+msgstr "ה_עדפות"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr ""
+msgstr "אודות"
 
+# בתהליך
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "ההתחברות הושלמה..."
+msgstr "בשלבי התחברות כעת..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "ביטול ניסיון ההתחברות הנוכחי"
 
 #: data/wicd.ui:260
 msgid "Configure Scripts"
-msgstr "סקריפט חזרה"
+msgstr "הגדרת תסריטים"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "הגדרת תסריטים להרצה עבור רשת זו:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr "הרצת סקריפט טרום התחברות"
+msgstr "תסריט טרום התחברות:"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr "מריץ תסריטים שלאחר ניתוק"
+msgstr "תסריט שלאחר התחברות:"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr "הרצת סקריפט טרום התחברות"
+msgstr "תסריט טרום התנתקות:"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
-msgstr "מריץ תסריטים שלאחר ניתוק"
+msgstr "תסריט שלאחר התנתקות:"
 
 #: data/wicd.ui:514
 msgid "Always switch to a wired connection when available"
-msgstr "תמיד יש לעבור למנשק הקווי כאשר זה זמין"
+msgstr "החלפה אוטומטית אל חיבור קווי כאשר זה זמין"
 
 #: data/wicd.ui:519
 msgid ""
@@ -908,26 +947,28 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"בבוחרך באפשרות זו, Wicd יחובר אוטומטית לרשת קווית\n"
+"בו ברגע שמחובר כבל, אפילו אם כבר קיים חיבור אלחוטי פעיל."
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr "מתחם DNS"
+msgstr "מתחם DNS:"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>לא להתחבר בכלל</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
-msgstr "חידוש החיבור לאחר אבדן התקשורת"
+msgstr "חידוש החיבור באופן אוטומטי כאשר חיבור הרשת אובד"
 
 #: data/wicd.ui:625
 msgid "<b>Automatic Reconnection</b>"
-msgstr "<b>חיבור מחדש אוטומטית</b>"
+msgstr "<b>חידוש חיבור באופן אוטומטי</b>"
 
 #: data/wicd.ui:641
 msgid "Use last wired network profile"
-msgstr "שינוי פרופיל רשת קווית"
+msgstr "שימוש בפרופיל הרשת הקווית האחרון"
 
 #: data/wicd.ui:663
 msgid "Prompt for wired network profile"
@@ -935,43 +976,43 @@ msgstr ""
 
 #: data/wicd.ui:686
 msgid "Use default wired network profile"
-msgstr "שינוי פרופיל רשת קווית"
+msgstr "שימוש בפרופיל רשת קווית ברירת המחדל"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "חיבור מחדש אוטומטית"
+msgstr "<b>חיבור קווי אוטומטי</b>"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr "מנשק קווי"
+msgstr "ממשק קווי:"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr "מנשק אלחוטי"
+msgstr "ממשק אלחוטי:"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr "מנשקי רשת"
+msgstr "<b>ממשקי רשת</b>"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr "שרת DNS"
+msgstr "שרת DNS מספר 3:"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr "שרת DNS"
+msgstr "שרת DNS מספר 2:"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr "שרת DNS"
+msgstr "שרת DNS מספר 1:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr "חיפוש מתחם"
+msgstr "חיפוש מתחם:"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr "שרתי DNS גלובליים"
+msgstr "<b>שרתי DNS גלובליים</b>"
 
 #: data/wicd.ui:960
 msgid ""
@@ -979,6 +1020,9 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"בבוחרך באפשרות זו, ממשק הרשת הקווית תמיד יוצג בחלון הראשי. ניתן להפיק תועלת "
+"מאפשרות זו במידה שכרטיס הרשת החוטית שלך לא מאתר את הרשת הקווית כאשר הממשק "
+"מחובר אל כבל."
 
 #: data/wicd.ui:976
 msgid "<b>Notifications</b>"
@@ -986,41 +1030,44 @@ msgstr "<b>התרעות</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr "ניקוי טבלת הניתוב"
+msgstr "<b>ניקוי טבלת הניתוב</b>"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr "זיהוי חיבור קווי"
+msgstr "<b>זיהוי חיבור קווי</b>"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>לקוח DHCP</b>"
 
 #: data/wicd.ui:1300
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>יישום Sudo גרפי</b>"
 
 #: data/wicd.ui:1421
 msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
+"העבירו את סמן העכבר על המנגנון המסומן \n"
+"כדי לקרוא את תיאורו."
 
 #: data/wicd.ui:1474
 msgid "Driver:"
-msgstr ""
+msgstr "מנהל התקן:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr "מנשק אלחוטי"
+msgstr "<b>ממשק אלחוטי</b>"
 
+# WPA Supplicant
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>‏WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr "ניפוי שגיאות"
+msgstr "<b>ניפוי שגיאות</b>"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
@@ -1028,10 +1075,13 @@ msgstr "מנגנון"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>מנגנון</b>"
 
+# WPA supplicant
 #: data/wicd.ui:1615
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "מומלץ כמעט בכול מקרה להשתמש ב־wext כמנהל התקן התמיכה ב־WPA"
+msgstr ""
+"מומלץ כמעט בכול מקרה להשתמש בהתקן wext\n"
+"כמנהל התקן התמיכה ברכיב WPA."

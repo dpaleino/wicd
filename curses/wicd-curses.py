@@ -75,9 +75,13 @@ from os import system
 CURSES_REV=wpath.curses_revision
 
 # Fix strings in wicd-curses
-from wicd.translations import language, _
+from wicd.translations import language
+from wicd.translations import _ as orig_
 for i in language.keys():
     language[i] = language[i].decode('utf8')
+
+def _(s):
+    orig_(s).decode('utf8')
 
 ########################################
 ##### SUPPORT CLASSES
@@ -350,7 +354,7 @@ class NetLabel(urwid.WidgetWrap):
         if wireless.GetWirelessProperty(id, 'encryption'):
             self.encrypt = wireless.GetWirelessProperty(id,'encryption_method')
         else:
-            self.encrypt = _('Unsecured').decode('utf-8')
+            self.encrypt = _('Unsecured')
 
         self.mode  = wireless.GetWirelessProperty(id, 'mode') # Master, Ad-Hoc
         self.channel = wireless.GetWirelessProperty(id, 'channel')

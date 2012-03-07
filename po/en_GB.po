@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2011-10-18 23:03+0000\n"
+"PO-Revision-Date: 2012-03-06 11:23+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: en_GB <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-19 06:10+0000\n"
-"X-Generator: Launchpad (build 14814)\n"
+"X-Launchpad-Export-Date: 2012-03-07 05:37+0000\n"
+"X-Generator: Launchpad (build 14907)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -840,7 +840,7 @@ msgstr "You should almost always use wext as the WPA supplicant driver"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Connection Info"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -864,11 +864,11 @@ msgstr "Wicd Network Manager"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Create an ad-hoc network"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Find a hidden network"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."

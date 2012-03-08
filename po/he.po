@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: wicd-1.7.1\n"
 "Report-Msgid-Bugs-To: Eli Zaretskii <eliz@gnu.org>\n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-03-05 19:37+0000\n"
-"Last-Translator: wicd <Unknown>\n"
+"PO-Revision-Date: 2012-03-07 09:19+0000\n"
+"Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: Hebrew <he@translationproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-06 04:54+0000\n"
-"X-Generator: Launchpad (build 14900)\n"
+"X-Launchpad-Export-Date: 2012-03-08 05:02+0000\n"
+"X-Generator: Launchpad (build 14914)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -48,11 +48,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr "אודות"
+msgstr "על אודות"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
-msgstr "אודות Wicd"
+msgstr "על אודות Wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
@@ -103,7 +103,7 @@ msgstr "חידוש אוטומטי של החיבור כאשר הוא אובד"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr "מנוע"
+msgstr "מנגנון"
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
@@ -900,10 +900,9 @@ msgstr "ה_עדפות"
 msgid "_About"
 msgstr "על _אודות"
 
-# בתהליך
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "בשלבי התחברות כעת..."
+msgstr "בהתחברות..."
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

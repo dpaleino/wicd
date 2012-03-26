@@ -1807,6 +1807,7 @@ def main(argv):
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
     daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
+    child_pid = None
     if not no_poll:
         child_pid = Popen([wpath.python, "-O", 
                           os.path.join(wpath.daemon, "monitor.py")],

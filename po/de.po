@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-02-25 10:08+0000\n"
-"Last-Translator: Fabian Nowak <timystery@arcor.de>\n"
+"PO-Revision-Date: 2012-03-26 19:05+0000\n"
+"Last-Translator: Dennis Baudys <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
-"X-Generator: Launchpad (build 14860)\n"
+"X-Launchpad-Export-Date: 2012-03-27 04:56+0000\n"
+"X-Generator: Launchpad (build 15011)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -107,7 +107,8 @@ msgstr "Zur Verfügung gestellt von:"
 #: curses/wicd-curses.py:1029
 msgid "Can't connect to the daemon, trying to start it automatically..."
 msgstr ""
-"Kann nicht mit dem Dienst verbinden, versuche ihn automatisch zu starten"
+"Keine Verbindung zum Dienst möglich. Es wird versucht, ihn automatisch zu "
+"starten …"
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:535
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
@@ -142,7 +143,7 @@ msgstr "Einstellungen für das Funknetzwerk \"$A\" ($B) festlegen"
 
 #: wicd/misc.py:80
 msgid "Configuring wireless interface..."
-msgstr "Konfiguriere WLAN-Gerät..."
+msgstr "Funknetzwerkschnittstelle wird konfiguriert …"
 
 #: curses/wicd-curses.py:559 gtk/wicd-client.py:498
 msgid "Connect"
@@ -264,7 +265,7 @@ msgstr "Verbindung getrennt"
 
 #: gtk/gui.py:725
 msgid "Disconnecting active connections..."
-msgstr "Trenne aktive Verbindungen..."
+msgstr "Aktive Verbindungen werden getrennt …"
 
 #: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
@@ -284,7 +285,7 @@ msgstr "Domain"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
-msgstr "Verbindung erfolgreich..."
+msgstr "Verbindung erfolgreich …"
 
 #: curses/wicd-curses.py:1053
 msgid ""
@@ -304,7 +305,7 @@ msgstr "Debug-Modus einschalten"
 
 #: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
-msgstr "Stelle Verbindung her..."
+msgstr "Verbindungsaufbau …"
 
 #: curses/prefs_curses.py:51 data/wicd.ui:1398
 msgid "External Programs"
@@ -312,7 +313,7 @@ msgstr "Externe Programme"
 
 #: wicd/misc.py:84
 msgid "Flushing the routing table..."
-msgstr "Leere die Routing-Tabelle..."
+msgstr "Routing-Tabelle wird geleert …"
 
 #: curses/wicd-curses.py:210
 msgid "For more detailed help, consult the wicd-curses(8) man page."
@@ -329,11 +330,11 @@ msgstr "Allgemeine Einstellungen"
 
 #: wicd/misc.py:85
 msgid "Generating PSK..."
-msgstr "Erstelle PSK..."
+msgstr "PSK wird erzeugt …"
 
 #: wicd/misc.py:86
 msgid "Generating WPA configuration file..."
-msgstr "Erstelle die WPA-Konfigurationsdatei..."
+msgstr "WPA-Konfigurationsdatei wird erzeugt …"
 
 #: gtk/netentry.py:233
 msgid "Global DNS has not been enabled in general preferences."
@@ -409,7 +410,7 @@ msgstr "OK"
 
 #: wicd/misc.py:91
 msgid "Obtaining IP address..."
-msgstr "Warte auf IP-Adresse..."
+msgstr "IP-Adresse wird angefordert …"
 
 #: curses/wicd-curses.py:278
 msgid ""
@@ -507,11 +508,11 @@ msgstr "Eigenschaften"
 
 #: wicd/misc.py:87
 msgid "Putting interface down..."
-msgstr "Schalte Gerät ab..."
+msgstr "Schnittstelle wird beendet …"
 
 #: wicd/misc.py:88
 msgid "Putting interface up..."
-msgstr "Starte das Gerät..."
+msgstr "Schnittstelle wird gestartet …"
 
 #: curses/wicd-curses.py:565
 msgid "Quit"
@@ -543,7 +544,7 @@ msgstr "Die benötigte Verschlüsselungs-Information fehlt!"
 
 #: wicd/misc.py:90
 msgid "Resetting IP address..."
-msgstr "IP-Adresse zurücksetzen..."
+msgstr "IP-Adresse wird zurückgesetzt …"
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
@@ -567,7 +568,7 @@ msgstr "Suche"
 
 #: curses/wicd-curses.py:526
 msgid "Scanning networks... stand by..."
-msgstr "Suche nach Netzwerken... etwas Geduld bitte..."
+msgstr "Netzwerke werden gesucht … Bitte warten …"
 
 #: gtk/netentry.py:102
 msgid "Scripts"
@@ -600,15 +601,15 @@ msgstr "Ad-hoc-Netzwerk einrichten"
 
 #: wicd/misc.py:92
 msgid "Setting broadcast address..."
-msgstr "Setze Broadcast-Adresse..."
+msgstr "Broadcast-Adresse wird festgelegt …"
 
 #: wicd/misc.py:93
 msgid "Setting static DNS servers..."
-msgstr "Stelle statische DNS-Server ein..."
+msgstr "Statische DNS-Server werden festgelegt …"
 
 #: wicd/misc.py:94
 msgid "Setting static IP addresses..."
-msgstr "Setze statische IP-Adresse..."
+msgstr "Statische IP-Adresse wird festgelegt …"
 
 #: gtk/prefs.py:333 data/wicd.ui:571
 msgid "Show never connect networks"
@@ -744,11 +745,11 @@ msgstr "Benutzername"
 
 #: wicd/misc.py:96
 msgid "Validating authentication..."
-msgstr "Überprüfe Authentifizierung..."
+msgstr "Legitimierung wird überprüft …"
 
 #: wicd/misc.py:97
 msgid "Verifying access point association..."
-msgstr "Überprüfe Verbindung zum Zugangspunkt..."
+msgstr "Zugeordneter Zugangspunkt wird überprüft …"
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
@@ -904,11 +905,11 @@ msgstr "Einstellungen"
 
 #: data/wicd.ui:136
 msgid "_About"
-msgstr "_Über"
+msgstr "_Info"
 
 #: data/wicd.ui:213 data/wicd.ui:215
 msgid "Connecting..."
-msgstr "Verbindung wird aufgebaut ..."
+msgstr "Verbindungsaufbau …"
 
 #: data/wicd.ui:228
 msgid "Cancel the current connection attempt"

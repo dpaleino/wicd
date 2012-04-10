@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-02-25 10:02+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-04-09 21:44+0000\n"
+"Last-Translator: Niklas Ekström <niklas.him@gmail.com>\n"
 "Language-Team: sv <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-02-26 05:04+0000\n"
-"X-Generator: Launchpad (build 14860)\n"
+"X-Launchpad-Export-Date: 2012-04-10 04:59+0000\n"
+"X-Generator: Launchpad (build 15070)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,6 +38,9 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:564
 msgid "About"
@@ -224,7 +233,7 @@ msgstr "DHCP-klient"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP Hostnamn"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -472,7 +481,7 @@ msgstr "Inst."
 
 #: wicd/translations.py:86
 msgid "Preshared key"
-msgstr ""
+msgstr "Preshared Key"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
@@ -512,7 +521,7 @@ msgstr "Avsluta wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Avsluta wicd-tray-icon"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
@@ -536,7 +545,7 @@ msgstr "Nollställer IP-adress..."
 
 #: curses/wicd-curses.py:558
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -678,7 +687,7 @@ msgstr "Osäkert"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Använd DHCP Hostnamn"
 
 #: curses/netentry_curses.py:256 gtk/netentry.py:356
 msgid "Use Encryption"
@@ -810,7 +819,7 @@ msgstr "Trådlöst nätverk"
 
 #: gtk/gui.py:602 gtk/wicd-client.py:224 gtk/wicd-client.py:336
 msgid "Wireless Kill Switch Enabled"
-msgstr ""
+msgstr "Wireless Kill Switch aktiverad"
 
 #: curses/wicd-curses.py:535
 msgid "Wireless Networks"
@@ -835,11 +844,11 @@ msgstr ""
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Connection Information"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
-msgstr ""
+msgstr "_Avsluta"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -855,7 +864,7 @@ msgstr "wicd-curses hjälp"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Nätverkshanteraren Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
@@ -1047,7 +1056,7 @@ msgstr "Trådlöst nätverk"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"

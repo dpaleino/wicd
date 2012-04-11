@@ -1,6 +1,26 @@
 Wicd 1.7 Series
 ---------------
 
+1.7.2:
+	Major Changes:
+	- Fix local privilege escalation when setting configuration properties
+	  through the daemon's DBus interface (CVE-2012-2095).
+	- Support passing no driver to wpa_supplicant.
+
+	Minor Changes:
+	- Fixed installation instructions, with the new >= 1.7.1 commands.
+	- Fixed typo preventing DHCP hostname from properly working.
+	- Renamed wpa templates to clarify usage.
+	- Fixed wicd-cli crash when switching wired network profiles.
+	- Fallback to mode 'Master' if 'None' is detected when scanning wifi
+	  networks.
+	- Fixed bug when trying to start wicd multiple times.
+	- Fixed wicd-curses crash when trying to select wired encryption type,
+	  thanks to Joe MacMahon.
+	- Fixed wicd-curses crash with UTF-8 encryption types.
+	- Fixed wicd-daemon crash when child_pid is undefined, thanks to
+	  David Cantrell.
+
 1.7.1:
 	Changes for Packagers:
 	- You will now want to use the --python option to setup.py configure to 
@@ -81,6 +101,9 @@ Wicd 1.7 Series
 	- Marked ioctl backend not supported
 	- Use dhcpcd-bin on Debian instead of dhcpcd script
 
+Wicd 1.6 Series
+---------------
+
 1.6.2:
 	Minor Changes:
 	- Now deals better if the interface disappears while running
@@ -128,4 +151,3 @@ Wicd 1.7 Series
 	- Many init/config script, man page, and setup.py fixes/updates, including
 	  better autodetection of file placement with regard to sleep hooks and 
 	  KDE autostart files (thanks to Robby Workman)
-

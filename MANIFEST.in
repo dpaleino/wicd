@@ -22,5 +22,7 @@ recursive-include man wicd-client.1
 recursive-include . *.py
 recursive-include . *.png
 
-prune build .bzr* .git*
-prunt build *.log *.pyc
+prune build/
+prune .bzr*
+prune .git*
+prune *.log

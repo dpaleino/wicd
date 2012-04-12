@@ -81,7 +81,7 @@ for i in language.keys():
     language[i] = language[i].decode('utf8')
 
 def _(s):
-    orig_(s).decode('utf8')
+    return orig_(s).decode('utf8')
 
 ########################################
 ##### SUPPORT CLASSES

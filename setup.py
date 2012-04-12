@@ -27,7 +27,7 @@ from glob import glob
 
 # Be sure to keep this updated!
 # VERSIONNUMBER
-VERSION_NUM = '1.7.2'
+VERSION_NUM = '1.7.2.1'
 # REVISION_NUM is automatically updated
 REVISION_NUM = 'unknown'
 CURSES_REVNO = 'uimod'

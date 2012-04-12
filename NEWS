@@ -1,6 +1,10 @@
 Wicd 1.7 Series
 ---------------
 
+1.7.2.1:
+	Minor Changes:
+	- Fix typo in wicd-curses, which made it crash with UTF-8 locales.
+
 1.7.2:
 	Major Changes:
 	- Fix local privilege escalation when setting configuration properties

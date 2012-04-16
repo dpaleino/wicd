@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-12-07 23:04+0100\n"
-"PO-Revision-Date: 2012-04-06 20:10+0000\n"
+"PO-Revision-Date: 2012-04-15 06:23+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-04-07 05:01+0000\n"
-"X-Generator: Launchpad (build 15060)\n"
+"X-Launchpad-Export-Date: 2012-04-16 04:50+0000\n"
+"X-Generator: Launchpad (build 15099)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -169,7 +169,7 @@ msgstr "接続がキャンセルされました"
 
 #: wicd/misc.py:83
 msgid "Connection Failed."
-msgstr "接続がキャンセルされました。"
+msgstr "接続に失敗しました。"
 
 #: wicd/misc.py:79
 msgid "Connection Failed: Bad password"
@@ -199,7 +199,7 @@ msgstr "接続に成功しました。"
 msgid ""
 "Could not connect to wicd's D-Bus interface. Check the wicd log for error "
 "messages."
-msgstr "wicd の D-Busインタフェースに接続できませんでした。wicd ログのエラーメッセージをチェックしてください。"
+msgstr "wicd の D-Bus インタフェースに接続できませんでした。wicd ログのエラーメッセージをチェックしてください。"
 
 #: gtk/netentry.py:303 gtk/netentry.py:411
 msgid ""
@@ -273,7 +273,7 @@ msgstr "ヘルプダイアログを表示する"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr "DNS ドメイン"
+msgstr "ドメイン"
 
 #: wicd/misc.py:82
 msgid "Done connecting..."
@@ -515,7 +515,7 @@ msgstr "wicd-tray-icon を終了する"
 
 #: curses/wicd-curses.py:561
 msgid "Refresh"
-msgstr "設定"
+msgstr "更新"
 
 #: curses/wicd-curses.py:218
 msgid "Refresh network list"
@@ -563,7 +563,7 @@ msgstr "スクリプト"
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
-msgstr "ドメインを探しています"
+msgstr "ドメイン検索"
 
 #: gtk/netentry.py:960 gtk/netentry.py:1082
 msgid "Secured"
@@ -765,7 +765,7 @@ msgstr "有線インターフェース"
 
 #: curses/prefs_curses.py:99
 msgid "Wired Link Detection"
-msgstr "有線接続が見つかりました"
+msgstr "有線接続の検知"
 
 #: curses/wicd-curses.py:754 gtk/gui.py:474 gtk/netentry.py:286
 #: gtk/netentry.py:629 gtk/wicd-client.py:268 gtk/wicd-client.py:309
@@ -789,7 +789,14 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr "無線 LAN SSID: 速度: IP: 強度: RX: TX:"
+msgstr ""
+"無線 LAN\\n\n"
+"SSID:\\n\n"
+"速度:\\n\n"
+"IP:\\n\n"
+"強度:\\n\n"
+"RX:\\n\n"
+"TX:"
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
@@ -819,7 +826,7 @@ msgstr "WPA サプリカントドライバーとして wext を使用してく�
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr "接続情報 (_C)"
+msgstr "接続情報(_C)"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:151
 msgid "_Quit"
@@ -857,15 +864,15 @@ msgstr "Wi-Fi を OFF (_S)"
 
 #: data/wicd.ui:94
 msgid "_Disconnect All"
-msgstr "切断されました"
+msgstr "全てを切断(_D)"
 
 #: data/wicd.ui:108
 msgid "_Refresh"
-msgstr "設定"
+msgstr "更新(_R)"
 
 #: data/wicd.ui:122
 msgid "_Preferences"
-msgstr "設定"
+msgstr "設定(_P)"
 
 #: data/wicd.ui:136
 msgid "_About"
@@ -885,19 +892,19 @@ msgstr "スクリプトの実行を再開する"
 
 #: data/wicd.ui:279
 msgid "Configure scripts to run for this network:"
-msgstr "このネットワークで動かすスクリプトを設定"
+msgstr "このネットワークで動かすスクリプトを設定:"
 
 #: data/wicd.ui:296
 msgid "Pre-connection Script:"
-msgstr "切断前にスクリプトを実行する"
+msgstr "切断前にスクリプトを実行する:"
 
 #: data/wicd.ui:329
 msgid "Post-connection Script:"
-msgstr "切断後にスクリプトを実行する"
+msgstr "切断後にスクリプトを実行する:"
 
 #: data/wicd.ui:362
 msgid "Pre-disconnection Script:"
-msgstr "切断前にスクリプトを実行する"
+msgstr "切断前にスクリプトを実行する:"
 
 #: data/wicd.ui:395
 msgid "Post-disconnection Script:"
@@ -917,11 +924,11 @@ msgstr ""
 
 #: data/wicd.ui:542
 msgid "DNS domain:"
-msgstr "DNS ドメイン"
+msgstr "DNS ドメイン:"
 
 #: data/wicd.ui:590
 msgid "<b>Never Connect</b>"
-msgstr "<b>まだ接続していない</b>"
+msgstr "<b>決して接続しない</b>"
 
 #: data/wicd.ui:606
 msgid "Automatically reconnect on network connection loss"
@@ -945,39 +952,39 @@ msgstr "有線プロファイルの名前を変更する"
 
 #: data/wicd.ui:707
 msgid "<b>Wired automatic connection</b>"
-msgstr "自動再接続"
+msgstr "<b>有線自動接続</b>"
 
 #: data/wicd.ui:725
 msgid "Wired interface:"
-msgstr "有線インターフェース"
+msgstr "有線インターフェース:"
 
 #: data/wicd.ui:743
 msgid "Wireless interface:"
-msgstr "無線インターフェース"
+msgstr "無線インターフェース:"
 
 #: data/wicd.ui:783
 msgid "<b>Network Interfaces</b>"
-msgstr "ネットワークインターフェース"
+msgstr "<b>ネットワークインターフェース</b>"
 
 #: data/wicd.ui:799
 msgid "DNS server 3:"
-msgstr "DNS サーバ"
+msgstr "DNS サーバ 3:"
 
 #: data/wicd.ui:830
 msgid "DNS server 2:"
-msgstr "DNS サーバ"
+msgstr "DNS サーバ 2:"
 
 #: data/wicd.ui:848
 msgid "DNS server 1:"
-msgstr "DNS サーバ"
+msgstr "DNS サーバ 1:"
 
 #: data/wicd.ui:866
 msgid "Search domain:"
-msgstr "ドメインを探しています"
+msgstr "ドメイン検索:"
 
 #: data/wicd.ui:901
 msgid "<b>Global DNS Servers</b>"
-msgstr "グローバル DNS サーバ"
+msgstr "<b>グローバル DNS サーバ</b>"
 
 #: data/wicd.ui:960
 msgid ""
@@ -994,11 +1001,11 @@ msgstr "<b>通知</b>"
 
 #: data/wicd.ui:1050
 msgid "<b>Route Table Flushing</b>"
-msgstr "ルーティングテーブルの消去"
+msgstr "<b>ルーティングテーブルの消去</b>"
 
 #: data/wicd.ui:1063
 msgid "<b>Wired Link Detection</b>"
-msgstr "有線接続が見つかりました"
+msgstr "<b>有線接続の検知</b>"
 
 #: data/wicd.ui:1289
 msgid "<b>DHCP Client</b>"
@@ -1022,7 +1029,7 @@ msgstr "ドライバー:"
 
 #: data/wicd.ui:1530
 msgid "<b>Wireless Interface</b>"
-msgstr "無線インターフェース"
+msgstr "<b>無線インターフェース</b>"
 
 #: data/wicd.ui:1544
 msgid "<b>WPA Supplicant</b>"
@@ -1030,11 +1037,11 @@ msgstr "<b>WPA Supplicant</b>"
 
 #: data/wicd.ui:1556
 msgid "<b>Debugging</b>"
-msgstr "デバッグ"
+msgstr "<b>デバッグ</b>"
 
 #: data/wicd.ui:1574
 msgid "Backend:"
-msgstr "バックエンド"
+msgstr "バックエンド:"
 
 #: data/wicd.ui:1601
 msgid "<b>Backend</b>"

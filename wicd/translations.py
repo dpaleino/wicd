@@ -52,7 +52,7 @@ def get_gettext():
     langs += ["en_US"]
     lang = gettext.translation('wicd', local_path, languages=langs, 
                                fallback=True)
-    _ = lang.gettext
+    _ = lang.ugettext
     return _
 
 _ = get_gettext()

@@ -946,28 +946,6 @@ class WirelessDaemon(dbus.service.Object):
         self.LastScan = []
         self.config = ConfigManager(wireless_conf, debug=debug)
 
-        self._validProperties = (
-            'bssid',
-            'essid',
-            'hidden',
-            'channel',
-            'mode',
-            'enctype',
-            'encryption_method',
-            'key',
-            'automatic',
-            'ip',
-            'netmask',
-            'broadcast',
-            'gateway',
-            'use_static_dns',
-            'use_global_dns',
-            'dns1',
-            'dns2',
-            'dns3',
-            'use_settings_globally',
-        )
-
     def get_debug_mode(self):
         return self._debug_mode
     def set_debug_mode(self, mode):
@@ -1086,9 +1064,9 @@ class WirelessDaemon(dbus.service.Object):
     def SetWirelessProperty(self, netid, prop, value):
         """ Sets property to value in network specified. """
         # We don't write script settings here.
-        if prop.strip() not in self._validProperties:
-            print "Trying to set invalid property (or property not " \
-                  "permitted): "+ prop.strip() + "."
+        if misc.sanitize_config(prop).endswith('script'):
+            print 'Setting script properties through the daemon' \
+                  + ' is not permitted.'
             return False
         self.LastScan[netid][prop] = misc.to_unicode(misc.Noneify(value))
 
@@ -1377,25 +1355,6 @@ class WiredDaemon(dbus.service.Object):
         self.WiredNetwork = {}
         self.config = ConfigManager(wired_conf, debug=debug)
 
-        self._validProperties = (
-            'ip',
-            'broadcast',
-            'netmask',
-            'gateway',
-            'search_domain',
-            'dns_domain',
-            'dns1',
-            'dns2',
-            'dns3',
-            'encryption_enabled',
-            'default',
-            'dhcphostname',
-            'lastused',
-            'profilename',
-            'use_global_dns',
-            'use_static_dns',
-        )
-
     def get_debug_mode(self):
         return self._debug_mode
     def set_debug_mode(self, mode):
@@ -1447,9 +1406,9 @@ class WiredDaemon(dbus.service.Object):
     def SetWiredProperty(self, prop, value):
         """ Sets the given property to the given value. """
         if self.WiredNetwork:
-            if prop.strip() not in self._validProperties:
-                print "Trying to set invalid property (or property not " \
-                      "permitted): "+ prop.strip() + "."
+            if misc.sanitize_config(prop).endswith('script'):
+                print 'Setting script properties through the daemon' \
+                      + ' is not permitted.'
                 return False
             self.WiredNetwork[prop] = misc.to_unicode(misc.Noneify(value))
             return True

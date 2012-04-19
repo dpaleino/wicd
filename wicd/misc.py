@@ -425,6 +425,14 @@ def noneToString(text):
     else:
         return to_unicode(text)
 
+def sanitize_config(s):
+    """ Sanitize property names to be used in config-files. """
+    s = s.strip()
+    s = s.replace('=', '')
+    s = s.replace(' ', '')
+    s = s.replace('\n', '')
+    return s
+
 def sanitize_escaped(s):
     """ Sanitize double-escaped unicode strings. """
     lastpos = -1

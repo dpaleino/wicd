@@ -1,4 +1,57 @@
 ------------------------------------------------------------
+revno: 758
+fixes bug: https://launchpad.net/bugs/985879
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-19 22:38:24 +0200
+message:
+  Fix bug caused by fix for CVE
+------------------------------------------------------------
+revno: 757
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2012-04-16 22:44:15 +0200
+message:
+  Better fix for the curses UTF-8 bug, thanks to Konrad Schöbel!
+------------------------------------------------------------
+revno: 756
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Mon 2012-04-16 04:50:12 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 755
+tags: 1.7.2.1
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-12 22:03:49 +0200
+message:
+  Prepare for the release of 1.7.2.1
+------------------------------------------------------------
+revno: 754
+fixes bug: https://launchpad.net/bugs/980214
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-12 22:02:06 +0200
+message:
+  Fix crash with wicd-curses
+------------------------------------------------------------
+revno: 753
+tags: 1.7.2
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2012-04-11 23:20:22 +0200
+message:
+  Fixed MANIFEST.in
+------------------------------------------------------------
+revno: 752
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Wed 2012-04-11 23:08:00 +0200
+message:
+  Prepare files for the release of 1.7.2
+------------------------------------------------------------
 revno: 751
 fixes bug: https://launchpad.net/bugs/979221
 committer: David Paleino <d.paleino@gmail.com>
@@ -259,8 +312,8 @@ message:
 ------------------------------------------------------------
 
 Due to size, this file has been truncated. All revisions relevant to
-the 1.7.2 release have been included. For more information, please see
-the full log of changes at:
+the 1.7.2 release (and sub-releases) have been included. For more
+information, please see the full log of changes at:
 
      https://code.launchpad.net/~wicd-devel/wicd/experimental
 

@@ -1,4 +1,20 @@
 ------------------------------------------------------------
+revno: 760
+fixes bug: https://launchpad.net/bugs/986257
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-04-22 18:32:18 +0200
+message:
+  Fix 1.7.2.2 brokenness
+------------------------------------------------------------
+revno: 759
+tags: 1.7.2.2
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-19 22:42:33 +0200
+message:
+  Prepare files for the release of 1.7.2.2
+------------------------------------------------------------
 revno: 758
 fixes bug: https://launchpad.net/bugs/985879
 committer: David Paleino <d.paleino@gmail.com>

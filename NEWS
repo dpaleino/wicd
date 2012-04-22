@@ -1,9 +1,14 @@
 Wicd 1.7 Series
 ---------------
 
+1.7.2.3:
+	Minor Changes:
+	- Fixed crash of wicd-curses with (again) UTF-8 locales. This should fix
+	  it all now. Hopefully.
+
 1.7.2.2:
-    Minor Changes:
-    - Encryption templates were broken by the fix for CVE-2012-2095; fixed.
+	Minor Changes:
+	- Encryption templates were broken by the fix for CVE-2012-2095; fixed.
 
 1.7.2.1:
 	Minor Changes:

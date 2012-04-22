@@ -77,8 +77,6 @@ CURSES_REV=wpath.curses_revision
 # Fix strings in wicd-curses
 from wicd.translations import language
 from wicd.translations import _
-for i in language.keys():
-    language[i] = language[i].decode('utf8')
 
 ########################################
 ##### SUPPORT CLASSES

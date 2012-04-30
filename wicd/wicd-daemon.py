@@ -1064,7 +1064,8 @@ class WirelessDaemon(dbus.service.Object):
     def SetWirelessProperty(self, netid, prop, value):
         """ Sets property to value in network specified. """
         # We don't write script settings here.
-        if misc.sanitize_config(prop).endswith('script'):
+        prop = misc.sanitize_config(prop)
+        if prop.endswith('script'):
             print 'Setting script properties through the daemon' \
                   + ' is not permitted.'
             return False
@@ -1264,7 +1265,8 @@ class WirelessDaemon(dbus.service.Object):
     @dbus.service.method('org.wicd.daemon.wireless')
     def SaveWirelessNetworkProperty(self, id, option):
         """ Writes a particular wireless property to disk. """
-        if (option.strip()).endswith("script"):
+        option = misc.sanitize_config(option)
+        if option.endswith("script"):
             print 'You cannot save script information to disk through ' + \
                   'the daemon.'
             return
@@ -1406,7 +1408,8 @@ class WiredDaemon(dbus.service.Object):
     def SetWiredProperty(self, prop, value):
         """ Sets the given property to the given value. """
         if self.WiredNetwork:
-            if misc.sanitize_config(prop).endswith('script'):
+            prop = misc.sanitize_config(prop)
+            if prop.endswith('script'):
                 print 'Setting script properties through the daemon' \
                       + ' is not permitted.'
                 return False

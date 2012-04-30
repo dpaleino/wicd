@@ -26,6 +26,7 @@ import os
 import locale
 import sys
 import re
+import string
 import gobject
 from threading import Thread
 from subprocess import Popen, STDOUT, PIPE, call
@@ -427,11 +428,9 @@ def noneToString(text):
 
 def sanitize_config(s):
     """ Sanitize property names to be used in config-files. """
-    s = s.strip()
-    s = s.replace('=', '')
-    s = s.replace(' ', '')
-    s = s.replace('\n', '')
-    return s
+    allowed = string.ascii_letters + '_' + string.digits
+    table = string.maketrans(allowed, ' ' * len(allowed))
+    return s.translate(None, table)
 
 def sanitize_escaped(s):
     """ Sanitize double-escaped unicode strings. """

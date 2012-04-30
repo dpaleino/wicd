@@ -1,7 +1,4 @@
 #!/bin/sh
-BOLD=$(tput bold)
-BLUE=$(tput setaf 4)
-NC=$(tput sgr0)
 # check_firstrun()
 if [ ! -d "$HOME/.wicd" ]; then
     mkdir -p "$HOME/.wicd"
@@ -11,6 +8,9 @@ if [ -e "%VARLIB%WHEREAREMYFILES" ] && [ ! -L "$HOME/.wicd/WHEREAREMYFILES" ]; t
     ln -s "%VARLIB%WHEREAREMYFILES" "$HOME/.wicd/WHEREAREMYFILES"
 fi
 if [ "$DISPLAY" = "" ]; then
+    BOLD=$(tput bold)
+    BLUE=$(tput setaf 4)
+    NC=$(tput sgr0)
     if [ -x "%BIN%wicd-curses" ]; then
         if [ ! -f "$HOME/.wicd/CLIENT_CURSES_WARNING" ]; then
             printf "NOTICE: You do not have an X server active on this console, \n"

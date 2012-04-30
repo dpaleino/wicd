@@ -1,4 +1,56 @@
 ------------------------------------------------------------
+revno: 767
+fixes bug: https://launchpad.net/bugs/979221
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Mon 2012-04-30 21:20:47 +0200
+message:
+  Really fix the privilege escalation in a better way
+------------------------------------------------------------
+revno: 766
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Fri 2012-04-27 04:48:35 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 765
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-26 22:06:35 +0200
+message:
+  Re-integrate pt_BR, since it's different enough from pt to have a separate translation
+------------------------------------------------------------
+revno: 764
+fixes bug: https://launchpad.net/bugs/989146
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Thu 2012-04-26 22:03:35 +0200
+message:
+  Remove unmaintained language variants, rename en_GB to en
+------------------------------------------------------------
+revno: 763
+committer: Launchpad Translations on behalf of wicd-devel
+branch nick: wicd
+timestamp: Wed 2012-04-25 05:03:12 +0000
+message:
+  Launchpad automatic translations update.
+------------------------------------------------------------
+revno: 762 [merge]
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Tue 2012-04-24 21:28:52 +0200
+message:
+  Merge translations by LP
+------------------------------------------------------------
+revno: 761
+tags: 1.7.2.3
+committer: David Paleino <d.paleino@gmail.com>
+branch nick: wicd
+timestamp: Sun 2012-04-22 18:35:39 +0200
+message:
+  Prepare files for the release of 1.7.2.3
+------------------------------------------------------------
 revno: 760
 fixes bug: https://launchpad.net/bugs/986257
 committer: David Paleino <d.paleino@gmail.com>

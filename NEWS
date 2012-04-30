@@ -1,6 +1,11 @@
 Wicd 1.7 Series
 ---------------
 
+1.7.2.4:
+	Minor Changes:
+	- Really fix local privilege escalation (CVE-2012-2095).
+	- Removed unmaintained language variants.
+
 1.7.2.3:
 	Minor Changes:
 	- Fixed crash of wicd-curses with (again) UTF-8 locales. This should fix

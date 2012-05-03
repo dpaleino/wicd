@@ -430,7 +430,10 @@ def sanitize_config(s):
     """ Sanitize property names to be used in config-files. """
     allowed = string.ascii_letters + '_' + string.digits
     table = string.maketrans(allowed, ' ' * len(allowed))
-    return s.translate(None, table)
+
+    # s is a dbus.String -- since we don't allow unicode property keys,
+    # make it simple.
+    return str(s).translate(None, table)
 
 def sanitize_escaped(s):
     """ Sanitize double-escaped unicode strings. """

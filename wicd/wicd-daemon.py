@@ -1069,7 +1069,11 @@ class WirelessDaemon(dbus.service.Object):
             print 'Setting script properties through the daemon' \
                   + ' is not permitted.'
             return False
-        self.LastScan[netid][prop] = misc.to_unicode(misc.Noneify(value))
+        # whitelist some props that need different handling
+        if prop in ('key_index', ):
+            self.LastScan[netid][prop] = misc.to_unicode(misc.Noneify(value, False))
+        else:
+            self.LastScan[netid][prop] = misc.to_unicode(misc.Noneify(value))
 
     @dbus.service.method('org.wicd.daemon.wireless')
     def DetectWirelessInterface(self):

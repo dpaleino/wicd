@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-07 23:04+0100\n"
+"POT-Creation-Date: 2012-05-04 00:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -358,6 +358,10 @@ msgstr ""
 
 #: curses/wicd-curses.py:464 gtk/gui.py:268 wicd/translations.py:80
 msgid "Key"
+msgstr ""
+
+#: wicd/translations.py:81
+msgid "Key index"
 msgstr ""
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76

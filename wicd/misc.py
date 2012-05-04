@@ -252,15 +252,16 @@ def to_bool(var):
         var = bool(var)
     return var
 
-def Noneify(variable):
+def Noneify(variable, to_bool=True):
     """ Convert string types to either None or booleans"""
     #set string Nones to real Nones
     if variable in ("None", "", None):
         return None
-    if variable in ("False", "0"):
-        return False
-    if variable in ("True", "1"):
-        return True
+    if to_bool:
+        if variable in ("False", "0"):
+            return False
+        if variable in ("True", "1"):
+            return True
     return variable
 
 def ParseEncryption(network):
@@ -288,18 +289,18 @@ def ParseEncryption(network):
             elif "$_" in line: 
                 cur_val = re.findall('\$_([A-Z0-9_]+)', line)
                 if cur_val:
-                    if cur_val[0] == 'SCAN':
-                        #TODO should this be hardcoded?
-                        line = line.replace("$_SCAN", "1")
+                    rep_val = network.get(cur_val[0].lower())
+                    if not rep_val:
+                        # hardcode some default values
+                        if cur_val[0] == 'SCAN':
+                            rep_val = '1'
+                        elif cur_val[0] == 'KEY_INDEX':
+                            rep_val = '0'
+                    if rep_val:
+                        line = line.replace("$_%s" % cur_val[0], str(rep_val))
                         config_file = ''.join([config_file, line])
                     else:
-                        rep_val = network.get(cur_val[0].lower())
-                        if rep_val:
-                            line = line.replace("$_%s" % cur_val[0], 
-                                                str(rep_val))
-                            config_file = ''.join([config_file, line])
-                        else:
-                            print "Ignoring template line: '%s'" % line
+                        print "Ignoring template line: '%s'" % line
                 else:
                     print "Weird parsing error occurred"
             else:  # Just a regular entry.

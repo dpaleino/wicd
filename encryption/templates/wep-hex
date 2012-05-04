@@ -1,7 +1,8 @@
 name = WEP (Hex [0-9/A-F])
 author = Adam Blackburn
-version = 1
+version = 2
 require key *Key
+optional key_index *Key_Index
 protected key *Key
 -----
 ctrl_interface=/var/run/wpa_supplicant
@@ -9,7 +10,7 @@ network={
        ssid="$_ESSID"
        scan_ssid=$_SCAN
        key_mgmt=NONE
-       wep_key0=$_KEY
-       wep_tx_keyidx=0
+       wep_key$_KEY_INDEX=$_KEY
+       wep_tx_keyidx=$_KEY_INDEX
        priority=5
 }

@@ -84,6 +84,12 @@ class TestMisc(unittest.TestCase):
     def test_noneify_11(self):
         self.assertEquals(misc.Noneify(5), 5)
 
+    def test_noneify_12(self):
+        self.assertEquals(misc.Noneify(1, False), 1)
+
+    def test_noneify_13(self):
+        self.assertEquals(misc.Noneify(0, False), 0)
+
     def test_none_to_string_1(self):
         self.assertEquals(misc.noneToString(None), 'None')
 

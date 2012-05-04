@@ -433,7 +433,7 @@ def sanitize_config(s):
 
     # s is a dbus.String -- since we don't allow unicode property keys,
     # make it simple.
-    return str(s).translate(None, table)
+    return s.encode('ascii', 'replace').translate(None, table)
 
 def sanitize_escaped(s):
     """ Sanitize double-escaped unicode strings. """

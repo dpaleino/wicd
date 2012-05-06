@@ -56,6 +56,9 @@ Bring up instructions on how to edit the scripts.  I have implemented a way to d
 .TP
 .BR O
 Raise the Ad-Hoc network creation dialog
+.TP
+.BR X
+Show the list of saved wireless networks, to be able to remove them
 
 .SH "FILES"
 .TP

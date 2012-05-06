@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-04 00:29+0200\n"
+"POT-Creation-Date: 2012-05-06 08:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,6 +66,10 @@ msgstr ""
 msgid "Always switch to wired connection when available"
 msgstr ""
 
+#: gtk/gui.py:352
+msgid "Are you sure you want to discard settings for the selected networks?"
+msgstr ""
+
 #: wicd/translations.py:77
 msgid "Authentication"
 msgstr ""
@@ -86,6 +90,10 @@ msgstr ""
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
+msgstr ""
+
+#: gtk/gui.py:329
+msgid "BSSID"
 msgstr ""
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
@@ -362,6 +370,10 @@ msgstr ""
 
 #: wicd/translations.py:81
 msgid "Key index"
+msgstr ""
+
+#: gtk/gui.py:309
+msgid "List of saved networks"
 msgstr ""
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
@@ -826,6 +838,14 @@ msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
+msgstr ""
+
+#: data/wicd.ui:65
+msgid "Forget network settings"
+msgstr ""
+
+#: data/wicd.ui:67
+msgid "Remove settings for saved networks"
 msgstr ""
 
 #: data/wicd.ui:79

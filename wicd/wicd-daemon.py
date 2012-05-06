@@ -41,6 +41,7 @@ import getopt
 import signal
 import atexit
 from subprocess import Popen
+from operator import itemgetter
 
 # DBUS
 import gobject
@@ -1305,6 +1306,27 @@ class WirelessDaemon(dbus.service.Object):
     def GetWirelessInterfaces(self):
         ''' Returns a list of wireless interfaces on the system. '''
         return wnettools.GetWirelessInterfaces()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetSavedWirelessNetworks(self):
+        ''' Returns a list of saved wireless networks. '''
+        ret = []
+        for section in self.config.sections():
+            if section.startswith('essid:'):
+                ret.append((section.replace('essid:', ''), 'None'))
+            else:
+                essid = self.config.get(section, 'essid')
+                ret.append((essid, section))
+        return sorted(ret, key=itemgetter(0))
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def DeleteWirelessNetwork(self, section):
+        """ Deletes a wireless network section. """
+        section = misc.to_unicode(section)
+        print "Deleting wireless settings for %s (%s)" % \
+            (self.config.get(section, 'essid'), str(section))
+        self.config.remove_section(section)
+        self.config.write()
 
     @dbus.service.signal(dbus_interface='org.wicd.daemon.wireless', signature='')
     def SendStartScanSignal(self):

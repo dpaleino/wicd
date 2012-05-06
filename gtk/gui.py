@@ -180,6 +180,7 @@ class appGui(object):
                 "preferences_clicked" : self.settings_dialog,
                 "about_clicked" : self.about_dialog,
                 "create_adhoc_clicked" : self.create_adhoc_network,
+                "forget_network_clicked" : self.forget_network,
                 }
         self.wTree.connect_signals(dic)
 
@@ -298,6 +299,66 @@ class appGui(object):
                                         self.key_entry.entry.get_text(),
                                         self.chkbox_use_encryption.get_active(),
                                         False) #chkbox_use_ics.get_active())
+        dialog.destroy()
+
+    def forget_network(self, widget=None):
+        """
+        Shows a dialog that lists saved wireless networks, and lets the user
+        delete them.
+        """
+        wireless.ReloadConfig()
+        dialog = gtk.Dialog(title = _('List of saved networks'),
+                            flags = gtk.DIALOG_MODAL,
+                            buttons=(gtk.STOCK_DELETE, 1, gtk.STOCK_OK, 2))
+        dialog.set_has_separator(True)
+        dialog.set_size_request(400, 200)
+
+        networks = gtk.ListStore(str, str)
+        for entry in wireless.GetSavedWirelessNetworks():
+            if entry[1] != 'None':
+                networks.append(entry)
+            else:
+                networks.append((entry[0], _('Global settings for this ESSID')))
+        tree = gtk.TreeView(model=networks)
+        tree.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+
+        cell = gtk.CellRendererText()
+
+        column = gtk.TreeViewColumn(_('ESSID'), cell, text = 0)
+        tree.append_column(column)
+
+        column = gtk.TreeViewColumn(_('BSSID'), cell, text = 1)
+        tree.append_column(column)
+
+        scroll = gtk.ScrolledWindow()
+        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scroll.add(tree)
+        dialog.vbox.pack_start(scroll)
+        dialog.vbox.set_spacing(5)
+        dialog.show_all()
+        response = dialog.run()
+        if response == 1:
+            model, pathlist = tree.get_selection().get_selected_rows()
+            to_remove = dict(essid=[], bssid=[])
+            if pathlist:
+                for row in pathlist:
+                    iter = model.get_iter(path=row)
+                    to_remove['essid'].append(misc.noneToString(model.get_value(iter, 0)))
+                    to_remove['bssid'].append(model.get_value(iter, 1))
+
+                confirm = gtk.MessageDialog(
+                        flags = gtk.DIALOG_MODAL,
+                        type = gtk.MESSAGE_INFO,
+                        buttons = gtk.BUTTONS_YES_NO,
+                        message_format = _('Are you sure you want to discard' +
+                            ' settings for the selected networks?')
+                    )
+                confirm.format_secondary_text('\n'.join(to_remove['essid']))
+                response = confirm.run()
+                if response == gtk.RESPONSE_YES:
+                    map(wireless.DeleteWirelessNetwork, to_remove['bssid'])
+                    wireless.ReloadConfig()
+                confirm.destroy()
         dialog.destroy()
 
     def toggle_encrypt_check(self, widget=None):

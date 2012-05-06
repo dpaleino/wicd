@@ -221,6 +221,7 @@ _('For more detailed help, consult the wicd-curses(8) man page.')+"\n",
 ('bold','      I'),": "+_('Scan for hidden networks')+"\n",
 ('bold','      S'),": "+_('Select scripts')+"\n",
 ('bold','      O'),": "+_('Set up Ad-hoc network')+"\n",
+('bold','      X'),": "+_('Remove settings for saved networks')+"\n",
 ('bold','     ->'),": "+_('Configure selected network')+"\n",
 ('bold','      A'),": "+_("Display 'about' dialog")+"\n",
 ('bold',' F8 q Q'),": "+_('Quit wicd-curses')+"\n",
@@ -510,6 +511,54 @@ class AdHocDialog(Dialog2):
                  self.use_encrypt_chkb.get_state(),
                  self.key_edit.get_edit_text())
         return exitcode, data
+
+# TODO
+class ForgetDialog(Dialog2):
+    def __init__(self):
+        self.to_remove = dict(essid=[], bssid=[])
+
+        header = urwid.AttrWrap(urwid.Text('  %20s %20s' % ('ESSID', 'BSSID')), 'listbar')
+        title = urwid.Text(_('Please select the networks to forget'))
+        l = [ title, header ]
+        for entry in wireless.GetSavedWirelessNetworks():
+            label = '%20s %20s'
+            if entry[1] != 'None':
+                label = label % (entry[0], entry[1])
+                data = entry
+            else:
+                label = label % (entry[0], 'global')
+                data = (entry[0], 'essid:' + entry[0])
+
+            cb = urwid.CheckBox(label, on_state_change=self.update_to_remove, user_data=data)
+            l.append(cb)
+        body = urwid.ListBox(l)
+
+        header = ('header', _('List of saved networks'))
+        Dialog2.__init__(self, header, 15, 50, body)
+        self.add_buttons([(_('Remove'),1),(_('Cancel'),-1)])
+        self.frame.set_focus('body')
+
+    def update_to_remove(self, widget, checked, data):
+        if checked:
+            self.to_remove['essid'].append(data[0])
+            self.to_remove['bssid'].append(data[1])
+        else:
+            self.to_remove['essid'].remove(data[0])
+            self.to_remove['bssid'].remove(data[1])
+
+    def unhandled_key(self, size, k):
+        if k in ('up','page up'):
+            self.frame.set_focus('body')
+        if k in ('down','page down'):
+            self.frame.set_focus('footer')
+        if k == 'enter':
+            # pass enter to the "ok" button
+            self.frame.set_focus('footer')
+            self.buttons.set_focus(1)
+            self.view.keypress(size, k)
+
+    def on_exit(self, exitcode):
+        return exitcode, self.to_remove
 
 ########################################
 ##### APPLICATION INTERFACE CLASS
@@ -892,7 +941,18 @@ class appGUI():
                                                 data[1], "WEP",
                                                 data[5],
                                                 data[4], False)
-            
+            if 'X' in keys:
+                exitcode, data = ForgetDialog().run(ui, self.frame)
+                if exitcode == 1:
+                    text = _('Are you sure you want to discard settings for ' +
+                        'the selected networks?')
+                    text += '\n\n' + '\n'.join(data['essid'])
+                    confirm, useless = TextDialog(text, 20, 50,
+                        buttons=[(_('OK'), 1), (_('Cancel'), -1)],
+                        ).run(ui, self.frame)
+                    if confirm == 1:
+                        map(wireless.DeleteWirelessNetwork, data['bssid'])
+
         for k in keys:
             if urwid.VERSION < (1, 0, 0):
                 check_mouse_event = urwid.is_mouse_event

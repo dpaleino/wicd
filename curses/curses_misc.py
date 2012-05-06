@@ -511,14 +511,17 @@ class Dialog2(urwid.WidgetWrap):
 
 # Simple dialog with text in it and "OK"
 class TextDialog(Dialog2):
-    def __init__(self, text, height, width, header=None,align='left'):
+    def __init__(self, text, height, width, header=None, align='left',
+        buttons=(_('OK'), 1)):
         l = [urwid.Text(text)]
         body = urwid.ListBox(l)
         body = urwid.AttrWrap(body, 'body')
 
         Dialog2.__init__(self, header, height+2, width+2, body)
-        self.add_buttons([('OK',1)])
-
+        if type(buttons) == list:
+            self.add_buttons(buttons)
+        else:
+            self.add_buttons([buttons])
 
     def unhandled_key(self, size, k):
         if k in ('up','page up','down','page down'):

@@ -60,6 +60,16 @@
                                 <signal name="activate" handler="hidden_clicked"/>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkImageMenuItem" id="forget_network_button">
+                                <property name="label" translatable="yes">Forget network settings</property>
+                                <property name="visible">True</property>
+                                <property name="tooltip_text" translatable="yes">Remove settings for saved networks</property>
+                                <property name="image">image3</property>
+                                <property name="use_stock">True</property>
+                                <signal name="activate" handler="forget_network_clicked"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1731,6 +1741,10 @@ WPA supplicant driver.</property>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="stock">gtk-find</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="stock">gtk-delete</property>
   </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
 </interface>

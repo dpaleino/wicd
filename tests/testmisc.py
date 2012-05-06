@@ -18,6 +18,18 @@ class TestMisc(unittest.TestCase):
     def test_valid_ip_3(self):
         self.assertTrue(misc.IsValidIP('10.0.1.1'))
 
+    def test_valid_ip_4(self):
+        self.assertTrue(misc.IsValidIP('::'))
+
+    def test_valid_ip_5(self):
+        self.assertTrue(misc.IsValidIP('::1'))
+
+    def test_valid_ip_6(self):
+        self.assertTrue(misc.IsValidIP('FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF'))
+
+    def test_valid_ip_7(self):
+        self.assertTrue(misc.IsValidIP('2001:0db8:85a3:0000:0000:8a2e:0370:7334'))
+
     def test_invalid_ip_1(self):
         self.assertFalse(misc.IsValidIP('-10.0.-1.-1'))
 
@@ -26,6 +38,18 @@ class TestMisc(unittest.TestCase):
 
     def test_invalid_ip_3(self):
         self.assertFalse(misc.IsValidIP('1000.0.0.1'))
+
+    def test_invalid_ip_4(self):
+        self.assertFalse(misc.IsValidIP(':'))
+
+    def test_invalid_ip_5(self):
+        self.assertFalse(misc.IsValidIP('1:'))
+
+    def test_invalid_ip_6(self):
+        self.assertFalse(misc.IsValidIP('ZZZZ:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF'))
+
+    def test_invalid_ip_7(self):
+        self.assertFalse(misc.IsValidIP('2001:0db8:85Z3:0000:0000:8a2e:0370:7334'))
 
     def test_run_valid_regex(self):
         import re

@@ -33,6 +33,7 @@ from subprocess import Popen, STDOUT, PIPE, call
 from commands import getoutput
 from itertools import repeat, chain, izip
 from pipes import quote
+import socket
 
 from wicd.translations import _
 
@@ -173,15 +174,26 @@ def IsValidIP(ip):
     """ Make sure an entered IP is valid. """
     if not ip: return False
 
-    ipNumbers = ip.split('.')
-    if len(ipNumbers) < 4:
-        return False
-
-    for number in ipNumbers:
-        if not number.isdigit() or int(number) > 255:
+    if not IsValidIPv4(ip):
+        if not IsValidIPv6(ip):
             return False
+    return True
 
-    return ipNumbers
+def IsValidIPv4(ip):
+    ''' Make sure an entered IP is a valid IPv4. '''
+    try:
+        socket.inet_pton(socket.AF_INET, ip)
+    except (TypeError, socket.error):
+        return False
+    return True
+
+def IsValidIPv6(ip):
+    ''' Make sure an entered IP is a valid IPv6. '''
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except (TypeError, socket.error):
+        return False
+    return True
 
 def PromptToStartDaemon():
     """ Prompt the user to start the daemon """

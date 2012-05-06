@@ -6,13 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-04 00:29+0200\n"
-"PO-Revision-Date: 2012-02-25 11:47+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-05-06 04:42+0000\n"
+"Last-Translator: Praveen Illa <mail2ipn@gmail.com>\n"
 "Language-Team: te <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-06 04:48+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -35,11 +35,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:564
 msgid "About"
-msgstr ""
+msgstr "గురించి"
 
 #: curses/wicd-curses.py:201
 msgid "About Wicd"
-msgstr ""
+msgstr "Wicd గురించి"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:272
 msgid "Activate Internet Connection Sharing"
@@ -67,13 +67,13 @@ msgstr ""
 
 #: wicd/translations.py:77
 msgid "Authentication"
-msgstr ""
+msgstr "ధృవీకరణ"
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1082
 #: data/wicd.ui:1143 data/wicd.ui:1204 data/wicd.ui:1319
 msgid "Automatic (recommended)"
-msgstr ""
+msgstr "స్వయంచాలకం (సిఫారసుచేయబడింది)"
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
@@ -93,7 +93,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:195
 msgid "Brought to you by:"
-msgstr ""
+msgstr "సమర్పిస్తున్నవారు:"
 
 #: curses/wicd-curses.py:1029
 msgid "Can't connect to the daemon, trying to start it automatically..."
@@ -103,12 +103,12 @@ msgstr ""
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
 #: curses/wicd-curses.py:605 curses/wicd-curses.py:607
 msgid "Cancel"
-msgstr ""
+msgstr "రద్దుచేయి"
 
 #: curses/wicd-curses.py:463 gtk/gui.py:267 gtk/netentry.py:966
 #: gtk/netentry.py:1088
 msgid "Channel"
-msgstr ""
+msgstr "వాహిక"
 
 #: gtk/gui.py:188 data/wicd.ui:173
 msgid "Choose from the networks below:"
@@ -152,7 +152,7 @@ msgstr ""
 
 #: gtk/gui.py:191 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
-msgstr ""
+msgstr "అనుసంధానిస్తోంది"
 
 #: wicd/misc.py:77
 msgid "Connection Cancelled"

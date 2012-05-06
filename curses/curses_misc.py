@@ -454,12 +454,15 @@ class Dialog2(urwid.WidgetWrap):
     # buttons: tuple of name,exitcode
     def add_buttons(self, buttons):
         l = []
+        maxlen = 0
         for name, exitcode in buttons:
             b = urwid.Button( name, self.button_press )
             b.exitcode = exitcode
             b = urwid.AttrWrap( b, 'body','focus' )
             l.append( b )
-        self.buttons = urwid.GridFlow(l, 10, 3, 1, 'center')
+            maxlen = max(len(name), maxlen)
+        maxlen += 4 # because of '< ... >'
+        self.buttons = urwid.GridFlow(l, maxlen, 3, 1, 'center')
         self.frame.footer = urwid.Pile( [ urwid.Divider(),
             self.buttons ], focus_item = 1)
 

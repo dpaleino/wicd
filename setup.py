@@ -444,7 +444,7 @@ class update_translations(Command):
     def run(self):
         for pofile in glob('po/*.po'):
             lang = pofile.replace('po/', '').replace('.po', '')
-            os.system('pybabel update -o %s -i po/wicd.pot -D wicd -l %s' % (pofile, lang))
+            os.system('pybabel update -N -o %s -i po/wicd.pot -D wicd -l %s' % (pofile, lang))
 
 class compile_translations(Command):
     description = 'compile po-files to binary mo'

@@ -1,14 +1,14 @@
-# Translations for Kazakh (kk)
-# Translator ID 47
-# /translator/edit/47/
+# Translations for Spanish (es_CO)
+# Translator ID 79
+# /translator/edit/79/
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-02-25 11:42+0000\n"
+"PO-Revision-Date: 2011-12-09 22:52+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
-"Language-Team: kk <LL@li.org>\n"
+"Language-Team: es_CO <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -39,31 +39,31 @@ msgstr ""
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
-msgstr "Wicd туралы"
+msgstr ""
 
 #: curses/wicd-curses.py:465 gtk/gui.py:273
 msgid "Activate Internet Connection Sharing"
-msgstr "Интернетке қосылуды таратуды іске қосу"
+msgstr ""
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"
-msgstr "Жаңа профильді қосу"
+msgstr ""
 
 #: curses/wicd-curses.py:411
 msgid "Add a new wired profile"
-msgstr "Жаңа сымды желі профилін қосу"
+msgstr ""
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1679
 msgid "Advanced Settings"
-msgstr "Кеңейтілген баптаулар"
+msgstr ""
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:966
 msgid "Always show wired interface"
-msgstr "Сымды желі интерфейсін әрқашан көрсету"
+msgstr ""
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Мүмкін болса, әрқашан сымды желіге байланыс орнату"
+msgstr ""
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
@@ -71,25 +71,25 @@ msgstr ""
 
 #: wicd/translations.py:77
 msgid "Authentication"
-msgstr "Аутентификация"
+msgstr ""
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1092
 #: data/wicd.ui:1153 data/wicd.ui:1214 data/wicd.ui:1329
 msgid "Automatic (recommended)"
-msgstr "Автоматты түрде (ұсынылады)"
+msgstr ""
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
-msgstr "Автоматты қайта қосылу"
+msgstr ""
 
 #: curses/netentry_curses.py:374 gtk/netentry.py:889
 msgid "Automatically connect to this network"
-msgstr "Осы желіге автоқосылу"
+msgstr ""
 
 #: curses/prefs_curses.py:87 gtk/prefs.py:331
 msgid "Automatically reconnect on connection loss"
-msgstr "Байланыс жоғалса қайта автоқосылу"
+msgstr ""
 
 #: gtk/gui.py:330
 msgid "BSSID"
@@ -97,31 +97,31 @@ msgstr ""
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr "Басқару сайманы"
+msgstr ""
 
 #: curses/wicd-curses.py:194
 msgid "Brought to you by:"
-msgstr "Осыны сізге ұсынған"
+msgstr ""
 
 #: curses/wicd-curses.py:1089
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr "Қызметке қосылу мүмкін емес, оны іске қосып көру..."
+msgstr ""
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
 #: curses/wicd-curses.py:538 curses/wicd-curses.py:653
 #: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
-msgstr "Бас тарту"
+msgstr ""
 
 #: curses/wicd-curses.py:463 gtk/gui.py:268 gtk/netentry.py:1038
 #: gtk/netentry.py:1160
 msgid "Channel"
-msgstr "Канал"
+msgstr ""
 
 #: gtk/gui.py:189 data/wicd.ui:183
 msgid "Choose from the networks below:"
-msgstr "Төмендегі желілерден таңдаңыз"
+msgstr ""
 
 #: curses/wicd-curses.py:604
 msgid "Config"
@@ -129,92 +129,88 @@ msgstr ""
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
-msgstr "Таңдалған желіні баптау"
+msgstr ""
 
 #: curses/netentry_curses.py:267
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr "Сымды желі профайлы \"$A\" үшін баптауларды түзету"
+msgstr ""
 
 #: curses/netentry_curses.py:389
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr "\"$A\" ($B) сымсыз желі үшін баптауларды түзету"
+msgstr ""
 
 #: wicd/misc.py:82
 msgid "Configuring wireless interface..."
-msgstr "Сымсыз желі интерфейсін баптау..."
+msgstr ""
 
 #: curses/wicd-curses.py:607 gtk/wicd-client.py:498
 msgid "Connect"
-msgstr "Байланыс орнату"
+msgstr ""
 
 #: curses/wicd-curses.py:214
 msgid "Connect to selected network"
-msgstr "Таңдалған желімен байланыс орнату"
+msgstr ""
 
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
-msgstr "$A нүктесіне қосулы, деңгейі $B (IP: $C)"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
-msgstr "Сымды желіге қосулы тұр (IP: $A)"
+msgstr ""
 
 #: gtk/gui.py:192 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
-msgstr "Байланысты орнату"
+msgstr ""
 
 #: wicd/misc.py:79
 msgid "Connection Cancelled"
-msgstr "Байланыс орнатудан бас тартылды"
+msgstr ""
 
 #: wicd/misc.py:85
 msgid "Connection Failed."
-msgstr "Байланыс орнатудан бас тартылды"
+msgstr ""
 
 #: wicd/misc.py:81
 msgid "Connection Failed: Bad password"
-msgstr "Байланысты орнату орындалмады: Пароль қате"
+msgstr ""
 
 #: wicd/misc.py:91
 msgid "Connection Failed: No DHCP offers received."
-msgstr "Байланысты орнату орындалмады: бірде-бір DHCP ұсынысы алынбады."
+msgstr ""
 
 #: wicd/misc.py:83
 msgid "Connection Failed: Unable to Get IP Address"
-msgstr "Байланыс орнату қатемен аяқталды: IP адресін алу мүмкін емес"
+msgstr ""
 
 #: gtk/wicd-client.py:269 gtk/wicd-client.py:299
 msgid "Connection established"
-msgstr "Байланыс орнатыолы"
+msgstr ""
 
 #: wicd/misc.py:80
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
-"Байланыс орнату сәтсіз. Сымсыз желі тарату нүктесіне қосылу мүмкін емес."
+"Error de conexión: No se pudo contactar con el punto de acceso inalámbrico."
 
 #: wicd/misc.py:97
 msgid "Connection successful."
-msgstr "Байланыс орнатудан бас тартылды"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
 "Could not connect to wicd's D-Bus interface. Check the wicd log for error "
 "messages."
 msgstr ""
-"Wicd D-Bus интерфейсіне қосылу мүмкін емес. Wicd лог-файлын қателер туралы "
-"хабарламаларға тексеріңіз."
 
 #: gtk/netentry.py:379 gtk/netentry.py:522
 msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Графикалық sudo бағдарламасы табылмады. Скриптерді түзеткішті қосу мүмкін "
-"емес. Сізге баптаулар файлын тура түзету керек."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
 msgid "Create an Ad-Hoc Network"
-msgstr "Ad-Hoc желісін жасау"
+msgstr ""
 
 #: curses/wicd-curses.py:98
 msgid ""
@@ -222,13 +218,10 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
-"DBus қатесі! Көбінесе бұл қате wicd-curses қосулы тұрғанда wicd қызметі "
-"сөндірілгенде пайда болады. Алдымен қызметті, одан кейін wicd-curses қайта "
-"қосыңыз."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
-msgstr "DHCP клиенті"
+msgstr ""
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
@@ -236,110 +229,108 @@ msgstr ""
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
-msgstr "DNS сервері"
+msgstr ""
 
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
 #: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:80
 #: gtk/netentry.py:81 gtk/netentry.py:82
 msgid "DNS server"
-msgstr "DNS сервері"
+msgstr ""
 
 #: curses/prefs_curses.py:117
 msgid "Debugging"
-msgstr "Жөндеу режимі"
+msgstr ""
 
 #: curses/wicd-curses.py:608
 msgid "Disconn"
-msgstr "Байланыспаған"
+msgstr ""
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
-msgstr "Барлық желілермен байланысты үзу"
+msgstr ""
 
 #: gtk/wicd-client.py:340 gtk/wicd-client.py:643
 msgid "Disconnected"
-msgstr "Байланыспаған"
+msgstr ""
 
 #: gtk/gui.py:785
 msgid "Disconnecting active connections..."
-msgstr "Белсенді байланыстарды үзу..."
+msgstr ""
 
 #: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
-msgstr "Осы көмек сұхбатын көрсету"
+msgstr ""
 
 #: gtk/prefs.py:349 data/wicd.ui:1002
 msgid "Display notifications about connection status"
-msgstr "Байланыс күйі туралы хабарламаларды көрсету"
+msgstr ""
 
 #: curses/wicd-curses.py:213
 msgid "Display this help dialog"
-msgstr "Осы көмек сұхбатын көрсету"
+msgstr ""
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr "DNS сервері"
+msgstr ""
 
 #: wicd/misc.py:84
 msgid "Done connecting..."
-msgstr "Байланыс орнатуды аяқтау..."
+msgstr ""
 
 #: curses/wicd-curses.py:1113
 msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
-"ҚАТЕ: wicd-curses үшін wicd қызметіне рұқсат жоқ: пайдаланушыңыз \"$A\" "
-"тобында екеніне көзіңізді жеткізіңіз."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:267 gtk/gui.py:327
 msgid "ESSID"
-msgstr "ESSID"
+msgstr ""
 
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1521
 msgid "Enable debug mode"
-msgstr "Жөндеу режимін іске қосу"
+msgstr ""
 
 #: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
-msgstr "Байланысты орнату..."
+msgstr ""
 
 #: curses/prefs_curses.py:51 data/wicd.ui:1408
 msgid "External Programs"
-msgstr "Сыртқы бағдарламалар"
+msgstr ""
 
 #: wicd/misc.py:86
 msgid "Flushing the routing table..."
-msgstr "Бағдарлау кестесін тазарту..."
+msgstr ""
 
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "Толығырақ көмекті алу үшін wicd-curses(8) man парағын қараңыз."
+msgstr ""
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"
-msgstr "Шлюз"
+msgstr ""
 
 #: curses/prefs_curses.py:50 data/wicd.ui:1028
 msgid "General Settings"
-msgstr "Жалпы баптаулар"
+msgstr ""
 
 #: wicd/misc.py:87
 msgid "Generating PSK..."
-msgstr "PSK генерациялау..."
+msgstr ""
 
 #: wicd/misc.py:88
 msgid "Generating WPA configuration file..."
-msgstr "WPA баптаулар файлын құру..."
+msgstr ""
 
 #: gtk/netentry.py:234
 msgid "Global DNS has not been enabled in general preferences."
-msgstr "Глобалды DNS жалпы баптауларды қосылмаған."
+msgstr ""
 
 #: curses/prefs_curses.py:72
 msgid "Global DNS servers"
-msgstr "Глобалды DNS серверлері"
+msgstr ""
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
@@ -355,16 +346,16 @@ msgstr ""
 
 #: gtk/gui.py:418
 msgid "Hidden Network ESSID"
-msgstr "Жасырын желі ESSID-і"
+msgstr ""
 
 #: curses/netentry_curses.py:50 curses/wicd-curses.py:462 gtk/gui.py:266
 #: gtk/netentry.py:74
 msgid "IP"
-msgstr "IP"
+msgstr ""
 
 #: wicd/translations.py:79
 msgid "Identity"
-msgstr "Идентификация"
+msgstr ""
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
@@ -372,15 +363,15 @@ msgstr ""
 
 #: gtk/netentry.py:168
 msgid "Invalid IP address entered."
-msgstr "Енгізілген IP қате."
+msgstr ""
 
 #: gtk/gui.py:691 gtk/gui.py:699
 msgid "Invalid address in $A entry."
-msgstr "$A жолындағы адресі қате."
+msgstr ""
 
 #: curses/wicd-curses.py:464 gtk/gui.py:269 wicd/translations.py:80
 msgid "Key"
-msgstr "Кілт"
+msgstr ""
 
 #: wicd/translations.py:81
 msgid "Key index"
@@ -392,11 +383,11 @@ msgstr ""
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
-msgstr "Желі маскасы"
+msgstr ""
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
-msgstr "Желі интерфейстері:"
+msgstr ""
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
@@ -404,23 +395,23 @@ msgstr ""
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
-msgstr "Сымсыз желілер табылмады"
+msgstr ""
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
 msgid "Not connected"
-msgstr "Байланыс орнатылмаған"
+msgstr ""
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
 #: curses/wicd-curses.py:490 curses/wicd-curses.py:650
 #: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
-msgstr "ОК"
+msgstr ""
 
 #: wicd/misc.py:93
 msgid "Obtaining IP address..."
-msgstr "IP адресті алу..."
+msgstr ""
 
 #: curses/wicd-curses.py:278
 msgid ""
@@ -431,11 +422,6 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
-"Сіз \"beforescript\", \"afterscript\", және \"disconnectscript\" "
-"айнымалыларын сәйкесінше байланыс орнатылғанға дейін, кейін және үзілгеннен "
-"кейін орындалатын скриптерді баптау үшін қолдана аласыз. Есіңізде сақтаңыз, "
-"скриптерге дейінгі толық жол көрсетілу керек. Скриптердің құрамасын бөлек "
-"қосу/түзету керек. Көбірек білу үшін wicd нұсқау құжатын оқыңыз."
 
 #: wicd/translations.py:82
 msgid "Passphrase"
@@ -443,7 +429,7 @@ msgstr ""
 
 #: wicd/translations.py:83
 msgid "Password"
-msgstr "Пароль"
+msgstr ""
 
 #: wicd/translations.py:84
 msgid "Path to CA cert"
@@ -451,7 +437,7 @@ msgstr ""
 
 #: wicd/translations.py:86
 msgid "Path to PAC file"
-msgstr "PAC файлына жол"
+msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to client cert"
@@ -459,7 +445,7 @@ msgstr ""
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
-msgstr "Байланыстан кейін тұрақты шлюздарды пингілеу"
+msgstr ""
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
@@ -467,27 +453,27 @@ msgstr ""
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
-msgstr "Баптаулар"
+msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Preferences dialog"
-msgstr "Баптаулар сұхбаты"
+msgstr ""
 
 #: curses/wicd-curses.py:610
 msgid "Prefs"
@@ -511,19 +497,19 @@ msgstr ""
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
-msgstr "Сымды желіге қосылған кезде профильді сұрау"
+msgstr ""
 
 #: gtk/netentry.py:59 gtk/netentry.py:61 gtk/netentry.py:670
 msgid "Properties"
-msgstr "Баптаулар"
+msgstr ""
 
 #: wicd/misc.py:89
 msgid "Putting interface down..."
-msgstr "Интерфейсті сөндіру..."
+msgstr ""
 
 #: wicd/misc.py:90
 msgid "Putting interface up..."
-msgstr "Интерфейсті іске қосу..."
+msgstr ""
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
@@ -543,7 +529,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
-msgstr "Желілер тізімін жаңарту"
+msgstr ""
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
@@ -555,16 +541,16 @@ msgstr ""
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
-msgstr "Сымды желі профильдің атын ауыстыру"
+msgstr ""
 
 #: curses/netentry_curses.py:333 curses/netentry_curses.py:467 gtk/gui.py:754
 #: gtk/netentry.py:425 gtk/netentry.py:597
 msgid "Required encryption information is missing."
-msgstr "Керек шифрлеу ақпараты жоқ болып тұр."
+msgstr ""
 
 #: wicd/misc.py:92
 msgid "Resetting IP address..."
-msgstr "IP адресін тастау..."
+msgstr "Restableciendo dirección IP..."
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
@@ -572,64 +558,63 @@ msgstr ""
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
-msgstr "Бағдарлау кестесін тазарту"
+msgstr ""
 
 #: curses/wicd-curses.py:677
 msgid "Scan"
-msgstr "Іздеу"
+msgstr ""
 
 #: curses/wicd-curses.py:221
 msgid "Scan for hidden networks"
-msgstr "Жасырын желілерді іздеу"
+msgstr ""
 
 #: gtk/gui.py:224 gtk/gui.py:589 gtk/wicd-client.py:810
 msgid "Scanning"
-msgstr "Ізделуде"
+msgstr ""
 
 #: curses/wicd-curses.py:574
 msgid "Scanning networks... stand by..."
-msgstr "Желілер ізделуде...күте тұрыңыз..."
+msgstr ""
 
 #: gtk/netentry.py:102
 msgid "Scripts"
-msgstr "Скриптер"
+msgstr ""
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
-msgstr "Домен іздеу"
+msgstr ""
 
 #: gtk/netentry.py:1032 gtk/netentry.py:1154
 msgid "Secured"
-msgstr "Қорғалған"
+msgstr ""
 
 #: curses/wicd-curses.py:677
 msgid "Select Hidden Network ESSID"
-msgstr "Жасырын желінің ESSID-ін таңдаңыз"
+msgstr ""
 
 #: gtk/gui.py:103
 msgid "Select or create a wired profile to connect with"
 msgstr ""
-"Байланысты орнату үшін сымды желі профилін таңдаңыз не жаңа профильді құрыңыз"
 
 #: curses/wicd-curses.py:222
 msgid "Select scripts"
-msgstr "Таңдалған скриптер"
+msgstr ""
 
 #: curses/wicd-curses.py:223
 msgid "Set up Ad-hoc network"
-msgstr "Ad-hoc желісін жасау"
+msgstr ""
 
 #: wicd/misc.py:94
 msgid "Setting broadcast address..."
-msgstr "Кеңтаралым адресін орнату..."
+msgstr ""
 
 #: wicd/misc.py:95
 msgid "Setting static DNS servers..."
-msgstr "Тұрақты DNS серверлерін орнату..."
+msgstr ""
 
 #: wicd/misc.py:96
 msgid "Setting static IP addresses..."
-msgstr "Тұрақты IP адрестерін орнату..."
+msgstr ""
 
 #: gtk/prefs.py:333 data/wicd.ui:581
 msgid "Show never connect networks"
@@ -637,11 +622,11 @@ msgstr ""
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Автоқосылу туралы хабарлама көрсетуді уақытша тоқтату"
+msgstr ""
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr "Байланыс орнатуды тоқтату"
+msgstr ""
 
 #: gtk/gui.py:376
 msgid "Switch Off Wi-Fi"
@@ -661,20 +646,18 @@ msgstr ""
 
 #: curses/wicd-curses.py:93
 msgid "Terminated by user"
-msgstr "Пайдаланушымен тоқтатылды"
+msgstr ""
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
 "The wicd daemon has shut down. The UI will not function properly until it is "
 "restarted."
 msgstr ""
-"Wicd қызметі сөнді, ол қосылғанша басқару графикалық сайманы дұрыс жұмыс "
-"істемейді."
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
 #: gtk/netentry.py:608
 msgid "This network requires encryption to be enabled."
-msgstr "Бұл желі шифрлеуді қосуды талап етеді."
+msgstr ""
 
 #: curses/wicd-curses.py:272
 msgid ""
@@ -683,30 +666,22 @@ msgid ""
 "open the \"$A\" config file, and look for the section labeled by the $B in "
 "question. In this case, this is:"
 msgstr ""
-"Мүмкін мәселелерге жол бермеу үшін, wicd-curses скриптерді тура түзете "
-"алмайды. Бірақта, сіз оларды қолмен түзете аласыз. Біріншіден (root атынан) "
-"\"$A\" баптаулар файлын ашып, $B деп аталатын керек секцияны іздеңіз. Қазір, "
-"ол"
 
 #: gtk/netentry.py:707
 msgid ""
 "To connect to a wired network, you must create a network profile. To create "
 "a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"Сымды желіге байланыс орнату үшін желі профилін құру керек. Жасау үшін, "
-"желіні сипаттайтын атын енгізіп, Қосу батырмасын басыңыз."
 
 #: gtk/wicd-client.py:94
 msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from DBus. "
 "Please check that your user is in the $A group."
 msgstr ""
-"Wicd қызметімен байланысты орнату сәтсіз, DBus рұқсат жоқ деген жауапты "
-"қайтарды. DBus баптауларын тексеріңіз."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:1034 gtk/netentry.py:1156
 msgid "Unsecured"
-msgstr "Қауіпсіз емес"
+msgstr ""
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
@@ -715,72 +690,72 @@ msgstr ""
 #: curses/netentry_curses.py:255 curses/netentry_curses.py:373
 #: gtk/netentry.py:341 gtk/netentry.py:467
 msgid "Use Encryption"
-msgstr "Шифрлеуді қолдану"
+msgstr ""
 
 #: curses/wicd-curses.py:466 gtk/gui.py:264
 msgid "Use Encryption (WEP only)"
-msgstr "Шифрлеуді қолдану (тек WEP):"
+msgstr ""
 
 #: curses/netentry_curses.py:54 gtk/netentry.py:89
 msgid "Use Static DNS"
-msgstr "Тұрақты DNS қолдану"
+msgstr ""
 
 #: curses/netentry_curses.py:49 gtk/netentry.py:88
 msgid "Use Static IPs"
-msgstr "Тұрақты IP адрестерін қолдану"
+msgstr ""
 
 #: curses/netentry_curses.py:249 gtk/netentry.py:708
 msgid "Use as default profile (overwrites any previous default)"
-msgstr "Негізгі профиль ретінде қолдану (алдыңғысын алмастырады)"
+msgstr ""
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1500
 msgid "Use dBm to measure signal strength"
-msgstr "Желі деңгейін өлшеу үшін dBm қолдану"
+msgstr ""
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "Сымды желіге қосылу кезінде негізгі профилді қолдану"
+msgstr ""
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:892
 msgid "Use global DNS servers"
-msgstr "Глобалды DNS серверлерін қолдану"
+msgstr ""
 
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
-msgstr "Сымды желіге автоқосылғанда соңғы қолданған профильді қолдану"
+msgstr ""
 
 #: curses/netentry_curses.py:372 gtk/netentry.py:468
 msgid "Use these settings for all networks sharing this essid"
-msgstr "Бұл essid қолданатын барлық желілер үшін осы баптауларды қолдану"
+msgstr ""
 
 #: wicd/translations.py:90
 msgid "Username"
-msgstr "Пайдаланушы аты"
+msgstr ""
 
 #: wicd/misc.py:98
 msgid "Validating authentication..."
-msgstr "Аутентификациядан өту..."
+msgstr ""
 
 #: wicd/misc.py:99
 msgid "Verifying access point association..."
-msgstr "Рұқсат нүктесін тексеру..."
+msgstr ""
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
-msgstr "WPA Supplicant"
+msgstr ""
 
 #: curses/wicd-curses.py:576
 msgid "Wicd Curses Interface"
-msgstr "Wicd Curses интерфейсі"
+msgstr ""
 
 #: gtk/wicd-client.py:226 gtk/wicd-client.py:333
 msgid "Wicd daemon unreachable"
-msgstr "Wicd қызметі жауап қайтармайды"
+msgstr ""
 
 #: wicd/misc.py:209
 msgid "Wicd needs to access your computer's network cards."
-msgstr "Wicd үшін компьютеріңіздің желілік карталарына рұқсат керек."
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -792,28 +767,28 @@ msgstr ""
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
-msgstr "Сымды желіге автоқосылу баптаулары"
+msgstr ""
 
 #: curses/prefs_curses.py:67
 msgid "Wired Interface"
-msgstr "Сымды желі интерфейсі"
+msgstr ""
 
 #: curses/prefs_curses.py:99
 msgid "Wired Link Detection"
-msgstr "Сымды желі анықталды"
+msgstr ""
 
 #: curses/wicd-curses.py:802 gtk/gui.py:534 gtk/netentry.py:333
 #: gtk/netentry.py:701 gtk/wicd-client.py:268 gtk/wicd-client.py:309
 msgid "Wired Network"
-msgstr "Сымды желі"
+msgstr ""
 
 #: curses/wicd-curses.py:581
 msgid "Wired Networks"
-msgstr "Сымды желілер"
+msgstr ""
 
 #: gtk/gui.py:97
 msgid "Wired connection detected"
-msgstr "Сымды желі байланысы табылды"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""
@@ -824,35 +799,33 @@ msgid ""
 "Strength:\n"
 "RX:\n"
 "TX:"
-msgstr "Сымсыз SSID: Жылдамдығы: IP: Әлі: RX: TX:"
+msgstr ""
 
 #: curses/prefs_curses.py:68 curses/prefs_curses.py:120
 msgid "Wireless Interface"
-msgstr "Сымсыз желі интерфейсі"
+msgstr ""
 
 #: gtk/gui.py:662 gtk/wicd-client.py:224 gtk/wicd-client.py:336
 msgid "Wireless Kill Switch Enabled"
-msgstr "Сымсыз Kill Switch қосулы тұр"
+msgstr ""
 
 #: curses/wicd-curses.py:583
 msgid "Wireless Networks"
-msgstr "Сымсыз желілер"
+msgstr ""
 
 #: curses/wicd-curses.py:277
 msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"Сонымен қатар сіз сымсыз желілерді қолмен де баптаулар файлының ішінде "
-"\"[<ESSID>]\" жолын іздеу арқылы баптай аласыз."
 
 #: gtk/netentry.py:376 gtk/netentry.py:519
 msgid "You must enter your password to configure scripts"
-msgstr "Скриптерді баптау үшін өзіңіздің пароліңізді енгізіңіз"
+msgstr ""
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "Сізге әрқашан WPA supplicant драйвері ретінде wext қолдану керек"
+msgstr ""
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
@@ -867,8 +840,6 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
-"wicd-curses соңғы қолданған сымды желі профилін өшіруді қолдамайды. Оның "
-"атын ауыстырып көріңіз ('F2')"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -900,7 +871,7 @@ msgstr ""
 
 #: data/wicd.ui:104
 msgid "_Disconnect All"
-msgstr "Байланыспаған"
+msgstr ""
 
 #: data/wicd.ui:118
 msgid "_Refresh"
@@ -908,7 +879,7 @@ msgstr ""
 
 #: data/wicd.ui:132
 msgid "_Preferences"
-msgstr "Баптаулар"
+msgstr ""
 
 #: data/wicd.ui:146
 msgid "_About"
@@ -916,7 +887,7 @@ msgstr ""
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
-msgstr "Байланыс орнатуды аяқтау..."
+msgstr "Conectando..."
 
 #: data/wicd.ui:238
 msgid "Cancel the current connection attempt"
@@ -924,7 +895,7 @@ msgstr ""
 
 #: data/wicd.ui:270
 msgid "Configure Scripts"
-msgstr "Жалғастыру скрипті"
+msgstr ""
 
 #: data/wicd.ui:289
 msgid "Configure scripts to run for this network:"
@@ -932,23 +903,23 @@ msgstr ""
 
 #: data/wicd.ui:306
 msgid "Pre-connection Script:"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:339
 msgid "Post-connection Script:"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:372
 msgid "Pre-disconnection Script:"
-msgstr "Байланысты үзу алдындағы скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:405
 msgid "Post-disconnection Script:"
-msgstr "Байланыс үзілгеннен кейінгі скрипті орындау"
+msgstr ""
 
 #: data/wicd.ui:524
 msgid "Always switch to a wired connection when available"
-msgstr "Мүмкін болса, әрқашан сымды желіге байланыс орнату"
+msgstr ""
 
 #: data/wicd.ui:529
 msgid ""
@@ -959,7 +930,7 @@ msgstr ""
 
 #: data/wicd.ui:552
 msgid "DNS domain:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:600
 msgid "<b>Never Connect</b>"
@@ -967,15 +938,15 @@ msgstr ""
 
 #: data/wicd.ui:616
 msgid "Automatically reconnect on network connection loss"
-msgstr "Байланыс жоғалса қайта автоқосылу"
+msgstr ""
 
 #: data/wicd.ui:635
 msgid "<b>Automatic Reconnection</b>"
-msgstr "<b>Автоматты қайта қосылу</b>"
+msgstr ""
 
 #: data/wicd.ui:651
 msgid "Use last wired network profile"
-msgstr "Сымды желі профильдің атын ауыстыру"
+msgstr ""
 
 #: data/wicd.ui:673
 msgid "Prompt for wired network profile"
@@ -983,43 +954,43 @@ msgstr ""
 
 #: data/wicd.ui:696
 msgid "Use default wired network profile"
-msgstr "Сымды желі профильдің атын ауыстыру"
+msgstr ""
 
 #: data/wicd.ui:717
 msgid "<b>Wired automatic connection</b>"
-msgstr "Автоматты қайта қосылу"
+msgstr ""
 
 #: data/wicd.ui:735
 msgid "Wired interface:"
-msgstr "Сымды желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:753
 msgid "Wireless interface:"
-msgstr "Сымсыз желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:793
 msgid "<b>Network Interfaces</b>"
-msgstr "Желі интерфейстері:"
+msgstr ""
 
 #: data/wicd.ui:809
 msgid "DNS server 3:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:840
 msgid "DNS server 2:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:858
 msgid "DNS server 1:"
-msgstr "DNS сервері"
+msgstr ""
 
 #: data/wicd.ui:876
 msgid "Search domain:"
-msgstr "Домен іздеу"
+msgstr ""
 
 #: data/wicd.ui:911
 msgid "<b>Global DNS Servers</b>"
-msgstr "Глобалды DNS серверлері"
+msgstr ""
 
 #: data/wicd.ui:970
 msgid ""
@@ -1030,15 +1001,15 @@ msgstr ""
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
-msgstr "<b>Хабарламалар</b>"
+msgstr ""
 
 #: data/wicd.ui:1060
 msgid "<b>Route Table Flushing</b>"
-msgstr "Бағдарлау кестесін тазарту"
+msgstr ""
 
 #: data/wicd.ui:1073
 msgid "<b>Wired Link Detection</b>"
-msgstr "Сымды желі анықталды"
+msgstr ""
 
 #: data/wicd.ui:1299
 msgid "<b>DHCP Client</b>"
@@ -1060,7 +1031,7 @@ msgstr ""
 
 #: data/wicd.ui:1540
 msgid "<b>Wireless Interface</b>"
-msgstr "Сымсыз желі интерфейсі"
+msgstr ""
 
 #: data/wicd.ui:1554
 msgid "<b>WPA Supplicant</b>"
@@ -1068,11 +1039,11 @@ msgstr ""
 
 #: data/wicd.ui:1566
 msgid "<b>Debugging</b>"
-msgstr "Жөндеу режимі"
+msgstr ""
 
 #: data/wicd.ui:1584
 msgid "Backend:"
-msgstr "Басқару сайманы"
+msgstr ""
 
 #: data/wicd.ui:1611
 msgid "<b>Backend</b>"
@@ -1082,4 +1053,4 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "Сізге әрқашан WPA supplicant драйвері ретінде wext қолдану керек"
+msgstr ""

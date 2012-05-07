@@ -9,11 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-01-17 22:24+0000\n"
 "Last-Translator: Dylandy <Unknown>\n"
 "Language-Team: zh_TW <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -119,8 +118,8 @@ msgstr "無法連接 daemon。嘗試自動啟動它..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "取消"
 
@@ -226,7 +225,8 @@ msgid ""
 "DBus failure! This is most likely caused by the wicd daemon stopping while "
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
-msgstr "DBus 錯誤！可能是因為wicd-curses正在執行導致wicd daemon停止執行。請重新啟動daemon，再開啟wicd-curses即可。"
+msgstr ""
+"DBus 錯誤！可能是因為wicd-curses正在執行導致wicd daemon停止執行。請重新啟動daemon，再開啟wicd-curses即可。"
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -413,8 +413,8 @@ msgstr "未連線"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "確定"
 
@@ -425,12 +425,11 @@ msgstr "獲取IP地址中..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:82
@@ -660,8 +659,8 @@ msgstr "操作被使用者中止"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr "Wicd daemon 已被關閉。只有重新啟動 daemon 才能讓使用者介面正常運作"
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
@@ -672,15 +671,15 @@ msgstr "此網路需要加密才能連結。"
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr "要連線到有線網路，您必需建立一個網路設定檔。要建立網路設定檔，請鍵入描述此網路的名稱，然後按下 Add"
 
 #: gtk/wicd-client.py:94
@@ -851,8 +850,8 @@ msgstr ""
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -1008,9 +1007,9 @@ msgstr "全域 DNS 主機"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:986
@@ -1068,4 +1067,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr ""
-

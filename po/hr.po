@@ -9,12 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-01-17 22:21+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: hr <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -120,8 +118,8 @@ msgstr ""
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Poništi"
 
@@ -211,8 +209,8 @@ msgid ""
 "Could not connect to wicd's D-Bus interface. Check the wicd log for error "
 "messages."
 msgstr ""
-"Ne mogu se spojjiti na wicd-ovo D-Bus sučelje.Provjeravam wicd zapis "
-"tražeći poruke o greškama."
+"Ne mogu se spojjiti na wicd-ovo D-Bus sučelje.Provjeravam wicd zapis tražeći "
+"poruke o greškama."
 
 #: gtk/netentry.py:379 gtk/netentry.py:522
 msgid ""
@@ -418,8 +416,8 @@ msgstr "Nije povezan"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "OK"
 
@@ -430,12 +428,11 @@ msgstr "Dobivanje IP adrese..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 
 #: wicd/translations.py:82
@@ -665,8 +662,8 @@ msgstr "Prekinuo korisnik"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
@@ -677,23 +674,22 @@ msgstr "Da bi bila omogućena ova mreža zahtjeva enkripciju."
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"Da bi se izbjegle različite komplikacije,wicd-curses ne podržava uređivanje"
-" skripti.Ipak,možete ih urediti ručno.Prvo ( kao korijenski korisnik) "
-"otvorite \"$A\" configuracijsku datoteku,i tražite sekciju označenu sa  $B "
-"u pitanju.U tom slučaju ovo je:"
+"Da bi se izbjegle različite komplikacije,wicd-curses ne podržava uređivanje "
+"skripti.Ipak,možete ih urediti ručno.Prvo ( kao korijenski korisnik) "
+"otvorite \"$A\" configuracijsku datoteku,i tražite sekciju označenu sa  $B u "
+"pitanju.U tom slučaju ovo je:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"Za spajanje na žičnu mrežu,morate napraviti mrežni profil.Da biste "
-"napravili mrežni profil,upišite ime koje opisuje ovu mrežu,i pritisnite "
-"Dodaj"
+"Za spajanje na žičnu mrežu,morate napraviti mrežni profil.Da biste napravili "
+"mrežni profil,upišite ime koje opisuje ovu mrežu,i pritisnite Dodaj"
 
 #: gtk/wicd-client.py:94
 msgid ""
@@ -872,8 +868,8 @@ msgstr "_Isključi"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 
 #: curses/wicd-curses.py:205
@@ -1032,13 +1028,13 @@ msgstr "<b>Globalni DNS poslužitelji</b>"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 "Ako je omogućeno,žično mrežno sučelje će uvijek biti prikazano u glavnom "
-"prozoru.Ovo može biti korisno ako vaša mrežna kartica nije otkrivena kada "
-"je sučelje spojeno na kabel."
+"prozoru.Ovo može biti korisno ako vaša mrežna kartica nije otkrivena kada je "
+"sučelje spojeno na kabel."
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
@@ -1096,3 +1092,5 @@ msgid ""
 "WPA supplicant driver."
 msgstr ""
 
+#~ msgid "Help)"
+#~ msgstr "Pomoć)"

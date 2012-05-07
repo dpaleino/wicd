@@ -9,11 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-01-26 18:50+0000\n"
 "Last-Translator: Willem van de Krol <Unknown>\n"
 "Language-Team: nl <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -121,8 +120,8 @@ msgstr ""
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -201,7 +200,8 @@ msgstr "Verbinding gemaakt"
 
 #: wicd/misc.py:80
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "Verbinding mislukt: kon geen contact maken met draadloos toegangspunt."
+msgstr ""
+"Verbinding mislukt: kon geen contact maken met draadloos toegangspunt."
 
 #: wicd/misc.py:97
 msgid "Connection successful."
@@ -220,8 +220,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Kon geen grafische sudo-applicatie vinden. De script-editor kon niet worden"
-" gestart. Aanpassingen aan de scripts moeten rechtstreeks in het "
+"Kon geen grafische sudo-applicatie vinden. De script-editor kon niet worden "
+"gestart. Aanpassingen aan de scripts moeten rechtstreeks in het "
 "configuratiebestand aangebracht worden."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
@@ -301,8 +301,8 @@ msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
-"FOUT: wicd-curses werd de toegang tot de wicd-daemon geweigerd: ga na of uw"
-" account wel lid is van de groep \"$A\"."
+"FOUT: wicd-curses werd de toegang tot de wicd-daemon geweigerd: ga na of uw "
+"account wel lid is van de groep \"$A\"."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:267 gtk/gui.py:327
 msgid "ESSID"
@@ -424,8 +424,8 @@ msgstr "Niet verbonden"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "OK"
 
@@ -436,12 +436,11 @@ msgstr "IP-adres verkrijgen..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Op die plek kunnen de variabelen 'beforescript', 'afterscript' en "
 "'disconnectscript' naar behoefte toegevoegd of aangepast worden. Daarmee "
@@ -472,7 +471,8 @@ msgstr "Pad naar client-certificaat"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
-msgstr "Verbinding verifiëren door na het verbinden statische gateways te pingen"
+msgstr ""
+"Verbinding verifiëren door na het verbinden statische gateways te pingen"
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
@@ -677,8 +677,8 @@ msgstr "Afgebroken door gebruiker"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "De wicd-daemon is gestopt. De gebruikersinterface zal niet goed werken "
 "totdat de daemon weer is gestart."
@@ -691,23 +691,22 @@ msgstr "Dit netwerk vereist versleuteling."
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 "Om diverse problemen te voorkomen wordt het rechtstreeks aanpassen van "
 "scripts door wicd-curses niet ondersteund. Ze kunnen wel handmatig worden "
-"aangepast. Open daarvoor eerst (als root) het configuratiebestand \"$A\" en"
-" zoek de sectie op die is gelabeld door de $B in kwestie. In dit geval is "
-"dat:"
+"aangepast. Open daarvoor eerst (als root) het configuratiebestand \"$A\" en "
+"zoek de sectie op die is gelabeld door de $B in kwestie. In dit geval is dat:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
-"Om een verbinding te maken met een bekabeld netwerk moet een netwerkprofiel"
-" worden aangemaakt. Geef een beschrijvende netwerknaam op, en klik op "
+"Om een verbinding te maken met een bekabeld netwerk moet een netwerkprofiel "
+"worden aangemaakt. Geef een beschrijvende netwerknaam op, en klik op "
 "'Toevoegen'."
 
 #: gtk/wicd-client.py:94
@@ -715,8 +714,8 @@ msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from DBus. "
 "Please check that your user is in the $A group."
 msgstr ""
-"Kon geen contact maken met de wicd-daemon doordat de toegang door D-Bus "
-"werd geweigerd. Ga na of u lid bent van de $A groep."
+"Kon geen contact maken met de wicd-daemon doordat de toegang door D-Bus werd "
+"geweigerd. Ga na of u lid bent van de $A groep."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:1034 gtk/netentry.py:1156
 msgid "Unsecured"
@@ -870,8 +869,8 @@ msgid ""
 "You can also configure the wireless networks by looking for the "
 "\"[<ESSID>]\" field in the config file."
 msgstr ""
-"De draadloze netwerken kunnen ook ingesteld worden door het "
-"\"[<ESSID>]\"-veld in het configuratiebestand op te zoeken."
+"De draadloze netwerken kunnen ook ingesteld worden door het \"[<ESSID>]\"-"
+"veld in het configuratiebestand op te zoeken."
 
 #: gtk/netentry.py:376 gtk/netentry.py:519
 msgid "You must enter your password to configure scripts"
@@ -891,8 +890,8 @@ msgstr "Afsluiten"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 "Het verwijderen van het laatste bekabelde netwerkprofiel wordt niet door "
 "wicd-curses ondersteund. Probeer het te hernoemen (\"F2\")"
@@ -1053,9 +1052,9 @@ msgstr "<b>Globale DNS-servers</b>"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 "Indien ingeschakeld zal de bekabelde netwerkadapter altijd worden "
 "weergegeven in het hoofdvenster. Dit kan handig zijn als de bekabelde "
@@ -1122,3 +1121,5 @@ msgstr ""
 "Meestal is 'wext' het juiste stuurprogramma\n"
 "voor WPA-supplicant."
 
+#~ msgid "Help)"
+#~ msgstr "Help)"

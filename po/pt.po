@@ -9,11 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-03-02 04:00+0000\n"
 "Last-Translator: Nuno Messeder Ferreira <neocentaurus@gmail.com>\n"
 "Language-Team: pt <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -119,8 +118,8 @@ msgstr "Impossível ligar ao daemon, a tentar iniciá-lo automáticamente..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -218,8 +217,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Não foi possível encontrar um programa gráfico sudo. O editor de script não"
-" pôde ser lançado. Terá de editar os scripts directamente do ficheiro de "
+"Não foi possível encontrar um programa gráfico sudo. O editor de script não "
+"pôde ser lançado. Terá de editar os scripts directamente do ficheiro de "
 "configuração"
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
@@ -423,8 +422,8 @@ msgstr "Não está ligado"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "OK"
 
@@ -435,20 +434,19 @@ msgstr "A obter o endereço IP..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Uma vez nessa posição, poderá ajustar (ou adicionar) as variáveis "
 "\"beforescript\", \"afterscript\" e \"disconnectscript\" conforme "
-"necessário, de forma a alterar os scripts \"preconnect\", \"postconnect\" e"
-" \"disconnect\" respectivamente. Note que está a especificar o caminho "
+"necessário, de forma a alterar os scripts \"preconnect\", \"postconnect\" e "
+"\"disconnect\" respectivamente. Note que está a especificar o caminho "
 "completo para os scripts e não o conteúdo dos mesmos. Necessitará de "
-"adicionar/editar o conteúdo dos scripts separadamente. Para mais "
-"informações consultar a página do manual do wicd."
+"adicionar/editar o conteúdo dos scripts separadamente. Para mais informações "
+"consultar a página do manual do wicd."
 
 #: wicd/translations.py:82
 msgid "Passphrase"
@@ -649,7 +647,8 @@ msgstr "Mostrar redes da lista nunca ligar"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Parar de exibir a janela de restabelecimento de ligação (temporariamente)"
+msgstr ""
+"Parar de exibir a janela de restabelecimento de ligação (temporariamente)"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
@@ -677,11 +676,11 @@ msgstr "Terminado pelo utilizador"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
-"O daemon wicd foi desligado. O UI não funcionará correctamente até que este"
-" seja reiniciado."
+"O daemon wicd foi desligado. O UI não funcionará correctamente até que este "
+"seja reiniciado."
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
 #: gtk/netentry.py:608
@@ -691,19 +690,19 @@ msgstr "Esta rede requer criptografia para ser activada"
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 "De forma a evitar complicações várias, o wicd-curses não suporta a edição "
-"directa de scripts. Contudo pode editá-los manualmente. Primeiramente, como"
-" root, abra o ficheiro de configuração \"$A\" e procure a secção denominada"
-" pelo $B em questão. Neste caso:"
+"directa de scripts. Contudo pode editá-los manualmente. Primeiramente, como "
+"root, abra o ficheiro de configuração \"$A\" e procure a secção denominada "
+"pelo $B em questão. Neste caso:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Para efectuar a ligação a uma rede com fios deverá ser criado um perfil de "
 "rede. Para tal, escreva um nome que descreva a rede e prima adicionar"
@@ -743,7 +742,8 @@ msgstr "Utilizar IP estático"
 
 #: curses/netentry_curses.py:249 gtk/netentry.py:708
 msgid "Use as default profile (overwrites any previous default)"
-msgstr "Utilizar como perfil por defeito (sobrepõe qualquer valor por defeito)"
+msgstr ""
+"Utilizar como perfil por defeito (sobrepõe qualquer valor por defeito)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1500
 msgid "Use dBm to measure signal strength"
@@ -751,7 +751,8 @@ msgstr "Usar dBm para medir a potência do sinal"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "Usar perfil padrão para restabelecimento automático da ligação com fios"
+msgstr ""
+"Usar perfil padrão para restabelecimento automático da ligação com fios"
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:892
@@ -884,11 +885,11 @@ msgstr "_Sair"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
-"O wicd-curses não suporta a eliminação o último perfil de ligação com fios."
-" Tente mudar-lhe o nome."
+"O wicd-curses não suporta a eliminação o último perfil de ligação com fios. "
+"Tente mudar-lhe o nome."
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
@@ -1046,13 +1047,13 @@ msgstr "Servidores de DNS Globais"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
-"Se ativo, a interface de rede com fios aparecerá sempre na janela "
-"principal. Isto pode ser útil se a sua placa com fios não deteta quando um "
-"cabo lhe é ligado."
+"Se ativo, a interface de rede com fios aparecerá sempre na janela principal. "
+"Isto pode ser útil se a sua placa com fios não deteta quando um cabo lhe é "
+"ligado."
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
@@ -1114,3 +1115,5 @@ msgstr ""
 "O driver wext deverá ser utilizado preferencialmente como o driver de WPA "
 "supplicant"
 
+#~ msgid "Help)"
+#~ msgstr "Ajuda)"

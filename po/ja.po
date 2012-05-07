@@ -6,14 +6,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-04-15 06:23+0000\n"
+"PO-Revision-Date: 2012-05-06 21:09+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: ja <LL@li.org>\n"
-"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -119,8 +118,8 @@ msgstr "デーモンを起動できなかったので、自動起動を試みま
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -417,8 +416,8 @@ msgstr "接続していません"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "はい"
 
@@ -429,16 +428,16 @@ msgstr "IP アドレスを取得しています……"
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "必要であれば、\"beforescript\"、\"afterscript\" および \"disconnectscript\" "
-"の変数を変更または追加することができます。これらは接続前、接続後、および切断時に実行するスクリプトを変更する変数です。これらの変数には実際のスクリプトの中身ではなく、スクリプトへのフルパスを記述するように注意してください。これらのスクリプトは別々に追加・編集する必要があります。詳細は"
-" wicd のマニュアルを参照してください。"
+"の変数を変更または追加することができます。これらは接続前、接続後、および切断時に実行するスクリプトを変更する変数です。これらの変数には実際のスクリプトの中"
+"身ではなく、スクリプトへのフルパスを記述するように注意してください。これらのスクリプトは別々に追加・編集する必要があります。詳細は wicd "
+"のマニュアルを参照してください。"
 
 #: wicd/translations.py:82
 msgid "Passphrase"
@@ -667,8 +666,8 @@ msgstr "ユーザによって切断されました"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr "wicd デーモンはシャットダウンしています。再起動するまで、この UI 設定は機能しません。"
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
@@ -679,9 +678,9 @@ msgstr "このネットワークを使用するには、暗号化を有効にす
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 "さまざまな問題を回避するために、wicd-curses "
 "ではスクリプト群を直接編集できないようになっていますが、手動で直接編集することは可能です。はじめに、(root として) \"$A\" "
@@ -689,8 +688,8 @@ msgstr ""
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "有線接続に接続するためには、ネットワークプロファイルを作成する必要があります。\r\n"
 "ネットワークプロファイルを作成するためには、設定名、ネットワークアドレスを入力し、追加ボタンを押します。"
@@ -878,8 +877,8 @@ msgstr "終了(_Q)"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr "wicd-curses は、最後に接続した有線接続を削除できません。('F2') の名前を変更してください"
 
 #: curses/wicd-curses.py:205
@@ -967,7 +966,8 @@ msgid ""
 "If selected, wicd will automatically connect to a wired network\n"
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
-msgstr "選択されているとき、既に無線接続されていても wicd はケーブルが差し込まれるとすぐに自動的にインターネットを利用しているネットワークに接続します。"
+msgstr ""
+"選択されているとき、既に無線接続されていても wicd はケーブルが差し込まれるとすぐに自動的にインターネットを利用しているネットワークに接続します。"
 
 #: data/wicd.ui:552
 msgid "DNS domain:"
@@ -1035,10 +1035,12 @@ msgstr "<b>グローバル DNS サーバ</b>"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
-msgstr "有効にした場合、有線ネットワーク用インターフェイスはメインウインドウに常に表示されます。これはインターフェイスがケーブルに接続された時、それを有線ネットワークカードが検知しない場合に便利です。"
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
+msgstr ""
+"有効にした場合、有線ネットワーク用インターフェイスはメインウインドウに常に表示されます。これはインターフェイスがケーブルに接続された時、それを有線ネットワ"
+"ークカードが検知しない場合に便利です。"
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
@@ -1097,4 +1099,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "WPA サプリカントドライバーとして wext を使用してください"
-

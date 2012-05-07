@@ -9,11 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-02-25 11:40+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: bg <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -110,8 +109,8 @@ msgstr "Връзка с wicd неустановена, опит за повто�
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Назад"
 
@@ -209,9 +208,9 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Няма намерена графична sudo програма. Редактора на скриптове не може да "
-"бъде стартиран. Ще трябва да редактирате скриптове директно в "
-"конфигурационния файл."
+"Няма намерена графична sudo програма. Редактора на скриптове не може да бъде "
+"стартиран. Ще трябва да редактирате скриптове директно в конфигурационния "
+"файл."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
 msgid "Create an Ad-Hoc Network"
@@ -414,8 +413,8 @@ msgstr "Няма връзка"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "Добре"
 
@@ -426,19 +425,18 @@ msgstr "Получаване на IP адрес..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Там можете да промените (или добавяне) \"beforescript\", \"afterscript\" и "
 "\"disconnectscript\" променливи, ако е необходимо, за да промените "
 "preconnect, postconnect и disconnect скриптове. Имайте предвид, че ще се "
 "посочва пълния път до скрипта - не самото съдържание на скрипта. Вие ще "
-"трябва да се добавите/редактирате съдържанието на скрипта отделно. Обърнете"
-" се към wicd ръководството за повече информация."
+"трябва да се добавите/редактирате съдържанието на скрипта отделно. Обърнете "
+"се към wicd ръководството за повече информация."
 
 #: wicd/translations.py:82
 msgid "Passphrase"
@@ -667,8 +665,8 @@ msgstr "Прекъсната от потребителя"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "Wicd демона не работи. Потребителският интерфейс няма да работа, докато "
 "демона не бъде рестартиран."
@@ -681,19 +679,19 @@ msgstr "Тази мрежа е защитена."
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"За да се избегнат различни усложнения, wicd интерфейса не поддържа директно"
-" редактиране на скриптовете. Въпреки това, можете да ги редактирате ръчно. "
+"За да се избегнат различни усложнения, wicd интерфейса не поддържа директно "
+"редактиране на скриптовете. Въпреки това, можете да ги редактирате ръчно. "
 "Първо, отворете конфигурационния файл \"$A\", и потърсете секцията $B. В "
 "този случай, това е:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "За да се свържете към кабелна мрежа, трябва да създадете мрежов профил. За "
 "да се създаде мрежов профил, въведете име, което описва тази мрежа, и "
@@ -784,8 +782,8 @@ msgstr "Wicd демона недостъпен"
 #: wicd/misc.py:209
 msgid "Wicd needs to access your computer's network cards."
 msgstr ""
-"За да работи коректно, Wicd трябва да има достъп до мрежовите карти на този"
-" компютър"
+"За да работи коректно, Wicd трябва да има достъп до мрежовите карти на този "
+"компютър"
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -869,8 +867,8 @@ msgstr ""
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 "Wicd интерфейса не позволява изтриване на единствения останал профил. Може "
 "да бъде преименуван ('F2')"
@@ -1028,9 +1026,9 @@ msgstr "Глобални DNS сървъри"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:986
@@ -1088,4 +1086,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Почти винаги трябва да се използва wext за WPA supplicant драйвер"
-

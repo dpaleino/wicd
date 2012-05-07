@@ -9,12 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-02-25 11:44+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: sr <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -107,12 +105,13 @@ msgstr "Омогућили су вам:"
 
 #: curses/wicd-curses.py:1089
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr "Не могу да се повежем са даемоном. Покушавам да га покренем аутоматски..."
+msgstr ""
+"Не могу да се повежем са даемоном. Покушавам да га покренем аутоматски..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Откажи"
 
@@ -210,8 +209,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"Не могу да пронађем графички \"sudo\" интерфејс. Едитор скрипти не може "
-"бити покренут. Морате мењати скрипте директно у конфигурационом фајлу."
+"Не могу да пронађем графички \"sudo\" интерфејс. Едитор скрипти не може бити "
+"покренут. Морате мењати скрипте директно у конфигурационом фајлу."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
 msgid "Create an Ad-Hoc Network"
@@ -223,8 +222,8 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
-"Грешка D-Bus-a! Ово је вероватно изазвано прекидом рада wicd даемона док је"
-" wicd-curses радио. Покрените поново даемона а затим и wicd-curses."
+"Грешка D-Bus-a! Ово је вероватно изазвано прекидом рада wicd даемона док је "
+"wicd-curses радио. Покрените поново даемона а затим и wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -411,8 +410,8 @@ msgstr "Неповезан"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "У реду"
 
@@ -423,12 +422,11 @@ msgstr "Узимам IP адресу..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Када сте ту, можете подешавати (или додавати) променљиве у „предскрипти“, "
 "„постскрипти“ и „скрипти искључивања“ да бисте мењали скрипте пред "
@@ -663,11 +661,11 @@ msgstr "Прекинуо корисник"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
-"Wicd демон је угашен. Кориснички интерфејс неће радити правилно док се "
-"демон не покрене поново."
+"Wicd демон је угашен. Кориснички интерфејс неће радити правилно док се демон "
+"не покрене поново."
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
 #: gtk/netentry.py:608
@@ -677,9 +675,9 @@ msgstr "Ова мрежа захтева да се укључи шифровањ
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 "Да би се избегле разне компликације, wicd-curses не подржава директно "
 "уређивање скрипти. Међутим, можете их уређивати ручно. Прво, (као root) "
@@ -688,8 +686,8 @@ msgstr ""
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 
 #: gtk/wicd-client.py:94
@@ -725,7 +723,8 @@ msgstr "Користи статички IP"
 
 #: curses/netentry_curses.py:249 gtk/netentry.py:708
 msgid "Use as default profile (overwrites any previous default)"
-msgstr "Користи као подразумевани профил (брише претходни подразумевани профил)"
+msgstr ""
+"Користи као подразумевани профил (брише претходни подразумевани профил)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1500
 msgid "Use dBm to measure signal strength"
@@ -858,8 +857,8 @@ msgstr ""
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 "wicd-curses не подржава брисање последњег жичног профила. Покушајте са "
 "преименовањем (F2)"
@@ -1017,9 +1016,9 @@ msgstr "Општи DNS сервери"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 
 #: data/wicd.ui:986
@@ -1077,4 +1076,3 @@ msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
 msgstr "Требало би готово увек да користите wext као драјвер WPA омогућивача"
-

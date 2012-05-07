@@ -4,18 +4,16 @@
 # Yuri Chornoivan <yurchor@gmail.com>, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version:  \n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
 "PO-Revision-Date: 2012-01-15 22:03+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@gmail.com>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -121,8 +119,8 @@ msgstr "Неможливо під’єднатись до служби, спро
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -201,7 +199,8 @@ msgstr "З’єднання встановлене"
 
 #: wicd/misc.py:80
 msgid "Connection failed: Could not contact the wireless access point."
-msgstr "З’єднання втрачено: неможливо з’єднатися з бездротовою точкою доступу."
+msgstr ""
+"З’єднання втрачено: неможливо з’єднатися з бездротовою точкою доступу."
 
 #: wicd/misc.py:97
 msgid "Connection successful."
@@ -234,9 +233,9 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
-"Помилка DBus! Можливо, це сталось через зупинку служби wicd під час запуску"
-" wicd-curses. Будь ласка перезапустіть службу wicd, після чого запустіть "
-"wicd-curses."
+"Помилка DBus! Можливо, це сталось через зупинку служби wicd під час запуску "
+"wicd-curses. Будь ласка перезапустіть службу wicd, після чого запустіть wicd-"
+"curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -302,8 +301,8 @@ msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
-"Помилка: програмі wicd-curses було відмовлено у доступі до служби wicd: "
-"будь ласка, перевірте приналежність вашого користувача до групи \"$A\"."
+"Помилка: програмі wicd-curses було відмовлено у доступі до служби wicd: будь "
+"ласка, перевірте приналежність вашого користувача до групи \"$A\"."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:267 gtk/gui.py:327
 msgid "ESSID"
@@ -425,8 +424,8 @@ msgstr "Не з’єднано"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "Гаразд"
 
@@ -437,12 +436,11 @@ msgstr "Отримання IP-адреси…"
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Тут ви можете налаштувати (або додати) змінні \"beforescript\", "
 "\"afterscript\" та \"disconnectscript\", щоб змінити сценарії preconnect, "
@@ -651,7 +649,8 @@ msgstr "Відключитись від усіх мереж"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Тимчасово призупинити показ контекстної підказки автоматичного з’єднання"
+msgstr ""
+"Тимчасово призупинити показ контекстної підказки автоматичного з’єднання"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
@@ -679,9 +678,10 @@ msgstr "Скасовано користувачем"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
-msgstr "Службу wicd було зупинено. Перезапустіть службу для відновлення роботи."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
+msgstr ""
+"Службу wicd було зупинено. Перезапустіть службу для відновлення роботи."
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
 #: gtk/netentry.py:608
@@ -691,19 +691,19 @@ msgstr "Ця мережа вимагає застосування шифрува
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
 "Для уникнення різноманітних ускладнень wicd-curses не підтримує прямого "
 "редагування сценаріїв. Однак ви можете редагувати їх власноруч. По перше, "
-"від імені root відкрийте файл налаштувань „$A“  та знайдіть секцію "
-"позначену $B (яка Вас цікавить). У цьому разі, це:"
+"від імені root відкрийте файл налаштувань „$A“  та знайдіть секцію позначену "
+"$B (яка Вас цікавить). У цьому разі, це:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Для з’єднання з дротовою мережею потрібно створити мережевий профіль. Для "
 "цього введіть назву, що характеризує цю мережу, та натисніть «Додати»."
@@ -713,9 +713,8 @@ msgid ""
 "Unable to contact the Wicd daemon due to an access denied error from DBus. "
 "Please check that your user is in the $A group."
 msgstr ""
-"Не вдається зв’язатися зі службою Wicd через відмову в доступі до шини "
-"DBus. Будь ласка, переконайтеся у приналежності вашого користувача до групи"
-" $A."
+"Не вдається зв’язатися зі службою Wicd через відмову в доступі до шини DBus. "
+"Будь ласка, переконайтеся у приналежності вашого користувача до групи $A."
 
 #: curses/wicd-curses.py:353 gtk/netentry.py:1034 gtk/netentry.py:1156
 msgid "Unsecured"
@@ -745,8 +744,7 @@ msgstr "Використати статичні IP-адреси"
 #: curses/netentry_curses.py:249 gtk/netentry.py:708
 msgid "Use as default profile (overwrites any previous default)"
 msgstr ""
-"Використовувати, як типовий профіль (перезапис попереднього типового "
-"профілю)"
+"Використовувати, як типовий профіль (перезапис попереднього типового профілю)"
 
 #: curses/prefs_curses.py:121 gtk/prefs.py:337 data/wicd.ui:1500
 msgid "Use dBm to measure signal strength"
@@ -890,8 +888,8 @@ msgstr "Ви_йти"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 "wicd-curses не підтримує вилучення останнього профілю дротового з’єднання. "
 "Спробуйте перейменувати його («F2»)"
@@ -1052,13 +1050,13 @@ msgstr "<b>Загальні DNS-сервери</b>"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 "Якщо позначено, пункт інтерфейсу дротової мережі у основному вікні\n"
-"буде показано завжди. Може бути корисним, якщо ваша картка дротового "
-"зв’язку не здатна виявляти з’єднання у автоматичному режимі."
+"буде показано завжди. Може бути корисним, якщо ваша картка дротового зв’язку "
+"не здатна виявляти з’єднання у автоматичному режимі."
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
@@ -1118,3 +1116,5 @@ msgid ""
 "WPA supplicant driver."
 msgstr "Найчастіше драйвером WPA supplicant є wext."
 
+#~ msgid "Help)"
+#~ msgstr "Довідка)"

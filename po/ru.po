@@ -9,12 +9,10 @@ msgstr ""
 "PO-Revision-Date: 2012-03-05 22:41+0000\n"
 "Last-Translator: Michael <Unknown>\n"
 "Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-05 05:17+0000\n"
+"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
 "X-Generator: Launchpad (build 15195)\n"
 "Generated-By: Babel 0.9.6\n"
 
@@ -120,8 +118,8 @@ msgstr "Не удалось соединиться с сервисом, попы
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
-#: curses/wicd-curses.py:538 curses/wicd-curses.py:653 curses/wicd-curses.py:655
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:538 curses/wicd-curses.py:653
+#: curses/wicd-curses.py:655 curses/wicd-curses.py:951
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -233,8 +231,7 @@ msgid ""
 "curses."
 msgstr ""
 "Ошибка DBus! Скорее всего, ошибка вызвана прекращением работы сервиса при "
-"запущенном curses-интерфейсе wicd. Перезапустите сервис, а затем wicd-"
-"curses."
+"запущенном curses-интерфейсе wicd. Перезапустите сервис, а затем wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -423,8 +420,8 @@ msgstr "Нет соединения"
 
 #: curses/configscript_curses.py:73 curses/curses_misc.py:515
 #: curses/curses_misc.py:533 curses/netentry_curses.py:66
-#: curses/wicd-curses.py:490 curses/wicd-curses.py:650 curses/wicd-curses.py:654
-#: curses/wicd-curses.py:951
+#: curses/wicd-curses.py:490 curses/wicd-curses.py:650
+#: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
 msgstr "ОК"
 
@@ -435,19 +432,18 @@ msgstr "Получение IP адреса..."
 #: curses/wicd-curses.py:278
 msgid ""
 "Once there, you can adjust (or add) the \"beforescript\", \"afterscript\", "
-"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, "
-"to change the preconnect, postconnect, predisconnect and postdisconnect "
-"scripts respectively.  Note that you will be specifying the full path to "
-"the scripts - not the actual script contents.  You will need to add/edit "
-"the script contents separately.  Refer to the wicd manual page for more "
-"information."
+"\"predisconnectscript\" and \"postdisconnectscript\" variables as needed, to "
+"change the preconnect, postconnect, predisconnect and postdisconnect scripts "
+"respectively.  Note that you will be specifying the full path to the scripts "
+"- not the actual script contents.  You will need to add/edit the script "
+"contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
 "Здесь вы можете изменить (добавить) переменные «beforescript», "
 "«afterscript», и «disconnectscript» для того, чтобы изменить (задать) "
 "сценарии, выполняемые перед подключением, после подключения и при разрыве "
-"соединения соответственно. Указывать нужно полный путь к файлам сценариев, "
-"а не их содержание. Файлы сценариев создаются и изменяются отдельно. Man "
-"wicd содержит более подробную информацию."
+"соединения соответственно. Указывать нужно полный путь к файлам сценариев, а "
+"не их содержание. Файлы сценариев создаются и изменяются отдельно. Man wicd "
+"содержит более подробную информацию."
 
 #: wicd/translations.py:82
 msgid "Passphrase"
@@ -471,7 +467,8 @@ msgstr "Расположение сертификата клиента"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
-msgstr "Пинговать статические шлюзы после соединения, для проверки ассоциаций"
+msgstr ""
+"Пинговать статические шлюзы после соединения, для проверки ассоциаций"
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
@@ -676,8 +673,8 @@ msgstr "Прервано пользователем"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
-"The wicd daemon has shut down. The UI will not function properly until it "
-"is restarted."
+"The wicd daemon has shut down. The UI will not function properly until it is "
+"restarted."
 msgstr ""
 "Сервис wicd был остановлен, интерфейс не будет корректно работать, если не "
 "перезапустить сервис"
@@ -690,19 +687,18 @@ msgstr "Для этой сети необходимо включить шифр�
 #: curses/wicd-curses.py:272
 msgid ""
 "To avoid various complications, wicd-curses does not support directly "
-"editing the scripts. However, you can edit them manually. First, (as root),"
-" open the \"$A\" config file, and look for the section labeled by the $B in"
-" question. In this case, this is:"
+"editing the scripts. However, you can edit them manually. First, (as root), "
+"open the \"$A\" config file, and look for the section labeled by the $B in "
+"question. In this case, this is:"
 msgstr ""
-"Для упрощения, wicd-curses не позволяет редактировать сценарии напрямую. "
-"Тем не менее, Вы можете изменить их вручную. Сначала, (от имени root) "
-"откройте файл «$A» и найдите в нём секцию, с именем $B. В данном случае, "
-"это:"
+"Для упрощения, wicd-curses не позволяет редактировать сценарии напрямую. Тем "
+"не менее, Вы можете изменить их вручную. Сначала, (от имени root) откройте "
+"файл «$A» и найдите в нём секцию, с именем $B. В данном случае, это:"
 
 #: gtk/netentry.py:707
 msgid ""
-"To connect to a wired network, you must create a network profile. To create"
-" a network profile, type a name that describes this network, and press Add."
+"To connect to a wired network, you must create a network profile. To create "
+"a network profile, type a name that describes this network, and press Add."
 msgstr ""
 "Чтобы подключиться к проводной сети, необходимо создать сетевой профиль. "
 "Чтобы это сделать, введите краткое описание сети и нажмите «Добавить»"
@@ -750,7 +746,8 @@ msgstr "Измерять силу сигнала в dBm"
 
 #: curses/prefs_curses.py:82 gtk/prefs.py:341
 msgid "Use default profile on wired autoconnect"
-msgstr "Использовать профиль по умолчанию для автоматического проводного подключения"
+msgstr ""
+"Использовать профиль по умолчанию для автоматического проводного подключения"
 
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:892
@@ -869,7 +866,8 @@ msgstr "Для изменения сценариев необходимо вве
 
 #: curses/prefs_curses.py:111
 msgid "You should almost always use wext as the WPA supplicant driver"
-msgstr "Почти всегда следует использовать wext в качестве драйвера WPA supplicant"
+msgstr ""
+"Почти всегда следует использовать wext в качестве драйвера WPA supplicant"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
@@ -881,8 +879,8 @@ msgstr "_Выход"
 
 #: curses/wicd-curses.py:428
 msgid ""
-"wicd-curses does not support deleting the last wired profile.  Try renaming"
-" it (\"F2\")"
+"wicd-curses does not support deleting the last wired profile.  Try renaming "
+"it (\"F2\")"
 msgstr ""
 "wicd-curses не поддерживает удаление последнего проводного интерфейса. "
 "Порпобуйте переименовать его (F2)"
@@ -1043,9 +1041,9 @@ msgstr "Глобальные серверы DNS"
 
 #: data/wicd.ui:970
 msgid ""
-"If enabled, the wired network interface will always be displayed in the "
-"main window. This can be useful if your wired network card does not detect "
-"when the interface is connected to a cable."
+"If enabled, the wired network interface will always be displayed in the main "
+"window. This can be useful if your wired network card does not detect when "
+"the interface is connected to a cable."
 msgstr ""
 "Если выбрано, кабельный интерфейс всегда отображается вглавном окне. Может "
 "быть полезно, если ваша сетевая карта автоматически не определяет "
@@ -1107,5 +1105,5 @@ msgstr ""
 msgid ""
 "You should almost always use wext as the\n"
 "WPA supplicant driver."
-msgstr "Почти всегда следует использовать wext в качестве драйвера WPA supplicant"
-
+msgstr ""
+"Почти всегда следует использовать wext в качестве драйвера WPA supplicant"

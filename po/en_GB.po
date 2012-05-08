@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-03-06 11:23+0000\n"
+"PO-Revision-Date: 2012-05-07 08:23+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: en_GB <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-05-08 04:56+0000\n"
+"X-Generator: Launchpad (build 15204)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -78,7 +78,7 @@ msgstr "Always switch to wired connection when available"
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
-msgstr ""
+msgstr "Are you sure you want to discard settings for the selected networks?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -104,7 +104,7 @@ msgstr "Automatically reconnect on connection loss"
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -353,7 +353,7 @@ msgstr "Global DNS servers"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
-msgstr ""
+msgstr "Global settings for this ESSID"
 
 #: curses/wicd-curses.py:603
 msgid "Help"
@@ -394,11 +394,11 @@ msgstr "Key"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "Key index"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "List of saved networks"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -474,7 +474,7 @@ msgstr "Ping static gateways after connecting to verify association"
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
-msgstr ""
+msgstr "Please select the networks to forget"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
@@ -558,11 +558,11 @@ msgstr "Refresh network list"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
-msgstr ""
+msgstr "Remove"
 
 #: curses/wicd-curses.py:224 data/wicd.ui:67
 msgid "Remove settings for saved networks"
-msgstr ""
+msgstr "Remove settings for saved networks"
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
@@ -913,7 +913,7 @@ msgstr "Enter a hidden network to try to locate."
 
 #: data/wicd.ui:65
 msgid "Forget network settings"
-msgstr ""
+msgstr "Forget network settings"
 
 #: data/wicd.ui:89
 msgid "_Switch Off Wi-Fi"

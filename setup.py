@@ -422,122 +422,117 @@ class install(_install):
             for cmd in [configure,build]:
                 cmd(self.distribution).run()
 
-        try:
-            print "Using init file",(wpath.init, wpath.initfile)
-            data.extend([
-                (wpath.dbus, ['other/wicd.conf']),
-                (wpath.dbus_service, ['other/org.wicd.daemon.service']),
-                (wpath.systemd, ['other/wicd.service']),
-                (wpath.logrotate, ['other/wicd.logrotate']),
-                (wpath.log, [empty_file]),
-                (wpath.etc, ['other/dhclient.conf.template.default']),
-                (wpath.encryption, [('encryption/templates/' + b) for b in
-                                    os.listdir('encryption/templates') if not b.startswith('.')]),
-                (wpath.networks, [empty_file]),
-                (wpath.sbin,  ['scripts/wicd']),
-                (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
-                            'wicd/suspend.py', 'wicd/autoconnect.py']),
-                (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
-                (wpath.scripts, [empty_file]),
-                (wpath.predisconnectscripts, [empty_file]),
-                (wpath.postdisconnectscripts, [empty_file]),
-                (wpath.preconnectscripts, [empty_file]),
-                (wpath.postconnectscripts, [empty_file])
-            ])
+        print "Using init file",(wpath.init, wpath.initfile)
+        data.extend([
+            (wpath.dbus, ['other/wicd.conf']),
+            (wpath.dbus_service, ['other/org.wicd.daemon.service']),
+            (wpath.systemd, ['other/wicd.service']),
+            (wpath.logrotate, ['other/wicd.logrotate']),
+            (wpath.log, [empty_file]),
+            (wpath.etc, ['other/dhclient.conf.template.default']),
+            (wpath.encryption, [('encryption/templates/' + b) for b in
+                                os.listdir('encryption/templates') if not b.startswith('.')]),
+            (wpath.networks, [empty_file]),
+            (wpath.sbin,  ['scripts/wicd']),
+            (wpath.daemon, ['wicd/monitor.py', 'wicd/wicd-daemon.py',
+                        'wicd/suspend.py', 'wicd/autoconnect.py']),
+            (wpath.backends, ['wicd/backends/be-external.py', 'wicd/backends/be-ioctl.py']),
+            (wpath.scripts, [empty_file]),
+            (wpath.predisconnectscripts, [empty_file]),
+            (wpath.postdisconnectscripts, [empty_file]),
+            (wpath.preconnectscripts, [empty_file]),
+            (wpath.postconnectscripts, [empty_file])
+        ])
 
-            if not wpath.no_install_gtk:
-                data.append((wpath.desktop, ['other/wicd.desktop']))
-                data.append((wpath.bin, ['scripts/wicd-client']))
-                data.append((wpath.bin, ['scripts/wicd-gtk']))
-                data.append((wpath.gtk, [
-                                         'gtk/wicd-client.py',
-                                         'gtk/netentry.py',
-                                         'gtk/prefs.py',
-                                         'gtk/gui.py',
-                                         'gtk/guiutil.py',
-                                         'data/wicd.ui',
-                                         'gtk/configscript.py',
-                                        ]))
-                data.append((wpath.autostart, ['other/wicd-tray.desktop']))
-                if not wpath.no_install_man:
-                    data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
-                data.append((wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-gtk.svg']))
-                data.append((wpath.icons + '192x192/apps/', ['icons/192px/wicd-gtk.png']))
-                data.append((wpath.icons + '128x128/apps/', ['icons/128px/wicd-gtk.png']))
-                data.append((wpath.icons + '96x96/apps/', ['icons/96px/wicd-gtk.png']))
-                data.append((wpath.icons + '72x72/apps/', ['icons/72px/wicd-gtk.png']))
-                data.append((wpath.icons + '64x64/apps/', ['icons/64px/wicd-gtk.png']))
-                data.append((wpath.icons + '48x48/apps/', ['icons/48px/wicd-gtk.png']))
-                data.append((wpath.icons + '36x36/apps/', ['icons/36px/wicd-gtk.png']))
-                data.append((wpath.icons + '32x32/apps/', ['icons/32px/wicd-gtk.png']))
-                data.append((wpath.icons + '24x24/apps/', ['icons/24px/wicd-gtk.png']))
-                data.append((wpath.icons + '22x22/apps/', ['icons/22px/wicd-gtk.png']))
-                data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-gtk.png']))
-                data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
-                data.append((wpath.pixmaps, ['other/wicd-gtk.xpm']))
-            if not wpath.no_install_ncurses:
-                data.append((wpath.curses, ['curses/curses_misc.py']))
-                data.append((wpath.curses, ['curses/prefs_curses.py']))
-                data.append((wpath.curses, ['curses/wicd-curses.py']))
-                data.append((wpath.curses, ['curses/netentry_curses.py']))
-                data.append((wpath.curses, ['curses/configscript_curses.py']))
-                data.append((wpath.bin, ['scripts/wicd-curses']))
-                if not wpath.no_install_man:
-                    data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8']))
-                if not wpath.no_install_man and not wpath.no_install_i18n_man:
-                    data.append(( wpath.mandir + 'nl/man8/', ['man/nl/wicd-curses.8']))
-                if not wpath.no_install_docs:
-                    data.append(( wpath.docdir, ['curses/README.curses']))
-            if not wpath.no_install_cli:
-                data.append((wpath.cli, ['cli/wicd-cli.py']))
-                data.append((wpath.bin, ['scripts/wicd-cli']))
-                if not wpath.no_install_man:
-                    data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8']))
-                if not wpath.no_install_docs:
-                    data.append(( wpath.docdir, ['cli/README.cli']))
-            piddir = os.path.dirname(wpath.pidfile)
-            if not piddir.endswith('/'):
-                piddir += '/'
-            if not wpath.no_install_docs:
-                data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
-                                             'README', 'CHANGES', ]))
-                data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
-            if not wpath.no_install_kde:
-                if not wpath.no_install_gtk:
-                    data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
-            if not wpath.no_install_init:
-                data.append((wpath.init, [ wpath.initfile ]))
+        if not wpath.no_install_gtk:
+            data.append((wpath.desktop, ['other/wicd.desktop']))
+            data.append((wpath.bin, ['scripts/wicd-client']))
+            data.append((wpath.bin, ['scripts/wicd-gtk']))
+            data.append((wpath.gtk, [
+                                     'gtk/wicd-client.py',
+                                     'gtk/netentry.py',
+                                     'gtk/prefs.py',
+                                     'gtk/gui.py',
+                                     'gtk/guiutil.py',
+                                     'data/wicd.ui',
+                                     'gtk/configscript.py',
+                                    ]))
+            data.append((wpath.autostart, ['other/wicd-tray.desktop']))
             if not wpath.no_install_man:
-                data.append((wpath.mandir + 'man8/', ['man/wicd.8']))
-                data.append((wpath.mandir + 'man5/', ['man/wicd-manager-settings.conf.5']))
-                data.append((wpath.mandir + 'man5/', ['man/wicd-wired-settings.conf.5']))
-                data.append((wpath.mandir + 'man5/', ['man/wicd-wireless-settings.conf.5']))
-                data.append((wpath.mandir + 'man1/', ['man/wicd-client.1']))
+                data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
+            data.append((wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-gtk.svg']))
+            data.append((wpath.icons + '192x192/apps/', ['icons/192px/wicd-gtk.png']))
+            data.append((wpath.icons + '128x128/apps/', ['icons/128px/wicd-gtk.png']))
+            data.append((wpath.icons + '96x96/apps/', ['icons/96px/wicd-gtk.png']))
+            data.append((wpath.icons + '72x72/apps/', ['icons/72px/wicd-gtk.png']))
+            data.append((wpath.icons + '64x64/apps/', ['icons/64px/wicd-gtk.png']))
+            data.append((wpath.icons + '48x48/apps/', ['icons/48px/wicd-gtk.png']))
+            data.append((wpath.icons + '36x36/apps/', ['icons/36px/wicd-gtk.png']))
+            data.append((wpath.icons + '32x32/apps/', ['icons/32px/wicd-gtk.png']))
+            data.append((wpath.icons + '24x24/apps/', ['icons/24px/wicd-gtk.png']))
+            data.append((wpath.icons + '22x22/apps/', ['icons/22px/wicd-gtk.png']))
+            data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-gtk.png']))
+            data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
+            data.append((wpath.pixmaps, ['other/wicd-gtk.xpm']))
+        if not wpath.no_install_ncurses:
+            data.append((wpath.curses, ['curses/curses_misc.py']))
+            data.append((wpath.curses, ['curses/prefs_curses.py']))
+            data.append((wpath.curses, ['curses/wicd-curses.py']))
+            data.append((wpath.curses, ['curses/netentry_curses.py']))
+            data.append((wpath.curses, ['curses/configscript_curses.py']))
+            data.append((wpath.bin, ['scripts/wicd-curses']))
+            if not wpath.no_install_man:
+                data.append(( wpath.mandir + 'man8/', ['man/wicd-curses.8']))
             if not wpath.no_install_man and not wpath.no_install_i18n_man:
-                # Dutch translations of the man
-                data.append((wpath.mandir + 'nl/man8/', ['man/nl/wicd.8' ]))
-                data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-manager-settings.conf.5']))
-                data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-wired-settings.conf.5']))
-                data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-wireless-settings.conf.5']))
-                data.append((wpath.mandir + 'nl/man1/', ['man/nl/wicd-client.1']))
-            if not wpath.no_install_acpi:
-                data.append((wpath.resume, ['other/80-wicd-connect.sh']))
-                data.append((wpath.suspend, ['other/50-wicd-suspend.sh']))
-            if not wpath.no_install_pmutils:
-                data.append((wpath.pmutils, ['other/55wicd']))
-            print 'Using pid path', os.path.basename(wpath.pidfile)
-            if not wpath.no_install_i18n:
-                print 'Language support for',
-                for pofile in sorted(glob('po/*.po')):
-                    language = pofile.replace('po/', '').replace('.po', '')
-                    print language,
-                    data.append((wpath.translations + language + '/LC_MESSAGES/',
-                            ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
-            print
-        except Exception, e:
-            print str(e)
-            print '''Error setting up data array. This is normal if
-        python setup.py configure has not yet been run.'''
+                data.append(( wpath.mandir + 'nl/man8/', ['man/nl/wicd-curses.8']))
+            if not wpath.no_install_docs:
+                data.append(( wpath.docdir, ['curses/README.curses']))
+        if not wpath.no_install_cli:
+            data.append((wpath.cli, ['cli/wicd-cli.py']))
+            data.append((wpath.bin, ['scripts/wicd-cli']))
+            if not wpath.no_install_man:
+                data.append(( wpath.mandir + 'man8/', ['man/wicd-cli.8']))
+            if not wpath.no_install_docs:
+                data.append(( wpath.docdir, ['cli/README.cli']))
+        piddir = os.path.dirname(wpath.pidfile)
+        if not piddir.endswith('/'):
+            piddir += '/'
+        if not wpath.no_install_docs:
+            data.append((wpath.docdir, ['INSTALL', 'LICENSE', 'AUTHORS',
+                                         'README', 'CHANGES', ]))
+            data.append((wpath.varlib, ['other/WHEREAREMYFILES']))
+        if not wpath.no_install_kde:
+            if not wpath.no_install_gtk:
+                data.append((wpath.kdedir, ['other/wicd-tray.desktop']))
+        if not wpath.no_install_init:
+            data.append((wpath.init, [ wpath.initfile ]))
+        if not wpath.no_install_man:
+            data.append((wpath.mandir + 'man8/', ['man/wicd.8']))
+            data.append((wpath.mandir + 'man5/', ['man/wicd-manager-settings.conf.5']))
+            data.append((wpath.mandir + 'man5/', ['man/wicd-wired-settings.conf.5']))
+            data.append((wpath.mandir + 'man5/', ['man/wicd-wireless-settings.conf.5']))
+            data.append((wpath.mandir + 'man1/', ['man/wicd-client.1']))
+        if not wpath.no_install_man and not wpath.no_install_i18n_man:
+            # Dutch translations of the man
+            data.append((wpath.mandir + 'nl/man8/', ['man/nl/wicd.8' ]))
+            data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-manager-settings.conf.5']))
+            data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-wired-settings.conf.5']))
+            data.append((wpath.mandir + 'nl/man5/', ['man/nl/wicd-wireless-settings.conf.5']))
+            data.append((wpath.mandir + 'nl/man1/', ['man/nl/wicd-client.1']))
+        if not wpath.no_install_acpi:
+            data.append((wpath.resume, ['other/80-wicd-connect.sh']))
+            data.append((wpath.suspend, ['other/50-wicd-suspend.sh']))
+        if not wpath.no_install_pmutils:
+            data.append((wpath.pmutils, ['other/55wicd']))
+        print 'Using pid path', os.path.basename(wpath.pidfile)
+        if not wpath.no_install_i18n:
+            print 'Language support for',
+            for pofile in sorted(glob('po/*.po')):
+                language = pofile.replace('po/', '').replace('.po', '')
+                print language,
+                data.append((wpath.translations + language + '/LC_MESSAGES/',
+                        ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+        print
 
         _install.run(self)
 

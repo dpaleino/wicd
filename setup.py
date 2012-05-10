@@ -21,6 +21,7 @@ from distutils.core import setup, Command
 from distutils.command.build import build as _build
 from distutils.command.install import install as _install
 import os
+import re
 import sys
 import shutil
 import subprocess
@@ -58,6 +59,12 @@ class build(_build):
     sub_commands = _build.sub_commands + [('compile_translations', None)]
 
     def run(self):
+        try:
+            import wpath
+        except ImportError:
+            self.run_command('configure')
+            import wpath
+            #raise Exception, 'Please run "./setup.py configure" first.'
         _build.run(self)
 
 class configure(Command):
@@ -307,10 +314,8 @@ class configure(Command):
                 self.distro_check()
             else:
                 print "WARNING: Distro detection failed!"
-                self.init='init/default/wicd'
                 self.no_install_init = True
                 self.distro_detect_failed = True
-        
 
 
     def finalize_options(self):
@@ -416,10 +421,8 @@ class install(_install):
         try:
             import wpath
         except ImportError:
-            # if there's no wpath.py, then run configure+build
-            print 'Running configure with default parameters.'
-            for cmd in [configure,build]:
-                cmd(self.distribution).run()
+            self.run_command('build')
+            import wpath
 
         print "Using init file",(wpath.init, wpath.initfile)
         data.extend([
@@ -526,8 +529,8 @@ class install(_install):
         print 'Using pid path', os.path.basename(wpath.pidfile)
         if not wpath.no_install_i18n:
             print 'Language support for',
-            for pofile in sorted(glob('po/*.po')):
-                language = pofile.replace('po/', '').replace('.po', '')
+            for language in sorted(glob('translations/*')):
+                language = language.replace('translations/', '')
                 print language,
                 data.append((wpath.translations + language + '/LC_MESSAGES/',
                         ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
@@ -585,6 +588,7 @@ class update_translations(Command):
 
 class compile_translations(Command):
     description = 'compile po-files to binary mo'
+    threshold = 0.8
 
     user_options = []
 
@@ -595,17 +599,54 @@ class compile_translations(Command):
         pass
  
     def run(self):
-        import wpath
+        try:
+            import wpath
+        except ImportError:
+            # if there's no wpath.py, then run configure+build
+            self.run_command('build')
+            import wpath
 
         if not wpath.no_install_i18n:
             if os.path.exists('translations'):
                 shutil.rmtree('translations/')
             os.makedirs('translations')
+
+            oldlang = os.environ['LANG']
+            os.environ['LANG'] = 'C'
+
             for pofile in sorted(glob('po/*.po')):
                 lang = pofile.replace('po/', '').replace('.po', '')
-                os.makedirs('translations/' + lang + '/LC_MESSAGES/')
-                os.system('pybabel compile -D wicd -i %s -l %s -d translations/' % (pofile, lang))
-        
+                compile_po = False
+                try:
+                    msgfmt = subprocess.Popen(['msgfmt', '--statistics', pofile,
+                        '-o', '/dev/null'], stderr=subprocess.PIPE)
+                    returncode = msgfmt.wait() # let it finish, and get the exit code
+                    output = msgfmt.stderr.readline().strip()
+                    if len(output) == 0 or returncode != 0:
+                        print len(output), returncode
+                        raise ValueError
+                    else:
+                        m = re.match('(\d+) translated messages(?:, (\d+) fuzzy translation)?(?:, (\d+) untranslated messages)?.', output)
+                        if m:
+                            done, fuzzy, missing = m.groups()
+                            fuzzy = int(fuzzy) if fuzzy else 0
+                            missing = int(missing) if missing else 0
+
+                            completeness = float(done)/(int(done) + missing + fuzzy)
+                            if completeness >= self.threshold:
+                                compile_po = True
+                            else:
+                                print 'Disabled %s (%s%% < %s%%).' % \
+                                    (lang, completeness*100, self.threshold*100)
+                                continue
+                except (OSError, ValueError):
+                    print 'ARGH'
+
+                if compile_po:
+                    os.makedirs('translations/' + lang + '/LC_MESSAGES/')
+                    os.system('pybabel compile -D wicd -i %s -l %s -d translations/' % (pofile, lang))
+
+            os.environ['LANG'] = oldlang
 
 class uninstall(Command):
     description = "remove Wicd using uninstall.sh and install.log"

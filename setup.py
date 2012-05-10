@@ -18,7 +18,6 @@
 #
 
 from distutils.core import setup, Command
-from distutils.extension import Extension
 from distutils.command.build import build as _build
 from distutils.command.install import install as _install
 import os
@@ -627,14 +626,6 @@ py_modules = ['wicd.networking','wicd.misc','wicd.wnettools',
               'wicd.logfile','wicd.backend','wicd.configmanager',
               'wicd.translations']
 
-wpactrl_ext = Extension(name = 'wpactrl', 
-                        sources = ['depends/python-wpactrl/wpa_ctrl.c',
-                                   'depends/python-wpactrl/wpactrl.c'],
-                        extra_compile_args = ["-fno-strict-aliasing"])
-
-iwscan_ext = Extension(name = 'iwscan', libraries = ['iw'],
-                       sources = ['depends/python-iwscan/pyiwscan.c'])
-    
 setup(
     cmdclass = {
         'build' : build,

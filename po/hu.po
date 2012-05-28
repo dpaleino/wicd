@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-02-25 11:42+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-05-27 23:25+0000\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: hu <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-05-28 05:31+0000\n"
+"X-Generator: Launchpad (build 15288)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:612
 msgid "About"
-msgstr ""
+msgstr "Névjegy"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -67,7 +76,7 @@ msgstr "Vezetékes kapcsolat használata amikor elérhető"
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
-msgstr ""
+msgstr "Biztos, hogy eldobja a kiválasztott hálózatok beállításait?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -93,7 +102,7 @@ msgstr "Automatikus újracsatlakozás a kapcsolat megszakadásakor"
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -125,7 +134,7 @@ msgstr "Válasszon az alábbi hálózatokból:"
 
 #: curses/wicd-curses.py:604
 msgid "Config"
-msgstr ""
+msgstr "Beállítás"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -232,7 +241,7 @@ msgstr "DHCP kliens"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP gépnév"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -343,15 +352,15 @@ msgstr "Globális DNS kiszolgálók"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
-msgstr ""
+msgstr "ESSID globális beállításai"
 
 #: curses/wicd-curses.py:603
 msgid "Help"
-msgstr ""
+msgstr "Súgó"
 
 #: curses/wicd-curses.py:611
 msgid "Hidden"
-msgstr ""
+msgstr "Rejtett"
 
 #: gtk/gui.py:418
 msgid "Hidden Network ESSID"
@@ -368,7 +377,7 @@ msgstr "Azonosítás"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Információk az aktuális kapcsolatról"
 
 #: gtk/netentry.py:168
 msgid "Invalid IP address entered."
@@ -384,11 +393,11 @@ msgstr "Kulcs"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "Kulcsindex"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "Mentett hálózatok listája"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -400,7 +409,7 @@ msgstr "Hálózati csatolók"
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Soha ne csatlakozzon ehhez a hálózathoz"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -440,7 +449,7 @@ msgstr ""
 
 #: wicd/translations.py:82
 msgid "Passphrase"
-msgstr ""
+msgstr "Jelmondat"
 
 #: wicd/translations.py:83
 msgid "Password"
@@ -448,7 +457,7 @@ msgstr "Jelszó"
 
 #: wicd/translations.py:84
 msgid "Path to CA cert"
-msgstr ""
+msgstr "CA tanúsítvány útvonala"
 
 #: wicd/translations.py:86
 msgid "Path to PAC file"
@@ -456,7 +465,7 @@ msgstr "Elérési út a PAC állományhoz"
 
 #: wicd/translations.py:85
 msgid "Path to client cert"
-msgstr ""
+msgstr "Klienstanúsítvány útvonala"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
@@ -465,7 +474,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
-msgstr ""
+msgstr "Válassza ki az elfelejteni kívánt hálózatokat"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
@@ -493,23 +502,23 @@ msgstr "Beállítások"
 
 #: curses/wicd-curses.py:610
 msgid "Prefs"
-msgstr ""
+msgstr "Beállítások"
 
 #: wicd/translations.py:87
 msgid "Preshared key"
-msgstr ""
+msgstr "Előzetesen megosztott kulcs"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
-msgstr ""
+msgstr "Nyomjon meg egy billentyűt a visszatéréshez."
 
 #: wicd/translations.py:88
 msgid "Private key"
-msgstr ""
+msgstr "Személyes kulcs"
 
 #: wicd/translations.py:89
 msgid "Private key password"
-msgstr ""
+msgstr "A személyes kulcs jelszava"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -529,19 +538,19 @@ msgstr "Adapter bekapcsolása..."
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
-msgstr ""
+msgstr "Kilépés"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Kilépés a wicd-cursesből"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Kilépés a wicd-tray-iconból"
 
 #: curses/wicd-curses.py:609
 msgid "Refresh"
-msgstr ""
+msgstr "Frissítés"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -549,11 +558,11 @@ msgstr "Hálózati lista frissítése"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
-msgstr ""
+msgstr "Eltávolítás"
 
 #: curses/wicd-curses.py:224 data/wicd.ui:67
 msgid "Remove settings for saved networks"
-msgstr ""
+msgstr "Mentett hálózatok beállításainak eltávolítása"
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
@@ -570,7 +579,7 @@ msgstr "IP cím visszaállítása..."
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -634,7 +643,7 @@ msgstr "Statikus IP cím beállítása..."
 
 #: gtk/prefs.py:333 data/wicd.ui:581
 msgid "Show never connect networks"
-msgstr ""
+msgstr "Soha nem használandó hálózatok megjelenítése"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
@@ -646,19 +655,19 @@ msgstr "Kapcsolat megszüntetése folyamatban"
 
 #: gtk/gui.py:376
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi kikapcsolása"
 
 #: gtk/gui.py:373
 msgid "Switch On Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi bekapcsolása"
 
 #: curses/wicd-curses.py:651
 msgid "Tab Left"
-msgstr ""
+msgstr "Bal lap"
 
 #: curses/wicd-curses.py:652
 msgid "Tab Right"
-msgstr ""
+msgstr "Jobb lap"
 
 #: curses/wicd-curses.py:93
 msgid "Terminated by user"
@@ -712,7 +721,7 @@ msgstr "Nem biztonságos"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "DHCP gépnév használata"
 
 #: curses/netentry_curses.py:255 curses/netentry_curses.py:373
 #: gtk/netentry.py:341 gtk/netentry.py:467
@@ -794,6 +803,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Vezetékes\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -861,11 +874,11 @@ msgstr "Csaknem mindig használnia kell a wext-et WPA igényő meghajtóként"
 
 #: gtk/wicd-client.py:499
 msgid "_Connection Info"
-msgstr ""
+msgstr "_Kapcsolatinformációk"
 
 #: gtk/wicd-client.py:502 data/wicd.ui:161
 msgid "_Quit"
-msgstr ""
+msgstr "_Kilépés"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -877,31 +890,31 @@ msgstr ""
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses súgó"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd hálózatkezelő"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Eseti hálózat létrehozása"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Rejtett hálózat megkeresése"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Adja meg a rejtett hálózat nevét a megkereséséhez."
 
 #: data/wicd.ui:65
 msgid "Forget network settings"
-msgstr ""
+msgstr "Hálózati beállítások elfelejtése"
 
 #: data/wicd.ui:89
 msgid "_Switch Off Wi-Fi"
-msgstr ""
+msgstr "Wi-Fi _kikapcsolása"
 
 #: data/wicd.ui:104
 msgid "_Disconnect All"
@@ -909,7 +922,7 @@ msgstr "Leválasztva"
 
 #: data/wicd.ui:118
 msgid "_Refresh"
-msgstr ""
+msgstr "_Frissítés"
 
 #: data/wicd.ui:132
 msgid "_Preferences"
@@ -917,7 +930,7 @@ msgstr "Beállítások"
 
 #: data/wicd.ui:146
 msgid "_About"
-msgstr ""
+msgstr "_Névjegy"
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
@@ -925,7 +938,7 @@ msgstr "Kapcsolat létrejött..."
 
 #: data/wicd.ui:238
 msgid "Cancel the current connection attempt"
-msgstr ""
+msgstr "Jelenlegi csatlakozási kísérlet megszakítása"
 
 #: data/wicd.ui:270
 msgid "Configure Scripts"
@@ -933,7 +946,7 @@ msgstr "Script folytatása"
 
 #: data/wicd.ui:289
 msgid "Configure scripts to run for this network:"
-msgstr ""
+msgstr "Hálózathoz futtatandó parancsfájlok beállítása:"
 
 #: data/wicd.ui:306
 msgid "Pre-connection Script:"
@@ -961,6 +974,8 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"A wicd automatikusan kapcsolódni fog a vezetékes hálózathoz\n"
+"a kábel csatlakoztatásakor, még ha van is aktív vezeték nélküli kapcsolat."
 
 #: data/wicd.ui:552
 msgid "DNS domain:"
@@ -968,7 +983,7 @@ msgstr "DNS tartomány"
 
 #: data/wicd.ui:600
 msgid "<b>Never Connect</b>"
-msgstr ""
+msgstr "<b>Soha ne kapcsolódjon</b>"
 
 #: data/wicd.ui:616
 msgid "Automatically reconnect on network connection loss"
@@ -984,7 +999,7 @@ msgstr "Vezetékes profil átnevezése"
 
 #: data/wicd.ui:673
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Kérdés a vezetékes hálózati profilhoz"
 
 #: data/wicd.ui:696
 msgid "Use default wired network profile"
@@ -1032,6 +1047,8 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"A vezetékes hálózati csatoló mindig jelenjen meg a főablakban. Hasznos, ha a "
+"vezetékes hálózati kártya nem ismeri fel, mikor van a kábel csatlakoztatva."
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
@@ -1047,21 +1064,23 @@ msgstr "Vezetékes kapcsolat észlelése"
 
 #: data/wicd.ui:1299
 msgid "<b>DHCP Client</b>"
-msgstr ""
+msgstr "<b>DHCP kliens</b>"
 
 #: data/wicd.ui:1310
 msgid "<b>Graphical Sudo Application</b>"
-msgstr ""
+msgstr "<b>Grafikus sudo alkalmazás</b>"
 
 #: data/wicd.ui:1431
 msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
+"Mutasson a kiválasztott háttérprogramra\n"
+"a leírásának megjelenítéséhez."
 
 #: data/wicd.ui:1484
 msgid "Driver:"
-msgstr ""
+msgstr "Illesztőprogram:"
 
 #: data/wicd.ui:1540
 msgid "<b>Wireless Interface</b>"
@@ -1069,7 +1088,7 @@ msgstr "Vezeték nélküli adapter"
 
 #: data/wicd.ui:1554
 msgid "<b>WPA Supplicant</b>"
-msgstr ""
+msgstr "<b>WPA kérvényező</b>"
 
 #: data/wicd.ui:1566
 msgid "<b>Debugging</b>"
@@ -1081,7 +1100,7 @@ msgstr "Háttér-hálózat"
 
 #: data/wicd.ui:1611
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>Háttérprogram</b>"
 
 #: data/wicd.ui:1625
 msgid ""

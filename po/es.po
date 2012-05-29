@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-05-07 08:44+0000\n"
-"Last-Translator: Xoan Sampaiño <xoansampainho@gmail.com>\n"
+"PO-Revision-Date: 2012-05-28 11:13+0000\n"
+"Last-Translator: Fitoschido <fitoschido@gmail.com>\n"
 "Language-Team: es <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-09 04:57+0000\n"
-"X-Generator: Launchpad (build 15213)\n"
+"X-Launchpad-Export-Date: 2012-05-29 04:52+0000\n"
+"X-Generator: Launchpad (build 15316)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -77,6 +77,8 @@ msgstr "Cambiar siempre a red cableada cuando esté disponible"
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
 msgstr ""
+"¿Está seguro de que quiere descartar la configuración para las redes "
+"seleccionadas?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -90,7 +92,7 @@ msgstr "Automático (recomendado)"
 
 #: curses/prefs_curses.py:86
 msgid "Automatic Reconnection"
-msgstr "Reconexión Automática"
+msgstr "Reconexión automática"
 
 #: curses/netentry_curses.py:374 gtk/netentry.py:889
 msgid "Automatically connect to this network"
@@ -102,7 +104,7 @@ msgstr "Reconectar automaticamente al perder la conexión"
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -179,7 +181,7 @@ msgstr "Conexión cancelada"
 
 #: wicd/misc.py:85
 msgid "Connection Failed."
-msgstr "Conexión fallida"
+msgstr "Conexión fallida."
 
 #: wicd/misc.py:81
 msgid "Connection Failed: Bad password"
@@ -204,7 +206,7 @@ msgstr ""
 
 #: wicd/misc.py:97
 msgid "Connection successful."
-msgstr "Conexión exitosa"
+msgstr "Conexión exitosa."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -219,8 +221,8 @@ msgid ""
 "Could not find a graphical sudo program. The script editor could not be "
 "launched.  You'll have to edit scripts directly your configuration file."
 msgstr ""
-"No se encontro un programa grafico para sudo. El editor del script podria no "
-"ser lanzado. Tendrá que editar los scripts directamente en su archivo de "
+"No se encontró un programa gráfico para sudo. El editor de scripts no puede "
+"abrirse. Tendrá que editar los scripts directamente en su archivo de "
 "configuración."
 
 #: curses/wicd-curses.py:488 gtk/gui.py:259
@@ -278,7 +280,7 @@ msgstr "Desconectando de las conexiones activas..."
 
 #: curses/wicd-curses.py:226
 msgid "Display 'about' dialog"
-msgstr "Muestra este dialogo de ayuda"
+msgstr "Mostrar diálogo «Acerca de»"
 
 #: gtk/prefs.py:349 data/wicd.ui:1002
 msgid "Display notifications about connection status"
@@ -286,11 +288,11 @@ msgstr "Mostrar notificaciones sobre el estado de la conexión"
 
 #: curses/wicd-curses.py:213
 msgid "Display this help dialog"
-msgstr "Muestra este dialogo de ayuda"
+msgstr "Mostrar este diálogo de ayuda"
 
 #: wicd/translations.py:78
 msgid "Domain"
-msgstr "Dominio DNS:"
+msgstr "Dominio"
 
 #: wicd/misc.py:84
 msgid "Done connecting..."
@@ -310,7 +312,7 @@ msgstr "ESSID"
 
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1521
 msgid "Enable debug mode"
-msgstr "Habilitar el modo de depuración"
+msgstr "Activar modo de depuración"
 
 #: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
@@ -336,7 +338,7 @@ msgstr "Puerta de enlace"
 
 #: curses/prefs_curses.py:50 data/wicd.ui:1028
 msgid "General Settings"
-msgstr "Opciones Generales"
+msgstr "Opciones generales"
 
 #: wicd/misc.py:87
 msgid "Generating PSK..."
@@ -358,7 +360,7 @@ msgstr "Servidores globales de DNS"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
-msgstr ""
+msgstr "Configuración global para este ESSID"
 
 #: curses/wicd-curses.py:603
 msgid "Help"
@@ -399,11 +401,11 @@ msgstr "Clave"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "Índice de clave"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "Lista de redes guardadas"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -419,7 +421,7 @@ msgstr "No conectar nunca a esta red"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
-msgstr "No se han encontrado redes inalambricas."
+msgstr "No se encontraron redes inálambricas."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
@@ -431,7 +433,7 @@ msgstr "No conectado"
 #: curses/wicd-curses.py:490 curses/wicd-curses.py:650
 #: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
-msgstr "OK"
+msgstr "Aceptar"
 
 #: wicd/misc.py:93
 msgid "Obtaining IP address..."
@@ -481,23 +483,23 @@ msgstr ""
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
-msgstr ""
+msgstr "Seleccione las redes a olvidar"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr "Guión a ejecutar tras la conexión"
+msgstr "Script a ejecutar tras la conexión"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
-msgstr "Guión a ejecutar tras la desconexión"
+msgstr "Script a ejecutar tras la desconexión"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
-msgstr "Guión a ejecutar antes de la conexión"
+msgstr "Script a ejecutar antes de la conexión"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
-msgstr "Guión a ejecutar antes de la desconexión"
+msgstr "Script a ejecutar antes de la desconexión"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -529,7 +531,7 @@ msgstr "Contraseña de la clave privada"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
-msgstr "Preguntar que perfil utilizar en las conexiones cableadas"
+msgstr "Preguntar qué perfil utilizar en las conexiones cableadas"
 
 #: gtk/netentry.py:59 gtk/netentry.py:61 gtk/netentry.py:670
 msgid "Properties"
@@ -545,11 +547,11 @@ msgstr "Activando la interfaz..."
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
-msgstr "Cerrar"
+msgstr "Salir"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr "Cerrar wicd-curses"
+msgstr "Salir de wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
@@ -565,11 +567,11 @@ msgstr "Actualizar lista de redes"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
-msgstr ""
+msgstr "Quitar"
 
 #: curses/wicd-curses.py:224 data/wicd.ui:67
 msgid "Remove settings for saved networks"
-msgstr ""
+msgstr "Quitar configuraciones para redes guardadas"
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
@@ -582,7 +584,7 @@ msgstr "Falta la información requerida para el cifrado."
 
 #: wicd/misc.py:92
 msgid "Resetting IP address..."
-msgstr "Reestableciendo la dirección IP..."
+msgstr "Restableciendo la dirección IP..."
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
@@ -610,7 +612,7 @@ msgstr "Buscando redes... espere..."
 
 #: gtk/netentry.py:102
 msgid "Scripts"
-msgstr "Guiones"
+msgstr "Scripts"
 
 #: curses/netentry_curses.py:57 curses/prefs_curses.py:75 gtk/netentry.py:78
 msgid "Search domain"
@@ -630,11 +632,11 @@ msgstr "Seleccionar o crear un perfil de conexión cableada para conectarse"
 
 #: curses/wicd-curses.py:222
 msgid "Select scripts"
-msgstr "Seleccionar guiones"
+msgstr "Seleccionar scripts"
 
 #: curses/wicd-curses.py:223
 msgid "Set up Ad-hoc network"
-msgstr "Configurar red Ad-hoc"
+msgstr "Configurar red ad-hoc"
 
 #: wicd/misc.py:94
 msgid "Setting broadcast address..."
@@ -650,11 +652,11 @@ msgstr "Configurando direcciones IP estáticas..."
 
 #: gtk/prefs.py:333 data/wicd.ui:581
 msgid "Show never connect networks"
-msgstr "Desconectar de todas las redes"
+msgstr "Mostrar redes a las que nunca conectar"
 
 #: gtk/gui.py:104
 msgid "Stop Showing Autoconnect pop-up temporarily"
-msgstr "Dejar de mostrar temporalmente el mensaje emergente de auto-conexión"
+msgstr "Dejar de mostrar temporalmente el mensaje de conexión automática"
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
@@ -923,7 +925,7 @@ msgstr "Introduzca una red oculta a localizar."
 
 #: data/wicd.ui:65
 msgid "Forget network settings"
-msgstr ""
+msgstr "Olvidar configuración de red"
 
 #: data/wicd.ui:89
 msgid "_Switch Off Wi-Fi"

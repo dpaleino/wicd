@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: wicd-1.7.1\n"
 "Report-Msgid-Bugs-To: Eli Zaretskii <eliz@gnu.org>\n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-03-07 09:19+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-05-30 11:34+0000\n"
+"Last-Translator: my name <Unknown>\n"
 "Language-Team: Hebrew <he@translationproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-05-31 05:06+0000\n"
+"X-Generator: Launchpad (build 15322)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -81,7 +81,7 @@ msgstr "החלפה אוטומטית לחיבור קווי בעת זמינות"
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
-msgstr ""
+msgstr "האם ברצונך לשכוח את הגדרות הרשתות הנבחרות?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "רשימה של רשתות שמורות"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -477,7 +477,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
-msgstr ""
+msgstr "נא לבחור את הרשת שברצונך לשכוח"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
@@ -561,11 +561,11 @@ msgstr "רענון רשימת הרשתות"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
-msgstr ""
+msgstr "הסרה"
 
 #: curses/wicd-curses.py:224 data/wicd.ui:67
 msgid "Remove settings for saved networks"
-msgstr ""
+msgstr "הסרת הגדרות עבור רשתות שנשמרו"
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
@@ -919,7 +919,7 @@ msgstr "נא להזין רשת נסתרת לאיתור."
 
 #: data/wicd.ui:65
 msgid "Forget network settings"
-msgstr ""
+msgstr "התעלמות מהגדרות רשת"
 
 #: data/wicd.ui:89
 msgid "_Switch Off Wi-Fi"
@@ -1085,12 +1085,12 @@ msgid ""
 "Hover your mouse over the selected backend \n"
 "to read its description."
 msgstr ""
-"יש להעביר את סמן העכבר על המנוע המסומן \n"
+"יש להעביר את סמן העכבר על המנגנון המסומן \n"
 "כדי לקרוא את תיאורו."
 
 #: data/wicd.ui:1484
 msgid "Driver:"
-msgstr "מנהל התקן:"
+msgstr "מנהל ההתקן:"
 
 #: data/wicd.ui:1540
 msgid "<b>Wireless Interface</b>"
@@ -1107,11 +1107,11 @@ msgstr "<b>ניפוי שגיאות</b>"
 
 #: data/wicd.ui:1584
 msgid "Backend:"
-msgstr "מנוע:"
+msgstr "מנגנון:"
 
 #: data/wicd.ui:1611
 msgid "<b>Backend</b>"
-msgstr "<b>מנוע</b>"
+msgstr "<b>מנגנון</b>"
 
 # WPA supplicant
 #: data/wicd.ui:1625

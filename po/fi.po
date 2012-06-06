@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-02-25 11:41+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-06-05 12:19+0000\n"
+"Last-Translator: Jukka Valvanne <Unknown>\n"
 "Language-Team: fi <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-06-06 05:03+0000\n"
+"X-Generator: Launchpad (build 15353)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -35,7 +35,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:612
 msgid "About"
-msgstr ""
+msgstr "Tietoja"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -233,7 +233,7 @@ msgstr "DHCP-ohjelma"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP-nimi"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -349,7 +349,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:603
 msgid "Help"
-msgstr ""
+msgstr "Ohje"
 
 #: curses/wicd-curses.py:611
 msgid "Hidden"
@@ -370,7 +370,7 @@ msgstr "Identiteetti"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Nykyisen yhteyden tiedot"
 
 #: gtk/netentry.py:168
 msgid "Invalid IP address entered."
@@ -402,7 +402,7 @@ msgstr "Verkkolaitteet"
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Älä yhdistä tähän verkkoon"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -533,11 +533,11 @@ msgstr "Otetaan verkkolaite käyttöön..."
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
-msgstr ""
+msgstr "Lopeta"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Lopeta"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
@@ -545,7 +545,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:609
 msgid "Refresh"
-msgstr ""
+msgstr "Päivitä"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -650,7 +650,7 @@ msgstr "Pysäytä yhdistäminen"
 
 #: gtk/gui.py:376
 msgid "Switch Off Wi-Fi"
-msgstr ""
+msgstr "Sammuta Wi-Fi"
 
 #: gtk/gui.py:373
 msgid "Switch On Wi-Fi"
@@ -716,7 +716,7 @@ msgstr "Salaamaton"
 
 #: curses/netentry_curses.py:62
 msgid "Use DHCP Hostname"
-msgstr ""
+msgstr "Käytä DHCP-nimeä"
 
 #: curses/netentry_curses.py:255 curses/netentry_curses.py:373
 #: gtk/netentry.py:341 gtk/netentry.py:467
@@ -889,11 +889,11 @@ msgstr ""
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
-msgstr ""
+msgstr "Luo ad-hoc -verkko"
 
 #: data/wicd.ui:55
 msgid "Find a hidden network"
-msgstr ""
+msgstr "Etsi piilotettu verkko"
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
@@ -913,7 +913,7 @@ msgstr "Yhteys katkaistu"
 
 #: data/wicd.ui:118
 msgid "_Refresh"
-msgstr ""
+msgstr "_Päivitä"
 
 #: data/wicd.ui:132
 msgid "_Preferences"
@@ -921,7 +921,7 @@ msgstr "Asetukset"
 
 #: data/wicd.ui:146
 msgid "_About"
-msgstr ""
+msgstr "_Tietoja"
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
@@ -965,6 +965,8 @@ msgid ""
 "as soon as a cable is plugged in, even if a wireless connection \n"
 "is already active."
 msgstr ""
+"tämä valittuna wicd yhdistää automaattisesti lankaverkkoon \n"
+"kun kaapeli yhdistetään, vaikka langaton verkko olisi jo käytössä."
 
 #: data/wicd.ui:552
 msgid "DNS domain:"
@@ -1036,6 +1038,8 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
+"Tämä käytössä lankaverkkosovitin näytetään aina pääikkunassa. Tämä voi olla "
+"hyödyllinen, jos sovitin ei havaitse kaapelin kytkemistä."
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"

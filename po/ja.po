@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-05-06 21:09+0000\n"
+"PO-Revision-Date: 2012-06-17 02:03+0000\n"
 "Last-Translator: Toshiharu Kudoh <toshi.kd2@gmail.com>\n"
 "Language-Team: ja <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-06-17 04:43+0000\n"
+"X-Generator: Launchpad (build 15419)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -150,7 +150,7 @@ msgstr "無線ネットワーク \"$A\" ($B)を設定中"
 
 #: wicd/misc.py:82
 msgid "Configuring wireless interface..."
-msgstr "無線インターフェイスを設定しています……"
+msgstr "無線インターフェースを設定しています……"
 
 #: curses/wicd-curses.py:607 gtk/wicd-client.py:498
 msgid "Connect"
@@ -186,7 +186,7 @@ msgstr "接続に失敗しました: パスワードが間違っています"
 
 #: wicd/misc.py:91
 msgid "Connection Failed: No DHCP offers received."
-msgstr "接続に失敗しました: DHCP サーバからの応答がありません。"
+msgstr "接続に失敗しました: DHCP サーバーからの応答がありません。"
 
 #: wicd/misc.py:83
 msgid "Connection Failed: Unable to Get IP Address"
@@ -246,7 +246,7 @@ msgstr "DNS ドメイン"
 #: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:80
 #: gtk/netentry.py:81 gtk/netentry.py:82
 msgid "DNS server"
-msgstr "DNS サーバ"
+msgstr "DNS サーバー"
 
 #: curses/prefs_curses.py:117
 msgid "Debugging"
@@ -293,7 +293,7 @@ msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
-"エラー: wicd デーモンは wicd-curses の接続を拒否しました。あなたのユーザ名が \"$A\" "
+"エラー: wicd デーモンは wicd-curses の接続を拒否しました。使用しているユーザーが \"$A\" "
 "グループに所属しているかどうか確認してください。"
 
 #: curses/wicd-curses.py:461 gtk/gui.py:267 gtk/gui.py:327
@@ -342,7 +342,7 @@ msgstr "一般設定でグローバル DNS が有効になっていません。"
 
 #: curses/prefs_curses.py:72
 msgid "Global DNS servers"
-msgstr "グローバル DNS サーバ"
+msgstr "グローバル DNS サーバー"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
@@ -391,7 +391,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "保存されたネットワークのリスト"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -403,7 +403,7 @@ msgstr "ネットワークインターフェース"
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
-msgstr "このネットワークに自動的に接続する"
+msgstr "二度とこのネットワークには接続しない"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -419,7 +419,7 @@ msgstr "接続していません"
 #: curses/wicd-curses.py:490 curses/wicd-curses.py:650
 #: curses/wicd-curses.py:654 curses/wicd-curses.py:951
 msgid "OK"
-msgstr "はい"
+msgstr "OK"
 
 #: wicd/misc.py:93
 msgid "Obtaining IP address..."
@@ -434,9 +434,10 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
-"必要であれば、\"beforescript\"、\"afterscript\" および \"disconnectscript\" "
-"の変数を変更または追加することができます。これらは接続前、接続後、および切断時に実行するスクリプトを変更する変数です。これらの変数には実際のスクリプトの中"
-"身ではなく、スクリプトへのフルパスを記述するように注意してください。これらのスクリプトは別々に追加・編集する必要があります。詳細は wicd "
+"必要であれば、\"beforescript\"、\"afterscript\"、\"predisconnectscript\" および "
+"\"postdisconnectscript\" "
+"の変数を変更または追加することができます。これらは接続前、接続後、切断前、および切断後に実行するスクリプトを変更する変数です。これらの変数には実際のスクリ"
+"プトの中身ではなく、スクリプトへのフルパスを記述するように注意してください。これらのスクリプトは別々に追加・編集する必要があります。詳細は wicd "
 "のマニュアルを参照してください。"
 
 #: wicd/translations.py:82
@@ -521,11 +522,11 @@ msgstr "プロパティ"
 
 #: wicd/misc.py:89
 msgid "Putting interface down..."
-msgstr "インターフェイスを無効にしています……"
+msgstr "インターフェースを無効にしています……"
 
 #: wicd/misc.py:90
 msgid "Putting interface up..."
-msgstr "インターフェイスを有効にしています……"
+msgstr "インターフェースを有効にしています……"
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
@@ -626,7 +627,7 @@ msgstr "ブロードキャストアドレスを設定しています……"
 
 #: wicd/misc.py:95
 msgid "Setting static DNS servers..."
-msgstr "スタティック DNS サーバを設定しています……"
+msgstr "スタティック DNS サーバーを設定しています……"
 
 #: wicd/misc.py:96
 msgid "Setting static IP addresses..."
@@ -662,7 +663,7 @@ msgstr "タブを右に"
 
 #: curses/wicd-curses.py:93
 msgid "Terminated by user"
-msgstr "ユーザによって切断されました"
+msgstr "ユーザーによって中断されました"
 
 #: gtk/gui.py:85 gtk/wicd-client.py:984
 msgid ""
@@ -742,7 +743,7 @@ msgstr "有線への自動接続を初期のプロファイルとして使用す
 #: curses/netentry_curses.py:55 curses/prefs_curses.py:73 gtk/netentry.py:90
 #: data/wicd.ui:892
 msgid "Use global DNS servers"
-msgstr "グローバル DNS サーバを使用する"
+msgstr "グローバル DNS サーバーを使用する"
 
 #: curses/prefs_curses.py:84 gtk/prefs.py:345
 msgid "Use last used profile on wired autoconnect"
@@ -754,7 +755,7 @@ msgstr "この ESSID がついている全てのネットワークでこの設�
 
 #: wicd/translations.py:90
 msgid "Username"
-msgstr "ユーザ名"
+msgstr "ユーザー名"
 
 #: wicd/misc.py:98
 msgid "Validating authentication..."
@@ -1015,15 +1016,15 @@ msgstr "<b>ネットワークインターフェース</b>"
 
 #: data/wicd.ui:809
 msgid "DNS server 3:"
-msgstr "DNS サーバ 3:"
+msgstr "DNS サーバー 3:"
 
 #: data/wicd.ui:840
 msgid "DNS server 2:"
-msgstr "DNS サーバ 2:"
+msgstr "DNS サーバー 2:"
 
 #: data/wicd.ui:858
 msgid "DNS server 1:"
-msgstr "DNS サーバ 1:"
+msgstr "DNS サーバー 1:"
 
 #: data/wicd.ui:876
 msgid "Search domain:"
@@ -1031,7 +1032,7 @@ msgstr "ドメイン検索:"
 
 #: data/wicd.ui:911
 msgid "<b>Global DNS Servers</b>"
-msgstr "<b>グローバル DNS サーバ</b>"
+msgstr "<b>グローバル DNS サーバー</b>"
 
 #: data/wicd.ui:970
 msgid ""
@@ -1039,7 +1040,7 @@ msgid ""
 "window. This can be useful if your wired network card does not detect when "
 "the interface is connected to a cable."
 msgstr ""
-"有効にした場合、有線ネットワーク用インターフェイスはメインウインドウに常に表示されます。これはインターフェイスがケーブルに接続された時、それを有線ネットワ"
+"有効にした場合、有線ネットワーク用インターフェースはメインウインドウに常に表示されます。これはインターフェースがケーブルに接続された時、それを有線ネットワ"
 "ークカードが検知しない場合に便利です。"
 
 #: data/wicd.ui:986

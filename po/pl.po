@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-03-03 22:23+0000\n"
-"Last-Translator: Maciej Krupa <hekko@hekko.com.pl>\n"
+"PO-Revision-Date: 2012-06-27 16:58+0000\n"
+"Last-Translator: Tomasz Lizurej <irtomek@gmail.com>\n"
 "Language-Team: pl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-06-28 04:50+0000\n"
+"X-Generator: Launchpad (build 15505)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -102,7 +102,7 @@ msgstr "Automatyczne ponowne połączenie po utracie połączenia"
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -357,7 +357,7 @@ msgstr "Globalne serwery DNS"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
-msgstr ""
+msgstr "Globalne ustawienia dla tego ESSID"
 
 #: curses/wicd-curses.py:603
 msgid "Help"

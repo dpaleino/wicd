@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-02-25 11:42+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2012-07-22 09:02+0000\n"
+"Last-Translator: tzem <athmakrigiannis@gmail.com>\n"
 "Language-Team: el <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-07-23 05:21+0000\n"
+"X-Generator: Launchpad (build 15654)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,10 +38,13 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:612
 msgid "About"
-msgstr ""
+msgstr "Περί"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
@@ -93,11 +102,11 @@ msgstr "Αυτόματη επανασύνδεση κατά την αποσύνδ
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr ""
+msgstr "Σύστημα υποστήριξη"
 
 #: curses/wicd-curses.py:194
 msgid "Brought to you by:"
@@ -127,7 +136,7 @@ msgstr "Επιλέξτε από τα δίκτυα:"
 
 #: curses/wicd-curses.py:604
 msgid "Config"
-msgstr ""
+msgstr "Διαμόρφωση"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -349,11 +358,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:603
 msgid "Help"
-msgstr ""
+msgstr "Βοήθεια"
 
 #: curses/wicd-curses.py:611
 msgid "Hidden"
-msgstr ""
+msgstr "Κρυμμένο"
 
 #: gtk/gui.py:418
 msgid "Hidden Network ESSID"
@@ -442,7 +451,7 @@ msgstr ""
 
 #: wicd/translations.py:82
 msgid "Passphrase"
-msgstr ""
+msgstr "Συνθηματική φράση"
 
 #: wicd/translations.py:83
 msgid "Password"
@@ -495,7 +504,7 @@ msgstr "Διάλογος προτιμήσεων"
 
 #: curses/wicd-curses.py:610
 msgid "Prefs"
-msgstr ""
+msgstr "Prefs"
 
 #: wicd/translations.py:87
 msgid "Preshared key"
@@ -507,11 +516,11 @@ msgstr ""
 
 #: wicd/translations.py:88
 msgid "Private key"
-msgstr ""
+msgstr "Ιδιωτικό κλειδί"
 
 #: wicd/translations.py:89
 msgid "Private key password"
-msgstr ""
+msgstr "Κωδικός πρόσβασης ιδιωτικού κλειδιού"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -531,7 +540,7 @@ msgstr "Ενεργοποίηση διεπαφής..."
 
 #: curses/wicd-curses.py:613
 msgid "Quit"
-msgstr ""
+msgstr "Έξοδος"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
@@ -543,7 +552,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:609
 msgid "Refresh"
-msgstr ""
+msgstr "Ανανέωση"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
@@ -551,7 +560,7 @@ msgstr "Ανανέωση λίστας δικτύων"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
-msgstr ""
+msgstr "Αφαίρεση"
 
 #: curses/wicd-curses.py:224 data/wicd.ui:67
 msgid "Remove settings for saved networks"
@@ -572,7 +581,7 @@ msgstr "Επανάκτηση Διεύθυνσης IP..."
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -793,6 +802,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Ενσύρματο\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -864,7 +877,7 @@ msgstr ""
 
 #: gtk/wicd-client.py:502 data/wicd.ui:161
 msgid "_Quit"
-msgstr ""
+msgstr "_Έξοδος"
 
 #: curses/wicd-curses.py:428
 msgid ""
@@ -880,7 +893,7 @@ msgstr ""
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Διαχειριστής δικτύων Wicd"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
@@ -908,7 +921,7 @@ msgstr "Αποσυνδεμένο."
 
 #: data/wicd.ui:118
 msgid "_Refresh"
-msgstr ""
+msgstr "_Ανανέωση"
 
 #: data/wicd.ui:132
 msgid "_Preferences"
@@ -916,7 +929,7 @@ msgstr "Προτιμήσεις"
 
 #: data/wicd.ui:146
 msgid "_About"
-msgstr ""
+msgstr "_Σχετικά"
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
@@ -1060,7 +1073,7 @@ msgstr ""
 
 #: data/wicd.ui:1484
 msgid "Driver:"
-msgstr ""
+msgstr "Οδηγός:"
 
 #: data/wicd.ui:1540
 msgid "<b>Wireless Interface</b>"

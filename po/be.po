@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: wicd\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-08-21 20:54+0000\n"
+"PO-Revision-Date: 2012-08-29 17:03+0000\n"
 "Last-Translator: Mikalai Udodau <Unknown>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-28 07:17+0000\n"
+"X-Launchpad-Export-Date: 2012-08-30 05:16+0000\n"
 "X-Generator: Launchpad (build 15864)\n"
 
 #: gtk/wicd-client.py:610
@@ -98,7 +98,7 @@ msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
-msgstr ""
+msgstr "Рухавік"
 
 #: curses/wicd-curses.py:194
 msgid "Brought to you by:"
@@ -106,7 +106,7 @@ msgstr "Распрацавалі для вас:"
 
 #: curses/wicd-curses.py:1089
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr ""
+msgstr "Немагчыма далучыцца да дэмана, спрабую запусціць яго аўтаматычна..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
@@ -122,7 +122,7 @@ msgstr "Канал"
 
 #: gtk/gui.py:189 data/wicd.ui:183
 msgid "Choose from the networks below:"
-msgstr ""
+msgstr "Выберыце з ніжэйпададзеных сетак:"
 
 #: curses/wicd-curses.py:604
 msgid "Config"
@@ -130,19 +130,19 @@ msgstr ""
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
-msgstr ""
+msgstr "Канфігураваць выбраную сетку"
 
 #: curses/netentry_curses.py:267
 msgid "Configuring preferences for wired profile \"$A\""
-msgstr ""
+msgstr "Канфігураванне настроек для праваднога профілю \"$A\""
 
 #: curses/netentry_curses.py:389
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
-msgstr ""
+msgstr "Канфігураванне настроек для бесправадной сеткі \"$A\" ($B)"
 
 #: wicd/misc.py:82
 msgid "Configuring wireless interface..."
-msgstr ""
+msgstr "Канфігураванне бесправаднога інтэрфейсу..."
 
 #: curses/wicd-curses.py:607 gtk/wicd-client.py:498
 msgid "Connect"
@@ -150,7 +150,7 @@ msgstr "Злучыць"
 
 #: curses/wicd-curses.py:214
 msgid "Connect to selected network"
-msgstr ""
+msgstr "Злучыцца з выбранай сеткай"
 
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
@@ -166,15 +166,15 @@ msgstr "Злучэнне"
 
 #: wicd/misc.py:79
 msgid "Connection Cancelled"
-msgstr ""
+msgstr "Злучэнне скасавана"
 
 #: wicd/misc.py:85
 msgid "Connection Failed."
-msgstr ""
+msgstr "Злучэнне схібіла."
 
 #: wicd/misc.py:81
 msgid "Connection Failed: Bad password"
-msgstr ""
+msgstr "Злучэнне схібіла: дрэнны пароль"
 
 #: wicd/misc.py:91
 msgid "Connection Failed: No DHCP offers received."
@@ -182,19 +182,20 @@ msgstr ""
 
 #: wicd/misc.py:83
 msgid "Connection Failed: Unable to Get IP Address"
-msgstr ""
+msgstr "Злучэнне схібіла: немагчыма атрымаць адрас IP"
 
 #: gtk/wicd-client.py:269 gtk/wicd-client.py:299
 msgid "Connection established"
-msgstr ""
+msgstr "Злучэнне ўстаноўлена"
 
 #: wicd/misc.py:80
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
+"Злучэнне схібіла: немагчыма злучыцца з пунктам бесправоднага доступу."
 
 #: wicd/misc.py:97
 msgid "Connection successful."
-msgstr ""
+msgstr "Паспяхова злучана."
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -221,7 +222,7 @@ msgstr ""
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
-msgstr ""
+msgstr "Кліент DHCP"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
@@ -229,14 +230,14 @@ msgstr ""
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
-msgstr ""
+msgstr "Дамен DNS"
 
 #: curses/netentry_curses.py:58 curses/netentry_curses.py:59
 #: curses/netentry_curses.py:60 curses/prefs_curses.py:76
 #: curses/prefs_curses.py:77 curses/prefs_curses.py:78 gtk/netentry.py:80
 #: gtk/netentry.py:81 gtk/netentry.py:82
 msgid "DNS server"
-msgstr ""
+msgstr "Сервер DNS"
 
 #: curses/prefs_curses.py:117
 msgid "Debugging"
@@ -290,7 +291,7 @@ msgstr "ESSID"
 
 #: curses/prefs_curses.py:118 gtk/prefs.py:335 data/wicd.ui:1521
 msgid "Enable debug mode"
-msgstr ""
+msgstr "Уключыць рэжым адладкі"
 
 #: gtk/wicd-client.py:320 gtk/wicd-client.py:324
 msgid "Establishing connection..."
@@ -298,7 +299,7 @@ msgstr ""
 
 #: curses/prefs_curses.py:51 data/wicd.ui:1408
 msgid "External Programs"
-msgstr ""
+msgstr "Вонкавыя праграмы"
 
 #: wicd/misc.py:86
 msgid "Flushing the routing table..."
@@ -359,7 +360,7 @@ msgstr "Ідэнтычнасць"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Інфармацыя пра бягучае злучэнне"
 
 #: gtk/netentry.py:168
 msgid "Invalid IP address entered."
@@ -391,11 +392,11 @@ msgstr "Сеткавыя інтэрфейсы"
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Ніколі не злучацца з гэтай сеткай"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
-msgstr ""
+msgstr "Бесправадныя сеткі не знойдзены."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
@@ -411,7 +412,7 @@ msgstr "ОК"
 
 #: wicd/misc.py:93
 msgid "Obtaining IP address..."
-msgstr ""
+msgstr "Атрыманне адраса IP..."
 
 #: curses/wicd-curses.py:278
 msgid ""
@@ -529,7 +530,7 @@ msgstr "Абнавіць"
 
 #: curses/wicd-curses.py:217
 msgid "Refresh network list"
-msgstr ""
+msgstr "Абнавіць спіс сетак"
 
 #: curses/wicd-curses.py:538
 msgid "Remove"
@@ -690,11 +691,11 @@ msgstr ""
 #: curses/netentry_curses.py:255 curses/netentry_curses.py:373
 #: gtk/netentry.py:341 gtk/netentry.py:467
 msgid "Use Encryption"
-msgstr ""
+msgstr "Ужываць шыфраванне"
 
 #: curses/wicd-curses.py:466 gtk/gui.py:264
 msgid "Use Encryption (WEP only)"
-msgstr ""
+msgstr "Ужываць шыфраванне (толькі WEP)"
 
 #: curses/netentry_curses.py:54 gtk/netentry.py:89
 msgid "Use Static DNS"
@@ -771,7 +772,7 @@ msgstr ""
 
 #: curses/prefs_curses.py:67
 msgid "Wired Interface"
-msgstr ""
+msgstr "Правадны інтэрфейс"
 
 #: curses/prefs_curses.py:99
 msgid "Wired Link Detection"
@@ -966,11 +967,11 @@ msgstr ""
 
 #: data/wicd.ui:753
 msgid "Wireless interface:"
-msgstr ""
+msgstr "Бесправадны інтэрфейс:"
 
 #: data/wicd.ui:793
 msgid "<b>Network Interfaces</b>"
-msgstr ""
+msgstr "<b>Сеткавыя інтэрфейсы</b>"
 
 #: data/wicd.ui:809
 msgid "DNS server 3:"
@@ -1039,15 +1040,15 @@ msgstr ""
 
 #: data/wicd.ui:1566
 msgid "<b>Debugging</b>"
-msgstr ""
+msgstr "<b>Адладка</b>"
 
 #: data/wicd.ui:1584
 msgid "Backend:"
-msgstr ""
+msgstr "Рухавік:"
 
 #: data/wicd.ui:1611
 msgid "<b>Backend</b>"
-msgstr ""
+msgstr "<b>Рухавік</b>"
 
 #: data/wicd.ui:1625
 msgid ""

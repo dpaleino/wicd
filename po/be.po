@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wicd\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-05-06 21:25+0200\n"
-"PO-Revision-Date: 2012-09-03 10:36+0000\n"
+"PO-Revision-Date: 2012-09-17 18:50+0000\n"
 "Last-Translator: Mikalai Udodau <Unknown>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-04 04:56+0000\n"
-"X-Generator: Launchpad (build 15890)\n"
+"X-Launchpad-Export-Date: 2012-09-18 05:08+0000\n"
+"X-Generator: Launchpad (build 15966)\n"
 
 #: gtk/wicd-client.py:610
 msgid ""
@@ -44,7 +44,7 @@ msgstr "Пра Wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:273
 msgid "Activate Internet Connection Sharing"
-msgstr ""
+msgstr "Уключыць супольнае выкарыстанне інтэрнэт-злучэння"
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"

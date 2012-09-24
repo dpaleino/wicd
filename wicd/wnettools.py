@@ -43,7 +43,7 @@ from misc import find_path
 
 # Regular expressions.
 _re_mode = (re.I | re.M | re.S)
-essid_pattern = re.compile('.*ESSID:"?(.*?)"?\s*\n', _re_mode)
+essid_pattern = re.compile('.*ESSID:"?(.*?)".*\n', _re_mode)
 ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
 channel_pattern = re.compile('.*Channel:?=? ?(\d+)', _re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)

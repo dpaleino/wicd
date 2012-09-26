@@ -46,6 +46,13 @@ CONNECTING = 1
 WIRELESS = 2
 WIRED = 3
 SUSPENDED = 4
+_const_status_dict = {
+    NOT_CONNECTED: _('Not connected'),
+    CONNECTING: _('Connection in progress'),
+    WIRELESS: _('Connected to a wireless network'),
+    WIRED: _('Connected to a wired network'),
+    SUSPENDED: _('Connection suspended'),
+}
 
 # Automatic app selection constant
 AUTO = 0

@@ -20,6 +20,7 @@ import dbus
 import dbus.service
 import sys
 from wicd import misc
+from wicd.translations import _
 
 misc.RenameProcess('wicd-cli')
 
@@ -61,18 +62,54 @@ parser.add_option('--network-details', '-d', default=False, action='store_true')
 parser.add_option('--disconnect', '-x', default=False, action='store_true')
 parser.add_option('--connect', '-c', default=False, action='store_true')
 parser.add_option('--list-encryption-types', '-e', default=False, action='store_true')
-# short options for these two aren't great.
+# short options for these aren't great.
 parser.add_option('--wireless', '-y', default=False, action='store_true')
 parser.add_option('--wired', '-z', default=False, action='store_true')
 parser.add_option('--load-profile', '-o', default=False, action='store_true')
+parser.add_option('--status', '-i', default=False, action='store_true') # -i(nfo)
 
 options, arguments = parser.parse_args()
 
 op_performed = False
 
-if not (options.wireless or options.wired):
+if not (options.wireless or options.wired) and not options.status:
     print "Please use --wireless or --wired to specify " + \
     "the type of connection to operate on."
+
+if options.status:
+    status, info = daemon.GetConnectionStatus()
+    if status in (misc.WIRED, misc.WIRELESS):
+        connected = True
+        status_msg = _('Connected')
+        if status == misc.WIRED:
+            conn_type = _('Wired')
+        else:
+            conn_type = _('Wireless')
+    else:
+        connected = False
+        status_msg = misc._const_status_dict[status]
+
+    print _('Connection status') + ': ' + status_msg
+    if connected:
+        print _('Connection type') + ': ' + conn_type
+        if status == misc.WIRELESS:
+            print _('Connected to $A at $B (IP: $C)') \
+                .replace('$A', info[1]) \
+                .replace('$B', info[2]) \
+                .replace('$C', info[0])
+            print _('Network ID: $A') \
+                .replace('$A', info[3])
+        else:
+            print _('Connected to wired network (IP: $A)') \
+                .replace('$A', info[0])
+    else:
+        if status == misc.CONNECTING:
+            if info[0] == 'wired':
+                print _('Connecting to wired network.')
+            elif info[0] == 'wireless':
+                print _('Connecting to wireless network "$A".') \
+                    .replace('$A', info[1])
+    op_performed = True
 
 # functions
 def is_valid_wireless_network_id(network_id):

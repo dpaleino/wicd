@@ -93,9 +93,10 @@ if options.status:
     if connected:
         print _('Connection type') + ': ' + conn_type
         if status == misc.WIRELESS:
+            strength = daemon.FormatSignalForPrinting(info[2])
             print _('Connected to $A at $B (IP: $C)') \
                 .replace('$A', info[1]) \
-                .replace('$B', info[2]) \
+                .replace('$B', strength) \
                 .replace('$C', info[0])
             print _('Network ID: $A') \
                 .replace('$A', info[3])

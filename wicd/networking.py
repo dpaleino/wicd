@@ -634,7 +634,8 @@ class Wireless(Controller):
             self.after_script, self.pre_disconnect_script,
             self.post_disconnect_script, self.global_dns_1,
             self.global_dns_2, self.global_dns_3, self.global_dns_dom,
-            self.global_search_dom, self.wiface, self.should_verify_ap, debug)
+            self.global_search_dom, self.wiface, self.should_verify_ap,
+            self.bitrate, self.allow_lower_bitrates, debug)
         self.connecting_thread.setDaemon(True)
         self.connecting_thread.start()
         return True
@@ -707,6 +708,15 @@ class Wireless(Controller):
         
         """
         return self.wiface.GetAvailableAuthMethods(iwlistauth)
+
+    def GetAvailableBitrates(self):
+        """ Get the available bitrates for the interface.
+
+        Returns:
+        The available bitrates of the interface as a string, or None if the
+        bitrates can't be found.
+        """
+        return self.wiface.GetAvailableBitrates()
 
     def GetIwconfig(self):
         """ Get the out of iwconfig. """
@@ -838,7 +848,7 @@ class WirelessConnectThread(ConnectThread):
     def __init__(self, network, wireless, wpa_driver, before_script,
                  after_script, pre_disconnect_script, post_disconnect_script,
                  gdns1, gdns2, gdns3, gdns_dom, gsearch_dom, wiface, 
-                 should_verify_ap, debug=False):
+                 should_verify_ap, bitrate, allow_lower_bitrates, debug=False):
         """ Initialise the thread with network information.
 
         Keyword arguments:
@@ -852,6 +862,8 @@ class WirelessConnectThread(ConnectThread):
         gdns1 -- global DNS server 1
         gdns2 -- global DNS server 2
         gdns3 -- global DNS server 3
+        bitrate -- chosen interface bitrate
+        allow_lower_bitrates -- whether to allow lower bitrates or not
 
         """
         ConnectThread.__init__(self, network, wireless, before_script, 
@@ -860,7 +872,8 @@ class WirelessConnectThread(ConnectThread):
                                gdns3, gdns_dom, gsearch_dom, wiface, debug)
         self.wpa_driver = wpa_driver
         self.should_verify_ap = should_verify_ap
-
+        self.bitrate = bitrate
+        self.allow_lower_bitrates = allow_lower_bitrates
 
     def _connect(self):
         """ The main function of the connection thread.
@@ -896,6 +909,7 @@ class WirelessConnectThread(ConnectThread):
         self.stop_wpa(wiface)
         self.flush_routes(wiface)
         wiface.SetMode(self.network['mode'])
+        wiface.SetBitrate(self.bitrate, self.allow_lower_bitrates)
 
         # Put interface up.
         self.SetStatus('configuring_interface')

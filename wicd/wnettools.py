@@ -36,6 +36,7 @@ import re
 import random
 import time
 from string import maketrans, translate
+import dbus
 
 import wpath
 import misc
@@ -49,7 +50,7 @@ channel_pattern = re.compile('.*Channel:?=? ?(\d+)', _re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
-bitrates_pattern = re.compile('(\d+\s+\S+/s)', _re_mode)
+bitrates_pattern = re.compile('([\d\.]+)\s+\S+/s', _re_mode)
 mode_pattern = re.compile('.*Mode:([A-Za-z-]*?)\n', _re_mode)
 freq_pattern = re.compile('.*Frequency:(.*?)\n', _re_mode)
 wep_pattern = re.compile('.*Encryption key:(.*?)\n', _re_mode)
@@ -1114,6 +1115,22 @@ class BaseWirelessInterface(BaseInterface):
         misc.Run(cmd)
 
     @neediface(False)
+    def SetBitrate(self, bitrate, allow_lower=False):
+        ''' Set the desired bitrate for the interface.
+
+        Keyword arguments:
+        bitrate -- desired bitrate (string)
+        allow_lower -- whether to allow lower bitrates, or keep it fixed (bool)
+        '''
+        # FIXME: what if, in future, bitrates won't be "M(egabit per second)"
+        #+anymore?
+        if allow_lower:
+            cmd = 'iwconfig %s rate %sM auto' % (self.iface, bitrate)
+        else:
+            cmd = 'iwconfig %s rate %sM fixed' % (self.iface, bitrate)
+        misc.Run(cmd)
+
+    @neediface(False)
     def Associate(self, essid, channel=None, bssid=None):
         """ Associate with the specified wireless network.
 
@@ -1293,9 +1310,14 @@ class BaseWirelessInterface(BaseInterface):
             ap['channel'] = self._FreqToChannel(freq)
 
         # Bit Rate
-        ap['bitrates'] = misc.RunRegex(bitrates_pattern,
-                                       cell.split("Bit Rates")[-1])
-     
+        bitrates = cell.split('Bit Rates')[-1].replace('\n', '; ')
+        m = re.findall(bitrates_pattern, bitrates)
+        if m:
+            # numeric sort
+            ap['bitrates'] = sorted(m, lambda x, y: int(float(x) - float(y)))
+        else:
+            ap['bitrates'] = None
+
         # BSSID
         ap['bssid'] = misc.RunRegex(ap_mac_pattern, cell)
 
@@ -1455,6 +1477,20 @@ class BaseWirelessInterface(BaseInterface):
         authm = misc.RunRegex(authmethods_pattern, output)
         authm_list = [m.strip() for m in authm.split('\n') if m.strip()]
         return ';'.join(authm_list)
+
+    @neediface('')
+    def GetAvailableBitrates(self):
+        """ Get the available bitrates the wifi card can use. """
+
+        cmd = 'iwlist ' + self.iface + ' rate'
+        if self.verbose: print cmd
+        rates = misc.Run(cmd)
+
+        # process the output
+        rates = rates.split('\n')
+        rates = filter(None, map(lambda x: x.strip().split(' ')[0], rates))
+        rates = filter(lambda x: x[0].isdigit(), rates)
+        return dbus.Array(rates, signature='v')
 
     def _get_link_quality(self, output):
         """ Parse out the link quality from iwlist scan or iwconfig output. """

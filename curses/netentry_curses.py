@@ -372,13 +372,21 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         global_settings_t = _('Use these settings for all networks sharing this essid')
         encryption_t = _('Use Encryption')
         autoconnect_t = _('Automatically connect to this network')
+        bitrate_t = _('Wireless bitrate')
+        allow_lower_bitrates_t = _('Allow lower bitrates')
         
         self.global_settings_chkbox = urwid.CheckBox(global_settings_t)
         self.encryption_chkbox = urwid.CheckBox(encryption_t,on_state_change=self.encryption_toggle)
         self.encryption_combo = ComboBox(callback=self.combo_on_change)
         self.autoconnect_chkbox = urwid.CheckBox(autoconnect_t)
+        self.bitrate_combo = ComboBox(bitrate_t)
+        self.allow_lower_bitrates_chkbox = urwid.CheckBox(allow_lower_bitrates_t)
+
         self.pile_encrypt = None
         # _w is a Frame, _w.body is a ListBox, _w.body.body is the ListWalker :-)
+        self._listbox.body.append(self.bitrate_combo)
+        self._listbox.body.append(self.allow_lower_bitrates_chkbox)
+        self._listbox.body.append(urwid.Text(''))
         self._listbox.body.append(self.global_settings_chkbox)
         self._listbox.body.append(self.autoconnect_chkbox)
         self._listbox.body.append(self.encryption_chkbox)
@@ -410,6 +418,12 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.search_dom_edit.set_edit_text(self.format_entry(networkID, "search_domain"))
         
         self.autoconnect_chkbox.set_state(to_bool(self.format_entry(networkID, "automatic")))
+
+        self.bitrates = wireless.GetAvailableBitrates()
+        self.bitrates.append('auto')
+        self.bitrate_combo.set_list(self.bitrates)
+        self.bitrate_combo.set_focus(self.bitrates.index(wireless.GetWirelessProperty(networkID, 'bitrate')))
+        self.allow_lower_bitrates_chkbox.set_state(to_bool(self.format_entry(networkID, 'allow_lower_bitrates')))
 
         #self.reset_static_checkboxes()
         self.encryption_chkbox.set_state(bool(wireless.GetWirelessProperty(networkID,
@@ -490,6 +504,14 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             self.set_net_prop('use_settings_globally', False)
             wireless.RemoveGlobalEssidEntry(self.networkid)
-            
+
+        self.set_net_prop('bitrate', self.bitrates[self.bitrate_combo.get_focus()[1]])
+        self.set_net_prop('allow_lower_bitrates', self.allow_lower_bitrates_chkbox.get_state())
         wireless.SaveWirelessNetworkProfile(self.networkid)
         return True
+
+    def ready_widgets(self, ui, body):
+        AdvancedSettingsDialog.ready_widgets(self, ui, body)
+        self.ui = ui
+        self.body = body
+        self.bitrate_combo.build_combobox(body, ui, 17)

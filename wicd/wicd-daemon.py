@@ -1030,6 +1030,22 @@ class WirelessDaemon(dbus.service.Object):
         return misc.to_unicode(self.wifi.GetAvailableAuthMethods(iwlistauth))
 
     @dbus.service.method('org.wicd.daemon.wireless')
+    def GetAvailableBitrates(self):
+        """ Returns the available bitrates the wifi card can use """
+        return self.wifi.GetAvailableBitrates()
+
+    @dbus.service.method('org.wicd.daemon.wireless')
+    def GetOperableBitrates(self, networkid):
+        """ Returns the real bitrates a connection to a network can use.
+
+        This is the intersection between the bitrates the AP can transmit to,
+        and the bitrates the wireless card can use.
+        """
+        a = set(self.GetAvailableBitrates())
+        b = set(self.GetWirelessProperty(networkid, 'bitrates'))
+        return sorted(list(a & b), lambda x, y: int(float(x) - float(y)))
+
+    @dbus.service.method('org.wicd.daemon.wireless')
     def CreateAdHocNetwork(self, essid, channel, ip, enctype, key, encused,
                            ics):
         """ Creates an ad-hoc network using user inputted settings. """
@@ -1157,6 +1173,9 @@ class WirelessDaemon(dbus.service.Object):
                                                                'predisconnectscript')
         self.wifi.post_disconnect_script = self.GetWirelessProperty(id,
                                                                'postdisconnectscript')
+        self.wifi.bitrate = self.GetWirelessProperty(id, 'bitrate')
+        self.wifi.allow_lower_bitrates = self.GetWirelessProperty(id,
+                                                               'allow_lower_bitrates')
         print 'Connecting to wireless network ' + str(self.LastScan[id]['essid'])
         # disconnect to make sure that scripts are run
         self.wifi.Disconnect()

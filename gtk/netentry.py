@@ -31,7 +31,7 @@ import wicd.misc as misc
 import wicd.wpath as wpath
 import wicd.dbusmanager as dbusmanager
 from wicd.misc import noneToString, stringToNone, noneToBlankString, to_bool
-from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input, ProtectedLabelEntry
+from guiutil import error, LabelEntry, GreyLabel, LeftAlignedLabel, string_input, ProtectedLabelEntry, LabelCombo
 
 from wicd.translations import language, _
 
@@ -466,6 +466,20 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         self.combo_encryption = gtk.combo_box_new_text()
         self.chkbox_encryption = gtk.CheckButton(_('Use Encryption'))
         self.chkbox_global_settings = gtk.CheckButton(_('Use these settings for all networks sharing this essid'))
+
+        rate_vbox = gtk.VBox(False, 0)
+
+        self.combo_rate = LabelCombo(_('Wireless bitrate'))
+        rates = gtk.ListStore(str)
+        self.bitrates = wireless.GetAvailableBitrates()
+        self.bitrates.append('auto')
+        for br in self.bitrates:
+            rates.append((br,))
+        self.combo_rate.set_model(rates)
+        self.chkbox_lower_rate = gtk.CheckButton(_('Allow lower bitrates'))
+        rate_vbox.pack_start(self.combo_rate)
+        rate_vbox.pack_start(self.chkbox_lower_rate)
+
         # Make the vbox to hold the encryption stuff.
         self.vbox_encrypt_info = gtk.VBox(False, 0)        
         self.toggle_encryption()
@@ -493,6 +507,7 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
             self.combo_encryption.set_active(0)
         self.change_encrypt_method()
 
+        self.cvbox.pack_start(rate_vbox, False, False)
         self.cvbox.pack_start(self.chkbox_global_settings, False, False)
         self.cvbox.pack_start(self.chkbox_encryption, False, False)
         self.cvbox.pack_start(self.combo_encryption, False, False)
@@ -567,6 +582,14 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
 
         self.toggle_dhcp_hostname_checkbox()
 
+        # TODO: get the value from the config
+        chosen_bitrate = wireless.GetWirelessProperty(networkID, 'bitrate')
+        if chosen_bitrate not in self.bitrates:
+            chosen_bitrate = 'auto'
+        self.combo_rate.set_active(self.bitrates.index(chosen_bitrate))
+        self.chkbox_lower_rate.set_active(bool(wireless.GetWirelessProperty(networkID,
+                                                            'allow_lower_bitrates')))
+
         activeID = -1  # Set the menu to this item when we are done
         user_enctype = wireless.GetWirelessProperty(networkID, "enctype")
         for x, enc_type in enumerate(self.encrypt_types):
@@ -617,7 +640,12 @@ class WirelessSettingsDialog(AdvancedSettingsDialog):
         else:
             self.set_net_prop('use_settings_globally', False)
             wireless.RemoveGlobalEssidEntry(networkid)
-            
+
+        if self.combo_rate.get_active() == -1:
+            self.set_net_prop('bitrate', 'auto')
+        else:
+            self.set_net_prop('bitrate', self.bitrates[self.combo_rate.get_active()])
+        self.set_net_prop('allow_lower_bitrates', bool(self.chkbox_lower_rate.get_active()))
         wireless.SaveWirelessNetworkProfile(networkid)
         return True
 

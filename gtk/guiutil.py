@@ -216,3 +216,40 @@ class ProtectedLabelEntry(gtk.HBox):
     def click_handler(self, widget=None, event=None):
         active = self.check.get_active()
         self.entry.set_visibility(active)
+
+class LabelCombo(gtk.HBox):
+    """ A label on the left with a combobox on the right. """
+    def __init__(self,text):
+        gtk.HBox.__init__(self)
+        self.combo = gtk.ComboBox()
+        self.combo.set_size_request(200, -1)
+        self.label = LeftAlignedLabel()
+        self.label.set_text(text)
+        self.label.set_size_request(170, -1)
+        cell = gtk.CellRendererText()
+        self.combo.pack_start(cell, True)
+        self.combo.add_attribute(cell, 'text', 0)
+        self.pack_start(self.label, fill=True, expand=True)
+        self.pack_start(self.combo, fill=False, expand=False)
+        self.label.show()
+        self.combo.show()
+        self.show()
+
+    def get_active(self):
+        return self.combo.get_active()
+
+    def set_active(self, index):
+        self.combo.set_active(index)
+
+    def get_active_text(self):
+        return self.combo.get_active_text()
+
+    def get_model(self):
+        return self.combo.get_model()
+
+    def set_model(self, model=None):
+        self.combo.set_model(model)
+
+    def set_sensitive(self, value):
+        self.combo.set_sensitive(value)
+        self.label.set_sensitive(value)

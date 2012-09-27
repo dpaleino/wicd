@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-01-26 18:50+0000\n"
 "Last-Translator: Willem van de Krol <Unknown>\n"
 "Language-Team: nl <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -150,7 +150,7 @@ msgstr "Instellen van voorkeuren voor bekabeld netwerkprofiel \"$A\""
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Instellen van voorkeuren voor draadloos netwerk \"$B\""
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr "Draadloze netwerkadapter instellen..."
 
@@ -162,9 +162,29 @@ msgstr "Verbinden"
 msgid "Connect to selected network"
 msgstr "Met gekozen netwerk verbinden"
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Verbonden met $A op $B (IP: $C)"
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -174,23 +194,31 @@ msgstr "Verbonden met bekabeld netwerk (IP: $A)"
 msgid "Connecting"
 msgstr "Verbinding maken"
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr "Verbinding geannuleerd"
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr "Verbinding mislukt."
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr "Verbinding mislukt: ongeldig wachtwoord"
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Verbinding mislukt: geen DHCP-aanbod ontvangen."
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Verbinding mislukt: kon geen IP-adres krijgen"
 
@@ -198,14 +226,30 @@ msgstr "Verbinding mislukt: kon geen IP-adres krijgen"
 msgid "Connection established"
 msgstr "Verbinding gemaakt"
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 "Verbinding mislukt: kon geen contact maken met draadloos toegangspunt."
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
 msgstr "Verbinding gelukt."
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -292,7 +336,7 @@ msgstr "Geef dit helpvenster weer"
 msgid "Domain"
 msgstr "DNS-domein"
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr "Klaar met verbinden..."
 
@@ -320,7 +364,7 @@ msgstr "Verbinding maken..."
 msgid "External Programs"
 msgstr "Externe programma's"
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr "De route-tabel wordt opgeschoond..."
 
@@ -336,11 +380,11 @@ msgstr "Gateway"
 msgid "General Settings"
 msgstr "Algemene instellingen"
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr "Pre-shared key wordt gegenereerd..."
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr "WPA-configuratiebestand wordt gegenereerd..."
 
@@ -405,6 +449,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "Netmasker"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr "Netwerkadapters"
@@ -419,6 +467,7 @@ msgstr "Geen draadloze netwerken gevonden."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr "Niet verbonden"
 
@@ -429,7 +478,7 @@ msgstr "Niet verbonden"
 msgid "OK"
 msgstr "OK"
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr "IP-adres verkrijgen..."
 
@@ -530,11 +579,11 @@ msgstr "Om netwerkprofiel vragen bij automatische bekabelde verbinding"
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr "Netwerkadapter stoppen..."
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr "Netwerkadapter starten..."
 
@@ -575,7 +624,7 @@ msgstr "Bekabeld netwerkprofiel hernoemen"
 msgid "Required encryption information is missing."
 msgstr "Benodigde versleutelingsinformatie is niet gevonden."
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr "IP-adres opnieuw instellen..."
 
@@ -631,15 +680,15 @@ msgstr "Kies scripts"
 msgid "Set up Ad-hoc network"
 msgstr "Ad-hocnetwerk instellen"
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr "Het broadcast-adres wordt ingesteld..."
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr "Statische DNS-servers instellen..."
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr "Statische IP-adressen instellen..."
 
@@ -773,11 +822,11 @@ msgstr "Deze instellingen voor alle netwerken met dit ESSID gebruiken"
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr "De authenticatie wordt gevalideerd..."
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr "Toegangspunt-verbinding verifiëren..."
 
@@ -793,9 +842,13 @@ msgstr "Wicd curses-interface"
 msgid "Wicd daemon unreachable"
 msgstr "Kan geen contact maken met de wicd-daemon"
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd moet toegang hebben tot de netwerkkaarten in deze computer."
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -833,6 +886,10 @@ msgstr "Bekabelde netwerken"
 #: gtk/gui.py:97
 msgid "Wired connection detected"
 msgstr "Bekabelde verbinding gevonden"
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""

@@ -1,14 +1,14 @@
-# Translations for Norwegian (no)
-# Translator ID 52
-# /translator/edit/52/
+# Translations for Spanish (Nicaragua) (es_NI)
+# Translator ID 31
+# /translator/edit/31/
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-02-25 11:43+0000\n"
+"PO-Revision-Date: 2011-12-09 22:52+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
-"Language-Team: nb <LL@li.org>\n"
+"Language-Team: es_NI <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -59,11 +59,11 @@ msgstr ""
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:966
 msgid "Always show wired interface"
-msgstr "Vis alltid kablet nettverk"
+msgstr ""
 
 #: curses/prefs_curses.py:70
 msgid "Always switch to wired connection when available"
-msgstr "Bytt alltid til kablet forbindelse hvis tilgjengelig"
+msgstr ""
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
@@ -145,7 +145,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:607 gtk/wicd-client.py:498
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: curses/wicd-curses.py:214
 msgid "Connect to selected network"
@@ -181,7 +181,7 @@ msgstr ""
 
 #: gtk/gui.py:192 gtk/wicd-client.py:313 gtk/wicd-client.py:641
 msgid "Connecting"
-msgstr "Kobler til"
+msgstr ""
 
 #: cli/wicd-cli.py:107
 msgid "Connecting to wired network."
@@ -193,19 +193,19 @@ msgstr ""
 
 #: wicd/misc.py:86
 msgid "Connection Cancelled"
-msgstr "Forbindelse avbrutt"
+msgstr ""
 
 #: wicd/misc.py:92
 msgid "Connection Failed."
-msgstr "Forbindelse avbrutt"
+msgstr ""
 
 #: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
-msgstr "Tilkobling feilet: Feil passord"
+msgstr ""
 
 #: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
-msgstr "Tilkobling feilet: Ingen DHCP tilbud mottatt."
+msgstr ""
 
 #: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
@@ -244,8 +244,6 @@ msgid ""
 "Could not connect to wicd's D-Bus interface. Check the wicd log for error "
 "messages."
 msgstr ""
-"Klarte ikke koble til Wicd's D-Bus grensesnitt. Kontroller Wicd loggen for "
-"feilmeldinger."
 
 #: gtk/netentry.py:379 gtk/netentry.py:522
 msgid ""
@@ -293,7 +291,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
-msgstr "Koble fra alle nettverk"
+msgstr ""
 
 #: gtk/wicd-client.py:340 gtk/wicd-client.py:643
 msgid "Disconnected"
@@ -351,11 +349,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
-msgstr "For mer detaljert hjelp, see wicd-curses(8) manual."
+msgstr ""
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"
-msgstr ""
+msgstr "puerta de acceso"
 
 #: curses/prefs_curses.py:50 data/wicd.ui:1028
 msgid "General Settings"
@@ -396,7 +394,7 @@ msgstr ""
 #: curses/netentry_curses.py:50 curses/wicd-curses.py:462 gtk/gui.py:266
 #: gtk/netentry.py:74
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: wicd/translations.py:79
 msgid "Identity"
@@ -428,7 +426,7 @@ msgstr ""
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
-msgstr ""
+msgstr "máscara"
 
 #: cli/wicd-cli.py:99
 msgid "Network ID: $A"
@@ -479,7 +477,7 @@ msgstr ""
 
 #: wicd/translations.py:83
 msgid "Password"
-msgstr "Passord"
+msgstr ""
 
 #: wicd/translations.py:84
 msgid "Path to CA cert"
@@ -487,7 +485,7 @@ msgstr ""
 
 #: wicd/translations.py:86
 msgid "Path to PAC file"
-msgstr "Sti til PAC fil"
+msgstr ""
 
 #: wicd/translations.py:85
 msgid "Path to client cert"
@@ -503,19 +501,19 @@ msgstr ""
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -523,7 +521,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:218
 msgid "Preferences dialog"
-msgstr "Innstillinger"
+msgstr ""
 
 #: curses/wicd-curses.py:610
 msgid "Prefs"
@@ -600,7 +598,7 @@ msgstr ""
 
 #: wicd/misc.py:99
 msgid "Resetting IP address..."
-msgstr "Resetter IP-adresse..."
+msgstr ""
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
@@ -624,7 +622,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:574
 msgid "Scanning networks... stand by..."
-msgstr "Skanner nettverk... venligst vent..."
+msgstr ""
 
 #: gtk/netentry.py:102
 msgid "Scripts"
@@ -676,7 +674,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:216
 msgid "Stop a connection in progress"
-msgstr "Stopp nettverkstilkobling som settes opp"
+msgstr ""
 
 #: gtk/gui.py:376
 msgid "Switch Off Wi-Fi"
@@ -748,11 +746,11 @@ msgstr ""
 
 #: curses/netentry_curses.py:54 gtk/netentry.py:89
 msgid "Use Static DNS"
-msgstr "Bruk statisk DNS"
+msgstr "Usar DNS estático"
 
 #: curses/netentry_curses.py:49 gtk/netentry.py:88
 msgid "Use Static IPs"
-msgstr ""
+msgstr "us IPs est"
 
 #: curses/netentry_curses.py:249 gtk/netentry.py:708
 msgid "Use as default profile (overwrites any previous default)"
@@ -789,7 +787,7 @@ msgstr ""
 
 #: wicd/misc.py:106
 msgid "Verifying access point association..."
-msgstr "Verifiserer aksesspunkt assosiasjon..."
+msgstr ""
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
@@ -838,7 +836,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:581
 msgid "Wired Networks"
-msgstr "Kablet nettverk"
+msgstr ""
 
 #: gtk/gui.py:97
 msgid "Wired connection detected"
@@ -929,7 +927,7 @@ msgstr ""
 
 #: data/wicd.ui:104
 msgid "_Disconnect All"
-msgstr "Koble fra alle nettverk"
+msgstr ""
 
 #: data/wicd.ui:118
 msgid "_Refresh"
@@ -937,7 +935,7 @@ msgstr ""
 
 #: data/wicd.ui:132
 msgid "_Preferences"
-msgstr "Innstillinger"
+msgstr ""
 
 #: data/wicd.ui:146
 msgid "_About"
@@ -945,7 +943,7 @@ msgstr ""
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
-msgstr "Kobler til..."
+msgstr "Conectando..."
 
 #: data/wicd.ui:238
 msgid "Cancel the current connection attempt"
@@ -961,23 +959,23 @@ msgstr ""
 
 #: data/wicd.ui:306
 msgid "Pre-connection Script:"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: data/wicd.ui:339
 msgid "Post-connection Script:"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: data/wicd.ui:372
 msgid "Pre-disconnection Script:"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: data/wicd.ui:405
 msgid "Post-disconnection Script:"
-msgstr "Kjør skript før frakobling"
+msgstr ""
 
 #: data/wicd.ui:524
 msgid "Always switch to a wired connection when available"
-msgstr "Bytt alltid til kablet forbindelse hvis tilgjengelig"
+msgstr ""
 
 #: data/wicd.ui:529
 msgid ""
@@ -1020,11 +1018,11 @@ msgstr ""
 
 #: data/wicd.ui:735
 msgid "Wired interface:"
-msgstr "Vis alltid kablet nettverk"
+msgstr ""
 
 #: data/wicd.ui:753
 msgid "Wireless interface:"
-msgstr "Vis alltid kablet nettverk"
+msgstr ""
 
 #: data/wicd.ui:793
 msgid "<b>Network Interfaces</b>"

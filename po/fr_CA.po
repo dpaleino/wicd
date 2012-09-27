@@ -5,20 +5,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-04-05 01:50+0000\n"
 "Last-Translator: Gideon <Unknown>\n"
 "Language-Team: fr_CA <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
-
-#: curses/wicd-curses.py:200
-msgid "About Wicd"
-msgstr "À propos de Wicd"
 
 #: gtk/wicd-client.py:610
 msgid ""
@@ -49,6 +45,10 @@ msgstr ""
 #: curses/wicd-curses.py:612
 msgid "About"
 msgstr "À propos"
+
+#: curses/wicd-curses.py:200
+msgid "About Wicd"
+msgstr "À propos de Wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:273
 msgid "Activate Internet Connection Sharing"
@@ -151,7 +151,7 @@ msgstr "Configuration des préférences pour le profil câblé \"$A\""
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Configuration des préférences pour le réseau sans fil \"$A\" ($B)"
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr "Configuration de l'interface sans fil..."
 
@@ -163,9 +163,29 @@ msgstr "Se connecter"
 msgid "Connect to selected network"
 msgstr "Se connecter au réseau sélectionné"
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Connecté à $A - $B (IP:$C)"
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -175,23 +195,31 @@ msgstr "Connecté au réseau câblé (IP: $A)"
 msgid "Connecting"
 msgstr "Connexion en cours"
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr "Connexion annulée"
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr "Connexion annulée"
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr "Échec de la connexion: Mot de passe erroné"
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Échec de la connexion: Aucun bail DHCP reçu."
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Échec de la connexion: Impossible d'obtenir une adresse IP."
 
@@ -199,14 +227,30 @@ msgstr "Échec de la connexion: Impossible d'obtenir une adresse IP."
 msgid "Connection established"
 msgstr "Connexion établie"
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 "Échec de la connexion: Impossible de contacter le point d'accès sans fil."
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
 msgstr "Connexion effectuée."
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -293,7 +337,7 @@ msgstr "Affiche ce dialogue d'aide"
 msgid "Domain"
 msgstr "Domaine DNS"
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr "Connexion effectuée..."
 
@@ -321,7 +365,7 @@ msgstr "Connexion en cours..."
 msgid "External Programs"
 msgstr "Programmes externes"
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr "Purge de la table de routage..."
 
@@ -338,11 +382,11 @@ msgstr "Passerelle"
 msgid "General Settings"
 msgstr "Paramètres généraux"
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr "Génération de la clé PSK"
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr "Génération du fichier de configuration WPA"
 
@@ -407,6 +451,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "Masque de sous-réseau"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr "Interfaces réseau"
@@ -421,6 +469,7 @@ msgstr "Aucun réseau sans fil détecté."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr "Non connecté"
 
@@ -431,7 +480,7 @@ msgstr "Non connecté"
 msgid "OK"
 msgstr "OK"
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr "Obtention de l'adresse IP..."
 
@@ -534,11 +583,11 @@ msgstr ""
 msgid "Properties"
 msgstr "Propriétés"
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr "Arrêt de l'interface..."
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr "Démarrage de l'interface..."
 
@@ -579,7 +628,7 @@ msgstr "Renommer le profil câblé"
 msgid "Required encryption information is missing."
 msgstr "De l'information de chiffrement requise est manquante."
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr "Reconfiguration de l'adresse IP..."
 
@@ -635,15 +684,15 @@ msgstr "Sélectionner les scripts"
 msgid "Set up Ad-hoc network"
 msgstr "Créer un réseau Ad-Hoc"
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr "Configuration de l'adresse de diffusion..."
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr "Configuration des serveurs DNS statiques..."
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr "Activation des adresses IP statiques"
 
@@ -779,11 +828,11 @@ msgstr "Utiliser ces options pour tous les réseaux partageant cet ESSID"
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr "Authentification en cours..."
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr "Vérification de l'association du point d'accès..."
 
@@ -799,9 +848,13 @@ msgstr "Interface Curses de Wicd"
 msgid "Wicd daemon unreachable"
 msgstr "Service Wicd inaccessible"
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd doit accéder aux cartes réseau de votre ordinateur."
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -839,6 +892,10 @@ msgstr "Réseaux Câblés"
 #: gtk/gui.py:97
 msgid "Wired connection detected"
 msgstr "Connexion câblée détectée"
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""

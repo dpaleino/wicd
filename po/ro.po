@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-02-25 11:44+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ro <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -139,7 +139,7 @@ msgstr "Configurarea preferințelor pentru profilul prin fir „$A”"
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Configurarea preferințelor pentru rețeaua fără fir „$A” ($B)"
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr "Configurare interfață fără fir..."
 
@@ -151,9 +151,29 @@ msgstr "Conectează"
 msgid "Connect to selected network"
 msgstr "Conectează la rețeaua aleasă"
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Conectat la $A la $B (IP: $C)"
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -163,23 +183,31 @@ msgstr "Conectat la rețea prin fir (IP: $A)"
 msgid "Connecting"
 msgstr "Conectare"
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr "Conexiune anulată"
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr "Conexiune anulată"
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr "Conexiune eșuată: Parolă greșită"
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Conexiune eşuată: Nu am găsit un server DHCP."
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Conexiune eșuată: Imposibil de obținut o adresă IP"
 
@@ -187,14 +215,30 @@ msgstr "Conexiune eșuată: Imposibil de obținut o adresă IP"
 msgid "Connection established"
 msgstr "Conexiune stabilită"
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 "Conectare eşuată: Nu m-am putut conecta la punctul de acces fără fir."
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
 msgstr "Conexiune anulată"
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -280,7 +324,7 @@ msgstr "Afișează acest dialog de ajutor"
 msgid "Domain"
 msgstr "Domeniu DNS"
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr "Conexiune încheiată..."
 
@@ -308,7 +352,7 @@ msgstr "Stabilesc conexiunea..."
 msgid "External Programs"
 msgstr "Programe externe"
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr "Golire tabelă de rutare..."
 
@@ -324,11 +368,11 @@ msgstr "Gateway"
 msgid "General Settings"
 msgstr "Configurări generale"
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr "Generare PSK..."
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr "Generare fișier de configurare WPA..."
 
@@ -393,6 +437,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "Mască rețea"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr "Interfețe de rețea"
@@ -407,6 +455,7 @@ msgstr "Nu au fost găsite rețele fără fir."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr "Neconectat"
 
@@ -417,7 +466,7 @@ msgstr "Neconectat"
 msgid "OK"
 msgstr "OK"
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr "Obținere adresă IP..."
 
@@ -518,11 +567,11 @@ msgstr "Cere profil la conectarea automată prin fir"
 msgid "Properties"
 msgstr "Proprietăţi"
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr "Închidere interfață..."
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr "Deschidere interfață..."
 
@@ -563,7 +612,7 @@ msgstr "Redenumește profilul prin fir"
 msgid "Required encryption information is missing."
 msgstr "Lipsesc informații de criptare necesare."
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr "Reinițializare adresă IP..."
 
@@ -619,15 +668,15 @@ msgstr "Alege scripturi"
 msgid "Set up Ad-hoc network"
 msgstr "Configurează rețea ad-hoc"
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr "Stabilire adresă de difuzare..."
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr "Stabilire DNS-uri statice..."
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr "Stabilire adresă IP statică..."
 
@@ -761,11 +810,11 @@ msgstr ""
 msgid "Username"
 msgstr "Utilizator"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr "Validez autentificarea..."
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr "Verific asocierea cu punctul de acces..."
 
@@ -781,9 +830,13 @@ msgstr "Interfață Curses pentru Wicd"
 msgid "Wicd daemon unreachable"
 msgstr "Serviciul Wicd este indisponibil"
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd are nevoie să acceseze plăcile de rețea ale calculatorului dvs."
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -817,6 +870,10 @@ msgstr "Rețele prin fir"
 #: gtk/gui.py:97
 msgid "Wired connection detected"
 msgstr "Conexiune prin fir detectată"
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""

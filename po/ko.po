@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-02-25 11:43+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ko <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -139,7 +139,7 @@ msgstr "유선 프로필 \"$A\" 설정하기"
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "유선 네트워크 \"$A\" 설정 중 ($B)"
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr "무선 네트워크 인터페이스 설정 중..."
 
@@ -151,9 +151,29 @@ msgstr "연결"
 msgid "Connect to selected network"
 msgstr "선택한 네트워크에 연결하기"
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "$A에 연결됨. 신호 강도: $B (IP: $C)"
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -163,23 +183,31 @@ msgstr "유선 네트워크에 연결됨(IP:$A)"
 msgid "Connecting"
 msgstr "연결 중"
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr "연결 취소됨"
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr "연결 취소됨"
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr "연결 실패: 암호가 잘못됨"
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr "연결 실패 : DHCP 정보를 받을 수 없음"
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "연결 실패: IP 주소를 가져올 수 없음"
 
@@ -187,13 +215,29 @@ msgstr "연결 실패: IP 주소를 가져올 수 없음"
 msgid "Connection established"
 msgstr "연결됨"
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr "연결할 수 없음: 무선 액세스 포인트에 접근할 수 없습니다."
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
 msgstr "연결 취소됨"
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -276,7 +320,7 @@ msgstr "이 도움말 대화상자를 표시합니다"
 msgid "Domain"
 msgstr "DNS 도메인"
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr "연결 완료됨..."
 
@@ -302,7 +346,7 @@ msgstr "연결하는 중..."
 msgid "External Programs"
 msgstr "외부 프로그램"
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr "라우팅 테이블 비우는 중..."
 
@@ -318,11 +362,11 @@ msgstr "게이트웨이"
 msgid "General Settings"
 msgstr "일반 설정"
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr "PSK 생성 중..."
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr "WPA 설정 파일 생성 중..."
 
@@ -387,6 +431,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "넷마스크"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr "네트워크 인터페이스"
@@ -401,6 +449,7 @@ msgstr "무선 네트워크가 없습니다."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr "연결되지 않음"
 
@@ -411,7 +460,7 @@ msgstr "연결되지 않음"
 msgid "OK"
 msgstr "확인"
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr "IP 주소 얻는 중..."
 
@@ -511,11 +560,11 @@ msgstr "유선 네트워크 자동 연결 시 프로필 묻기"
 msgid "Properties"
 msgstr "속성"
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr "인터페이스 비활성화 중..."
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr "인터페이스 작동 중..."
 
@@ -556,7 +605,7 @@ msgstr "유선 프로필 이름 바꾸기"
 msgid "Required encryption information is missing."
 msgstr "필요한 암호화 정보가 없습니다."
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr "IP 주소 다시 설정하는 중..."
 
@@ -612,15 +661,15 @@ msgstr "스크립트 선택"
 msgid "Set up Ad-hoc network"
 msgstr "Ad-hoc 네트워크 설정"
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr "브로드캐스트 주소 설정하는 중..."
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr "정적 DNS 서버 설정하는 중..."
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr "고정 IP 주소 설정하는 중..."
 
@@ -745,11 +794,11 @@ msgstr "이 ESSID를 사용하는 모든 네트워크에 이 설정 사용하기
 msgid "Username"
 msgstr "사용자 이름"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr "인증 검증 중..."
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr "AP 연결 확인하는 중..."
 
@@ -765,9 +814,13 @@ msgstr "Wicd Curses 인터페이스"
 msgid "Wicd daemon unreachable"
 msgstr "Wicd 데몬 접근 불가능"
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd에서 네트워크 카드에 접근해야 합니다."
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -801,6 +854,10 @@ msgstr "유선 네트워크"
 #: gtk/gui.py:97
 msgid "Wired connection detected"
 msgstr "유선 연결 감지됨"
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""

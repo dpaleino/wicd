@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-03-05 21:01+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: da <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:45+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -25,6 +25,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E KB/s\n"
+"$F KB/s"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -32,14 +38,17 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B KB/s\n"
+"$C KB/s"
 
 #: curses/wicd-curses.py:612
 msgid "About"
-msgstr ""
+msgstr "Om"
 
 #: curses/wicd-curses.py:200
 msgid "About Wicd"
-msgstr "Om Wicd"
+msgstr "Om wicd"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:273
 msgid "Activate Internet Connection Sharing"
@@ -55,7 +64,7 @@ msgstr "Tilføje en ny kablet profil"
 
 #: curses/prefs_curses.py:52 data/wicd.ui:1679
 msgid "Advanced Settings"
-msgstr "Avancerede indstillinger"
+msgstr "Avanceret opsætning"
 
 #: curses/prefs_curses.py:69 gtk/prefs.py:326 data/wicd.ui:966
 msgid "Always show wired interface"
@@ -140,7 +149,7 @@ msgstr "Konfigurere præferencer for den kablet profil \"$A\":"
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr "Konfigurere indstillingerne for det trådløse netværk \"$A\" ($B)"
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr "Konfigurerer trådløst netværkskort..."
 
@@ -152,9 +161,29 @@ msgstr "Forbind"
 msgid "Connect to selected network"
 msgstr "Forbind til det valgte netværk"
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
 msgstr "Tilsluttet $A ved $B (IP: $C)"
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
+msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -164,23 +193,31 @@ msgstr "Tilsluttet kablet netværk (IP: $A)"
 msgid "Connecting"
 msgstr "Forbinder"
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr "Forbindelse afbrudt"
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr "Tilslutning annulleret"
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr "Tilslutning mislykkedes: Forkert adgangskode"
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr "Forbindelse mislykkedes: Ingen DHCP tilbud modtaget."
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr "Tilslutning mislykkedes: Kunne ikke hente IP adresse"
 
@@ -188,15 +225,31 @@ msgstr "Tilslutning mislykkedes: Kunne ikke hente IP adresse"
 msgid "Connection established"
 msgstr "Forbindelse oprettet"
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 "Forbindelse mislykkedes: Kunne ikke komme i kontakt med det trådløse access "
 "point."
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
 msgstr "Tilslutning annulleret"
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
+msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -282,7 +335,7 @@ msgstr "Vis denne hjælpedialogboks"
 msgid "Domain"
 msgstr "Domæne"
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr "Forbindelse oprettet..."
 
@@ -310,7 +363,7 @@ msgstr "Etablerer forbindelse..."
 msgid "External Programs"
 msgstr "Eksterne programmer"
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr "Rydder rute tabellen..."
 
@@ -326,11 +379,11 @@ msgstr "Gateway"
 msgid "General Settings"
 msgstr "Generelle indstillinger"
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr "Genererer PSK..."
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr "Genererer WPA konfigurationsfil..."
 
@@ -352,7 +405,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:611
 msgid "Hidden"
-msgstr ""
+msgstr "Skjult"
 
 #: gtk/gui.py:418
 msgid "Hidden Network ESSID"
@@ -395,6 +448,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "Netmaske"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr "Netværksgrænseflader"
@@ -409,6 +466,7 @@ msgstr "Ingen trådløse netværk fundet."
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr "Ikke tilsluttet"
 
@@ -419,7 +477,7 @@ msgstr "Ikke tilsluttet"
 msgid "OK"
 msgstr "OK"
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr "Henter IP adresse..."
 
@@ -507,11 +565,11 @@ msgstr "Tryk på en tast for at vende tilbage til det du var i gang med"
 
 #: wicd/translations.py:88
 msgid "Private key"
-msgstr ""
+msgstr "Privat nøgle"
 
 #: wicd/translations.py:89
 msgid "Private key password"
-msgstr ""
+msgstr "Adgangskode til privat nøgle"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -521,11 +579,11 @@ msgstr "Spørg efter profil ved kablet autoforbindelse"
 msgid "Properties"
 msgstr "Egenskaber"
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr "Deaktiverer grænseflade..."
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr "Sætter grænsefladen op..."
 
@@ -566,7 +624,7 @@ msgstr "Omdøb kablet profil"
 msgid "Required encryption information is missing."
 msgstr "Den nødvendige krypteringsinformation mangler."
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr "Nulstiller IP adresse..."
 
@@ -622,15 +680,15 @@ msgstr "Vælg skripts"
 msgid "Set up Ad-hoc network"
 msgstr "Sæt Ad-hoc netværket op"
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr "Indstiller broadcast adresse..."
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr "Indstiller statiske DNS-servere..."
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr "Sætter statiske IP adresser..."
 
@@ -656,11 +714,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:651
 msgid "Tab Left"
-msgstr ""
+msgstr "Tab venstre"
 
 #: curses/wicd-curses.py:652
 msgid "Tab Right"
-msgstr ""
+msgstr "Tab højre"
 
 #: curses/wicd-curses.py:93
 msgid "Terminated by user"
@@ -762,11 +820,11 @@ msgstr "Benyt disse indstillinger for alle netværk med dette ESSID"
 msgid "Username"
 msgstr "Brugernavn"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr "Validerer godkendelse..."
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr "Kontrollerer access point tilslutningen..."
 
@@ -782,9 +840,13 @@ msgstr "Wicd Curses grænseflade"
 msgid "Wicd daemon unreachable"
 msgstr "Wicd dæmon ikke tilgængelig"
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
 msgstr "Wicd har behov for adgang til din computers netværkskort."
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
+msgstr ""
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -793,6 +855,10 @@ msgid ""
 "RX:\n"
 "TX:"
 msgstr ""
+"Kablet\n"
+"IP:\n"
+"RX:\n"
+"TX:"
 
 #: curses/prefs_curses.py:81
 msgid "Wired Autoconnect Settings"
@@ -818,6 +884,10 @@ msgstr "Kablet netværk:"
 #: gtk/gui.py:97
 msgid "Wired connection detected"
 msgstr "Kablet forbindelse fundet"
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
+msgstr ""
 
 #: gtk/wicd-client.py:633
 msgid ""
@@ -880,7 +950,7 @@ msgstr "\"wicd-curses\" hjælp"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
-msgstr ""
+msgstr "Wicd - netværkshåndtering"
 
 #: data/wicd.ui:46
 msgid "Create an ad-hoc network"
@@ -916,7 +986,7 @@ msgstr "Indstillinger"
 
 #: data/wicd.ui:146
 msgid "_About"
-msgstr ""
+msgstr "_Om"
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."

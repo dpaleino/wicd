@@ -5,15 +5,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 21:25+0200\n"
+"POT-Creation-Date: 2012-09-26 17:26+0200\n"
 "PO-Revision-Date: 2012-02-25 11:43+0000\n"
 "Last-Translator: David Paleino <dapal@debian.org>\n"
 "Language-Team: ml <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 04:46+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
+"X-Generator: Launchpad (build 16033)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Configuring preferences for wireless network \"$A\" ($B)"
 msgstr ""
 
-#: wicd/misc.py:82
+#: wicd/misc.py:89
 msgid "Configuring wireless interface..."
 msgstr ""
 
@@ -151,8 +151,28 @@ msgstr "ബന്ധിപ്പിയ്ക്കുക"
 msgid "Connect to selected network"
 msgstr ""
 
+#: cli/wicd-cli.py:83
+msgid "Connected"
+msgstr ""
+
+#: cli/wicd-cli.py:96
+msgid "Connected to \"$A\" ($B)."
+msgstr ""
+
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
+msgstr ""
+
+#: cli/wicd-cli.py:102
+msgid "Connected to $A."
+msgstr ""
+
+#: wicd/misc.py:53
+msgid "Connected to a wired network"
+msgstr ""
+
+#: wicd/misc.py:52
+msgid "Connected to a wireless network"
 msgstr ""
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
@@ -163,23 +183,31 @@ msgstr ""
 msgid "Connecting"
 msgstr ""
 
-#: wicd/misc.py:79
+#: cli/wicd-cli.py:107
+msgid "Connecting to wired network."
+msgstr ""
+
+#: cli/wicd-cli.py:109
+msgid "Connecting to wireless network \"$A\"."
+msgstr ""
+
+#: wicd/misc.py:86
 msgid "Connection Cancelled"
 msgstr ""
 
-#: wicd/misc.py:85
+#: wicd/misc.py:92
 msgid "Connection Failed."
 msgstr ""
 
-#: wicd/misc.py:81
+#: wicd/misc.py:88
 msgid "Connection Failed: Bad password"
 msgstr ""
 
-#: wicd/misc.py:91
+#: wicd/misc.py:98
 msgid "Connection Failed: No DHCP offers received."
 msgstr ""
 
-#: wicd/misc.py:83
+#: wicd/misc.py:90
 msgid "Connection Failed: Unable to Get IP Address"
 msgstr ""
 
@@ -187,12 +215,28 @@ msgstr ""
 msgid "Connection established"
 msgstr ""
 
-#: wicd/misc.py:80
+#: wicd/misc.py:87
 msgid "Connection failed: Could not contact the wireless access point."
 msgstr ""
 
-#: wicd/misc.py:97
+#: wicd/misc.py:51
+msgid "Connection in progress"
+msgstr ""
+
+#: cli/wicd-cli.py:92
+msgid "Connection status"
+msgstr ""
+
+#: wicd/misc.py:104
 msgid "Connection successful."
+msgstr ""
+
+#: wicd/misc.py:54
+msgid "Connection suspended"
+msgstr ""
+
+#: cli/wicd-cli.py:94
+msgid "Connection type"
 msgstr ""
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
@@ -273,7 +317,7 @@ msgstr ""
 msgid "Domain"
 msgstr ""
 
-#: wicd/misc.py:84
+#: wicd/misc.py:91
 msgid "Done connecting..."
 msgstr ""
 
@@ -299,7 +343,7 @@ msgstr ""
 msgid "External Programs"
 msgstr ""
 
-#: wicd/misc.py:86
+#: wicd/misc.py:93
 msgid "Flushing the routing table..."
 msgstr ""
 
@@ -315,11 +359,11 @@ msgstr "ഗേറ്റ്‌വേ"
 msgid "General Settings"
 msgstr ""
 
-#: wicd/misc.py:87
+#: wicd/misc.py:94
 msgid "Generating PSK..."
 msgstr ""
 
-#: wicd/misc.py:88
+#: wicd/misc.py:95
 msgid "Generating WPA configuration file..."
 msgstr ""
 
@@ -384,6 +428,10 @@ msgstr ""
 msgid "Netmask"
 msgstr "നെറ്റ്‌മാസ്ക്"
 
+#: cli/wicd-cli.py:99
+msgid "Network ID: $A"
+msgstr ""
+
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
 msgstr ""
@@ -398,6 +446,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:786 gtk/gui.py:500 gtk/wicd-client.py:213
 #: gtk/wicd-client.py:223 gtk/wicd-client.py:335 gtk/wicd-client.py:338
+#: wicd/misc.py:50
 msgid "Not connected"
 msgstr ""
 
@@ -408,7 +457,7 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: wicd/misc.py:93
+#: wicd/misc.py:100
 msgid "Obtaining IP address..."
 msgstr ""
 
@@ -502,11 +551,11 @@ msgstr ""
 msgid "Properties"
 msgstr ""
 
-#: wicd/misc.py:89
+#: wicd/misc.py:96
 msgid "Putting interface down..."
 msgstr ""
 
-#: wicd/misc.py:90
+#: wicd/misc.py:97
 msgid "Putting interface up..."
 msgstr ""
 
@@ -547,7 +596,7 @@ msgstr ""
 msgid "Required encryption information is missing."
 msgstr ""
 
-#: wicd/misc.py:92
+#: wicd/misc.py:99
 msgid "Resetting IP address..."
 msgstr ""
 
@@ -603,15 +652,15 @@ msgstr ""
 msgid "Set up Ad-hoc network"
 msgstr ""
 
-#: wicd/misc.py:94
+#: wicd/misc.py:101
 msgid "Setting broadcast address..."
 msgstr ""
 
-#: wicd/misc.py:95
+#: wicd/misc.py:102
 msgid "Setting static DNS servers..."
 msgstr ""
 
-#: wicd/misc.py:96
+#: wicd/misc.py:103
 msgid "Setting static IP addresses..."
 msgstr ""
 
@@ -732,11 +781,11 @@ msgstr ""
 msgid "Username"
 msgstr "ഉപയോക്താവിന്റെ പേരു്"
 
-#: wicd/misc.py:98
+#: wicd/misc.py:105
 msgid "Validating authentication..."
 msgstr ""
 
-#: wicd/misc.py:99
+#: wicd/misc.py:106
 msgid "Verifying access point association..."
 msgstr ""
 
@@ -752,8 +801,12 @@ msgstr ""
 msgid "Wicd daemon unreachable"
 msgstr ""
 
-#: wicd/misc.py:209
+#: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
+msgstr ""
+
+#: cli/wicd-cli.py:85
+msgid "Wired"
 msgstr ""
 
 #: gtk/wicd-client.py:628
@@ -787,6 +840,10 @@ msgstr ""
 
 #: gtk/gui.py:97
 msgid "Wired connection detected"
+msgstr ""
+
+#: cli/wicd-cli.py:87
+msgid "Wireless"
 msgstr ""
 
 #: gtk/wicd-client.py:633

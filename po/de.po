@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-05-12 20:04+0000\n"
-"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"PO-Revision-Date: 2012-10-10 03:19+0000\n"
+"Last-Translator: Daniel Dietrich <Unknown>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-27 04:51+0000\n"
-"X-Generator: Launchpad (build 16033)\n"
+"X-Launchpad-Export-Date: 2012-10-10 05:01+0000\n"
+"X-Generator: Launchpad (build 16112)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -166,11 +166,11 @@ msgstr "Mit dem ausgewählten Netzwerk verbinden"
 
 #: cli/wicd-cli.py:83
 msgid "Connected"
-msgstr ""
+msgstr "Verbunden"
 
 #: cli/wicd-cli.py:96
 msgid "Connected to \"$A\" ($B)."
-msgstr ""
+msgstr "Verbunden mit \"$A\" ($B)."
 
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
@@ -178,15 +178,15 @@ msgstr "Verbunden mit $A unter $B (IP: $C)"
 
 #: cli/wicd-cli.py:102
 msgid "Connected to $A."
-msgstr ""
+msgstr "Verbunden mit $A."
 
 #: wicd/misc.py:53
 msgid "Connected to a wired network"
-msgstr ""
+msgstr "Verbunden mit einem Kabelnetzwerk"
 
 #: wicd/misc.py:52
 msgid "Connected to a wireless network"
-msgstr ""
+msgstr "Verbunden mit einem Drahtlosnetzwerk"
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -198,11 +198,11 @@ msgstr "Verbindung wird hergestellt"
 
 #: cli/wicd-cli.py:107
 msgid "Connecting to wired network."
-msgstr ""
+msgstr "Verbinde mit einem Kabelnetzwerk"
 
 #: cli/wicd-cli.py:109
 msgid "Connecting to wireless network \"$A\"."
-msgstr ""
+msgstr "Verbinde mit Drahtlosnetzwerk \"$A\"."
 
 #: wicd/misc.py:86
 msgid "Connection Cancelled"
@@ -235,11 +235,11 @@ msgstr ""
 
 #: wicd/misc.py:51
 msgid "Connection in progress"
-msgstr ""
+msgstr "Verbindungsvorgang läuft"
 
 #: cli/wicd-cli.py:92
 msgid "Connection status"
-msgstr ""
+msgstr "Verbindungsstatus"
 
 #: wicd/misc.py:104
 msgid "Connection successful."
@@ -251,7 +251,7 @@ msgstr ""
 
 #: cli/wicd-cli.py:94
 msgid "Connection type"
-msgstr ""
+msgstr "Verbindungstyp"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -858,7 +858,7 @@ msgstr "Wicd muss auf die Netzwerkkarten Ihres Rechners zugreifen."
 
 #: cli/wicd-cli.py:85
 msgid "Wired"
-msgstr ""
+msgstr "Kabelgebunden"
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -899,7 +899,7 @@ msgstr "Kabelverbindung gefunden"
 
 #: cli/wicd-cli.py:87
 msgid "Wireless"
-msgstr ""
+msgstr "Drahtlos"
 
 #: gtk/wicd-client.py:633
 msgid ""

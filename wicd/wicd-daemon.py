@@ -1802,6 +1802,7 @@ def main(argv):
             backup_location = wpath.varlib + 'resolv.conf.orig'
             if os.path.islink(backup_location):
                 dest = os.readlink(backup_location)
+                os.remove('/etc/resolv.conf')
                 os.symlink(dest, '/etc/resolv.conf')
             else:
                 shutil.move(backup_location, '/etc/resolv.conf')

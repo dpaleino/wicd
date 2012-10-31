@@ -678,7 +678,7 @@ class BaseInterface(object):
             resolv_params += ''.join(valid_dns_list)
 
         if self.resolvconf_cmd:
-            cmd = [self.resolvconf_cmd, '-a', self.iface]
+            cmd = [self.resolvconf_cmd, '-a', self.iface + '.wicd']
             if self.verbose: print cmd
             p = misc.Run(cmd, include_stderr=True, return_obj=True)
             p.communicate(input=resolv_params)

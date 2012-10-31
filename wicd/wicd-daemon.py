@@ -1748,7 +1748,11 @@ def main(argv):
         # don't back up if .orig exists, probably there cause
         # wicd exploded
         if not os.path.exists(backup_location):
-            shutil.copy2('/etc/resolv.conf', backup_location)
+            if os.path.islink('/etc/resolv.conf'):
+                dest = os.readlink('/etc/resolv.conf')
+                os.symlink(dest, backup_location)
+            else:
+                shutil.copy2('/etc/resolv.conf', backup_location)
             os.chmod(backup_location, 0644)
     except IOError:
         print 'error backing up resolv.conf'
@@ -1795,7 +1799,12 @@ def main(argv):
 
         # restore resolv.conf on quit
         try:
-            shutil.move(wpath.varlib + 'resolv.conf.orig', '/etc/resolv.conf')
+            backup_location = wpath.varlib + 'resolv.conf.orig'
+            if os.path.islink(backup_location):
+                dest = os.readlink(backup_location)
+                os.symlink(dest, '/etc/resolv.conf')
+            else:
+                shutil.move(backup_location, '/etc/resolv.conf')
             os.chmod('/etc/resolv.conf', 0644)
         except IOError:
             print 'error restoring resolv.conf'

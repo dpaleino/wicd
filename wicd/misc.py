@@ -306,22 +306,22 @@ def ParseEncryption(network):
                 # This is the last line, so we just write it.
                 config_file = ''.join([config_file, line])
             elif "$_" in line: 
-                cur_val = re.findall('\$_([A-Z0-9_]+)', line)
-                if cur_val:
-                    rep_val = network.get(cur_val[0].lower())
-                    if not rep_val:
-                        # hardcode some default values
-                        if cur_val[0] == 'SCAN':
-                            rep_val = '1'
-                        elif cur_val[0] == 'KEY_INDEX':
-                            rep_val = '0'
-                    if rep_val:
-                        line = line.replace("$_%s" % cur_val[0], str(rep_val))
-                        config_file = ''.join([config_file, line])
+                for cur_val in re.findall('\$_([A-Z0-9_]+)', line):
+                    if cur_val:
+                        rep_val = network.get(cur_val.lower())
+                        if not rep_val:
+                            # hardcode some default values
+                            if cur_val == 'SCAN':
+                                rep_val = '1'
+                            elif cur_val == 'KEY_INDEX':
+                                rep_val = '0'
+                        if rep_val:
+                            line = line.replace("$_%s" % cur_val, str(rep_val))
+                            config_file = ''.join([config_file, line])
+                        else:
+                            print "Ignoring template line: '%s'" % line
                     else:
-                        print "Ignoring template line: '%s'" % line
-                else:
-                    print "Weird parsing error occurred"
+                        print "Weird parsing error occurred"
             else:  # Just a regular entry.
                 config_file = ''.join([config_file, line])
 

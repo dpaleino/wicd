@@ -222,6 +222,7 @@ class Controller(object):
         iface.ReleaseDHCP()
         iface.SetAddress('0.0.0.0')
         iface.FlushRoutes()
+        iface.FlushDNS()
         iface.Down()
         iface.Up()
         misc.ExecuteScripts(wpath.postdisconnectscripts, self.debug,
@@ -463,6 +464,17 @@ class ConnectThread(threading.Thread):
                 if self.connect_result != "aborted":
                     self.abort_connection(dhcp_status)
                 return
+
+    @abortable
+    def flush_dns_addresses(self, iface):
+        """ Flush the added DNS address(es).
+
+        This is only useful when using resolvconf, since we effectively have no
+        foolproof way of removing added DNS addresses from a non-resolvconf
+        setup.
+
+        """
+        iface.FlushDNS()
 
     @abortable
     def set_dns_addresses(self, iface):
@@ -908,6 +920,7 @@ class WirelessConnectThread(ConnectThread):
         self.reset_ip_addresses(wiface)
         self.stop_wpa(wiface)
         self.flush_routes(wiface)
+        self.flush_dns_addresses(wiface)
         wiface.SetMode(self.network['mode'])
         wiface.SetBitrate(self.bitrate, self.allow_lower_bitrates)
 
@@ -983,6 +996,7 @@ class WirelessConnectThread(ConnectThread):
                 # Clean up before aborting.
                 iface.SetAddress('0.0.0.0')
                 iface.FlushRoutes()
+                iface.FlushDNS()
                 if hasattr(iface, "StopWPA"):
                     iface.StopWPA()
                 self.abort_connection('association_failed')
@@ -1162,6 +1176,7 @@ class WiredConnectThread(ConnectThread):
         self.reset_ip_addresses(liface)
         self.stop_wpa(liface)
         self.flush_routes(liface)
+        self.flush_dns_addresses(liface)
         
         # Bring up interface.
         self.put_iface_up(liface)

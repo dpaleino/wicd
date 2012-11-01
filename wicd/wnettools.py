@@ -644,6 +644,19 @@ class BaseInterface(object):
         misc.Run(cmd)
 
     @neediface(False)
+    def FlushDNS(self):
+        """ Remove added DNS servers from system resolv.conf.
+
+        Only useful for resolvconf-based setups.
+
+        """
+        if self.resolvconf_cmd:
+            cmd = [self.resolvconf_cmd, '-d', self.iface + '.wicd']
+            if self.verbose: print cmd
+            p = misc.Run(cmd, include_stderr=True, return_obj=True)
+            p.communicate()
+
+    @neediface(False)
     def SetDNS(self, dns1=None, dns2=None, dns3=None, 
                dns_dom=None, search_dom=None):
         """ Set the DNS of the system to the specified DNS servers.

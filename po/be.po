@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wicd\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-09-17 18:50+0000\n"
+"PO-Revision-Date: 2012-11-04 09:26+0000\n"
 "Last-Translator: Mikalai Udodau <Unknown>\n"
 "Language-Team: Belarusian <be@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-20 05:16+0000\n"
-"X-Generator: Launchpad (build 16165)\n"
+"X-Launchpad-Export-Date: 2012-11-05 04:45+0000\n"
+"X-Generator: Launchpad (build 16232)\n"
 
 #: gtk/wicd-client.py:610
 msgid ""
@@ -26,6 +26,12 @@ msgid ""
 "$E KB/s\n"
 "$F KB/s"
 msgstr ""
+"$A\n"
+"$B\n"
+"$C\n"
+"$D\n"
+"$E КБ/с\n"
+"$F КБ/с"
 
 #: gtk/wicd-client.py:603
 msgid ""
@@ -33,6 +39,9 @@ msgid ""
 "$B KB/s\n"
 "$C KB/s"
 msgstr ""
+"$A\n"
+"$B КБ/с\n"
+"$C КБ/с"
 
 #: curses/wicd-curses.py:612
 msgid "About"
@@ -68,7 +77,7 @@ msgstr "Заўсёды пераключацца на правадное злуч
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
-msgstr ""
+msgstr "Вы насамрэч хочаце адкінуць настаўленні для вылучанай сеткі?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -126,7 +135,7 @@ msgstr "Выберыце з ніжэйпададзеных сетак:"
 
 #: curses/wicd-curses.py:604
 msgid "Config"
-msgstr ""
+msgstr "Канфіг"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -154,11 +163,11 @@ msgstr "Злучыцца з выбранай сеткай"
 
 #: cli/wicd-cli.py:83
 msgid "Connected"
-msgstr ""
+msgstr "Злучана"
 
 #: cli/wicd-cli.py:96
 msgid "Connected to \"$A\" ($B)."
-msgstr ""
+msgstr "Злучана з \"$A\" ($B)."
 
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
@@ -166,15 +175,15 @@ msgstr "Злучана з $A у $B (IP: $C)"
 
 #: cli/wicd-cli.py:102
 msgid "Connected to $A."
-msgstr ""
+msgstr "Злучана з $A."
 
 #: wicd/misc.py:53
 msgid "Connected to a wired network"
-msgstr ""
+msgstr "Злучана з правадной сеткай"
 
 #: wicd/misc.py:52
 msgid "Connected to a wireless network"
-msgstr ""
+msgstr "Злучана з бесправадной сеткай"
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -186,11 +195,11 @@ msgstr "Злучэнне"
 
 #: cli/wicd-cli.py:107
 msgid "Connecting to wired network."
-msgstr ""
+msgstr "Злучэнне з правадной сеткай"
 
 #: cli/wicd-cli.py:109
 msgid "Connecting to wireless network \"$A\"."
-msgstr ""
+msgstr "Злучэнне з бесправадной сеткай \"$A\"."
 
 #: wicd/misc.py:86
 msgid "Connection Cancelled"
@@ -223,11 +232,11 @@ msgstr ""
 
 #: wicd/misc.py:51
 msgid "Connection in progress"
-msgstr ""
+msgstr "Злучэнне ў працэсе"
 
 #: cli/wicd-cli.py:92
 msgid "Connection status"
-msgstr ""
+msgstr "Статус злучэння"
 
 #: wicd/misc.py:104
 msgid "Connection successful."
@@ -239,7 +248,7 @@ msgstr ""
 
 #: cli/wicd-cli.py:94
 msgid "Connection type"
-msgstr ""
+msgstr "Тып злучэння"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -291,7 +300,7 @@ msgstr "Адладка"
 
 #: curses/wicd-curses.py:608
 msgid "Disconn"
-msgstr ""
+msgstr "Адлуч"
 
 #: curses/wicd-curses.py:215
 msgid "Disconnect from all networks"
@@ -311,11 +320,11 @@ msgstr ""
 
 #: gtk/prefs.py:349 data/wicd.ui:1002
 msgid "Display notifications about connection status"
-msgstr ""
+msgstr "Паказваць паведамленні пра статус злучэння"
 
 #: curses/wicd-curses.py:213
 msgid "Display this help dialog"
-msgstr ""
+msgstr "Паказаць гэту даведку"
 
 #: wicd/translations.py:78
 msgid "Domain"
@@ -414,7 +423,7 @@ msgstr "Уведзены недапушчальны адрас IP."
 
 #: gtk/gui.py:691 gtk/gui.py:699
 msgid "Invalid address in $A entry."
-msgstr ""
+msgstr "Недапушчальны адрас у запісе $A."
 
 #: curses/wicd-curses.py:464 gtk/gui.py:269 wicd/translations.py:80
 msgid "Key"
@@ -422,11 +431,11 @@ msgstr "Ключ"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "Індэкс ключа"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "Спіс запісаных сетак"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -434,7 +443,7 @@ msgstr "Маска сеткі"
 
 #: cli/wicd-cli.py:99
 msgid "Network ID: $A"
-msgstr ""
+msgstr "ID сеткі: $A"
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
@@ -545,7 +554,7 @@ msgstr "Закрыты ключ"
 
 #: wicd/translations.py:89
 msgid "Private key password"
-msgstr ""
+msgstr "Пароль закрытага ключа"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -593,7 +602,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:441
 msgid "Rename wired profile"
-msgstr ""
+msgstr "Перайменаваць правадны профіль"
 
 #: curses/netentry_curses.py:333 curses/netentry_curses.py:467 gtk/gui.py:754
 #: gtk/netentry.py:425 gtk/netentry.py:597
@@ -811,7 +820,7 @@ msgstr ""
 
 #: cli/wicd-cli.py:85
 msgid "Wired"
-msgstr ""
+msgstr "Правадное"
 
 #: gtk/wicd-client.py:628
 msgid ""
@@ -848,7 +857,7 @@ msgstr ""
 
 #: cli/wicd-cli.py:87
 msgid "Wireless"
-msgstr ""
+msgstr "Бесправадное"
 
 #: gtk/wicd-client.py:633
 msgid ""
@@ -931,7 +940,7 @@ msgstr ""
 
 #: data/wicd.ui:104
 msgid "_Disconnect All"
-msgstr ""
+msgstr "А_длучыць усе"
 
 #: data/wicd.ui:118
 msgid "_Refresh"
@@ -1002,15 +1011,15 @@ msgstr ""
 
 #: data/wicd.ui:635
 msgid "<b>Automatic Reconnection</b>"
-msgstr ""
+msgstr "<b>Аўтаматычнае перазлучэнне</b>"
 
 #: data/wicd.ui:651
 msgid "Use last wired network profile"
-msgstr ""
+msgstr "Ужыць апошні профіль правадной сеткі"
 
 #: data/wicd.ui:673
 msgid "Prompt for wired network profile"
-msgstr ""
+msgstr "Спытаць профіль правадной сеткі"
 
 #: data/wicd.ui:696
 msgid "Use default wired network profile"
@@ -1046,7 +1055,7 @@ msgstr ""
 
 #: data/wicd.ui:876
 msgid "Search domain:"
-msgstr ""
+msgstr "Пошукавы дамен:"
 
 #: data/wicd.ui:911
 msgid "<b>Global DNS Servers</b>"

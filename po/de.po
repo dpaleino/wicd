@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-10-10 03:19+0000\n"
-"Last-Translator: Daniel Dietrich <Unknown>\n"
+"PO-Revision-Date: 2012-11-05 14:45+0000\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: de <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-20 05:16+0000\n"
-"X-Generator: Launchpad (build 16165)\n"
+"X-Launchpad-Export-Date: 2012-11-06 04:54+0000\n"
+"X-Generator: Launchpad (build 16232)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -455,7 +455,7 @@ msgstr "Netzwerkmaske"
 
 #: cli/wicd-cli.py:99
 msgid "Network ID: $A"
-msgstr ""
+msgstr "Netzwerkkennung: $A"
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"

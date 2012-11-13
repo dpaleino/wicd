@@ -10,14 +10,14 @@ msgstr ""
 "Project-Id-Version: wicd-1.7.1\n"
 "Report-Msgid-Bugs-To: Eli Zaretskii <eliz@gnu.org>\n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-05-30 11:34+0000\n"
-"Last-Translator: my name <Unknown>\n"
+"PO-Revision-Date: 2012-11-12 12:47+0000\n"
+"Last-Translator: GenghisKhan <genghiskhan@gmx.ca>\n"
 "Language-Team: Hebrew <he@translationproject.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-10-20 05:16+0000\n"
-"X-Generator: Launchpad (build 16165)\n"
+"X-Launchpad-Export-Date: 2012-11-13 05:23+0000\n"
+"X-Generator: Launchpad (build 16251)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -107,7 +107,7 @@ msgstr "חידוש אוטומטי של החיבור כאשר הוא אובד"
 
 #: gtk/gui.py:330
 msgid "BSSID"
-msgstr ""
+msgstr "BSSID"
 
 #: curses/prefs_curses.py:113 curses/prefs_curses.py:114
 msgid "Backend"
@@ -167,11 +167,11 @@ msgstr "התחברות לרשת הנבחרת"
 
 #: cli/wicd-cli.py:83
 msgid "Connected"
-msgstr ""
+msgstr "חיבור פעיל"
 
 #: cli/wicd-cli.py:96
 msgid "Connected to \"$A\" ($B)."
-msgstr ""
+msgstr "יש חיבור אל „$A“‏ ($B)."
 
 #: curses/wicd-curses.py:158 gtk/gui.py:490 gtk/wicd-client.py:215
 msgid "Connected to $A at $B (IP: $C)"
@@ -179,15 +179,15 @@ msgstr "קיים חיבור אל $A בשיעור של $B ‏(IP: $C)"
 
 #: cli/wicd-cli.py:102
 msgid "Connected to $A."
-msgstr ""
+msgstr "יש חיבור אל $A."
 
 #: wicd/misc.py:53
 msgid "Connected to a wired network"
-msgstr ""
+msgstr "יש חיבור לרשת קווית."
 
 #: wicd/misc.py:52
 msgid "Connected to a wireless network"
-msgstr ""
+msgstr "יש חיבור לרשת אלחוטית."
 
 #: curses/wicd-curses.py:133 gtk/gui.py:483 gtk/wicd-client.py:220
 msgid "Connected to wired network (IP: $A)"
@@ -199,11 +199,11 @@ msgstr "בהתחברות כעת"
 
 #: cli/wicd-cli.py:107
 msgid "Connecting to wired network."
-msgstr ""
+msgstr "מתבצעת התחברות לרשת קווית."
 
 #: cli/wicd-cli.py:109
 msgid "Connecting to wireless network \"$A\"."
-msgstr ""
+msgstr "מתבצעת התחברות לרשת האלחוטית „$A“."
 
 #: wicd/misc.py:86
 msgid "Connection Cancelled"
@@ -235,11 +235,11 @@ msgstr "ההתחברות נכשלה: לא ניתן להתחבר אל נקודת 
 
 #: wicd/misc.py:51
 msgid "Connection in progress"
-msgstr ""
+msgstr "מתבצע חיבור"
 
 #: cli/wicd-cli.py:92
 msgid "Connection status"
-msgstr ""
+msgstr "מצב החיבור"
 
 #: wicd/misc.py:104
 msgid "Connection successful."
@@ -247,11 +247,11 @@ msgstr "ההתחברות נוצרה בהצלחה."
 
 #: wicd/misc.py:54
 msgid "Connection suspended"
-msgstr ""
+msgstr "החיבור מושההה"
 
 #: cli/wicd-cli.py:94
 msgid "Connection type"
-msgstr ""
+msgstr "סוג החיבור"
 
 #: gtk/gui.py:65 gtk/wicd-client.py:955
 msgid ""
@@ -399,7 +399,7 @@ msgstr "שרתי DNS גלובליים"
 
 #: gtk/gui.py:321
 msgid "Global settings for this ESSID"
-msgstr ""
+msgstr "הגדרות כלליות עבור ESSID זה"
 
 #: curses/wicd-curses.py:603
 msgid "Help"
@@ -440,7 +440,7 @@ msgstr "מפתח"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "ערכת מפתחות"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
@@ -452,7 +452,7 @@ msgstr "מסכת רשת"
 
 #: cli/wicd-cli.py:99
 msgid "Network ID: $A"
-msgstr ""
+msgstr "מזהה הרשת: $A"
 
 #: curses/prefs_curses.py:66
 msgid "Network Interfaces"
@@ -844,7 +844,7 @@ msgstr "נדרשת גישה לכרטיסי הרשת שבמחשבך עבור Wicd
 
 #: cli/wicd-cli.py:85
 msgid "Wired"
-msgstr ""
+msgstr "קווי"
 
 # RX: Receive/Receiver/Reception
 # TX: Transmit
@@ -887,7 +887,7 @@ msgstr "זוהה חיבור קווי"
 
 #: cli/wicd-cli.py:87
 msgid "Wireless"
-msgstr ""
+msgstr "אלחוטי"
 
 # Signal Strength
 # RX: Receive/Receiver/Reception

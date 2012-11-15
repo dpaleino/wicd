@@ -85,6 +85,9 @@ if __name__ == '__main__':
 daemon = wireless = wired = lost_dbus_id = None
 DBUS_AVAIL = False
 
+theme = gtk.icon_theme_get_default()
+theme.append_search_path(wpath.images)
+
 def catchdbus(func):
     def wrapper(*args, **kwargs):
         try:
@@ -261,7 +264,7 @@ class TrayIcon(object):
             wired_ip = info[0]
             self.network_addr = str(info[0])
             self.network_type = "wired"
-            self.tr.set_from_file(os.path.join(wpath.images, "wired.png"))
+            self.tr.set_from_name('wired')
             # status_string = _('Connected to wired network (IP: $A)').replace('$A',
             #wired_ip)
             # self.tr.set_tooltip(status_string)
@@ -314,7 +317,7 @@ class TrayIcon(object):
                                 cur_network + "..."
             self.update_tooltip()
             # self.tr.set_tooltip(status_string)
-            self.tr.set_from_file(os.path.join(wpath.images, "no-signal.png"))
+            self.tr.set_from_name('no-signal')
             if wired:
                 self._show_notification(cur_network,
                                         _('Establishing connection...'),
@@ -328,7 +331,7 @@ class TrayIcon(object):
         @catchdbus
         def set_not_connected_state(self, info=None):
             """ Set the icon info for the not connected state. """
-            self.tr.set_from_file(wpath.images + "no-signal.png")
+            self.tr.set_from_name('no-signal')
             if not DBUS_AVAIL:
                 status = _('Wicd daemon unreachable')
             elif wireless.GetKillSwitchEnabled():
@@ -393,9 +396,8 @@ class TrayIcon(object):
                     signal_img = "low-signal"
                 else:
                     signal_img = "bad-signal"
-
-            img_file = ''.join([wpath.images, prefix, signal_img, lock, ".png"])
-            self.tr.set_from_file(img_file)
+            img_name = ''.join([prefix, signal_img, lock])
+            self.tr.set_from_name(img_name)
         
         @catchdbus
         def get_bandwidth_activity(self):
@@ -677,10 +679,7 @@ TX:'''))
             if type_ == "__wired__":
                 image.set_from_icon_name("network-wired", 2)
             else:
-                pb = gtk.gdk.pixbuf_new_from_file_at_size(self._get_img(n_id),
-                                                          20, 20)
-                image.set_from_pixbuf(pb)
-                del pb
+                image.set_from_icon_name(self._get_img(n_id), 2)
             item.set_image(image)
             del image
             item.connect("activate", network_selected, type_, n_id)
@@ -706,23 +705,23 @@ TX:'''))
             if daemon.GetWPADriver() == 'ralink legacy' or \
                daemon.GetSignalDisplayType() == 1:
                 if dbm_strength >= -60:
-                    signal_img = 'signal-100.png'
+                    signal_img = 'signal-100'
                 elif dbm_strength >= -70:
-                    signal_img = 'signal-75.png'
+                    signal_img = 'signal-75'
                 elif dbm_strength >= -80:
-                    signal_img = 'signal-50.png'
+                    signal_img = 'signal-50'
                 else:
-                    signal_img = 'signal-25.png'
+                    signal_img = 'signal-25'
             else:
                 if strength > 75:
-                    signal_img = 'signal-100.png'
+                    signal_img = 'signal-100'
                 elif strength > 50:
-                    signal_img = 'signal-75.png'
+                    signal_img = 'signal-75'
                 elif strength > 25:
-                    signal_img = 'signal-50.png'
+                    signal_img = 'signal-50'
                 else:
-                    signal_img = 'signal-25.png'
-            return wpath.images + signal_img
+                    signal_img = 'signal-25'
+            return signal_img
             
         @catchdbus
         def on_net_menu_activate(self, item):
@@ -847,7 +846,7 @@ TX:'''))
                 self.tray = egg.trayicon.TrayIcon("WicdTrayIcon")
                 self.pic = gtk.Image()
                 self.tooltip.set_tip(self.eb, "Initializing wicd...")
-                self.pic.set_from_file(wpath.images + "no-signal.png")
+                self.pic.set_from_name('no-signal')
 
                 self.eb.connect('button_press_event', self.tray_clicked)
                 self.eb.add(self.pic)
@@ -864,7 +863,7 @@ TX:'''))
 
             def set_from_file(self, val=None):
                 """ Calls set_from_file on the gtk.Image for the tray icon. """
-                self.pic.set_from_file(val)
+                self.pic.set_from_file(os.path.join(wpath.images, 'hicolor/22x22/status/%s.png' % val))
 
             def set_tooltip(self, val):
                 """ Set the tooltip for this tray icon.
@@ -899,11 +898,11 @@ TX:'''))
                 TrayIcon.TrayIconGUI.__init__(self, parent)
                 gtk.StatusIcon.__init__(self)
 
-                self.current_icon_path = ''
+                self.current_icon_name = ''
                 self.set_visible(True)
                 self.connect('activate', self.on_activate)
                 self.connect('popup-menu', self.on_popup_menu)
-                self.set_from_file(wpath.images + "no-signal.png")
+                self.set_from_name('no-signal')
                 self.set_tooltip("Initializing wicd...")
 
             def on_popup_menu(self, status, button, timestamp):
@@ -911,11 +910,11 @@ TX:'''))
                 self.init_network_menu()
                 self.menu.popup(None, None, None, button, timestamp)
 
-            def set_from_file(self, path=None):
+            def set_from_name(self, name=None):
                 """ Sets a new tray icon picture. """
-                if path != self.current_icon_path:
-                    self.current_icon_path = path
-                    gtk.StatusIcon.set_from_file(self, path)
+                if name != self.current_icon_name:
+                    self.current_icon_name = name
+                    gtk.StatusIcon.set_from_icon_name(self, name)
 
             def visible(self, val):
                 """ Set if the icon is visible or not.

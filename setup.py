@@ -139,9 +139,6 @@ class configure(Command):
         self.share = '/usr/share/wicd/'
         self.etc = '/etc/wicd/'
         self.scripts = self.etc + "scripts/"
-        self.icons = '/usr/share/icons/hicolor/'
-        self.pixmaps = '/usr/share/pixmaps/'
-        self.images = self.pixmaps + 'wicd/'
         self.encryption = self.etc + 'encryption/templates/'
         self.bin = '/usr/bin/'
         self.sbin = '/usr/sbin/'
@@ -150,6 +147,9 @@ class configure(Command):
         self.curses = self.share + 'curses'
         self.gtk = self.share + 'gtk'
         self.cli = self.share + 'cli'
+        self.icons = '/usr/share/icons/hicolor/'
+        self.pixmaps = '/usr/share/pixmaps/'
+        self.images = self.share + 'icons'
         self.varlib = '/var/lib/wicd/'
         self.networks = self.varlib + 'configurations/'
         self.log = '/var/log/wicd/'
@@ -462,19 +462,20 @@ class install(_install):
             data.append((wpath.autostart, ['other/wicd-tray.desktop']))
             if not wpath.no_install_man:
                 data.append((wpath.mandir + 'man1/', [ 'man/wicd-client.1' ]))
-            data.append((wpath.icons + 'scalable/apps/', ['icons/scalable/wicd-gtk.svg']))
-            data.append((wpath.icons + '192x192/apps/', ['icons/192px/wicd-gtk.png']))
-            data.append((wpath.icons + '128x128/apps/', ['icons/128px/wicd-gtk.png']))
-            data.append((wpath.icons + '96x96/apps/', ['icons/96px/wicd-gtk.png']))
-            data.append((wpath.icons + '72x72/apps/', ['icons/72px/wicd-gtk.png']))
-            data.append((wpath.icons + '64x64/apps/', ['icons/64px/wicd-gtk.png']))
-            data.append((wpath.icons + '48x48/apps/', ['icons/48px/wicd-gtk.png']))
-            data.append((wpath.icons + '36x36/apps/', ['icons/36px/wicd-gtk.png']))
-            data.append((wpath.icons + '32x32/apps/', ['icons/32px/wicd-gtk.png']))
-            data.append((wpath.icons + '24x24/apps/', ['icons/24px/wicd-gtk.png']))
-            data.append((wpath.icons + '22x22/apps/', ['icons/22px/wicd-gtk.png']))
-            data.append((wpath.icons + '16x16/apps/', ['icons/16px/wicd-gtk.png']))
-            data.append((wpath.images, [('images/' + b) for b in os.listdir('images') if not b.startswith('.')]))
+            for size in os.listdir('icons'):
+                for category in os.listdir(os.path.join('icons', size)):
+                    imgdir = os.path.join('icons', size, category)
+                    data.append(
+                        (os.path.join(wpath.icons, size, category),
+                         [(os.path.join(imgdir, f)) for f in os.listdir(imgdir) if not f.startswith('.')])
+                    )
+            for size in os.listdir('images'):
+                for category in os.listdir(os.path.join('images', size)):
+                    imgdir = os.path.join('images', size, category)
+                    data.append(
+                        (os.path.join(wpath.images, 'hicolor', size, category),
+                         [(os.path.join(imgdir, f)) for f in os.listdir(imgdir) if not f.startswith('.')])
+                    )
             data.append((wpath.pixmaps, ['other/wicd-gtk.xpm']))
         if not wpath.no_install_ncurses:
             data.append((wpath.curses, ['curses/curses_misc.py']))

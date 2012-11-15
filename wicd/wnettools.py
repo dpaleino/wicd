@@ -37,6 +37,7 @@ import random
 import time
 from string import maketrans, translate
 import dbus
+import socket, fcntl
 
 import wpath
 import misc
@@ -132,6 +133,27 @@ def GetDefaultGateway():
         print 'couldn\'t retrieve default gateway from route -n'
     return gateway
 
+def isWireless(devname):
+    """
+    Classic-style wifi device classification using linux/wireless.h 
+    This should be extended or replaced by nl80211.h style classification
+    in the future, if wireless.h is fully replaced.
+    """
+    we = None
+    for t in [socket.AF_INET, socket.AF_INET6, socket.AF_IPX, socket.AF_AX25, socket.AF_APPLETALK]:
+        sk = socket.socket(t, socket.SOCK_DGRAM)
+        if sk is None:
+            continue
+        skfd = sk.fileno()
+        try:
+            #define SIOCGIWNAME 0x8b01 in linux/wireless.h
+            # "used to verify the presence of wireless extensions"
+            we = fcntl.ioctl(skfd, 0x8b01, devname)
+        except:
+            pass
+        sk.close()
+    return we is not None
+
 def GetWirelessInterfaces():
     """ Get available wireless interfaces.
 
@@ -142,10 +164,7 @@ def GetWirelessInterfaces():
 
     """
     dev_dir = '/sys/class/net/'
-    ifnames = [iface for iface in os.listdir(dev_dir)
-               if os.path.isdir(dev_dir + iface) and 
-                  'wireless' in os.listdir(dev_dir + iface)]
-    
+    ifnames = [iface for iface in os.listdir(dev_dir) and isWireless(str(iface))]
     return ifnames
 
 def GetWiredInterfaces():

@@ -512,7 +512,7 @@ class TrayIcon(object):
             self.menu = (self.manager.get_widget('/Menubar/Menu/Quit').
                                                                   props.parent)
             self.gui_win = None
-            self.current_icon_path = None
+            self.current_icon_name = None
             self._is_scanning = False
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             net_menuitem.connect("activate", self.on_net_menu_activate)

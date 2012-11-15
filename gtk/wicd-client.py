@@ -797,7 +797,8 @@ TX:'''))
                 no_nets_item.set_sensitive(False)
                 no_nets_item.show()
                 submenu.append(no_nets_item)
-                    
+
+            submenu.reposition()
             net_menuitem.show()
         
         def init_network_menu(self):
@@ -908,7 +909,8 @@ TX:'''))
             def on_popup_menu(self, status, button, timestamp):
                 """ Opens the right click menu for the tray icon. """
                 self.init_network_menu()
-                self.menu.popup(None, None, None, button, timestamp)
+                self.menu.popup(None, None, gtk.status_icon_position_menu,
+                    button, timestamp, self)
 
             def set_from_name(self, name=None):
                 """ Sets a new tray icon picture. """

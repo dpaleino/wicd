@@ -164,7 +164,7 @@ def GetWirelessInterfaces():
 
     """
     dev_dir = '/sys/class/net/'
-    ifnames = [iface for iface in os.listdir(dev_dir) and isWireless(str(iface))]
+    ifnames = [iface for iface in os.listdir(dev_dir) if isWireless(str(iface))]
     return ifnames
 
 def GetWiredInterfaces():

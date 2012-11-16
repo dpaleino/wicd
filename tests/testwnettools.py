@@ -21,12 +21,9 @@ class TestWnettools(unittest.TestCase):
 	def test_needs_external_calls_not_implemented(self):
 		self.assertRaises(NotImplementedError, wnettools.NeedsExternalCalls)
 		
-	def test_get_ip_not_implemented(self):
-		self.assertRaises(NotImplementedError, self.interface.GetIP)
-		
-	def test_is_up_not_implemented(self):
-		self.assertRaises(NotImplementedError, self.interface.IsUp)
-		
+	def test_is_up_boolean(self):
+		self.assertTrue(type(self.interface.IsUp()) == bool)
+
 	def test_enable_debug_mode(self):
 		self.interface.SetDebugMode(True)
 		self.assertTrue(self.interface.verbose)

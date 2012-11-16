@@ -9,7 +9,7 @@ class TestWnettools(unittest.TestCase):
 		interfaces = wnettools.GetWirelessInterfaces()
 		# wlan0 may change depending on your system
 		#self.assertTrue('wlan0' in interfaces)
-		self.asserTrue(type(interfaces) == list)
+		self.assertTrue(type(interfaces) == list)
 		
 	def test_find_wired_interface(self):
 		interfaces = wnettools.GetWiredInterfaces()

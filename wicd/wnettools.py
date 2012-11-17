@@ -1586,7 +1586,7 @@ class BaseWirelessInterface(BaseInterface):
         # process the output
         rates = rates.split('\n')
         rates = [x.strip().split(' ')[0] for x in rates]
-        rates = [x for x in rates if x[0].isdigit()]
+        rates = [x for x in rates if x and x[0].isdigit()]
         return dbus.Array(rates, signature='v')
 
     def _get_link_quality(self, output):

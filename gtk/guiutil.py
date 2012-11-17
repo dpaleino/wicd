@@ -30,22 +30,27 @@ try:
 except ImportError:
     print "Importing pynotify failed, notifications disabled."
     HAS_NOTIFY = False
- 
+
 print "Has notifications support", HAS_NOTIFY
 
 if wpath.no_use_notifications:
     print 'Notifications disabled during setup.py configure'
-    
+
+
 def can_use_notify():
+    """ Check whether WICD is allowed to use notifications. """
     use_notify = os.path.exists(os.path.join(os.path.expanduser('~/.wicd'),
                                              'USE_NOTIFICATIONS')
                                 )
     return use_notify and HAS_NOTIFY and not wpath.no_use_notifications
-    
-def error(parent, message, block=True): 
+
+
+def error(parent, message, block=True):
     """ Shows an error dialog. """
-    def delete_event(dialog, id):
+    def delete_event(dialog, i):
+        """ Handle dialog destroy. """
         dialog.destroy()
+
     if can_use_notify() and not block:
         notification = pynotify.Notification("ERROR", message, "error")
         notification.show()
@@ -59,11 +64,14 @@ def error(parent, message, block=True):
     else:
         dialog.run()
         dialog.destroy()
-    
-def alert(parent, message, block=True): 
+
+
+def alert(parent, message, block=True):
     """ Shows an warning dialog. """
-    def delete_event(dialog, id):
+    def delete_event(dialog, i):
+        """ Handle dialog destroy. """
         dialog.destroy()
+
     dialog = gtk.MessageDialog(parent, gtk.DIALOG_MODAL, gtk.MESSAGE_WARNING,
                                gtk.BUTTONS_OK)
     dialog.set_markup(message)
@@ -74,11 +82,14 @@ def alert(parent, message, block=True):
         dialog.run()
         dialog.destroy()
 
+
 def string_input(prompt, secondary, textbox_label):
+    """ Dialog with a label and an entry. """
     # based on a version of a PyGTK text entry from
     # http://ardoris.wordpress.com/2008/07/05/pygtk-text-entry-dialog/
 
     def dialog_response(entry, dialog, response):
+        """ Handle dialog response. """
         dialog.response(response)
 
     dialog = gtk.MessageDialog(
@@ -103,6 +114,7 @@ def string_input(prompt, secondary, textbox_label):
     hbox.pack_start(entry)
 
     # pack the boxes and show the dialog
+    # pylint: disable-msg=E1101
     dialog.vbox.pack_end(hbox, True, True, 0)
     dialog.show_all()
 
@@ -114,19 +126,24 @@ def string_input(prompt, secondary, textbox_label):
         dialog.destroy()
         return None
 
+
 class SmallLabel(gtk.Label):
+    """ Small GtkLabel. """
     def __init__(self, text=''):
         gtk.Label.__init__(self, text)
         self.set_size_request(50, -1)
-        
+
+
 class LeftAlignedLabel(gtk.Label):
+    """GtkLabel with text aligned to left. """
     def __init__(self, label=None):
         gtk.Label.__init__(self, label)
         self.set_alignment(0.0, 0.5)
 
+
 class LabelEntry(gtk.HBox):
     """ A label on the left with a textbox on the right. """
-    def __init__(self,text):
+    def __init__(self, text):
         gtk.HBox.__init__(self)
         self.entry = gtk.Entry()
         self.entry.set_size_request(200, -1)
@@ -143,27 +160,31 @@ class LabelEntry(gtk.HBox):
         self.show()
 
     def set_text(self, text):
+        """ Set text of the GtkEntry. """
         # For compatibility...
         self.entry.set_text(text)
 
     def get_text(self):
+        """ Get text of the GtkEntry. """
         return self.entry.get_text()
 
     def set_auto_hidden(self, value):
+        """ Set auto-hide of the text of GtkEntry. """
         self.entry.set_visibility(False)
         self.auto_hide_text = value
 
     def show_characters(self, widget=None, event=None):
-        # When the box has focus, show the characters
+        """ When the box has focus, show the characters. """
         if self.auto_hide_text and widget:
             self.entry.set_visibility(True)
 
     def set_sensitive(self, value):
+        """ Set sensitivity of the widget. """
         self.entry.set_sensitive(value)
         self.label.set_sensitive(value)
 
     def hide_characters(self, widget=None, event=None):
-        # When the box looses focus, hide them
+        """ When the box looses focus, hide them. """
         if self.auto_hide_text and widget:
             self.entry.set_visibility(False)
 
@@ -202,24 +223,30 @@ class ProtectedLabelEntry(gtk.HBox):
         self.show()
 
     def set_entry_text(self, text):
+        """ Set text of the GtkEntry. """
         # For compatibility...
         self.entry.set_text(text)
 
     def get_entry_text(self):
+        """ Get text of the GtkEntry. """
         return self.entry.get_text()
 
     def set_sensitive(self, value):
+        """ Set sensitivity of the widget. """
         self.entry.set_sensitive(value)
         self.label.set_sensitive(value)
         self.check.set_sensitive(value)
 
     def click_handler(self, widget=None, event=None):
+        """ Handle clicks. """
         active = self.check.get_active()
         self.entry.set_visibility(active)
 
+
 class LabelCombo(gtk.HBox):
     """ A label on the left with a combobox on the right. """
-    def __init__(self,text):
+
+    def __init__(self, text):
         gtk.HBox.__init__(self)
         self.combo = gtk.ComboBox()
         self.combo.set_size_request(200, -1)
@@ -236,20 +263,26 @@ class LabelCombo(gtk.HBox):
         self.show()
 
     def get_active(self):
+        """ Return the selected item in the GtkComboBox. """
         return self.combo.get_active()
 
     def set_active(self, index):
+        """ Set given item in the GtkComboBox. """
         self.combo.set_active(index)
 
     def get_active_text(self):
+        """ Return the selected item's text in the GtkComboBox. """
         return self.combo.get_active_text()
 
     def get_model(self):
+        """ Return the GtkComboBox's model. """
         return self.combo.get_model()
 
     def set_model(self, model=None):
+        """ Set the GtkComboBox's model. """
         self.combo.set_model(model)
 
     def set_sensitive(self, value):
+        """ Set sensitivity of the widget. """
         self.combo.set_sensitive(value)
         self.label.set_sensitive(value)

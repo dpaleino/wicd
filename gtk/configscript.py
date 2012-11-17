@@ -47,10 +47,10 @@ wired_conf = wpath.etc + 'wired-settings.conf'
 
 def none_to_blank(text):
     """ Converts special string cases to a blank string.
-    
+
     If text is None, 'None', or '' then this method will
     return '', otherwise it will just return str(text).
-    
+
     """
     if text in (None, "None", ""):
         return ""
@@ -63,7 +63,7 @@ def blank_to_none(text):
         return "None"
     else:
         return str(text)
-    
+
 def get_script_info(network, network_type):
     """ Read script info from disk and load it into the configuration dialog """
     info = {}
@@ -72,16 +72,20 @@ def get_script_info(network, network_type):
         if con.has_section(network):
             info["pre_entry"] = con.get(network, "beforescript", None)
             info["post_entry"] = con.get(network, "afterscript", None)
-            info["pre_disconnect_entry"] = con.get(network, "predisconnectscript", None)
-            info["post_disconnect_entry"] = con.get(network, "postdisconnectscript", None)
+            info["pre_disconnect_entry"] = con.get(network,
+                "predisconnectscript", None)
+            info["post_disconnect_entry"] = con.get(network,
+                "postdisconnectscript", None)
     else:
         bssid = wireless.GetWirelessProperty(int(network), "bssid")
         con = ConfigManager(wireless_conf)
         if con.has_section(bssid):
             info["pre_entry"] = con.get(bssid, "beforescript", None)
             info["post_entry"] = con.get(bssid, "afterscript", None)
-            info["pre_disconnect_entry"] = con.get(bssid, "predisconnectscript", None)
-            info["post_disconnect_entry"] = con.get(bssid, "postdisconnectscript", None)
+            info["pre_disconnect_entry"] = con.get(bssid,
+                "predisconnectscript", None)
+            info["post_disconnect_entry"] = con.get(bssid,
+                "postdisconnectscript", None)
     return info
 
 def write_scripts(network, network_type, script_info):
@@ -90,8 +94,10 @@ def write_scripts(network, network_type, script_info):
         con = ConfigManager(wired_conf)
         con.set(network, "beforescript", script_info["pre_entry"])
         con.set(network, "afterscript", script_info["post_entry"])
-        con.set(network, "predisconnectscript", script_info["pre_disconnect_entry"])
-        con.set(network, "postdisconnectscript", script_info["post_disconnect_entry"])
+        con.set(network, "predisconnectscript",
+            script_info["pre_disconnect_entry"])
+        con.set(network, "postdisconnectscript",
+            script_info["post_disconnect_entry"])
         con.write()
         wired.ReloadConfig()
         wired.ReadWiredNetworkProfile(network)
@@ -101,8 +107,10 @@ def write_scripts(network, network_type, script_info):
         con = ConfigManager(wireless_conf)
         con.set(bssid, "beforescript", script_info["pre_entry"])
         con.set(bssid, "afterscript", script_info["post_entry"])
-        con.set(bssid, "predisconnectscript", script_info["pre_disconnect_entry"])
-        con.set(bssid, "postdisconnectscript", script_info["post_disconnect_entry"])
+        con.set(bssid, "predisconnectscript",
+            script_info["pre_disconnect_entry"])
+        con.set(bssid, "postdisconnectscript",
+            script_info["post_disconnect_entry"])
         con.write()
         wireless.ReloadConfig()
         wireless.ReadWirelessNetworkProfile(int(network))
@@ -114,12 +122,12 @@ def main (argv):
     if len(argv) < 2:
         print 'Network id to configure is missing, aborting.'
         sys.exit(1)
-    
+
     network = argv[1]
     network_type = argv[2]
-    
+
     script_info = get_script_info(network, network_type)
-    
+
     gladefile = os.path.join(wpath.gtk, "wicd.ui")
     wTree = gtk.Builder()
     wTree.set_translation_domain('wicd')
@@ -127,33 +135,39 @@ def main (argv):
     dialog = wTree.get_object("configure_script_dialog")
     wTree.get_object("pre_label").set_label(_('Pre-connection Script') + ":")
     wTree.get_object("post_label").set_label(_('Post-connection Script') + ":")
-    wTree.get_object("pre_disconnect_label").set_label(_('Pre-disconnection Script')
-                                                   + ":")
-    wTree.get_object("post_disconnect_label").set_label(_('Post-disconnection Script')
-                                                   + ":")
+    wTree.get_object("pre_disconnect_label").\
+        set_label(_('Pre-disconnection Script') + ":")
+    wTree.get_object("post_disconnect_label").\
+        set_label(_('Post-disconnection Script') + ":")
     wTree.get_object("window1").hide()
-    
+
     pre_entry = wTree.get_object("pre_entry")
     post_entry = wTree.get_object("post_entry")
     pre_disconnect_entry = wTree.get_object("pre_disconnect_entry")
     post_disconnect_entry = wTree.get_object("post_disconnect_entry")
-    
+
     pre_entry.set_text(none_to_blank(script_info.get("pre_entry")))
     post_entry.set_text(none_to_blank(script_info.get("post_entry")))
-    pre_disconnect_entry.set_text(none_to_blank(script_info.get("pre_disconnect_entry")))
-    post_disconnect_entry.set_text(none_to_blank(script_info.get("post_disconnect_entry")))
+    pre_disconnect_entry.set_text(
+        none_to_blank(script_info.get("pre_disconnect_entry"))
+    )
+    post_disconnect_entry.set_text(
+        none_to_blank(script_info.get("post_disconnect_entry"))
+    )
 
     dialog.show_all()
-    
+
     result = dialog.run()
     if result == 1:
         script_info["pre_entry"] = blank_to_none(pre_entry.get_text())
         script_info["post_entry"] = blank_to_none(post_entry.get_text())
-        script_info["pre_disconnect_entry"] = blank_to_none(pre_disconnect_entry.get_text())
-        script_info["post_disconnect_entry"] = blank_to_none(post_disconnect_entry.get_text())
+        script_info["pre_disconnect_entry"] = \
+            blank_to_none(pre_disconnect_entry.get_text())
+        script_info["post_disconnect_entry"] = \
+            blank_to_none(post_disconnect_entry.get_text())
         write_scripts(network, network_type, script_info)
     dialog.destroy()
- 
+
 
 if __name__ == '__main__':
     if os.getuid() != 0:

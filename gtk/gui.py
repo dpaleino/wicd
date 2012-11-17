@@ -27,7 +27,6 @@ import os
 import sys
 import time
 import gobject
-import pango
 import gtk
 from itertools import chain
 from dbus import DBusException
@@ -49,22 +48,30 @@ if __name__ == '__main__':
 proxy_obj = daemon = wireless = wired = bus = None
 DBUS_AVAIL = False
 
+
 def setup_dbus(force=True):
+    """ Initialize DBus. """
     global bus, daemon, wireless, wired, DBUS_AVAIL
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
         if force:
-            print "Can't connect to the daemon, trying to start it automatically..."
+            print "Can't connect to the daemon, ' + \
+                'trying to start it automatically..."
             if not misc.PromptToStartDaemon():
-                print "Failed to find a graphical sudo program, cannot continue."
+                print "Failed to find a graphical sudo program, ' + \
+                    'cannot continue."
                 return False
             try:
                 dbusmanager.connect_to_dbus()
             except DBusException:
-                error(None, _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages."))
+                error(
+                    None,
+                    _("Could not connect to wicd's D-Bus interface. "
+                    "Check the wicd log for error messages.")
+                )
                 return False
-        else:  
+        else:
             return False
     prefs.setup_dbus()
     netentry.setup_dbus()
@@ -74,18 +81,26 @@ def setup_dbus(force=True):
     wireless = dbus_ifaces['wireless']
     wired = dbus_ifaces['wired']
     DBUS_AVAIL = True
-    
+
     return True
 
+
 def handle_no_dbus(from_tray=False):
+    """ Handle the case where no DBus is available. """
     global DBUS_AVAIL
     DBUS_AVAIL = False
-    if from_tray: return False
+    if from_tray:
+        return False
     print "Wicd daemon is shutting down!"
-    error(None, _('The wicd daemon has shut down. The UI will not function properly until it is restarted.'), block=False)
+    error(
+        None,
+        _('The wicd daemon has shut down. The UI will not function '
+        'properly until it is restarted.'),
+        block=False
+    )
     return False
 
-        
+
 class WiredProfileChooser:
     """ Class for displaying the wired profile chooser. """
     def __init__(self):
@@ -94,14 +109,19 @@ class WiredProfileChooser:
         # functions and widgets it uses.
         wired_net_entry = WiredNetworkEntry()
 
-        dialog = gtk.Dialog(title = _('Wired connection detected'),
-                            flags = gtk.DIALOG_MODAL,
-                            buttons = (gtk.STOCK_CONNECT, 1,
-                                       gtk.STOCK_CANCEL, 2))
+        dialog = gtk.Dialog(
+            title=_('Wired connection detected'),
+            flags=gtk.DIALOG_MODAL,
+            buttons=(gtk.STOCK_CONNECT, 1, gtk.STOCK_CANCEL, 2)
+        )
         dialog.set_has_separator(False)
         dialog.set_size_request(400, 150)
-        instruct_label = gtk.Label(_('Select or create a wired profile to connect with') + ':\n')
-        stoppopcheckbox = gtk.CheckButton(_('Stop Showing Autoconnect pop-up temporarily'))
+        instruct_label = gtk.Label(
+            _('Select or create a wired profile to connect with') + ':\n'
+        )
+        stoppopcheckbox = gtk.CheckButton(
+            _('Stop Showing Autoconnect pop-up temporarily')
+        )
 
         wired_net_entry.is_full_gui = False
         instruct_label.set_alignment(0, 0)
@@ -112,15 +132,19 @@ class WiredProfileChooser:
         wired_net_entry.vbox_top.remove(wired_net_entry.hbox_temp)
         wired_net_entry.vbox_top.remove(wired_net_entry.profile_help)
 
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(instruct_label, fill=False, expand=False)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(wired_net_entry.profile_help, False, False)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(wired_net_entry.hbox_temp, False, False)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(stoppopcheckbox, False, False)
         dialog.show_all()
 
         wired_profiles = wired_net_entry.combo_profile_names
         wired_net_entry.profile_help.hide()
-        if wired_net_entry.profile_list != None:
+        if wired_net_entry.profile_list is not None:
             wired_profiles.set_active(0)
             print "wired profiles found"
         else:
@@ -139,6 +163,7 @@ class WiredProfileChooser:
 
 
 def get_wireless_prop(net_id, prop):
+    """ Get wireless property. """
     return wireless.GetWirelessProperty(net_id, prop)
 
 class appGui(object):
@@ -170,18 +195,19 @@ class appGui(object):
             width = 530
         self.window.resize(width, int(gtk.gdk.screen_height() / 1.7))
 
-        dic = { "refresh_clicked" : self.refresh_clicked, 
-                "quit_clicked" : self.exit,
-                "rfkill_clicked" : self.switch_rfkill,
-                "disconnect_clicked" : self.disconnect_all,
-                "main_exit" : self.exit, 
-                "cancel_clicked" : self.cancel_connect,
-                "hidden_clicked" : self.connect_hidden,
-                "preferences_clicked" : self.settings_dialog,
-                "about_clicked" : self.about_dialog,
-                "create_adhoc_clicked" : self.create_adhoc_network,
-                "forget_network_clicked" : self.forget_network,
-                }
+        dic = {
+            "refresh_clicked": self.refresh_clicked,
+            "quit_clicked": self.exit,
+            "rfkill_clicked": self.switch_rfkill,
+            "disconnect_clicked": self.disconnect_all,
+            "main_exit": self.exit,
+            "cancel_clicked": self.cancel_connect,
+            "hidden_clicked": self.connect_hidden,
+            "preferences_clicked": self.settings_dialog,
+            "about_clicked": self.about_dialog,
+            "create_adhoc_clicked": self.create_adhoc_network,
+            "forget_network_clicked": self.forget_network,
+        }
         self.wTree.connect_signals(dic)
 
         # Set some strings in the GUI - they may be translated
@@ -207,7 +233,9 @@ class appGui(object):
         self.status_area.hide_all()
 
         if os.path.exists(os.path.join(wpath.images, "wicd.png")):
-            self.window.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
+            self.window.set_icon_from_file(
+                os.path.join(wpath.images, "wicd.png")
+            )
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True
@@ -236,32 +264,36 @@ class appGui(object):
                         'org.wicd.daemon')
         bus.add_signal_receiver(self.handle_connection_results,
                                 'ConnectResultsSent', 'org.wicd.daemon')
-        bus.add_signal_receiver(lambda: setup_dbus(force=False), 
+        bus.add_signal_receiver(lambda: setup_dbus(force=False),
                                 "DaemonStarting", "org.wicd.daemon")
         bus.add_signal_receiver(self._do_statusbar_update, 'StatusChanged',
                                 'org.wicd.daemon')
         if standalone:
-            bus.add_signal_receiver(handle_no_dbus, "DaemonClosing", 
+            bus.add_signal_receiver(handle_no_dbus, "DaemonClosing",
                                     "org.wicd.daemon")
-            
+
         self._do_statusbar_update(*daemon.GetConnectionStatus())
         self.wait_for_events(0.1)
         self.update_cb = misc.timeout_add(2, self.update_statusbar)
         self.refresh_clicked()
-        
+
     def handle_connection_results(self, results):
+        """ Handle connection results. """
         if results not in ['success', 'aborted'] and self.is_visible:
             error(self.window, language[results], block=False)
 
     def create_adhoc_network(self, widget=None):
         """ Shows a dialog that creates a new adhoc network. """
         print "Starting the Ad-Hoc Network Creation Process..."
-        dialog = gtk.Dialog(title = _('Create an Ad-Hoc Network'),
-                            flags = gtk.DIALOG_MODAL,
-                            buttons=(gtk.STOCK_CANCEL, 2, gtk.STOCK_OK, 1))
+        dialog = gtk.Dialog(
+            title=_('Create an Ad-Hoc Network'),
+            flags=gtk.DIALOG_MODAL,
+            buttons=(gtk.STOCK_CANCEL, 2, gtk.STOCK_OK, 1)
+        )
         dialog.set_has_separator(False)
         dialog.set_size_request(400, -1)
-        self.chkbox_use_encryption = gtk.CheckButton(_('Use Encryption (WEP only)'))
+        self.chkbox_use_encryption = \
+            gtk.CheckButton(_('Use Encryption (WEP only)'))
         self.chkbox_use_encryption.set_active(False)
         ip_entry = LabelEntry(_('IP') + ':')
         essid_entry = LabelEntry(_('ESSID') + ':')
@@ -270,7 +302,8 @@ class appGui(object):
         self.key_entry.set_auto_hidden(True)
         self.key_entry.set_sensitive(False)
 
-        chkbox_use_ics = gtk.CheckButton( _('Activate Internet Connection Sharing'))
+        chkbox_use_ics = \
+            gtk.CheckButton(_('Activate Internet Connection Sharing'))
 
         self.chkbox_use_encryption.connect("toggled",
                                            self.toggle_encrypt_check)
@@ -283,22 +316,30 @@ class appGui(object):
         vbox_ah.pack_start(self.chkbox_use_encryption, False, False)
         vbox_ah.pack_start(self.key_entry, False, False)
         vbox_ah.show()
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(essid_entry)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(ip_entry)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(channel_entry)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(chkbox_use_ics)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(vbox_ah)
+        # pylint: disable-msg=E1101
         dialog.vbox.set_spacing(5)
         dialog.show_all()
         response = dialog.run()
         if response == 1:
-            wireless.CreateAdHocNetwork(essid_entry.entry.get_text(),
-                                        channel_entry.entry.get_text(),
-                                        ip_entry.entry.get_text().strip(),
-                                        "WEP",
-                                        self.key_entry.entry.get_text(),
-                                        self.chkbox_use_encryption.get_active(),
-                                        False) #chkbox_use_ics.get_active())
+            wireless.CreateAdHocNetwork(
+                essid_entry.entry.get_text(),
+                channel_entry.entry.get_text(),
+                ip_entry.entry.get_text().strip(),
+                "WEP",
+                self.key_entry.entry.get_text(),
+                self.chkbox_use_encryption.get_active(),
+                False  # chkbox_use_ics.get_active())
+        )
         dialog.destroy()
 
     def forget_network(self, widget=None):
@@ -307,9 +348,11 @@ class appGui(object):
         delete them.
         """
         wireless.ReloadConfig()
-        dialog = gtk.Dialog(title = _('List of saved networks'),
-                            flags = gtk.DIALOG_MODAL,
-                            buttons=(gtk.STOCK_DELETE, 1, gtk.STOCK_OK, 2))
+        dialog = gtk.Dialog(
+            title=_('List of saved networks'),
+            flags=gtk.DIALOG_MODAL,
+            buttons=(gtk.STOCK_DELETE, 1, gtk.STOCK_OK, 2)
+        )
         dialog.set_has_separator(True)
         dialog.set_size_request(400, 200)
 
@@ -324,16 +367,18 @@ class appGui(object):
 
         cell = gtk.CellRendererText()
 
-        column = gtk.TreeViewColumn(_('ESSID'), cell, text = 0)
+        column = gtk.TreeViewColumn(_('ESSID'), cell, text=0)
         tree.append_column(column)
 
-        column = gtk.TreeViewColumn(_('BSSID'), cell, text = 1)
+        column = gtk.TreeViewColumn(_('BSSID'), cell, text=1)
         tree.append_column(column)
 
         scroll = gtk.ScrolledWindow()
         scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         scroll.add(tree)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(scroll)
+        # pylint: disable-msg=E1101
         dialog.vbox.set_spacing(5)
         dialog.show_all()
         response = dialog.run()
@@ -342,21 +387,24 @@ class appGui(object):
             to_remove = dict(essid=[], bssid=[])
             if pathlist:
                 for row in pathlist:
-                    iter = model.get_iter(path=row)
-                    to_remove['essid'].append(misc.noneToString(model.get_value(iter, 0)))
-                    to_remove['bssid'].append(model.get_value(iter, 1))
+                    it = model.get_iter(path=row)
+                    to_remove['essid'].append(
+                        misc.noneToString(model.get_value(it, 0))
+                    )
+                    to_remove['bssid'].append(model.get_value(it, 1))
 
                 confirm = gtk.MessageDialog(
-                        flags = gtk.DIALOG_MODAL,
-                        type = gtk.MESSAGE_INFO,
-                        buttons = gtk.BUTTONS_YES_NO,
-                        message_format = _('Are you sure you want to discard' +
-                            ' settings for the selected networks?')
-                    )
+                    flags=gtk.DIALOG_MODAL,
+                    type=gtk.MESSAGE_INFO,
+                    buttons=gtk.BUTTONS_YES_NO,
+                    message_format=_('Are you sure you want to discard' +
+                        ' settings for the selected networks?')
+                )
                 confirm.format_secondary_text('\n'.join(to_remove['essid']))
                 response = confirm.run()
                 if response == gtk.RESPONSE_YES:
-                    map(wireless.DeleteWirelessNetwork, to_remove['bssid'])
+                    for x in to_remove['bssid']:
+                        wireless.DeleteWirelessNetwork(x)
                     wireless.ReloadConfig()
                 confirm.destroy()
         dialog.destroy()
@@ -379,7 +427,7 @@ class appGui(object):
         """ Disconnects from any active network. """
         def handler(*args):
             gobject.idle_add(self.all_network_list.set_sensitive, True)
-         
+
         self.all_network_list.set_sensitive(False)
         daemon.Disconnect(reply_handler=handler, error_handler=handler)
 
@@ -388,17 +436,22 @@ class appGui(object):
         dialog = gtk.AboutDialog()
         dialog.set_name("Wicd")
         dialog.set_version(daemon.Hello())
-        dialog.set_authors([ "Adam Blackburn", "Dan O'Reilly", "Andrew Psaltis", "David Paleino"])
+        dialog.set_authors([
+            "Adam Blackburn",
+            "Dan O'Reilly",
+            "Andrew Psaltis",
+            "David Paleino"
+        ])
         dialog.set_website("http://wicd.sourceforge.net")
         dialog.run()
         dialog.destroy()
-        
-    def key_event (self, widget, event=None):
+
+    def key_event(self, widget, event=None):
         """ Handle key-release-events. """
         if event.state & gtk.gdk.CONTROL_MASK and \
            gtk.gdk.keyval_name(event.keyval) in ["w", "q"]:
             self.exit()
-    
+
     def settings_dialog(self, widget, event=None):
         """ Displays a general settings dialog. """
         if not self.pref:
@@ -411,13 +464,17 @@ class appGui(object):
 
     def connect_hidden(self, widget):
         """ Prompts the user for a hidden network, then scans for it. """
-        dialog = gtk.Dialog(title=('Hidden Network'),
-                            flags=gtk.DIALOG_MODAL,
-                            buttons=(gtk.STOCK_CONNECT, 1, gtk.STOCK_CANCEL, 2))
+        dialog = gtk.Dialog(
+            title=('Hidden Network'),
+            flags=gtk.DIALOG_MODAL,
+            buttons=(gtk.STOCK_CONNECT, 1, gtk.STOCK_CANCEL, 2)
+        )
         dialog.set_has_separator(False)
         lbl = gtk.Label(_('Hidden Network ESSID'))
         textbox = gtk.Entry()
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(lbl)
+        # pylint: disable-msg=E1101
         dialog.vbox.pack_start(textbox)
         dialog.show_all()
         button = dialog.run()
@@ -454,18 +511,19 @@ class appGui(object):
         """ Triggers a status update in wicd-monitor. """
         if not self.is_visible:
             return True
-        
+
         daemon.UpdateState()
         if self.connecting:
             # If we're connecting, don't wait for the monitor to send
             # us a signal, since it won't until the connection is made.
             self._do_statusbar_update(*daemon.GetConnectionStatus())
         return True
-    
+
     def _do_statusbar_update(self, state, info):
+        """ Actually perform the statusbar update. """
         if not self.is_visible:
             return True
-        
+
         if state == misc.WIRED:
             return self.set_wired_state(info)
         elif state == misc.WIRELESS:
@@ -475,15 +533,19 @@ class appGui(object):
         elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
             return self.set_not_connected_state(info)
         return True
-        
+
     def set_wired_state(self, info):
+        """ Set wired state. """
         if self.connecting:
             # Adjust our state from connecting->connected.
             self._set_not_connecting_state()
-        self.set_status(_('Connected to wired network (IP: $A)').replace('$A', info[0]))
+        self.set_status(
+            _('Connected to wired network (IP: $A)').replace('$A', info[0])
+        )
         return True
-    
+
     def set_wireless_state(self, info):
+        """ Set wireless state. """
         if self.connecting:
             # Adjust our state from connecting->connected.
             self._set_not_connecting_state()
@@ -492,15 +554,17 @@ class appGui(object):
                         ('$B', daemon.FormatSignalForPrinting(info[2])).replace
                         ('$C', info[0]))
         return True
-        
+
     def set_not_connected_state(self, info):
+        """ Set not connected state. """
         if self.connecting:
             # Adjust our state from connecting->not-connected.
             self._set_not_connecting_state()
         self.set_status(_('Not connected'))
         return True
-        
+
     def _set_not_connecting_state(self):
+        """ Set not-connecting state. """
         if self.connecting:
             if self.update_cb:
                 gobject.source_remove(self.update_cb)
@@ -512,12 +576,13 @@ class appGui(object):
             gobject.idle_add(self.status_area.hide_all)
         if self.statusID:
             gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
-    
+
     def set_connecting_state(self, info):
+        """ Set connecting state. """
         if not self.connecting:
             if self.update_cb:
                 gobject.source_remove(self.update_cb)
-            self.update_cb = misc.timeout_add(500, self.update_statusbar, 
+            self.update_cb = misc.timeout_add(500, self.update_statusbar,
                                               milli=True)
             self.connecting = True
         if not self.pulse_active:
@@ -531,56 +596,60 @@ class appGui(object):
             stat = wireless.CheckWirelessConnectingMessage()
             gobject.idle_add(self.set_status, "%s: %s" % (info[1], stat))
         elif info[0] == "wired":
-            gobject.idle_add(self.set_status, _('Wired Network') + ': ' \
+            gobject.idle_add(self.set_status, _('Wired Network') + ': '
                 + wired.CheckWiredConnectingMessage())
         return True
-        
+
     def update_connect_buttons(self, state=None, x=None, force_check=False):
         """ Updates the connect/disconnect buttons for each network entry.
 
         If force_check is given, update the buttons even if the
         current network state is the same as the previous.
-        
+
         """
-        if not DBUS_AVAIL: return
+        if not DBUS_AVAIL:
+            return
         if not state:
             state, x = daemon.GetConnectionStatus()
-        
+
         if self.prev_state != state or force_check:
             apbssid = wireless.GetApBssid()
             for entry in chain(self.network_list, self.wired_network_box):
                 if hasattr(entry, "update_connect_button"):
                     entry.update_connect_button(state, apbssid)
         self.prev_state = state
-    
+
     def set_status(self, msg):
         """ Sets the status bar message for the GUI. """
         self.statusID = self.status_bar.push(1, msg)
-        
+
     def dbus_scan_finished(self):
         """ Calls for a non-fresh update of the gui window.
-        
+
         This method is called after a wireless scan is completed.
-        
+
         """
-        if not DBUS_AVAIL: return
+        if not DBUS_AVAIL:
+            return
         gobject.idle_add(self.refresh_networks, None, False, None)
-            
+
     def dbus_scan_started(self):
         """ Called when a wireless scan starts. """
-        if not DBUS_AVAIL: return
+        if not DBUS_AVAIL:
+            return
         self.network_list.set_sensitive(False)
 
     def _remove_items_from_vbox(self, vbox):
+        """ Remove items fro a VBox. """
         for z in vbox:
             vbox.remove(z)
             z.destroy()
             del z
 
-    
     def refresh_clicked(self, widget=None):
         """ Kick off an asynchronous wireless scan. """
-        if not DBUS_AVAIL or self.connecting: return
+        if not DBUS_AVAIL or self.connecting:
+            return
         self.refreshing = True
 
         # Remove stuff already in there.
@@ -598,7 +667,7 @@ class appGui(object):
             wirednet.disconnect_button.connect("clicked", self.disconnect,
                                                "wired", 0, wirednet)
             wirednet.advanced_button.connect("clicked",
-                                             self.edit_advanced, "wired", 0, 
+                                             self.edit_advanced, "wired", 0,
                                              wirednet)
             state, x = daemon.GetConnectionStatus()
             wirednet.update_connect_button(state)
@@ -611,13 +680,13 @@ class appGui(object):
 
     def refresh_networks(self, widget=None, fresh=True, hidden=None):
         """ Refreshes the network list.
-        
+
         If fresh=True, scans for wireless networks and displays the results.
         If a ethernet connection is available, or the user has chosen to,
         displays a Wired Network entry as well.
         If hidden isn't None, will scan for networks after running
         iwconfig <wireless interface> essid <hidden>.
-        
+
         """
         if fresh:
             if hidden:
@@ -637,7 +706,9 @@ class appGui(object):
             skip_never_connect = not daemon.GetShowNeverConnect()
             instruct_label.show()
             for x in xrange(0, num_networks):
-                if skip_never_connect and misc.to_bool(get_wireless_prop(x,'never')): continue
+                if skip_never_connect and \
+                  misc.to_bool(get_wireless_prop(x, 'never')):
+                    continue
                 if printLine:
                     sep = gtk.HSeparator()
                     self.network_list.pack_start(sep, padding=10, fill=False,
@@ -673,17 +744,17 @@ class appGui(object):
         entry = networkentry.advanced_dialog
         opt_entlist = []
         req_entlist = []
-        
+
         # First make sure all the Addresses entered are valid.
         if entry.chkbox_static_ip.get_active():
             req_entlist = [entry.txt_ip, entry.txt_netmask]
             opt_entlist = [entry.txt_gateway]
-                
+
         if entry.chkbox_static_dns.get_active() and \
            not entry.chkbox_global_dns.get_active():
             for ent in [entry.txt_dns_1, entry.txt_dns_2, entry.txt_dns_3]:
                 opt_entlist.append(ent)
-        
+
         # Required entries.
         for lblent in req_entlist:
             lblent.set_text(lblent.get_text().strip())
@@ -691,7 +762,7 @@ class appGui(object):
                 error(self.window, _('Invalid address in $A entry.').
                                     replace('$A', lblent.label.get_label()))
                 return False
-        
+
         # Optional entries, only check for validity if they're entered.
         for lblent in opt_entlist:
             lblent.set_text(lblent.get_text().strip())
@@ -708,17 +779,17 @@ class appGui(object):
         elif nettype == "wired":
             if not networkentry.save_wired_settings():
                 return False
-            
+
         return True
 
     def edit_advanced(self, widget, ttype, networkid, networkentry):
         """ Display the advanced settings dialog.
-        
+
         Displays the advanced settings dialog and saves any changes made.
         If errors occur in the settings, an error message will be displayed
         and the user won't be able to save the changes until the errors
         are fixed.
-        
+
         """
         dialog = networkentry.advanced_dialog
         dialog.set_values()
@@ -727,13 +798,13 @@ class appGui(object):
             if self.run_settings_dialog(dialog, ttype, networkid, networkentry):
                 break
         dialog.hide()
-        
+
     def run_settings_dialog(self, dialog, nettype, networkid, networkentry):
         """ Runs the settings dialog.
-        
+
         Runs the settings dialog and returns True if settings are saved
         successfully, and false otherwise.
-        
+
         """
         result = dialog.run()
         if result == gtk.RESPONSE_ACCEPT:
@@ -742,7 +813,7 @@ class appGui(object):
             else:
                 return False
         return True
-    
+
     def check_encryption_valid(self, networkid, entry):
         """ Make sure that encryption settings are properly filled in. """
         # Make sure no entries are left blank
@@ -751,18 +822,25 @@ class appGui(object):
             for entry_info in encryption_info.itervalues():
                 if entry_info[0].entry.get_text() == "" and \
                    entry_info[1] == 'required':
-                    error(self.window, "%s (%s)" % (_('Required encryption information is missing.'),
-                                             entry_info[0].label.get_label())
-                          )
+                    error(
+                        self.window,
+                        "%s (%s)" %
+                            (_('Required encryption information is missing.'),
+                            entry_info[0].label.get_label())
+                    )
                     return False
         # Make sure the checkbox is checked when it should be
         elif not entry.chkbox_encryption.get_active() and \
              wireless.GetWirelessProperty(networkid, "encryption"):
-            error(self.window, _('This network requires encryption to be enabled.'))
+            error(
+                self.window,
+                _('This network requires encryption to be enabled.')
+            )
             return False
         return True
 
     def _wait_for_connect_thread_start(self):
+        """ Wait for the connect thread to start. """
         self.wTree.get_object("progressbar").pulse()
         if not self._connect_thread_started:
             return True
@@ -770,19 +848,22 @@ class appGui(object):
             misc.timeout_add(2, self.update_statusbar)
             self.update_statusbar()
             return False
-        
+
     def connect(self, widget, nettype, networkid, networkentry):
         """ Initiates the connection process in the daemon. """
         def handler(*args):
             self._connect_thread_started = True
 
         def setup_interface_for_connection():
+            """ Initialize interface for connection. """
             cancel_button = self.wTree.get_object("cancel_button")
             cancel_button.set_sensitive(True)
             self.all_network_list.set_sensitive(False)
             if self.statusID:
-                gobject.idle_add(self.status_bar.remove_message, 1, self.statusID)
-            gobject.idle_add(self.set_status, _('Disconnecting active connections...'))
+                gobject.idle_add(
+                    self.status_bar.remove_message, 1, self.statusID)
+            gobject.idle_add(
+                self.set_status, _('Disconnecting active connections...'))
             gobject.idle_add(self.status_area.show_all)
             self.wait_for_events()
             self._connect_thread_started = False
@@ -798,25 +879,25 @@ class appGui(object):
         elif nettype == "wired":
             setup_interface_for_connection()
             wired.ConnectWired(reply_handler=handler, error_handler=handler)
-        
+
         gobject.source_remove(self.update_cb)
         misc.timeout_add(100, self._wait_for_connect_thread_start, milli=True)
-        
+
     def disconnect(self, widget, nettype, networkid, networkentry):
         """ Disconnects from the given network.
-        
+
         Keyword arguments:
         widget -- The disconnect button that was pressed.
         event -- unused
         nettype -- "wired" or "wireless", depending on the network entry type.
         networkid -- unused
         networkentry -- The NetworkEntry containing the disconnect button.
-        
+
         """
         def handler(*args):
             gobject.idle_add(self.all_network_list.set_sensitive, True)
             gobject.idle_add(self.network_list.set_sensitive, True)
-            
+
         widget.hide()
         networkentry.connect_button.show()
         daemon.SetForcedDisconnect(True)
@@ -824,16 +905,16 @@ class appGui(object):
         if nettype == "wired":
             wired.DisconnectWired(reply_handler=handler, error_handler=handler)
         else:
-            wireless.DisconnectWireless(reply_handler=handler, 
+            wireless.DisconnectWireless(reply_handler=handler,
                                         error_handler=handler)
-        
+
     def wait_for_events(self, amt=0):
-        """ Wait for any pending gtk events to finish before moving on. 
+        """ Wait for any pending gtk events to finish before moving on.
 
         Keyword arguments:
         amt -- a number specifying the number of ms to wait before checking
                for pending events.
-        
+
         """
         time.sleep(amt)
         while gtk.events_pending():
@@ -843,7 +924,7 @@ class appGui(object):
         """ Hide the wicd GUI.
 
         This method hides the wicd GUI and writes the current window size
-        to disc for later use.  This method normally does NOT actually 
+        to disc for later use.  This method normally does NOT actually
         destroy the GUI, it just hides it.
 
         """
@@ -864,11 +945,11 @@ class appGui(object):
         return True
 
     def show_win(self):
-        """ Brings the GUI out of the hidden state. 
-        
+        """ Brings the GUI out of the hidden state.
+
         Method to show the wicd GUI, alert the daemon that it is open,
         and refresh the network list.
-        
+
         """
         self.window.present()
         self.window.deiconify()

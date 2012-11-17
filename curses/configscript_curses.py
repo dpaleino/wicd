@@ -12,21 +12,20 @@ Also recycles a lot of configscript.py, too. :-)
 #       it under the terms of the GNU General Public License as published by
 #       the Free Software Foundation; either version 2 of the License, or
 #       (at your option) any later version.
-#       
+#
 #       This program is distributed in the hope that it will be useful,
 #       but WITHOUT ANY WARRANTY; without even the implied warranty of
 #       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #       GNU General Public License for more details.
-#       
+#
 #       You should have received a copy of the GNU General Public License
 #       along with this program; if not, write to the Free Software
 #       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #       MA 02110-1301, USA.
 
-from wicd import misc
 from wicd.translations import _
-import configscript
-from configscript import write_scripts, get_script_info, get_val
+
+from configscript import write_scripts, get_script_info
 from configscript import none_to_blank, blank_to_none
 
 import urwid
@@ -41,6 +40,7 @@ post_entry = None
 pre_disconnect_entry = None
 post_disconnect_entry = None
 
+
 def main(argv):
     """ Main function. """
     global ui, frame
@@ -54,17 +54,17 @@ def main(argv):
         ('focus', 'dark magenta', 'light gray'),
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
-        ('editfc', 'white','dark blue', 'bold'),
+        ('editfc', 'white', 'dark blue', 'bold'),
     ])
 
     network = argv[1]
     network_type = argv[2]
-    
+
     script_info = get_script_info(network, network_type)
 
     blank = urwid.Text('')
     pre_entry_t = ('body', _('Pre-connection Script') + ': ')
-    post_entry_t  = ('body', _('Post-connection Script') + ': ')
+    post_entry_t = ('body', _('Post-connection Script') + ': ')
     pre_disconnect_entry_t = ('body', _('Pre-disconnection Script') + ': ')
     post_disconnect_entry_t = ('body', _('Post-disconnection Script') + ': ')
 
@@ -74,23 +74,23 @@ def main(argv):
         'editbx', 'editfc')
     post_entry = urwid.AttrWrap(urwid.Edit(post_entry_t,
         none_to_blank(script_info.get('post_entry'))),
-        'editbx','editfc')
+        'editbx', 'editfc')
 
     pre_disconnect_entry = urwid.AttrWrap(urwid.Edit(pre_disconnect_entry_t,
         none_to_blank(script_info.get('pre_disconnect_entry'))),
         'editbx', 'editfc')
     post_disconnect_entry = urwid.AttrWrap(urwid.Edit(post_disconnect_entry_t,
         none_to_blank(script_info.get('post_disconnect_entry'))),
-        'editbx','editfc')
+        'editbx', 'editfc')
 
     # The buttons
     ok_button = urwid.AttrWrap(
         urwid.Button(_('OK'), ok_callback),
-        'body','focus'
+        'body', 'focus'
     )
     cancel_button = urwid.AttrWrap(
         urwid.Button(_('Cancel'), cancel_callback),
-        'body','focus'
+        'body', 'focus'
     )
 
     button_cols = urwid.Columns([ok_button, cancel_button], dividechars=1)
@@ -101,12 +101,12 @@ def main(argv):
                        ('fixed', 2, urwid.Filler(pre_disconnect_entry)),
                        ('fixed', 2, urwid.Filler(post_disconnect_entry)),
                        #blank, blank, blank, blank, blank,
-                       urwid.Filler(button_cols,'bottom')
+                       urwid.Filler(button_cols, 'bottom')
                        ])
     frame = urwid.Frame(lbox)
     result = ui.run_wrapper(run)
- 
-    if result == True:
+
+    if result:
         script_info["pre_entry"] = blank_to_none(pre_entry.get_edit_text())
         script_info["post_entry"] = blank_to_none(post_entry.get_edit_text())
         script_info["pre_disconnect_entry"] = \
@@ -117,13 +117,22 @@ def main(argv):
 
 OK_PRESSED = False
 CANCEL_PRESSED = False
+
+
 def ok_callback(button_object, user_data=None):
+    """ Callback. """
     global OK_PRESSED
     OK_PRESSED = True
+
+
 def cancel_callback(button_object, user_data=None):
+    """ Callback. """
     global CANCEL_PRESSED
     CANCEL_PRESSED = True
+
+
 def run():
+    """ Run the UI. """
     dim = ui.get_cols_rows()
     ui.set_mouse_tracking()
 

@@ -3,7 +3,7 @@
 """ wicd - wireless connection daemon frontend implementation
 
 This module implements a usermode frontend for wicd.  It updates connection
-information, provides an (optional) tray icon, and allows for launching of 
+information, provides an (optional) tray icon, and allows for launching of
 the wicd GUI and Wired Profile Chooser.
 
 class TrayIcon() -- Parent class of TrayIconGUI and IconConnectionInfo.
@@ -11,7 +11,7 @@ class TrayIcon() -- Parent class of TrayIconGUI and IconConnectionInfo.
         and updates connection status.
     class TrayIconGUI() -- Child class of TrayIcon which implements the tray.
         icon itself.  Parent class of StatusTrayIconGUI and EggTrayIconGUI.
-    class StatusTrayIconGUI() -- Implements the tray icon using a 
+    class StatusTrayIconGUI() -- Implements the tray icon using a
                                  gtk.StatusIcon.
     class EggTrayIconGUI() -- Implements the tray icon using egg.trayicon.
     def usage() -- Prints usage information.
@@ -42,7 +42,6 @@ import gobject
 import getopt
 import os
 import pango
-import time
 import atexit
 from dbus import DBusException
 
@@ -74,27 +73,37 @@ if not hasattr(gtk, "StatusIcon"):
         import egg.trayicon
         USE_EGG = True
     except ImportError:
-        print 'Unable to load tray icon: Missing both egg.trayicon and gtk.StatusIcon modules.'
+        print 'Unable to load tray icon: Missing both egg.trayicon and ' + \
+            'gtk.StatusIcon modules.'
         ICON_AVAIL = False
 
 misc.RenameProcess("wicd-client")
 
 if __name__ == '__main__':
     wpath.chdir(__file__)
-    
+
 daemon = wireless = wired = lost_dbus_id = None
 DBUS_AVAIL = False
 
 theme = gtk.icon_theme_get_default()
 theme.append_search_path(wpath.images)
 
+
 def catchdbus(func):
+    """ Decorator to catch DBus exceptions. """
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except DBusException, e:
-            if e.get_dbus_name() != None and "DBus.Error.AccessDenied" in e.get_dbus_name():
-                error(None, _('Unable to contact the Wicd daemon due to an access denied error from DBus. Please check that your user is in the $A group.').replace("$A","<b>"+wpath.wicd_group+"</b>"))
+            if e.get_dbus_name() is not None and \
+              "DBus.Error.AccessDenied" in e.get_dbus_name():
+                error(
+                    None,
+                    _('Unable to contact the Wicd daemon due to an access '
+                    'denied error from DBus. Please check that your user is '
+                    'in the $A group.').
+                    replace("$A", "<b>" + wpath.wicd_group + "</b>")
+                )
                 #raise
                 raise DBusException(e)
             else:
@@ -105,9 +114,10 @@ def catchdbus(func):
     wrapper.__dict__ = func.__dict__
     wrapper.__doc__ = func.__doc__
     return wrapper
-            
+
 
 class NetworkMenuItem(gtk.ImageMenuItem):
+    """ Network menu item. """
     def __init__(self, lbl, is_active=False):
         gtk.ImageMenuItem.__init__(self)
         self.label = gtk.Label(lbl)
@@ -119,13 +129,13 @@ class NetworkMenuItem(gtk.ImageMenuItem):
         self.label.set_alignment(0, 0)
         self.add(self.label)
         self.label.show()
-        
+
 
 class TrayIcon(object):
     """ Base Tray Icon class.
-    
+
     Base Class for implementing a tray icon to display network status.
-    
+
     """
     def __init__(self, animate, displaytray=True, displayapp=False):
         self.cur_sndbytes = -1
@@ -145,13 +155,13 @@ class TrayIcon(object):
         self.tr.icon_info = self.icon_info
         print 'displaytray %s' % displaytray
         self.tr.visible(displaytray)
-        
+
     def is_embedded(self):
         if USE_EGG:
             raise NotImplementedError()
         else:
-            return self.tr.is_embedded()
-   
+            return self.tr.is_embedded()  # pylint: disable-msg=E1103
+
     def get_bandwidth_bytes(self):
         """ Gets the amount of byte sent sine the last time I checked """
         dev_dir = '/sys/class/net/'
@@ -161,13 +171,15 @@ class TrayIcon(object):
             if fldr == iface:
                 dev_dir = dev_dir + fldr + "/statistics/"
                 break
-      
+
         try:
-            self.cur_rcvbytes = int(open(dev_dir + "rx_bytes", "r").read().strip())
-            self.cur_sndbytes = int(open(dev_dir + "tx_bytes", "r").read().strip())
-        except:
-           self.cur_sndbytes = -1
-           self.cur_rcvbytes = -1
+            self.cur_rcvbytes = int(
+                open(dev_dir + "rx_bytes", "r").read().strip())
+            self.cur_sndbytes = int(
+                open(dev_dir + "tx_bytes", "r").read().strip())
+        except (IOError, OSError, ValueError):
+            self.cur_sndbytes = -1
+            self.cur_rcvbytes = -1
 
     class TrayConnectionInfo(object):
         """ Class for updating the tray icon status. """
@@ -234,8 +246,8 @@ class TrayIcon(object):
             if self.should_notify:
                 try:
                     if not self._last_bubble:
-                        self._last_bubble = pynotify.Notification(title, details,
-                                                                  image)
+                        self._last_bubble = pynotify.Notification(
+                            title, details, image)
                         self._last_bubble.show()
                     else:
                         self._last_bubble.clear_actions()
@@ -258,20 +270,20 @@ class TrayIcon(object):
             """ Launch the wired profile chooser. """
             gui.WiredProfileChooser()
             daemon.SetNeedWiredProfileChooser(False)
-            
+
         def set_wired_state(self, info):
             """ Sets the icon info for a wired state. """
             wired_ip = info[0]
             self.network_addr = str(info[0])
             self.network_type = "wired"
             self.tr.set_from_name('wired')
-            # status_string = _('Connected to wired network (IP: $A)').replace('$A',
-            #wired_ip)
-            # self.tr.set_tooltip(status_string)
+            #status_string = _('Connected to wired network (IP: $A)'). \
+            #    replace('$A',wired_ip)
+            #self.tr.set_tooltip(status_string)
             self._show_notification(_('Wired Network'),
                                     _('Connection established'),
                                     'network-wired')
-            
+
             self.update_tooltip()
 
         @catchdbus
@@ -289,22 +301,21 @@ class TrayIcon(object):
             self.network_str = sig_string
             self.network_br = info[4]
             self.set_signal_image(int(info[2]), lock)
-            
+
             if wireless.GetWirelessProperty(cur_net_id, "encryption"):
                 lock = "-lock"
             # status_string = (_('Connected to $A at $B (IP: $C)')
             #.replace('$A', self.network)
             #                    .replace('$B', sig_string)
-            #                    .replace('$C', str(wireless_ip))) 
+            #                    .replace('$C', str(wireless_ip)))
             #self.tr.set_tooltip(status_string)
             self.set_signal_image(int(strength), lock)
             self._show_notification(self.network,
                                     _('Connection established'),
                                     'network-wireless')
-            
-                
+
             self.update_tooltip()
-            
+
         def set_connecting_state(self, info):
             """ Sets the icon info for a connecting state. """
             wired = False
@@ -327,7 +338,6 @@ class TrayIcon(object):
                                         _('Establishing connection...'),
                                         'network-wireless')
 
-            
         @catchdbus
         def set_not_connected_state(self, info=None):
             """ Set the icon info for the not connected state. """
@@ -335,7 +345,7 @@ class TrayIcon(object):
             if not DBUS_AVAIL:
                 status = _('Wicd daemon unreachable')
             elif wireless.GetKillSwitchEnabled():
-                status = (_('Not connected') + " (" + 
+                status = (_('Not connected') + " (" +
                          _('Wireless Kill Switch Enabled') + ")")
             else:
                 status = _('Not connected')
@@ -346,17 +356,18 @@ class TrayIcon(object):
         @catchdbus
         def update_tray_icon(self, state=None, info=None):
             """ Updates the tray icon and current connection status. """
-            if not DBUS_AVAIL: return False
+            if not DBUS_AVAIL:
+                return False
 
             if not state or not info:
                 [state, info] = daemon.GetConnectionStatus()
 
             # should this state change display a notification?
-            self.should_notify = (can_use_notify() and 
+            self.should_notify = (can_use_notify() and
                                   self.last_state != state)
 
             self.last_state = state
-            
+
             if state == misc.WIRED:
                 self.set_wired_state(info)
             elif state == misc.WIRELESS:
@@ -398,13 +409,13 @@ class TrayIcon(object):
                     signal_img = "bad-signal"
             img_name = ''.join([prefix, signal_img, lock])
             self.tr.set_from_name(img_name)
-        
+
         @catchdbus
         def get_bandwidth_activity(self):
             """ Determines what network activity state we are in. """
             transmitting = False
             receiving = False
-                    
+
             dev_dir = '/sys/class/net/'
             wiface = daemon.GetWirelessInterface()
             for fldr in os.listdir(dev_dir):
@@ -417,26 +428,26 @@ class TrayIcon(object):
             except IOError:
                 sndbytes = None
                 rcvbytes = None
-                
+
             if not rcvbytes or not sndbytes:
                 return 'idle-'
-                    
+
             # Figure out receiving data info.
-            activity = self.is_network_active(self.parent.cur_rcvbytes, 
+            activity = self.is_network_active(self.parent.cur_rcvbytes,
                                               self.parent.max_rcv_gain,
                                               self.parent.last_rcvbytes)
             receiving = activity[0]
             self.parent.max_rcv_gain = activity[1]
             self.parent.last_rcvbytes = activity[2]
-                    
+
             # Figure out out transmitting data info.
-            activity = self.is_network_active(self.parent.cur_sndbytes, 
+            activity = self.is_network_active(self.parent.cur_sndbytes,
                                               self.parent.max_snd_gain,
                                               self.parent.last_sndbytes)
             transmitting = activity[0]
             self.parent.max_snd_gain = activity[1]
             self.parent.last_sndbytes = activity[2]
-                    
+
             if transmitting and receiving:
                 return 'both-'
             elif transmitting:
@@ -445,21 +456,21 @@ class TrayIcon(object):
                 return 'receiving-'
             else:
                 return 'idle-'
-            
+
         def is_network_active(self, bytes, max_gain, last_bytes):
             """ Determines if a network is active.
-            
+
             Determines if a network is active by looking at the
             number of bytes sent since the previous check.  This method
             is generic, and can be used to determine activity in both
             the sending and receiving directions.
-            
+
             Returns:
             A tuple containing three elements:
             1) a boolean specifying if the network is active.
             2) an int specifying the maximum gain the network has had.
             3) an int specifying the last recorded number of bytes sent.
-            
+
             """
             active = False
             if last_bytes == -1:
@@ -467,21 +478,24 @@ class TrayIcon(object):
             elif bytes > (last_bytes + float(max_gain / 20.0)):
                 last_bytes = bytes
                 active = True
-                
+
                 gain = bytes - last_bytes
                 if gain > max_gain:
                     max_gain = gain
             return (active, max_gain, last_bytes)
 
-
     class TrayIconGUI(object):
         """ Base Tray Icon UI class.
-        
+
         Implements methods and variables used by both egg/StatusIcon
         tray icons.
 
         """
         def __init__(self, parent):
+            self.list = []
+            self.label = None
+            self.data = None
+
             menu = """
                     <ui>
                         <menubar name="Menubar">
@@ -496,13 +510,13 @@ class TrayIcon(object):
                     </ui>
             """
             actions = [
-                    ('Menu',  None, 'Menu'),
+                    ('Menu', None, 'Menu'),
                     ('Connect', gtk.STOCK_CONNECT, _('Connect')),
                     ('Info', gtk.STOCK_INFO, _('_Connection Info'), None,
-                     _('Information about the current connection'),
-                     self.on_conn_info),
-                    ('Quit',gtk.STOCK_QUIT,_('_Quit'),None,_('Quit wicd-tray-icon'),
-                     self.on_quit),
+                        _('Information about the current connection'),
+                        self.on_conn_info),
+                    ('Quit', gtk.STOCK_QUIT, _('_Quit'), None,
+                        _('Quit wicd-tray-icon'), self.on_quit),
                     ]
             actg = gtk.ActionGroup('Actions')
             actg.add_actions(actions)
@@ -516,30 +530,34 @@ class TrayIcon(object):
             self._is_scanning = False
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
             net_menuitem.connect("activate", self.on_net_menu_activate)
-            
+
             self.parent = parent
             self.time = 2           # Time between updates
             self.cont = 'Stop'
             self.conn_info_txt = ''
-            
+
         def tray_scan_started(self):
             """ Callback for when a wireless scan is started. """
-            if not DBUS_AVAIL: return
+            if not DBUS_AVAIL:
+                return
             self._is_scanning = True
             self.init_network_menu()
-            
+
         def tray_scan_ended(self):
             """ Callback for when a wireless scan finishes. """
-            if not DBUS_AVAIL: return
+            if not DBUS_AVAIL:
+                return
             self._is_scanning = False
             self.populate_network_menu()
-                
+
         def on_activate(self, data=None):
             """ Opens the wicd GUI. """
             if DBUS_AVAIL:
                 self.toggle_wicd_gui()
             else:
-                # error(None, _('The wicd daemon is unavailable, so your request cannot be completed'))
+                #error(None,
+                    #_('The wicd daemon is unavailable, so your request '
+                    # 'cannot be completed'))
                 pass
 
         def on_quit(self, widget=None):
@@ -558,8 +576,13 @@ class TrayIcon(object):
 
         def on_conn_info(self, data=None):
             """ Opens the Connection Information Dialog """
-            window = gtk.Dialog("Wicd Connection Info", None, 0, (gtk.STOCK_OK, gtk.RESPONSE_CLOSE))
-           
+            window = gtk.Dialog(
+                "Wicd Connection Info",
+                None,
+                0,
+                (gtk.STOCK_OK, gtk.RESPONSE_CLOSE)
+            )
+
             # Create labels
             self.label = gtk.Label()
             self.data = gtk.Label()
@@ -571,43 +594,43 @@ class TrayIcon(object):
             self.list.append(self.label)
 
             # Setup table
-            table = gtk.Table(1,2)
+            table = gtk.Table(1, 2)
             table.set_col_spacings(12)
             table.attach(self.label, 0, 1, 0, 1)
-            table.attach(self.data, 1, 2, 0 ,1)
+            table.attach(self.data, 1, 2, 0, 1)
 
             # Setup Window
             content = window.get_content_area()
             content.pack_start(table, True, True, 0)
             content.show_all()
-            
+
             # Start updates
             self.cont = 'Go'
             gobject.timeout_add(5000, self.update_conn_info_win, self.list)
             self.update_conn_info_win(self.list)
-            
+
             window.run()
-    
+
             # Destroy window and stop updates
             window.destroy()
             self.cont = 'Stop'
-    
-        def update_conn_info_win(self, list): 
+
+        def update_conn_info_win(self, l):
             """ Updates the information in the connection summary window """
             if (self.cont == "Stop"):
                 return False
-            
+
             [state, info] = daemon.GetConnectionStatus()
             [rx, tx] = self.get_current_bandwidth()
-                   
+
             # Choose info for the data
             if state == misc.WIRED:
                 text = (_('''$A
 $B KB/s
 $C KB/s''')
-                        .replace('$A', str(info[0]))    #IP
-                        .replace('$B', str(rx))         #RX
-                        .replace('$C', str(tx)))        #TX
+                        .replace('$A', str(info[0]))    # IP
+                        .replace('$B', str(rx))         # RX
+                        .replace('$C', str(tx)))        # TX
             elif state == misc.WIRELESS:
                 text = (_('''$A
 $B
@@ -615,10 +638,11 @@ $C
 $D
 $E KB/s
 $F KB/s''')
-                        .replace('$A', str(info[1]))    #SSID
-                        .replace('$B', str(info[4]))    #Speed
-                        .replace('$C', str(info[0]))    #IP
-                        .replace('$D', daemon.FormatSignalForPrinting(str(info[2])))
+                        .replace('$A', str(info[1]))    # SSID
+                        .replace('$B', str(info[4]))    # Speed
+                        .replace('$C', str(info[0]))    # IP
+                        .replace('$D',
+                                daemon.FormatSignalForPrinting(str(info[2])))
                         .replace('$E', str(rx))
                         .replace('$F', str(tx)))
             else:
@@ -643,11 +667,11 @@ TX:'''))
                 self.list[1].set_text(_('Connecting'))
             elif state in (misc.SUSPENDED, misc.NOT_CONNECTED):
                 self.list[1].set_text(_('Disconnected'))
-                       
-            return True 
-                            
+
+            return True
+
         def get_current_bandwidth(self):
-            """ 
+            """
             Calculates the current bandwidth based on sent/received bytes
             divided over time. Unit is in KB/s
             """
@@ -660,10 +684,10 @@ TX:'''))
 
             rx_rate = float(rxb / (self.time * 1024))
             tx_rate = float(txb / (self.time * 1024))
-                                
+
             return (rx_rate, tx_rate)
-        
-        def _add_item_to_menu(self, net_menu, lbl, type_, n_id, is_connecting, 
+
+        def _add_item_to_menu(self, net_menu, lbl, type_, n_id, is_connecting,
                               is_active):
             """ Add an item to the network list submenu. """
             def network_selected(widget, net_type, net_id):
@@ -672,10 +696,10 @@ TX:'''))
                     wired.ConnectWired()
                 else:
                     wireless.ConnectWireless(net_id)
-                    
+
             item = NetworkMenuItem(lbl, is_active)
             image = gtk.Image()
-            
+
             if type_ == "__wired__":
                 image.set_from_icon_name("network-wired", 2)
             else:
@@ -686,19 +710,19 @@ TX:'''))
             net_menu.append(item)
             item.show()
             if is_connecting:
-                item.set_sensitive(False)  
+                item.set_sensitive(False)
             del item
-                
+
         @catchdbus
         def _get_img(self, net_id):
             """ Determines which image to use for the wireless entries. """
             def fix_strength(val, default):
                 """ Assigns given strength to a default value if needed. """
                 return val and int(val) or default
-            
+
             def get_prop(prop):
                 return wireless.GetWirelessProperty(net_id, prop)
-            
+
             strength = fix_strength(get_prop("quality"), -1)
             dbm_strength = fix_strength(get_prop('strength'), -100)
 
@@ -722,26 +746,27 @@ TX:'''))
                 else:
                     signal_img = 'signal-25'
             return signal_img
-            
+
         @catchdbus
         def on_net_menu_activate(self, item):
-            """ Trigger a background scan to populate the network menu. 
-            
+            """ Trigger a background scan to populate the network menu.
+
             Called when the network submenu is moused over.  We
             sleep briefly, clear pending gtk events, and if
             we're still being moused over we trigger a scan.
             This is to prevent scans when the user is just
             mousing past the menu to select another menu item.
-            
+
             """
-            def dummy(x=None): pass
-            
+            def dummy(x=None):
+                pass
+
             if self._is_scanning:
                 return True
-            
+
             self.init_network_menu()
             gobject.timeout_add(800, self._trigger_scan_if_needed, item)
-            
+
         @catchdbus
         def _trigger_scan_if_needed(self, item):
             """ Trigger a scan if the network menu is being hovered over. """
@@ -751,7 +776,7 @@ TX:'''))
                 return True
             wireless.Scan(False)
             return False
-        
+
         @catchdbus
         def populate_network_menu(self, data=None):
             """ Populates the network list submenu. """
@@ -768,7 +793,7 @@ TX:'''))
             is_connecting = daemon.CheckIfConnecting()
             num_networks = wireless.GetNumberOfNetworks()
             [status, info] = daemon.GetConnectionStatus()
-                
+
             if daemon.GetAlwaysShowWiredInterface() or \
                wired.CheckPluggedIn():
                 if status == misc.WIRED:
@@ -780,11 +805,13 @@ TX:'''))
                 sep = gtk.SeparatorMenuItem()
                 submenu.append(sep)
                 sep.show()
-            
+
             if num_networks > 0:
                 skip_never_connect = not daemon.GetShowNeverConnect()
                 for x in xrange(0, num_networks):
-                    if skip_never_connect and misc.to_bool(get_prop(x,"never")): continue
+                    if skip_never_connect and \
+                      misc.to_bool(get_prop(x,"never")):
+                        continue
                     essid = get_prop(x, "essid")
                     if status == misc.WIRELESS and info[1] == essid:
                         is_active = True
@@ -800,7 +827,7 @@ TX:'''))
 
             submenu.reposition()
             net_menuitem.show()
-        
+
         def init_network_menu(self):
             """ Set the right-click network menu to the scanning state. """
             net_menuitem = self.manager.get_widget("/Menubar/Menu/Connect/")
@@ -812,13 +839,13 @@ TX:'''))
             loading_item.show()
             submenu.append(loading_item)
             net_menuitem.show()
-            
+
         def _clear_menu(self, menu):
             """ Clear the right-click menu. """
             for item in menu.get_children():
                 menu.remove(item)
                 item.destroy()
-            
+
         def toggle_wicd_gui(self):
             """ Toggles the wicd GUI. """
             if not self.gui_win:
@@ -828,16 +855,15 @@ TX:'''))
             else:
                 self.gui_win.exit()
                 return True
-    
 
     if USE_EGG:
         class EggTrayIconGUI(TrayIconGUI):
             """ Tray Icon for gtk < 2.10.
-            
+
             Uses the deprecated egg.trayicon module to implement the tray icon.
             Since it relies on a deprecated module, this class is only used
             for machines running versions of GTK < 2.10.
-            
+
             """
             def __init__(self, parent):
                 """Initializes the tray icon"""
@@ -864,11 +890,15 @@ TX:'''))
 
             def set_from_file(self, val=None):
                 """ Calls set_from_file on the gtk.Image for the tray icon. """
-                self.pic.set_from_file(os.path.join(wpath.images, 'hicolor/22x22/status/%s.png' % val))
+                self.pic.set_from_file(
+                    os.path.join(
+                        wpath.images, 'hicolor/22x22/status/%s.png' % val
+                    )
+                )
 
             def set_tooltip(self, val):
                 """ Set the tooltip for this tray icon.
-                
+
                 Sets the tooltip for the gtk.ToolTips associated with this
                 tray icon.
 
@@ -887,13 +917,12 @@ TX:'''))
                 else:
                     self.tray.hide_all()
 
-
     if hasattr(gtk, "StatusIcon"):
         class StatusTrayIconGUI(gtk.StatusIcon, TrayIconGUI):
             """ Class for creating the wicd tray icon on gtk > 2.10.
-            
+
             Uses gtk.StatusIcon to implement a tray icon.
-            
+
             """
             def __init__(self, parent):
                 TrayIcon.TrayIconGUI.__init__(self, parent)
@@ -930,7 +959,7 @@ TX:'''))
 def usage():
     """ Print usage information. """
     print """
-wicd %s 
+wicd %s
 wireless (and wired) connection daemon front-end.
 
 Arguments:
@@ -941,23 +970,29 @@ Arguments:
 \t-o\t--only-notifications\tDon't display anything except notifications.
 """ % wpath.version
 
+
 def setup_dbus(force=True):
+    """ Initialize DBus. """
     global daemon, wireless, wired, DBUS_AVAIL, lost_dbus_id
     print "Connecting to daemon..."
     try:
         dbusmanager.connect_to_dbus()
     except DBusException:
         if force:
-            print "Can't connect to the daemon, trying to start it automatically..."
+            print "Can't connect to the daemon, trying to start it " + \
+                "automatically..."
             misc.PromptToStartDaemon()
             try:
                 dbusmanager.connect_to_dbus()
             except DBusException:
-                error(None, _("Could not connect to wicd's D-Bus interface. Check the wicd log for error messages."))
+                error(None,
+                    _("Could not connect to wicd's D-Bus interface. Check "
+                    "the wicd log for error messages.")
+                )
                 return False
-        else:  
+        else:
             return False
-                
+
     if lost_dbus_id:
         gobject.source_remove(lost_dbus_id)
         lost_dbus_id = None
@@ -969,12 +1004,15 @@ def setup_dbus(force=True):
     print "Connected."
     return True
 
+
 def on_exit():
+    """ Handle GUI exit. """
     if DBUS_AVAIL:
         try:
             daemon.SetGUIOpen(False)
         except DBusException:
             pass
+
 
 def handle_no_dbus():
     """ Called when dbus announces its shutting down. """
@@ -982,9 +1020,15 @@ def handle_no_dbus():
     DBUS_AVAIL = False
     gui.handle_no_dbus(from_tray=True)
     print "Wicd daemon is shutting down!"
-    lost_dbus_id = misc.timeout_add(5, lambda:error(None, _('The wicd daemon has shut down. The UI will not function properly until it is restarted.'),
-                                                    block=False))
+    lost_dbus_id = misc.timeout_add(5,
+        lambda: error(None,
+            _('The wicd daemon has shut down. The UI will not function '
+            'properly until it is restarted.'),
+            block=False
+        )
+    )
     return False
+
 
 @catchdbus
 def main(argv):
@@ -995,10 +1039,11 @@ def main(argv):
 
     """
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'tnhao', ['help', 'no-tray',
-                                                          'tray',
-                                                          'no-animate',
-                                                          'only-notifications'])
+        opts, args = getopt.getopt(
+            sys.argv[1:],
+            'tnhao',
+            ['help', 'no-tray', 'tray', 'no-animate', 'only-notifications']
+        )
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -1024,13 +1069,13 @@ def main(argv):
         else:
             usage()
             sys.exit(2)
-    
+
     print 'Loading...'
     setup_dbus()
     atexit.register(on_exit)
 
     if display_app and not use_tray or not ICON_AVAIL:
-        the_gui = gui.appGui(standalone=True)
+        gui.appGui(standalone=True)
         mainloop = gobject.MainLoop()
         mainloop.run()
         sys.exit(0)
@@ -1043,7 +1088,7 @@ def main(argv):
     if DBUS_AVAIL and daemon.GetNeedWiredProfileChooser():
         daemon.SetNeedWiredProfileChooser(False)
         tray_icon.icon_info.wired_profile_chooser()
-        
+
     bus = dbusmanager.get_bus()
     bus.add_signal_receiver(tray_icon.icon_info.wired_profile_chooser,
                             'LaunchChooser', 'org.wicd.daemon')
@@ -1053,9 +1098,13 @@ def main(argv):
                             'org.wicd.daemon.wireless')
     bus.add_signal_receiver(tray_icon.tr.tray_scan_started,
                             'SendStartScanSignal', 'org.wicd.daemon.wireless')
-    bus.add_signal_receiver(lambda: (handle_no_dbus() or 
-                                     tray_icon.icon_info.set_not_connected_state()), 
-                            "DaemonClosing", 'org.wicd.daemon')
+    bus.add_signal_receiver(
+        lambda: (
+            handle_no_dbus() or tray_icon.icon_info.set_not_connected_state()
+        ),
+        "DaemonClosing",
+        'org.wicd.daemon'
+    )
     bus.add_signal_receiver(lambda: setup_dbus(force=False), "DaemonStarting",
                             "org.wicd.daemon")
     print 'Done loading.'

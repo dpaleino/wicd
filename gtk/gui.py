@@ -173,8 +173,8 @@ class appGui(object):
         setup_dbus()
 
         if not daemon:
-            errmsg = "Error connecting to wicd service via D-Bus." + \
-                     "Please ensure the wicd service is running."
+            errmsg = _("Error connecting to wicd service via D-Bus. "
+                     "Please ensure the wicd service is running.")
             d = gtk.MessageDialog(parent=None,
                                   flags=gtk.DIALOG_MODAL,
                                   type=gtk.MESSAGE_ERROR,

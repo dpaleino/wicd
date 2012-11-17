@@ -802,7 +802,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.set_padding(0, 0)
         self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
-        self.image.set_from_file(wpath.images + "wired-gui.svg")
+        self.image.set_from_icon_name("wired-gui", 4)
         self.image.show()
         self.connect_button.show()
 

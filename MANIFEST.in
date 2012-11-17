@@ -12,6 +12,9 @@ graft cli
 graft curses
 graft data
 graft encryption
+graft gtk
+graft icons
+graft images
 graft in
 graft other
 graft po
@@ -21,6 +24,7 @@ graft wicd
 recursive-include man wicd-client.1
 recursive-include . *.py
 recursive-include . *.png
+recursive-include . *.svg
 
 prune build/
 prune .bzr*

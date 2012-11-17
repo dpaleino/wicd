@@ -26,26 +26,36 @@ Also recycles a lot of configscript.py, too. :-)
 from wicd import misc
 from wicd.translations import _
 import configscript
-from configscript import write_scripts,get_script_info,get_val,none_to_blank,blank_to_none
+from configscript import write_scripts, get_script_info, get_val
+from configscript import none_to_blank, blank_to_none
 
 import urwid
 import urwid.curses_display
 import sys
 import os
 
+ui = None
+frame = None
+pre_entry = None
+post_entry = None
+pre_disconnect_entry = None
+post_disconnect_entry = None
+
 def main(argv):
-    global ui,frame
+    """ Main function. """
+    global ui, frame
     if len(argv) < 2:
         print 'Network id to configure is missing, aborting.'
         sys.exit(1)
 
     ui = urwid.curses_display.Screen()
-    ui.register_palette( [
-        ('body','default','default'),
-        ('focus','dark magenta','light gray'),
+    ui.register_palette([
+        ('body', 'default', 'default'),
+        ('focus', 'dark magenta', 'light gray'),
         ('editcp', 'default', 'default', 'standout'),
         ('editbx', 'light gray', 'dark blue'),
-        ('editfc', 'white','dark blue', 'bold')] )
+        ('editfc', 'white','dark blue', 'bold'),
+    ])
 
     network = argv[1]
     network_type = argv[2]
@@ -53,34 +63,44 @@ def main(argv):
     script_info = get_script_info(network, network_type)
 
     blank = urwid.Text('')
-    pre_entry_t = ('body',_('Pre-connection Script')+': ')
-    post_entry_t  = ('body',_('Post-connection Script')+': ')
-    pre_disconnect_entry_t = ('body',_('Pre-disconnection Script')+': ')
-    post_disconnect_entry_t = ('body',_('Post-disconnection Script')+': ')
+    pre_entry_t = ('body', _('Pre-connection Script') + ': ')
+    post_entry_t  = ('body', _('Post-connection Script') + ': ')
+    pre_disconnect_entry_t = ('body', _('Pre-disconnection Script') + ': ')
+    post_disconnect_entry_t = ('body', _('Post-disconnection Script') + ': ')
 
-    global pre_entry,post_entry,pre_disconnect_entry,post_disconnect_entry
-    pre_entry  = urwid.AttrWrap(urwid.Edit(pre_entry_t,
-            none_to_blank(script_info.get('pre_entry'))),'editbx','editfc' )
-    post_entry  = urwid.AttrWrap(urwid.Edit(post_entry_t,
-            none_to_blank(script_info.get('post_entry'))),'editbx','editfc' )
+    global pre_entry, post_entry, pre_disconnect_entry, post_disconnect_entry
+    pre_entry = urwid.AttrWrap(urwid.Edit(pre_entry_t,
+        none_to_blank(script_info.get('pre_entry'))),
+        'editbx', 'editfc')
+    post_entry = urwid.AttrWrap(urwid.Edit(post_entry_t,
+        none_to_blank(script_info.get('post_entry'))),
+        'editbx','editfc')
 
-    pre_disconnect_entry  = urwid.AttrWrap(urwid.Edit(pre_disconnect_entry_t,
-            none_to_blank(script_info.get('pre_disconnect_entry'))),'editbx','editfc' )
-    post_disconnect_entry  = urwid.AttrWrap(urwid.Edit(post_disconnect_entry_t,
-            none_to_blank(script_info.get('post_disconnect_entry'))),'editbx','editfc' )
+    pre_disconnect_entry = urwid.AttrWrap(urwid.Edit(pre_disconnect_entry_t,
+        none_to_blank(script_info.get('pre_disconnect_entry'))),
+        'editbx', 'editfc')
+    post_disconnect_entry = urwid.AttrWrap(urwid.Edit(post_disconnect_entry_t,
+        none_to_blank(script_info.get('post_disconnect_entry'))),
+        'editbx','editfc')
 
     # The buttons
-    ok_button = urwid.AttrWrap(urwid.Button(_('OK'),ok_callback),'body','focus')
-    cancel_button = urwid.AttrWrap(urwid.Button(_('Cancel'),cancel_callback),'body','focus')
+    ok_button = urwid.AttrWrap(
+        urwid.Button(_('OK'), ok_callback),
+        'body','focus'
+    )
+    cancel_button = urwid.AttrWrap(
+        urwid.Button(_('Cancel'), cancel_callback),
+        'body','focus'
+    )
 
-    button_cols = urwid.Columns([ok_button,cancel_button],dividechars=1)
+    button_cols = urwid.Columns([ok_button, cancel_button], dividechars=1)
 
-    lbox = urwid.Pile([('fixed',2,urwid.Filler(pre_entry)),
-                       #('fixed',urwid.Filler(blank),1),
-                       ('fixed',2,urwid.Filler(post_entry)),
-                       ('fixed',2,urwid.Filler(pre_disconnect_entry)),
-                       ('fixed',2,urwid.Filler(post_disconnect_entry)),
-                       #blank,blank,blank,blank,blank,
+    lbox = urwid.Pile([('fixed', 2, urwid.Filler(pre_entry)),
+                       #('fixed', urwid.Filler(blank), 1),
+                       ('fixed', 2, urwid.Filler(post_entry)),
+                       ('fixed', 2, urwid.Filler(pre_disconnect_entry)),
+                       ('fixed', 2, urwid.Filler(post_disconnect_entry)),
+                       #blank, blank, blank, blank, blank,
                        urwid.Filler(button_cols,'bottom')
                        ])
     frame = urwid.Frame(lbox)
@@ -89,16 +109,18 @@ def main(argv):
     if result == True:
         script_info["pre_entry"] = blank_to_none(pre_entry.get_edit_text())
         script_info["post_entry"] = blank_to_none(post_entry.get_edit_text())
-        script_info["pre_disconnect_entry"] = blank_to_none(pre_disconnect_entry.get_edit_text())
-        script_info["post_disconnect_entry"] = blank_to_none(post_disconnect_entry.get_edit_text())
+        script_info["pre_disconnect_entry"] = \
+            blank_to_none(pre_disconnect_entry.get_edit_text())
+        script_info["post_disconnect_entry"] = \
+            blank_to_none(post_disconnect_entry.get_edit_text())
         write_scripts(network, network_type, script_info)
 
 OK_PRESSED = False
 CANCEL_PRESSED = False
-def ok_callback(button_object,user_data=None):
+def ok_callback(button_object, user_data=None):
     global OK_PRESSED
     OK_PRESSED = True
-def cancel_callback(button_object,user_data=None):
+def cancel_callback(button_object, user_data=None):
     global CANCEL_PRESSED
     CANCEL_PRESSED = True
 def run():
@@ -119,9 +141,7 @@ def run():
             #Send key to underlying widget:
             if urwid.is_mouse_event(k):
                 event, button, col, row = k
-                frame.mouse_event( dim,
-                        event, button, col, row,
-                        focus=True)
+                frame.mouse_event(dim, event, button, col, row, focus=True)
             else:
                 frame.keypress(dim, k)
             # Check if buttons are pressed.

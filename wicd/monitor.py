@@ -47,6 +47,9 @@ wireless = dbus_dict["wireless"]
 mainloop = None
 
 def diewithdbus(func):
+    """
+    Decorator catching DBus exceptions, making wicd quit.
+    """
     def wrapper(self, *__args, **__kargs):
         try:
             ret = func(self, *__args, **__kargs)
@@ -86,6 +89,7 @@ class ConnectionStatus(object):
         self.trigger_reconnect = False
         self.__lost_dbus_count = 0
         self._to_time = daemon.GetBackendUpdateInterval()
+        self.update_callback = None
         
         self.add_poll_callback()
         bus = dbusmanager.get_bus()
@@ -275,14 +279,14 @@ class ConnectionStatus(object):
                 info = ["wired"]
             else:
                 info = ["wireless",
-                        misc.noneToBlankString(wireless.GetCurrentNetwork(iwconfig))]
+                  misc.noneToBlankString(wireless.GetCurrentNetwork(iwconfig))]
         elif state == misc.WIRELESS:
             self.reconnect_tries = 0
             info = [str(wifi_ip),
-                    misc.noneToBlankString(wireless.GetCurrentNetwork(iwconfig)),
-                    str(self._get_printable_sig_strength()),
-                    str(wireless.GetCurrentNetworkID(iwconfig)),
-                    misc.noneToBlankString(wireless.GetCurrentBitrate(iwconfig))]
+                misc.noneToBlankString(wireless.GetCurrentNetwork(iwconfig)),
+                str(self._get_printable_sig_strength()),
+                str(wireless.GetCurrentNetworkID(iwconfig)),
+                misc.noneToBlankString(wireless.GetCurrentBitrate(iwconfig))]
         elif state == misc.WIRED:
             self.reconnect_tries = 0
             info = [str(wired_ip)]
@@ -310,16 +314,18 @@ class ConnectionStatus(object):
         """ Get the correct signal strength format. """
         try:
             if daemon.GetSignalDisplayType() == 0:
-                wifi_signal = int(wireless.GetCurrentSignalStrength(self.iwconfig))
+                signal = wireless.GetCurrentSignalStrength(self.iwconfig)
+                wifi_signal = int(signal)
             else:
+                signal = wireless.GetCurrentDBMStrength(self.iwconfig)
                 if always_positive:
-                    # because dBm is negative, add 99 to the signal. This way, if
-                    # the signal drops below -99, wifi_signal will == 0, and
+                    # because dBm is negative, add 99 to the signal. This way,
+                    # if the signal drops below -99, wifi_signal will == 0, and
                     # an automatic reconnect will be triggered
                     # this is only used in check_for_wireless_connection
-                    wifi_signal = 99 + int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                    wifi_signal = 99 + int(signal)
                 else:
-                    wifi_signal = int(wireless.GetCurrentDBMStrength(self.iwconfig))
+                    wifi_signal = int(signal)
         except TypeError:
             wifi_signal = 0        
 

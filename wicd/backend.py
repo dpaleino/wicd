@@ -30,6 +30,7 @@ import os
 import wicd.wpath as wpath
 
 def fail(backend_name, reason):
+    """ Helper to warn the user about failure in loading backend. """
     print "Failed to load backend %s: %s" % (backend_name, reason)
     return True
 
@@ -40,7 +41,7 @@ class BackendManager(object):
         """ Initialize the backend manager. """
         self.backend_dir = wpath.backends
         self.__loaded_backend = None
-        
+
     def _valid_backend_file(self, be_file):
         """ Make sure the backend file is valid. """
         return (os.path.exists(be_file) and 
@@ -115,7 +116,8 @@ class BackendManager(object):
         
         """
         backend = self._load_backend(backend_name)
-        if not backend : return None
+        if not backend:
+            return None
         
         failed = self._validate_backend(backend, backend_name)
         if failed:

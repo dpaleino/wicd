@@ -84,7 +84,8 @@ _sudo_dict = {
 
 _status_dict = {
     'aborted': _('Connection Cancelled'),
-    'association_failed': _('Connection failed: Could not contact the wireless access point.'),
+    'association_failed': _('Connection failed: Could not contact the ' + \
+        'wireless access point.'),
     'bad_pass': _('Connection Failed: Bad password'),
     'configuring_interface': _('Configuring wireless interface...'),
     'dhcp_failed': _('Connection Failed: Unable to Get IP Address'),
@@ -107,6 +108,7 @@ _status_dict = {
 }
 
 class WicdError(Exception):
+    """ Custom Exception type. """
     pass
     
 
@@ -179,7 +181,8 @@ def LaunchAndWait(cmd):
 
 def IsValidIP(ip):
     """ Make sure an entered IP is valid. """
-    if not ip: return False
+    if not ip:
+        return False
 
     if not IsValidIPv4(ip):
         if not IsValidIPv6(ip):
@@ -218,9 +221,9 @@ def PromptToStartDaemon():
     os.spawnvpe(os.P_WAIT, sudo_prog, sudo_args, os.environ)
     return True
 
-def RunRegex(regex, string):
+def RunRegex(regex, s):
     """ runs a regex search on a string """
-    m = regex.search(string)
+    m = regex.search(s)
     if m:
         return m.groups()[0]
     else:
@@ -271,12 +274,13 @@ def to_bool(var):
         var = bool(var)
     return var
 
-def Noneify(variable, to_bool=True):
+def Noneify(variable, convert_to_bool=True):
     """ Convert string types to either None or booleans"""
     #set string Nones to real Nones
     if variable in ("None", "", None):
         return None
-    if to_bool:
+    if convert_to_bool:
+        # FIXME: should instead use above to_bool()?
         if variable in ("False", "0"):
             return False
         if variable in ("True", "1"):
@@ -415,8 +419,10 @@ def _parse_enc_template(enctype):
                 print "Invalid 'optional' line found in template %s" % enctype
                 continue
         elif line.startswith("protected"):
-            cur_type["protected"] = __parse_field_ent(parse_ent(line, "protected"),
-                                                    field_type="protected")
+            cur_type["protected"] = __parse_field_ent(
+                parse_ent(line, "protected"),
+                field_type="protected"
+            )
             if not cur_type["protected"]:
                 # An error occured parsing the protected line.
                 print "Invalid 'protected' line found in template %s" % enctype
@@ -530,7 +536,8 @@ def detect_desktop_environment():
 def get_sudo_cmd(msg, prog_num=0):
     """ Returns a graphical sudo command for generic use. """
     sudo_prog = choose_sudo_prog(prog_num)
-    if not sudo_prog: return None
+    if not sudo_prog:
+        return None
     if re.search("(ktsuss|gksu|gksudo)$", sudo_prog):
         msg_flag = "-m"
     else:
@@ -590,6 +597,8 @@ def stringToNone(text):
         return str(text)
 
 def checkboxTextboxToggle(checkbox, textboxes):
+    """ Manage {de,}activation of textboxes depending on checkboxes. """
+    # FIXME: should be moved to UI-specific files?
     for textbox in textboxes:
         textbox.set_sensitive(checkbox.get_active())
 
@@ -613,7 +622,8 @@ def timeout_add(time, func, milli=False):
     if hasattr(gobject, "timeout_add_seconds") and not milli:
         return gobject.timeout_add_seconds(time, func)
     else:
-        if not milli: time = time * 1000
+        if not milli:
+            time = time * 1000
         return gobject.timeout_add(time, func)
 
 def izip_longest(*args, **kwds):

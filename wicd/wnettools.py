@@ -49,7 +49,8 @@ essid_pattern = re.compile('.*ESSID:"?(.*?)".*\n', _re_mode)
 ap_mac_pattern = re.compile('.*Address: (.*?)\n', _re_mode)
 channel_pattern = re.compile('.*Channel:?=? ?(\d+)', _re_mode)
 strength_pattern = re.compile('.*Quality:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
-altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)', _re_mode)
+altstrength_pattern = re.compile('.*Signal level:?=? ?(\d+)\s*/?\s*(\d*)',
+    _re_mode)
 signaldbm_pattern = re.compile('.*Signal level:?=? ?(-\d\d*)', _re_mode)
 bitrates_pattern = re.compile('([\d\.]+)\s+\S+/s', _re_mode)
 mode_pattern = re.compile('.*Mode:([A-Za-z-]*?)\n', _re_mode)
@@ -61,12 +62,15 @@ wpa2_pattern = re.compile('(WPA2)', _re_mode)
 
 #iwconfig-only regular expressions.
 ip_up = re.compile(r'flags=[0.9]*<([^>]*)>', re.S)
-ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
+ip_pattern = re.compile(r'inet [Aa]d?dr[^.]*:([^.]*\.[^.]*\.[^.]*\.[0-9]*)',
+    re.S)
 ip_pattern1 = re.compile(r'inet ([^.]*\.[^.]*\.[^.]*\.[0-9]*)', re.S)
-bssid_pattern = re.compile('.*[(Access Point)|(Cell)]: (([0-9A-Z]{2}:){5}[0-9A-Z]{2})', _re_mode)
+bssid_pattern = re.compile('.*[(Access Point)|(Cell)]: ' + \
+    '(([0-9A-Z]{2}:){5}[0-9A-Z]{2})', _re_mode)
 bitrate_pattern = re.compile('.*Bit Rate[=:](.*?/s)', _re_mode)
 opmode_pattern = re.compile('.*Mode:(.*?) ', _re_mode)
-authmethods_pattern = re.compile('.*Authentication capabilities :\n(.*?)Current', _re_mode)
+authmethods_pattern = re.compile('.*Authentication capabilities ' + \
+    ':\n(.*?)Current', _re_mode)
 
 # Regular expressions for wpa_cli output
 auth_pattern = re.compile('.*wpa_state=(.*?)\n', _re_mode)
@@ -79,12 +83,14 @@ blacklist_norm = ";`$!*|><&\\"
 blank_trans = maketrans("", "")
 
 def _sanitize_string(string):
+    """ Sanitize string. """
     if string:
         return translate(str(string), blank_trans, blacklist_norm)
     else:
         return string
 
 def _sanitize_string_strict(string):
+    """ Sanitize string in a stricter way. """
     if string:
         return translate(str(string), blank_trans, blacklist_strict)
     else:
@@ -140,7 +146,8 @@ def isWireless(devname):
     in the future, if wireless.h is fully replaced.
     """
     we = None
-    for t in [socket.AF_INET, socket.AF_INET6, socket.AF_IPX, socket.AF_AX25, socket.AF_APPLETALK]:
+    for t in [socket.AF_INET, socket.AF_INET6, socket.AF_IPX, socket.AF_AX25,
+      socket.AF_APPLETALK]:
         sk = socket.socket(t, socket.SOCK_DGRAM)
         if sk is None:
             continue
@@ -149,7 +156,7 @@ def isWireless(devname):
             #define SIOCGIWNAME 0x8b01 in linux/wireless.h
             # "used to verify the presence of wireless extensions"
             we = fcntl.ioctl(skfd, 0x8b01, devname)
-        except:
+        except IOError:
             pass
         sk.close()
     return we is not None
@@ -184,7 +191,7 @@ def GetWpaSupplicantDrivers():
     output = misc.Run(["wpa_supplicant", "-h"])
     try:
         output = output.split("drivers:")[1].split("options:")[0].strip()
-    except:
+    except KeyError:
         print "Warning: Couldn't get list of valid wpa_supplicant drivers"
         return [""]
     patt = re.compile("(\S+)\s+=.*")
@@ -236,7 +243,24 @@ class BaseInterface(object):
         self.flush_tool = None
         self.link_detect = None       
         self.dhcp_object = None
-    
+
+        self.ethtool_cmd = None
+        self.miitool_cmd = None
+        self.ip_cmd = None
+        self.route_cmd = None
+        self.wpa_cli_cmd = None
+        self.resolvconf_cmd = None
+
+        self.dhclient_cmd = None
+        self.dhclient_needs_verbose = False
+        self.udhcpc_cmd = None
+        self.dhcpcd_cmd = None
+        self.pump_cmd = None
+
+        self.kdesu_cmd = None
+        self.gksudo_cmd = None
+        self.ktsuss_cmd = None
+
     def SetDebugMode(self, value):
         """ If True, verbose output is enabled. """
         self.verbose = value
@@ -363,7 +387,8 @@ class BaseInterface(object):
                       "hostname" : hostname,
                       'dhclientconf' : dhclient_conf_path }
         elif flavor == "release":
-            return client_dict[client_name]['release'] % {"cmd":cmd, "iface":self.iface}
+            return client_dict[client_name]['release'] % \
+                {"cmd": cmd, "iface": self.iface}
         else:
             return client_dict[client_name]['id']
     
@@ -429,6 +454,7 @@ class BaseInterface(object):
         self.route_cmd = self._find_program_path("route")
             
     def CheckSudoApplications(self):
+        """ Check for available root-gaining 'sudo' applications. """
         self.gksudo_cmd = self._find_program_path("gksudo")
         self.kdesu_cmd = self._find_program_path("kdesu")
         self.ktsuss_cmd = self._find_program_path("ktsuss")
@@ -442,7 +468,8 @@ class BaseInterface(object):
         
         """
         cmd = 'ifconfig ' + self.iface + ' up'
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
         return True
 
@@ -455,7 +482,8 @@ class BaseInterface(object):
         
         """
         cmd = 'ifconfig ' + self.iface + ' down'
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
         return True
     
@@ -464,7 +492,8 @@ class BaseInterface(object):
     def GetIfconfig(self):
         """ Runs ifconfig and returns the output. """
         cmd = "ifconfig %s" % self.iface
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         return misc.Run(cmd)
 
     @neediface("")
@@ -491,7 +520,8 @@ class BaseInterface(object):
             cmd = ''.join([cmd, 'netmask ', netmask, ' '])
         if broadcast:
             cmd = ''.join([cmd, 'broadcast ', broadcast, ' '])
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     def _parse_dhclient(self, pipe):
@@ -624,7 +654,8 @@ class BaseInterface(object):
         
         """
         cmd = self._get_dhcp_command('connect', hostname)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         self.dhcp_object = misc.Run(cmd, include_stderr=True, return_obj=True)
         pipe = self.dhcp_object.stdout
         client_dict = { misc.DHCLIENT : self._parse_dhclient,
@@ -646,7 +677,8 @@ class BaseInterface(object):
     def ReleaseDHCP(self):
         """ Release the DHCP lease for this interface. """
         cmd = self._get_dhcp_command("release")
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface(False)
@@ -659,7 +691,8 @@ class BaseInterface(object):
         else:
             print "No route manipulation command available!"
             return 
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface(False)
@@ -671,7 +704,8 @@ class BaseInterface(object):
         """
         if self.resolvconf_cmd:
             cmd = [self.resolvconf_cmd, '-d', self.iface + '.wicd']
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             p = misc.Run(cmd, include_stderr=True, return_obj=True)
             p.communicate()
 
@@ -711,7 +745,8 @@ class BaseInterface(object):
 
         if self.resolvconf_cmd:
             cmd = [self.resolvconf_cmd, '-a', self.iface + '.wicd']
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             p = misc.Run(cmd, include_stderr=True, return_obj=True)
             p.communicate(input=resolv_params)
         else:
@@ -730,7 +765,8 @@ class BaseInterface(object):
             print "No flush command available!"
             cmds = []
         for cmd in cmds:
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             misc.Run(cmd)
 
     @neediface(False)
@@ -745,7 +781,8 @@ class BaseInterface(object):
             print 'WARNING: Invalid gateway found.  Aborting!'
             return False
         cmd = 'route add default gw %s dev %s' % (gw, self.iface)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface("")
@@ -763,7 +800,8 @@ class BaseInterface(object):
         # check multiple ifconfig output styles
         for pat in [ip_pattern, ip_pattern1]:
             m = misc.RunRegex(pat, output)
-            if m: return m
+            if m:
+                return m
         return None
 
     @neediface(False)
@@ -784,7 +822,8 @@ class BaseInterface(object):
             # timeout, while the above will wait (-w) 3 seconds at
             # most.
             cmd = "ping -q -c 1 %s" % gateway
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         return misc.LaunchAndWait(cmd)
 
     @neediface(False)
@@ -799,7 +838,8 @@ class BaseInterface(object):
         try:
             flags = open(flags_file, "r").read().strip()
         except IOError:
-            print "Could not open %s, using ifconfig to determine status" % flags_file
+            print "Could not open %s, using ifconfig to determine status" \
+                % flags_file
             return self._slow_is_up(ifconfig)
         return bool(int(flags, 16) & 1)
     
@@ -807,7 +847,8 @@ class BaseInterface(object):
     def StopWPA(self):
         """ Terminates wpa using wpa_cli"""
         cmd = 'wpa_cli -i %s terminate' % self.iface
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
         
         
@@ -866,7 +907,8 @@ class BaseWiredInterface(BaseInterface):
             while True:
                 tries += 1
                 time.sleep(2)
-                if self.IsUp() or tries > MAX_TRIES: break
+                if self.IsUp() or tries > MAX_TRIES:
+                    break
       
         if os.path.exists(carrier_path):
             carrier = open(carrier_path, 'r')
@@ -878,7 +920,8 @@ class BaseWiredInterface(BaseInterface):
                 elif link == 0:
                     return False
             except (IOError, ValueError, TypeError):
-                print 'Error checking link using /sys/class/net/%s/carrier' % self.iface
+                print 'Error checking link using /sys/class/net/%s/carrier' \
+                    % self.iface
                 
         if self.ethtool_cmd and self.link_detect in [misc.ETHTOOL, misc.AUTO]:
             return self._eth_get_plugged_in()
@@ -901,10 +944,13 @@ class BaseWiredInterface(BaseInterface):
             print 'Wired Interface is down, putting it up'
             self.Up()
             time.sleep(6)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         tool_data = misc.Run(cmd, include_stderr=True)
-        if misc.RunRegex(re.compile('(Link detected: yes)', re.I | re.M  | re.S),
-                         tool_data):
+        if misc.RunRegex(
+          re.compile('(Link detected: yes)', re.I | re.M  | re.S),
+          tool_data
+        ):
             return True
         else:
             return False
@@ -917,14 +963,16 @@ class BaseWiredInterface(BaseInterface):
         
         """
         cmd = "%s %s" % (self.miitool_cmd, self.iface)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         tool_data = misc.Run(cmd, include_stderr=True)
         if misc.RunRegex(re.compile('(Invalid argument)', re.I | re.M  | re.S), 
                          tool_data) is not None:
             print 'Wired Interface is down, putting it up'
             self.Up()
             time.sleep(4)
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             tool_data = misc.Run(cmd, include_stderr=True)
         
         if misc.RunRegex(re.compile('(link ok)', re.I | re.M | re.S),
@@ -934,11 +982,13 @@ class BaseWiredInterface(BaseInterface):
             return False
         
     def Authenticate(self, network):
+        """ Authenticate with wpa_supplicant. """
         misc.ParseEncryption(network)
         cmd = ['wpa_supplicant', '-B', '-i', self.iface, '-c',
                os.path.join(wpath.networks, 'wired'),
                '-Dwired']
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
 class BaseWirelessInterface(BaseInterface):
@@ -968,7 +1018,8 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         cmd = ['iwconfig', self.iface, 'essid', '--', str(essid)]
-        if self.verbose: print str(cmd)
+        if self.verbose:
+            print str(cmd)
         misc.Run(cmd)
 
     @neediface(False)
@@ -994,7 +1045,8 @@ class BaseWirelessInterface(BaseInterface):
     def GetIwconfig(self):
         """ Returns the output of iwconfig for this interface. """
         cmd = "iwconfig " + self.iface
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         return misc.Run(cmd)
 
     def _FreqToChannel(self, freq):
@@ -1019,7 +1071,7 @@ class BaseWirelessInterface(BaseInterface):
         try:
             ret = freq_dict[freq]
         except KeyError:
-            print "Couldn't determine channel number for frequency: " + str(freq)
+            print "Couldn't determine channel number for frequency:", str(freq)
         
         return ret
 
@@ -1040,7 +1092,7 @@ class BaseWirelessInterface(BaseInterface):
         for x in lines:
             ap = {}
             info = x.split("   ")
-            info = filter(None, [x.strip() for x in info])
+            info = [x.strip() for x in info if x.strip()]
             if len(info) < 5:
                 continue
             if re.match(patt, info[2].upper()):
@@ -1066,7 +1118,7 @@ class BaseWirelessInterface(BaseInterface):
                 ap['enctype'] = info[4 + offset]
             elif info[5 + offset] == 'WPA2-PSK':
                 ap['encryption_method'] = 'WPA2'
-                ap['authmode'] ="WPA2PSK"
+                ap['authmode'] = "WPA2PSK"
                 ap['keyname'] = "WPA2PSK"
                 ap['enctype'] = info[4 + offset]
             elif info[4 + offset] == "NONE":
@@ -1075,7 +1127,8 @@ class BaseWirelessInterface(BaseInterface):
                 print "Unknown AuthMode, can't assign encryption_method!"
                 ap['encryption_method'] = 'Unknown'
             aps[bssid] = ap
-        if self.verbose: print str(aps)
+        if self.verbose:
+            print str(aps)
         return aps
 
     def _ParseRalinkAccessPoint(self, ap, ralink_info, cell):
@@ -1090,7 +1143,6 @@ class BaseWirelessInterface(BaseInterface):
         Updated array containing info about the current access point
 
         """
-        wep_pattern = re.compile('.*Encryption key:(.*?)\n', re.I | re.M  | re.S)
         if ralink_info.has_key(ap['bssid']):
             info = ralink_info[ap['bssid']]
             for key in info.keys():
@@ -1115,7 +1167,8 @@ class BaseWirelessInterface(BaseInterface):
         if mode.lower() == 'master':
             mode = 'managed'
         cmd = 'iwconfig %s mode %s' % (self.iface, mode)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface(False)
@@ -1131,7 +1184,8 @@ class BaseWirelessInterface(BaseInterface):
             return False
         
         cmd = 'iwconfig %s channel %s' % (self.iface, str(channel))
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface(False)
@@ -1143,7 +1197,8 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         cmd = 'iwconfig %s key %s' % (self.iface, key)
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         misc.Run(cmd)
 
     @neediface(False)
@@ -1176,11 +1231,13 @@ class BaseWirelessInterface(BaseInterface):
         base = "iwconfig %s" % self.iface
         if channel and str(channel).isdigit():
             cmd = "%s channel %s" % (base, str(channel))
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             misc.Run(cmd)
         if bssid:
             cmd = "%s ap %s" % (base, bssid)
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             misc.Run(cmd)
         
     def GeneratePSK(self, network):
@@ -1191,11 +1248,13 @@ class BaseWirelessInterface(BaseInterface):
         
         """
         wpa_pass_path = misc.find_path('wpa_passphrase')
-        if not wpa_pass_path: return None
+        if not wpa_pass_path:
+            return None
         key_pattern = re.compile('network={.*?\spsk=(.*?)\n}.*',
                                  re.I | re.M  | re.S)
         cmd = [wpa_pass_path, str(network['essid']), str(network['key'])]
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         return misc.RunRegex(key_pattern, misc.Run(cmd))
 
     @neediface(False)
@@ -1218,7 +1277,8 @@ class BaseWirelessInterface(BaseInterface):
                    os.path.join(wpath.networks, 
                                 network['bssid'].replace(':', '').lower()),
                    driver]
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             misc.Run(cmd)
 
     def _AuthenticateRalinkLegacy(self, network):
@@ -1243,7 +1303,8 @@ class BaseWirelessInterface(BaseInterface):
                 print 'Setting up WEP'
                 cmd = ''.join(['iwconfig ', self.iface, ' key ',
                               network.get('key')])
-                if self.verbose: print cmd
+                if self.verbose:
+                    print cmd
                 misc.Run(cmd)
             else:
                 cmd_list = []
@@ -1251,13 +1312,14 @@ class BaseWirelessInterface(BaseInterface):
                 cmd_list.append('AuthMode=' + info['authmode'])
                 cmd_list.append('EncrypType=' + info['enctype'])
                 cmd_list.append('SSID="%s"' % network['essid'])
-                cmd_list.append('%s="%s"' % (network['keyname'], network['key']))
+                cmd_list.append('%(keyname)s="%(key)s"' % network)
                 if info['nettype'] == 'SHARED' and info['enctype'] == 'WEP':
                     cmd_list.append('DefaultKeyID=1')
     
                 for cmd in cmd_list:
                     cmd = ['iwpriv', self.iface, 'set', cmd]
-                    if self.verbose: print ' '.join(cmd)
+                    if self.verbose:
+                        print ' '.join(cmd)
                     misc.Run(cmd)
 
     @neediface([])
@@ -1269,7 +1331,8 @@ class BaseWirelessInterface(BaseInterface):
 
         """
         cmd = 'iwlist ' + self.iface + ' scan'
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         results = misc.Run(cmd)
         # Split the networks apart, using Cell as our split point
         # this way we can look at only one network at a time.
@@ -1501,7 +1564,8 @@ class BaseWirelessInterface(BaseInterface):
         """ Get the available authentication methods for the interface. """
         if not iwlistauth:
             cmd = 'iwlist ' + self.iface + ' auth'
-            if self.verbose: print cmd
+            if self.verbose:
+                print cmd
             output = misc.Run(cmd)
         else:
             output = iwlistauth
@@ -1515,13 +1579,14 @@ class BaseWirelessInterface(BaseInterface):
         """ Get the available bitrates the wifi card can use. """
 
         cmd = 'iwlist ' + self.iface + ' rate'
-        if self.verbose: print cmd
+        if self.verbose:
+            print cmd
         rates = misc.Run(cmd)
 
         # process the output
         rates = rates.split('\n')
-        rates = filter(None, map(lambda x: x.strip().split(' ')[0], rates))
-        rates = filter(lambda x: x[0].isdigit(), rates)
+        rates = [x.strip().split(' ')[0] for x in rates]
+        rates = [x for x in rates if x[0].isdigit()]
         return dbus.Array(rates, signature='v')
 
     def _get_link_quality(self, output):

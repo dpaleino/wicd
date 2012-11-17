@@ -33,10 +33,9 @@ try:
     proxy_obj = bus.get_object('org.wicd.daemon', '/org/wicd/daemon')
     daemon = dbus.Interface(proxy_obj, 'org.wicd.daemon')
 except Exception, e:
-    print>>sys.stderr, "Exception caught: %s" % str(e)
-    print>>sys.stderr, 'Could not connect to daemon.'
+    print >> sys.stderr, "Exception caught: %s" % str(e)
+    print >> sys.stderr, 'Could not connect to daemon.'
     sys.exit(1)
-    
 
 
 if __name__ == '__main__':
@@ -45,7 +44,6 @@ if __name__ == '__main__':
         daemon.SetForcedDisconnect(False)
         daemon.SetSuspend(True)
     except Exception, e:
-        print>>sys.stderr, "Exception caught: %s" % str(e)
-        print>>sys.stderr, 'Error setting suspend.'
+        print >> sys.stderr, "Exception caught: %s" % str(e)
+        print >> sys.stderr, 'Error setting suspend.'
         sys.exit(2)
-        

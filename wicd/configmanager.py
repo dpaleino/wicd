@@ -35,6 +35,7 @@ from wicd.misc import Noneify, to_unicode
 from dbus import Int32
 
 def sanitize_config_file(path):
+    """ Remove invalid lines from config file. """
     conf = open(path)
     newconf = ''
     for line in conf:
@@ -56,7 +57,7 @@ class ConfigManager(RawConfigParser):
             sanitize_config_file(path)
         try:
             self.read(path)
-        except ParsingError, e:
+        except ParsingError:
             self.write()
             try:
                 self.read(path)
@@ -121,15 +122,18 @@ class ConfigManager(RawConfigParser):
             if default:
                 if self.debug:
                     # mask out sensitive information
-                    if option in ['apsk', 'password', 'identity', 'private_key', \
-                                  'private_key_passwd', 'key', 'passphrase']:
-                        print ''.join(['found ', option, ' in configuration *****'])
+                    if option in ['apsk', 'password', 'identity', \
+                                  'private_key', 'private_key_passwd', \
+                                  'key', 'passphrase']:
+                        print ''.join(['found ', option, \
+                            ' in configuration *****'])
                     else:
-                        print ''.join(['found ', option, ' in configuration ', 
+                        print ''.join(['found ', option, ' in configuration ',
                                        str(ret)])
         else:
             if default != "__None__":
-                print 'did not find %s in configuration, setting default %s' % (option, str(default))
+                print 'did not find %s in configuration, setting default %s' \
+                    % (option, str(default))
                 self.set(section, option, str(default), write=True)
                 ret = default
             else:
@@ -196,7 +200,8 @@ class ConfigManager(RawConfigParser):
             p = RawConfigParser()
             p.readfp(codecs.open(fname, 'r', 'utf-8'))
             for section_name in p.sections():
-                # New files override old, so remove first to avoid DuplicateSectionError.
+                # New files override old, so remove first to avoid
+                # DuplicateSectionError.
                 self.remove_section(section_name)
                 self.add_section(section_name)
                 for (name, value) in p.items(section_name):
@@ -206,6 +211,7 @@ class ConfigManager(RawConfigParser):
 
 
     def _copy_section(self, name):
+        """ Copy whole section from config file. """
         p = ConfigManager("", self.debug, self.mrk_ws)
         p.add_section(name)
         for (iname, value) in self.items(name):
@@ -215,7 +221,7 @@ class ConfigManager(RawConfigParser):
         p.remove_option(name, '_filename_')
         return p
 
-    def write(self):
+    def write(self, fp):
         """ Writes the loaded config file to disk. """
         in_this_file = []
         for sname in sorted(self.sections()):

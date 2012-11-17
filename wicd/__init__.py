@@ -1,0 +1,1 @@
+""" WICD core module. """

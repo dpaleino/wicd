@@ -33,21 +33,27 @@ else:
 DBUS_MANAGER = None
     
 def get_dbus_ifaces():
+    """ Return available DBus interfaces. """
     return DBUS_MANAGER.get_dbus_ifaces()
 
 def get_interface(iface):
+    """ Return specified interface. """
     return DBUS_MANAGER.get_interface(iface)
 
 def get_bus():
+    """ Return the loaded System Bus. """
     return DBUS_MANAGER.get_bus()
 
-def set_mainloop():
-    return DBUS_MANAGER.set_mainloop()
+def set_mainloop(loop):
+    """ Set DBus main loop. """
+    return DBUS_MANAGER.set_mainloop(loop)
 
 def connect_to_dbus():
+    """ Connect to DBus. """
     return DBUS_MANAGER.connect_to_dbus()
 
 def threads_init():
+    """ Init GLib threads. """
     dbus.mainloop.glib.threads_init()
 
 
@@ -59,12 +65,14 @@ class DBusManager(object):
     
     def get_dbus_ifaces(self):
         """ Returns a dict of dbus interfaces. """
-        if not self._dbus_ifaces: connect_to_dbus()
+        if not self._dbus_ifaces:
+            connect_to_dbus()
         return self._dbus_ifaces
     
     def get_interface(self, iface):
         """ Returns a DBus Interface. """
-        if not self._dbus_ifaces: connect_to_dbus()
+        if not self._dbus_ifaces:
+            connect_to_dbus()
         return self._dbus_ifaces[iface]
     
     def get_bus(self):
@@ -72,6 +80,7 @@ class DBusManager(object):
         return self._bus
     
     def set_mainloop(self, loop):
+        """ Set DBus main loop. """
         dbus.set_default_main_loop(loop)
     
     def connect_to_dbus(self):

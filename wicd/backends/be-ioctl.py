@@ -155,7 +155,7 @@ class Interface(BaseInterface):
         return socket.inet_ntoa(raw_ip[20:24])
 
     @neediface(False)
-    def IsUp(self):
+    def IsUp(self, ifconfig=None):
         """ Determines if the interface is up.
 
         Returns:
@@ -357,7 +357,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
                 print "Couldn't open ctrl_interface: %s" % e
                 return None
         else:
-            print "Couldn't find a wpa_supplicant ctrl_interface for iface %s" % self.iface
+            print "Couldn't find a wpa_supplicant ctrl_interface for iface %s" \
+                % self.iface
             return None
 
     def ValidateAuthentication(self, auth_time):
@@ -402,7 +403,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
                 return False
 
             if self.verbose:
-                print 'wpa_supplicant ctrl_interface status query is %s' % str(status)
+                print 'wpa_supplicant ctrl_interface status query is %s' \
+                    % str(status)
 
             try:
                 [result] = [l for l in status if l.startswith("wpa_state=")]
@@ -456,7 +458,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
                         print 'Setting up WEP'
                         cmd = ''.join(['iwconfig ', self.iface, ' key ',
                                        network.get('key')])
-                        if self.verbose: print cmd
+                        if self.verbose:
+                            print cmd
                         misc.Run(cmd)
                     else:
                         if info[5] == 'SHARED' and info[4] == 'WEP':
@@ -488,7 +491,8 @@ class WirelessInterface(Interface, BaseWirelessInterface):
 
                         for cmd in cmd_list:
                             cmd = 'iwpriv ' + self.iface + ' '
-                            if self.verbose: print cmd
+                            if self.verbose:
+                                print cmd
                             misc.Run(cmd)
 
     @neediface("")

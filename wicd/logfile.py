@@ -26,6 +26,7 @@ import os
 import time
 
 class SizeError(IOError):
+    """ Custom error class. """
     pass
 
 class LogFile(file):
@@ -48,7 +49,8 @@ class LogFile(file):
         self.written += len(data)
         
         data = data.decode('utf-8').encode('utf-8')
-        if len(data) <= 0: return
+        if len(data) <= 0:
+            return
         if self.eol:
             super(LogFile, self).write(self.get_time() + ' :: ')
             self.eol = False
@@ -79,6 +81,7 @@ class LogFile(file):
             str(x[4]).rjust(2, '0'), ':', str(x[5]).rjust(2, '0')])
 
     def rotate(self):
+        """ Rotate logfile. """
         return rotate(self)
 
     def note(self, text):
@@ -108,21 +111,25 @@ class ManagedLog(object):
                                    self._lf.maxsize, self.maxsave)
 
     def write(self, data):
+        """ Write logfile. """
         try:
             self._lf.write(data)
         except SizeError:
             self._lf = rotate(self._lf, self.maxsave)
 
     def note(self, data):
+        """ Write a note to the logfile. """
         try:
             self._lf.note(data)
         except SizeError:
             self._lf = rotate(self._lf, self.maxsave)
 
     def written(self):
+        """ Return whether the logfile was written. """
         return self._lf.written
 
-    def rotate(self): 
+    def rotate(self):
+        """ Rotate logfile. """
         self._lf = rotate(self._lf, self.maxsave)
 
     # auto-delegate remaining methods (but you should not read or seek an open
@@ -133,7 +140,9 @@ class ManagedLog(object):
 
 # useful for logged stdout for daemon processes
 class ManagedStdio(ManagedLog):
+    """ Manage stdout/stderr. """
     def write(self, data):
+        """ Write logfile to disk. """
         try:
             self._lf.write(data)
         except SizeError:
@@ -147,6 +156,7 @@ class ManagedStdio(ManagedLog):
 
 
 def rotate(fileobj, maxsave=9):
+    """ Rotate fileobj. """
     name = fileobj.name
     mode = fileobj.mode
     maxsize = fileobj.maxsize
@@ -157,6 +167,7 @@ def rotate(fileobj, maxsave=9):
 
 # assumes basename logfile is closed.
 def shiftlogs(basename, maxsave):
+    """ Shift logfiles. """
     topname = "%s.%d" % (basename, maxsave)
     if os.path.isfile(topname):
         os.unlink(topname)
@@ -175,9 +186,11 @@ def shiftlogs(basename, maxsave):
 
 
 def open(name, maxsize=360000, maxsave=9):
+    """ Open logfile. """
     return ManagedLog(name, maxsize, maxsave)
 
 def writelog(logobj, data):
+    """ Write logfile. """
     try:
         logobj.write(data)
     except SizeError:

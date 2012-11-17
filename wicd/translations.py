@@ -52,8 +52,7 @@ def get_gettext():
     langs += ["en_US"]
     lang = gettext.translation('wicd', local_path, languages=langs, 
                                fallback=True)
-    _ = lang.ugettext
-    return _
+    return lang.ugettext
 
 _ = get_gettext()
 
@@ -67,13 +66,17 @@ language = {}
 # FIXME: these were present in wicd 1.7.0, can't find where they are.
 # Leaving here for future reference, they should be removed whenever
 # possible.
-#language['cannot_start_daemon'] = _('''Unable to connect to wicd daemon DBus interface. This typically means there was a problem starting the daemon. Check the wicd log for more information.''')
-#language['backend_alert'] = _('''Changes to your backend won't occur until the daemon is restarted.''')
-#language['about_help'] = _('''Stop a network connection in progress''')
-#language['connect'] = _('''Connect''')
+#language['cannot_start_daemon'] = _('Unable to connect to wicd daemon ' + \
+#    'DBus interface. This typically means there was a problem starting ' + \
+#    'the daemon. Check the wicd log for more information.')
+#language['backend_alert'] = _('Changes to your backend won't occur until ' + \
+#    'the daemon is restarted.')
+#language['about_help'] = _('Stop a network connection in progress')
+#language['connect'] = _('Connect')
 
 # from templates, dict populated with:
-# grep -R "*" encryption/templates/ | tr " " "\n" | grep "^*" | sed -e "s/*//"| sort -u | tr [A-Z] [a-z]
+# grep -R "*" encryption/templates/ | tr " " "\n" | grep "^*" | \
+# sed -e "s/*//" | sort -u | tr [A-Z] [a-z]
 language['authentication'] = _('Authentication')
 language['domain'] = _('Domain')
 language['identity'] = _('Identity')

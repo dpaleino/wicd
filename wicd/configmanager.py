@@ -221,7 +221,7 @@ class ConfigManager(RawConfigParser):
         p.remove_option(name, '_filename_')
         return p
 
-    def write(self, fp):
+    def write(self, fp=None):
         """ Writes the loaded config file to disk. """
         in_this_file = []
         for sname in sorted(self.sections()):

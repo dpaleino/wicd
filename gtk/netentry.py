@@ -802,7 +802,7 @@ class WiredNetworkEntry(NetworkEntry):
         self.image.set_padding(0, 0)
         self.image.set_alignment(.5, .5)
         self.image.set_size_request(60, -1)
-        self.image.set_from_icon_name("wired-gui", 4)
+        self.image.set_from_icon_name("wired-gui", gtk.ICON_SIZE_DND)
         self.image.show()
         self.connect_button.show()
 
@@ -1130,28 +1130,28 @@ class WirelessNetworkEntry(NetworkEntry):
             # "converted" to strength bars, so suggestions from people
             # for a better way would be welcome.
             if dbm_strength >= -60:
-                signal_img = 'signal-100.png'
+                signal_img = 'signal-100'
             elif dbm_strength >= -70:
-                signal_img = 'signal-75.png'
+                signal_img = 'signal-75'
             elif dbm_strength >= -80:
-                signal_img = 'signal-50.png'
+                signal_img = 'signal-50'
             else:
-                signal_img = 'signal-25.png'
+                signal_img = 'signal-25'
             ending = "dBm"
             disp_strength = str(dbm_strength)
         else:
             # Uses normal link quality, should be fine in most cases
             if strength > 75:
-                signal_img = 'signal-100.png'
+                signal_img = 'signal-100'
             elif strength > 50:
-                signal_img = 'signal-75.png'
+                signal_img = 'signal-75'
             elif strength > 25:
-                signal_img = 'signal-50.png'
+                signal_img = 'signal-50'
             else:
-                signal_img = 'signal-25.png'
+                signal_img = 'signal-25'
             ending = "%"
             disp_strength = str(strength)
-        self.image.set_from_file(wpath.images + signal_img)
+        self.image.set_from_icon_name(signal_img, gtk.ICON_SIZE_DND)
         self.lbl_strength.set_label(disp_strength + ending)
         self.image.show()
 

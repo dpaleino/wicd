@@ -701,9 +701,11 @@ TX:'''))
             image = gtk.Image()
 
             if type_ == "__wired__":
-                image.set_from_icon_name("network-wired", 2)
+                image.set_from_icon_name("network-wired",
+                    gtk.ICON_SIZE_SMALL_TOOLBAR)
             else:
-                image.set_from_icon_name(self._get_img(n_id), 2)
+                image.set_from_icon_name(self._get_img(n_id),
+                    gtk.ICON_SIZE_SMALL_TOOLBAR)
             item.set_image(image)
             del image
             item.connect("activate", network_selected, type_, n_id)

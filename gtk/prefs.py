@@ -378,9 +378,7 @@ class PreferencesDialog(object):
 
         self.dialog = self.wTree.get_object("pref_dialog")
         self.dialog.set_title(_('Preferences'))
-        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
-            self.dialog.set_icon_from_file(
-                os.path.join(wpath.images, "wicd.png"))
+        self.dialog.set_icon_name('wicd-gtk')
         width = int(gtk.gdk.screen_width() / 2.4)
         if width > 450:
             width = 450

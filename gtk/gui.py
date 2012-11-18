@@ -232,10 +232,7 @@ class appGui(object):
 
         self.status_area.hide_all()
 
-        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
-            self.window.set_icon_from_file(
-                os.path.join(wpath.images, "wicd.png")
-            )
+        self.window.set_icon_name('wicd-gtk')
         self.statusID = None
         self.first_dialog_load = True
         self.is_visible = True

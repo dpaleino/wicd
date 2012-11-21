@@ -80,7 +80,7 @@ class WicdDaemon(dbus.service.Object, object):
 
     """
     def __init__(self, bus_name, object_path="/org/wicd/daemon",
-                 auto_connect=True):
+                 auto_connect=True, keep_connection=False):
         """ Initializes the daemon DBus object. """
         dbus.service.Object.__init__(self, bus_name=bus_name, 
                                      object_path=object_path)
@@ -118,6 +118,7 @@ class WicdDaemon(dbus.service.Object, object):
         self.dns3 = None
         self.search_dom = None
         self.auto_reconnect = True
+        self.keep_connection = keep_connection
 
         # This will speed up the scanning process - if a client doesn't 
         # need a fresh scan, just feed them the old one.  A fresh scan
@@ -841,7 +842,9 @@ class WicdDaemon(dbus.service.Object, object):
     @dbus.service.signal(dbus_interface='org.wicd.daemon', signature='')
     def DaemonClosing(self):
         """ Emits a signal indicating the daemon will be closing. """
-        pass
+        # By default, disconnect network links on close.
+        if not self.keep_connection:
+            self.Disconnect()
 
     @dbus.service.method('org.wicd.daemon', in_signature='uav')
     def EmitStatusChanged(self, state, info):
@@ -1704,6 +1707,7 @@ wireless (and wired) connection daemon.
 
 Arguments:
 \t-a\t--no-autoconnect\tDon't auto-scan/auto-connect.
+\t-c\t--keep-connection\tKeep connection alive when daemon stops.
 \t-f\t--no-daemon\tDon't daemonize (run in foreground).
 \t-e\t--no-stderr\tDon't redirect stderr.
 \t-n\t--no-poll\tDon't monitor network status.
@@ -1803,11 +1807,13 @@ def main(argv):
     redirect_stdout = True
     auto_connect = True
     kill = False
+    keep_connection = False
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'fenoahk',
+        opts, args = getopt.getopt(sys.argv[1:], 'fenoahkc',
                                    ['help', 'no-daemon', 'no-poll', 'no-stderr',
-                                    'no-stdout', 'no-autoconnect', 'kill'])
+                                    'no-stdout', 'no-autoconnect', 'kill',
+                                    'keep-connection'])
     except getopt.GetoptError:
         # Print help information and exit
         usage()
@@ -1830,6 +1836,8 @@ def main(argv):
             no_poll = True
         if o in ('-k', '--kill'):
             kill = True
+        if o in ('-c', '--keep-connection'):
+            keep_connection = True
 
     if kill:
         try:
@@ -1908,7 +1916,8 @@ def main(argv):
     # Open the DBUS session
     bus = dbus.SystemBus()
     wicd_bus = dbus.service.BusName('org.wicd.daemon', bus=bus)
-    daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect)
+    daemon = WicdDaemon(wicd_bus, auto_connect=auto_connect,
+        keep_connection=keep_connection)
     child_pid = None
     if not no_poll:
         child_pid = Popen([wpath.python, "-O", 

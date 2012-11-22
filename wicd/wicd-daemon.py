@@ -1358,7 +1358,7 @@ class WirelessDaemon(dbus.service.Object, object):
         """ Reloads the active config file. """
         self.config.reload()
 
-    @dbus.service.method('org.wicd.daemon.wireless')
+    @dbus.service.method('org.wicd.daemon.wireless', out_signature='as')
     def GetWirelessInterfaces(self):
         ''' Returns a list of wireless interfaces on the system. '''
         return wnettools.GetWirelessInterfaces()
@@ -1694,7 +1694,7 @@ class WiredDaemon(dbus.service.Object, object):
         """ Reloads the active config file. """
         self.config.reload()
 
-    @dbus.service.method('org.wicd.daemon.wired')
+    @dbus.service.method('org.wicd.daemon.wired', out_signature='as')
     def GetWiredInterfaces(self):
         ''' Returns a list of wireless interfaces on the system. '''
         return wnettools.GetWiredInterfaces()

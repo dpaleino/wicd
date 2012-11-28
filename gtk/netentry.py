@@ -184,7 +184,13 @@ class AdvancedSettingsDialog(gtk.Dialog):
                 # Make sure the netmask is blank
                 if stringToNone(netmask.get_text()) is None:
                     # Fill in the most common one
-                    netmask.set_text('255.255.255.0')
+                    if ip.startswith('172'):
+                        netmask.set_text('255.240.0.0')
+                    elif ip.startswith('10'):
+                        netmask.set_text('255.0.0.0')
+                    else:
+                        # 192.168 and all other cases
+                        netmask.set_text('255.255.255.0')
         elif ip != '':
             error(None, _('Invalid IP address entered.'))
 

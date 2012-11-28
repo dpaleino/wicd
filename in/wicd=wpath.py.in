@@ -51,6 +51,7 @@ daemon = '%DAEMON%'
 curses = '%CURSES%'
 gtk = '%GTK%'
 cli = '%CLI%'
+gnome_shell_extensions = '%GNOME_SHELL_EXTENSIONS%'
 translations = '%TRANSLATIONS%'
 icons = '%ICONS%'
 pixmaps = '%PIXMAPS%'
@@ -86,6 +87,7 @@ no_install_docs = %NO_INSTALL_DOCS%
 no_install_gtk = %NO_INSTALL_GTK%
 no_install_ncurses = %NO_INSTALL_NCURSES%
 no_install_cli = %NO_INSTALL_CLI%
+no_install_gnome_shell_extensions = %NO_INSTALL_GNOME_SHELL_EXTENSIONS%
 no_use_notifications = %NO_USE_NOTIFICATIONS%
 
 def chdir(f):

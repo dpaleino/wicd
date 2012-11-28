@@ -87,6 +87,7 @@ class configure(Command):
         ('curses=', None, 'set the curses UI directory'),
         ('gtk=', None, 'set the GTK UI directory'),
         ('cli=', None, 'set the CLI directory'),
+        ('gnome-shell-extensions=', None, 'set the Gnome Shell Extensions directory'),
         ('networks=', None, 'set the encryption configuration directory'),
         ('log=', None, 'set the log directory'),
         ('resume=', None, 'set the directory the resume from suspend script is stored in'),
@@ -131,6 +132,7 @@ class configure(Command):
         ('no-install-ncurses', None, 'do not install the ncurses client'),
         ('no-install-cli', None, 'do not install the command line executable'),
         ('no-install-gtk', None, 'do not install the gtk client'),
+        ('no-install-gnome-shell-extensions', None, 'do not install the Gnome Shell extension'),
         ('no-use-notifications', None, 'do not ever allow the use of libnotify notifications')
         ]
         
@@ -147,6 +149,7 @@ class configure(Command):
         self.curses = self.share + 'curses'
         self.gtk = self.share + 'gtk'
         self.cli = self.share + 'cli'
+        self.gnome_shell_extensions = '/usr/share/gnome-shell/extensions/'
         self.icons = '/usr/share/icons/hicolor/'
         self.pixmaps = '/usr/share/pixmaps/'
         self.images = self.share + 'icons'
@@ -179,6 +182,7 @@ class configure(Command):
         self.no_install_gtk = False
         self.no_install_ncurses = False
         self.no_install_cli = False
+        self.no_install_gnome_shell_extensions = False
         self.no_use_notifications = False
 
         # Determine the default init file location on several different distros
@@ -477,6 +481,11 @@ class install(_install):
                          [(os.path.join(imgdir, f)) for f in os.listdir(imgdir) if not f.startswith('.')])
                     )
             data.append((wpath.pixmaps, ['other/wicd-gtk.xpm']))
+        if not wpath.no_install_gnome_shell_extensions:
+            data.append(
+                (wpath.gnome_shell_extensions + 'wicd@code.hanskalabs.net',
+                 ['gnome-shell/' + f for f in os.listdir('gnome-shell')])
+            )
         if not wpath.no_install_ncurses:
             data.append((wpath.curses, ['curses/curses_misc.py']))
             data.append((wpath.curses, ['curses/prefs_curses.py']))

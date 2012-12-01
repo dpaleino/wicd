@@ -217,6 +217,7 @@ class appGui(object):
         probar = self.wTree.get_object("progressbar")
         probar.set_text(_('Connecting'))
 
+        self.disconnect_all_button = self.wTree.get_object('disconnect_button')
         self.rfkill_button = self.wTree.get_object("rfkill_button")
         self.all_network_list = self.wTree.get_object("network_list_vbox")
         self.all_network_list.show_all()
@@ -598,7 +599,7 @@ class appGui(object):
         return True
 
     def update_connect_buttons(self, state=None, x=None, force_check=False):
-        """ Updates the connect/disconnect buttons for each network entry.
+        """ Updates the connect/disconnect buttons for the GUI.
 
         If force_check is given, update the buttons even if the
         current network state is the same as the previous.
@@ -609,6 +610,9 @@ class appGui(object):
         if not state:
             state, x = daemon.GetConnectionStatus()
 
+        self.disconnect_all_button.set_sensitive(
+            state in [misc.WIRED, misc.WIRELESS]
+        )
         if self.prev_state != state or force_check:
             apbssid = wireless.GetApBssid()
             for entry in chain(self.network_list, self.wired_network_box):

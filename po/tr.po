@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-07-31 11:29+0000\n"
-"Last-Translator: Utku BERBEROĞLU <Unknown>\n"
+"PO-Revision-Date: 2013-01-21 01:35+0000\n"
+"Last-Translator: Volkan Gezer <Unknown>\n"
 "Language-Team: tr <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-02 04:43+0000\n"
-"X-Generator: Launchpad (build 16319)\n"
+"X-Launchpad-Export-Date: 2013-01-21 04:50+0000\n"
+"X-Generator: Launchpad (build 16430)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -76,7 +76,7 @@ msgstr "Kullanılabilirse daima kablolu bağlantıya geç"
 
 #: curses/wicd-curses.py:947 gtk/gui.py:353
 msgid "Are you sure you want to discard settings for the selected networks?"
-msgstr ""
+msgstr "Seçili ağlar için ayarları silmek istediğinizden emin misiniz?"
 
 #: wicd/translations.py:77
 msgid "Authentication"
@@ -284,7 +284,7 @@ msgstr "DHCP istemcisi"
 
 #: curses/netentry_curses.py:63
 msgid "DHCP Hostname"
-msgstr ""
+msgstr "DHCP Sunucu adı"
 
 #: curses/netentry_curses.py:56 curses/prefs_curses.py:74 gtk/netentry.py:79
 msgid "DNS domain"
@@ -420,7 +420,7 @@ msgstr "Kimlik"
 
 #: gtk/wicd-client.py:500
 msgid "Information about the current connection"
-msgstr ""
+msgstr "Geçerli bağlantı hakkında bilgi"
 
 #: gtk/netentry.py:168
 msgid "Invalid IP address entered."
@@ -436,11 +436,11 @@ msgstr "Anahtar"
 
 #: wicd/translations.py:81
 msgid "Key index"
-msgstr ""
+msgstr "Anahtar dizini"
 
 #: curses/wicd-curses.py:536 gtk/gui.py:310
 msgid "List of saved networks"
-msgstr ""
+msgstr "Kaydedilmiş ağların listesi"
 
 #: curses/netentry_curses.py:51 gtk/netentry.py:76
 msgid "Netmask"
@@ -456,7 +456,7 @@ msgstr "Ağ Arayüzleri"
 
 #: gtk/netentry.py:890
 msgid "Never connect to this network"
-msgstr ""
+msgstr "Bu ağa asla bağlanma"
 
 #: curses/wicd-curses.py:575 gtk/gui.py:664 gtk/wicd-client.py:797
 msgid "No wireless networks found."
@@ -499,7 +499,7 @@ msgstr "Parola"
 
 #: wicd/translations.py:84
 msgid "Path to CA cert"
-msgstr ""
+msgstr "CA sertifikasının yolu"
 
 #: wicd/translations.py:86
 msgid "Path to PAC file"
@@ -507,7 +507,7 @@ msgstr "PAC dosya yolu"
 
 #: wicd/translations.py:85
 msgid "Path to client cert"
-msgstr ""
+msgstr "İstemci sertifikasının yolu"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
@@ -516,7 +516,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:521
 msgid "Please select the networks to forget"
-msgstr ""
+msgstr "Lütfen unutulacak ağları seçin"
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"

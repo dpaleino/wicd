@@ -440,7 +440,7 @@ class appGui(object):
             "Andrew Psaltis",
             "David Paleino"
         ])
-        dialog.set_website("http://wicd.sourceforge.net")
+        dialog.set_website("http://launchpad.net/wicd")
         dialog.run()
         dialog.destroy()
 

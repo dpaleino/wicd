@@ -148,7 +148,10 @@ def isWireless(devname):
     we = None
     for t in [socket.AF_INET, socket.AF_INET6, socket.AF_IPX, socket.AF_AX25,
       socket.AF_APPLETALK]:
-        sk = socket.socket(t, socket.SOCK_DGRAM)
+        try:
+            sk = socket.socket(t, socket.SOCK_DGRAM)
+        except socket.error:
+            sk = None
         if sk is None:
             continue
         skfd = sk.fileno()

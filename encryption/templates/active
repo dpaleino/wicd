@@ -1,6 +1,7 @@
 wpa
 wpa-peap
 wpa-psk
+wpa-psk-hex
 wpa2-leap
 wpa2-peap
 wep-hex

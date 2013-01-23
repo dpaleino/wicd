@@ -1,0 +1,16 @@
+name = WPA 1/2 (Preshared Hex Key)
+author = Thomas Kahle
+version = 1
+require apsk *Preshared_Key
+protected apsk *Preshared_Key
+-----
+ctrl_interface=/var/run/wpa_supplicant
+network={
+       ssid="$_ESSID"
+       scan_ssid=$_SCAN
+       proto=WPA RSN
+       key_mgmt=WPA-PSK
+       pairwise=CCMP TKIP
+       group=CCMP TKIP 
+       psk=$_APSK
+}

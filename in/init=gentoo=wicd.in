@@ -10,12 +10,13 @@ WICD_PIDFILE=%PIDFILE%
 depend() {
 	need dbus
 	after hald
+	provide net
 }
 
 start() {
 	ebegin "Starting wicd daemon"
 	# fix Gentoo bug 296197
-	sed -i 's/^\[\]$//' /etc/wicd/wired-settings.conf
+	[ -f /etc/wicd/wired-settings.conf ] && sed -i 's/^\[\]$//' /etc/wicd/wired-settings.conf
 	"${WICD_DAEMON}" >/dev/null 2>&1
 	eend $?
 }

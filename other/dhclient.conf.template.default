@@ -17,6 +17,6 @@
 #  configuration, you need to change dhclient.conf.template,
 #  NOT dhclient.conf.template.default
 
-# wicd will replace $_HOSTNAME in the following line with
-# the appropriate hostname for this system
-send host-name "$_HOSTNAME";
+# wicd will replace the following line with the appropriate
+# "send host-name" command, based on what the user chose
+# <WICDHOSTNAME>

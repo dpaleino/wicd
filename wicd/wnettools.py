@@ -38,6 +38,7 @@ import time
 from string import maketrans, translate
 import dbus
 import socket, fcntl
+import shutil
 
 import wpath
 import misc
@@ -333,21 +334,25 @@ class BaseInterface(object):
         client_dict = {
             "dhclient" : 
                 {'connect' : r"%(cmd)s -cf %(dhclientconf)s %(iface)s",
+                 'connect_with_hostname' : r"%(cmd)s -cf %(dhclientconf)s %(iface)s",
                  'release' : r"%(cmd)s -r %(iface)s",
                  'id' : misc.DHCLIENT, 
                  },
             "pump" : 
-                { 'connect' : r"%(cmd)s -i %(iface)s -h %(hostname)s",
+                { 'connect' : r"%(cmd)s -i %(iface)s",
+                  'connect_with_hostname' : r"%(cmd)s -i %(iface)s -h %(hostname)s",
                   'release' : r"%(cmd)s -r -i %(iface)s",
                   'id' : misc.PUMP,
                 },
             "dhcpcd" : 
-                {'connect' : r"%(cmd)s -h %(hostname)s --noipv4ll %(iface)s ",
+                {'connect' : r"%(cmd)s --noipv4ll %(iface)s",
+                 'connect_with_hostname' : r"%(cmd)s -h %(hostname)s --noipv4ll %(iface)s ",
                  'release' : r"%(cmd)s -k %(iface)s",
                  'id' : misc.DHCPCD,
                 },
             "udhcpc":
-                {'connect' : r"%(cmd)s -n -i %(iface)s -H %(hostname)s ",
+                {'connect' : r"%(cmd)s -n -i %(iface)s",
+                 'connect_with_hostname' : r"%(cmd)s -n -i %(iface)s -H %(hostname)s ",
                  'release' : r"killall -SIGUSR2 %(cmd)s",
                  'id' : misc.UDHCPC,
                 },
@@ -357,24 +362,25 @@ class BaseInterface(object):
         # cause dhclient doesn't have a handy dandy argument
         # for specifing the hostname to be sent
         if client_name == "dhclient" and flavor:
-            if hostname == None:
-                # <hostname> will use the system hostname
-                # we'll use that if there is hostname passed
-                # that shouldn't happen, though
-                hostname = '<hostname>'
-            print 'attempting to set hostname with dhclient'
-            print 'using dhcpcd or another supported client may work better'
-            dhclient_template = \
-                open(os.path.join(wpath.etc, 'dhclient.conf.template'), 'r')
+            if hostname:
+                print 'attempting to set hostname with dhclient'
+                print 'using dhcpcd or another supported client may work better'
 
-            output_conf = open(dhclient_conf_path, 'w')
+                dhclient_template = \
+                    open(os.path.join(wpath.etc, 'dhclient.conf.template'), 'r')
+                output_conf = open(dhclient_conf_path, 'w')
 
-            for line in dhclient_template.readlines():
-                line = line.replace('$_HOSTNAME', hostname)
-                output_conf.write(line)
+                for line in dhclient_template.readlines():
+                    line = line.replace('# <WICDHOSTNAME>', 'send host-name "%s";' \
+                        % hostname)
+                    output_conf.write(line)
 
-            output_conf.close()
-            dhclient_template.close()
+                output_conf.close()
+                dhclient_template.close()
+            else:
+                shutil.copy(os.path.join(wpath.etc, 'dhclient.conf.template'), \
+                    dhclient_conf_path)
+
             os.chmod(dhclient_conf_path, 0644)
 
         if not client_name or not cmd:
@@ -382,12 +388,16 @@ class BaseInterface(object):
             return ""
             
         if flavor == "connect":
-            if not hostname:
-                hostname = os.uname()[1]
-            return client_dict[client_name]['connect'] % \
+            if hostname:
+                return client_dict[client_name]['connect_with_hostname'] % \
                     { "cmd" : cmd,
                       "iface" : self.iface,
                       "hostname" : hostname,
+                      'dhclientconf' : dhclient_conf_path }
+            else:
+                return client_dict[client_name]['connect'] % \
+                    { "cmd" : cmd,
+                      "iface" : self.iface,
                       'dhclientconf' : dhclient_conf_path }
         elif flavor == "release":
             return client_dict[client_name]['release'] % \

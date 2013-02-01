@@ -470,11 +470,12 @@ class ConnectThread(threading.Thread):
                 self.network['usedhcphostname'] = False
             if self.network.get('dhcphostname') == None:
                 self.network['dhcphostname'] = os.uname()[1]
-            if not self.network['usedhcphostname']:
-                hname = os.uname()[1]
-            else:
+            if self.network['usedhcphostname']:
                 hname = self.network['dhcphostname']
-            print "Running DHCP with hostname", hname
+                print "Running DHCP with hostname", hname
+            else:
+                hname = None
+                print "Running DHCP with NO hostname"
             dhcp_status = iface.StartDHCP(hname)
             if dhcp_status in ['no_dhcp_offers', 'dhcp_failed']:
                 if self.connect_result != "aborted":

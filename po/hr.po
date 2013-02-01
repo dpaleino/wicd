@@ -6,14 +6,14 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-09-26 17:26+0200\n"
-"PO-Revision-Date: 2012-01-17 22:21+0000\n"
-"Last-Translator: David Paleino <dapal@debian.org>\n"
+"PO-Revision-Date: 2013-01-30 07:11+0000\n"
+"Last-Translator: Ted Teddy <ted.teddy.cro@gmail.com>\n"
 "Language-Team: hr <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-12-02 04:43+0000\n"
-"X-Generator: Launchpad (build 16319)\n"
+"X-Launchpad-Export-Date: 2013-01-31 04:47+0000\n"
+"X-Generator: Launchpad (build 16455)\n"
 "Generated-By: Babel 0.9.6\n"
 
 #: gtk/wicd-client.py:610
@@ -52,7 +52,7 @@ msgstr "O Wicd-u"
 
 #: curses/wicd-curses.py:465 gtk/gui.py:273
 msgid "Activate Internet Connection Sharing"
-msgstr ""
+msgstr "Omogućite Dijeljenje Internet Veze"
 
 #: curses/wicd-curses.py:378
 msgid "Add a new profile"
@@ -80,7 +80,7 @@ msgstr ""
 
 #: wicd/translations.py:77
 msgid "Authentication"
-msgstr ""
+msgstr "Autentifikacija"
 
 #: curses/prefs_curses.py:90 curses/prefs_curses.py:176 gtk/prefs.py:352
 #: gtk/prefs.py:359 gtk/prefs.py:366 gtk/prefs.py:371 data/wicd.ui:1092
@@ -110,11 +110,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:194
 msgid "Brought to you by:"
-msgstr ""
+msgstr "Donose vam:"
 
 #: curses/wicd-curses.py:1089
 msgid "Can't connect to the daemon, trying to start it automatically..."
-msgstr ""
+msgstr "Nemog se spojiti na daemona, pokušavam ga pokrenuti automatski..."
 
 #: curses/configscript_curses.py:74 curses/curses_misc.py:541
 #: curses/netentry_curses.py:65 curses/wicd-curses.py:490
@@ -126,7 +126,7 @@ msgstr "Poništi"
 #: curses/wicd-curses.py:463 gtk/gui.py:268 gtk/netentry.py:1038
 #: gtk/netentry.py:1160
 msgid "Channel"
-msgstr ""
+msgstr "Kanal"
 
 #: gtk/gui.py:189 data/wicd.ui:183
 msgid "Choose from the networks below:"
@@ -134,7 +134,7 @@ msgstr "Izaberite sa mreža izlistanih dolje"
 
 #: curses/wicd-curses.py:604
 msgid "Config"
-msgstr ""
+msgstr "Konfiguracija"
 
 #: curses/wicd-curses.py:225
 msgid "Configure selected network"
@@ -274,6 +274,9 @@ msgid ""
 "wicd-curses is running. Please restart the daemon, and then restart wicd-"
 "curses."
 msgstr ""
+"DBus kvar! Najvjerojatnije uzrokovan zaustavljanjem wicd daemona za vrijeme "
+"rada wicd-curses programa. Molim vas ponovno pokrenite daemon i zatim ponovo "
+"pokrenite wicd-curses."
 
 #: curses/prefs_curses.py:92
 msgid "DHCP Client"
@@ -339,6 +342,8 @@ msgid ""
 "ERROR: wicd-curses was denied access to the wicd daemon: please check that "
 "your user is in the \"$A\" group."
 msgstr ""
+"POGREŠKA: wicd-curses-u je odbijen pristup wicd daemonu: molim vas "
+"provjerite da je korisnik u \"$A\" grupi."
 
 #: curses/wicd-curses.py:461 gtk/gui.py:267 gtk/gui.py:327
 msgid "ESSID"
@@ -358,7 +363,7 @@ msgstr "Vanjski programi"
 
 #: wicd/misc.py:93
 msgid "Flushing the routing table..."
-msgstr ""
+msgstr "Ispirem ruting tabelu..."
 
 #: curses/wicd-curses.py:209
 msgid "For more detailed help, consult the wicd-curses(8) man page."
@@ -366,7 +371,7 @@ msgstr "Za detaljniju pomoć, pogledajte wicd-curses(8) man stranicu"
 
 #: curses/netentry_curses.py:52 gtk/netentry.py:77
 msgid "Gateway"
-msgstr ""
+msgstr "Pristupna točka"
 
 #: curses/prefs_curses.py:50 data/wicd.ui:1028
 msgid "General Settings"
@@ -398,7 +403,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:611
 msgid "Hidden"
-msgstr ""
+msgstr "Skriveno"
 
 #: gtk/gui.py:418
 msgid "Hidden Network ESSID"
@@ -483,10 +488,17 @@ msgid ""
 "- not the actual script contents.  You will need to add/edit the script "
 "contents separately.  Refer to the wicd manual page for more information."
 msgstr ""
+"Jednom kad ste tamo, možete podesiti (ili dodati) \"prijeskripta\", "
+"\"poslijeskripta\", \"prijeprekidaskripta\" i \"poslijeprekidaskripta\" "
+"varijable po potrebi za promjeniti predpovezivanje, postpovezivanje, "
+"predprekid i poslijeprekidne skripte odgovarajući. Obratite pozornost da će "
+"biti potrebno odrediti punu putanju do skripte - ne do stvarnog sadržaja "
+"skripte. Trebati će dodati/urediti sadržaj skripte odvojeno. Pogledajte wicd "
+"priručnik za više informacija o tome."
 
 #: wicd/translations.py:82
 msgid "Passphrase"
-msgstr ""
+msgstr "Zaporka"
 
 #: wicd/translations.py:83
 msgid "Password"
@@ -494,7 +506,7 @@ msgstr "Lozinka"
 
 #: wicd/translations.py:84
 msgid "Path to CA cert"
-msgstr ""
+msgstr "Put do CA certifikata"
 
 #: wicd/translations.py:86
 msgid "Path to PAC file"
@@ -502,7 +514,7 @@ msgstr "Putanja do PAC datoteke"
 
 #: wicd/translations.py:85
 msgid "Path to client cert"
-msgstr ""
+msgstr "Put do certifikata klijenta"
 
 #: curses/prefs_curses.py:122 gtk/prefs.py:339 data/wicd.ui:1654
 msgid "Ping static gateways after connecting to verify association"
@@ -514,19 +526,19 @@ msgstr ""
 
 #: curses/configscript_curses.py:57 gtk/configscript.py:129
 msgid "Post-connection Script"
-msgstr ""
+msgstr "Skripta poslije povezivanja"
 
 #: curses/configscript_curses.py:59 gtk/configscript.py:132
 msgid "Post-disconnection Script"
-msgstr ""
+msgstr "Skripta poslije prekida veze"
 
 #: curses/configscript_curses.py:56 gtk/configscript.py:128
 msgid "Pre-connection Script"
-msgstr ""
+msgstr "Skripta prije povezivanja"
 
 #: curses/configscript_curses.py:58 gtk/configscript.py:130
 msgid "Pre-disconnection Script"
-msgstr ""
+msgstr "Skripta prije prekida veze"
 
 #: curses/prefs_curses.py:56 curses/prefs_curses.py:252 gtk/prefs.py:318
 msgid "Preferences"
@@ -538,11 +550,11 @@ msgstr "Dijalog osobitosti"
 
 #: curses/wicd-curses.py:610
 msgid "Prefs"
-msgstr ""
+msgstr "Postavke"
 
 #: wicd/translations.py:87
 msgid "Preshared key"
-msgstr ""
+msgstr "Podijeljeni ključ"
 
 #: curses/wicd-curses.py:229
 msgid "Press any key to return."
@@ -550,11 +562,11 @@ msgstr "Pritisnite bilo koju tipku za povratak"
 
 #: wicd/translations.py:88
 msgid "Private key"
-msgstr ""
+msgstr "Privatni ključ"
 
 #: wicd/translations.py:89
 msgid "Private key password"
-msgstr ""
+msgstr "Zaporka privatnog ključa"
 
 #: curses/prefs_curses.py:83 gtk/prefs.py:343
 msgid "Prompt for profile on wired autoconnect"
@@ -566,7 +578,7 @@ msgstr "Svojstva"
 
 #: wicd/misc.py:96
 msgid "Putting interface down..."
-msgstr ""
+msgstr "Gasim sučelje..."
 
 #: wicd/misc.py:97
 msgid "Putting interface up..."
@@ -578,11 +590,11 @@ msgstr "Isključi"
 
 #: curses/wicd-curses.py:227
 msgid "Quit wicd-curses"
-msgstr ""
+msgstr "Ugasi wicd-curses"
 
 #: gtk/wicd-client.py:502
 msgid "Quit wicd-tray-icon"
-msgstr ""
+msgstr "Isključi wicd-tray-icon"
 
 #: curses/wicd-curses.py:609
 msgid "Refresh"
@@ -615,7 +627,7 @@ msgstr "Ponovno postavljanje IP adrese"
 
 #: curses/wicd-curses.py:606
 msgid "RfKill"
-msgstr ""
+msgstr "RfKill"
 
 #: curses/prefs_curses.py:103
 msgid "Route Table Flushing"
@@ -623,7 +635,7 @@ msgstr ""
 
 #: curses/wicd-curses.py:677
 msgid "Scan"
-msgstr ""
+msgstr "Skeniranje"
 
 #: curses/wicd-curses.py:221
 msgid "Scan for hidden networks"
@@ -631,7 +643,7 @@ msgstr "Traži skrivene mreže"
 
 #: gtk/gui.py:224 gtk/gui.py:589 gtk/wicd-client.py:810
 msgid "Scanning"
-msgstr ""
+msgstr "Skeniram"
 
 #: curses/wicd-curses.py:574
 msgid "Scanning networks... stand by..."
@@ -714,6 +726,8 @@ msgid ""
 "The wicd daemon has shut down. The UI will not function properly until it is "
 "restarted."
 msgstr ""
+"wicd daemon se ugasio. Korisničko Sučelje neće funkcionirati ispravno do "
+"ponovnog pokretanja."
 
 #: curses/netentry_curses.py:478 gtk/gui.py:761 gtk/netentry.py:436
 #: gtk/netentry.py:608
@@ -802,11 +816,11 @@ msgstr "Korisničko ime"
 
 #: wicd/misc.py:105
 msgid "Validating authentication..."
-msgstr ""
+msgstr "Ovjeravam autentifikaciju..."
 
 #: wicd/misc.py:106
 msgid "Verifying access point association..."
-msgstr ""
+msgstr "Ovjeravam asocijaciju pristupne točke..."
 
 #: curses/prefs_curses.py:108
 msgid "WPA Supplicant"
@@ -814,11 +828,11 @@ msgstr ""
 
 #: curses/wicd-curses.py:576
 msgid "Wicd Curses Interface"
-msgstr ""
+msgstr "Wicd Curses Sučelje"
 
 #: gtk/wicd-client.py:226 gtk/wicd-client.py:333
 msgid "Wicd daemon unreachable"
-msgstr ""
+msgstr "Wicd daemon je nedhvatljiv"
 
 #: wicd/misc.py:216
 msgid "Wicd needs to access your computer's network cards."
@@ -893,7 +907,7 @@ msgstr "Bežično sučelje"
 
 #: gtk/gui.py:662 gtk/wicd-client.py:224 gtk/wicd-client.py:336
 msgid "Wireless Kill Switch Enabled"
-msgstr ""
+msgstr "Bežični Kill Switch je Omogućen"
 
 #: curses/wicd-curses.py:583
 msgid "Wireless Networks"
@@ -928,10 +942,12 @@ msgid ""
 "wicd-curses does not support deleting the last wired profile.  Try renaming "
 "it (\"F2\")"
 msgstr ""
+"wicd-curses ne podržava brisanje posljednjeg žičanog profila. Probajte ga "
+"preimenovati (\"F2\")"
 
 #: curses/wicd-curses.py:205
 msgid "wicd-curses help"
-msgstr ""
+msgstr "wicd-curses pomoć"
 
 #: data/wicd.ui:9
 msgid "Wicd Network Manager"
@@ -947,7 +963,7 @@ msgstr ""
 
 #: data/wicd.ui:57
 msgid "Enter a hidden network to try to locate."
-msgstr ""
+msgstr "Unesite skrivenu mrežu za pokušaj lociranja."
 
 #: data/wicd.ui:65
 msgid "Forget network settings"
@@ -971,7 +987,7 @@ msgstr "Osobitosti"
 
 #: data/wicd.ui:146
 msgid "_About"
-msgstr ""
+msgstr "_O programu"
 
 #: data/wicd.ui:223 data/wicd.ui:225
 msgid "Connecting..."
@@ -983,7 +999,7 @@ msgstr "Poništi trenutni pokušaj spajanja"
 
 #: data/wicd.ui:270
 msgid "Configure Scripts"
-msgstr ""
+msgstr "Konfigurirajte Skripte"
 
 #: data/wicd.ui:289
 msgid "Configure scripts to run for this network:"
@@ -995,7 +1011,7 @@ msgstr "Odaberite skripte"
 
 #: data/wicd.ui:339
 msgid "Post-connection Script:"
-msgstr ""
+msgstr "Skripta za Poslije Povezivanja"
 
 #: data/wicd.ui:372
 msgid "Pre-disconnection Script:"
@@ -1003,7 +1019,7 @@ msgstr "Žična veza pronađena"
 
 #: data/wicd.ui:405
 msgid "Post-disconnection Script:"
-msgstr ""
+msgstr "Skripta za Poslije Prekida Veze"
 
 #: data/wicd.ui:524
 msgid "Always switch to a wired connection when available"
@@ -1095,7 +1111,7 @@ msgstr ""
 
 #: data/wicd.ui:986
 msgid "<b>Notifications</b>"
-msgstr ""
+msgstr "<b>Obavijesti</b>"
 
 #: data/wicd.ui:1060
 msgid "<b>Route Table Flushing</b>"
